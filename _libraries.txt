@@ -1,0 +1,2 @@
+Name                Datum               NPM install befehl
+SCSS                14.07.2021          node-sass --save
