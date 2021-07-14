@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
+import Nav from "./components/platform/nav/Nav";
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <Nav/>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
