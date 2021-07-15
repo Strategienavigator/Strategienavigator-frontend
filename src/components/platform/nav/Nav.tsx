@@ -1,5 +1,6 @@
 import {Component} from "react";
 import {Container, Form, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
+import {NavLink} from "react-router-dom";
 import {faHome} from "@fortawesome/free-solid-svg-icons/faHome";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCog} from "@fortawesome/free-solid-svg-icons/faCog";
@@ -19,30 +20,30 @@ class Nav extends Component<any, any> {
                     <Navbar.Brand>{process.env.REACT_APP_NAME}</Navbar.Brand>
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
-                            <BootstrapNav.Link>
+                            <NavLink exact to={"/"} className={"nav-link"} >
                                 <FontAwesomeIcon icon={faHome}/>&nbsp;
                                 Startseite
-                            </BootstrapNav.Link>
-                            <BootstrapNav.Link>
+                            </NavLink>
+                            <NavLink to={"/settings"} className={"nav-link"} >
                                 <FontAwesomeIcon icon={faCog}/>&nbsp;
                                 Einstellungen
-                            </BootstrapNav.Link>
-                            <BootstrapNav.Link>
+                            </NavLink>
+                            <NavLink to={"/data-privacy"} className={"nav-link"} >
                                 <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;
                                 Datenschutz
-                            </BootstrapNav.Link>
-                            <BootstrapNav.Link>
+                            </NavLink>
+                            <NavLink to={"/imprint"} className={"nav-link"} >
                                 <FontAwesomeIcon icon={faBalanceScale}/>&nbsp;
                                 Impressum
-                            </BootstrapNav.Link>
-                            <BootstrapNav.Link>
+                            </NavLink>
+                            <NavLink to={"/login"} className={"nav-link"} >
                                 <FontAwesomeIcon icon={faSignInAlt}/>&nbsp;
                                 Anmelden
-                            </BootstrapNav.Link>
-                            <BootstrapNav.Link>
+                            </NavLink>
+                            <NavLink to={"/register"} className={"nav-link"} >
                                 <FontAwesomeIcon icon={faUserPlus}/>&nbsp;
                                 Registrieren
-                            </BootstrapNav.Link>
+                            </NavLink>
                         </BootstrapNav>
                         <BootstrapNav>
                             <Form className="d-flex justify-content-center align-items-center">
@@ -56,8 +57,12 @@ class Nav extends Component<any, any> {
                                 />
                             </Form>
                             <NavDropdown id={"profile-dropdown"} title={<FontAwesomeIcon icon={faUser}/>}>
-                                <NavDropdown.Item>Mein Profil</NavDropdown.Item>
-                                <NavDropdown.Item>Abmelden</NavDropdown.Item>
+                                <NavLink to={"/my-profile"} role={"button"} className={"dropdown-item"} >
+                                    Mein Profil
+                                </NavLink>
+                                <NavLink to={"/logout"} role={"button"} className={"dropdown-item"} >
+                                    Abmelden
+                                </NavLink>
                             </NavDropdown>
                         </BootstrapNav>
                     </Navbar.Collapse>
