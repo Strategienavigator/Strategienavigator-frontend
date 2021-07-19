@@ -12,7 +12,15 @@ import Logout from "./components/platform/logout/Logout";
 import Register from "./components/platform/register/Register";
 import Settings from "./components/platform/settings/Settings";
 import MyProfile from "./components/platform/my-profile/MyProfile";
+import {Session} from "./general-components/Session/Session";
 // import reportWebVitals from './reportWebVitals';
+
+ReactDOM.render(
+    <React.StrictMode>
+        Lädt...
+    </React.StrictMode>,
+    document.getElementById('root')
+);
 
 const reload_app = () => {
     ReactDOM.render(
@@ -39,7 +47,10 @@ const reload_app = () => {
         document.getElementById('root')
     );
 }
-reload_app();
+
+Session.checkLogin().then(() => {
+    reload_app();
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

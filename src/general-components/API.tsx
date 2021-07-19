@@ -23,7 +23,8 @@ const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | st
     let requestInit: RequestInit = {
         method: method,
         headers: headers,
-        body: data
+        body: data,
+        mode: "cors"
     }
 
     // CALL THE API

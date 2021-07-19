@@ -9,8 +9,12 @@ import {faBalanceScale} from "@fortawesome/free-solid-svg-icons/faBalanceScale";
 import {faUser} from "@fortawesome/free-solid-svg-icons/faUser";
 import {faSignInAlt} from "@fortawesome/free-solid-svg-icons/faSignInAlt";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons/faUserPlus";
+import {Session} from "../../../general-components/Session/Session";
 
 class Nav extends Component<any, any> {
+
+    componentDidMount = async () => {
+    }
 
     render() {
         return (
@@ -20,30 +24,34 @@ class Nav extends Component<any, any> {
                     <Navbar.Brand>{process.env.REACT_APP_NAME}</Navbar.Brand>
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
-                            <NavLink exact to={"/"} className={"nav-link"} >
+                            <NavLink exact to={"/"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faHome}/>&nbsp;
                                 Startseite
                             </NavLink>
-                            <NavLink to={"/settings"} className={"nav-link"} >
+                            <NavLink to={"/settings"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faCog}/>&nbsp;
                                 Einstellungen
                             </NavLink>
-                            <NavLink to={"/data-privacy"} className={"nav-link"} >
+                            <NavLink to={"/data-privacy"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;
                                 Datenschutz
                             </NavLink>
-                            <NavLink to={"/imprint"} className={"nav-link"} >
+                            <NavLink to={"/imprint"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faBalanceScale}/>&nbsp;
                                 Impressum
                             </NavLink>
-                            <NavLink to={"/login"} className={"nav-link"} >
-                                <FontAwesomeIcon icon={faSignInAlt}/>&nbsp;
-                                Anmelden
-                            </NavLink>
-                            <NavLink to={"/register"} className={"nav-link"} >
-                                <FontAwesomeIcon icon={faUserPlus}/>&nbsp;
-                                Registrieren
-                            </NavLink>
+                            {(!Session.isLoggedIn()) && (
+                                <>
+                                    <NavLink to={"/login"} className={"nav-link"}>
+                                        <FontAwesomeIcon icon={faSignInAlt}/>&nbsp;
+                                        Anmelden
+                                    </NavLink>
+                                    <NavLink to={"/register"} className={"nav-link"}>
+                                        <FontAwesomeIcon icon={faUserPlus}/>&nbsp;
+                                        Registrieren
+                                    </NavLink>
+                                </>
+                            )}
                         </BootstrapNav>
                         <BootstrapNav>
                             <Form className="d-flex justify-content-center align-items-center">
@@ -56,14 +64,16 @@ class Nav extends Component<any, any> {
                                     aria-label="Search"
                                 />
                             </Form>
-                            <NavDropdown id={"profile-dropdown"} title={<FontAwesomeIcon icon={faUser}/>}>
-                                <NavLink to={"/my-profile"} role={"button"} className={"dropdown-item"} >
-                                    Mein Profil
-                                </NavLink>
-                                <NavLink to={"/logout"} role={"button"} className={"dropdown-item"} >
-                                    Abmelden
-                                </NavLink>
-                            </NavDropdown>
+                            {(Session.isLoggedIn()) && (
+                                <NavDropdown id={"profile-dropdown"} title={<FontAwesomeIcon icon={faUser}/>}>
+                                    <NavLink to={"/my-profile"} role={"button"} className={"dropdown-item"}>
+                                        Mein Profil
+                                    </NavLink>
+                                    <NavLink to={"/logout"} role={"button"} className={"dropdown-item"}>
+                                        Abmelden
+                                    </NavLink>
+                                </NavDropdown>
+                            )}
                         </BootstrapNav>
                     </Navbar.Collapse>
                 </Container>
