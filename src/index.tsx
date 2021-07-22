@@ -13,12 +13,13 @@ import Register from "./components/platform/register/Register";
 import Settings from "./components/platform/settings/Settings";
 import MyProfile from "./components/platform/my-profile/MyProfile";
 import {Session} from "./general-components/Session/Session";
+import {Container, Spinner} from "react-bootstrap";
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-    <React.StrictMode>
-        Lädt...
-    </React.StrictMode>,
+    <div>
+        <Spinner animation={"border"} /> Lädt...
+    </div>,
     document.getElementById('root')
 );
 
@@ -28,10 +29,10 @@ const reload_app = () => {
             <Router>
                 <Nav/>
 
-                <div id={"content"}>
+                <Container fluid={true} id={"content"}>
                     <Switch>
                         <Route path={"/"} exact component={Home}/>
-                        <Route path={"/imprint"} component={Imprint}/>
+                        <Route path={"/legal-notice"} component={Imprint}/>
                         <Route path={"/data-privacy"} component={DataPrivacy}/>
                         <Route path={"/login"} component={Login}/>
                         <Route path={"/logout"} component={Logout}/>
@@ -41,7 +42,7 @@ const reload_app = () => {
 
                         <Route path={"/"} component={Home}/>
                     </Switch>
-                </div>
+                </Container>
             </Router>
         </React.StrictMode>,
         document.getElementById('root')

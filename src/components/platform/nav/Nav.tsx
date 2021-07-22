@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {Container, Form, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
+import {Container, Dropdown, Form, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {faHome} from "@fortawesome/free-solid-svg-icons/faHome";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -11,47 +11,56 @@ import {faSignInAlt} from "@fortawesome/free-solid-svg-icons/faSignInAlt";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons/faUserPlus";
 import {Session} from "../../../general-components/Session/Session";
 
-class Nav extends Component<any, any> {
+interface NavState {
+    expanded: boolean
+}
 
-    componentDidMount = async () => {
+class Nav extends Component<any, NavState> {
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            expanded: false
+        }
+    }
+
+    setExpanded = (value: boolean) => {
+        this.setState({
+            expanded: value
+        });
     }
 
     render() {
+        const navOnClick = (e: any) => {
+            this.setExpanded(false);
+        };
+
         return (
-            <Navbar bg="light" expand="lg">
+            <Navbar onToggle={(e) => {
+                this.setExpanded(!this.state.expanded)
+            }} bg="light" expanded={this.state.expanded} expand="lg">
                 <Container>
-                    <Navbar.Toggle/>
                     <Navbar.Brand>{process.env.REACT_APP_NAME}</Navbar.Brand>
+                    <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
-                            <NavLink exact to={"/"} className={"nav-link"}>
+                            <NavLink onClick={navOnClick} exact to={"/"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faHome}/>&nbsp;
                                 Startseite
                             </NavLink>
-                            <NavLink to={"/settings"} className={"nav-link"}>
+                            <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faCog}/>&nbsp;
                                 Einstellungen
                             </NavLink>
-                            <NavLink to={"/data-privacy"} className={"nav-link"}>
+                            <NavLink onClick={navOnClick} to={"/data-privacy"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;
                                 Datenschutz
                             </NavLink>
-                            <NavLink to={"/imprint"} className={"nav-link"}>
+                            <NavLink onClick={navOnClick} to={"/legal-notice"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faBalanceScale}/>&nbsp;
                                 Impressum
                             </NavLink>
-                            {(!Session.isLoggedIn()) && (
-                                <>
-                                    <NavLink to={"/login"} className={"nav-link"}>
-                                        <FontAwesomeIcon icon={faSignInAlt}/>&nbsp;
-                                        Anmelden
-                                    </NavLink>
-                                    <NavLink to={"/register"} className={"nav-link"}>
-                                        <FontAwesomeIcon icon={faUserPlus}/>&nbsp;
-                                        Registrieren
-                                    </NavLink>
-                                </>
-                            )}
                         </BootstrapNav>
                         <BootstrapNav>
                             <Form className="d-flex justify-content-center align-items-center">
@@ -64,14 +73,31 @@ class Nav extends Component<any, any> {
                                     aria-label="Search"
                                 />
                             </Form>
+                            {(!Session.isLoggedIn()) && (
+                                <>
+                                    <NavLink onClick={navOnClick} to={"/login"} className={"nav-link"}>
+                                        <FontAwesomeIcon icon={faSignInAlt}/>&nbsp;
+                                        Anmelden
+                                    </NavLink>
+                                    <NavLink onClick={navOnClick} to={"/register"} className={"nav-link"}>
+                                        <FontAwesomeIcon icon={faUserPlus}/>&nbsp;
+                                        Registrieren
+                                    </NavLink>
+                                </>
+                            )}
                             {(Session.isLoggedIn()) && (
                                 <NavDropdown id={"profile-dropdown"} title={<FontAwesomeIcon icon={faUser}/>}>
-                                    <NavLink to={"/my-profile"} role={"button"} className={"dropdown-item"}>
+                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/my-profile"} role={"button"}>
                                         Mein Profil
-                                    </NavLink>
-                                    <NavLink to={"/logout"} role={"button"} className={"dropdown-item"}>
-                                        Abmelden
-                                    </NavLink>
+                                    </Dropdown.Item>
+
+                                    <Dropdown.Item as={"div"} className="p-0">
+                                        <NavLink onClick={navOnClick} to={"/logout"} role={"button"}
+                                                 className={"dropdown-item"}>
+                                            Abmelden
+                                        </NavLink>
+                                    </ Dropdown.Item>
+
                                 </NavDropdown>
                             )}
                         </BootstrapNav>

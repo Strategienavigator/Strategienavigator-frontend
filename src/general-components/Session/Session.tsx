@@ -14,7 +14,7 @@ class Session {
         return Session.currentUser !== null;
     }
 
-    static setCurrent = (user: User) => {
+    static setCurrent = (user: User | null) => {
         Session.currentUser = user;
     }
 
@@ -23,6 +23,16 @@ class Session {
         if (refreshToken !== undefined) {
             Session.refreshToken.setToken(refreshToken);
         }
+    }
+
+    static logout = async () => {
+        let call = await callAPI("oauth/token/" + Session.token.breakDown()?.id, "DELETE", undefined, Session.token.getToken() as string);
+
+        if (call.success) {
+            Session.setCurrent(null);
+            Session.removeTokens();
+        }
+        return call;
     }
 
     static removeTokens = () => {
@@ -64,11 +74,22 @@ class Session {
         return null;
     }
 
-    static login = (username: string, password: string, rememberMe?: boolean) => {
-        // TODO: implement
-        // if (rememberMe !== undefined) {
-        //     Session.refreshToken.setToken("");
-        // }
+    static login = async (email: string, password: string, rememberMe?: boolean): Promise<User | null> => {
+        let formData: FormData = new FormData();
+        formData.append('grant_type', 'password');
+        formData.append('client_id', String(process.env.REACT_APP_CLIENT_ID));
+        formData.append('client_secret', process.env.REACT_APP_CLIENT_SECRET);
+        formData.append('username', email);
+        formData.append('password', password);
+        formData.append('scope', '');
+
+        let call = await callAPI('oauth/token', 'POST', formData);
+        if (call.success) {
+            let data: any = call.callData;
+            Session.updateTokens(data.access_token, (rememberMe) ? data.refresh_token : undefined);
+            return await Session.checkLogin();
+        }
+        return null;
     }
 
 }

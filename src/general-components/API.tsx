@@ -29,7 +29,15 @@ const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | st
 
     // CALL THE API
     let call = await fetch(callURL, requestInit);
-    let callData = await call.json();
+    let body = await call.text();
+    // check if body json, else put raw response
+    let callData;
+    // TODO: change here if other than json responses are needed
+    try {
+        callData = JSON.parse(body);
+    } catch (e) {
+        callData = body;
+    }
 
     // BUILD RESPONSE
     let response: CallInterface = {
