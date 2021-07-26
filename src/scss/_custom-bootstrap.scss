@@ -1,5 +1,21 @@
 @import "colors";
 
+// DROPDOWN
+$dropdown-link-active-bg: $color;
+$dropdown-link-active-color: white;
+
+// INPUT
+$input-focus-box-shadow: 0 0 0 0.25rem adjust-color($color, $alpha: -0.9);
+$input-focus-border-color: adjust-color($color, $alpha: -0.6);
+
+// FORM-CHECK
+$form-check-input-checked-bg-color: $color;
+$form-check-input-focus-box-shadow: 0 0 0 0.25rem adjust-color($color, $alpha: -0.9);
+$form-check-input-checked-color: white;
+
+// THEMES
 $theme-colors: (
-        "dark": $iconColor
+        "dark": $color,
+        "primary": $color,
+        "blue": $color
 );

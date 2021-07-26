@@ -134,7 +134,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                             this.changed(e)
                         }}
                     />
-                    <Form.Label htmlFor={"password"} className={"loginLabel"}>Password</Form.Label>
+                    <Form.Label htmlFor={"password"}>Password</Form.Label>
                     {(this.props.eye) && (
                         <div title={(!this.state.viewPassword) ? "Passwort anzeigen" : "Passwort verstecken"}
                              onClick={this.switchPasswordView} className={"passwordEye"}>

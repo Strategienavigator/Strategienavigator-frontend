@@ -68,9 +68,9 @@ class Nav extends Component<any, NavState> {
                                     size={"sm"}
                                     style={{maxHeight: '50px'}}
                                     type="search"
-                                    placeholder="Search"
+                                    placeholder="Suchen"
                                     className="mr-2"
-                                    aria-label="Search"
+                                    aria-label="Suchen"
                                 />
                             </Form>
                             {(!Session.isLoggedIn()) && (
