@@ -5,6 +5,7 @@ import "./login.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
 import {withRouter} from "react-router";
+import {PasswordField} from "../../../general-components/PasswordField";
 
 interface LoginState {
     failed: boolean
@@ -68,18 +69,11 @@ class Login extends Component<any, LoginState> {
                         size={"sm"}
                         placeholder="name@example.com"
                     />
-                    <Form.Label htmlFor={"email"} className={"email"}>Email</Form.Label>
+                    <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
                 </Form.Group>
-                <Form.Group className={"mb-3 form-floating"}>
-                    <Form.Control
-                        id="password"
-                        type="password"
-                        name={"password"}
-                        size={"sm"}
-                        placeholder="Password"
-                    />
-                    <Form.Label htmlFor={"password"} className={"loginLabel"}>Password</Form.Label>
-                </Form.Group>
+
+                <PasswordField check={false} />
+
                 <Form.Group className={"mb-3"}>
                     <Form.Check
                         type="checkbox"
@@ -107,9 +101,9 @@ class Login extends Component<any, LoginState> {
                             size="sm"
                             role="status"
                             aria-hidden="true"
-                        />{" "}
+                        />
                     )}
-                    Anmelden
+                    {" "}Anmelden
                 </Button>
             </Form>
         );
