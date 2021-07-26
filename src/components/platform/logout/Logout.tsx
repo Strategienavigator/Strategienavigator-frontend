@@ -17,7 +17,7 @@ class Logout extends Component<any, any> {
     render() {
         return (
             <h1 className="h3">
-                <Spinner animation={"border"} /> Sie werden abgemeldet...
+                <Spinner animation={"border"}/> Sie werden abgemeldet...
             </h1>
         );
     }

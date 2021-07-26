@@ -8,7 +8,7 @@ const extractFromForm = (form: FormEvent<HTMLFormElement>, id: string): string |
     if (input === null) {
         return input;
     }
-    if (input.type==="checkbox") {
+    if (input.type === "checkbox") {
         return input.checked;
     }
 

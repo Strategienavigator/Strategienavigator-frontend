@@ -5,7 +5,7 @@ import "./login.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
 import {withRouter} from "react-router";
-import {PasswordField} from "../../../general-components/PasswordField";
+import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 
 interface LoginState {
     failed: boolean
@@ -52,6 +52,10 @@ class Login extends Component<any, LoginState> {
         }
     }
 
+    password = () => {
+        console.log("passwrd");
+    }
+
     render() {
         return (
             <Form className={"loginContainer"} onSubmit={(e) => {
@@ -72,7 +76,7 @@ class Login extends Component<any, LoginState> {
                     <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
                 </Form.Group>
 
-                <PasswordField check={false} />
+                <PasswordField check={false}/>
 
                 <Form.Group className={"mb-3"}>
                     <Form.Check

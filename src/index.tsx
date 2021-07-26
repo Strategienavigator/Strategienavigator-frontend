@@ -18,7 +18,7 @@ import {Container, Spinner} from "react-bootstrap";
 
 ReactDOM.render(
     <div>
-        <Spinner animation={"border"} /> Lädt...
+        <Spinner animation={"border"}/> Lädt...
     </div>,
     document.getElementById('root')
 );
