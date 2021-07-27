@@ -1,5 +1,5 @@
 # Strategietools-Frontend
-Das Projekt Strategietools basiert auf einer Idee aus der Software CRM-Navigator aus dem Jahre 2007. Die Strategietools sollen jedem einen einfachen Zugang zu strategischen Werkzeugen bieten. Insbesonders ist der Einsatz in der Hochschule geplant. Aber auch allen Interessierten stehen die Werkzeuge zur Verfügung.
+Das Projekt Strategietools basiert auf einer Idee aus der Software CRM-Navigator aus dem Jahre 2007. Die Strategietools sollen jedem einen einfachen Zugang zu strategischen Werkzeugen bieten. Insbesondere ist der Einsatz in der Hochschule geplant. Aber auch allen Interessierten stehen die Werkzeuge zur Verfügung.
 
 Das Projekt wird an der Jade Hochschule in Wilhelmshaven am [Fachbereich Management Information Technologie:link:](https://www.jade-hs.de/mit/) entwickelt.
 
@@ -24,9 +24,9 @@ npm  | >= 7.19.1
 ## Installationsanweisungen
 
 Zu Beginn muss sich das Github-Repository heruntergeladen und in einen von Ihnen gewählten Ordner platziert werden.  
-(Für Mitentwickelnde kann dies auch durch **git** oder **Github-Desktop** geschehen)<br />
+(Für Mitentwickelnde kann dies auch durch **Git** oder **Github-Desktop** geschehen)<br />
 
-Folgend muss sich NodeJS heruntergeladen werden. Dies kann [hier:link:](https://nodejs.org/de/) geschehen. Achten Sie hierbei auf die oben genannten Mindestvorraussetzungen.
+Folgend muss sich NodeJS heruntergeladen werden. Dies kann [hier:link:](https://nodejs.org/de/) geschehen. Achten Sie hierbei auf die oben genannten Mindestvoraussetzungen.
 Nach der Installation von NodeJS haben Sie die nötigen Programme und Programmierwerkzeuge um die Installation fortzusetzen.<br />
 
 Nun muss die Kommandozeile gestartet werden und ins Hauptverzeichnis des Repositories manövriert werden.
@@ -36,7 +36,7 @@ Wenn Sie sich nicht bereits im Hauptverzeichnis des Repositories befinden, könn
 cd <pfad>
 ```
 
-<br />Um die benötigten Bibliotheken und Pakete zu installieren wird der Node-Package-Manager (*npm*) benutzt. Der konkrete Befehl lautet hierzu:
+<br />Um die benötigten Bibliotheken und Pakete zu installieren, wird der Node-Package-Manager (*npm*) benutzt. Der konkrete Befehl lautet hierzu:
 ```bat
 npm install
 ```
@@ -50,7 +50,7 @@ copy .env.example .env   // Windows
 cp .env.example .env     // Linux
 ```
 
-Wenn die **.env** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie die vorhandenden Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.<br /><br />
+Wenn die **.env** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie die vorhandenen Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.<br /><br />
 
 Nun ist die Installation abgeschlossen und der Entwicklungsserver kann gestartet werden. Hierzu ist folgender Befehl auszuführen:
 ```bat
@@ -60,14 +60,14 @@ npm start
 Startet den Entwicklungsserver.  
 Der Server ist nun unter [http://localhost:3000:link:](http://localhost:3000) erreichbar.
 
-Sämtliche Editierungen werden bei der Abspeicherung automatisch aktualisiert.
+Sämtliche Editierungen werden beim Abspeichern automatisch aktualisiert.
 
 
 ## Guidelines für Beteiligte
 - Alles was keine Dokumentation oder Kommentare sind, muss in der englischen Sprache angefertigt werden.
 - Alle Dokumentationen sollten in der deutschen Sprache angefertigt werden.
 - Variablen- und Methodenbezeichnungen werden in Camelcase geschrieben.
-- Wenn möglich sollen Dependency Injection für Services verwendet werden.
+- Wenn möglich sollen Dependency-Injection für Services verwendet werden.
 
 ## Bugs
 Wenn ein Fehler gefunden wird, diesen bitte als [Issue](https://github.com/ricom/toolbox-frontend/issues) im Github Repository eintragen.
