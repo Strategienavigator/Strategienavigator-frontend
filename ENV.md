@@ -8,8 +8,10 @@ Diese Datei dient allgemein betrachtet zum vordefinieren **globaler Variablen**,
 Steht für den Namen des Projektes und wird zur Darstellung verwendet. Folglich ist diese globale Variable bereits mit dem Wert *Strategietools* vordefiniert. Dieser Wert kann aber beliebig angepasst werden. 
 
 #### REACT_APP_API
-Diese Variable wird für jegliche API-Calls von dem Frontend ausgehend zum Backend verwendet.
-Der eingegebene Link in dem Browser muss zu dem Backend führen. Für XAMPP-Benutzer lautet dieser Link beispielsweise *http://localhost:80/toolbox-backend/public/api/*.   
+Diese Variable wird für jegliche API-Calls von dem Frontend ausgehend zum Backend verwendet. Sie müssen diese globale Variable mit dem Link definieren der zu dem Backend führt. Letzterer ist **für jeden Benutzer variabel** und von einigen Faktoren wie zum Beispiel die Verzeichnisstruktur des jeweiligen Benutzers abhängig. Für XAMPP-Benutzer könnte dieser Link beispielsweise *http://localhost:80/toolbox-backend/public/api/* lauten.
+
+#### REACT_APP_CLIENT_ID
+
    
 
 Nachdem Sie die zuvor genannten Schritte ausgeführt haben, kehren Sie wieder in das ursprüngliche [Guide](https://github.com/ricom/toolbox-frontend/blob/main/README.md) zurück.
