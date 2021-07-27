@@ -1,5 +1,13 @@
-# toolbox-frontend  -  Guide
-Das Projekt wurde mittels [Create React App](https://github.com/facebook/create-react-app) erstellt.
+# Strategietools-Frontend
+Das Projekt Strategietools basiert auf einer Idee aus der Software CRM-Navigator aus dem Jahre 2007. Die Strategietools sollen jedem einen einfachen Zugang zu strategischen Werkzeugen bieten. Insbesonders ist der Einsatz in der Hochschule geplant. Aber auch allen Interessierten stehen die Werkzeuge zur Verfügung.
+
+Das Projekt wird an der Jade Hochschule in Wilhelmshaven am [Fachbereich Management Information Technologie:link:](https://www.jade-hs.de/mit/) entwickelt.
+
+Das Frontend wurde mittels [Create React App](https://github.com/facebook/create-react-app) erstellt.  
+Das Toolbox-Backend ist [hier:link:](https://github.com/ricom/toolbox-backend) zu finden.
+
+## Weitere Informationen
+[Interne Projektinformationen:link:](https://moodle.jade-hs.de/moodle/course/view.php?id=521&section=4)
 
 ## Vorraussetzungen
 Programm/Package | min. Version
@@ -24,28 +32,28 @@ Nach der Installation von NodeJS haben Sie die nötigen Programme und Programmie
 Nun muss die Kommandozeile gestartet werden und ins Hauptverzeichnis des Repositories manövriert werden.
 Wenn Sie sich nicht bereits im Hauptverzeichnis des Repositories befinden, können Sie mithilfe des **cd**-Befehls zum Hauptverzeichnis gelangen.
 
-```console
+```bat
 cd <pfad>
 ```
 
 <br />Um die benötigten Bibliotheken und Pakete zu installieren wird der Node-Package-Manager (*npm*) benutzt. Der konkrete Befehl lautet hierzu:
-```console
+```bat
 npm install
 ```
 Dieser Schritt kann je nach System und Internetverbindung mehr Zeit in Anspruch nehmen.<br /><br />
 
 Um nun das Projekt zu konfigurieren, muss die **.env** Datei erstellt und eingerichtet werden. Hierzu kopieren wir die mitgelieferte **.env.example** Datei.
-```console
+```bat
 copy .env.example .env   // Windows
 ```
-```console
+```bat
 cp .env.example .env     // Linux
 ```
 
-Wenn die **.env** Datei vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie die vorhandenden Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.
+Wenn die **.env** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie die vorhandenden Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.<br /><br />
 
 Nun ist die Installation abgeschlossen und der Entwicklungsserver kann gestartet werden. Hierzu ist folgender Befehl auszuführen:
-```console
+```bat
 npm start
 ```
 
@@ -53,3 +61,23 @@ Startet den Entwicklungsserver.
 Der Server ist nun unter [http://localhost:3000:link:](http://localhost:3000) erreichbar.
 
 Sämtliche Editierungen werden bei der Abspeicherung automatisch aktualisiert.
+
+
+## Guidelines für Beteiligte
+- Alles was keine Dokumentation oder Kommentare sind, muss in der englischen Sprache angefertigt werden.
+- Alle Dokumentationen sollten in der deutschen Sprache angefertigt werden.
+- Variablen- und Methodenbezeichnungen werden in Camelcase geschrieben.
+- Wenn möglich sollen Dependency Injection für Services verwendet werden.
+
+## Bugs
+Wenn ein Fehler gefunden wird, diesen bitte als [Issue](https://github.com/ricom/toolbox-frontend/issues) im Github Repository eintragen.
+
+## Lizenz
+[GNU GPL 3.0:link:](https://www.gnu.org/licenses/gpl-3.0.de.html) 
+
+## Autoren
+- [Nichlas Schipper:link:](https://github.com/nic-schi)  
+- [Marcel Bankert:link:](https://github.com/Marce200700)  
+- [Marco Janssen:link:](https://github.com/ma1160)  
+
+Weiterhin kann auf die Liste der Projektteilnehmer in Github verwiesen werden.
