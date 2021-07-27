@@ -17,10 +17,10 @@ import {Container, Spinner} from "react-bootstrap";
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-    <div>
-        <Spinner animation={"border"}/> Lädt...
+    <div className={"loader dark fullscreen"}>
+        <Spinner className={"spinner"} animation={"border"}/>
     </div>,
-    document.getElementById('root')
+    document.getElementById('loader')
 );
 
 const reload_app = () => {
@@ -46,6 +46,12 @@ const reload_app = () => {
             </Router>
         </React.StrictMode>,
         document.getElementById('root')
+    );
+    ReactDOM.render(
+        <div className={"loader loaded fullscreen"}>
+            <Spinner className={"spinner"} animation={"border"}/>
+        </div>,
+        document.getElementById('loader')
     );
 }
 
