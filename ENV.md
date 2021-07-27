@@ -1,6 +1,7 @@
 ## Erklärung zum Befüllen der .env-Datei.
 
-Die aktuelle **.env** Datei ist [hier](./.env.example) zu finden.
+Die aktuelle **.env** Datei ist [hier](./.env.example) zu finden.  
+
 Diese Datei dient allgemein betrachtet zum vordefinieren **globaler Variablen**, welche dann im gesamten Code frei genutzt werden können. Sämtliche Änderungen die Sie an der lokalen **.env** Datei vornehmen haben keine Auswirkungen auf andere Mitentwickelnde oder das Gesamtprojekt. Daher müssen Sie sich im Bezug auf vorgenommene Änderungen keine Sorgen machen. :wink:
 
 #### REACT_APP_NAME
