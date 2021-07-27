@@ -32,7 +32,7 @@ Nach der Installation von NodeJS haben Sie die nötigen Programme und Programmie
 Nun muss die Kommandozeile gestartet werden und ins Hauptverzeichnis des Repositories manövriert werden.
 Wenn Sie sich nicht bereits im Hauptverzeichnis des Repositories befinden, können Sie mithilfe des **cd**-Befehls zum Hauptverzeichnis gelangen.
 
-```shell
+```
 cd <pfad>
 ```
 
