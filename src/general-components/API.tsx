@@ -1,4 +1,4 @@
-interface CallInterface {
+export interface CallInterface {
     callData: any
     success: boolean
     status: number
@@ -42,7 +42,7 @@ const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | st
     // BUILD RESPONSE
     let response: CallInterface = {
         callData: callData,
-        success: (call.status === 200),
+        success: (call.status >= 200 && call.status < 300),
         status: call.status,
         response: call
     }

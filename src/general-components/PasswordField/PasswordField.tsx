@@ -71,6 +71,7 @@ const checkPassword = (password: string): PasswordFieldState => {
 interface PasswordFieldProps {
     check: boolean
     eye?: boolean
+    changeHandler?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 }
 
 interface PasswordFieldState {
@@ -104,6 +105,10 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
     }
 
     changed = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        if (this.props.changeHandler !== undefined) {
+            this.props.changeHandler(e);
+        }
+
         if (this.props.check) {
             let password: string = e.currentTarget.value;
             let checkedPassword = checkPassword(password);
@@ -130,11 +135,12 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                         name={"password"}
                         size={"sm"}
                         placeholder="Password"
+                        required={true}
                         onChange={(e) => {
                             this.changed(e)
                         }}
                     />
-                    <Form.Label htmlFor={"password"}>Password</Form.Label>
+                    <Form.Label htmlFor={"password"}>Passwort</Form.Label>
                     {(this.props.eye) && (
                         <div title={(!this.state.viewPassword) ? "Passwort anzeigen" : "Passwort verstecken"}
                              onClick={this.switchPasswordView} className={"passwordEye"}>
