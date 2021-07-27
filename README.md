@@ -1,46 +1,83 @@
-# Getting Started with Create React App
+# Strategietools-Frontend
+Das Projekt Strategietools basiert auf einer Idee aus der Software CRM-Navigator aus dem Jahre 2007. Die Strategietools sollen jedem einen einfachen Zugang zu strategischen Werkzeugen bieten. Insbesonders ist der Einsatz in der Hochschule geplant. Aber auch allen Interessierten stehen die Werkzeuge zur Verfügung.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Das Projekt wird an der Jade Hochschule in Wilhelmshaven am [Fachbereich Management Information Technologie:link:](https://www.jade-hs.de/mit/) entwickelt.
 
-## Available Scripts
+Das Frontend wurde mittels [Create React App](https://github.com/facebook/create-react-app) erstellt.  
+Das Toolbox-Backend ist [hier:link:](https://github.com/ricom/toolbox-backend) zu finden.
 
-In the project directory, you can run:
+## Weitere Informationen
+[Interne Projektinformationen:link:](https://moodle.jade-hs.de/moodle/course/view.php?id=521&section=4)
 
-### `npm start`
+## Vorraussetzungen
+Programm/Package | min. Version
+------------ | -------------
+NodeJS | >= 16.2.0
+npm  | >= 7.19.1
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### Mögliche IDE's
+- WebStorm
+- Visual Studio
+- Visual Studio Code
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+## Installationsanweisungen
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Zu Beginn muss sich das Github-Repository heruntergeladen und in einen von Ihnen gewählten Ordner platziert werden.  
+(Für Mitentwickelnde kann dies auch durch **git** oder **Github-Desktop** geschehen)<br />
 
-### `npm run build`
+Folgend muss sich NodeJS heruntergeladen werden. Dies kann [hier:link:](https://nodejs.org/de/) geschehen. Achten Sie hierbei auf die oben genannten Mindestvorraussetzungen.
+Nach der Installation von NodeJS haben Sie die nötigen Programme und Programmierwerkzeuge um die Installation fortzusetzen.<br />
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Nun muss die Kommandozeile gestartet werden und ins Hauptverzeichnis des Repositories manövriert werden.
+Wenn Sie sich nicht bereits im Hauptverzeichnis des Repositories befinden, können Sie mithilfe des **cd**-Befehls zum Hauptverzeichnis gelangen.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bat
+cd <pfad>
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<br />Um die benötigten Bibliotheken und Pakete zu installieren wird der Node-Package-Manager (*npm*) benutzt. Der konkrete Befehl lautet hierzu:
+```bat
+npm install
+```
+Dieser Schritt kann je nach System und Internetverbindung mehr Zeit in Anspruch nehmen.<br /><br />
 
-### `npm run eject`
+Um nun das Projekt zu konfigurieren, muss die **.env** Datei erstellt und eingerichtet werden. Hierzu kopieren wir die mitgelieferte **.env.example** Datei.
+```bat
+copy .env.example .env   // Windows
+```
+```bat
+cp .env.example .env     // Linux
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Wenn die **.env** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie die vorhandenden Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.<br /><br />
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Nun ist die Installation abgeschlossen und der Entwicklungsserver kann gestartet werden. Hierzu ist folgender Befehl auszuführen:
+```bat
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Startet den Entwicklungsserver.  
+Der Server ist nun unter [http://localhost:3000:link:](http://localhost:3000) erreichbar.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Sämtliche Editierungen werden bei der Abspeicherung automatisch aktualisiert.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Guidelines für Beteiligte
+- Alles was keine Dokumentation oder Kommentare sind, muss in der englischen Sprache angefertigt werden.
+- Alle Dokumentationen sollten in der deutschen Sprache angefertigt werden.
+- Variablen- und Methodenbezeichnungen werden in Camelcase geschrieben.
+- Wenn möglich sollen Dependency Injection für Services verwendet werden.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Bugs
+Wenn ein Fehler gefunden wird, diesen bitte als [Issue](https://github.com/ricom/toolbox-frontend/issues) im Github Repository eintragen.
+
+## Lizenz
+[GNU GPL 3.0:link:](https://www.gnu.org/licenses/gpl-3.0.de.html) 
+
+## Autoren
+- [Nichlas Schipper:link:](https://github.com/nic-schi)  
+- [Marcel Bankert:link:](https://github.com/Marce200700)  
+- [Marco Janssen:link:](https://github.com/ma1160)  
+
+Weiterhin kann auf die Liste der Projektteilnehmer in Github verwiesen werden.
