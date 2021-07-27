@@ -24,4 +24,4 @@ Die unter dem Punkt **Password grant client** genannte **Client ID** und **Clien
 ![Passport](https://github.com/ricom/toolbox-frontend/blob/main/screenshots/passport_install.png)  
 *Passport Install Beispielausgabe.* **Dargestellte Werte NICHT in eigene .env-Datei übernehmen !**
 
-Nachdem Sie die zuvor genannten Schritte ausgeführt haben, kehren Sie wieder in das ursprüngliche [Guide](./README.md) zurück.  
+<br/>Nachdem Sie die zuvor genannten Schritte ausgeführt haben, kehren Sie wieder in das ursprüngliche [Guide](./README.md) zurück.  
