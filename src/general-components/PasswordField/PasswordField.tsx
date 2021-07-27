@@ -128,7 +128,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
     render() {
         return (
             <>
-                <Form.Group className={((!this.props.check) ? "mb-3 " : "") + "form-floating"}>
+                <Form.Group className={((!this.props.check) ? "mb-2 mt-2 " : "") + "form-floating"}>
                     <Form.Control
                         id="password"
                         type={(this.state.viewPassword) ? "text" : "password"}
