@@ -9,7 +9,7 @@ Sämtliche Änderungen die Sie an der lokalen **.env-Datei** vornehmen haben kei
 Steht für den Namen des Projektes und wird zur Darstellung verwendet. Folglich ist diese globale Variable bereits mit dem Wert *Strategietools* vordefiniert. Dieser Wert kann aber beliebig angepasst werden. 
 
 #### REACT_APP_API
-Diese Variable wird für jegliche API-Calls von dem Frontend ausgehend zum Backend verwendet. Sie müssen diese globale Variable mit dem Link definieren der zu dem Backend führt. Letzterer ist **für jeden Benutzer variabel** und von einigen Faktoren wie zum Beispiel die Verzeichnisstruktur des jeweiligen Benutzers abhängig. Für XAMPP-Benutzer könnte dieser Link beispielsweise *http://localhost:80/toolbox-backend/public/api/* lauten.
+Diese Variable wird für jegliche API-Calls von dem Frontend ausgehend zum Backend verwendet. Sie müssen diese globale Variable mit dem Link initialisieren der zu dem Backend führt. Letztendlich ist dies **für jeden Benutzer variabel** und von einigen Faktoren wie zum Beispiel die Verzeichnisstruktur des jeweiligen Benutzers abhängig. Für XAMPP-Benutzer könnte dieser Link beispielsweise *http://localhost:80/toolbox-backend/public/api/* lauten. Dieser Wert sollte **nur bei dem lokalen Verschieben des Backends** (*ändern der Vezeichnisstruktur*) angepasst werden. Falls sich die URL zu dem Backdend verändert, **muss** dieser Wert aktualisiert werden.
 
 #### REACT_APP_CLIENT_ID
 
