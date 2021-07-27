@@ -1,1 +1,1 @@
-# Erklärung zum Befüllen der .env-Datei.
+## Erklärung zum Befüllen der .env-Datei.
