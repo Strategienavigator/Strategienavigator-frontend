@@ -32,28 +32,28 @@ Nach der Installation von NodeJS haben Sie die nötigen Programme und Programmie
 Nun muss die Kommandozeile gestartet werden und ins Hauptverzeichnis des Repositories manövriert werden.
 Wenn Sie sich nicht bereits im Hauptverzeichnis des Repositories befinden, können Sie mithilfe des **cd**-Befehls zum Hauptverzeichnis gelangen.
 
-```bat
+```shell
 cd <pfad>
 ```
 
 <br />Um die benötigten Bibliotheken und Pakete zu installieren, wird der Node-Package-Manager (*npm*) benutzt. Der konkrete Befehl lautet hierzu:
-```bat
+```shell
 npm install
 ```
 Dieser Schritt kann je nach System und Internetverbindung mehr Zeit in Anspruch nehmen.<br /><br />
 
 Um nun das Projekt zu konfigurieren, muss die **.env** Datei erstellt und eingerichtet werden. Hierzu kopieren wir die mitgelieferte **.env.example** Datei.
-```bat
+```shell
 copy .env.example .env   // Windows
 ```
-```bat
+```shell
 cp .env.example .env     // Linux
 ```
 
 Wenn die **.env** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie die vorhandenen Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.<br /><br />
 
 Nun ist die Installation abgeschlossen und der Entwicklungsserver kann gestartet werden. Hierzu ist folgender Befehl auszuführen:
-```bat
+```shell
 npm start
 ```
 
