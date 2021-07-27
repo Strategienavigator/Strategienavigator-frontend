@@ -61,7 +61,7 @@ class Login extends Component<any, LoginState> {
 
                 <hr/>
 
-                <Form.Group className={"mb-3 form-floating"}>
+                <Form.Group className={"mb-2 mt-2 form-floating"}>
                     <Form.Control
                         id="email"
                         type="email"
@@ -74,7 +74,7 @@ class Login extends Component<any, LoginState> {
 
                 <PasswordField check={false}/>
 
-                <Form.Group className={"mb-3"}>
+                <Form.Group className={"mb-2 mt-2"}>
                     <Form.Check
                         type="checkbox"
                         id="rememberMe"

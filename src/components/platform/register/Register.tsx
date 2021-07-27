@@ -71,8 +71,10 @@ class Register extends Component<any, RegisterState> {
             }}>
                 <h2>Registrieren</h2>
 
+                <hr />
+
                 {/*E-MAIL*/}
-                <Form.Group className={"mb-3 form-floating"}>
+                <Form.Group className={"mb-2 mt-2 form-floating"}>
                     <Form.Control
                         id="email"
                         type="email"
@@ -85,7 +87,7 @@ class Register extends Component<any, RegisterState> {
                 </Form.Group>
 
                 {/*USERNAME*/}
-                <Form.Group className={"mb-3 form-floating"}>
+                <Form.Group className={"mb-2 mt-2 form-floating"}>
                     <Form.Control
                         id="username"
                         type="text"
@@ -103,7 +105,7 @@ class Register extends Component<any, RegisterState> {
                 }} check={true} eye={true}/>
 
                 {/*PASSWORD CONFIRMATION*/}
-                <Form.Group className={"mb-3 form-floating"}>
+                <Form.Group className={"mb-2 mt-2 form-floating"}>
                     <Form.Control
                         id="passwordConfirm"
                         type="password"
@@ -125,6 +127,8 @@ class Register extends Component<any, RegisterState> {
                         </div>
                     )}
                 </div>
+
+                <hr />
 
                 {/*SUBMIT*/}
                 <Button disabled={this.state.passwordNotMatchingConfirmed || this.state.isRegistering} type={"submit"} variant={"dark"}>
