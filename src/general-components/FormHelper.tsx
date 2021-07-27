@@ -1,9 +1,9 @@
 import {FormEvent} from "react";
 
-const extractFromForm = (form: FormEvent<HTMLFormElement>, id: string): string | boolean | null => {
+const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): string | boolean | null => {
     let target: HTMLFormElement = form.currentTarget;
     let elements = target.elements;
-    let input: HTMLInputElement = elements.namedItem(id) as HTMLInputElement;
+    let input: HTMLInputElement = elements.namedItem(name) as HTMLInputElement;
 
     if (input === null) {
         return input;
