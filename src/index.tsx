@@ -14,6 +14,8 @@ import Settings from "./components/platform/settings/Settings";
 import MyProfile from "./components/platform/my-profile/MyProfile";
 import {Session} from "./general-components/Session/Session";
 import {Container, Spinner} from "react-bootstrap";
+import PairwiseComparison from "./components/tools/pairwise-comparison/PairwiseComparison";
+import PairwiseComparisonHome from "./components/tools/pairwise-comparison/PairwiseComparisonHome";
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -32,13 +34,16 @@ const reload_app = () => {
                 <Container fluid={true} id={"content"}>
                     <Switch>
                         <Route path={"/"} exact component={Home}/>
-                        <Route path={"/legal-notice"} component={Imprint}/>
-                        <Route path={"/data-privacy"} component={DataPrivacy}/>
-                        <Route path={"/login"} component={Login}/>
-                        <Route path={"/logout"} component={Logout}/>
-                        <Route path={"/register"} component={Register}/>
-                        <Route path={"/settings"} component={Settings}/>
-                        <Route path={"/my-profile"} component={MyProfile}/>
+                        <Route path={"/legal-notice"} exact component={Imprint}/>
+                        <Route path={"/data-privacy"} exact component={DataPrivacy}/>
+                        <Route path={"/login"} exact component={Login}/>
+                        <Route path={"/logout"} exact component={Logout}/>
+                        <Route path={"/register"} exact component={Register}/>
+                        <Route path={"/settings"} exact component={Settings}/>
+                        <Route path={"/my-profile"} exact component={MyProfile}/>
+
+                        <Route path={"/pairwise-comparison/new"} exact component={PairwiseComparison}/>
+                        <Route path={"/pairwise-comparison"} exact component={PairwiseComparisonHome}/>
 
                         <Route path={"/"} component={Home}/>
                     </Switch>

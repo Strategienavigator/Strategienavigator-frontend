@@ -94,17 +94,17 @@ class Login extends Component<any, LoginState> {
                 <hr/>
 
                 <Button disabled={this.state.isLoggingIn} type={"submit"} variant={"dark"}>
-                {(this.state.isLoggingIn) && (
-                    <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                    />
-                )}
-                {" "}Anmelden
-            </Button>
+                    {(this.state.isLoggingIn) && (
+                        <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />
+                    )}
+                    {" "}Anmelden
+                </Button>
             </Form>
         );
     }

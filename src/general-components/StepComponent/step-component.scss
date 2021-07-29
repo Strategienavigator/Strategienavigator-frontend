@@ -1,0 +1,43 @@
+@import "src/scss/variables";
+
+$tabColor: #6e6e6e;
+
+.stepContainer > .stepTabContainer, .stepContainer > .tabsContent {
+  flex: 1 1 100%;
+}
+
+.stepTabs > .nav-item {
+  flex: 1 1 auto;
+  text-align: center;
+  background-color: $tabColor; //#888484
+  color: white;
+  margin: 1px;
+  border: none;
+  border-color: $tabColor !important;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.stepTabs > .nav-item.disabled {
+  background-color: $tabColor;
+  opacity: 0.5;
+  color: black;
+}
+
+.stepTabs > .nav-item:hover {
+  background-color: $tabColor !important;
+  color: white;
+}
+
+.stepTabs > .nav-item.active {
+  background-color: darken(#e6e6e6, 5%) !important;
+  border-bottom: 3px solid $tabColor !important;
+  color: black !important;
+}
+
+.stepTitle {
+  flex: 1 1 auto;
+  font-size: medium;
+  margin: 10px 0px;
+}
+

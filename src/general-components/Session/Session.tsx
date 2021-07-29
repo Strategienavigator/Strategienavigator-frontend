@@ -4,9 +4,7 @@ import Token from "./token/Token";
 import AuthToken from "./token/AuthToken";
 import RefreshToken from "./token/RefreshToken";
 
-class
-
-Session {
+class Session {
     static currentUser: User | null = null;
 
     private static token: AuthToken = new AuthToken();
@@ -95,7 +93,7 @@ Session {
         return null;
     }
 
-    static register = async (email: string, username: string, password: string) : Promise<CallInterface> => {
+    static register = async (email: string, username: string, password: string): Promise<CallInterface> => {
         let formData: FormData = new FormData();
         formData.append('email', email);
         formData.append('username', username);

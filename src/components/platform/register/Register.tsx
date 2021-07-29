@@ -1,6 +1,6 @@
 import React, {Component, FormEvent} from "react";
-import {Button, Form, Spinner} from "react-bootstrap";
-import {checkPassword, PasswordField} from "../../../general-components/PasswordField/PasswordField";
+import {Button, Form} from "react-bootstrap";
+import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 
 import "./register.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
@@ -71,7 +71,7 @@ class Register extends Component<any, RegisterState> {
             }}>
                 <h2>Registrieren</h2>
 
-                <hr />
+                <hr/>
 
                 {/*E-MAIL*/}
                 <Form.Group className={"mb-2 mt-2 form-floating"}>
@@ -128,10 +128,11 @@ class Register extends Component<any, RegisterState> {
                     )}
                 </div>
 
-                <hr />
+                <hr/>
 
                 {/*SUBMIT*/}
-                <Button disabled={this.state.passwordNotMatchingConfirmed || this.state.isRegistering} type={"submit"} variant={"dark"}>
+                <Button disabled={this.state.passwordNotMatchingConfirmed || this.state.isRegistering} type={"submit"}
+                        variant={"dark"}>
                     {" "}Registrieren
                 </Button>
 
