@@ -1,14 +1,16 @@
 import {Component} from "react";
 import {Container, Dropdown, Form, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
-import {faHome} from "@fortawesome/free-solid-svg-icons/faHome";
+import {
+    faBalanceScale,
+    faCog,
+    faHome,
+    faShieldAlt,
+    faSignInAlt,
+    faUser,
+    faUserPlus
+} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCog} from "@fortawesome/free-solid-svg-icons/faCog";
-import {faShieldAlt} from "@fortawesome/free-solid-svg-icons/faShieldAlt";
-import {faBalanceScale} from "@fortawesome/free-solid-svg-icons/faBalanceScale";
-import {faUser} from "@fortawesome/free-solid-svg-icons/faUser";
-import {faSignInAlt} from "@fortawesome/free-solid-svg-icons/faSignInAlt";
-import {faUserPlus} from "@fortawesome/free-solid-svg-icons/faUserPlus";
 import {Session} from "../../../general-components/Session/Session";
 
 interface NavState {
@@ -41,14 +43,13 @@ class Nav extends Component<any, NavState> {
                 this.setExpanded(!this.state.expanded)
             }} bg="light" expanded={this.state.expanded} expand="lg">
                 <Container>
-                    <Navbar.Brand>{process.env.REACT_APP_NAME}</Navbar.Brand>
+                    <Navbar.Brand as={NavLink} to={"/"} exact className={"nav-link"}>
+                        <FontAwesomeIcon icon={faHome}/>&nbsp;
+                        {process.env.REACT_APP_NAME}
+                    </Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
-                            <NavLink onClick={navOnClick} exact to={"/"} className={"nav-link"}>
-                                <FontAwesomeIcon icon={faHome}/>&nbsp;
-                                Startseite
-                            </NavLink>
                             <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
                                 <FontAwesomeIcon icon={faCog}/>&nbsp;
                                 Einstellungen
