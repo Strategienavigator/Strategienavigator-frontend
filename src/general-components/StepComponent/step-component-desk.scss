@@ -1,5 +1,6 @@
-@import "node_modules/bootstrap/scss/bootstrap";
 @import "./src/scss/variables";
+
+@import "~bootstrap/scss/bootstrap-utilities";
 
 @include media-breakpoint-up(xl) {
 
@@ -17,13 +18,16 @@
     flex: 1 1 100%;
     text-align: left;
   }
+
   .stepHeader {
     padding: 0.2rem 1rem;
     margin-bottom: 1rem;
     font-size: 13pt;
     border-left: 2px solid $color;
   }
+
   .stepTabs > .nav-item {
     margin-bottom: 0.25rem;
   }
+
 }

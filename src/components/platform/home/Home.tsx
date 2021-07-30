@@ -1,6 +1,11 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
-import {Form, FormControl} from "react-bootstrap";
+import {Col, Form, FormControl, Row} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowsAlt, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
+
+import "./home.scss";
+import "./home-desk.scss";
 
 class Home extends Component<any, any> {
 
@@ -16,7 +21,40 @@ class Home extends Component<any, any> {
                     />
                 </Form>
 
-                <Link to={"/pairwise-comparison"}>Paarweiser vergleich</Link>
+                <Row className={"tools"}>
+                    <Col as={Link} className={"tool"} to={"/pairwise-comparison"}>
+                        <div className={"icon"}>
+                            <FontAwesomeIcon icon={faSortAmountDownAlt}/>
+                        </div>
+                        <div className={"text"}>
+                            Paarweiser vergleich
+                        </div>
+                    </Col>
+                    <Col as={Link} className={"tool"} to={"/swot"}>
+                        <div className={"icon"}>
+                            <FontAwesomeIcon icon={faThLarge}/>
+                        </div>
+                        <div className={"text"}>
+                            SWOT Analyse
+                        </div>
+                    </Col>
+                    <Col as={Link} className={"tool"} to={"/abc"}>
+                        <div className={"icon"}>
+                            <FontAwesomeIcon icon={faChartPie}/>
+                        </div>
+                        <div className={"text"}>
+                            ABC Analyse
+                        </div>
+                    </Col>
+                    <Col as={Link} className={"tool"} to={"/port"}>
+                        <div className={"icon"}>
+                            <FontAwesomeIcon icon={faArrowsAlt}/>
+                        </div>
+                        <div className={"text"}>
+                            Portfolio Analyse
+                        </div>
+                    </Col>
+                </Row>
             </div>
         );
     }

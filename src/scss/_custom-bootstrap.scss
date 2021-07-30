@@ -13,6 +13,11 @@ $form-check-input-checked-bg-color: $color;
 $form-check-input-focus-box-shadow: 0 0 0 0.25rem adjust-color($color, $alpha: -0.9);
 $form-check-input-checked-color: white;
 
+// LINKS
+$link-color: $color;
+$link-decoration: none;
+$link-hover-color: lighten($color, 25%);
+
 // THEMES
 $theme-colors: (
         "dark": $color,

@@ -1,0 +1,56 @@
+@import "~bootstrap/scss/bootstrap-utilities";
+
+
+.tools {
+  padding: 0.5rem 0;
+
+  .tool {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
+    flex-direction: row;
+    padding: 0.5rem 1.2rem;
+
+    .icon {
+      flex: 0 0 80%;
+      display: flex;
+      border-radius: 15px;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      position: relative;
+      width: 100%;
+      padding-bottom: 80%;
+      min-height: 50px;
+      min-width: 50px;
+
+      svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 140%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .text {
+      flex: 0 0 20%;
+      padding: 0.25rem 0.25rem 0 0.25rem;
+      font-size: 10.5pt;
+    }
+  }
+}
+
+@include media-breakpoint-down(lg) {
+
+  .tools {
+    .tool {
+      min-width: 33.33333%;
+      max-width: 33.33333%;
+    }
+  }
+
+
+}
