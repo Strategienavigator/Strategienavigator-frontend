@@ -27,10 +27,10 @@ class Home extends Component<any, any> {
                             <FontAwesomeIcon icon={faSortAmountDownAlt}/>
                         </div>
                         <div className={"text"}>
-                            Paarweiser vergleich
+                            Paarweiser Vergleich
                         </div>
                     </Col>
-                    <Col as={Link} className={"tool"} to={"/swot"}>
+                    <Col as={Link} className={"tool"} to={"/swot-analysis"}>
                         <div className={"icon"}>
                             <FontAwesomeIcon icon={faThLarge}/>
                         </div>

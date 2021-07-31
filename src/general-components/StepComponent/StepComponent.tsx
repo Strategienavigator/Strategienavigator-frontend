@@ -57,7 +57,7 @@ class StepComponent<P, S> extends Component<P, S> {
                             </Nav>
 
                             {(isDesktop()) ? (
-                                <Button variant={"light"} onClick={this.nextStep} size={"sm"}>
+                                <Button variant={"dark"} className={"mt-2"} onClick={this.nextStep} size={"sm"}>
                                     <FontAwesomeIcon icon={faCaretRight}/> Weiter
                                 </Button>
                             ) : ""}
@@ -69,7 +69,6 @@ class StepComponent<P, S> extends Component<P, S> {
                                     return (
                                         <Tab.Pane key={"2" + e} eventKey={e}>
                                             <div className={"stepTitle"}>{value.title}</div>
-
                                             {value.callback.call(value.callback)}
                                         </Tab.Pane>
                                     );

@@ -2,11 +2,11 @@ import React, {Component} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {withRouter} from "react-router";
 import {reload_app} from "../../../index";
-import {Spinner} from "react-bootstrap";
+import Loader from "../../../general-components/Loader/Loader";
 
 class Logout extends Component<any, any> {
 
-    componentDidMount = async () => {
+    logout = async () => {
         let call = await Session.logout();
         if (call.success) {
             reload_app();
@@ -16,9 +16,7 @@ class Logout extends Component<any, any> {
 
     render() {
         return (
-            <div className={"loader"}>
-                <Spinner className={"spinner"} animation={"border"}/>
-            </div>
+            <Loader payload={[this.logout]} transparent size={120}/>
         );
     }
 

@@ -24,3 +24,12 @@ $theme-colors: (
         "primary": $color,
         "blue": $color
 );
+
+// CUSTOM
+.btn-dark:hover, .btn-dark:focus {
+  background-color: lighten($color, 10%);
+}
+
+.btn-dark, .btn-dark * {
+  color: white;
+}

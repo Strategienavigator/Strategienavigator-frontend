@@ -35,12 +35,16 @@ class Session {
         return call;
     }
 
+    static getToken(): string | null {
+        return Session.token.getToken();
+    }
+
     static removeTokens = () => {
         Session.token.delete();
         Session.refreshToken.delete();
     }
 
-    static checkLogin = async (): Promise<User | null> => {
+    static checkLogin = async (): Promise<any> => {
         let validToken = Session.token.getValidTokenBreakdown();
         if (validToken !== null) {
             let token = Session.token.getToken() as string;
@@ -50,6 +54,10 @@ class Session {
                 let user = User.from(call.callData.data);
                 Session.setCurrent(user);
                 return user;
+            } else {
+                if (call.status === 401) {
+                    Session.removeTokens();
+                }
             }
         }
         if (Session.refreshToken.exists()) {
@@ -84,7 +92,7 @@ class Session {
         formData.append('scope', '');
 
         let call = await callAPI('oauth/token', 'POST', formData);
-        console.log(call);
+
         if (call.success) {
             let data: any = call.callData;
             Session.updateTokens(data.access_token, (rememberMe) ? data.refresh_token : undefined);

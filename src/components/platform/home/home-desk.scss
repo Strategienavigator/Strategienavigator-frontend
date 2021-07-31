@@ -1,4 +1,3 @@
-
 @import "~bootstrap/scss/bootstrap-utilities";
 
 @include media-breakpoint-up(lg) {
@@ -6,6 +5,7 @@
   .tools {
     justify-content: flex-start;
     align-items: flex-start;
+
     .tool {
       max-width: 20%;
       padding-left: 3rem;
@@ -16,6 +16,7 @@
         padding: 1rem 0.25rem 0 0.25rem;
         font-size: 12pt;
       }
+
       .icon {
         svg {
           font-size: 200%;

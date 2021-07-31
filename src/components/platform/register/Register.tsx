@@ -60,8 +60,7 @@ class Register extends Component<any, RegisterState> {
         let username: string = extractFromForm(e, "username") as string;
         let password: string = extractFromForm(e, "password") as string;
 
-        let call = await Session.register(email, username, password);
-        console.log(call);
+        await Session.register(email, username, password);
     }
 
     render() {

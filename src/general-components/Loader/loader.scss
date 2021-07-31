@@ -1,0 +1,106 @@
+@import "src/scss/variables";
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  z-index: 10000000;
+  padding: 1rem 0;
+}
+
+// SPINNER
+.loader .spinner {
+  margin-right: 1rem;
+  width: 12vh;
+  height: 12vh;
+  border-width: 0.5vh;
+}
+
+// ALIGNMENTS
+.loader.center {
+  justify-content: center;
+  align-items: center;
+}
+
+.loader.left {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.loader.right {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+// DARK
+.loader.dark {
+  background-color: darken($color, 6%);
+  color: #b6b6b6;
+}
+
+.loader.dark .spinner {
+  border-color: #b6b6b6;
+  border-right-color: darken($color, 6%);
+}
+
+// LIGHT
+.loader.light {
+  background-color: #d3d3d3;
+  color: black;
+}
+
+.loader.light .spinner {
+  border-color: black;
+  border-right-color: #d3d3d3;
+}
+
+// TRANSPARENT
+.loader.transparent {
+  background-color: transparent !important;
+}
+
+.loader.transparent .spinner {
+  border-right-color: transparent !important;
+}
+
+// FULLSCREEN
+.loader.fullscreen {
+  position: fixed;
+  min-width: 100vw;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+  padding: 0;
+}
+
+// LOADED
+.loaded {
+  height: auto;
+  display: none;
+}
+
+// ANIMATE
+.loaded.animate {
+  display: flex;
+  opacity: 0;
+  transition: opacity 0.5s;
+  animation: hide;
+  animation-duration: 0.5s;
+  animation-direction: normal;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes hide {
+  to {
+    height: 0;
+    padding: 0;
+    visibility: collapse;
+    display: none;
+    overflow: hidden;
+    z-index: -10000000;
+  }
+}

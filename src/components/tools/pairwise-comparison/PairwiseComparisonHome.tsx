@@ -1,22 +1,19 @@
 import React, {Component} from "react";
-import {isDesktop} from "../../../general-components/Desktop";
-import FixedFooter from "../../../general-components/FixedFooter/FixedFooter";
+import ToolFrontpage from "../../../general-components/Tool/Frontpage/ToolFrontpage";
 
 class PairwiseComparisonHome extends Component<any, any> {
+
     render() {
         return (
-            <div className={"container"}>
+            <ToolFrontpage tool={3} link={"/pairwise-comparison"}>
                 <h4>Paarweiser Vergleich</h4>
 
                 <small>Es sollten Kriterien festgelegt werden, welche anschließend Paarweise verglichen und gewichtet
                     werden.</small>
-
-                {!isDesktop() && (
-                    <FixedFooter home settings newTool={{link: "/pairwise-comparison/new", title: "Neue Analyse"}}/>
-                )}
-            </div>
+            </ToolFrontpage>
         );
     }
+
 }
 
 export default PairwiseComparisonHome;
