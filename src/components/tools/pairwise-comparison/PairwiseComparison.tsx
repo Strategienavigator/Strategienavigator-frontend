@@ -1,6 +1,9 @@
 import "./pairwise-comparison.scss";
 import StepComponent from "../../../general-components/StepComponent/StepComponent";
 import React from "react";
+import {isDesktop} from "../../../general-components/Desktop";
+import FixedFooter from "../../../general-components/FixedFooter/FixedFooter";
+import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
 
 class PairwiseComparison extends StepComponent<any, any> {
 
@@ -28,6 +31,21 @@ class PairwiseComparison extends StepComponent<any, any> {
         return (
             <div className={"container"}>
                 {super.render()}
+
+                {(!isDesktop() && !this.isLastStep()) && (
+                    <FixedFooter
+                        home
+                        tool={{icon: faSortAmountDownAlt, link: "/pairwise-comparison", title: "Start PV"}}
+                        nextStep={{onNextStep: this.nextStep}}
+                    />
+                )}
+                {(!isDesktop() && this.isLastStep()) && (
+                    <FixedFooter
+                        home
+                        tool={{icon: faSortAmountDownAlt, link: "/pairwise-comparison", title: "Start PV"}}
+                        exportAndShare
+                    />
+                )}
             </div>
         );
     }

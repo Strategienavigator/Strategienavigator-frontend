@@ -9,6 +9,7 @@ import "./fixed-footer.scss";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import {faCogs} from "@fortawesome/free-solid-svg-icons/faCogs";
+import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 
 export interface FooterToolProps {
     icon: IconProp
@@ -29,6 +30,7 @@ export interface FooterStepProps {
 interface FixedFooterProps {
     home?: boolean
     settings?: boolean
+    exportAndShare?: boolean
     nextStep?: FooterStepProps
     tool?: FooterToolProps
     newTool?: FooterNewToolProps
@@ -60,6 +62,12 @@ class FixedFooter extends Component<FixedFooterProps, any> {
                 {(this.props.settings) && (
                     <Col as={NavLink} to={"/settings"} exact className={"text-center"}>
                         <FontAwesomeIcon icon={faCogs}/> Einstellungen
+                    </Col>
+                )}
+
+                {(this.props.exportAndShare) && (
+                    <Col className={"text-center"}>
+                        <FontAwesomeIcon icon={faFileExport}/> Exportieren/Teilen
                     </Col>
                 )}
 

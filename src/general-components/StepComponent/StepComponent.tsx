@@ -4,8 +4,6 @@ import {Button, Col, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import "./step-component.scss";
 import "./step-component-desk.scss";
 import {isDesktop} from "../Desktop";
-import FixedFooter from "../FixedFooter/FixedFooter";
-import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretRight} from "@fortawesome/free-solid-svg-icons/faCaretRight";
 
@@ -77,12 +75,6 @@ class StepComponent<P, S> extends Component<P, S> {
                         </Col>
                     </Row>
                 </Tab.Container>
-
-                {!isDesktop() && (
-                    <FixedFooter home
-                                 tool={{icon: faSortAmountDownAlt, link: "/pairwise-comparison", title: "Start PV"}}
-                                 nextStep={{onNextStep: this.nextStep}}/>
-                )}
             </>
         );
     }
@@ -122,6 +114,10 @@ class StepComponent<P, S> extends Component<P, S> {
 
     protected getProgress = (): number => {
         return this.progress;
+    }
+
+    protected isLastStep = (): boolean => {
+        return this.getProgress() === this.steps.length;
     }
 
     private changeCurrentTab = (title: string | null) => {

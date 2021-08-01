@@ -1,6 +1,9 @@
 import "./swot-analysis.scss";
 import StepComponent from "../../../general-components/StepComponent/StepComponent";
 import React from "react";
+import {isDesktop} from "../../../general-components/Desktop";
+import FixedFooter from "../../../general-components/FixedFooter/FixedFooter";
+import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
 
 class SWOTAnalysis extends StepComponent<any, any> {
 
@@ -28,6 +31,21 @@ class SWOTAnalysis extends StepComponent<any, any> {
         return (
             <div className={"container"}>
                 {super.render()}
+
+                {(!isDesktop() && !this.isLastStep()) && (
+                    <FixedFooter
+                        home
+                        tool={{icon: faSortAmountDownAlt, link: "/swot-analysis", title: "Start SWOT"}}
+                        nextStep={{onNextStep: this.nextStep}}
+                    />
+                )}
+                {(!isDesktop() && this.isLastStep()) && (
+                    <FixedFooter
+                        home
+                        tool={{icon: faSortAmountDownAlt, link: "/swot-analysis", title: "Start SWOT"}}
+                        exportAndShare
+                    />
+                )}
             </div>
         );
     }
