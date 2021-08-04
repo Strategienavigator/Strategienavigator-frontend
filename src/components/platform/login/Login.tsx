@@ -6,6 +6,7 @@ import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
 import {withRouter} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
+import {Messages} from "../../../general-components/Messages/Messages";
 
 interface LoginState {
     failed: boolean
@@ -39,6 +40,9 @@ class Login extends Component<any, LoginState> {
 
         if (user !== null) {
             reload_app();
+
+            Messages.add("Willkommen zurück!", "SUCCESS", Messages.TIMER);
+
             this.props.history.push("/my-profile");
         } else {
             this.setState({

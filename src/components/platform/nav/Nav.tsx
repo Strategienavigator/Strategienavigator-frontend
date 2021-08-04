@@ -43,7 +43,7 @@ class Nav extends Component<any, NavState> {
                 this.setExpanded(!this.state.expanded)
             }} bg="light" expanded={this.state.expanded} expand="lg">
                 <Container>
-                    <Navbar.Brand as={NavLink} to={"/"} exact className={"nav-link"}>
+                    <Navbar.Brand onClick={navOnClick} as={NavLink} to={"/"} exact className={"nav-link"}>
                         <FontAwesomeIcon icon={faHome}/>&nbsp;
                         {process.env.REACT_APP_NAME}
                     </Navbar.Brand>

@@ -3,6 +3,7 @@ import {Session} from "../../../general-components/Session/Session";
 import {withRouter} from "react-router";
 import {reload_app} from "../../../index";
 import Loader from "../../../general-components/Loader/Loader";
+import {Messages} from "../../../general-components/Messages/Messages";
 
 class Logout extends Component<any, any> {
 
@@ -10,6 +11,9 @@ class Logout extends Component<any, any> {
         let call = await Session.logout();
         if (call.success) {
             reload_app();
+
+            Messages.add("Bis bald!", "SUCCESS", Messages.TIMER);
+
             this.props.history.push("/home");
         }
     }

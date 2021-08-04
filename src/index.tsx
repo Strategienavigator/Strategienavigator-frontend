@@ -23,12 +23,21 @@ import PairwiseComparisonHome from "./components/tools/pairwise-comparison/Pairw
 
 import SWOTAnalysisHome from "./components/tools/swot-analysis/SWOTAnalysisHome";
 import SWOTAnalysis from "./components/tools/swot-analysis/SWOTAnalysis";
+import {Messages} from "./general-components/Messages/Messages";
+import {isDesktop} from "./general-components/Desktop";
 
 // import reportWebVitals from './reportWebVitals';
 
 const reload_app = () => {
     ReactDOM.render(
         <React.StrictMode>
+
+            <Messages
+                xAlignment={isDesktop() ? "LEFT" : "CENTER"}
+                yAlignment={"BOTTOM"}
+                style={!isDesktop() ? {marginBottom: 70} : undefined}
+            />
+
             <Loader animate fullscreen variant={"dark"} payload={[Session.checkLogin]}>
                 <Router>
                     <Nav/>

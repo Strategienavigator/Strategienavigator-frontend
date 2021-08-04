@@ -21,8 +21,6 @@ window.addEventListener('resize', (e) => {
             reloadedDesktop = false;
         }
     }
-
-    reload_app();
 });
 
 const isDesktop = (): boolean => {
