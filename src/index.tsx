@@ -25,6 +25,7 @@ import SWOTAnalysisHome from "./components/tools/swot-analysis/SWOTAnalysisHome"
 import SWOTAnalysis from "./components/tools/swot-analysis/SWOTAnalysis";
 import {Messages} from "./general-components/Messages/Messages";
 import {isDesktop} from "./general-components/Desktop";
+import Footer from "./components/platform/footer/Footer";
 
 // import reportWebVitals from './reportWebVitals';
 
@@ -62,6 +63,7 @@ const reload_app = () => {
                             <Route path={"/"} component={Home}/>
                         </Switch>
                     </Container>
+                    {isDesktop() ? <Footer/> : null}
                 </Router>
             </Loader>
         </React.StrictMode>,

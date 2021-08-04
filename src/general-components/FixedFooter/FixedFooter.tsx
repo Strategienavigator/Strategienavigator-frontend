@@ -85,23 +85,4 @@ class FixedFooter extends Component<FixedFooterProps, any> {
         );
     }
 }
-
-// TODO: footer implementieren (deskstop)
-// <Nav as={"footer"} style={{backgroundColor: "#fff", position: "fixed", bottom: 0, left: 0, width: "100%"}}>
-//     <Row className={"container pt-2 pb-2 m-auto justify-content-center align-items-center w-100"}>
-//         <Col className={"text-center"}>
-//             <NavLink to={"/legal-notice"} className={"nav-link"}>Über üns</NavLink>
-//         </Col>
-//         <Col className={"text-center"}>
-//             <NavLink to={"/legal-notice"} className={"nav-link"}>Impressum</NavLink>
-//         </Col>
-//         <Col className={"text-center"}>
-//             <NavLink to={"/legal-notice"} className={"nav-link"}>Datenschutz</NavLink>
-//         </Col>
-//         <Col sm={12} className={"text-left"}>
-//             @ Strategietools
-//         </Col>
-//     </Row>
-// </Nav>
-
 export default FixedFooter;

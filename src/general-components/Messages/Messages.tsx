@@ -1,4 +1,4 @@
-import {Component, ReactElement, ReactNode, CSSProperties} from "react";
+import {Component, CSSProperties, ReactElement, ReactNode} from "react";
 import {reload_app} from "../../index";
 import {Alert} from "react-bootstrap";
 

@@ -1,9 +1,9 @@
-.field{
+.field {
   margin-bottom: 0.75rem;
   align-items: center;
 }
 
-.deleteButton{
+.deleteButton {
   margin-top: 5px;
 }
 
@@ -19,10 +19,12 @@
   flex: 0 0 auto;
   margin: 0 0.5rem;
 }
+
 .buttonGroup button:last-child {
   margin-left: 0.5rem;
   margin-right: 0;
 }
+
 .buttonGroup button:first-child {
   margin-right: 0.5rem;
   margin-left: 0;
