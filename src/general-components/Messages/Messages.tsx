@@ -1,9 +1,8 @@
-import {Component, ReactElement, ReactNode} from "react";
+import {Component, ReactElement, ReactNode, CSSProperties} from "react";
 import {reload_app} from "../../index";
 import {Alert} from "react-bootstrap";
 
 import "./messages.scss";
-import {CSSProperties} from ".react-PfKKcMYO";
 
 export type MessageTypes = "WARNING" | "DANGER" | "INFO" | "SUCCESS";
 export type xAlignments = "CENTER" | "LEFT" | "RIGHT";
