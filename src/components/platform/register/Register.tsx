@@ -7,7 +7,7 @@ import {extractFromForm} from "../../../general-components/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
 
 interface RegisterState {
-    passwordNotMatchingConfirmed?: boolean
+    passwordNotMatching?: boolean
     isRegistering: boolean
     loaded?: boolean
 }
@@ -29,11 +29,11 @@ class Register extends Component<any, RegisterState> {
         if (this.password !== null && this.passwordConfirm !== null) {
             if (this.password === this.passwordConfirm) {
                 this.setState({
-                    passwordNotMatchingConfirmed: false
+                    passwordNotMatching: false
                 });
             } else {
                 this.setState({
-                    passwordNotMatchingConfirmed: true
+                    passwordNotMatching: true
                 });
             }
         }
@@ -120,7 +120,7 @@ class Register extends Component<any, RegisterState> {
                 </Form.Group>
 
                 <div className={"feedback"}>
-                    {(this.state.passwordNotMatchingConfirmed) && (
+                    {(this.state.passwordNotMatching) && (
                         <div className="invalid-feedback d-block">
                             Passwörter müssen übereinstimmen!
                         </div>
@@ -130,7 +130,7 @@ class Register extends Component<any, RegisterState> {
                 <hr/>
 
                 {/*SUBMIT*/}
-                <Button disabled={this.state.passwordNotMatchingConfirmed || this.state.isRegistering} type={"submit"}
+                <Button disabled={this.state.passwordNotMatching || this.state.isRegistering} type={"submit"}
                         variant={"dark"}>
                     {" "}Registrieren
                 </Button>

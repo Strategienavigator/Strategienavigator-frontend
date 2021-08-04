@@ -1,3 +1,5 @@
+import {updateData} from "./APICalls";
+
 class User {
     private id: number;
     private username: string;
@@ -16,6 +18,13 @@ class User {
 
     static from(data: any): User {
         return new User(data.id, data.username, data.email, data.anonym, data.created_at);
+    }
+
+    update = (data: updateData) => {
+        if (data.username !== undefined)
+            this.setUsername(data.username);
+        if (data.email !== undefined)
+            this.setEmail(data.email);
     }
 
     isAnonymous = (): boolean => {
@@ -50,11 +59,11 @@ class User {
         this.anonymous = value;
     }
 
-    getcreatedAt(): Date {
+    getCreatedAt(): Date {
         return this.created_at;
     }
 
-    setcreatedAt(value: Date) {
+    setCreatedAt(value: Date) {
         this.created_at = value;
     }
 }

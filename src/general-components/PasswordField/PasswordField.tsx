@@ -71,6 +71,9 @@ const checkPassword = (password: string): PasswordFieldState => {
 interface PasswordFieldProps {
     check: boolean
     eye?: boolean
+    text?: string
+    required?: boolean
+    id?: string
     changeHandler?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 }
 
@@ -84,6 +87,7 @@ interface PasswordFieldState {
     invalidChar: boolean
     valid: boolean
     viewPassword?: boolean
+    fieldTouched?: boolean
 }
 
 class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordFieldState> {
@@ -100,7 +104,8 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
             maxLength: true,
             minLength: false,
             invalidChar: false,
-            valid: false
+            valid: false,
+            fieldTouched: false
         }
     }
 
@@ -112,6 +117,12 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
         if (this.props.check) {
             let password: string = e.currentTarget.value;
             let checkedPassword = checkPassword(password);
+
+            if (password.length > 0) {
+                this.setState({fieldTouched: true});
+            } else {
+                this.setState({fieldTouched: false});
+            }
 
             if (checkedPassword !== null) {
                 this.setState(checkedPassword);
@@ -127,20 +138,20 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
 
     render() {
         return (
-            <>
-                <Form.Group className={((!this.props.check) ? "mb-2 mt-2 " : "") + "form-floating"}>
+            <div className={"mb-2"}>
+                <Form.Group className={"form-floating"}>
                     <Form.Control
-                        id="password"
+                        id={(this.props.id !== undefined) ? this.props.id : "password"}
                         type={(this.state.viewPassword) ? "text" : "password"}
-                        name={"password"}
+                        name={(this.props.id !== undefined) ? this.props.id : "password"}
                         size={"sm"}
-                        placeholder="Password"
-                        required={true}
+                        placeholder={"*********"}
+                        required={(this.props.required !== undefined) ? this.props.required : false}
                         onChange={(e) => {
                             this.changed(e)
                         }}
                     />
-                    <Form.Label htmlFor={"password"}>Passwort</Form.Label>
+                    <Form.Label htmlFor={"password"}>{(this.props.text !== undefined) ? this.props.text : "Passwort"}</Form.Label>
                     {(this.props.eye) && (
                         <div title={(!this.state.viewPassword) ? "Passwort anzeigen" : "Passwort verstecken"}
                              onClick={this.switchPasswordView} className={"passwordEye"}>
@@ -148,7 +159,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                         </div>
                     )}
                 </Form.Group>
-                {(this.props.check) && (
+                {(this.props.check && this.state.fieldTouched) && (
                     <Card body>
                         {(!this.state.special) && (
                             <Row className={"text-danger"}>
@@ -200,7 +211,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                         )}
                     </Card>
                 )}
-            </>
+            </div>
         );
     }
 
