@@ -85,4 +85,5 @@ class FixedFooter extends Component<FixedFooterProps, any> {
         );
     }
 }
+
 export default FixedFooter;
