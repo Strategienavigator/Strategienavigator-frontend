@@ -13,6 +13,8 @@ import {
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Session} from "../../../general-components/Session/Session";
 
+import "./nav.scss";
+
 interface NavState {
     expanded: boolean
 }

@@ -33,3 +33,8 @@ $theme-colors: (
 .btn-dark, .btn-dark * {
   color: white;
 }
+
+.btn-transparent {
+  background-color: transparent;
+  border-color: transparent;
+}

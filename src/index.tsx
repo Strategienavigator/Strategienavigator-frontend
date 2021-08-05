@@ -36,7 +36,7 @@ const reload_app = () => {
             <Messages
                 xAlignment={isDesktop() ? "LEFT" : "CENTER"}
                 yAlignment={"BOTTOM"}
-                style={!isDesktop() ? {marginBottom: 70} : undefined}
+                style={{marginBottom: 65}}
             />
 
             <Loader animate fullscreen variant={"dark"} payload={[Session.checkLogin]}>

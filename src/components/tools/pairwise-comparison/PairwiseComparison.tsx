@@ -1,53 +1,111 @@
 import "./pairwise-comparison.scss";
-import StepComponent from "../../../general-components/StepComponent/StepComponent";
-import React from "react";
-import {isDesktop} from "../../../general-components/Desktop";
-import FixedFooter from "../../../general-components/FixedFooter/FixedFooter";
+import StepComponent, {SingleStep} from "../../../general-components/StepComponent/StepComponent";
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
+import Form from "../../../general-components/Form/Form";
+import {FormEvent, ReactNode} from "react";
+import {FormControl, InputGroup} from "react-bootstrap";
+import {extractFromForm} from "../../../general-components/FormHelper";
+import {Messages} from "../../../general-components/Messages/Messages";
+
+interface PCCriteriasValues {
+    email: string
+}
+
+export class PCCriterias extends Form<PCCriteriasValues> {
+
+    build(): ReactNode {
+        return (
+            <div>
+                <InputGroup size={"sm"}>
+                    <FormControl name={"email"} placeholder={"E-Mail-Adresse"} aria-label="Small"
+                                 aria-describedby="inputGroup-sizing-sm"/>
+                </InputGroup>
+            </div>
+        );
+    }
+
+    submit(e: FormEvent<HTMLFormElement>): boolean | void {
+        return true;
+    }
+
+    validate(e: FormEvent<HTMLFormElement>): boolean {
+        let {email} = this.extractValues(e);
+        return email.length > 0;
+    }
+
+    extractValues(e: FormEvent<HTMLFormElement>): PCCriteriasValues {
+        let email: string = extractFromForm(e, "email") as string;
+
+        return {
+            email: email
+        };
+    }
+
+}
+
+interface PCPairComparisonValues {
+    email: string
+}
+
+export class PCPairComparison extends Form<PCPairComparisonValues> {
+
+    build(): ReactNode {
+        return (
+            <div>
+                <InputGroup size={"sm"}>
+                    <FormControl name={"email"} placeholder={"E-Mail-Adresse"} aria-label="Small"
+                                 aria-describedby="inputGroup-sizing-sm"/>
+                </InputGroup>
+            </div>
+        );
+    }
+
+    submit(e: FormEvent<HTMLFormElement>): boolean | void {
+        return true;
+    }
+
+    validate(e: FormEvent<HTMLFormElement>): boolean {
+        let {email} = this.extractValues(e);
+        return email.length > 0;
+    }
+
+    extractValues(e: FormEvent<HTMLFormElement>): PCCriteriasValues {
+        let email: string = extractFromForm(e, "email") as string;
+
+        return {
+            email: email
+        };
+    }
+
+}
 
 class PairwiseComparison extends StepComponent<any, any> {
 
     constructor(props: any) {
-        super(props, "Paarweiser Vergleich");
+        super(
+            props,
+            "Paarweiser Vergleich",
+            {
+                icon: faSortAmountDownAlt,
+                link: "/pairwise-comparison",
+                title: "Start PV"
+            }
+        );
 
-        this.addStep(this.step1, "Kritierien festlegen");
-        this.addStep(this.step2, "Paarvergleich");
-        this.addStep(this.step3, "Ergebnismatrix");
-    }
-
-    step1 = (): React.ReactElement => {
-        return (<div>Step 1</div>);
-    }
-
-    step2 = (): React.ReactElement => {
-        return (<div>Step 2</div>);
-    }
-
-    step3 = (): React.ReactElement => {
-        return (<div>Step 3</div>);
+        this.addStep(new PCCriterias(this, "pc-criterias"), "Kritierien festlegen");
+        this.addStep(new PCPairComparison(this, "pair-comparison"), "Paarvergleich");
     }
 
     render() {
         return (
             <div className={"container"}>
                 {super.render()}
-
-                {(!isDesktop() && !this.isLastStep()) && (
-                    <FixedFooter
-                        home
-                        tool={{icon: faSortAmountDownAlt, link: "/pairwise-comparison", title: "Start PV"}}
-                        nextStep={{onNextStep: this.nextStep}}
-                    />
-                )}
-                {(!isDesktop() && this.isLastStep()) && (
-                    <FixedFooter
-                        home
-                        tool={{icon: faSortAmountDownAlt, link: "/pairwise-comparison", title: "Start PV"}}
-                        exportAndShare
-                    />
-                )}
             </div>
         );
+    }
+
+    save(steps: Array<SingleStep>): any {
+        Messages.add("Tool abgespeichert!", "SUCCESS", Messages.TIMER);
     }
 
 }

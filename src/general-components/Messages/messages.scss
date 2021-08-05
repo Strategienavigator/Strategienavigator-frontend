@@ -1,57 +1,12 @@
-
-.messagesContainer {
-  overflow-x: hidden;
-  overflow-y: auto;
-  position: fixed;
-  min-height: 100vh;
-  max-height: 100vh;
-  min-width: 100vw;
-  max-width: 100vw;
-  display: flex;
-  top: 0;
-  left: 0;
-  z-index: -1000;
-}
-
-// ALIGNMENTS
-// --> Y
-// TOP
-.messagesContainer.top {
-  align-items: flex-start;
-}
-
-// MIDDLE
-.messagesContainer.middle {
-  align-items: center;
-}
-
-// BOTTOM
-.messagesContainer.bottom {
-  align-items: flex-end;
-}
-
-// --> X
-// LEFT
-.messagesContainer.left {
-  justify-content: flex-start;
-}
-
-// CENTER
-.messagesContainer.center {
-  justify-content: center;
-}
-
-// RIGHT
-.messagesContainer.right {
-  justify-content: flex-end;
-}
-
 .messages {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  position: absolute;
-  padding: 0 0.75rem;
+  position: fixed;
+  z-index: 501;
+  padding: 0 0.5rem;
+  width: max-content;
+  max-width: 100vw;
 
   .message {
     flex: 0 0 100%;
@@ -69,7 +24,37 @@
   }
 }
 
-.messages,
-.messages * {
-  z-index: 10000000000000;
+// ALIGNMENTS
+// --> Y
+// TOP
+.messages.top {
+  top: 0;
+}
+
+// MIDDLE
+.messages.middle {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+// BOTTOM
+.messages.bottom {
+  bottom: 0;
+}
+
+// --> X
+// LEFT
+.messages.left {
+  left: 0;
+}
+
+// CENTER
+.messages.center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// RIGHT
+.messages.right {
+  right: 0;
 }

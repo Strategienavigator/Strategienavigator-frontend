@@ -9,7 +9,7 @@ import "./fixed-footer.scss";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import {faCogs} from "@fortawesome/free-solid-svg-icons/faCogs";
-import {faFileExport} from "@fortawesome/free-solid-svg-icons";
+import {faSave} from "@fortawesome/free-solid-svg-icons/";
 
 export interface FooterToolProps {
     icon: IconProp
@@ -22,16 +22,11 @@ export interface FooterNewToolProps {
     link: string
 }
 
-export interface FooterStepProps {
-    onNextStep: (e: any) => void
-}
-
-
 interface FixedFooterProps {
     home?: boolean
     settings?: boolean
-    exportAndShare?: boolean
-    nextStep?: FooterStepProps
+    saveTool?: string
+    nextStep?: string
     tool?: FooterToolProps
     newTool?: FooterNewToolProps
 }
@@ -65,19 +60,19 @@ class FixedFooter extends Component<FixedFooterProps, any> {
                     </Col>
                 )}
 
-                {(this.props.exportAndShare) && (
+                {(this.props.saveTool) && (
                     <Col className={"text-center"}>
-                        <FontAwesomeIcon icon={faFileExport}/> Exportieren/Teilen
+                        <button className={"btn-transparent"} form={this.props.saveTool} type={"submit"}>
+                            <FontAwesomeIcon icon={faSave}/> Speichern
+                        </button>
                     </Col>
                 )}
 
                 {(this.props.nextStep) && (
                     <Col className={"text-center"}>
-                        <div onClick={(e) => {
-                            this.props.nextStep?.onNextStep(e);
-                        }}>
+                        <button className={"btn-transparent"} form={this.props.nextStep} type={"submit"}>
                             <FontAwesomeIcon icon={faCaretRight}/> Weiter
-                        </div>
+                        </button>
                     </Col>
                 )}
 

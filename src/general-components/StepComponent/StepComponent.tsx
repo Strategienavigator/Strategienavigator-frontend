@@ -6,23 +6,28 @@ import "./step-component-desk.scss";
 import {isDesktop} from "../Desktop";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretRight} from "@fortawesome/free-solid-svg-icons/faCaretRight";
+import FixedFooter, {FooterToolProps} from "../FixedFooter/FixedFooter";
+import Form from "../Form/Form";
+import {faSave} from "@fortawesome/free-solid-svg-icons/";
 
-interface SingleStep {
-    callback: () => React.ReactElement
+export interface SingleStep {
+    form: Form<any>
     title: string
 }
 
-class StepComponent<P, S> extends Component<P, S> {
+abstract class StepComponent<P, S> extends Component<P, S> {
 
     protected steps: Array<SingleStep> = [];
     protected currentStep: number = 1;
     protected progress: number = 1;
 
     private readonly header: string;
+    private readonly fixedFooterProps: FooterToolProps;
 
-    constructor(props: any, header: string) {
+    protected constructor(props: any, header: string, fixedFooterProps: FooterToolProps) {
         super(props);
         this.header = header;
+        this.fixedFooterProps = fixedFooterProps;
     }
 
     render() {
@@ -55,8 +60,11 @@ class StepComponent<P, S> extends Component<P, S> {
                             </Nav>
 
                             {(isDesktop()) ? (
-                                <Button variant={"dark"} className={"mt-2"} onClick={this.nextStep} size={"sm"}>
-                                    <FontAwesomeIcon icon={faCaretRight}/> Weiter
+                                <Button variant={"dark"} type={"submit"}
+                                        form={this.steps[this.currentStep - 1].form.getID()} className={"mt-2"}
+                                        size={"sm"}>
+                                    <FontAwesomeIcon
+                                        icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
                                 </Button>
                             ) : ""}
                         </Col>
@@ -64,10 +72,11 @@ class StepComponent<P, S> extends Component<P, S> {
                             <Tab.Content>
                                 {this.steps.map((value) => {
                                     e++;
+
                                     return (
                                         <Tab.Pane key={"2" + e} eventKey={e}>
                                             <div className={"stepTitle"}>{value.title}</div>
-                                            {value.callback.call(value.callback)}
+                                            {value.form.render()}
                                         </Tab.Pane>
                                     );
                                 })}
@@ -75,14 +84,30 @@ class StepComponent<P, S> extends Component<P, S> {
                         </Col>
                     </Row>
                 </Tab.Container>
+
+                {(!isDesktop() && !this.isLastStep()) && (
+                    <FixedFooter
+                        home
+                        tool={this.fixedFooterProps}
+                        nextStep={this.steps[this.currentStep - 1].form.getID()}
+                    />
+                )}
+                {(!isDesktop() && this.isLastStep()) && (
+                    <FixedFooter
+                        home
+                        tool={this.fixedFooterProps}
+                        saveTool={this.steps[this.currentStep - 1].form.getID()}
+                    />
+                )}
             </>
         );
     }
 
-    protected nextStep = () => {
+    public nextStep = () => {
         if (this.progress < this.steps.length) {
             this.currentStep++;
             this.progress = this.currentStep;
+
             this.refresh();
         } else {
             if (this.currentStep < this.steps.length) {
@@ -92,7 +117,16 @@ class StepComponent<P, S> extends Component<P, S> {
         }
     }
 
-    protected addStep = (callback: () => React.ReactElement, title?: string) => {
+    public getSteps = (): Array<SingleStep> => {
+        return this.steps;
+    }
+
+    public abstract save(forms: Array<SingleStep>): any;
+
+    public isLastStep = (): boolean => {
+        return this.currentStep === this.steps.length;
+    }
+
         let newIndex = this.steps.length + 1;
         let stepTitle = String(newIndex);
 
@@ -101,8 +135,6 @@ class StepComponent<P, S> extends Component<P, S> {
         }
 
         let singleStep: SingleStep = {
-            callback: callback,
-            title: stepTitle
         };
 
         this.steps.push(singleStep);
@@ -114,10 +146,6 @@ class StepComponent<P, S> extends Component<P, S> {
 
     protected getProgress = (): number => {
         return this.progress;
-    }
-
-    protected isLastStep = (): boolean => {
-        return this.getProgress() === this.steps.length;
     }
 
     private changeCurrentTab = (title: string | null) => {

@@ -208,7 +208,7 @@ class MyProfile extends Component<any, MyProfileState> {
 
                 <hr/>
 
-                {(!this.state.isSaved) && (
+                {(this.state.isSaved !== undefined && this.state.isSaved) && (
                     <div className={"feedback text-success"}>
                         Ihre Benutzerdaten wurden abgespeichert!
                     </div>
