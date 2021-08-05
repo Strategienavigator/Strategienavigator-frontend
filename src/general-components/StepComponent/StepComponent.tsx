@@ -127,6 +127,7 @@ abstract class StepComponent<P, S> extends Component<P, S> {
         return this.currentStep === this.steps.length;
     }
 
+    protected addStep = (content: Form<any>, title?: string) => {
         let newIndex = this.steps.length + 1;
         let stepTitle = String(newIndex);
 
@@ -135,6 +136,8 @@ abstract class StepComponent<P, S> extends Component<P, S> {
         }
 
         let singleStep: SingleStep = {
+            title: stepTitle,
+            form: content
         };
 
         this.steps.push(singleStep);
