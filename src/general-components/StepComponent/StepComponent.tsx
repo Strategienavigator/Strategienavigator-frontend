@@ -20,6 +20,7 @@ abstract class StepComponent<P, S> extends Component<P, S> {
     protected steps: Array<SingleStep> = [];
     protected currentStep: number = 1;
     protected progress: number = 1;
+    protected completedSteps: Array<SingleStep> = [];
 
     private readonly header: string;
     private readonly fixedFooterProps: FooterToolProps;
@@ -87,14 +88,12 @@ abstract class StepComponent<P, S> extends Component<P, S> {
 
                 {(!isDesktop() && !this.isLastStep()) && (
                     <FixedFooter
-                        home
                         tool={this.fixedFooterProps}
                         nextStep={this.steps[this.currentStep - 1].form.getID()}
                     />
                 )}
                 {(!isDesktop() && this.isLastStep()) && (
                     <FixedFooter
-                        home
                         tool={this.fixedFooterProps}
                         saveTool={this.steps[this.currentStep - 1].form.getID()}
                     />
@@ -105,6 +104,9 @@ abstract class StepComponent<P, S> extends Component<P, S> {
 
     public nextStep = () => {
         if (this.progress < this.steps.length) {
+            let step = this.steps[this.progress - 1];
+            this.completedSteps.push(step);
+
             this.currentStep++;
             this.progress = this.currentStep;
 
@@ -125,6 +127,15 @@ abstract class StepComponent<P, S> extends Component<P, S> {
 
     public isLastStep = (): boolean => {
         return this.currentStep === this.steps.length;
+    }
+
+    public getCompletedStep(className: string): Form<any> | null {
+        for (const step of this.completedSteps) {
+            if (step.form.constructor.name === className) {
+                return step.form;
+            }
+        }
+        return null;
     }
 
     protected addStep = (content: Form<any>, title?: string) => {
@@ -167,7 +178,6 @@ abstract class StepComponent<P, S> extends Component<P, S> {
     private refresh() {
         this.forceUpdate();
     }
-
 }
 
 export default StepComponent;

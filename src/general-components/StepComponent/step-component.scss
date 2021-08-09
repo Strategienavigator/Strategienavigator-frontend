@@ -9,30 +9,27 @@ $tabColor: #6e6e6e;
 .stepTabs > .nav-item {
   flex: 1 1 auto;
   text-align: center;
-  background-color: $tabColor; //#888484
-  color: white;
+  background-color: darken($tabColor, 15%); //#888484 darken(#e6e6e6, 5%)
+  color: white; //white
   margin: 1px;
   border: none;
-  border-color: $tabColor !important;
-  border-bottom: 3px solid transparent;
   cursor: pointer;
 }
 
 .stepTabs > .nav-item.disabled {
-  background-color: $tabColor;
+  background-color: darken($tabColor, 15%); //$tabColor or darken($tabColor, 15%)
   opacity: 0.5;
   color: black;
 }
 
 .stepTabs > .nav-item:hover {
-  background-color: $tabColor !important;
+  background-color: darken($tabColor, 20%) !important;
   color: white;
 }
 
 .stepTabs > .nav-item.active {
-  background-color: darken(#e6e6e6, 5%) !important;
-  border-bottom: 3px solid $tabColor !important;
-  color: black !important;
+  background-color: $color !important; //
+  color: white !important;
 }
 
 .stepTitle {

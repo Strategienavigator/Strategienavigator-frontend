@@ -13,24 +13,27 @@ interface PCCriteriasValues {
 
 export class PCCriterias extends Form<PCCriteriasValues> {
 
+    buildValues(): void {
+    }
+
     build(): ReactNode {
         return (
             <div>
                 <InputGroup size={"sm"}>
-                    <FormControl name={"email"} placeholder={"E-Mail-Adresse"} aria-label="Small"
+                    <FormControl name={"email"} defaultValue={this.values?.email} placeholder={"E-Mail-Adresse"}
+                                 aria-label="Small"
                                  aria-describedby="inputGroup-sizing-sm"/>
                 </InputGroup>
             </div>
         );
     }
 
-    submit(e: FormEvent<HTMLFormElement>): boolean | void {
+    submit(values: PCCriteriasValues): boolean | void {
         return true;
     }
 
-    validate(e: FormEvent<HTMLFormElement>): boolean {
-        let {email} = this.extractValues(e);
-        return email.length > 0;
+    validate(values: PCCriteriasValues): boolean {
+        return values.email.length > 0;
     }
 
     extractValues(e: FormEvent<HTMLFormElement>): PCCriteriasValues {
@@ -49,24 +52,29 @@ interface PCPairComparisonValues {
 
 export class PCPairComparison extends Form<PCPairComparisonValues> {
 
+    buildValues(): void {
+    }
+
     build(): ReactNode {
+        let criterias: PCCriteriasValues | undefined = this.getCompletedStep(PCCriterias)?.getValues();
+
         return (
             <div>
                 <InputGroup size={"sm"}>
-                    <FormControl name={"email"} placeholder={"E-Mail-Adresse"} aria-label="Small"
+                    <FormControl name={"email"} defaultValue={criterias?.email} placeholder={"E-Mail-Adresse"}
+                                 aria-label="Small"
                                  aria-describedby="inputGroup-sizing-sm"/>
                 </InputGroup>
             </div>
         );
     }
 
-    submit(e: FormEvent<HTMLFormElement>): boolean | void {
+    submit(values: PCCriteriasValues): boolean | void {
         return true;
     }
 
-    validate(e: FormEvent<HTMLFormElement>): boolean {
-        let {email} = this.extractValues(e);
-        return email.length > 0;
+    validate(values: PCCriteriasValues): boolean {
+        return values.email.length > 0;
     }
 
     extractValues(e: FormEvent<HTMLFormElement>): PCCriteriasValues {

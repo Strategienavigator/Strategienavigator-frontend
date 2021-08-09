@@ -48,7 +48,7 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
             <div className={"container"}>
                 {this.props.children}
 
-                <Loader text={"Lade Speicherstände..."} alignment={"left"} size={50} transparent animate={false}
+                <Loader alignment={"left"} size={50} transparent animate={false}
                         payload={[this.loadToolSaves]}>
                     <ListGroup className={"saves mt-3"}>
 
@@ -81,7 +81,7 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
                     )}
 
                     {!isDesktop() && (
-                        <FixedFooter home settings
+                        <FixedFooter settings
                                      newTool={{link: this.props.link + "/new", title: "Neue Analyse"}}/>
                     )}
                 </div>

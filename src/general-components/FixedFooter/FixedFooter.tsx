@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {Col, Row} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome} from "@fortawesome/free-solid-svg-icons/faHome";
 import {faCaretRight} from "@fortawesome/free-solid-svg-icons/faCaretRight";
 
 import "./fixed-footer.scss";
@@ -23,7 +22,6 @@ export interface FooterNewToolProps {
 }
 
 interface FixedFooterProps {
-    home?: boolean
     settings?: boolean
     saveTool?: string
     nextStep?: string
@@ -36,11 +34,6 @@ class FixedFooter extends Component<FixedFooterProps, any> {
         return (
             <Row as={"footer"}
                  className={"nav fixed container p-0 pt-3 pb-3 m-auto justify-content-center align-items-center"}>
-                {(this.props.home) && (
-                    <Col as={NavLink} to={"/"} exact className={"text-center"}>
-                        <FontAwesomeIcon icon={faHome}/> Startseite
-                    </Col>
-                )}
 
                 {(this.props.tool) && (
                     <Col as={NavLink} to={this.props.tool?.link} exact className={"text-center"}>
