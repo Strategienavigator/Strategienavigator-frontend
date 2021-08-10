@@ -1,5 +1,5 @@
 import {User} from "../User";
-import {callAPI, CallInterface} from "../API";
+import {callAPI, CallInterface} from "../API/API";
 import Token from "./token/Token";
 import AuthToken from "./token/AuthToken";
 import RefreshToken from "./token/RefreshToken";

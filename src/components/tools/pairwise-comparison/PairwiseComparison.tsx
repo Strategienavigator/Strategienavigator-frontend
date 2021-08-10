@@ -15,12 +15,12 @@ class PairwiseComparison extends Component<any, any> {
                     steps={[
                         {
                             form: <PCCriterias/>,
-                            title: "Kritierien festlegen",
+                            title: "1. Kritierien festlegen",
                             id: "criterias"
                         },
                         {
                             form: <PCPairComparison/>,
-                            title: "Paarvergleich",
+                            title: "2. Paarvergleich",
                             id: "comparison"
                         }
                     ]}

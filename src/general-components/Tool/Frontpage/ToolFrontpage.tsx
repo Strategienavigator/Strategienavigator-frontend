@@ -7,8 +7,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import Loader from "../../Loader/Loader";
 import {Session} from "../../Session/Session";
-import {getSaves} from "../../APICalls";
-import {Save} from "../../Datastructures";
+import {getSaves} from "../../API/calls/Saves";
+import {SimpleSaveResource} from "../../Datastructures";
 
 export interface ToolFrontpageProps {
     tool: number
@@ -57,7 +57,7 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
                         )}
 
                         {this.state.saves?.map(value => {
-                            let save = value as Save;
+                            let save = value as SimpleSaveResource;
                             if (save.tool_id === this.props.tool) {
                                 return (
                                     <ListGroupItem as={Link} to={this.props.link + "/" + save.id} key={save.id} action>

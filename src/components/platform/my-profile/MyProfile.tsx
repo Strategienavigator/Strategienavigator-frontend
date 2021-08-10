@@ -8,7 +8,7 @@ import {Button, Form, FormControl, Modal} from "react-bootstrap";
 import "./my-profile.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {deleteUser, updateData, updateUser} from "../../../general-components/APICalls";
+import {deleteUser, updateData, updateUser} from "../../../general-components/API/calls/User";
 import {reload_app} from "../../../index";
 import {withRouter} from "react-router";
 import {Messages} from "../../../general-components/Messages/Messages";

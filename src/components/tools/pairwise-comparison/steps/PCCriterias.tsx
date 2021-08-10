@@ -19,7 +19,8 @@ export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
         return (
             <div>
                 <InputGroup size={"sm"}>
-                    <FormControl disabled={this.disabled} name={"firstname"} defaultValue={this.values?.firstname} placeholder={"Vorname"}/>
+                    <FormControl disabled={this.disabled} name={"firstname"} defaultValue={this.values?.firstname}
+                                 placeholder={"Vorname"}/>
                 </InputGroup>
             </div>
         );

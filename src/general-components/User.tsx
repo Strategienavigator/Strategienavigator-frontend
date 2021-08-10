@@ -1,4 +1,4 @@
-import {updateData} from "./APICalls";
+import {updateData} from "./API/calls/User";
 
 class User {
     private id: number;

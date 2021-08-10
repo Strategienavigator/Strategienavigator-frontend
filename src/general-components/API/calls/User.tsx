@@ -1,21 +1,18 @@
-import {callAPI} from "./API";
+import {callAPI} from "../API";
 
-/**
- * Will return all Saves by the given userID and toolID
- */
-const getSaves = async (userID: number, token: string | null) => {
-    return await callAPI("api/users/" + userID + "/saves", "GET", undefined, (token !== null) ? token : undefined);
-}
-
-/**
- * Will update the User with the given data and userID
- */
 export type updateData = {
     username?: string
     password?: string
     email?: string
     current_password?: string
 }
+/**
+ * Bearbeitet den Benutzer mit den übermittelten Daten
+ *
+ * @param data Die zu übernehmenden Daten
+ * @param userID Die ID des Benutzers
+ * @param token Der Token zur Authentifizierung
+ */
 const updateUser = async (userID: number, data: updateData, token: string | null) => {
     let formData = new FormData();
 
@@ -32,14 +29,16 @@ const updateUser = async (userID: number, data: updateData, token: string | null
 }
 
 /**
- * Will delete the user with the given userID and token
+ * Löscht einen Benutzer
+ *
+ * @param userID Die ID des Benutzers
+ * @param token Der Token zur Authentifizierung
  */
 const deleteUser = async (userID: number, token: string | null) => {
     return await callAPI("api/users/" + userID, "DELETE", undefined, (token !== null) ? token : undefined);
 }
 
 export {
-    getSaves,
     updateUser,
     deleteUser
 }
