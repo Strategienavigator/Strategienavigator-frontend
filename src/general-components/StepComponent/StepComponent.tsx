@@ -1,60 +1,86 @@
-import React, {Component} from "react";
-import {Button, Col, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import React, {Component, RefObject} from "react";
 
 import "./step-component.scss";
 import "./step-component-desk.scss";
+import {Button, Card, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../Desktop";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretRight} from "@fortawesome/free-solid-svg-icons/faCaretRight";
 import FixedFooter, {FooterToolProps} from "../FixedFooter/FixedFooter";
-import Form from "../Form/Form";
-import {faSave} from "@fortawesome/free-solid-svg-icons/";
+import FormComponent from "../Form/FormComponent";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCaretRight, faSave} from "@fortawesome/free-solid-svg-icons/";
 
-export interface SingleStep {
-    form: Form<any>
-    title: string
+export type StepProp = {
+    id: string,
+    title: string,
+    form: JSX.Element,
+    ref?: React.Ref<any>
+};
+
+interface StepComponentProps {
+    steps: StepProp[]
+    header?: string
+    fixedFooterToolProp?: FooterToolProps
+    onSave?: (forms: Array<FormComponent<any, any>>) => Promise<boolean>
 }
 
-abstract class StepComponent<P, S> extends Component<P, S> {
 
-    protected steps: Array<SingleStep> = [];
-    protected currentStep: number = 1;
-    protected progress: number = 1;
-    protected completedSteps: Array<SingleStep> = [];
+class StepComponent extends Component<StepComponentProps, any> {
+    private allSteps: Array<StepProp> = new Array<StepProp>();
+    private currentStep: number = 1;
+    private currentProgress: number = 1;
 
-    private readonly header: string;
-    private readonly fixedFooterProps: FooterToolProps;
+    private readonly completedSteps: Array<RefObject<FormComponent<any, any>>>;
+    private readonly allRefs: Array<RefObject<FormComponent<any, any>>> = new Array<RefObject<FormComponent<any, any>>>();
 
-    protected constructor(props: any, header: string, fixedFooterProps: FooterToolProps) {
+    constructor(props: any) {
         super(props);
-        this.header = header;
-        this.fixedFooterProps = fixedFooterProps;
+
+        this.completedSteps = new Array<RefObject<FormComponent<any, any>>>();
+        this.allRefs = new Array<RefObject<FormComponent<any, any>>>();
+
+        this.props.steps.map((value) => {
+            let ref = React.createRef<FormComponent<any, any>>();
+            this.allRefs.push(ref);
+
+            value.form = React.cloneElement(value.form, {ref: ref, id: value.id, title: value.title, stepComp: this});
+            this.allSteps.push(value);
+
+            return null;
+        });
     }
 
-    render() {
-        let i = 0
+    render = () => {
+        let i = 0;
         let e = 0;
+
+        if (this.props.steps.length < 1) {
+            return (
+                <Card body>
+                    Diese Analyse ist in Bearbeitung...
+                </Card>
+            );
+        }
 
         return (
             <>
                 <Tab.Container
                     id="step"
-                    activeKey={this.getCurrentStep()}
-                    transition={false}
-                    onSelect={(e) => this.changeCurrentTab(e)}
+                    activeKey={this.currentStep}
+                    transition={Fade}
+                    onSelect={(e) => this.onStepSelect(e)}
                 >
                     <Row className={"stepContainer"}>
                         <Col className={"stepTabContainer"}>
 
-                            {(isDesktop()) ? (
-                                <div className={"stepHeader"}>{this.header}</div>
+                            {(isDesktop() && this.props.header !== undefined) ? (
+                                <div className={"stepHeader"}>{this.props.header}</div>
                             ) : ""}
 
                             <Nav className={"stepTabs"}>
-                                {this.steps.map((value) => {
+                                {this.props.steps.map((value) => {
                                     i++;
                                     return (
-                                        <Nav.Link key={i} as={NavItem} disabled={i > this.getProgress()}
+                                        <Nav.Link key={i} as={NavItem} disabled={i > this.currentProgress}
                                                   eventKey={i}>{isDesktop() ? value.title : i}</Nav.Link>
                                     );
                                 })}
@@ -62,22 +88,23 @@ abstract class StepComponent<P, S> extends Component<P, S> {
 
                             {(isDesktop()) ? (
                                 <Button variant={"dark"} type={"submit"}
-                                        form={this.steps[this.currentStep - 1].form.getID()} className={"mt-2"}
-                                        size={"sm"}>
+                                        form={this.allSteps[this.currentStep - 1].id} className={"mt-2"}
+                                >
                                     <FontAwesomeIcon
                                         icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
                                 </Button>
                             ) : ""}
+
                         </Col>
                         <Col className={"tabsContent"}>
                             <Tab.Content>
-                                {this.steps.map((value) => {
+                                {this.allSteps.map((value) => {
                                     e++;
 
                                     return (
                                         <Tab.Pane key={"2" + e} eventKey={e}>
                                             <div className={"stepTitle"}>{value.title}</div>
-                                            {value.form.render()}
+                                            {value.form}
                                         </Tab.Pane>
                                     );
                                 })}
@@ -86,97 +113,100 @@ abstract class StepComponent<P, S> extends Component<P, S> {
                     </Row>
                 </Tab.Container>
 
-                {(!isDesktop() && !this.isLastStep()) && (
-                    <FixedFooter
-                        tool={this.fixedFooterProps}
-                        nextStep={this.steps[this.currentStep - 1].form.getID()}
-                    />
-                )}
                 {(!isDesktop() && this.isLastStep()) && (
                     <FixedFooter
-                        tool={this.fixedFooterProps}
-                        saveTool={this.steps[this.currentStep - 1].form.getID()}
+                        tool={this.props.fixedFooterToolProp}
+                        saveTool={this.allSteps[this.currentStep - 1].id}
+                    />
+                )}
+
+                {(!isDesktop() && !this.isLastStep()) && (
+                    <FixedFooter
+                        tool={this.props.fixedFooterToolProp}
+                        nextStep={this.allSteps[this.currentStep - 1].id}
                     />
                 )}
             </>
         );
     }
 
-    public nextStep = () => {
-        if (this.progress < this.steps.length) {
-            let step = this.steps[this.progress - 1];
-            this.completedSteps.push(step);
-
-            this.currentStep++;
-            this.progress = this.currentStep;
-
-            this.refresh();
-        } else {
-            if (this.currentStep < this.steps.length) {
-                this.currentStep++;
-                this.refresh();
-            }
-        }
-    }
-
-    public getSteps = (): Array<SingleStep> => {
-        return this.steps;
-    }
-
-    public abstract save(forms: Array<SingleStep>): any;
-
-    public isLastStep = (): boolean => {
-        return this.currentStep === this.steps.length;
-    }
-
-    public getCompletedStep(className: string): Form<any> | null {
-        for (const step of this.completedSteps) {
-            if (step.form.constructor.name === className) {
-                return step.form;
-            }
+    public getPreviousStep = (): null | FormComponent<any, any> => {
+        if ((this.currentStep - 1 <= this.completedSteps.length) && this.completedSteps.length !== 0) {
+            return this.completedSteps[this.currentStep - 2].current;
         }
         return null;
     }
 
-    protected addStep = (content: Form<any>, title?: string) => {
-        let newIndex = this.steps.length + 1;
-        let stepTitle = String(newIndex);
-
-        if (title) {
-            stepTitle = stepTitle + ": " + title;
+    public getForm = (index: number) => {
+        if (index <= this.completedSteps.length) {
+            return this.completedSteps[index].current?.getValues();
         }
-
-        let singleStep: SingleStep = {
-            title: stepTitle,
-            form: content
-        };
-
-        this.steps.push(singleStep);
+        return null;
     }
 
-    protected getCurrentStep = (): number => {
-        return this.currentStep;
+    public isAt = (index: number): boolean => {
+        return this.currentStep === index;
     }
 
-    protected getProgress = (): number => {
-        return this.progress;
+    public isFirstStep = (): boolean => {
+        return this.currentStep === 1;
     }
 
-    private changeCurrentTab = (title: string | null) => {
+    public isLastStep = (): boolean => {
+        return this.currentStep === this.allSteps.length;
+    }
+
+    public nextStep = () => {
+        if (this.currentProgress < this.allSteps.length) {
+            let step = this.allRefs[this.currentProgress - 1];
+            this.completedSteps.push(step);
+            step.current?.setDisabled(true);
+
+            this.currentStep++;
+            this.currentProgress = this.currentStep;
+
+            step = this.allRefs[this.currentProgress - 1];
+            step.current?.prepareValues();
+            step.current?.forceUpdate();
+
+            this.forceUpdate();
+        } else {
+            if (this.currentStep < this.allSteps.length) {
+                this.currentStep++;
+
+                let step = this.allRefs[this.currentStep - 1];
+                step.current?.prepareValues();
+                step.current?.forceUpdate();
+
+                this.forceUpdate();
+            }
+        }
+    }
+
+    public onSave = async (): Promise<boolean> => {
+        if (this.props.onSave !== undefined) {
+            let allForms = new Array<FormComponent<any, any>>();
+
+            for (const form of this.allRefs) {
+                allForms.push(form.current as FormComponent<any, any>);
+            }
+
+            return await this.props.onSave(allForms);
+        }
+        return false;
+    }
+
+    private onStepSelect = (title: string | null) => {
         if (title !== null) {
             let step: number = parseInt(title);
 
-            if (step > this.progress) {
-                this.progress = step;
+            if (step > this.currentProgress) {
+                this.currentProgress = step;
             }
 
             this.currentStep = step;
-            this.refresh();
+            this.forceUpdate();
         }
-    }
-
-    private refresh() {
-        this.forceUpdate();
     }
 }
 

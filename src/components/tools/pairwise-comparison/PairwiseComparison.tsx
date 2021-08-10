@@ -1,119 +1,44 @@
 import "./pairwise-comparison.scss";
-import StepComponent, {SingleStep} from "../../../general-components/StepComponent/StepComponent";
-import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
-import Form from "../../../general-components/Form/Form";
-import {FormEvent, ReactNode} from "react";
-import {FormControl, InputGroup} from "react-bootstrap";
-import {extractFromForm} from "../../../general-components/FormHelper";
-import {Messages} from "../../../general-components/Messages/Messages";
+import StepComponent from "../../../general-components/StepComponent/StepComponent";
+import PCCriterias from "./steps/PCCriterias";
+import {Component} from "react";
+import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
+import PCPairComparison from "./steps/PCPairComparison";
+import FormComponent from "../../../general-components/Form/FormComponent";
 
-interface PCCriteriasValues {
-    email: string
-}
-
-export class PCCriterias extends Form<PCCriteriasValues> {
-
-    buildValues(): void {
-    }
-
-    build(): ReactNode {
-        return (
-            <div>
-                <InputGroup size={"sm"}>
-                    <FormControl name={"email"} defaultValue={this.values?.email} placeholder={"E-Mail-Adresse"}
-                                 aria-label="Small"
-                                 aria-describedby="inputGroup-sizing-sm"/>
-                </InputGroup>
-            </div>
-        );
-    }
-
-    submit(values: PCCriteriasValues): boolean | void {
-        return true;
-    }
-
-    validate(values: PCCriteriasValues): boolean {
-        return values.email.length > 0;
-    }
-
-    extractValues(e: FormEvent<HTMLFormElement>): PCCriteriasValues {
-        let email: string = extractFromForm(e, "email") as string;
-
-        return {
-            email: email
-        };
-    }
-
-}
-
-interface PCPairComparisonValues {
-    email: string
-}
-
-export class PCPairComparison extends Form<PCPairComparisonValues> {
-
-    buildValues(): void {
-    }
-
-    build(): ReactNode {
-        let criterias: PCCriteriasValues | undefined = this.getCompletedStep(PCCriterias)?.getValues();
-
-        return (
-            <div>
-                <InputGroup size={"sm"}>
-                    <FormControl name={"email"} defaultValue={criterias?.email} placeholder={"E-Mail-Adresse"}
-                                 aria-label="Small"
-                                 aria-describedby="inputGroup-sizing-sm"/>
-                </InputGroup>
-            </div>
-        );
-    }
-
-    submit(values: PCCriteriasValues): boolean | void {
-        return true;
-    }
-
-    validate(values: PCCriteriasValues): boolean {
-        return values.email.length > 0;
-    }
-
-    extractValues(e: FormEvent<HTMLFormElement>): PCCriteriasValues {
-        let email: string = extractFromForm(e, "email") as string;
-
-        return {
-            email: email
-        };
-    }
-
-}
-
-class PairwiseComparison extends StepComponent<any, any> {
-
-    constructor(props: any) {
-        super(
-            props,
-            "Paarweiser Vergleich",
-            {
-                icon: faSortAmountDownAlt,
-                link: "/pairwise-comparison",
-                title: "Start PV"
-            }
-        );
-
-        this.addStep(new PCCriterias(this, "pc-criterias"), "Kritierien festlegen");
-        this.addStep(new PCPairComparison(this, "pair-comparison"), "Paarvergleich");
-    }
+class PairwiseComparison extends Component<any, any> {
 
     render() {
         return (
             <div className={"container"}>
-                {super.render()}
+                <StepComponent
+                    steps={[
+                        {
+                            form: <PCCriterias/>,
+                            title: "Kritierien festlegen",
+                            id: "criterias"
+                        },
+                        {
+                            form: <PCPairComparison/>,
+                            title: "Paarvergleich",
+                            id: "comparison"
+                        }
+                    ]}
+                    header={"Paarweiser Vergleich"}
+                    fixedFooterToolProp={{
+                        title: "PV-Start",
+                        link: "/pairwise-comparison",
+                        icon: faSortAmountDownAlt
+                    }}
+                    onSave={(e) => this.save(e)}
+                />
             </div>
         );
     }
 
-    save(steps: Array<SingleStep>): any {
-        Messages.add("Tool abgespeichert!", "SUCCESS", Messages.TIMER);
+    save = async (forms: Array<FormComponent<any, any>>) => {
+        // forms[1].getValues() as PCPairComparisonValues;
+        return true;
     }
 
 }

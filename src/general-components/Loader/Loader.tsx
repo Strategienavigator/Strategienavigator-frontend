@@ -47,9 +47,9 @@ class Loader extends Component<LoaderProps, LoaderState> {
      * This is considered pretty hacky, but using history.push from react-router, this could be considered a considerable solution
      */
     componentWillUnmount() {
-        this.setState = (state, callback) => {
+        this.setState = (() => {
             return;
-        };
+        });
     }
 
     loadPayload = async () => {

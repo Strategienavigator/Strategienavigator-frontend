@@ -1,23 +1,18 @@
 import "./swot-analysis.scss";
-import StepComponent, {SingleStep} from "../../../general-components/StepComponent/StepComponent";
-import React from "react";
-import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
+import React, {Component} from "react";
+import StepComponent from "../../../general-components/StepComponent/StepComponent";
 
-class SWOTAnalysis extends StepComponent<any, any> {
-
-    constructor(props: any) {
-        super(props, "SWOT Analyse", {icon: faSortAmountDownAlt, link: "/swot-analysis", title: "Start SWOT"});
-    }
+class SWOTAnalysis extends Component<any, any> {
 
     render() {
         return (
             <div className={"container"}>
-                {super.render()}
+                <StepComponent
+                    steps={[]}
+                    header={"SWOT Analyse"}
+                />
             </div>
         );
-    }
-
-    save(steps: Array<SingleStep>): any {
     }
 
 }
