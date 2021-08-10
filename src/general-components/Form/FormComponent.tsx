@@ -1,7 +1,9 @@
-import {Component, FormEvent} from "react";
+import {Component, FormEvent, ReactNode} from "react";
 import {Form} from "react-bootstrap";
 import {Messages} from "../Messages/Messages";
 import StepComponent from "../StepComponent/StepComponent";
+
+import "../../scss/feedback.scss";
 
 interface FormComponentProps {
     id?: string,
@@ -12,6 +14,7 @@ interface FormComponentProps {
 abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     protected values: V | undefined;
     protected disabled: boolean = false;
+    private error: Map<string, ReactNode[]> = new Map<string, ReactNode[]>();
 
     public componentDidMount = async () => {
         await this.prepareValues();
@@ -52,6 +55,40 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     public setDisabled = (disabled: boolean) => {
         this.disabled = disabled;
         this.forceUpdate();
+    }
+
+    protected addError = (id: string, error: ReactNode) => {
+        let errorArray = this.error.get(id);
+
+        if (errorArray === undefined) {
+            this.error.set(id, []);
+        }
+
+        errorArray = this.error.get(id);
+        errorArray?.push(error);
+        this.error.set(id, errorArray as ReactNode[]);
+
+        this.forceUpdate(() => {
+            this.error.delete(id);
+        });
+    }
+
+    protected getError = (id: string): ReactNode => {
+        return (
+            <div className={"feedbackContainer"}>
+                {this.error.get(id)?.map((value) => {
+                    return (
+                        <div className={"feedback DANGER"}>
+                            {value}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
+    protected hasError = (): boolean => {
+        return false;
     }
 
     private onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {

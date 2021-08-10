@@ -1,0 +1,19 @@
+@import "variables";
+@import "~bootstrap/scss/bootstrap-utilities";
+
+.feedbackContainer {
+
+  .feedback {
+    padding: 0.25rem 0;
+    border-radius: 15px;
+  }
+
+  .feedback.DANGER {
+    color: $danger;
+  }
+
+  .feedback.SUCCESS {
+    color: $success;
+  }
+
+}

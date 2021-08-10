@@ -11,7 +11,7 @@ export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
 
     prepareValues = async () => {
         this.setValues({
-            firstname: "Nichlas"
+            firstname: "Peter"
         });
     }
 
@@ -22,6 +22,7 @@ export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
                     <FormControl disabled={this.disabled} name={"firstname"} defaultValue={this.values?.firstname}
                                  placeholder={"Vorname"}/>
                 </InputGroup>
+                {this.getError("firstname")}
             </div>
         );
     }
@@ -31,6 +32,11 @@ export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
     }
 
     validate(values: PCCriteriasValues): boolean {
+        if (values.firstname.length < 1) {
+            this.addError("firstname", "Bitte füllen Sie das Feld aus!");
+            return false;
+        }
+
         return true;
     }
 
