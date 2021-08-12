@@ -1,0 +1,43 @@
+.input-group, .addCard {
+  margin-top: 5px;
+}
+
+.addCard {
+  background-color: #060139;
+  transition: 0.2s;
+  cursor: pointer;
+
+  :hover {
+    background-color: lighten(#060139, 10%);
+  }
+
+  * {
+    color: white !important;
+    transition: 0.2s;
+  }
+
+  .icon {
+    text-align: center;
+  }
+
+  .card-body {
+    padding: 0.375rem 0.75rem;
+  }
+}
+
+.addCard.disabled {
+  opacity: 0.4;
+}
+
+.input-group {
+  button {
+    color: #060139;
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-left: none;
+  }
+
+  button:focus {
+    box-shadow: none;
+  }
+}

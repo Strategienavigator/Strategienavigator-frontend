@@ -112,10 +112,10 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
                 } else {
                     this.props.stepComp?.nextStep();
                 }
-            } else {
+            } /*else {
                 Messages.add(
                     <span>In Ihren Eingaben befinden sich Fehler!<br/> Bitte überprüfen Sie diese erneut.</span>, "DANGER", Messages.TIMER);
-            }
+            }*/
         }
     }
 

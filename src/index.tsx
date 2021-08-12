@@ -26,7 +26,6 @@ import SWOTAnalysis from "./components/tools/swot-analysis/SWOTAnalysis";
 import {Messages} from "./general-components/Messages/Messages";
 import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
-
 // import reportWebVitals from './reportWebVitals';
 
 const reload_app = () => {
@@ -70,6 +69,11 @@ const reload_app = () => {
         document.getElementById('root')
     );
 }
+
+// TODO: FixedFooter umschreiben und einbinden
+// const setFixedFooter = () => {
+//
+// }
 
 reload_app();
 

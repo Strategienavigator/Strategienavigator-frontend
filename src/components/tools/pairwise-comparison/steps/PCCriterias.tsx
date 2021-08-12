@@ -1,39 +1,37 @@
 import FormComponent from "../../../../general-components/Form/FormComponent";
-import {FormControl, InputGroup} from "react-bootstrap";
 import {FormEvent} from "react";
-import {extractFromForm} from "../../../../general-components/FormHelper";
+import {extractCardComponentField} from "../../../../general-components/FormHelper";
+import CardComponent, {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
+import {Messages} from "../../../../general-components/Messages/Messages";
 
 export interface PCCriteriasValues {
-    firstname: string
+    criterias: CardComponentFields
 }
 
 export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
 
     prepareValues = async () => {
-        this.setValues({
-            firstname: "Peter"
-        });
     }
 
     build() {
         return (
             <div>
-                <InputGroup size={"sm"}>
-                    <FormControl disabled={this.disabled} name={"firstname"} defaultValue={this.values?.firstname}
-                                 placeholder={"Vorname"}/>
-                </InputGroup>
-                {this.getError("firstname")}
+                <CardComponent
+                    name={"criterias"}
+                    disabled={this.disabled}
+                    min={2}
+                    max={10}
+                />
             </div>
         );
     }
 
     submit = async (values: PCCriteriasValues) => {
-
     }
 
     validate(values: PCCriteriasValues): boolean {
-        if (values.firstname.length < 1) {
-            this.addError("firstname", "Bitte füllen Sie das Feld aus!");
+        if (values.criterias.length < 2) {
+            Messages.add("Sie müssen mindestens 2 Kriterien sammt Beschreibung angeben, um fortfahren zu können.", "DANGER", Messages.TIMER);
             return false;
         }
 
@@ -41,10 +39,10 @@ export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
     }
 
     extractValues(e: FormEvent<HTMLFormElement>): PCCriteriasValues {
-        let firstname: string = extractFromForm(e, "firstname") as string;
+        let criterias: CardComponentFields = extractCardComponentField(e, "criterias") as CardComponentFields;
 
         return {
-            firstname: firstname
+            criterias: criterias
         };
     }
 
