@@ -21,8 +21,8 @@ interface StepComponentProps {
     header?: string
     fixedFooterToolProp?: FooterToolProps
     onSave?: (forms: Array<FormComponent<any, any>>) => Promise<boolean>
+    maintenance?: boolean
 }
-
 
 class StepComponent extends Component<StepComponentProps, any> {
     private allSteps: Array<StepProp> = new Array<StepProp>();
@@ -53,7 +53,7 @@ class StepComponent extends Component<StepComponentProps, any> {
         let i = 0;
         let e = 0;
 
-        if (this.props.steps.length < 1) {
+        if (this.props.steps.length < 1 || this.props.maintenance) {
             return (
                 <Card body>
                     Diese Analyse ist in Bearbeitung...
