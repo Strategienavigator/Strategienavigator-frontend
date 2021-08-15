@@ -5,7 +5,11 @@ class SWOTAnalysisHome extends Component<any, any> {
 
     render() {
         return (
-            <ToolFrontpage tool={1} link={"/swot-analysis"}>
+            <ToolFrontpage
+                tool={1}
+                link={"/swot-analysis"}
+                maintenance
+            >
                 <h4>SWOT Analyse</h4>
             </ToolFrontpage>
         );

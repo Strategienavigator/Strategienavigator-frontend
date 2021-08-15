@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {isDesktop} from "../../Desktop";
 import FixedFooter from "../../FixedFooter/FixedFooter";
-import {Button, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
@@ -13,6 +13,7 @@ import {SimpleSaveResource} from "../../Datastructures";
 export interface ToolFrontpageProps {
     tool: number
     link: string
+    maintenance?: boolean
 }
 
 interface ToolFrontpageState {
@@ -44,6 +45,14 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
     }
 
     render = () => {
+        if (this.props.maintenance) {
+            return (
+                <Card body>
+                    Diese Analyse ist in Bearbeitung...
+                </Card>
+            );
+        }
+
         return (
             <div className={"container"}>
                 {this.props.children}
