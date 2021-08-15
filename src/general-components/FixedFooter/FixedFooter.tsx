@@ -56,7 +56,8 @@ class FixedFooter extends Component<FixedFooterProps, any> {
 
                 {(this.props.reset !== undefined) && (
                     <Col className={"text-center"}>
-                        <button onClick={() => this.props.reset?.call(this.props.reset)} className={"btn-transparent"} type={"button"}>
+                        <button onClick={() => this.props.reset?.call(this.props.reset)} className={"btn-transparent"}
+                                type={"button"}>
                             <FontAwesomeIcon icon={faUndo}/> Zurücksetzen
                         </button>
                     </Col>
