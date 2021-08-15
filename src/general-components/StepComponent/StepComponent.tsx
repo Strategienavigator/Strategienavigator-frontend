@@ -7,7 +7,7 @@ import {isDesktop} from "../Desktop";
 import FixedFooter, {FooterToolProps} from "../FixedFooter/FixedFooter";
 import FormComponent from "../Form/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretRight, faSave} from "@fortawesome/free-solid-svg-icons/";
+import {faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
 export type StepProp = {
     id: string,
@@ -96,15 +96,27 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                 })}
                             </Nav>
 
-                            {(isDesktop()) ? (
-                                <Button variant={"dark"} type={"submit"}
+                            {(isDesktop()) && (
+                                <>
+                                    <Button
+                                        variant={"dark"}
+                                        type={"submit"}
                                         form={this.allSteps[this.currentStep - 1].id} className={"mt-2"}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
-                                </Button>
-                            ) : ""}
-
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
+                                    </Button>
+                                    <Button
+                                        variant={"dark"}
+                                        type={"button"}
+                                        className={"mt-2 mx-2"}
+                                        onClick={() => this.setState({onReset: true, showResetModal: true})}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faUndo}/> Zurücksetzen
+                                    </Button>
+                                </>
+                            )}
                         </Col>
                         <Col className={"tabsContent"}>
                             <Tab.Content>

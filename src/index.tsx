@@ -33,7 +33,7 @@ const reload_app = () => {
         <React.StrictMode>
 
             <Messages
-                xAlignment={isDesktop() ? "LEFT" : "CENTER"}
+                xAlignment={"CENTER"}
                 yAlignment={"BOTTOM"}
                 style={{marginBottom: 65}}
             />
