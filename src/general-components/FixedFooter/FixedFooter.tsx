@@ -8,7 +8,7 @@ import "./fixed-footer.scss";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import {faCogs} from "@fortawesome/free-solid-svg-icons/faCogs";
-import {faSave} from "@fortawesome/free-solid-svg-icons/";
+import {faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
 export interface FooterToolProps {
     icon: IconProp
@@ -25,6 +25,7 @@ interface FixedFooterProps {
     settings?: boolean
     saveTool?: string
     nextStep?: string
+    reset?: () => void
     tool?: FooterToolProps
     newTool?: FooterNewToolProps
 }
@@ -50,6 +51,14 @@ class FixedFooter extends Component<FixedFooterProps, any> {
                 {(this.props.settings) && (
                     <Col as={NavLink} to={"/settings"} exact className={"text-center"}>
                         <FontAwesomeIcon icon={faCogs}/> Einstellungen
+                    </Col>
+                )}
+
+                {(this.props.reset !== undefined) && (
+                    <Col className={"text-center"}>
+                        <button onClick={() => this.props.reset?.call(this.props.reset)} className={"btn-transparent"} type={"button"}>
+                            <FontAwesomeIcon icon={faUndo}/> Zurücksetzen
+                        </button>
                     </Col>
                 )}
 

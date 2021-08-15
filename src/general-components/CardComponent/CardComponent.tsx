@@ -51,9 +51,11 @@ class Card extends Component<CardProps, CardState> {
                         defaultValue={this.props.value}
                         placeholder={"Bezeichnung"}
                     />
-                    <Button disabled={this.props.disabled} onClick={() => this.props.onDelete()} variant={"link"}>
-                        <FontAwesomeIcon icon={faTimes}/>
-                    </Button>
+                    {(!this.props.disabled) && (
+                        <Button onClick={() => this.props.onDelete()} variant={"link"}>
+                            <FontAwesomeIcon icon={faTimes}/>
+                        </Button>
+                    )}
                 </InputGroup>
                 <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
                     <div>
@@ -61,10 +63,10 @@ class Card extends Component<CardProps, CardState> {
                             required
                             disabled={this.props.disabled}
                             onChange={(e) => this.descChanged(e)}
-                            rows={1}
                             onFocus={() => this.setState({showDesc: true})}
                             onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
                             as="textarea"
+                            style={{maxHeight: 500}}
                             name={this.props.name + "[][desc]"}
                             placeholder={"Beschreibung"}
                         />
@@ -139,7 +141,7 @@ class CardComponent extends Component<CardComponentProps, any> {
             <div>
                 {this.getAllCards()}
 
-                {(this.cards.size < this.props.max) && (
+                {((this.cards.size < this.props.max) && !this.props.disabled) && (
                     <BootstrapCard onClick={() => this.addCard()}
                                    className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
                         <div className={"icon"}>

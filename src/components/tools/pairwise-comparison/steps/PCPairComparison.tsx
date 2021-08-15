@@ -10,6 +10,7 @@ export default class PCPairComparison extends FormComponent<PCPairComparisonValu
 
     prepareValues = async () => {
         let previous = this.props.stepComp?.getPreviousStep()?.getValues() as PCCriteriasValues;
+        console.log("STEP 1 Values: " + previous);
     }
 
     build() {

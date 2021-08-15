@@ -2,7 +2,7 @@ import React, {Component, RefObject} from "react";
 
 import "./step-component.scss";
 import "./step-component-desk.scss";
-import {Button, Card, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import {Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../Desktop";
 import FixedFooter, {FooterToolProps} from "../FixedFooter/FixedFooter";
 import FormComponent from "../Form/FormComponent";
@@ -19,12 +19,17 @@ export type StepProp = {
 interface StepComponentProps {
     steps: StepProp[]
     header?: string
-    fixedFooterToolProp?: FooterToolProps
+    fixedFooterToolProp: FooterToolProps
     onSave?: (forms: Array<FormComponent<any, any>>) => Promise<boolean>
     maintenance?: boolean
 }
 
-class StepComponent extends Component<StepComponentProps, any> {
+interface StepComponentState {
+    onReset: boolean
+    showResetModal: boolean
+}
+
+class StepComponent extends Component<StepComponentProps, StepComponentState> {
     private allSteps: Array<StepProp> = new Array<StepProp>();
     private currentStep: number = 1;
     private currentProgress: number = 1;
@@ -47,6 +52,11 @@ class StepComponent extends Component<StepComponentProps, any> {
 
             return null;
         });
+
+        this.state = {
+            onReset: false,
+            showResetModal: false
+        }
     }
 
     render = () => {
@@ -116,6 +126,7 @@ class StepComponent extends Component<StepComponentProps, any> {
                 {(!isDesktop() && this.isLastStep()) && (
                     <FixedFooter
                         tool={this.props.fixedFooterToolProp}
+                        reset={() => this.setState({onReset: true, showResetModal: true})}
                         saveTool={this.allSteps[this.currentStep - 1].id}
                     />
                 )}
@@ -123,8 +134,50 @@ class StepComponent extends Component<StepComponentProps, any> {
                 {(!isDesktop() && !this.isLastStep()) && (
                     <FixedFooter
                         tool={this.props.fixedFooterToolProp}
+                        reset={() => this.setState({onReset: true, showResetModal: true})}
                         nextStep={this.allSteps[this.currentStep - 1].id}
                     />
+                )}
+
+                {(this.state.onReset) && (
+                    <Modal
+                        show={this.state.showResetModal}
+                        backdrop="static"
+                        keyboard={true}
+                    >
+                        <Modal.Header>
+                            <Modal.Title>Sind Sie sich sicher?</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Sind Sie sich sicher, dass Sie mit dem zurücksetzen fortfahren möchten?
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button
+                                onClick={() => this.setState({showResetModal: false, onReset: false})}
+                                variant={"light"}
+                            >
+                                Nein!
+                            </Button>
+                            <Button
+                                variant="dark"
+                                onClick={() => {
+                                    this.setState({showResetModal: false, onReset: false});
+                                    this.resetSteps();
+                                }}
+                            >
+                                Ja, ALLE Schritte zurücksetzen!
+                            </Button>
+                            <Button
+                                variant="dark"
+                                onClick={() => {
+                                    this.setState({showResetModal: false, onReset: false});
+                                    this.resetSteps(this.currentStep);
+                                }}
+                            >
+                                Ja, ab dem aktuellen Schritt neu beginnen!
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 )}
             </>
         );
@@ -194,6 +247,27 @@ class StepComponent extends Component<StepComponentProps, any> {
             return await this.props.onSave(allForms);
         }
         return false;
+    }
+
+    private resetSteps(currentStep?: number) {
+        let i = (currentStep !== undefined) ? (currentStep) : 0;
+
+        if (currentStep !== undefined) {
+            this.currentStep = currentStep;
+            this.currentProgress = currentStep;
+
+            this.allRefs[currentStep - 1].current?.setDisabled(false);
+        } else {
+            this.currentStep = 1;
+            this.currentProgress = 1;
+        }
+
+        for (i; i < this.allSteps.length; i++) {
+            let step = this.allRefs[i];
+            step.current?.reset();
+        }
+
+        this.forceUpdate();
     }
 
     private onStepSelect = (title: string | null) => {

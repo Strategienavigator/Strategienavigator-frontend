@@ -1,6 +1,7 @@
 import "./swot-analysis.scss";
 import React, {Component} from "react";
 import StepComponent from "../../../general-components/StepComponent/StepComponent";
+import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
 
 class SWOTAnalysis extends Component<any, any> {
 
@@ -8,6 +9,11 @@ class SWOTAnalysis extends Component<any, any> {
         return (
             <div className={"container"}>
                 <StepComponent
+                    fixedFooterToolProp={{
+                        title: "SWOT-Start",
+                        link: "/swot-analysis",
+                        icon: faSortAmountDownAlt
+                    }}
                     steps={[]}
                     header={"SWOT Analyse"}
                 />

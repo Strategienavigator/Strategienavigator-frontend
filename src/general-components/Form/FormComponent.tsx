@@ -4,6 +4,7 @@ import {Messages} from "../Messages/Messages";
 import StepComponent from "../StepComponent/StepComponent";
 
 import "../../scss/feedback.scss";
+import {randomBytes} from "crypto";
 
 interface FormComponentProps {
     id?: string,
@@ -15,6 +16,7 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     protected values: V | undefined;
     protected disabled: boolean = false;
     private error: Map<string, ReactNode[]> = new Map<string, ReactNode[]>();
+    private key: string = randomBytes(200).toString();
 
     public componentDidMount = async () => {
         await this.prepareValues();
@@ -23,11 +25,21 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
 
     public render = () => {
         return (
-            <Form aria-disabled={this.disabled} name={this.props.id} onSubmit={async (e) => await this.onFormSubmit(e)}
+            <Form key={this.key} aria-disabled={this.disabled} name={this.props.id}
+                  onSubmit={async (e) => await this.onFormSubmit(e)}
                   id={this.props.id}>
                 {this.build()}
             </Form>
         );
+    }
+
+    public reset = (): void => {
+        this.values = undefined;
+        this.disabled = false;
+        this.error.clear();
+        this.key = randomBytes(200).toString();
+
+        this.forceUpdate();
     }
 
     public abstract prepareValues(): Promise<void>;

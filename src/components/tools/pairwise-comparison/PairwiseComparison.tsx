@@ -12,6 +12,8 @@ class PairwiseComparison extends Component<any, any> {
         return (
             <div className={"container"}>
                 <StepComponent
+                    header={"Paarweiser Vergleich"}
+                    onSave={(e) => this.save(e)}
                     steps={[
                         {
                             form: <PCCriterias/>,
@@ -24,13 +26,11 @@ class PairwiseComparison extends Component<any, any> {
                             id: "comparison"
                         }
                     ]}
-                    header={"Paarweiser Vergleich"}
                     fixedFooterToolProp={{
                         title: "PV-Start",
                         link: "/pairwise-comparison",
                         icon: faSortAmountDownAlt
                     }}
-                    onSave={(e) => this.save(e)}
                 />
             </div>
         );
