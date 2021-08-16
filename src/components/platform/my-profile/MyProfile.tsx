@@ -2,7 +2,7 @@ import React, {Component, FormEvent} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPencilAlt, faSave, faTimes, faUser} from "@fortawesome/free-solid-svg-icons/";
+import {faArrowLeft, faPencilAlt, faSave, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
 import {Button, Form, FormControl, Modal} from "react-bootstrap";
 
 import "./my-profile.scss";
@@ -152,6 +152,12 @@ class MyProfile extends Component<any, MyProfileState> {
             }} className={"profile"}>
                 <h4>
                     <FontAwesomeIcon icon={faUser}/> &nbsp;{this.state.user.getUsername()}
+                    {(this.state.edit) && (
+                        <Button style={{float: "right"}} disabled={this.state.isSaving} size={"sm"} variant={"dark"}
+                                className={"editButton"} onClick={this.changeView}>
+                            <FontAwesomeIcon icon={faArrowLeft}/> &nbsp;Zurück
+                        </Button>
+                    )}
                 </h4>
 
                 <hr/>
@@ -227,17 +233,12 @@ class MyProfile extends Component<any, MyProfileState> {
                                 size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}>
                                 <FontAwesomeIcon icon={faSave}/> &nbsp; Änderungen speichern
                             </Button>
-
-                            <Button disabled={this.state.isSaving} size={"sm"} variant={"dark"}
-                                    className={"editButton"} onClick={this.changeView}>
-                                <FontAwesomeIcon icon={faTimes}/> &nbsp; Bearbeiten abbrechen
-                            </Button>
                         </div>
                         <div className={"buttonGroup"}>
-                            <Button disabled={this.state.isSaving} size={"sm"} variant={"dark"}
+                            <Button disabled={this.state.isSaving} size={"sm"} variant={"danger"}
                                     className={"deleteButton"}
                                     onClick={this.showDeleteModal}>
-                                <FontAwesomeIcon icon={faTimes}/> &nbsp; Benutzer löschen
+                                <FontAwesomeIcon icon={faTrash}/> &nbsp; Benutzer löschen
                             </Button>
                         </div>
                     </>
