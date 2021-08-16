@@ -2,3 +2,10 @@
 nav {
   z-index: 500 !important;
 }
+
+nav .dropdown-menu .dropdown-item.active,
+nav .dropdown-menu .dropdown-item.active *,
+nav .dropdown-menu .dropdown-item:active,
+nav .dropdown-menu .dropdown-item:active * {
+  color: white;
+}

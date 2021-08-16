@@ -1,12 +1,12 @@
 import {Component} from "react";
-import {Container, Dropdown, Form, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
+import {Container, Dropdown, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
     faBalanceScale,
     faCog,
     faHome,
     faShieldAlt,
-    faSignInAlt,
+    faSignInAlt, faSignOutAlt,
     faUser,
     faUserPlus
 } from "@fortawesome/free-solid-svg-icons/";
@@ -14,6 +14,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Session} from "../../../general-components/Session/Session";
 
 import "./nav.scss";
+import {isDesktop} from "../../../general-components/Desktop";
+import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 interface NavState {
     expanded: boolean
@@ -52,30 +54,14 @@ class Nav extends Component<any, NavState> {
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
-                            <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
-                                <FontAwesomeIcon icon={faCog}/>&nbsp;
-                                Einstellungen
-                            </NavLink>
-                            <NavLink onClick={navOnClick} to={"/data-privacy"} className={"nav-link"}>
-                                <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;
-                                Datenschutz
-                            </NavLink>
-                            <NavLink onClick={navOnClick} to={"/legal-notice"} className={"nav-link"}>
-                                <FontAwesomeIcon icon={faBalanceScale}/>&nbsp;
-                                Impressum
-                            </NavLink>
+                            {(isDesktop()) && (
+                                    <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
+                                        <FontAwesomeIcon icon={faCog}/>&nbsp;
+                                        Einstellungen
+                                    </NavLink>
+                            )}
                         </BootstrapNav>
                         <BootstrapNav>
-                            <Form className="d-flex justify-content-center align-items-center">
-                                <FormControl
-                                    size={"sm"}
-                                    style={{maxHeight: '50px'}}
-                                    type="search"
-                                    placeholder="Suchen"
-                                    className="mr-2"
-                                    aria-label="Suchen"
-                                />
-                            </Form>
                             {(!Session.isLoggedIn()) && (
                                 <>
                                     <NavLink onClick={navOnClick} to={"/login"} className={"nav-link"}>
@@ -89,14 +75,16 @@ class Nav extends Component<any, NavState> {
                                 </>
                             )}
                             {(Session.isLoggedIn()) && (
-                                <NavDropdown id={"profile-dropdown"} title={<FontAwesomeIcon icon={faUser}/>}>
+                                <NavDropdown id={"profile-dropdown"} title={<><FontAwesomeIcon icon={faUser}/> &nbsp;{Session.currentUser?.getUsername()}</>}>
                                     <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/my-profile"} role={"button"}>
+                                        <FontAwesomeIcon icon={faUser}/>&nbsp;
                                         Mein Profil
                                     </Dropdown.Item>
 
                                     <Dropdown.Item as={"div"} className="p-0">
                                         <NavLink onClick={navOnClick} to={"/logout"} role={"button"}
                                                  className={"dropdown-item"}>
+                                            <FontAwesomeIcon icon={faSignOutAlt}/>&nbsp;
                                             Abmelden
                                         </NavLink>
                                     </ Dropdown.Item>
@@ -104,6 +92,30 @@ class Nav extends Component<any, NavState> {
                                 </NavDropdown>
                             )}
                         </BootstrapNav>
+                        {(!isDesktop()) && (
+                            <BootstrapNav>
+                                <NavDropdown id={"profile-dropdown"} title={"mehr"}>
+                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/settings"} role={"button"}>
+                                        <FontAwesomeIcon icon={faCog}/>&nbsp;
+                                        Einstellungen
+                                    </Dropdown.Item>
+                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/data-privacy"}
+                                                   role={"button"}>
+                                        <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;
+                                        Datenschutz
+                                    </Dropdown.Item>
+                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/legal-notice"}
+                                                   role={"button"}>
+                                        <FontAwesomeIcon icon={faBalanceScale}/>&nbsp;
+                                        Impressum
+                                    </Dropdown.Item>
+                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/about-us"} role={"button"}>
+                                        <FontAwesomeIcon icon={faInfoCircle}/>&nbsp;
+                                        Über uns
+                                    </Dropdown.Item>
+                                </NavDropdown>
+                            </BootstrapNav>
+                        )}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
