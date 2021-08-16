@@ -12,7 +12,7 @@ class Home extends Component<any, any> {
     render() {
         return (
             <div className={"container"}>
-                <Form className="d-flex justify-content-center align-items-center">
+                <Form className="searchbar d-flex justify-content-center align-items-center">
                     <FormControl
                         size={"sm"}
                         type="search"
