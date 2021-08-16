@@ -26,6 +26,7 @@ import SWOTAnalysis from "./components/tools/swot-analysis/SWOTAnalysis";
 import {Messages} from "./general-components/Messages/Messages";
 import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
+import AboutUs from "./components/platform/abous-us/AboutUs";
 // import reportWebVitals from './reportWebVitals';
 
 const reload_app = () => {
@@ -47,6 +48,7 @@ const reload_app = () => {
                             <Route path={"/"} exact component={Home}/>
                             <Route path={"/legal-notice"} exact component={Imprint}/>
                             <Route path={"/data-privacy"} exact component={DataPrivacy}/>
+                            <Route path={"/about-us"} exact component={AboutUs}/>
                             <Route path={"/login"} exact component={Login}/>
                             <Route path={"/logout"} exact component={Logout}/>
                             <Route path={"/register"} exact component={Register}/>
