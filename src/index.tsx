@@ -27,6 +27,7 @@ import {Messages} from "./general-components/Messages/Messages";
 import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
 import AboutUs from "./components/platform/abous-us/AboutUs";
+import ControlFooter from "./general-components/ControlFooter/ControlFooter";
 // import reportWebVitals from './reportWebVitals';
 
 const reload_app = () => {
@@ -43,39 +44,36 @@ const reload_app = () => {
                 <Router>
                     <Nav/>
 
-                    <Container fluid={false} id={"content"}>
-                        <Switch>
-                            <Route path={"/"} exact component={Home}/>
-                            <Route path={"/legal-notice"} exact component={Imprint}/>
-                            <Route path={"/data-privacy"} exact component={DataPrivacy}/>
-                            <Route path={"/about-us"} exact component={AboutUs}/>
-                            <Route path={"/login"} exact component={Login}/>
-                            <Route path={"/logout"} exact component={Logout}/>
-                            <Route path={"/register"} exact component={Register}/>
-                            <Route path={"/settings"} exact component={Settings}/>
-                            <Route path={"/my-profile"} exact component={MyProfile}/>
+                    <div id={"content"}>
+                        <Container fluid={false}>
+                            <Switch>
+                                <Route path={"/"} exact component={Home}/>
+                                <Route path={"/legal-notice"} exact component={Imprint}/>
+                                <Route path={"/data-privacy"} exact component={DataPrivacy}/>
+                                <Route path={"/about-us"} exact component={AboutUs}/>
+                                <Route path={"/login"} exact component={Login}/>
+                                <Route path={"/logout"} exact component={Logout}/>
+                                <Route path={"/register"} exact component={Register}/>
+                                <Route path={"/settings"} exact component={Settings}/>
+                                <Route path={"/my-profile"} exact component={MyProfile}/>
 
-                            <Route path={"/pairwise-comparison/new"} exact component={PairwiseComparison}/>
-                            <Route path={"/pairwise-comparison"} exact component={PairwiseComparisonHome}/>
+                                <Route path={"/pairwise-comparison/new"} exact component={PairwiseComparison}/>
+                                <Route path={"/pairwise-comparison"} exact component={PairwiseComparisonHome}/>
 
-                            <Route path={"/swot-analysis/new"} exact component={SWOTAnalysis}/>
-                            <Route path={"/swot-analysis"} exact component={SWOTAnalysisHome}/>
+                                <Route path={"/swot-analysis/new"} exact component={SWOTAnalysis}/>
+                                <Route path={"/swot-analysis"} exact component={SWOTAnalysisHome}/>
 
-                            <Route path={"/"} component={Home}/>
-                        </Switch>
-                    </Container>
-                    {isDesktop() ? <Footer/> : null}
+                                <Route path={"/"} component={Home}/>
+                            </Switch>
+                        </Container>
+                    </div>
+                    {isDesktop() ? <Footer/> : <ControlFooter places={3}/>}
                 </Router>
             </Loader>
         </React.StrictMode>,
         document.getElementById('root')
     );
 }
-
-// TODO: FixedFooter umschreiben und einbinden
-// const setFixedFooter = () => {
-//
-// }
 
 reload_app();
 

@@ -26,10 +26,12 @@ class PairwiseComparison extends Component<any, any> {
                             id: "comparison"
                         }
                     ]}
-                    fixedFooterToolProp={{
-                        title: "PV-Start",
-                        link: "/pairwise-comparison",
-                        icon: faSortAmountDownAlt
+                    controlFooterTool={{
+                        tool: {
+                            title: "PV-Start",
+                            link: "/pairwise-comparison",
+                            icon: faSortAmountDownAlt
+                        }
                     }}
                 />
             </div>

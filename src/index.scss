@@ -28,10 +28,14 @@ body, #root {
   display: grid;
   grid-template-areas:
     "nav"
-    "content";
-  grid-template-rows: auto 1fr;
+    "content"
+    "footer";
+  grid-template-rows: auto 1fr auto;
 }
 
+footer {
+  grid-area: footer;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -45,6 +49,7 @@ svg {
 #content {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+  overflow-y: auto;
 }
 
 .form-group {

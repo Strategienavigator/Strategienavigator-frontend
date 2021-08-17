@@ -6,7 +6,8 @@ import {
     faCog,
     faHome,
     faShieldAlt,
-    faSignInAlt, faSignOutAlt,
+    faSignInAlt,
+    faSignOutAlt,
     faUser,
     faUserPlus
 } from "@fortawesome/free-solid-svg-icons/";
@@ -55,10 +56,10 @@ class Nav extends Component<any, NavState> {
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
                             {(isDesktop()) && (
-                                    <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
-                                        <FontAwesomeIcon icon={faCog}/>&nbsp;
-                                        Einstellungen
-                                    </NavLink>
+                                <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
+                                    <FontAwesomeIcon icon={faCog}/>&nbsp;
+                                    Einstellungen
+                                </NavLink>
                             )}
                         </BootstrapNav>
                         <BootstrapNav>
@@ -75,7 +76,8 @@ class Nav extends Component<any, NavState> {
                                 </>
                             )}
                             {(Session.isLoggedIn()) && (
-                                <NavDropdown id={"profile-dropdown"} title={<><FontAwesomeIcon icon={faUser}/> &nbsp;{Session.currentUser?.getUsername()}</>}>
+                                <NavDropdown id={"profile-dropdown"} title={<><FontAwesomeIcon
+                                    icon={faUser}/> &nbsp;{Session.currentUser?.getUsername()}</>}>
                                     <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/my-profile"} role={"button"}>
                                         <FontAwesomeIcon icon={faUser}/>&nbsp;
                                         Mein Profil

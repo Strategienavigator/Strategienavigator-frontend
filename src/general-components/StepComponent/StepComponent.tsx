@@ -4,7 +4,7 @@ import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../Desktop";
-import FixedFooter, {FooterToolProps} from "../FixedFooter/FixedFooter";
+import {setControlFooterItem, ToolItem} from "../ControlFooter/ControlFooter";
 import FormComponent from "../Form/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
@@ -19,7 +19,7 @@ export type StepProp = {
 interface StepComponentProps {
     steps: StepProp[]
     header?: string
-    fixedFooterToolProp: FooterToolProps
+    controlFooterTool: ToolItem
     onSave?: (forms: Array<FormComponent<any, any>>) => Promise<boolean>
     maintenance?: boolean
 }
@@ -135,22 +135,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                     </Row>
                 </Tab.Container>
 
-                {(!isDesktop() && this.isLastStep()) && (
-                    <FixedFooter
-                        tool={this.props.fixedFooterToolProp}
-                        reset={() => this.setState({onReset: true, showResetModal: true})}
-                        saveTool={this.allSteps[this.currentStep - 1].id}
-                    />
-                )}
-
-                {(!isDesktop() && !this.isLastStep()) && (
-                    <FixedFooter
-                        tool={this.props.fixedFooterToolProp}
-                        reset={() => this.setState({onReset: true, showResetModal: true})}
-                        nextStep={this.allSteps[this.currentStep - 1].id}
-                    />
-                )}
-
                 {(this.state.onReset) && (
                     <Modal
                         show={this.state.showResetModal}
@@ -193,6 +177,26 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                 )}
             </>
         );
+    }
+
+    componentDidMount() {
+        this.componentDidUpdate();
+    }
+
+    componentDidUpdate() {
+        if (!this.props.maintenance) {
+            setControlFooterItem(1, this.props.controlFooterTool);
+            setControlFooterItem(2, {resetSteps: () => this.setState({onReset: true, showResetModal: true})});
+
+            let id = this.allSteps[this.currentStep - 1].id;
+            if (this.isLastStep()) {
+                setControlFooterItem(3, {saveSteps: id});
+            } else {
+                setControlFooterItem(3, {nextStep: id});
+            }
+        } else {
+            setControlFooterItem(2, {home: true});
+        }
     }
 
     public getPreviousStep = (): null | FormComponent<any, any> => {

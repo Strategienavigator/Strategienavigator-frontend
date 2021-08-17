@@ -9,13 +9,16 @@ class SWOTAnalysis extends Component<any, any> {
         return (
             <div className={"container"}>
                 <StepComponent
-                    fixedFooterToolProp={{
-                        title: "SWOT-Start",
-                        link: "/swot-analysis",
-                        icon: faSortAmountDownAlt
+                    controlFooterTool={{
+                        tool: {
+                            title: "SWOT-Start",
+                            link: "/swot-analysis",
+                            icon: faSortAmountDownAlt
+                        }
                     }}
                     steps={[]}
                     header={"SWOT Analyse"}
+                    maintenance={true}
                 />
             </div>
         );

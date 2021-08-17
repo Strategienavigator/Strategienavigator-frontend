@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {isDesktop} from "../../Desktop";
-import FixedFooter from "../../FixedFooter/FixedFooter";
+import {setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -41,6 +41,15 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
                     saves: saves
                 })
             }
+        }
+    }
+
+    componentDidMount() {
+        if (this.props.maintenance) {
+            setControlFooterItem(2, {home: true});
+        } else {
+            setControlFooterItem(1, {newTool: {link: this.props.link + "/new", title: "Neue Analyse"}});
+            setControlFooterItem(2, {settings: true});
         }
     }
 
@@ -88,15 +97,11 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
                             </Button>
                         </Link>
                     )}
-
-                    {!isDesktop() && (
-                        <FixedFooter settings
-                                     newTool={{link: this.props.link + "/new", title: "Neue Analyse"}}/>
-                    )}
                 </div>
             </div>
         );
     }
+
 }
 
 export default ToolFrontpage;
