@@ -30,6 +30,25 @@
 }
 
 .input-group {
+  input {
+    border-left: none;
+  }
+
+  .id {
+    border: 1px solid #ced4da;
+    border-right: none;
+    padding: 0.375rem 0.5rem;
+    background-color: white;
+  }
+
+  .id:empty {
+    padding: 0 !important;
+  }
+
+  .id[aria-disabled="true"] {
+    background-color: #e9ecef;
+  }
+
   button {
     color: #060139;
     background-color: white;
@@ -40,4 +59,6 @@
   button:focus {
     box-shadow: none;
   }
+
+
 }

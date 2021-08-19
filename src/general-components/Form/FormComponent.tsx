@@ -13,7 +13,7 @@ interface FormComponentProps {
 }
 
 abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
-    protected values: V | undefined;
+    protected values: V | object = {};
     protected disabled: boolean = false;
     private error: Map<string, ReactNode[]> = new Map<string, ReactNode[]>();
     private key: string = randomBytes(200).toString();
@@ -34,7 +34,7 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     }
 
     public reset = (): void => {
-        this.values = undefined;
+        this.values = {};
         this.disabled = false;
         this.error.clear();
         this.key = randomBytes(200).toString();
@@ -52,16 +52,18 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
 
     public abstract extractValues(e: FormEvent<HTMLFormElement>): V;
 
-    public getValues = (): V | undefined => {
+    public getValues = (): V | object => {
         return this.values;
     }
 
-    public setValues = (values: V) => {
-        this.values = values;
+    public setValues = (values: object) => {
+        if (values !== undefined && values !== null) {
+            Object.assign(this.values, values);
+        }
     }
 
     public hasValues = (): boolean => {
-        return this.values !== undefined;
+        return this.values !== {};
     }
 
     public setDisabled = (disabled: boolean) => {
@@ -124,10 +126,10 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
                 } else {
                     this.props.stepComp?.nextStep();
                 }
-            } /*else {
+            } else {
                 Messages.add(
                     <span>In Ihren Eingaben befinden sich Fehler!<br/> Bitte überprüfen Sie diese erneut.</span>, "DANGER", Messages.TIMER);
-            }*/
+            }
         }
     }
 

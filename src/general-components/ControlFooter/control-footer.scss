@@ -12,6 +12,10 @@
     padding: 1rem 1.25rem;
   }
 
+  .item button, .item a {
+    cursor: pointer;
+  }
+
   .item:empty {
     padding: 0 !important;
   }
@@ -22,7 +26,6 @@
   }
 
   > * {
-    cursor: pointer;
     font-size: 10pt;
   }
 
