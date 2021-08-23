@@ -28,6 +28,8 @@ import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
 import AboutUs from "./components/platform/abous-us/AboutUs";
 import ControlFooter from "./general-components/ControlFooter/ControlFooter";
+import EmailVerification from "./components/platform/verification/EmailVerification";
+import PasswordReset from "./components/platform/verification/PasswordReset";
 // import reportWebVitals from './reportWebVitals';
 
 const reload_app = () => {
@@ -56,6 +58,10 @@ const reload_app = () => {
                                 <Route path={"/register"} exact component={Register}/>
                                 <Route path={"/settings"} exact component={Settings}/>
                                 <Route path={"/my-profile"} exact component={MyProfile}/>
+
+                                <Route path={"/verify-email/:token"} component={EmailVerification}/>
+                                <Route path={"/reset-password/:token"} component={PasswordReset}/>
+                                <Route path={"/reset-password"} exact component={PasswordReset}/>
 
                                 <Route path={"/pairwise-comparison/new"} exact component={PairwiseComparison}/>
                                 <Route path={"/pairwise-comparison"} exact component={PairwiseComparisonHome}/>

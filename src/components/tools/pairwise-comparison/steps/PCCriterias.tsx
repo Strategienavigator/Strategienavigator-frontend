@@ -8,7 +8,7 @@ export interface PCCriteriasValues {
     criterias: CardComponentFields
 }
 
-export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
+class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
 
     prepareValues = async () => {
     }
@@ -47,3 +47,5 @@ export default class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
     }
 
 }
+
+export default PCCriterias;

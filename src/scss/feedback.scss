@@ -9,11 +9,11 @@
   }
 
   .feedback.DANGER {
-    color: $danger;
+    color: $danger !important;
   }
 
   .feedback.SUCCESS {
-    color: $success;
+    color: $success !important;
   }
 
 }

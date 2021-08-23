@@ -48,11 +48,11 @@
 // LIGHT
 .loader.light {
   background-color: #d3d3d3;
-  color: black;
+  color: $color;
 }
 
 .loader.light .spinner {
-  border-color: black;
+  border-color: $color;
   border-right-color: #d3d3d3;
 }
 

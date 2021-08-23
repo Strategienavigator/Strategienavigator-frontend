@@ -175,21 +175,21 @@ class MyProfile extends Component<any, MyProfileState> {
                                  defaultValue={this.state.user.getEmail()}/>
                     <Form.Label>E-Mail-Adresse</Form.Label>
                 </Form.Group>
+                {/* changeHandler={(e) => {
+                    this.passwordChanged(e)
+                }}*/}
 
                 {/* NEUES PASSWORD */}
                 {(this.state.edit) && (
-                    <PasswordField changeHandler={(e) => {
-                        this.passwordChanged(e)
-                    }} id={"new_password"} text={"Neues Passwort"} required={false} className={"field"} check={true}
+                    <PasswordField id={"new_password"} text={"Neues Passwort"} required={false} className={"field"}
+                                   check={true}
                                    eye/>
                 )}
 
                 {/* NEUES PASSWORD WIEDERHOLEN */}
                 {(this.state.edit) && (
                     <>
-                        <PasswordField changeHandler={(e) => {
-                            this.passwordConfirmChanged(e)
-                        }} id={"new_password_confirm"} text={"Neues Passwort wiederholen"}
+                        <PasswordField id={"new_password_confirm"} text={"Neues Passwort wiederholen"}
                                        required={this.state.passwordFieldTouched}
                                        className={"field"} check={false} eye/>
                         <div className={"feedback"}>

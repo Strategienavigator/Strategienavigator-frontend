@@ -13,7 +13,7 @@ interface SWOTAlternativeActionsState {
     name: string
 }
 
-export default class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, SWOTAlternativeActionsState> {
+class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, SWOTAlternativeActionsState> {
     private factors: SwotFactorsValues | undefined;
 
     private combis = Array<string>();
@@ -146,3 +146,5 @@ export default class SWOTAlternativeActions extends FormComponent<SWOTAlternativ
     }
 
 }
+
+export default SWOTAlternativeActions;

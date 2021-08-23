@@ -74,7 +74,8 @@ interface PasswordFieldProps {
     text?: string
     required?: boolean
     id?: string
-    changeHandler?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    // changeHandler?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    confirm?: boolean
 }
 
 interface PasswordFieldState {
@@ -88,9 +89,16 @@ interface PasswordFieldState {
     valid: boolean
     viewPassword?: boolean
     fieldTouched?: boolean
+    confirmFieldTouched?: boolean
+    passwordMatching?: boolean
 }
 
 class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordFieldState> {
+    private valid: boolean = false;
+    private matching: boolean = false;
+
+    private password: string | null = null;
+    private passwordConfirm: string | null = null;
 
     constructor(props: (P & PasswordFieldProps) | Readonly<P & PasswordFieldProps>) {
         super(props);
@@ -105,18 +113,58 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
             minLength: false,
             invalidChar: false,
             valid: false,
-            fieldTouched: false
+            fieldTouched: false,
+            passwordMatching: undefined
         }
     }
 
+    isMatching = (): boolean => {
+        return this.matching;
+    }
+
+    checkMatching = () => {
+        if (this.password !== null && this.passwordConfirm !== null) {
+            if (this.password === this.passwordConfirm) {
+                this.matching = true;
+                this.setState({
+                    passwordMatching: true
+                });
+            } else {
+                this.setState({
+                    passwordMatching: false
+                });
+            }
+        }
+    }
+
+    isValid = (): boolean => {
+        return this.valid;
+    }
+
+    passwordConfirmChanged = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        this.passwordConfirm = e.currentTarget.value;
+        if (this.passwordConfirm.length > 0) {
+            this.setState({confirmFieldTouched: true});
+        } else {
+            this.setState({confirmFieldTouched: false});
+        }
+        this.checkMatching()
+    }
+
     changed = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        if (this.props.changeHandler !== undefined) {
+        /*if (this.props.changeHandler !== undefined) {
             this.props.changeHandler(e);
+        }*/
+
+        if (this.props.confirm) {
+            this.password = e.currentTarget.value;
+            this.checkMatching();
         }
 
         if (this.props.check) {
             let password: string = e.currentTarget.value;
             let checkedPassword = checkPassword(password);
+            this.valid = checkedPassword.valid;
 
             if (password.length > 0) {
                 this.setState({fieldTouched: true});
@@ -124,11 +172,10 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                 this.setState({fieldTouched: false});
             }
 
-            if (checkedPassword !== null) {
-                this.setState(checkedPassword);
-            }
+            this.setState(checkedPassword);
         }
     }
+
 
     switchPasswordView = () => {
         this.setState({
@@ -139,7 +186,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
     render() {
         return (
             <div className={"mb-2"}>
-                <Form.Group className={"form-floating"}>
+                <Form.Floating>
                     <Form.Control
                         id={(this.props.id !== undefined) ? this.props.id : "password"}
                         type={(this.state.viewPassword) ? "text" : "password"}
@@ -159,7 +206,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                             <FontAwesomeIcon icon={(!this.state.viewPassword) ? faEye : faEyeSlash}/>
                         </div>
                     )}
-                </Form.Group>
+                </Form.Floating>
                 {(this.props.check && this.state.fieldTouched) && (
                     <Card body>
                         {(!this.state.special) && (
@@ -212,7 +259,33 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                         )}
                     </Card>
                 )}
+                {(this.props.confirm) && (
+                    <>
+                        <Form.Floating className={"mt-2"}>
+                            <Form.Control
+                                id={"passwordConfirm"}
+                                type={(this.state.viewPassword) ? "text" : "password"}
+                                name={"passwordConfirm"}
+                                size={"sm"}
+                                placeholder={"*********"}
+                                required={(this.props.required !== undefined) ? this.props.required : false}
+                                onChange={(e) => {
+                                    this.passwordConfirmChanged(e)
+                                }}
+                            />
+                            <Form.Label htmlFor={"passwordConfirm"}>Passwort wiederholen</Form.Label>
+                        </Form.Floating>
+                        <div className={"feedback"}>
+                            {(!this.state.passwordMatching && this.state.confirmFieldTouched) && (
+                                <div className="invalid-feedback d-block">
+                                    Passwörter müssen übereinstimmen!
+                                </div>
+                            )}
+                        </div>
+                    </>
+                )}
             </div>
+
         );
     }
 

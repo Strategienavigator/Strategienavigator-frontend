@@ -16,7 +16,7 @@ export interface SwotFactorsValues {
     weaknesses: CardComponentFields
 }
 
-export default class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
+class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
 
     extractValues(e: FormEvent<HTMLFormElement>): SwotFactorsValues {
         let chances: CardComponentFields = extractCardComponentField(e, "chances") as CardComponentFields;
@@ -88,3 +88,5 @@ export default class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
     }
 
 }
+
+export default SWOTFactors;

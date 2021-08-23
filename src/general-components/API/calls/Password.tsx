@@ -1,11 +1,26 @@
 import {callAPI} from "../API";
 
-const showPasswordReset = async () => {
-
+/**
+ * Zeigt die Meta-Daten eines Password-resets an
+ *
+ * @param passwordResetToken Token des Password-resets
+ */
+const showPasswordReset = async (passwordResetToken: string) => {
+    return await callAPI("api/password/" + passwordResetToken, "GET");
 }
 
-const forgotPassword = async () => {
-    return await callAPI("api/password-reset", "POST", undefined)
+interface ForgotPassword {
+    email: string
+}
+
+/**
+ * Fordert einen passwort-reset eines Benutzers an
+ *
+ * @param data E-Mail des Benutzers
+ */
+const forgotPassword = async (data: ForgotPassword) => {
+    let apiData = JSON.stringify(data);
+    return await callAPI("api/password-reset", "POST", apiData);
 }
 
 interface UpdatePassword {
@@ -13,15 +28,14 @@ interface UpdatePassword {
 }
 
 /**
+ * Updated das Passwort des Benutzers
  *
- * @param passwordResetToken
- * @param data
- * @param token
+ * @param passwordResetToken Token des Password-resets
+ * @param data Das zu ändernde Passwort
  */
-const updatePassword = async (passwordResetToken: string, data: UpdatePassword, token: string | null) => {
+const updatePassword = async (passwordResetToken: string, data: UpdatePassword) => {
     let apiData = JSON.stringify(data);
-
-    return await callAPI("api/password-reset/" + passwordResetToken, "POST", apiData, (token !== null) ? token : undefined);
+    return await callAPI("api/update-password/" + passwordResetToken, "POST", apiData);
 }
 
 export {

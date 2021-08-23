@@ -6,7 +6,7 @@ import {callAPI} from "../API";
  * @param emailToken Token der Invitation (Hex-Code)
  */
 const verifyEmail = async (emailToken: string) => {
-    return await callAPI("api/email/" + emailToken + "/verify", "PUT");
+    return await callAPI("api/email/verify/" + emailToken, "PUT");
 }
 
 export {

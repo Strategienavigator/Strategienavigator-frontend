@@ -6,7 +6,7 @@ export interface PCPairComparisonValues {
 
 }
 
-export default class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
+class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
 
     prepareValues = async () => {
         let previous = this.props.stepComp?.getPreviousStep()?.getValues() as PCCriteriasValues;
@@ -33,3 +33,5 @@ export default class PCPairComparison extends FormComponent<PCPairComparisonValu
     }
 
 }
+
+export default PCPairComparison;

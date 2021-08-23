@@ -1,0 +1,15 @@
+@import "src/scss/variables";
+
+.emailVerification {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  max-width: 97vw;
+}
+
+.emailVerification > svg {
+  font-size: 25pt;
+}

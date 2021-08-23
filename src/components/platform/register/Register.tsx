@@ -7,15 +7,11 @@ import {extractFromForm} from "../../../general-components/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
 
 interface RegisterState {
-    passwordNotMatching?: boolean
     isRegistering: boolean
     loaded?: boolean
 }
 
 class Register extends Component<any, RegisterState> {
-
-    private password: string | null = null;
-    private passwordConfirm: string | null = null;
 
     constructor(props: any) {
         super(props);
@@ -23,30 +19,6 @@ class Register extends Component<any, RegisterState> {
         this.state = {
             isRegistering: false
         };
-    }
-
-    isSamePassword = () => {
-        if (this.password !== null && this.passwordConfirm !== null) {
-            if (this.password === this.passwordConfirm) {
-                this.setState({
-                    passwordNotMatching: false
-                });
-            } else {
-                this.setState({
-                    passwordNotMatching: true
-                });
-            }
-        }
-    }
-
-    passwordConfirmChanged = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        this.passwordConfirm = e.currentTarget.value;
-        this.isSamePassword();
-    }
-
-    passwordChanged = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        this.password = e.currentTarget.value;
-        this.isSamePassword();
     }
 
     register = async (e: FormEvent<HTMLFormElement>) => {
@@ -99,38 +71,12 @@ class Register extends Component<any, RegisterState> {
                 </Form.Group>
 
                 {/*PASSWORD*/}
-                <PasswordField changeHandler={(e) => {
-                    this.passwordChanged(e)
-                }} check={true} eye={true}/>
-
-                {/*PASSWORD CONFIRMATION*/}
-                <Form.Group className={"mb-2 mt-2 form-floating"}>
-                    <Form.Control
-                        id="passwordConfirm"
-                        type="password"
-                        name={"passwordConfirm"}
-                        size={"sm"}
-                        placeholder=""
-                        required={true}
-                        onChange={(e) => {
-                            this.passwordConfirmChanged(e)
-                        }}
-                    />
-                    <Form.Label htmlFor={"passwordConfirm"}>Passwort wiederholen</Form.Label>
-                </Form.Group>
-
-                <div className={"feedback"}>
-                    {(this.state.passwordNotMatching) && (
-                        <div className="invalid-feedback d-block">
-                            Passwörter müssen übereinstimmen!
-                        </div>
-                    )}
-                </div>
+                <PasswordField required confirm check={true} eye={true}/>
 
                 <hr/>
 
                 {/*SUBMIT*/}
-                <Button disabled={this.state.passwordNotMatching || this.state.isRegistering} type={"submit"}
+                <Button disabled={this.state.isRegistering} type={"submit"}
                         variant={"dark"}>
                     {" "}Registrieren
                 </Button>
