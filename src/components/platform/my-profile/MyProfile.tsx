@@ -3,7 +3,7 @@ import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faPencilAlt, faSave, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
-import {Button, Form, FormControl, Modal} from "react-bootstrap";
+import {Button, Form, Modal} from "react-bootstrap";
 
 import "./my-profile.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
@@ -12,6 +12,9 @@ import {deleteUser, updateData, updateUser} from "../../../general-components/AP
 import {reload_app} from "../../../index";
 import {withRouter} from "react-router";
 import {Messages} from "../../../general-components/Messages/Messages";
+import {checkEmail} from "../../../general-components/API/calls/Email";
+import {checkUsername} from "../../../general-components/API/calls/Username";
+import UniqueCheck from "../../../general-components/UniqueCheck/UniqueCheck";
 
 interface MyProfileState {
     user: User
@@ -163,18 +166,32 @@ class MyProfile extends Component<any, MyProfileState> {
                 <hr/>
 
                 {/* BENUTZERNAME */}
-                <Form.Group className={"form-floating field"}>
-                    <FormControl id={"username"} type={"text"} readOnly={!this.state.edit}
-                                 defaultValue={this.state.user.getUsername()}/>
+                <Form.Floating className={"field"}>
+                    <UniqueCheck
+                        id={"username"}
+                        type={"text"}
+                        readOnly={!this.state.edit}
+                        defaultValue={this.state.user.getUsername()}
+                        callback={checkUsername}
+                        failMessage={"Username bereits vorhanden!"}
+                        successMessage={"Username verfügbar!"}
+                    />
                     <Form.Label>Benutzername</Form.Label>
-                </Form.Group>
+                </Form.Floating>
 
                 {/* E-MAIL */}
-                <Form.Group className={"form-floating field"}>
-                    <FormControl id={"email"} type={"text"} readOnly={!this.state.edit}
-                                 defaultValue={this.state.user.getEmail()}/>
+                <Form.Floating className={"field"}>
+                    <UniqueCheck
+                        id={"email"}
+                        type={"text"}
+                        readOnly={!this.state.edit}
+                        defaultValue={this.state.user.getEmail()}
+                        callback={checkEmail}
+                        failMessage={"E-Mail bereits vorhanden!"}
+                        successMessage={"E-Mail verfügbar!"}
+                    />
                     <Form.Label>E-Mail-Adresse</Form.Label>
-                </Form.Group>
+                </Form.Floating>
                 {/* changeHandler={(e) => {
                     this.passwordChanged(e)
                 }}*/}

@@ -5,6 +5,9 @@ import {PasswordField} from "../../../general-components/PasswordField/PasswordF
 import "./register.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
+import UniqueCheck from "../../../general-components/UniqueCheck/UniqueCheck";
+import {checkUsername} from "../../../general-components/API/calls/Username";
+import {checkEmail} from "../../../general-components/API/calls/Email";
 
 interface RegisterState {
     isRegistering: boolean
@@ -37,38 +40,44 @@ class Register extends Component<any, RegisterState> {
 
     render() {
         return (
-            <Form className={"registerContainer"} onSubmit={(e) => {
-                this.register(e)
+            <Form className={"registerContainer"} onSubmit={async (e) => {
+                await this.register(e)
             }}>
                 <h2>Registrieren</h2>
 
                 <hr/>
 
                 {/*E-MAIL*/}
-                <Form.Group className={"mb-2 mt-2 form-floating"}>
-                    <Form.Control
+                <Form.Floating className={"mb-2 mt-2"}>
+                    <UniqueCheck
                         id="email"
                         type="email"
                         name={"email"}
                         size={"sm"}
                         placeholder="name@example.com"
                         required={true}
+                        callback={checkEmail}
+                        failMessage={"E-Mail bereits vorhanden!"}
+                        successMessage={"E-Mail verfügbar!"}
                     />
                     <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
-                </Form.Group>
+                </Form.Floating>
 
                 {/*USERNAME*/}
-                <Form.Group className={"mb-2 mt-2 form-floating"}>
-                    <Form.Control
+                <Form.Floating className={"mb-2 mt-2"}>
+                    <UniqueCheck
                         id="username"
                         type="text"
                         name={"username"}
                         size={"sm"}
                         placeholder="name@example.com"
                         required={true}
+                        callback={checkUsername}
+                        failMessage={"Username bereits vorhanden!"}
+                        successMessage={"Username verfügbar!"}
                     />
                     <Form.Label htmlFor={"username"}>Benutzername</Form.Label>
-                </Form.Group>
+                </Form.Floating>
 
                 {/*PASSWORD*/}
                 <PasswordField required confirm check={true} eye={true}/>
