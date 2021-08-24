@@ -2,7 +2,7 @@ import {callAPI} from "../API";
 
 const checkUsername = async (input: string) => {
     let data = JSON.stringify({
-      username: input
+        username: input
     });
 
     return await callAPI("api/checkUsername", "POST", data);

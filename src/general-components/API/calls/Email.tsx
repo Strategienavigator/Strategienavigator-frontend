@@ -10,7 +10,7 @@ const verifyEmail = async (emailToken: string) => {
 }
 
 const checkEmail = async (input: string) => {
-    let data = JSON.stringify( {
+    let data = JSON.stringify({
         email: input
     });
 
