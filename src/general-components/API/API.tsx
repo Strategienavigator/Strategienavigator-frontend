@@ -16,7 +16,7 @@ declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
  *
  * @param URL URL zur Backend-Route/ ohne slash am Anfang
  * @param method API Übermittlungsmethode
- * @param data Inhalt der Request
+ * @param data Inhalt des Requests
  * @param token Authentifizierungstoken
  */
 const callAPI = async (URL: string, method: Methods, data?: FormData | Blob, token?: string) => {
