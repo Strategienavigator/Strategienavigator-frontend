@@ -5,8 +5,20 @@ export interface CallInterface {
     response: Response
 }
 
+/**
+ * Alle API Übermittlungsmethoden
+ */
 declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
 
+/**
+ * Führt eine HTTP-Request auf der genannten URL aus.
+ * Hierzu kann auch ein Token übergeben werden, der zur Authentifizierung im Header platziert wird.
+ *
+ * @param URL URL zur Backend-Route/ ohne slash am Anfang
+ * @param method API Übermittlungsmethode
+ * @param data Inhalt der Request
+ * @param token Authentifizierungstoken
+ */
 const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | string, token?: string) => {
     let callURL = process.env.REACT_APP_API + URL;
 
@@ -30,6 +42,7 @@ const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | st
     // CALL THE API
     let call = await fetch(callURL, requestInit);
     let body = await call.text();
+
     // check if body json, else put raw response
     let callData;
     // TODO: change here if other than json responses are needed
