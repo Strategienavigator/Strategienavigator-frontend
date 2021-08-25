@@ -32,7 +32,9 @@ export interface createInviteInterface {
  * @param token Der Token zur Authentifizierung
  */
 const createInvitationLink = async (data: createInviteInterface, token: string | null) => {
-    let apiData = JSON.stringify(data);
+    let apiData = new FormData();
+    apiData.append("permission", String(data.permission))
+    apiData.append("expiry_date", String(data.expiry_date));
 
     return await callAPI("api/invitation-link", "POST", apiData, (token !== null ? token : undefined))
 }
@@ -45,7 +47,10 @@ const createInvitationLink = async (data: createInviteInterface, token: string |
  * @param token Der Token zur Authentifizierung
  */
 const updateInvitationLink = async (data: createInviteInterface, invitationToken: string, token: string | null) => {
-    let apiData = JSON.stringify(data);
+    let apiData = new FormData();
+    apiData.append("permission", String(data.permission));
+    apiData.append("expiry_date", String(data.expiry_date));
+
     return await callAPI("api/invitation-link/" + invitationToken, "PUT", apiData, (token !== null ? token : undefined))
 }
 
