@@ -22,6 +22,12 @@ declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
 const callAPI = async (URL: string, method: Methods, data?: FormData | Blob, token?: string) => {
     let callURL = process.env.REACT_APP_API + URL;
 
+    // METHOD
+    if (data?.constructor.name === "FormData" && method === "PUT") {
+        (data as FormData).append("_method", "PUT");
+        method = "POST";
+    }
+
     // HEADER
     let headers: HeadersInit = new Headers();
     headers.append("Accept", "application/json");
@@ -45,7 +51,6 @@ const callAPI = async (URL: string, method: Methods, data?: FormData | Blob, tok
 
     // check if body json, else put raw response
     let callData;
-    // TODO: change here if other than json responses are needed
     try {
         callData = JSON.parse(body);
     } catch (e) {
