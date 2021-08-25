@@ -19,9 +19,10 @@ interface ForgotPassword {
  * @param data E-Mail des Benutzers
  */
 const forgotPassword = async (data: ForgotPassword) => {
-    let apiData = JSON.stringify(data);
+    let apiData = new FormData();
+    apiData.append("email",data.email);
     return await callAPI("api/password-reset", "POST", apiData);
-}
+};
 
 interface UpdatePassword {
     password: string
@@ -34,7 +35,10 @@ interface UpdatePassword {
  * @param data Das zu ändernde Passwort
  */
 const updatePassword = async (passwordResetToken: string, data: UpdatePassword) => {
-    let apiData = JSON.stringify(data);
+    let apiData = new FormData();
+    apiData.append("password",data.password);
+    apiData.append("_method","PUT");
+
     return await callAPI("api/update-password/" + passwordResetToken, "POST", apiData);
 }
 
