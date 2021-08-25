@@ -10,9 +10,8 @@ const verifyEmail = async (emailToken: string) => {
 }
 
 const checkEmail = async (input: string) => {
-    let data = JSON.stringify({
-        email: input
-    });
+    let data = new FormData();
+    data.append("email", input);
 
     return await callAPI("api/checkEmail", "POST", data);
 }

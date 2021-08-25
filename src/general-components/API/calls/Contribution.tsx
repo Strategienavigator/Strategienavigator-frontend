@@ -19,6 +19,7 @@ const getContributors = async (saveID: number, token: string | null) => {
 const showContributions = async (userID: number, token: string | null) => {
     return await callAPI("api/users/" + userID + "/constributions", "GET", undefined, (token !== null ? token : undefined));
 }
+
 /**
  * Zeigt die Contribution an
  *
@@ -42,7 +43,8 @@ interface CreateContribution {
  * @param token Der Token zur Authentifizierung
  */
 const createContribution = async (saveID: number, userID: number, data: CreateContribution, token: string | null) => {
-    let apiData = JSON.stringify(data);
+    let apiData = new FormData();
+    apiData.append("permission", String(data.permission));
 
     return await callAPI("api/saves/" + saveID + "/contributors/" + userID, "POST", apiData, (token !== null ? token : undefined));
 }
@@ -60,7 +62,10 @@ interface UpdateContribution {
  * @param token Der Token zur Authentifizierung
  */
 const updateContribution = async (contributionID: number, data: UpdateContribution, token: string | null) => {
-    let apiData = JSON.stringify(data);
+    let apiData = new FormData();
+    apiData.append("permission", String(data.permission));
+    apiData.append("revoked", String(data.revoked));
+
     return await callAPI("api/contribution/" + contributionID, "PUT", apiData, (token !== null ? token : undefined))
 }
 
@@ -83,6 +88,7 @@ const acceptContribution = async (contributionID: number, token: string | null) 
 const declineContribution = async (contributionID: number, token: string | null) => {
     return await callAPI("api/contribution/" + contributionID + "/decline", "PUT", undefined, (token !== null ? token : undefined));
 }
+
 /**
  * Löscht eine Contribution
  *
