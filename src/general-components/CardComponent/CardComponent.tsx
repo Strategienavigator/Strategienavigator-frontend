@@ -15,6 +15,7 @@ interface CardProps {
     onDelete: () => void
     designation?: string
     desc?: string
+    placeholder?: CardComponentFieldPlaceholder
 }
 
 interface CardState {
@@ -55,7 +56,7 @@ class Card extends Component<CardProps, CardState> {
                         onFocus={() => this.setState({showDesc: true})}
                         name={this.props.name + "[][name]"}
                         defaultValue={this.props.designation}
-                        placeholder={"Bezeichnung"}
+                        placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
                     />
                     {(!this.props.disabled) && (
                         <Button onClick={() => this.props.onDelete()} variant={"link"}>
@@ -75,7 +76,7 @@ class Card extends Component<CardProps, CardState> {
                             style={{maxHeight: 500}}
                             name={this.props.name + "[][desc]"}
                             defaultValue={this.props.desc}
-                            placeholder={"Beschreibung"}
+                            placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}
                         />
                     </div>
                 </Collapse>
@@ -93,7 +94,13 @@ export type CardComponentField = {
     desc: string
     id: string | null
 };
+
 export type CardComponentFields = CardComponentField[];
+
+export interface CardComponentFieldPlaceholder {
+    description?: string
+    name?: string
+}
 
 interface CardComponentProps {
     name: string
@@ -102,6 +109,7 @@ interface CardComponentProps {
     max: number
     counter?: CounterInterface
     values?: CardComponentField[]
+    placeholder?: CardComponentFieldPlaceholder
 }
 
 class CardComponent extends Component<CardComponentProps, any> {
@@ -162,7 +170,8 @@ class CardComponent extends Component<CardComponentProps, any> {
         this.cards.forEach((value) => {
             cards.push(React.cloneElement(value, {
                 disabled: this.props.disabled,
-                id: this.props.counter?.get(i) || null
+                id: this.props.counter?.get(i) || null,
+                placeholder: this.props.placeholder
             }));
             i++;
         });

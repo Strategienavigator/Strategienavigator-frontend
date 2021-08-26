@@ -21,7 +21,15 @@ export interface SaveStepsItem {
 }
 
 export interface ResetStepsItem {
-    resetSteps: () => void
+    reset: () => any
+}
+
+export interface ButtonItem {
+    button: {
+        text: string
+        icon: IconProp
+        callback: () => any
+    }
 }
 
 export interface ToolItem {
@@ -54,7 +62,8 @@ export type ControlFooterItem =
     | ToolItem
     | SettingItem
     | NewToolItem
-    | HomeItem;
+    | HomeItem
+    | ButtonItem;
 
 export const setControlFooterItem = (place: number, item: ControlFooterItem) => {
     ControlFooter._instance?.setItem(place, item);
@@ -107,28 +116,28 @@ class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, 
         if (item !== undefined && item !== null) {
             if ("home" in item) {
                 return (
-                    <NavLink to={"/"} exact>
+                    <NavLink key={"home"} to={"/"} exact>
                         <FontAwesomeIcon icon={faHome}/> Startseite
                     </NavLink>
                 );
             }
             if ("nextStep" in item) {
                 return (
-                    <button className={"btn-transparent"} form={item.nextStep} type={"submit"}>
+                    <button key={"nextStep"} className={"btn-transparent"} form={item.nextStep} type={"submit"}>
                         <FontAwesomeIcon icon={faCaretRight}/> Weiter
                     </button>
                 );
             }
             if ("saveSteps" in item) {
                 return (
-                    <button className={"btn-transparent"} form={item.saveSteps} type={"submit"}>
+                    <button key={"saveSteps"} className={"btn-transparent"} form={item.saveSteps} type={"submit"}>
                         <FontAwesomeIcon icon={faSave}/> Speichern
                     </button>
                 );
             }
-            if ("resetSteps" in item) {
+            if ("reset" in item) {
                 return (
-                    <button onClick={() => item.resetSteps?.call(item.resetSteps)} className={"btn-transparent"}
+                    <button key={"reset"} onClick={() => item.reset()} className={"btn-transparent"}
                             type={"button"}>
                         <FontAwesomeIcon icon={faUndo}/> Zurücksetzen
                     </button>
@@ -136,23 +145,30 @@ class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, 
             }
             if ("tool" in item) {
                 return (
-                    <NavLink to={item.tool?.link} exact>
+                    <NavLink key={"tool"} to={item.tool?.link} exact>
                         <FontAwesomeIcon icon={item.tool?.icon}/> {item.tool?.title}
                     </NavLink>
                 );
             }
             if ("settings" in item) {
                 return (
-                    <NavLink to={"/settings"} exact>
+                    <NavLink key={"settings"} to={"/settings"} exact>
                         <FontAwesomeIcon icon={faCogs}/> Einstellungen
                     </NavLink>
                 );
             }
             if ("newTool" in item) {
                 return (
-                    <NavLink to={item.newTool?.link} exact>
+                    <NavLink key={"newTool"} to={item.newTool?.link} exact>
                         <FontAwesomeIcon icon={faPlusSquare}/> {item.newTool?.title}
                     </NavLink>
+                );
+            }
+            if ("button" in item) {
+                return (
+                    <button key={"button"} className={"btn-transparent"} onClick={() => item.button.callback()} type={"button"}>
+                        <FontAwesomeIcon icon={item.button.icon}/> {item.button.text}
+                    </button>
                 );
             }
         }

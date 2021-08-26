@@ -19,14 +19,16 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     private key: string = randomBytes(200).toString();
 
     public componentDidMount = async () => {
-        await this.prepareValues();
-        this.forceUpdate();
+        if (this.props.stepComp?.isAt(this.props.id as string)) {
+            await this.prepareValues();
+            this.forceUpdate();
+        }
     }
 
     public render = () => {
         return (
             <Form key={this.key} aria-disabled={this.disabled} name={this.props.id}
-                  onSubmit={async (e) => await this.onFormSubmit(e)}
+                  onSubmit={(e) => this.onFormSubmit(e)}
                   id={this.props.id}>
                 {this.build()}
             </Form>

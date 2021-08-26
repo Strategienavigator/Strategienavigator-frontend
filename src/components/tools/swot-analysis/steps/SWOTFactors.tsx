@@ -47,38 +47,42 @@ class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
         let max = 10;
         let activeKey = "view";
 
+        let numberCounter = new NumberCounter();
+        let romanNumeralCounter = new RomanNumeralsCounter();
+        let upperABCCounter = new UpperABCCounter();
+        let lowerABCCounter = new LowerABCCounter();
+
         return (
             <div className={"swot-factors"}>
                 <Accordion activeKey={this.disabled ? activeKey : undefined}
-                           defaultActiveKey={isDesktop() ? "chances" : undefined}>
-                    <Accordion.Item eventKey={this.disabled ? activeKey : "chances"}>
-                        <Accordion.Header>Chancen</Accordion.Header>
-                        <Accordion.Body>
-                            <CardComponent counter={new NumberCounter()} name={"chances"} disabled={this.disabled}
-                                           min={min} max={max}/>
-                        </Accordion.Body>
-                    </Accordion.Item>
-
-                    <Accordion.Item eventKey={this.disabled ? activeKey : "risks"}>
-                        <Accordion.Header>Risiken</Accordion.Header>
-                        <Accordion.Body>
-                            <CardComponent counter={new RomanNumeralsCounter()} name={"risks"} disabled={this.disabled}
-                                           min={min} max={max}/>
-                        </Accordion.Body>
-                    </Accordion.Item>
-
+                           defaultActiveKey={isDesktop() ? "strengths" : undefined}>
                     <Accordion.Item eventKey={this.disabled ? activeKey : "strengths"}>
-                        <Accordion.Header>Stärken</Accordion.Header>
+                        <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} - Stärken</Accordion.Header>
                         <Accordion.Body>
-                            <CardComponent counter={new UpperABCCounter()} name={"strengths"} disabled={this.disabled}
+                            <CardComponent counter={upperABCCounter} name={"strengths"} disabled={this.disabled}
                                            min={min} max={max}/>
                         </Accordion.Body>
                     </Accordion.Item>
 
                     <Accordion.Item eventKey={this.disabled ? activeKey : "weaknesses"}>
-                        <Accordion.Header>Schwächen</Accordion.Header>
+                        <Accordion.Header>{lowerABCCounter.get(1) + "-" + lowerABCCounter.get(max)} - Schwächen</Accordion.Header>
                         <Accordion.Body>
-                            <CardComponent counter={new LowerABCCounter()} name={"weaknesses"} disabled={this.disabled}
+                            <CardComponent counter={lowerABCCounter} name={"weaknesses"} disabled={this.disabled}
+                                           min={min} max={max}/>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey={this.disabled ? activeKey : "chances"}>
+                        <Accordion.Header>{numberCounter.get(1) + "-" + numberCounter.get(max)} - Chancen</Accordion.Header>
+                        <Accordion.Body>
+                            <CardComponent counter={numberCounter} name={"chances"} disabled={this.disabled}
+                                           min={min} max={max}/>
+                        </Accordion.Body>
+                    </Accordion.Item>
+
+                    <Accordion.Item eventKey={this.disabled ? activeKey : "risks"}>
+                        <Accordion.Header>{romanNumeralCounter.get(1) + "-" + romanNumeralCounter.get(max)} - Risiken</Accordion.Header>
+                        <Accordion.Body>
+                            <CardComponent counter={romanNumeralCounter} name={"risks"} disabled={this.disabled}
                                            min={min} max={max}/>
                         </Accordion.Body>
                     </Accordion.Item>

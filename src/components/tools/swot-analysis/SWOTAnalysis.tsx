@@ -4,6 +4,7 @@ import StepComponent from "../../../general-components/StepComponent/StepCompone
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
 import SWOTFactors from "./steps/SWOTFactors";
 import SWOTAlternativeActions from "./steps/SWOTAlternativeActions";
+import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions";
 
 class SWOTAnalysis extends Component<any, any> {
 
@@ -28,6 +29,11 @@ class SWOTAnalysis extends Component<any, any> {
                             id: "swot-alternate-actions",
                             form: <SWOTAlternativeActions/>,
                             title: "2. Handlungsalternativen festlegen"
+                        },
+                        {
+                            id: "swot-classify-alternate-actions",
+                            form: <SWOTClassifyAlternativeActions/>,
+                            title: "3. Handlungsalternativen klassifizieren"
                         }
                     ]}
                     header={"SWOT Analyse"}

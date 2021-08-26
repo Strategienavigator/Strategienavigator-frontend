@@ -48,3 +48,7 @@ $theme-colors: (
 .btn-danger * {
   color: #fff;
 }
+
+.modal-backdrop {
+  z-index: 1044 !important;
+}

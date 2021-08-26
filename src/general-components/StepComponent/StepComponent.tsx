@@ -181,20 +181,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     componentDidMount() {
         this.componentDidUpdate();
+        this.setFooter();
     }
 
     componentDidUpdate() {
-        if (!this.props.maintenance) {
-            setControlFooterItem(1, this.props.controlFooterTool);
-            setControlFooterItem(2, {resetSteps: () => this.setState({onReset: true, showResetModal: true})});
-
-            let id = this.allSteps[this.currentStep - 1].id;
-            if (this.isLastStep()) {
-                setControlFooterItem(3, {saveSteps: id});
-            } else {
-                setControlFooterItem(3, {nextStep: id});
-            }
-        } else {
+        if (this.props.maintenance) {
             setControlFooterItem(2, {home: true});
         }
     }
@@ -213,8 +204,13 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         return null;
     }
 
-    public isAt = (index: number): boolean => {
-        return this.currentStep === index;
+    public isAt = (indexOrFormComponentID: number | string): boolean => {
+        if (typeof indexOrFormComponentID === "number") {
+            return this.currentStep === indexOrFormComponentID;
+        } else {
+            let currentFormComponent = this.allRefs[this.currentStep - 1];
+            return currentFormComponent.current?.props.id === indexOrFormComponentID;
+        }
     }
 
     public isFirstStep = (): boolean => {
@@ -226,6 +222,8 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     public nextStep = () => {
+        this.setFooter();
+
         if (this.currentProgress < this.allSteps.length) {
             let step = this.allRefs[this.currentProgress - 1];
             this.completedSteps.push(step);
@@ -263,6 +261,25 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             return await this.props.onSave(allForms);
         }
         return false;
+    }
+
+    public setFooter = () => {
+        setControlFooterItem(1, this.props.controlFooterTool);
+        setControlFooterItem(2, {
+            reset: () => {
+                this.setState({
+                    onReset: true,
+                    showResetModal: true
+                })
+            }
+        });
+
+        let id = this.allSteps[this.currentStep - 1].id;
+        if (this.isLastStep()) {
+            setControlFooterItem(3, {saveSteps: id});
+        } else {
+            setControlFooterItem(3, {nextStep: id});
+        }
     }
 
     private resetSteps(currentStep?: number) {
