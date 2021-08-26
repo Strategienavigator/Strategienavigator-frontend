@@ -109,7 +109,7 @@ class PasswordReset extends Component<RouteComponentProps<RouteMatches>, Passwor
         let password: string = extractFromForm(e, "password") as string;
 
         if (this.passwordField.current?.isValid() && this.passwordField.current?.isMatching()) {
-            let call = await updatePassword(this.token as string, {password: password});
+            await updatePassword(this.token as string, {password: password});
 
             this.setState({
                 changingSuccess: true
