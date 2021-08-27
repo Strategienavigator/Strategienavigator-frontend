@@ -19,10 +19,8 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     private key: string = randomBytes(200).toString();
 
     public componentDidMount = async () => {
-        if (this.props.stepComp?.isAt(this.props.id as string)) {
-            await this.prepareValues();
-            this.forceUpdate();
-        }
+        await this.prepareValues();
+        this.forceUpdate();
     }
 
     public render = () => {
@@ -54,13 +52,15 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
 
     public abstract extractValues(e: FormEvent<HTMLFormElement>): V;
 
+    public abstract changeControlFooter(): void;
+
     public getValues = (): V | object => {
         return this.values;
     }
 
     public setValues = (values: object) => {
         if (values !== undefined && values !== null) {
-            Object.assign(this.values, values);
+            this.values = Object.assign(this.values, values);
         }
     }
 
@@ -71,6 +71,10 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     public setDisabled = (disabled: boolean) => {
         this.disabled = disabled;
         this.forceUpdate();
+    }
+
+    public isDisabled = (): boolean => {
+        return this.disabled;
     }
 
     protected addError = (id: string, error: ReactNode) => {

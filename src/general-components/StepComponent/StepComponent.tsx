@@ -4,7 +4,7 @@ import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../Desktop";
-import {setControlFooterItem, ToolItem} from "../ControlFooter/ControlFooter";
+import {clearControlFooter, setControlFooterItem, ToolItem} from "../ControlFooter/ControlFooter";
 import FormComponent from "../Form/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
@@ -179,15 +179,16 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         );
     }
 
-    componentDidMount() {
-        this.componentDidUpdate();
-        this.setFooter();
-    }
-
-    componentDidUpdate() {
-        if (this.props.maintenance) {
+    componentDidMount = async () => {
+        if (this.props.steps.length > 1 && !this.props.maintenance) {
+            this.setFooter();
+        } else {
             setControlFooterItem(2, {home: true});
         }
+    }
+
+    componentWillUnmount() {
+        clearControlFooter();
     }
 
     public getPreviousStep = (): null | FormComponent<any, any> => {
@@ -204,13 +205,8 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         return null;
     }
 
-    public isAt = (indexOrFormComponentID: number | string): boolean => {
-        if (typeof indexOrFormComponentID === "number") {
-            return this.currentStep === indexOrFormComponentID;
-        } else {
-            let currentFormComponent = this.allRefs[this.currentStep - 1];
-            return currentFormComponent.current?.props.id === indexOrFormComponentID;
-        }
+    public isAt = (currentStep: number): boolean => {
+        return this.currentStep === currentStep;
     }
 
     public isFirstStep = (): boolean => {
@@ -221,11 +217,12 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         return this.currentStep === this.allSteps.length;
     }
 
-    public nextStep = () => {
+    public nextStep = async () => {
         this.setFooter();
 
-        if (this.currentProgress < this.allSteps.length) {
-            let step = this.allRefs[this.currentProgress - 1];
+        let step;
+        if (this.currentProgress < this.allSteps.length && this.currentStep >= this.currentProgress) {
+            step = this.allRefs[this.currentProgress - 1];
             this.completedSteps.push(step);
             step.current?.setDisabled(true);
 
@@ -233,21 +230,24 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             this.currentProgress = this.currentStep;
 
             step = this.allRefs[this.currentProgress - 1];
-            step.current?.prepareValues();
+            await step.current?.prepareValues();
             step.current?.forceUpdate();
-
-            this.forceUpdate();
         } else {
             if (this.currentStep < this.allSteps.length) {
                 this.currentStep++;
 
-                let step = this.allRefs[this.currentStep - 1];
-                step.current?.prepareValues();
+                step = this.allRefs[this.currentStep - 1];
+                await step.current?.prepareValues();
                 step.current?.forceUpdate();
-
-                this.forceUpdate();
             }
         }
+
+        step = this.allRefs[this.currentProgress - 1];
+        if (!step.current?.isDisabled()) {
+            step.current?.changeControlFooter();
+        }
+
+        this.forceUpdate();
     }
 
     public onSave = async (): Promise<boolean> => {
@@ -275,6 +275,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         });
 
         let id = this.allSteps[this.currentStep - 1].id;
+
         if (this.isLastStep()) {
             setControlFooterItem(3, {saveSteps: id});
         } else {
@@ -305,13 +306,20 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     private onStepSelect = (title: string | null) => {
         if (title !== null) {
-            let step: number = parseInt(title);
+            let newProgress: number = parseInt(title);
 
-            if (step > this.currentProgress) {
-                this.currentProgress = step;
+            if (newProgress > this.currentProgress) {
+                this.currentProgress = newProgress;
             }
 
-            this.currentStep = step;
+            this.currentStep = newProgress;
+            this.setFooter();
+
+            let step = this.allRefs[newProgress - 1];
+            if (!step.current?.isDisabled()) {
+                step.current?.changeControlFooter();
+            }
+
             this.forceUpdate();
         }
     }

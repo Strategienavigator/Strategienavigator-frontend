@@ -20,6 +20,9 @@ class SWOTClassifyAlternativeActions extends FormComponent<any, any> {
         return false;
     }
 
+    changeControlFooter(): void {
+    }
+
 }
 
 export {

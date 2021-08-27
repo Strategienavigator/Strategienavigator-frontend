@@ -13,6 +13,9 @@ class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
     prepareValues = async () => {
     }
 
+    changeControlFooter(): void {
+    }
+
     build() {
         return (
             <div>

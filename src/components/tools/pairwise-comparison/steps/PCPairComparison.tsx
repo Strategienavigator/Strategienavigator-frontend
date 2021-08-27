@@ -13,6 +13,9 @@ class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
         console.log("STEP 1 Values: ", previous);
     }
 
+    changeControlFooter(): void {
+    }
+
     build() {
         return (
             <div>

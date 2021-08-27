@@ -12,6 +12,10 @@ export interface ControlFooterProps {
     places: number
 }
 
+interface ControlFooterState {
+    items: Map<number, ControlFooterItem>
+}
+
 export interface NextStepItem {
     nextStep: string
 }
@@ -69,22 +73,30 @@ export const setControlFooterItem = (place: number, item: ControlFooterItem) => 
     ControlFooter._instance?.setItem(place, item);
 }
 
-class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, any> {
+export const clearControlFooter = () => {
+    ControlFooter._instance?.clear();
+}
+
+class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, ControlFooterState> {
     public static _instance: undefined | ControlFooter = undefined;
-    public items: Map<number, ControlFooterItem> = new Map<number, ControlFooterItem>();
 
     constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
 
-        for (let i = 0; i < this.props.places; i++) {
-            this.items.set(i, null);
+        this.state = {
+            items: new Map<number, ControlFooterItem>()
         }
+
         ControlFooter._instance = this;
     }
 
     componentDidMount() {
-        this.props.history.listen(() => {
-            this.items.clear();
+        let oldMap = this.state.items;
+        for (let i = 0; i < this.props.places; i++) {
+            oldMap.set(i, null);
+        }
+        this.setState({
+            items: oldMap
         });
     }
 
@@ -99,7 +111,7 @@ class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, 
                 {places.map(value => {
                     return (
                         <div key={value} className={"item"}>
-                            {this.getItem(this.items.get(value))}
+                            {this.getItem(this.state.items.get(value))}
                         </div>
                     );
                 })}
@@ -108,8 +120,19 @@ class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, 
     }
 
     public setItem = (place: number, item: ControlFooterItem) => {
-        this.items.set(place, item);
-        this.forceUpdate();
+        this.setState(state => {
+            const items = state.items.set(place, item);
+
+            return {
+                items: items
+            }
+        });
+    }
+
+    public clear = () => {
+        this.setState({
+            items: new Map<number, ControlFooterItem>()
+        });
     }
 
     private getItem = (item: ControlFooterItem | undefined): null | ReactNode => {
@@ -166,7 +189,8 @@ class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, 
             }
             if ("button" in item) {
                 return (
-                    <button key={"button"} className={"btn-transparent"} onClick={() => item.button.callback()} type={"button"}>
+                    <button key={"button"} className={"btn-transparent"} onClick={() => item.button.callback()}
+                            type={"button"}>
                         <FontAwesomeIcon icon={item.button.icon}/> {item.button.text}
                     </button>
                 );

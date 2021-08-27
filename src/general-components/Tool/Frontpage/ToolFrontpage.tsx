@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {isDesktop} from "../../Desktop";
-import {setControlFooterItem} from "../../ControlFooter/ControlFooter";
+import {clearControlFooter, setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -53,6 +53,10 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
         }
     }
 
+    componentWillUnmount() {
+        clearControlFooter();
+    }
+
     render = () => {
         if (this.props.maintenance) {
             return (
@@ -68,7 +72,7 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
 
                 <Loader alignment={"left"} size={50} transparent animate={false}
                         payload={[this.loadToolSaves]}>
-                    <ListGroup className={"saves mt-3"}>
+                    <ListGroup className={"saves mt-2"}>
 
                         {this.state.saves?.length <= 0 && (
                             <ListGroupItem>Sie haben aktuell keine Speicherstände.</ListGroupItem>

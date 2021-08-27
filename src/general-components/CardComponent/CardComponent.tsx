@@ -108,7 +108,7 @@ interface CardComponentProps {
     min: number
     max: number
     counter?: CounterInterface
-    values?: CardComponentField[]
+    values?: CardComponentFields
     placeholder?: CardComponentFieldPlaceholder
 }
 
@@ -129,6 +129,19 @@ class CardComponent extends Component<CardComponentProps, any> {
         } else {
             for (let i = 0; i < this.props.min; i++) {
                 this.addCard();
+            }
+        }
+    }
+
+    componentDidUpdate(prevProps: Readonly<CardComponentProps>, prevState: Readonly<any>): any {
+        if (prevProps.values === undefined && this.props.values !== undefined) {
+            this.cards.clear();
+
+            for (const value of this.props.values) {
+                let designation = value.name;
+                let desc = value.desc;
+
+                this.addCard(designation, desc);
             }
         }
     }
