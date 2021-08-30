@@ -3,7 +3,7 @@ import {ToolFrontpage} from "../../../general-components/Tool/Frontpage/ToolFron
 import {Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export interface SWOTAnalysisHomeState {
     show: boolean
@@ -27,7 +27,7 @@ export class SWOTAnalysisHome extends Component<any, SWOTAnalysisHomeState> {
             >
                 <h4>SWOT Analyse</h4>
 
-                <hr />
+                <hr/>
 
                 {isDesktop() ? this.getDescriptionText() : this.getDescription()}
             </ToolFrontpage>
@@ -39,7 +39,7 @@ export class SWOTAnalysisHome extends Component<any, SWOTAnalysisHomeState> {
             <>
                 <Button className={"description"} variant={"dark"}
                         onClick={() => this.setState({show: true})}>
-                    <FontAwesomeIcon icon={faInfoCircle} /> &nbsp;Erklärung
+                    <FontAwesomeIcon icon={faInfoCircle}/> &nbsp;Erklärung
                 </Button>
 
                 <Offcanvas show={this.state.show}>

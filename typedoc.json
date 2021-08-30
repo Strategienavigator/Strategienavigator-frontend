@@ -1,6 +1,10 @@
 {
-  "entryPoints": ["./src"],
+  "entryPoints": [
+    "./src"
+  ],
   "out": "docs",
   "excludeExternals": true,
-  "plugin": ["typedoc-plugin-merge-modules"]
+  "plugin": [
+    "typedoc-plugin-merge-modules"
+  ]
 }
