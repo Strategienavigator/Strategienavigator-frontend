@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {withRouter} from "react-router";
 import {reload_app} from "../../../index";
-import Loader from "../../../general-components/Loader/Loader";
+import {Loader} from "../../../general-components/Loader/Loader";
 import {Messages} from "../../../general-components/Messages/Messages";
 
-class Logout extends Component<any, any> {
+export class LogoutComponent extends Component<any, any> {
 
     logout = async () => {
         let call = await Session.logout();
@@ -26,4 +26,4 @@ class Logout extends Component<any, any> {
 
 }
 
-export default withRouter(Logout);
+export const Logout = withRouter(LogoutComponent);

@@ -5,7 +5,7 @@ import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
-import Loader from "../../Loader/Loader";
+import {Loader} from "../../Loader/Loader";
 import {Session} from "../../Session/Session";
 import {getSaves} from "../../API/calls/Saves";
 import {SimpleSaveResource} from "../../Datastructures";
@@ -16,11 +16,11 @@ export interface ToolFrontpageProps {
     maintenance?: boolean
 }
 
-interface ToolFrontpageState {
+export interface ToolFrontpageState {
     saves: Array<any>
 }
 
-class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageState> {
+export class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageState> {
 
     constructor(props: (ToolFrontpageProps & P) | Readonly<ToolFrontpageProps & P>) {
         super(props);
@@ -107,5 +107,3 @@ class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFrontpageSt
     }
 
 }
-
-export default ToolFrontpage;

@@ -6,20 +6,20 @@ import {Omit, ReplaceProps} from "react-bootstrap/helpers";
 import {CallInterface} from "../API/API";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
-import Loader from "../Loader/Loader";
+import {Loader} from "../Loader/Loader";
 
-interface UniqueCheckProps {
+export interface UniqueCheckProps {
     callback: (input: string) => Promise<CallInterface>
     failMessage: string
     successMessage: string
 }
 
-interface UniqueCheckState {
+export interface UniqueCheckState {
     isLoading: boolean
     success?: boolean
 }
 
-class UniqueCheck extends Component<ReplaceProps<"input", FormControlProps> & UniqueCheckProps, UniqueCheckState> {
+export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProps> & UniqueCheckProps, UniqueCheckState> {
     private timeout: NodeJS.Timeout | undefined;
 
     constructor(props: (Omit<Pick<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "key" | keyof React.InputHTMLAttributes<HTMLInputElement>> & { ref?: ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined; }, FormControlProps> & FormControlProps & UniqueCheckProps) | Readonly<Omit<Pick<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "key" | keyof React.InputHTMLAttributes<HTMLInputElement>> & { ref?: ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined; }, FormControlProps> & FormControlProps & UniqueCheckProps>) {
@@ -98,5 +98,3 @@ class UniqueCheck extends Component<ReplaceProps<"input", FormControlProps> & Un
     }
 
 }
-
-export default UniqueCheck;

@@ -1,4 +1,4 @@
-import FormComponent from "../../../../general-components/Form/FormComponent";
+import {FormComponent} from "../../../../general-components/Form/FormComponent";
 import {FormEvent} from "react";
 import {PCCriteriasValues} from "./PCCriterias";
 
@@ -6,7 +6,7 @@ export interface PCPairComparisonValues {
 
 }
 
-class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
+export class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
 
     prepareValues = async () => {
         let previous = this.props.stepComp?.getPreviousStep()?.getValues() as PCCriteriasValues;
@@ -36,5 +36,3 @@ class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
     }
 
 }
-
-export default PCPairComparison;

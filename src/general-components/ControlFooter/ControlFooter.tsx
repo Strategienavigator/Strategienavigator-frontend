@@ -12,7 +12,7 @@ export interface ControlFooterProps {
     places: number
 }
 
-interface ControlFooterState {
+export interface ControlFooterState {
     items: Map<number, ControlFooterItem>
 }
 
@@ -70,15 +70,15 @@ export type ControlFooterItem =
     | ButtonItem;
 
 export const setControlFooterItem = (place: number, item: ControlFooterItem) => {
-    ControlFooter._instance?.setItem(place, item);
+    ControlFooterComponent._instance?.setItem(place, item);
 }
 
 export const clearControlFooter = () => {
-    ControlFooter._instance?.clear();
+    ControlFooterComponent._instance?.clear();
 }
 
-class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, ControlFooterState> {
-    public static _instance: undefined | ControlFooter = undefined;
+export class ControlFooterComponent extends Component<ControlFooterProps & RouteComponentProps, ControlFooterState> {
+    public static _instance: undefined | ControlFooterComponent = undefined;
 
     constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
@@ -87,7 +87,7 @@ class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, 
             items: new Map<number, ControlFooterItem>()
         }
 
-        ControlFooter._instance = this;
+        ControlFooterComponent._instance = this;
     }
 
     componentDidMount() {
@@ -202,4 +202,4 @@ class ControlFooter extends Component<ControlFooterProps & RouteComponentProps, 
 
 }
 
-export default withRouter(ControlFooter);
+export const ControlFooter = withRouter(ControlFooterComponent);

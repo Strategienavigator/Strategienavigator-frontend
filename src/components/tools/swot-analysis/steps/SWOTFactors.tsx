@@ -1,12 +1,12 @@
-import FormComponent from "../../../../general-components/Form/FormComponent";
+import {FormComponent} from "../../../../general-components/Form/FormComponent";
 import {FormEvent} from "react";
-import CardComponent, {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
+import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
 import {Accordion} from "react-bootstrap";
-import NumberCounter from "../../../../general-components/Counter/NumberCounter";
-import RomanNumeralsCounter from "../../../../general-components/Counter/RomanNumeralsCounter";
-import LowerABCCounter from "../../../../general-components/Counter/LowerABCCounter";
-import UpperABCCounter from "../../../../general-components/Counter/UpperABCCounter";
+import {NumberCounter} from "../../../../general-components/Counter/NumberCounter";
+import {RomanNumeralsCounter} from "../../../../general-components/Counter/RomanNumeralsCounter";
+import {LowerABCCounter} from "../../../../general-components/Counter/LowerABCCounter";
+import {UpperABCCounter} from "../../../../general-components/Counter/UpperABCCounter";
 import {isDesktop} from "../../../../general-components/Desktop";
 
 export interface SwotFactorsValues {
@@ -16,7 +16,7 @@ export interface SwotFactorsValues {
     weaknesses: CardComponentFields
 }
 
-class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
+export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
 
     extractValues(e: FormEvent<HTMLFormElement>): SwotFactorsValues {
         let chances: CardComponentFields = extractCardComponentField(e, "chances") as CardComponentFields;
@@ -141,5 +141,3 @@ class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
     }
 
 }
-
-export default SWOTFactors;

@@ -8,7 +8,7 @@ import {isDesktop} from "../Desktop";
 import {Messages} from "../Messages/Messages";
 import {CounterInterface} from "../Counter/CounterInterface";
 
-interface CardProps {
+export interface CardProps {
     name: string
     id: string | null
     disabled: boolean
@@ -18,7 +18,7 @@ interface CardProps {
     placeholder?: CardComponentFieldPlaceholder
 }
 
-interface CardState {
+export interface CardState {
     showDesc: boolean
     descChanged: boolean
 }
@@ -102,7 +102,7 @@ export interface CardComponentFieldPlaceholder {
     name?: string
 }
 
-interface CardComponentProps {
+export interface CardComponentProps {
     name: string
     disabled: boolean
     min: number
@@ -211,4 +211,4 @@ class CardComponent extends Component<CardComponentProps, any> {
 
 }
 
-export default CardComponent;
+export {CardComponent, Card};

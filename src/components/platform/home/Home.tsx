@@ -7,7 +7,7 @@ import {faArrowsAlt, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawes
 import "./home.scss";
 import "./home-desk.scss";
 
-class Home extends Component<any, any> {
+export class Home extends Component<any, any> {
 
     render() {
         return (
@@ -60,5 +60,3 @@ class Home extends Component<any, any> {
     }
 
 }
-
-export default Home;

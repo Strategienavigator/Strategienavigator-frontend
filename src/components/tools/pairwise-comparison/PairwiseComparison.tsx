@@ -1,12 +1,12 @@
 import "./pairwise-comparison.scss";
 import StepComponent from "../../../general-components/StepComponent/StepComponent";
-import PCCriterias from "./steps/PCCriterias";
+import {PCCriterias} from "./steps/PCCriterias";
 import {Component} from "react";
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
-import PCPairComparison from "./steps/PCPairComparison";
-import FormComponent from "../../../general-components/Form/FormComponent";
+import {PCPairComparison} from "./steps/PCPairComparison";
+import {FormComponent} from "../../../general-components/Form/FormComponent";
 
-class PairwiseComparison extends Component<any, any> {
+export class PairwiseComparison extends Component<any, any> {
 
     render() {
         return (
@@ -44,5 +44,3 @@ class PairwiseComparison extends Component<any, any> {
     }
 
 }
-
-export default PairwiseComparison;

@@ -68,7 +68,7 @@ const checkPassword = (password: string): PasswordFieldState => {
     return obj;
 };
 
-interface PasswordFieldProps {
+export interface PasswordFieldProps {
     check: boolean
     eye?: boolean
     text?: string
@@ -78,7 +78,7 @@ interface PasswordFieldProps {
     confirm?: boolean
 }
 
-interface PasswordFieldState {
+export interface PasswordFieldState {
     lowercase: boolean
     uppercase: boolean
     special: boolean

@@ -5,20 +5,20 @@ import "./email-verification.scss";
 import {RouteComponentProps} from "react-router";
 import {verifyEmail} from "../../../general-components/API/calls/Email";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
-import Loader from "../../../general-components/Loader/Loader";
+import {Loader} from "../../../general-components/Loader/Loader";
 import {Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
-interface EmailVerificationState {
+export interface EmailVerificationState {
     loaded: boolean
     success?: boolean
 }
 
-interface RouteMatches {
+export interface RouteMatches {
     token: string
 }
 
-class EmailVerification extends Component<RouteComponentProps<RouteMatches>, EmailVerificationState> {
+export class EmailVerification extends Component<RouteComponentProps<RouteMatches>, EmailVerificationState> {
     private readonly token: string;
 
     constructor(props: Readonly<RouteComponentProps<RouteMatches>> | RouteComponentProps<RouteMatches>) {
@@ -72,5 +72,3 @@ class EmailVerification extends Component<RouteComponentProps<RouteMatches>, Ema
     }
 
 }
-
-export default EmailVerification;

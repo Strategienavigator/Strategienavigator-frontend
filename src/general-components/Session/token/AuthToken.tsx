@@ -1,13 +1,13 @@
-import Token from "./Token";
+import {Token} from "./Token";
 import {Buffer} from "buffer";
 
-interface JWTTokenPayloadInterface {
+export interface JWTTokenPayloadInterface {
     userId: number;
     expiryDate: Date;
     id: string;
 }
 
-class AuthToken extends Token {
+export class AuthToken extends Token {
 
     constructor() {
         super("token");
@@ -46,5 +46,3 @@ class AuthToken extends Token {
     }
 
 }
-
-export default AuthToken;

@@ -22,7 +22,7 @@ interface NavState {
     expanded: boolean
 }
 
-class Nav extends Component<any, NavState> {
+export class Nav extends Component<any, NavState> {
 
     constructor(props: any) {
         super(props);
@@ -125,5 +125,3 @@ class Nav extends Component<any, NavState> {
     }
 
 }
-
-export default Nav;

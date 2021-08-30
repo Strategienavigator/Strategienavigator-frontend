@@ -1,15 +1,15 @@
 import React, {Component} from "react";
-import ToolFrontpage from "../../../general-components/Tool/Frontpage/ToolFrontpage";
+import {ToolFrontpage} from "../../../general-components/Tool/Frontpage/ToolFrontpage";
 import {Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface SWOTAnalysisHomeState {
+export interface SWOTAnalysisHomeState {
     show: boolean
 }
 
-class SWOTAnalysisHome extends Component<any, SWOTAnalysisHomeState> {
+export class SWOTAnalysisHome extends Component<any, SWOTAnalysisHomeState> {
 
     constructor(props: any) {
         super(props);
@@ -72,5 +72,3 @@ class SWOTAnalysisHome extends Component<any, SWOTAnalysisHomeState> {
     }
 
 }
-
-export default SWOTAnalysisHome;

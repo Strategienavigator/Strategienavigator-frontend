@@ -6,13 +6,13 @@ import StepComponent from "../StepComponent/StepComponent";
 import "../../scss/feedback.scss";
 import {randomBytes} from "crypto";
 
-interface FormComponentProps {
+export interface FormComponentProps {
     id?: string,
     title?: string,
     stepComp?: StepComponent
 }
 
-abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
+export abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     protected values: V | object = {};
     protected disabled: boolean = false;
     private error: Map<string, ReactNode[]> = new Map<string, ReactNode[]>();
@@ -140,5 +140,3 @@ abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
     }
 
 }
-
-export default FormComponent;

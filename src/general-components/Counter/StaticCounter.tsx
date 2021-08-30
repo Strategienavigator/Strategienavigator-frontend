@@ -1,6 +1,6 @@
 import {CounterInterface} from "./CounterInterface";
 
-export default class StaticCounter implements CounterInterface {
+export class StaticCounter implements CounterInterface {
 
     private readonly count: string;
 

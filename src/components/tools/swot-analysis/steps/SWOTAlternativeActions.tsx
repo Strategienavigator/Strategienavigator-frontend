@@ -1,8 +1,8 @@
-import FormComponent from "../../../../general-components/Form/FormComponent";
+import {FormComponent} from "../../../../general-components/Form/FormComponent";
 import {FormEvent} from "react";
 import {SwotFactorsValues} from "./SWOTFactors";
 import {Col, Form, Row, Tab} from "react-bootstrap";
-import CardComponent, {CardComponentField} from "../../../../general-components/CardComponent/CardComponent";
+import {CardComponent, CardComponentField} from "../../../../general-components/CardComponent/CardComponent";
 import {setControlFooterItem} from "../../../../general-components/ControlFooter/ControlFooter";
 import {faCaretLeft, faCaretRight} from "@fortawesome/free-solid-svg-icons/";
 import {isDesktop} from "../../../../general-components/Desktop";
@@ -11,12 +11,12 @@ export interface SWOTAlternativeActionsValues extends SwotFactorsValues {
 
 }
 
-interface ActionInterface {
+export interface ActionInterface {
     first: CardComponentField
     second: CardComponentField
 }
 
-class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, any> {
+export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, any> {
     private factors: SwotFactorsValues | undefined;
     private actions: Array<ActionInterface> = [];
     private currentAction: number = 0;
@@ -202,5 +202,3 @@ class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues,
     }
 
 }
-
-export default SWOTAlternativeActions;

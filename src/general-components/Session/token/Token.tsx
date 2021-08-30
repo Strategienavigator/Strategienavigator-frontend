@@ -1,4 +1,4 @@
-abstract class Token {
+export abstract class Token {
     protected identifier: string;
 
     protected constructor(identifier: string) {
@@ -22,5 +22,3 @@ abstract class Token {
     }
 
 }
-
-export default Token;

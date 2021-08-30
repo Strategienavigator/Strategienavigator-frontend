@@ -5,7 +5,7 @@ import "./step-component-desk.scss";
 import {Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../Desktop";
 import {clearControlFooter, setControlFooterItem, ToolItem} from "../ControlFooter/ControlFooter";
-import FormComponent from "../Form/FormComponent";
+import {FormComponent} from "../Form/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
@@ -16,7 +16,7 @@ export type StepProp = {
     ref?: React.Ref<any>
 };
 
-interface StepComponentProps {
+export interface StepComponentProps {
     steps: StepProp[]
     header?: string
     controlFooterTool: ToolItem
@@ -24,7 +24,7 @@ interface StepComponentProps {
     maintenance?: boolean
 }
 
-interface StepComponentState {
+export interface StepComponentState {
     onReset: boolean
     showResetModal: boolean
 }

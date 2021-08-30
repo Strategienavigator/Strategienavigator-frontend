@@ -8,19 +8,19 @@ export type MessageTypes = "WARNING" | "DANGER" | "INFO" | "SUCCESS";
 export type xAlignments = "CENTER" | "LEFT" | "RIGHT";
 export type yAlignments = "MIDDLE" | "TOP" | "BOTTOM";
 
-interface MessagesProps {
+export interface MessagesProps {
     xAlignment: xAlignments
     yAlignment: yAlignments
     style?: CSSProperties
 }
 
-interface SingleMessageProps {
+export interface SingleMessageProps {
     content: ReactNode
     type: MessageTypes
     timer?: number
 }
 
-interface SingleMessageState {
+export interface SingleMessageState {
     show: boolean
 }
 
@@ -73,5 +73,6 @@ class Messages extends Component<MessagesProps, any> {
 }
 
 export {
-    Messages
+    Messages,
+    SingleMessage
 }

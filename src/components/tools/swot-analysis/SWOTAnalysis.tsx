@@ -2,11 +2,11 @@ import "./swot-analysis.scss";
 import React, {Component} from "react";
 import StepComponent from "../../../general-components/StepComponent/StepComponent";
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
-import SWOTFactors from "./steps/SWOTFactors";
-import SWOTAlternativeActions from "./steps/SWOTAlternativeActions";
+import {SWOTFactors} from "./steps/SWOTFactors";
+import {SWOTAlternativeActions} from "./steps/SWOTAlternativeActions";
 import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions";
 
-class SWOTAnalysis extends Component<any, any> {
+export class SWOTAnalysis extends Component<any, any> {
 
     render() {
         return (
@@ -43,5 +43,3 @@ class SWOTAnalysis extends Component<any, any> {
     }
 
 }
-
-export default SWOTAnalysis;

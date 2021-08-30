@@ -3,7 +3,7 @@ import {Spinner} from "react-bootstrap";
 
 import "./loader.scss";
 
-interface LoaderState {
+export interface LoaderState {
     loaded: boolean
 }
 
@@ -22,7 +22,7 @@ export interface LoaderProps {
     size?: number
 }
 
-class Loader extends Component<LoaderProps, LoaderState> {
+export class Loader extends Component<LoaderProps, LoaderState> {
 
     constructor(props: LoaderProps | Readonly<LoaderProps>) {
         super(props);
@@ -90,5 +90,3 @@ class Loader extends Component<LoaderProps, LoaderState> {
     }
 
 }
-
-export default Loader;

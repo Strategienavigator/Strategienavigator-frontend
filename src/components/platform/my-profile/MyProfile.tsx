@@ -14,9 +14,9 @@ import {withRouter} from "react-router";
 import {Messages} from "../../../general-components/Messages/Messages";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 import {checkUsername} from "../../../general-components/API/calls/Username";
-import UniqueCheck from "../../../general-components/UniqueCheck/UniqueCheck";
+import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 
-interface MyProfileState {
+export interface MyProfileState {
     user: User
     edit: boolean
     delete: boolean
@@ -27,7 +27,7 @@ interface MyProfileState {
     isSaved?: boolean
 }
 
-class MyProfile extends Component<any, MyProfileState> {
+export class MyProfileComponent extends Component<any, MyProfileState> {
 
     private password: string | null = null;
     private passwordConfirm: string | null = null;
@@ -292,4 +292,4 @@ class MyProfile extends Component<any, MyProfileState> {
 
 }
 
-export default withRouter(MyProfile);
+export const MyProfile = withRouter(MyProfileComponent);

@@ -8,13 +8,14 @@ import {withRouter} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {Messages} from "../../../general-components/Messages/Messages";
 
-interface LoginState {
+
+export interface LoginState {
     failed: boolean
     isLoggingIn: boolean
     loaded?: boolean
 }
 
-class Login extends Component<any, LoginState> {
+export class LoginComponent extends Component<any, LoginState> {
 
     constructor(props: any) {
         super(props);
@@ -115,4 +116,5 @@ class Login extends Component<any, LoginState> {
 
 }
 
-export default withRouter(Login);
+export const Login = withRouter(LoginComponent);
+

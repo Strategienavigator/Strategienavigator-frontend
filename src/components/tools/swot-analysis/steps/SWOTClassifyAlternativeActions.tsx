@@ -1,4 +1,4 @@
-import FormComponent from "../../../../general-components/Form/FormComponent";
+import {FormComponent} from "../../../../general-components/Form/FormComponent";
 import {FormEvent} from "react";
 
 

@@ -1,11 +1,9 @@
 import {Component} from "react";
 
-class DataPrivacy extends Component<any, any> {
+export class DataPrivacy extends Component<any, any> {
 
     render() {
         return "Datenschutz";
     }
 
 }
-
-export default DataPrivacy;

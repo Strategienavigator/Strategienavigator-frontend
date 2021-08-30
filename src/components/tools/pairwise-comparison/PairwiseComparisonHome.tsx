@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import ToolFrontpage from "../../../general-components/Tool/Frontpage/ToolFrontpage";
+import {ToolFrontpage} from "../../../general-components/Tool/Frontpage/ToolFrontpage";
 
-class PairwiseComparisonHome extends Component<any, any> {
+export class PairwiseComparisonHome extends Component<any, any> {
 
     render() {
         return (
@@ -15,5 +15,3 @@ class PairwiseComparisonHome extends Component<any, any> {
     }
 
 }
-
-export default PairwiseComparisonHome;

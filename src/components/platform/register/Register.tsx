@@ -5,7 +5,7 @@ import {PasswordField} from "../../../general-components/PasswordField/PasswordF
 import "./register.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
-import UniqueCheck from "../../../general-components/UniqueCheck/UniqueCheck";
+import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 
@@ -14,7 +14,7 @@ interface RegisterState {
     loaded?: boolean
 }
 
-class Register extends Component<any, RegisterState> {
+export class Register extends Component<any, RegisterState> {
 
     constructor(props: any) {
         super(props);
@@ -95,5 +95,3 @@ class Register extends Component<any, RegisterState> {
     }
 
 }
-
-export default Register;

@@ -7,11 +7,11 @@ import "./password-reset.scss";
 import {forgotPassword, updatePassword} from "../../../general-components/API/calls/Password";
 import {Link} from "react-router-dom";
 
-interface RouteMatches {
+export interface RouteMatches {
     token?: string
 }
 
-interface PasswordResetState {
+export interface PasswordResetState {
     isRequesting: boolean
     requestSuccess?: boolean
 
@@ -19,7 +19,7 @@ interface PasswordResetState {
     changingSuccess?: boolean
 }
 
-class PasswordReset extends Component<RouteComponentProps<RouteMatches>, PasswordResetState> {
+export class PasswordReset extends Component<RouteComponentProps<RouteMatches>, PasswordResetState> {
     private readonly token: string | undefined;
     private readonly hasToken: boolean;
     private readonly passwordField;
@@ -169,5 +169,3 @@ class PasswordReset extends Component<RouteComponentProps<RouteMatches>, Passwor
         );
     }
 }
-
-export default PasswordReset;

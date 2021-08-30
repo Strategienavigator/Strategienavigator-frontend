@@ -1,14 +1,14 @@
-import FormComponent from "../../../../general-components/Form/FormComponent";
+import {FormComponent} from "../../../../general-components/Form/FormComponent";
 import {FormEvent} from "react";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
-import CardComponent, {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
+import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {Messages} from "../../../../general-components/Messages/Messages";
 
 export interface PCCriteriasValues {
     criterias: CardComponentFields
 }
 
-class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
+export class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
 
     prepareValues = async () => {
     }
@@ -50,5 +50,3 @@ class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
     }
 
 }
-
-export default PCCriterias;

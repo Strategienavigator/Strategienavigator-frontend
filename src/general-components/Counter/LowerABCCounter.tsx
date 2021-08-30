@@ -1,6 +1,6 @@
 import {CounterInterface} from "./CounterInterface";
 
-export default class LowerABCCounter implements CounterInterface {
+export class LowerABCCounter implements CounterInterface {
     private readonly alphabet = new Array<string>();
 
     constructor() {
