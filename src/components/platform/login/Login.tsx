@@ -64,6 +64,7 @@ export class LoginComponent extends Component<any, LoginState> {
             }}>
                 <h2>Anmelden</h2>
 
+
                 <hr/>
 
                 <Form.Floating className={"mb-2 mt-2"}>
