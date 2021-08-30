@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Component, ReactElement} from "react";
+import React, {ChangeEvent, Component, ReactElement, RefObject} from "react";
 import {Button, Card as BootstrapCard, Collapse, FormControl, InputGroup} from "react-bootstrap";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -24,6 +24,8 @@ export interface CardState {
 }
 
 class Card extends Component<CardProps, CardState> {
+    private currentDesc: string | undefined;
+    private currentName: string | undefined;
 
     constructor(props: CardProps | Readonly<CardProps>) {
         super(props);
@@ -34,8 +36,25 @@ class Card extends Component<CardProps, CardState> {
         };
     }
 
+    isValid = () => {
+        return (this.currentDesc !== undefined && this.currentName !== undefined);
+    }
+
+    getDescription = () => {
+        return this.currentDesc;
+    }
+
+    getName = () => {
+        return this.currentName;
+    }
+
+    nameChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        this.currentName = e.currentTarget.value;
+    }
+
     descChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         let value = e.currentTarget.value;
+        this.currentDesc = value;
 
         this.setState({
             descChanged: value.length > 0
@@ -53,6 +72,7 @@ class Card extends Component<CardProps, CardState> {
                         required={true}
                         disabled={this.props.disabled}
                         onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
+                        onChange={(e) => this.nameChanged(e)}
                         onFocus={() => this.setState({showDesc: true})}
                         name={this.props.name + "[][name]"}
                         defaultValue={this.props.designation}
@@ -113,7 +133,8 @@ export interface CardComponentProps {
 }
 
 class CardComponent extends Component<CardComponentProps, any> {
-    private cards: Map<number, ReactElement<CardProps, any>> = new Map<number, ReactElement<CardProps, any>>();
+    private cards = new Map<number, ReactElement<CardProps, any>>();
+    private cardRefs = new Map<number, RefObject<Card>>();
     private index: number = 0;
 
     constructor(props: CardComponentProps | Readonly<CardComponentProps>) {
@@ -133,6 +154,10 @@ class CardComponent extends Component<CardComponentProps, any> {
         }
     }
 
+    getValues = () => {
+        return this.cardRefs;
+    }
+
     componentDidUpdate(prevProps: Readonly<CardComponentProps>, prevState: Readonly<any>): any {
         if (prevProps.values === undefined && this.props.values !== undefined) {
             this.cards.clear();
@@ -150,6 +175,8 @@ class CardComponent extends Component<CardComponentProps, any> {
         if (this.cards.size < this.props.max && !this.props.disabled) {
             let index = this.index;
 
+            let ref = React.createRef<Card>();
+
             this.cards.set(
                 index,
                 <Card id={this.props.counter?.get(this.cards.size) || null}
@@ -158,13 +185,20 @@ class CardComponent extends Component<CardComponentProps, any> {
                       key={index}
                       name={this.props.name}
                       designation={designation}
+                      ref={ref}
                       desc={desc}
                 />
             );
+            this.cardRefs.set(index, ref);
             this.index++;
 
             this.forceUpdate();
         }
+    }
+
+    removeAllCards = () => {
+        this.cards.clear();
+        this.forceUpdate();
     }
 
     removeCard = (index: number) => {

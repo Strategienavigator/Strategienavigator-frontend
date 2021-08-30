@@ -11,6 +11,8 @@ class SWOTClassifyAlternativeActions extends FormComponent<any, any> {
     }
 
     prepareValues = async () => {
+        let values = this.props.stepComp?.getPreviousStep();
+        console.log(values?.getValues());
     }
 
     submit = async (values: any) => {

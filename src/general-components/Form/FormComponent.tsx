@@ -98,7 +98,7 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
             <div className={"feedbackContainer"}>
                 {this.error.get(id)?.map((value) => {
                     return (
-                        <div className={"feedback DANGER"}>
+                        <div key={"feedback-" + id} className={"feedback DANGER"}>
                             {value}
                         </div>
                     );

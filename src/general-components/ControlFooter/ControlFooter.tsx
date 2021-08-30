@@ -79,6 +79,7 @@ export const clearControlFooter = () => {
 
 export class ControlFooterComponent extends Component<ControlFooterProps & RouteComponentProps, ControlFooterState> {
     public static _instance: undefined | ControlFooterComponent = undefined;
+    private static oldItems: Map<number, ControlFooterItem> | undefined;
 
     constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
@@ -92,8 +93,14 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
 
     componentDidMount() {
         let oldMap = this.state.items;
-        for (let i = 0; i < this.props.places; i++) {
-            oldMap.set(i, null);
+
+        if (ControlFooterComponent.oldItems) {
+            oldMap = ControlFooterComponent.oldItems;
+        } else {
+            for (let i = 1; i <= this.props.places; i++) {
+                oldMap.set(i, null);
+            }
+            ControlFooterComponent.oldItems = oldMap;
         }
         this.setState({
             items: oldMap

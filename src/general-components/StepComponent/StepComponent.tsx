@@ -7,7 +7,7 @@ import {isDesktop} from "../Desktop";
 import {clearControlFooter, setControlFooterItem, ToolItem} from "../ControlFooter/ControlFooter";
 import {FormComponent} from "../Form/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
+import {faCaretLeft, faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
 export type StepProp = {
     id: string,
@@ -27,6 +27,11 @@ export interface StepComponentProps {
 export interface StepComponentState {
     onReset: boolean
     showResetModal: boolean
+    hasCustomNextButton: boolean
+    customNextButton: {
+        text: string
+        callback: () => void
+    } | null
 }
 
 class StepComponent extends Component<StepComponentProps, StepComponentState> {
@@ -55,8 +60,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
         this.state = {
             onReset: false,
-            showResetModal: false
+            showResetModal: false,
+            hasCustomNextButton: false,
+            customNextButton: null
         }
+
     }
 
     render = () => {
@@ -98,14 +106,26 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
                             {(isDesktop()) && (
                                 <>
-                                    <Button
-                                        variant={"dark"}
-                                        type={"submit"}
-                                        form={this.allSteps[this.currentStep - 1].id} className={"mt-2"}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
-                                    </Button>
+                                    {(!this.state.hasCustomNextButton) ? (
+                                        <Button
+                                            variant={"dark"}
+                                            type={"submit"}
+                                            form={this.allSteps[this.currentStep - 1].id} className={"mt-2"}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant={"dark"}
+                                            type={"button"}
+                                            onClick={this.state.customNextButton?.callback}
+                                            className={"mt-2"}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faCaretRight}/> Nächster
+                                        </Button>
+                                    )}
                                     <Button
                                         variant={"dark"}
                                         type={"button"}
@@ -181,7 +201,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     componentDidMount = async () => {
         if (this.props.steps.length > 1 && !this.props.maintenance) {
-            this.setFooter();
+            this.restoreFooter();
         } else {
             setControlFooterItem(2, {home: true});
         }
@@ -218,7 +238,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     public nextStep = async () => {
-        this.setFooter();
+        this.restoreFooter();
 
         let step;
         if (this.currentProgress < this.allSteps.length && this.currentStep >= this.currentProgress) {
@@ -242,6 +262,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             }
         }
 
+        if (this.isLastStep()) {
+            this.restoreFooter();
+        }
+
         step = this.allRefs[this.currentProgress - 1];
         if (!step.current?.isDisabled()) {
             step.current?.changeControlFooter();
@@ -263,7 +287,22 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         return false;
     }
 
-    public setFooter = () => {
+    public addCustomNextButton = (text: string, callback: () => any) => {
+        let button = {text: text, callback: callback, icon: faCaretRight};
+
+        this.setState({
+            hasCustomNextButton: true,
+            customNextButton: button
+        });
+
+        setControlFooterItem(3, {button: button});
+    }
+
+    public addCustomPreviousButton = (text: string, callback: () => any) => {
+        setControlFooterItem(1, {button: {text: text, callback: callback, icon: faCaretLeft}});
+    }
+
+    public restoreFooter = () => {
         setControlFooterItem(1, this.props.controlFooterTool);
         setControlFooterItem(2, {
             reset: () => {
@@ -281,6 +320,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         } else {
             setControlFooterItem(3, {nextStep: id});
         }
+
+        this.setState({
+            hasCustomNextButton: false,
+            customNextButton: null
+        });
     }
 
     private resetSteps(currentStep?: number) {
@@ -313,7 +357,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             }
 
             this.currentStep = newProgress;
-            this.setFooter();
+            this.restoreFooter();
 
             let step = this.allRefs[newProgress - 1];
             if (!step.current?.isDisabled()) {

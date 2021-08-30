@@ -19,6 +19,7 @@ export interface SwotFactorsValues {
 export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
 
     extractValues(e: FormEvent<HTMLFormElement>): SwotFactorsValues {
+
         let chances: CardComponentFields = extractCardComponentField(e, "chances") as CardComponentFields;
         let risks: CardComponentFields = extractCardComponentField(e, "risks") as CardComponentFields;
         let strengths: CardComponentFields = extractCardComponentField(e, "strengths") as CardComponentFields;
@@ -100,7 +101,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
                            defaultActiveKey={isDesktop() ? "strengths" : undefined}>
                     <Accordion.Item eventKey={this.disabled ? activeKey : "strengths"}>
                         <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} -
-                            Stärken</Accordion.Header>
+                            Stärken (Interne Faktoren)</Accordion.Header>
                         <Accordion.Body>
                             <CardComponent values={values.strengths} counter={upperABCCounter} name={"strengths"} disabled={this.disabled}
                                            min={min} max={max}/>
@@ -109,7 +110,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
 
                     <Accordion.Item eventKey={this.disabled ? activeKey : "weaknesses"}>
                         <Accordion.Header>{lowerABCCounter.get(1) + "-" + lowerABCCounter.get(max)} -
-                            Schwächen</Accordion.Header>
+                            Schwächen (Interne Faktoren)</Accordion.Header>
                         <Accordion.Body>
                             <CardComponent values={values.weaknesses} counter={lowerABCCounter} name={"weaknesses"} disabled={this.disabled}
                                            min={min} max={max}/>
@@ -117,7 +118,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
                     </Accordion.Item>
                     <Accordion.Item eventKey={this.disabled ? activeKey : "chances"}>
                         <Accordion.Header>{numberCounter.get(1) + "-" + numberCounter.get(max)} -
-                            Chancen</Accordion.Header>
+                            Chancen (Externe Faktoren)</Accordion.Header>
                         <Accordion.Body>
                             <CardComponent values={values.chances} counter={numberCounter} name={"chances"} disabled={this.disabled}
                                            min={min} max={max}/>
@@ -126,7 +127,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
 
                     <Accordion.Item eventKey={this.disabled ? activeKey : "risks"}>
                         <Accordion.Header>{romanNumeralCounter.get(1) + "-" + romanNumeralCounter.get(max)} -
-                            Risiken</Accordion.Header>
+                            Risiken (Externe Faktoren)</Accordion.Header>
                         <Accordion.Body>
                             <CardComponent values={values.risks} counter={romanNumeralCounter} name={"risks"} disabled={this.disabled}
                                            min={min} max={max}/>
