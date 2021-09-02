@@ -56,13 +56,23 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
                         name: "Hohe Mitarbeitermotivation",
                         desc: "3",
                         id: "A"
+                    },
+                    {
+                        name: "Beliebtheitsteigerung",
+                        desc: "4",
+                        id: "B"
                     }
                 ],
                 chances: [
                     {
-                        name: "Liquidität",
+                        name: "Liquiditätssteigerung",
                         desc: "4",
                         id: "1"
+                    },
+                    {
+                        name: "Premiumzugänge auf Lieferantenseiten",
+                        desc: "5",
+                        id: "2"
                     }
                 ],
                 risks: [
@@ -93,7 +103,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
     }
 
     build(): JSX.Element {
-        let min = 0;
+        let min = 2;
         let max = 6;
         let activeKey = "view";
 
