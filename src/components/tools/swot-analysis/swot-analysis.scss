@@ -1,4 +1,85 @@
 
-.swot-factors .accordion-body {
+#swot-factors .accordion-body {
   background-color: #f1f1f1;
+}
+
+#swot-classify-alternate-actions {
+  .card .card-body {
+    padding: 0.25rem 0.75rem;
+  }
+
+  .FormControl {
+    margin: 0 0 10px;
+  }
+
+  .xButton:hover {
+    background-color: darken(white, 10%);
+  }
+
+  .addClassification {
+    margin: 10px 0 20px 0;
+    size: 1rem;
+    width: 100%;
+
+    * {
+      color: white;
+    }
+  }
+
+  .classification .dropzone {
+    width: 100%;
+    min-height: 15px;
+    border: 2px dashed #b4b4b4;
+    padding: 0.5rem;
+    margin-top: 5px;
+  }
+
+  .classification .dropzone.isDraggingOver {
+    background-color: darken(#e6e6e6, 10%);
+    border-color: darken(#b4b4b4, 13%);
+  }
+
+  .classification .dropzone.alreadyDropped {
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+
+  .classification .dropzone {
+    margin-right: 5px;
+  }
+
+  .actions {
+    .withoutClassification {
+      font-weight: 700;
+    }
+  }
+
+  .actionRow {
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+
+    .actionCol {
+      flex: max-content 0 0;
+      padding: 0 0.15rem;
+    }
+
+    .actionCol .displayAction > * {
+      flex: max-content 0 0;
+    }
+
+    .actionCol .displayAction .icon {
+      text-align: center;
+    }
+
+    .actionCol.notDragging {
+      transform: none !important;
+    }
+  }
+}
+
+.dragClone .actionCard {
+  transform: rotate(3deg);
+}
+.dragClone .card-body {
+  padding: 0.25rem 0.75rem;
 }

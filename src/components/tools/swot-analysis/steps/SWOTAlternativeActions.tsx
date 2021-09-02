@@ -1,4 +1,4 @@
-import {FormComponent} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
 import React, {FormEvent, RefObject} from "react";
 import {SwotFactorsValues} from "./SWOTFactors";
 import {Col, Form, Row, Tab} from "react-bootstrap";
@@ -10,55 +10,74 @@ import {
 import {isDesktop} from "../../../../general-components/Desktop";
 import {extractCardComponentField, extractFromForm} from "../../../../general-components/FormHelper";
 
+export interface AlternateAction {
+    name: string
+    hasNone: boolean
+    first: CardComponentField | null
+    second: CardComponentField | null
+    alternatives: CardComponentFields
+}
+
 export interface SWOTAlternativeActionsValues {
-    actions: {
-        none: boolean,
-        alternatives: CardComponentFields
-    }[]
+    actions: AlternateAction[]
 }
 
 export interface ActionInterface {
     first: CardComponentField
     second: CardComponentField
+    name: string
 }
 
-export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, any> {
-    private factors: SwotFactorsValues | undefined;
-    private actions: Array<ActionInterface> = [];
-    private currentAction: number = 0;
+interface SWOTAlternativeActionsState extends SwotFactorsValues {
+    actions: AlternateAction[]
+}
 
-    private currentNoAlternative: boolean | undefined;
+export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, SWOTAlternativeActionsState> {
+    private currentAction: number = 0;
     private cardComponentFieldsRefs = Array<RefObject<CardComponent>>();
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            factors: {
+                chances: [],
+                weaknesses: [],
+                strengths: [],
+                risks: []
+            },
+            actions: []
+        }
+    }
 
     nextAction = () => {
         if (this.validateCurrent()) {
-            if (this.currentAction < this.actions.length - 1) {
+            if (this.currentAction < this.state.actions.length - 1) {
                 this.currentAction++;
 
-                if (this.currentAction >= this.actions.length - 1) {
+                if (this.currentAction >= this.state.actions.length - 1) {
                     this.props.stepComp?.restoreFooter();
                 }
                 this.forceUpdate();
             }
-            this.currentNoAlternative = undefined;
         }
     }
 
     changedSelected = (e: FormEvent<HTMLSelectElement>) => {
         let index = 0;
-        let action = this.actions[this.currentAction];
+        let action = this.state.actions[this.currentAction];
 
         if (e.currentTarget.id === "first") {
-            let secondId = action.second.id;
+            let secondId = action.second?.id;
             let splittedId = e.currentTarget.value.split("|");
-            while (this.actions[index].first.id !== splittedId[0] || this.actions[index].second.id !== secondId) {
+            while (this.state.actions[index].first?.id !== splittedId[0] || this.state.actions[index].second?.id !== secondId) {
                 index++;
             }
             this.currentAction = index;
         } else if (e.currentTarget.id === "second") {
-            let firstId = action.first.id;
+            let firstId = action.first?.id;
             let splittedId = e.currentTarget.value.split("|");
-            while (this.actions[index].second.id !== splittedId[0] || this.actions[index].first.id !== firstId) {
+            while (this.state.actions[index].second?.id !== splittedId[0] || this.state.actions[index].first?.id !== firstId) {
                 index++;
             }
             this.currentAction = index;
@@ -70,12 +89,12 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
         let minAlternativeActions = 0;
         let maxAlternativeActions = 2;
 
-        let currentAction = this.actions[this.currentAction];
+        let currentAction = this.state.actions[this.currentAction];
         let firstValue, secondValue;
 
         if (!this.disabled) {
-            firstValue = currentAction?.first.id + "|" + currentAction?.first.name;
-            secondValue = currentAction?.second.id + "|" + currentAction?.second.name;
+            firstValue = currentAction?.first?.id + "|" + currentAction?.first?.name;
+            secondValue = currentAction?.second?.id + "|" + currentAction?.second?.name;
         }
 
         return (
@@ -85,7 +104,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                         <Form.Select id={"first"} disabled={!this.disabled} onChange={(e) => {
                             this.changedSelected(e);
                         }} value={firstValue}>
-                            {this.factors?.strengths.map((value, index) => {
+                            {this.state.factors.strengths.map((value, index) => {
                                 return (
                                     <option
                                         key={"S" + index}
@@ -96,7 +115,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                                     </option>
                                 );
                             })}
-                            {this.factors?.weaknesses.map((value, index) => {
+                            {this.state.factors.weaknesses.map((value, index) => {
                                 return (
                                     <option
                                         key={"W" + index}
@@ -115,7 +134,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                                      onChange={(e) => {
                                          this.changedSelected(e);
                                      }}>
-                            {this.factors?.chances.map((value, index) => {
+                            {this.state.factors.chances.map((value, index) => {
                                 return (
                                     <option
                                         key={"C" + index}
@@ -126,7 +145,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                                     </option>
                                 );
                             })}
-                            {this.factors?.risks.map((value, index) => {
+                            {this.state.factors.risks.map((value, index) => {
                                 return (
                                     <option
                                         key={"R" + index}
@@ -143,31 +162,28 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
 
                 <Tab.Container activeKey={this.currentAction}>
                     <Tab.Content>
-                        {Array.from(Array(this.actions.length), (_, i) => i).map(value => {
-                            let name = this.actions[value].first.id + "-" + this.actions[value].second.id;
-
+                        {this.state.actions.map((value, index) => {
                             return (
-                                <Tab.Pane key={value}
-                                          eventKey={value}>
+                                <Tab.Pane key={index}
+                                          eventKey={index}>
                                     <Form.Check
                                         className={"mb-3"}
                                         disabled={this.disabled}
                                         type={"checkbox"}
-                                        name={name + "[][noalternative]"}
+                                        name={value.name + "[][noalternative]"}
                                         label={"Keine Handlungsalternative"}
+                                        checked={value.hasNone}
                                         onChange={(e) => {
-                                            this.noAlternativeChanged(e);
-                                            if (this.currentAction !== this.actions.length - 1) {
-                                                this.nextAction();
-                                            }
+                                            this.noAlternativeChanged(index, e);
                                         }}
                                     />
                                     <CardComponent
-                                        name={name}
+                                        name={value.name}
                                         disabled={this.disabled}
                                         min={minAlternativeActions}
                                         max={maxAlternativeActions}
-                                        ref={this.cardComponentFieldsRefs[value]}
+                                        values={value.alternatives}
+                                        ref={this.cardComponentFieldsRefs[index]}
                                         placeholder={{
                                             name: "Strategische Handlungsoption"
                                         }}
@@ -183,21 +199,43 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
         );
     }
 
-    extractValues(e: FormEvent<HTMLFormElement>): SWOTAlternativeActionsValues {
-        let actions = [];
+    onReset = (type: ResetType) => {
+        this.currentAction = 0;
 
-        for (let action of this.actions) {
-            let name = action.first.id + "-" + action.second.id;
-            let none = extractFromForm(e, name + "[][noalternative]");
+        if (type.same) {
+            this.setState(state => {
+                let actions = state.actions;
+                for (const action of actions) {
+                    action.hasNone = false;
+                }
+                return {
+                    actions: state.actions
+                };
+            });
+        }
+    }
+
+    extractValues(e: FormEvent<HTMLFormElement>): SWOTAlternativeActionsValues {
+        let actions: AlternateAction[] = [];
+
+        for (let action of this.state.actions) {
+            let name = action.name;
+            let none = extractFromForm(e, name + "[][noalternative]") as boolean;
             let cardComponent = extractCardComponentField(e, name);
 
             if (none) {
                 cardComponent = [];
             }
 
+            let first = cardComponent[0] || null
+            let second = cardComponent[1] || null;
+
             actions.push({
-                none: none,
-                alternatives: cardComponent
+                name: name,
+                hasNone: none,
+                alternatives: cardComponent,
+                first: first,
+                second: second
             });
         }
 
@@ -209,32 +247,41 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
     }
 
     changeControlFooter(): void {
-        if (this.currentAction < this.actions.length - 1) {
+        if (this.currentAction < this.state.actions.length - 1) {
             this.props.stepComp?.addCustomNextButton("Nächster", this.nextAction);
         }
     }
 
     prepareValues = async () => {
-        this.factors = this.props.stepComp?.getPreviousStep()?.getValues() as SwotFactorsValues;
+        let values = (this.props.stepComp?.getPreviousStep()?.getValues() as SwotFactorsValues);
+        let factors = values?.factors;
 
-        if (this.factors !== undefined) {
-            let strengths = this.factors.strengths;
-            let weaknesses = this.factors.weaknesses;
-            let chances = this.factors.chances;
-            let risks = this.factors.risks;
+        if (factors !== undefined) {
+            let strengths = factors.strengths;
+            let weaknesses = factors.weaknesses;
+            let chances = factors.chances;
+            let risks = factors.risks;
 
-            this.actions = [];
+            let actions: AlternateAction[] = [];
 
             for (const item1 of strengths.concat(weaknesses)) {
                 for (const item2 of chances.concat(risks)) {
-                    this.actions.push({
+                    actions.push({
+                        name: item1.id + "-" + item2.id,
                         first: item1,
-                        second: item2
+                        second: item2,
+                        hasNone: false,
+                        alternatives: []
                     });
                     let ref = React.createRef<CardComponent>();
                     this.cardComponentFieldsRefs.push(ref);
                 }
             }
+
+            this.setState({
+                actions: actions,
+                factors: factors
+            });
         }
     }
 
@@ -247,10 +294,11 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
     }
 
     validateCurrent = () => {
+        let currentAction = this.state.actions[this.currentAction];
         let currentCardComponentField = this.cardComponentFieldsRefs[this.currentAction].current;
 
         if (currentCardComponentField) {
-            if (this.currentNoAlternative === true) {
+            if (currentAction.hasNone) {
                 currentCardComponentField.removeAllCards();
                 return true;
             }
@@ -259,7 +307,6 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                 this.addError("alternative-action", "Bitte wählen Sie eine Handlungsalternative!");
                 return false;
             }
-
 
             let values = currentCardComponentField.getValues().values();
             let result = values.next();
@@ -277,7 +324,20 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
         return true;
     }
 
-    private noAlternativeChanged(e: React.ChangeEvent<HTMLInputElement>) {
-        this.currentNoAlternative = e.target.checked;
+    private noAlternativeChanged(index: number, e: React.ChangeEvent<HTMLInputElement>) {
+        let value = e.target.checked;
+
+        this.setState(state => {
+            let actions = state.actions;
+            actions[index].hasNone = value;
+
+            return {
+                actions: actions
+            }
+        }, () => {
+            if (this.currentAction !== this.state.actions.length - 1 && value) {
+                this.nextAction();
+            }
+        });
     }
 }

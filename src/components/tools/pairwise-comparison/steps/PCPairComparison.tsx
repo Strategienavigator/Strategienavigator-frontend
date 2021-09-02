@@ -1,4 +1,4 @@
-import {FormComponent} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
 import {FormEvent} from "react";
 import {PCCriteriasValues} from "./PCCriterias";
 
@@ -7,6 +7,10 @@ export interface PCPairComparisonValues {
 }
 
 export class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
+
+    onReset = (type: ResetType) => {
+
+    }
 
     prepareValues = async () => {
         let previous = this.props.stepComp?.getPreviousStep()?.getValues() as PCCriteriasValues;

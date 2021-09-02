@@ -20,7 +20,7 @@ export interface StepComponentProps {
     steps: StepProp[]
     header?: string
     controlFooterTool: ToolItem
-    onSave?: (forms: Array<FormComponent<any, any>>) => Promise<boolean>
+    onSave?: (forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
     maintenance?: boolean
 }
 
@@ -276,10 +276,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     public onSave = async (): Promise<boolean> => {
         if (this.props.onSave !== undefined) {
-            let allForms = new Array<FormComponent<any, any>>();
+            let allForms = new Map<string, FormComponent<any, any>>();
 
-            for (const form of this.allRefs) {
-                allForms.push(form.current as FormComponent<any, any>);
+            for (const {current} of this.allRefs) {
+                allForms.set(current?.props.id as string, current as FormComponent<any, any>);
             }
 
             return await this.props.onSave(allForms);
@@ -334,7 +334,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             this.currentStep = currentStep;
             this.currentProgress = currentStep;
 
-            this.allRefs[currentStep - 1].current?.setDisabled(false);
+            let form = this.allRefs[currentStep - 1].current;
+            form?.setDisabled(false);
+            form?.onReset({same: true, all: false});
+            form?.changeControlFooter();
         } else {
             this.currentStep = 1;
             this.currentProgress = 1;

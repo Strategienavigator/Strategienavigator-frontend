@@ -7,9 +7,14 @@ import "../../scss/feedback.scss";
 import {randomBytes} from "crypto";
 
 export interface FormComponentProps {
-    id?: string,
-    title?: string,
+    id?: string
+    title?: string
     stepComp?: StepComponent
+}
+
+export interface ResetType {
+    all: boolean
+    same: boolean
 }
 
 export abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
@@ -38,6 +43,7 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         this.disabled = false;
         this.error.clear();
         this.key = randomBytes(200).toString();
+        this.onReset({all: true, same: false});
 
         this.forceUpdate();
     }
@@ -45,6 +51,8 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
     public abstract prepareValues(): Promise<void>;
 
     public abstract build(): JSX.Element;
+
+    public abstract onReset(type: ResetType): void;
 
     public abstract validate(values: V): boolean;
 

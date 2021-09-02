@@ -87,7 +87,7 @@ class Card extends Component<CardProps, CardState> {
                 <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
                     <div>
                         <FormControl
-                            // required
+                            required
                             disabled={this.props.disabled}
                             onChange={(e) => this.descChanged(e)}
                             onFocus={() => this.setState({showDesc: true})}
@@ -198,12 +198,14 @@ class CardComponent extends Component<CardComponentProps, any> {
 
     removeAllCards = () => {
         this.cards.clear();
+        this.cardRefs.clear();
         this.forceUpdate();
     }
 
     removeCard = (index: number) => {
         if (!(this.cards.size <= this.props.min)) {
             this.cards.delete(index);
+            this.cardRefs.delete(index);
             this.forceUpdate();
         } else {
             Messages.add("Sie müssen mindestens " + this.props.min + " Punkte angeben, um fortfahren zu können.", "DANGER", Messages.TIMER);

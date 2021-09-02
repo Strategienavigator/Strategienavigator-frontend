@@ -1,4 +1,4 @@
-import {FormComponent} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
 import {FormEvent} from "react";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
@@ -14,6 +14,10 @@ export class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
     }
 
     changeControlFooter(): void {
+    }
+
+    onReset = (type: ResetType) => {
+
     }
 
     build() {

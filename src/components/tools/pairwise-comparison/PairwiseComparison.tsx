@@ -38,8 +38,7 @@ export class PairwiseComparison extends Component<any, any> {
         );
     }
 
-    save = async (forms: Array<FormComponent<any, any>>) => {
-        // forms[1].getValues() as PCPairComparisonValues;
+    save = async (forms: Map<string, FormComponent<any, any>>) => {
         return true;
     }
 
