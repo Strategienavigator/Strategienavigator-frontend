@@ -1,7 +1,7 @@
 import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
 import React, {FormEvent, RefObject} from "react";
 import {SwotFactorsValues} from "./SWOTFactors";
-import {Col, Form, Row, Tab} from "react-bootstrap";
+import {Col, Form, ProgressBar, Row, Tab} from "react-bootstrap";
 import {
     CardComponent,
     CardComponentField,
@@ -97,8 +97,17 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
             secondValue = currentAction?.second?.id + "|" + currentAction?.second?.name;
         }
 
+        let currentProgress = ((this.currentAction + 1) / this.state.actions.length) * 100;
+
+        if (this.disabled) {
+            currentProgress = 100;
+        }
+
         return (
             <div className={"alternative-actions"}>
+                <ProgressBar striped label={currentProgress.toFixed(0) + " %"} now={currentProgress}
+                             className={"progressBar"}/>
+
                 <Row className={"mb-3 mt-3"}>
                     <Col sm={isDesktop() ? 6 : 12}>
                         <Form.Select id={"first"} disabled={!this.disabled} onChange={(e) => {
@@ -167,6 +176,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                                 <Tab.Pane key={index}
                                           eventKey={index}>
                                     <Form.Check
+                                        id={"no-alternative-" + index}
                                         className={"mb-3"}
                                         disabled={this.disabled}
                                         type={"checkbox"}

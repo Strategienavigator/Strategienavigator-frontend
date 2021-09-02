@@ -9,18 +9,18 @@ import {FormComponent} from "../Form/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretLeft, faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
-export type StepProp = {
-    id: string,
-    title: string,
-    form: JSX.Element,
+export interface StepProp {
+    id: string
+    title: string
+    form: JSX.Element
     ref?: React.Ref<any>
-};
+}
 
 export interface StepComponentProps {
     steps: StepProp[]
-    header?: string
     controlFooterTool: ToolItem
-    onSave?: (forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
+    header?: string
+    onSave?: (data: any, forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
     maintenance?: boolean
 }
 
@@ -64,7 +64,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             hasCustomNextButton: false,
             customNextButton: null
         }
-
     }
 
     render = () => {
@@ -95,7 +94,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                             ) : ""}
 
                             <Nav className={"stepTabs"}>
-                                {this.props.steps.map((value) => {
+                                {this.allSteps.map((value) => {
                                     i++;
                                     return (
                                         <Nav.Link key={i} as={NavItem} disabled={i > this.currentProgress}
@@ -278,11 +277,14 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         if (this.props.onSave !== undefined) {
             let allForms = new Map<string, FormComponent<any, any>>();
 
+            let data = {};
             for (const {current} of this.allRefs) {
+                Object.assign(data, current?.getValues());
+                current?.setDisabled(true);
                 allForms.set(current?.props.id as string, current as FormComponent<any, any>);
             }
 
-            return await this.props.onSave(allForms);
+            return await this.props.onSave(data, allForms);
         }
         return false;
     }

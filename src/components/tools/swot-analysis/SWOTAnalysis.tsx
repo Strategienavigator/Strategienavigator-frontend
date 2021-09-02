@@ -44,12 +44,7 @@ export class SWOTAnalysis extends Component<any, any> {
         );
     }
 
-    save = async (forms: Map<string, FormComponent<any, any>>) => {
-        let data = {};
-        Object.assign(data, forms.get("swot-factors")?.getValues());
-        Object.assign(data, forms.get("swot-alternate-actions")?.getValues());
-        Object.assign(data, forms.get("swot-classify-alternate-actions")?.getValues());
-
+    save = async (data: any, forms: Map<string, FormComponent<any, any>>) => {
         console.log(data);
 
         return true;

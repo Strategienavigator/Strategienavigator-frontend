@@ -1,9 +1,7 @@
 @import "./src/scss/variables";
-
 @import "~bootstrap/scss/bootstrap-utilities";
 
 @include media-breakpoint-up(xl) {
-
   .stepContainer > .stepTabContainer {
     flex: 0 1 30%;
     order: 2;
@@ -23,6 +21,7 @@
     padding: 0.2rem 1rem;
     margin-bottom: 1rem;
     font-size: 13pt;
+    font-weight: 700;
     border-left: 2px solid $color;
   }
 

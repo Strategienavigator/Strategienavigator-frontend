@@ -13,17 +13,17 @@ export class PairwiseComparison extends Component<any, any> {
             <div className={"container"}>
                 <StepComponent
                     header={"Paarweiser Vergleich"}
-                    onSave={(e) => this.save(e)}
+                    onSave={this.save}
                     steps={[
                         {
                             form: <PCCriterias/>,
                             title: "1. Kritierien festlegen",
-                            id: "criterias"
+                            id: "pc-criterias"
                         },
                         {
                             form: <PCPairComparison/>,
                             title: "2. Paarvergleich",
-                            id: "comparison"
+                            id: "pc-comparison"
                         }
                     ]}
                     controlFooterTool={{
@@ -38,7 +38,7 @@ export class PairwiseComparison extends Component<any, any> {
         );
     }
 
-    save = async (forms: Map<string, FormComponent<any, any>>) => {
+    save = async (data: any, forms: Map<string, FormComponent<any, any>>) => {
         return true;
     }
 

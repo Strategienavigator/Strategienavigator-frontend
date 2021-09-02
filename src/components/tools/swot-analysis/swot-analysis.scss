@@ -39,15 +39,13 @@
     border-color: darken(#b4b4b4, 13%);
   }
 
-  .classification .dropzone.alreadyDropped {
-    background-color: rgba(255, 0, 0, 0.2);
-  }
-
   .classification .dropzone {
     margin-right: 5px;
   }
 
   .actions {
+    margin: 0.75rem 0;
+
     .withoutClassification {
       font-weight: 700;
     }
@@ -57,14 +55,32 @@
     justify-content: flex-start;
     align-items: flex-start;
     margin: 0;
+    flex-wrap: wrap;
 
     .actionCol {
       flex: max-content 0 0;
       padding: 0 0.15rem;
+      max-width: max-content;
+      min-width: max-content;
+      margin: 0.15rem 0;
+    }
+
+    .actionCol .displayAction {
+      flex-wrap: nowrap;
     }
 
     .actionCol .displayAction > * {
-      flex: max-content 0 0;
+      flex: auto 0 0;
+      width: auto;
+      min-width: max-content;
+    }
+
+    .displayAction .displayAction .text {
+      * {
+        white-space: nowrap
+      }
+
+      white-space: nowrap
     }
 
     .actionCol .displayAction .icon {
@@ -80,6 +96,13 @@
 .dragClone .actionCard {
   transform: rotate(3deg);
 }
+
 .dragClone .card-body {
   padding: 0.25rem 0.75rem;
+}
+
+.alternative-actions {
+  .progressBar .progress-bar {
+    background-color: #060139;
+  }
 }

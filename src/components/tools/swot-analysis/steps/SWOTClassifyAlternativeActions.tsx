@@ -1,14 +1,6 @@
 import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
 import React, {FormEvent} from "react";
-import {
-    DragDropContext,
-    Draggable,
-    DraggableProvided,
-    DraggableRubric,
-    DraggableStateSnapshot,
-    Droppable,
-    DropResult
-} from "react-beautiful-dnd";
+import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 import {Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -19,6 +11,7 @@ interface ClassifiedAlternateAction {
     name: string
     index: number
     indexName: string
+    alreadyAdded: boolean
     action: CardComponentField
 }
 
@@ -36,6 +29,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     private actions = new Map<string, ClassifiedAlternateAction>();
     private classifications = new Map<string, Classification>();
     private noneDroppableID = "classifications-draggables";
+    private maxClassifications = 10;
 
     onDragEnd = (result: DropResult) => {
         const {destination, source, draggableId} = result;
@@ -51,9 +45,25 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
             let action = this.getAction(draggableId);
             let classification = this.getClassification(destination.droppableId);
             if (classification !== undefined && action !== undefined) {
+                action.alreadyAdded = true;
                 classification.actions.set(action?.indexName, action);
+                classification.actions = this.sortActionMap(classification.actions);
+            }
+        } else if (source.droppableId !== destination.droppableId) {
+            let action = this.getAction(draggableId);
+            let classification = this.getClassification(destination.droppableId);
+            if (classification !== undefined && action !== undefined) {
+                this.removeAction(source.droppableId, draggableId);
+                action.alreadyAdded = true;
+                classification.actions.set(action?.indexName, action);
+                classification.actions = this.sortActionMap(classification.actions);
             }
         }
+    }
+
+    sortActionMap = (map: Map<string, ClassifiedAlternateAction>): Map<string, ClassifiedAlternateAction> => {
+        let sortedMap = new Map(Array.from(map).sort());
+        return sortedMap;
     }
 
     onReset = (type: ResetType) => {
@@ -64,6 +74,10 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     }
 
     addClassification = (droppableID: string | undefined) => {
+        if (this.maxClassifications < this.classifications.size) {
+            return;
+        }
+
         if (droppableID === undefined) {
             droppableID = "droppable-" + 0;
         } else {
@@ -87,6 +101,10 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     }
 
     removeClassification = (droppableID: string): boolean => {
+        let classification = this.classifications.get(droppableID);
+        classification?.actions.forEach((value) => {
+            value.alreadyAdded = false;
+        });
         let deleted = this.classifications.delete(droppableID);
         this.forceUpdate();
         return deleted;
@@ -99,9 +117,13 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     removeAction = (droppableID: string, draggableID: string): boolean => {
         let classification = this.getClassification(droppableID);
         if (classification) {
-            let deleted = classification.actions.delete(draggableID);
-            this.forceUpdate();
-            return deleted;
+            let action = classification.actions.get(draggableID);
+            if (action) {
+                action.alreadyAdded = false;
+                let deleted = classification.actions.delete(draggableID);
+                this.forceUpdate();
+                return deleted;
+            }
         }
         return false;
     }
@@ -112,25 +134,6 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
         if (classification) {
             classification.name = value;
         }
-    }
-
-    renderDragClone = (provided: DraggableProvided, snapshot: DraggableStateSnapshot, rubric: DraggableRubric) => {
-        let value = this.getAction(rubric.draggableId);
-
-        return (
-            <div
-                {...provided.dragHandleProps}
-                {...provided.draggableProps}
-                className={"dragClone"}
-            >
-                <Card className={"actionCard"}>
-                    <Card.Body>
-                        <b>{value?.name}</b> {value?.action.name}
-                    </Card.Body>
-                </Card>
-            </div>
-
-        );
     }
 
     build(): JSX.Element {
@@ -168,11 +171,13 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                                                 onChange={(e) => this.onClassificationNameChange(e, droppableID)}
                                                 placeholder={"Klassifikation"}
                                             />
-                                            <Button onClick={() => this.removeClassification(droppableID)}
-                                                    variant={"link"}
-                                                    className={"xButton"}>
-                                                <FontAwesomeIcon icon={faTimes}/>
-                                            </Button>
+                                            {!this.disabled && (
+                                                <Button onClick={() => this.removeClassification(droppableID)}
+                                                        variant={"link"}
+                                                        className={"xButton"}>
+                                                    <FontAwesomeIcon icon={faTimes}/>
+                                                </Button>
+                                            )}
                                         </InputGroup>
 
                                         {this.getError(droppableID + "-classification")}
@@ -186,8 +191,8 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                                                 e++;
 
                                                 return (
-                                                    <Draggable isDragDisabled={true} key={action.indexName}
-                                                               draggableId={action.indexName + e}
+                                                    <Draggable isDragDisabled={this.disabled} key={action.indexName}
+                                                               draggableId={action.indexName}
                                                                index={e}>
                                                         {(provided) => {
                                                             return (
@@ -203,11 +208,13 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                                                                             <Col className={"text"}>
                                                                                 <b>{action.name}</b> {action.action.name}
                                                                             </Col>
-                                                                            <Col
-                                                                                onClick={() => this.removeAction(droppableID, action.indexName)}
-                                                                                className={"icon"}>
-                                                                                <FontAwesomeIcon icon={faTimes}/>
-                                                                            </Col>
+                                                                            {!this.disabled && (
+                                                                                <Col
+                                                                                    onClick={() => this.removeAction(droppableID, action.indexName)}
+                                                                                    className={"icon"}>
+                                                                                    <FontAwesomeIcon icon={faTimes}/>
+                                                                                </Col>
+                                                                            )}
                                                                         </Card.Body>
                                                                     </Card>
                                                                 </Col>
@@ -217,6 +224,8 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                                                 );
                                             })}
                                             {provided.placeholder}
+
+                                            {this.getError(droppableID + "-action-size")}
                                         </Row>
                                     </div>
                                 );
@@ -225,15 +234,16 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                     );
                 })}
 
-                <Button onClick={() => this.addClassification(lastDropID)} className={"addClassification"}>
-                    <FontAwesomeIcon icon={faPlus} color={"white"}/>
-                </Button>
+                {(!this.disabled && (this.maxClassifications > this.classifications.size)) && (
+                    <Button onClick={() => this.addClassification(lastDropID)} className={"addClassification"}>
+                        <FontAwesomeIcon icon={faPlus} color={"white"}/>
+                    </Button>
+                )}
 
-                <Droppable direction={"horizontal"} isDropDisabled={true} renderClone={this.renderDragClone}
-                           droppableId={this.noneDroppableID}>
+                <Droppable direction={"horizontal"} isDropDisabled={true} droppableId={this.noneDroppableID}>
                     {(provided, snapshot) => (
                         <div className={"actions"}>
-                            <span className={"withoutClassification"}>Ohne klassifikation</span>
+                            <span className={"withoutClassification"}>Ohne Klassifikation</span>
 
                             <hr/>
 
@@ -244,45 +254,36 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                             >
                                 {Array.from(this.actions.values()).map((value) => {
                                     i++;
-                                    let shouldRenderClone = value.indexName === snapshot.draggingFromThisWith;
 
-                                    if (shouldRenderClone) {
-                                        return (
-                                            <Col
-                                                key={value.indexName}
-                                                className={"actionCol"}
-                                            >
-                                                <Card body className={"actionCard"}>
-                                                    <b>{value.name}</b> {value.action.name}
-                                                </Card>
-                                            </Col>
-                                        );
-                                    } else {
-                                        return (
-                                            <Draggable key={value.indexName} draggableId={value.indexName} index={i}>
-                                                {(provided2, snapshot2) => {
-                                                    let classes = ["actionCol"];
-
-                                                    if (!snapshot2.isDragging) {
-                                                        classes.push("notDragging");
-                                                    }
-
-                                                    return (
-                                                        <Col
-                                                            ref={provided2.innerRef}
-                                                            {...provided2.dragHandleProps}
-                                                            {...provided2.draggableProps}
-                                                            className={classes.join(" ")}
-                                                        >
-                                                            <Card body className={"actionCard"}>
-                                                                <b>{value.name}</b> {value.action.name}
-                                                            </Card>
-                                                        </Col>
-                                                    )
-                                                }}
-                                            </Draggable>
-                                        );
+                                    if (value.alreadyAdded) {
+                                        return undefined;
                                     }
+
+                                    return (
+                                        <Draggable isDragDisabled={this.disabled} key={value.indexName}
+                                                   draggableId={value.indexName} index={i}>
+                                            {(provided2, snapshot2) => {
+                                                let classes = ["actionCol"];
+
+                                                if (!snapshot2.isDragging) {
+                                                    classes.push("notDragging");
+                                                }
+
+                                                return (
+                                                    <Col
+                                                        ref={provided2.innerRef}
+                                                        {...provided2.dragHandleProps}
+                                                        {...provided2.draggableProps}
+                                                        className={classes.join(" ")}
+                                                    >
+                                                        <Card body className={"actionCard"}>
+                                                            <b>{value.name}</b> {value.action.name}
+                                                        </Card>
+                                                    </Col>
+                                                )
+                                            }}
+                                        </Draggable>
+                                    );
                                 })}
                                 {provided.placeholder}
                             </Row>
@@ -318,6 +319,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                     let newAction: ClassifiedAlternateAction = {
                         indexName: indexName,
                         index: e,
+                        alreadyAdded: false,
                         name: action.name,
                         action: action.alternatives[e]
                     }
@@ -337,6 +339,10 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
             let value = values.classifications[i];
             if (value.name === null || value.name === "") {
                 this.addError(value.droppableID + "-classification", "Bitte ausfüllen!");
+                validated = false;
+            }
+            if (value.actions.size <= 0) {
+                this.addError(value.droppableID + "-action-size", "Die Klassifikation muss mindestens eine Handlungsalternative haben");
                 validated = false;
             }
         }
