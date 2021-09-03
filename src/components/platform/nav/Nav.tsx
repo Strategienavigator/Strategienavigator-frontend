@@ -55,12 +55,6 @@ export class Nav extends Component<any, NavState> {
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
-                            {(isDesktop()) && (
-                                <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
-                                    <FontAwesomeIcon icon={faCog}/>&nbsp;
-                                    Einstellungen
-                                </NavLink>
-                            )}
                         </BootstrapNav>
                         <BootstrapNav>
                             {(!Session.isLoggedIn()) && (
