@@ -11,39 +11,51 @@
 
   .tool {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     text-align: center;
-    flex-direction: row;
+    flex-direction: column;
     padding: 0.5rem 1.2rem;
 
     .icon {
-      flex: 0 0 80%;
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 75%;
       display: flex;
-      border-radius: 15px;
+      position: relative;
       justify-content: center;
       align-items: center;
-      background-color: #fff;
-      position: relative;
-      width: 100%;
-      padding-bottom: 80%;
-      min-height: 50px;
-      min-width: 50px;
+
+      > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        position: relative;
+        padding-bottom: 100%;
+        background-color: #fff;
+        width: 100%;
+        height: 100%;
+      }
 
       svg {
         position: absolute;
         top: 50%;
         left: 50%;
-        font-size: 140%;
         transform: translate(-50%, -50%);
+        font-size: 150%;
       }
     }
 
     .text {
-      flex: 0 0 20%;
       padding: 0.25rem 0.25rem 0 0.25rem;
       font-size: 10.5pt;
+      height: auto;
+      position: relative;
+      word-break: break-word;
+      text-align: center;
+      width: 100%;
     }
   }
 }

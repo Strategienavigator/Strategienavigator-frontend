@@ -2,7 +2,7 @@ import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Col, Form, FormControl, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowsAlt, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
+import {faArrowsAlt, faBorderAll, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
 
 import {compareTwoStrings} from "string-similarity";
 
@@ -33,6 +33,11 @@ export class Home extends Component<any, HomeState> {
                     link: "/pairwise-comparison"
                 },
                 {
+                    name: "Nutzwertanalyse",
+                    icon: faBorderAll,
+                    link: "/utility-analysis"
+                },
+                {
                     name: "SWOT Analyse",
                     icon: faThLarge,
                     link: "/swot-analysis"
@@ -40,12 +45,12 @@ export class Home extends Component<any, HomeState> {
                 {
                     name: "ABC Analyse",
                     icon: faChartPie,
-                    link: "/abc"
+                    link: "/abc-analysis"
                 },
                 {
                     name: "Portfolio Analyse",
                     icon: faArrowsAlt,
-                    link: "/port"
+                    link: "/portfolio-analysis"
                 }
             ]
         }
@@ -74,7 +79,9 @@ export class Home extends Component<any, HomeState> {
                         return (
                             <Col key={value.name} as={Link} className={"tool"} to={value.link}>
                                 <div className={"icon"}>
-                                    <FontAwesomeIcon icon={value.icon}/>
+                                    <div>
+                                        <FontAwesomeIcon icon={value.icon}/>
+                                    </div>
                                 </div>
                                 <div className={"text"}>
                                     {value.name}
