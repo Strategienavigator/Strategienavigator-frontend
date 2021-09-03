@@ -70,28 +70,30 @@ export class ToolFrontpage<P> extends Component<ToolFrontpageProps & P, ToolFron
             <div className={"container"}>
                 {this.props.children}
 
-                <Loader alignment={"left"} size={50} transparent animate={false}
-                        payload={[this.loadToolSaves]}>
-                    <ListGroup className={"saves mt-2"}>
+                <div className={"saves mt-2"}>
+                    <Loader alignment={"left"} size={50} transparent animate={false}
+                            payload={[this.loadToolSaves]}>
+                        <ListGroup>
 
-                        {this.state.saves?.length <= 0 && (
-                            <ListGroupItem>Sie haben aktuell keine Speicherstände.</ListGroupItem>
-                        )}
+                            {this.state.saves?.length <= 0 && (
+                                <ListGroupItem>Sie haben aktuell keine Speicherstände.</ListGroupItem>
+                            )}
 
-                        {this.state.saves?.map(value => {
-                            let save = value as SimpleSaveResource;
-                            if (save.tool_id === this.props.tool) {
-                                return (
-                                    <ListGroupItem as={Link} to={this.props.link + "/" + save.id} key={save.id} action>
-                                        {save.name}
-                                    </ListGroupItem>
-                                );
-                            }
-                            return null;
-                        })}
+                            {this.state.saves?.map(value => {
+                                let save = value as SimpleSaveResource;
+                                if (save.tool_id === this.props.tool) {
+                                    return (
+                                        <ListGroupItem as={Link} to={this.props.link + "/" + save.id} key={save.id} action>
+                                            {save.name}
+                                        </ListGroupItem>
+                                    );
+                                }
+                                return null;
+                            })}
 
-                    </ListGroup>
-                </Loader>
+                        </ListGroup>
+                    </Loader>
+                </div>
 
                 <div className={"mt-4"}>
                     {isDesktop() && (

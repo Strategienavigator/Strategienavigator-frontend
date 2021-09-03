@@ -5,12 +5,13 @@ import {Component} from "react";
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
 import {PCPairComparison} from "./steps/PCPairComparison";
 import {FormComponent} from "../../../general-components/Form/FormComponent";
+import {Container} from "react-bootstrap";
 
 export class PairwiseComparison extends Component<any, any> {
 
     render() {
         return (
-            <div className={"container"}>
+            <Container>
                 <StepComponent
                     header={"Paarweiser Vergleich"}
                     onSave={this.save}
@@ -34,7 +35,7 @@ export class PairwiseComparison extends Component<any, any> {
                         }
                     }}
                 />
-            </div>
+            </Container>
         );
     }
 

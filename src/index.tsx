@@ -30,6 +30,12 @@ import {AboutUs} from "./components/platform/abous-us/AboutUs";
 import {ControlFooter} from "./general-components/ControlFooter/ControlFooter";
 import {EmailVerification} from "./components/platform/verification/EmailVerification";
 import {PasswordReset} from "./components/platform/verification/PasswordReset";
+import {ABCAnalysisHome} from "./components/tools/abc-analysis/ABCAnalysisHome";
+import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
+import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
+import {PortfolioAnalysisHome} from "./components/tools/portfolio-analysis/PortfolioAnalysisHome";
+import {UtilityAnalysisHome} from "./components/tools/utility-analysis/UtilityAnalysisHome";
+import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 // import reportWebVitals from './reportWebVitals';
 
 const reload_app = () => {
@@ -68,6 +74,15 @@ const reload_app = () => {
 
                                 <Route path={"/swot-analysis/new"} exact component={SWOTAnalysis}/>
                                 <Route path={"/swot-analysis"} exact component={SWOTAnalysisHome}/>
+
+                                <Route path={"/abc-analysis/new"} exact component={ABCAnalysis}/>
+                                <Route path={"/abc-analysis"} exact component={ABCAnalysisHome}/>
+
+                                <Route path={"/portfolio-analysis/new"} exact component={PortfolioAnalysis}/>
+                                <Route path={"/portfolio-analysis"} exact component={PortfolioAnalysisHome}/>
+
+                                <Route path={"/utility-analysis/new"} exact component={UtilityAnalysis}/>
+                                <Route path={"/utility-analysis"} exact component={UtilityAnalysisHome}/>
 
                                 <Route path={"/"} component={Home}/>
                             </Switch>
