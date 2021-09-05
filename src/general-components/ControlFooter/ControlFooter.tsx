@@ -144,6 +144,16 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
         });
     }
 
+    /**
+     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
+     * This is considered pretty hacky, but using history.push from react-router, this could be considered a considerable solution
+     */
+    componentWillUnmount() {
+        this.setState = (() => {
+            return;
+        });
+    }
+
     private getItem = (item: ControlFooterItem | undefined): null | ReactNode => {
         if (item !== undefined && item !== null) {
             if ("home" in item) {

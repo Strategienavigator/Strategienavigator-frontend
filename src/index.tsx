@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import {Nav} from "./components/platform/nav/Nav";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.scss';
+
 import {Imprint} from "./components/platform/imprint/Imprint";
 import {DataPrivacy} from "./components/platform/data-privacy/DataPrivacy";
 import {Home} from "./components/platform/home/Home";
@@ -11,11 +14,9 @@ import {Logout} from "./components/platform/logout/Logout";
 import {Register} from "./components/platform/register/Register";
 import {Settings} from "./components/platform/settings/Settings";
 import {MyProfile} from "./components/platform/my-profile/MyProfile";
-
 import {Session} from "./general-components/Session/Session";
 import {Container} from "react-bootstrap";
 import {Loader} from "./general-components/Loader/Loader";
-
 import {Messages} from "./general-components/Messages/Messages";
 import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
@@ -28,9 +29,6 @@ import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
 import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.scss';
 
 
 const reload_app = () => {

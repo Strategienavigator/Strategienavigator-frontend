@@ -1,14 +1,16 @@
+ @import "src/scss/variables/variables";
+
 .input-group, .addCard {
   margin-top: 5px;
 }
 
 .addCard {
-  background-color: #060139;
+  background-color: $color;
   transition: 0.2s;
   cursor: pointer;
 
   :hover {
-    background-color: lighten(#060139, 10%);
+    background-color: lighten($color, 10%);
   }
 
   * {
@@ -50,7 +52,7 @@
   }
 
   button {
-    color: #060139;
+    color: $color;
     background-color: white;
     border: 1px solid #ced4da;
     border-left: none;
