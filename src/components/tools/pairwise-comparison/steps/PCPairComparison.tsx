@@ -1,4 +1,4 @@
-import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
 import {PCCriteriasValues} from "./PCCriterias";
 

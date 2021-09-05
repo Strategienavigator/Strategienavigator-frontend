@@ -3,12 +3,11 @@ import {Link} from "react-router-dom";
 import {Col, Form, FormControl, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowsAlt, faBorderAll, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
-
 import {compareTwoStrings} from "string-similarity";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 import "./home.scss";
 import "./home-desk.scss"
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 interface HomeState {
     tools: {

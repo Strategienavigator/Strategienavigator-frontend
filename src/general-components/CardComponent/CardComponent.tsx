@@ -2,11 +2,11 @@ import React, {ChangeEvent, Component, ReactElement, RefObject} from "react";
 import {Button, Card as BootstrapCard, Collapse, FormControl, InputGroup} from "react-bootstrap";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
-import "./card-component.scss";
 import {isDesktop} from "../Desktop";
 import {Messages} from "../Messages/Messages";
 import {CounterInterface} from "../Counter/CounterInterface";
+
+import "./card-component.scss";
 
 export interface CardProps {
     name: string

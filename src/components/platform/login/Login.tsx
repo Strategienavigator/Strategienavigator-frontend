@@ -1,13 +1,13 @@
 import {Component, FormEvent} from "react";
 import {Button, Form, Spinner} from "react-bootstrap";
 import {Session} from "../../../general-components/Session/Session";
-import "./login.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
 import {withRouter} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {Messages} from "../../../general-components/Messages/Messages";
 
+import "./login.scss";
 
 export interface LoginState {
     failed: boolean

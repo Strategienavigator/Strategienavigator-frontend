@@ -1,4 +1,4 @@
-import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
@@ -37,58 +37,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
     }
 
     prepareValues = async () => {
-        this.setValues({
-            factors: {
-                weaknesses: [
-                    {
-                        name: "Gewinnverlust",
-                        desc: "1",
-                        id: "a"
-                    },
-                    {
-                        name: "Schlechte PR",
-                        desc: "2",
-                        id: "b"
-                    }
-                ],
-                strengths: [
-                    {
-                        name: "Hohe Mitarbeitermotivation",
-                        desc: "3",
-                        id: "A"
-                    },
-                    {
-                        name: "Beliebtheitsteigerung",
-                        desc: "4",
-                        id: "B"
-                    }
-                ],
-                chances: [
-                    {
-                        name: "Liquiditätssteigerung",
-                        desc: "4",
-                        id: "1"
-                    },
-                    {
-                        name: "Premiumzugänge auf Lieferantenseiten",
-                        desc: "5",
-                        id: "2"
-                    }
-                ],
-                risks: [
-                    {
-                        name: "Umweltverschmutzung",
-                        desc: "5",
-                        id: "I"
-                    },
-                    {
-                        name: "Steigende Inflation",
-                        desc: "6",
-                        id: "II"
-                    }
-                ]
-            }
-        });
+
     }
 
     onReset = (type: ResetType) => {

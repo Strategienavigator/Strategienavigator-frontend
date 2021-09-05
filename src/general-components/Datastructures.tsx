@@ -3,6 +3,8 @@ export type SaveResource = {
     owner_id: number
     tool_id: number
     name: string
+    data: any
+    description: string
     locked_by: number | null
     last_locked: string | null
     contributors: Array<number>

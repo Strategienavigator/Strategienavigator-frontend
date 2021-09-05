@@ -4,9 +4,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/faTimes";
 import {faCheck} from "@fortawesome/free-solid-svg-icons/faCheck";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
+import {faEyeSlash} from "@fortawesome/free-solid-svg-icons/faEyeSlash";
 
 import "./password-field.scss";
-import {faEyeSlash} from "@fortawesome/free-solid-svg-icons/faEyeSlash";
 
 const checkPassword = (password: string): PasswordFieldState => {
     let regexValidChars = "[A-Za-zäöüßÄÖÜ\\d$&§+,:;=?@#|'<>.^*()%!_-]";

@@ -1,67 +1,69 @@
-import StepComponent from "../../../general-components/StepComponent/StepComponent";
-import {Component} from "react";
-import {Container} from "react-bootstrap";
-import {FormComponent} from "../../../general-components/Form/FormComponent";
 import {faArrowsAlt} from "@fortawesome/free-solid-svg-icons";
+import {Tool} from "../../../general-components/Tool/Tool";
+import {SaveResource} from "../../../general-components/Datastructures";
 import {PortCreateObjects} from "./steps/PortCreateObjects";
 import {PortCriterias} from "./steps/PortCriterias";
 import {PortWeighting} from "./steps/PortWeighting";
 import {PortEvaluation} from "./steps/PortEvaluation";
 import {PortResult} from "./steps/PortResult";
 
+import "./portfolio-analysis.scss";
 
-class PortfolioAnalysis extends Component<any, any> {
+class PortfolioAnalysis extends Tool {
 
-    render = () => {
-        return (
-            <Container>
-                <StepComponent
-                    header={"Portfolio Analyse"}
-                    onSave={this.save}
-                    steps={[
-                        {
-                            id: "portfolio-objects",
-                            title: "1. Objekte anlegen",
-                            form: <PortCreateObjects/>
-                        },
-                        {
-                            id: "portfolio-criterias",
-                            title: "2. Kriterien",
-                            form: <PortCriterias/>
-                        },
-                        {
-                            id: "portfolio-weighting",
-                            title: "3. Gewichtung",
-                            form: <PortWeighting/>
-                        },
-                        {
-                            id: "portfolio-evaluation",
-                            title: "4. Bewertung",
-                            form: <PortEvaluation/>
-                        },
-                        {
-                            id: "portfolio-result",
-                            title: "5. Ergebnismatrix",
-                            form: <PortResult/>
-                        }
-                    ]}
-                    controlFooterTool={{
-                        tool: {
-                            icon: faArrowsAlt,
-                            title: "Portfolio Analyse",
-                            link: "/portfolio-analysis"
-                        }
-                    }}
-                    maintenance
-                />
-            </Container>
-        );
+    constructor(props: any) {
+        super(props);
+
+        this.setID(5);
+        this.setToolname("Portfolio Analyse");
+        this.setToolIcon(faArrowsAlt);
+
+        this.addStep({
+            id: "portfolio-objects",
+            title: "1. Objekte anlegen",
+            form: <PortCreateObjects/>
+        });
+        this.addStep({
+            id: "portfolio-criterias",
+            title: "2. Kriterien",
+            form: <PortCriterias/>
+        });
+        this.addStep({
+            id: "portfolio-weighting",
+            title: "3. Gewichtung",
+            form: <PortWeighting/>
+        });
+        this.addStep({
+            id: "portfolio-evaluation",
+            title: "4. Bewertung",
+            form: <PortEvaluation/>
+        });
+        this.addStep({
+            id: "portfolio-result",
+            title: "5. Ergebnismatrix",
+            form: <PortResult/>
+        });
     }
 
-    save = async (data: any, forms: Map<string, FormComponent<any, any>>) => {
-        return true;
+    protected renderToolHome() {
+        return null;
     }
 
+    protected renderShortDescription() {
+        return null;
+    }
+
+    protected renderTutorial() {
+        return null;
+    }
+
+    protected renderNew() {
+        return this.getStepComponent();
+    }
+
+    protected renderView(tool: SaveResource) {
+        return this.getStepComponent();
+    }
 }
 
 export {

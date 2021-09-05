@@ -5,9 +5,15 @@ import {callAPI} from "../API";
  *
  * @param userID Die ID des Benutzers
  * @param token Der Token zur Authentifizierung
+ * @param toolID ID des Strategietools
  */
-const getSaves = async (userID: number, token: string | null) => {
-    return await callAPI("api/users/" + userID + "/saves", "GET", undefined, (token !== null) ? token : undefined);
+const getSaves = async (userID: number, token: string | null, toolID?: number) => {
+    let data;
+    if (toolID) {
+        data = new URLSearchParams();
+        data.append("tool_id", String(toolID));
+    }
+    return await callAPI("api/users/" + userID + "/saves", "GET", data, (token !== null) ? token : undefined);
 }
 
 /**

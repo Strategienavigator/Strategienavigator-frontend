@@ -8,10 +8,12 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import {Loader} from "../Loader/Loader";
 
+import "./unique-check.scss";
+
 export interface UniqueCheckProps {
-    callback: (input: string) => Promise<CallInterface>
-    failMessage: string
-    successMessage: string
+    callback?: ((input: string) => Promise<CallInterface>)
+    failMessage?: string
+    successMessage?: string
 }
 
 export interface UniqueCheckState {
@@ -42,10 +44,10 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     isLoading: true
                 });
 
-                let call = await this.props.callback(value);
+                let call = await this.props.callback?.call(this.props.callback, value);
 
                 this.setState({
-                    success: call.success,
+                    success: call?.success,
                     isLoading: false
                 });
             }, 600);
@@ -68,11 +70,16 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
     }
 
     render = () => {
+        let propsForInput = {...this.props};
+        delete propsForInput.failMessage;
+        delete propsForInput.successMessage;
+        delete propsForInput.callback;
+
         return (
             <>
                 <Form.Control
                     onChange={(e) => this.changed(e)}
-                    {...this.props}
+                    {...propsForInput}
                 />
                 <div className={"uniqueOutput feedbackContainer"}>
                     {this.state.isLoading && (

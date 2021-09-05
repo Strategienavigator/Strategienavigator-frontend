@@ -4,8 +4,6 @@ import {User} from "../../../general-components/User";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faPencilAlt, faSave, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
 import {Button, Form, Modal} from "react-bootstrap";
-
-import "./my-profile.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {deleteUser, updateData, updateUser} from "../../../general-components/API/calls/User";
@@ -15,6 +13,8 @@ import {Messages} from "../../../general-components/Messages/Messages";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
+
+import "./my-profile.scss";
 
 export interface MyProfileState {
     user: User

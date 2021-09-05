@@ -13,10 +13,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Session} from "../../../general-components/Session/Session";
-
-import "./nav.scss";
 import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+
+import "./nav.scss";
 
 interface NavState {
     expanded: boolean

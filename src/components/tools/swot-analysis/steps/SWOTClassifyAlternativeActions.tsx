@@ -1,4 +1,4 @@
-import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent} from "react";
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 import {Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
@@ -62,14 +62,15 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     }
 
     sortActionMap = (map: Map<string, ClassifiedAlternateAction>): Map<string, ClassifiedAlternateAction> => {
-        let sortedMap = new Map(Array.from(map).sort());
-        return sortedMap;
+        return new Map(Array.from(map).sort());
     }
 
     onReset = (type: ResetType) => {
-        if (type.all) {
-            this.classifications.clear();
-            this.actions.clear();
+        this.classifications.clear();
+        this.actions.clear();
+        if (type.same) {
+            this.prepareValues();
+            this.forceUpdate();
         }
     }
 
@@ -140,99 +141,119 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
         let lastDropID: string;
         let i = -1;
 
+        if (this.actions.size <= 0) {
+            return (
+                <Card body>
+                    Es sind Keine Handlungsalternativen vorhanden...
+                </Card>
+            );
+        }
+
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
-                {Array.from(this.classifications.values()).map((classification) => {
-                    let e = -1;
-                    let droppableID = classification.droppableID;
-                    lastDropID = droppableID;
+                {
+                    Array.from(this.classifications.values()).map((classification) => {
+                        let e = -1;
+                        let droppableID = classification.droppableID;
+                        lastDropID = droppableID;
 
-                    return (
-                        <Droppable direction={"horizontal"} key={droppableID} droppableId={droppableID}>
-                            {(provided, snapshot) => {
-                                let dropZoneClassNames = ["dropzone", "actionRow"];
+                        return (
+                            <Droppable direction={"horizontal"} key={droppableID} droppableId={droppableID}>
+                                {(provided, snapshot) => {
+                                    let dropZoneClassNames = ["dropzone", "actionRow"];
 
-                                if (snapshot.isDraggingOver) {
-                                    dropZoneClassNames.push("isDraggingOver");
-                                }
-                                if (classification.actions.has(snapshot.draggingOverWith as string)) {
-                                    dropZoneClassNames.push("alreadyDropped");
-                                }
+                                    if (snapshot.isDraggingOver) {
+                                        dropZoneClassNames.push("isDraggingOver");
+                                    }
+                                    if (classification.actions.has(snapshot.draggingOverWith as string)) {
+                                        dropZoneClassNames.push("alreadyDropped");
+                                    }
 
-                                return (
-                                    <div
-                                        className={"classification"}
-                                    >
-                                        <InputGroup>
-                                            <FormControl
-                                                type={"text"}
-                                                required={true}
-                                                disabled={this.disabled}
-                                                onChange={(e) => this.onClassificationNameChange(e, droppableID)}
-                                                placeholder={"Klassifikation"}
-                                            />
-                                            {!this.disabled && (
-                                                <Button onClick={() => this.removeClassification(droppableID)}
+                                    return (
+                                        <div
+                                            className={"classification"}
+                                        >
+                                            <InputGroup>
+                                                <FormControl
+                                                    type={"text"}
+                                                    required={true}
+                                                    disabled={this.disabled}
+                                                    onChange={(e) => this.onClassificationNameChange(e, droppableID)}
+                                                    placeholder={"Klassifikation"}
+                                                />
+                                                {!this.disabled && (
+                                                    <Button
+                                                        onClick={() => this.removeClassification(droppableID)}
                                                         variant={"link"}
                                                         className={"xButton"}>
-                                                    <FontAwesomeIcon icon={faTimes}/>
-                                                </Button>
-                                            )}
-                                        </InputGroup>
+                                                        <FontAwesomeIcon icon={faTimes}/>
+                                                    </Button>
+                                                )}
+                                            </InputGroup>
 
-                                        {this.getError(droppableID + "-classification")}
+                                            {this.getError(droppableID + "-classification")}
 
-                                        <Row
-                                            ref={provided.innerRef}
-                                            {...provided.droppableProps}
-                                            className={dropZoneClassNames.join(" ")}
-                                        >
-                                            {Array.from(classification.actions.values()).map((action) => {
-                                                e++;
+                                            <Row
+                                                ref={provided.innerRef}
+                                                {...provided.droppableProps}
+                                                className={dropZoneClassNames.join(" ")}
+                                            >
+                                                {(classification.actions.size <= 0 && !snapshot.isDraggingOver) && (
+                                                    <small>
+                                                        Hierhin ziehen...
+                                                    </small>
+                                                )}
 
-                                                return (
-                                                    <Draggable isDragDisabled={this.disabled} key={action.indexName}
-                                                               draggableId={action.indexName}
-                                                               index={e}>
-                                                        {(provided) => {
-                                                            return (
-                                                                <Col
-                                                                    className={"actionCol"}
-                                                                    key={action.indexName}
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                    {...provided.dragHandleProps}
-                                                                >
-                                                                    <Card className={"actionCard"}>
-                                                                        <Card.Body as={Row} className={"displayAction"}>
-                                                                            <Col className={"text"}>
-                                                                                <b>{action.name}</b> {action.action.name}
-                                                                            </Col>
-                                                                            {!this.disabled && (
-                                                                                <Col
-                                                                                    onClick={() => this.removeAction(droppableID, action.indexName)}
-                                                                                    className={"icon"}>
-                                                                                    <FontAwesomeIcon icon={faTimes}/>
+                                                {Array.from(classification.actions.values()).map((action) => {
+                                                    e++;
+
+                                                    return (
+                                                        <Draggable isDragDisabled={this.disabled}
+                                                                   key={action.indexName}
+                                                                   draggableId={action.indexName}
+                                                                   index={e}>
+                                                            {(provided) => {
+                                                                return (
+                                                                    <Col
+                                                                        className={"actionCol"}
+                                                                        key={action.indexName}
+                                                                        ref={provided.innerRef}
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps}
+                                                                    >
+                                                                        <Card className={"actionCard"}>
+                                                                            <Card.Body as={Row}
+                                                                                       className={"displayAction"}>
+                                                                                <Col className={"text"}>
+                                                                                    <b>{action.name}</b> {action.action.name}
                                                                                 </Col>
-                                                                            )}
-                                                                        </Card.Body>
-                                                                    </Card>
-                                                                </Col>
-                                                            );
-                                                        }}
-                                                    </Draggable>
-                                                );
-                                            })}
-                                            {provided.placeholder}
+                                                                                {!this.disabled && (
+                                                                                    <Col
+                                                                                        onClick={() => this.removeAction(droppableID, action.indexName)}
+                                                                                        className={"icon"}>
+                                                                                        <FontAwesomeIcon
+                                                                                            icon={faTimes}/>
+                                                                                    </Col>
+                                                                                )}
+                                                                            </Card.Body>
+                                                                        </Card>
+                                                                    </Col>
+                                                                );
+                                                            }}
+                                                        </Draggable>
+                                                    );
+                                                })}
+                                                {provided.placeholder}
 
-                                            {this.getError(droppableID + "-action-size")}
-                                        </Row>
-                                    </div>
-                                );
-                            }}
-                        </Droppable>
-                    );
-                })}
+                                                {this.getError(droppableID + "-action-size")}
+                                            </Row>
+                                        </div>
+                                    );
+                                }}
+                            </Droppable>
+                        );
+                    })
+                }
 
                 {(!this.disabled && (this.maxClassifications > this.classifications.size)) && (
                     <Button onClick={() => this.addClassification(lastDropID)} className={"addClassification"}>
@@ -243,50 +264,52 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                 <Droppable direction={"horizontal"} isDropDisabled={true} droppableId={this.noneDroppableID}>
                     {(provided, snapshot) => (
                         <div className={"actions"}>
-                            <span className={"withoutClassification"}>Ohne Klassifikation</span>
+                            <>
+                                <span className={"withoutClassification"}>Ohne Klassifikation</span>
 
-                            <hr/>
+                                <hr/>
 
-                            <Row
-                                className={"actionRow"}
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {Array.from(this.actions.values()).map((value) => {
-                                    i++;
+                                <Row
+                                    className={"actionRow"}
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {Array.from(this.actions.values()).map((value) => {
+                                        i++;
 
-                                    if (value.alreadyAdded) {
-                                        return undefined;
-                                    }
+                                        if (value.alreadyAdded) {
+                                            return undefined;
+                                        }
 
-                                    return (
-                                        <Draggable isDragDisabled={this.disabled} key={value.indexName}
-                                                   draggableId={value.indexName} index={i}>
-                                            {(provided2, snapshot2) => {
-                                                let classes = ["actionCol"];
+                                        return (
+                                            <Draggable isDragDisabled={this.disabled} key={value.indexName}
+                                                       draggableId={value.indexName} index={i}>
+                                                {(provided2, snapshot2) => {
+                                                    let classes = ["actionCol"];
 
-                                                if (!snapshot2.isDragging) {
-                                                    classes.push("notDragging");
-                                                }
+                                                    if (!snapshot2.isDragging) {
+                                                        classes.push("notDragging");
+                                                    }
 
-                                                return (
-                                                    <Col
-                                                        ref={provided2.innerRef}
-                                                        {...provided2.dragHandleProps}
-                                                        {...provided2.draggableProps}
-                                                        className={classes.join(" ")}
-                                                    >
-                                                        <Card body className={"actionCard"}>
-                                                            <b>{value.name}</b> {value.action.name}
-                                                        </Card>
-                                                    </Col>
-                                                )
-                                            }}
-                                        </Draggable>
-                                    );
-                                })}
-                                {provided.placeholder}
-                            </Row>
+                                                    return (
+                                                        <Col
+                                                            ref={provided2.innerRef}
+                                                            {...provided2.dragHandleProps}
+                                                            {...provided2.draggableProps}
+                                                            className={classes.join(" ")}
+                                                        >
+                                                            <Card body className={"actionCard"}>
+                                                                <b>{value.name}</b> {value.action.name}
+                                                            </Card>
+                                                        </Col>
+                                                    )
+                                                }}
+                                            </Draggable>
+                                        );
+                                    })}
+                                    {provided.placeholder}
+                                </Row>
+                            </>
                         </div>
                     )}
                 </Droppable>
@@ -308,7 +331,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
 
     prepareValues = async () => {
         let previousStep = this.props.stepComp?.getPreviousStep();
-        if (previousStep) {
+        if (previousStep && this.actions.size <= 0) {
             let values = previousStep.getValues() as SWOTAlternativeActionsValues;
 
             for (let i = 0; i < values.actions.length; i++) {
@@ -326,6 +349,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                     this.actions.set(indexName, newAction);
                 }
             }
+            this.forceUpdate();
         }
     }
 

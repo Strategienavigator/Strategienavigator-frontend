@@ -1,36 +1,38 @@
-import StepComponent from "../../../general-components/StepComponent/StepComponent";
-import {Component} from "react";
-import {Container} from "react-bootstrap";
-import {FormComponent} from "../../../general-components/Form/FormComponent";
 import {faChartPie} from "@fortawesome/free-solid-svg-icons";
+import {Tool} from "../../../general-components/Tool/Tool";
+import {SaveResource} from "../../../general-components/Datastructures";
 
+import "./abc-analysis.scss";
 
-class ABCAnalysis extends Component<any, any> {
+class ABCAnalysis extends Tool {
 
-    render = () => {
-        return (
-            <Container>
-                <StepComponent
-                    header={"ABC Analyse"}
-                    onSave={this.save}
-                    steps={[]}
-                    controlFooterTool={{
-                        tool: {
-                            icon: faChartPie,
-                            title: "ABC Analyse",
-                            link: "/abc-analysis"
-                        }
-                    }}
-                    maintenance
-                />
-            </Container>
-        );
+    constructor(props: any) {
+        super(props);
+
+        this.setID(4);
+        this.setToolname("ABC Analyse");
+        this.setToolIcon(faChartPie);
     }
 
-    save = async (data: any, forms: Map<string, FormComponent<any, any>>) => {
-        return true;
+    protected renderToolHome() {
+        return null;
     }
 
+    protected renderShortDescription() {
+        return null;
+    }
+
+    protected renderTutorial() {
+        return null;
+    }
+
+    protected renderNew() {
+        return this.getStepComponent();
+    }
+
+    protected renderView(tool: SaveResource) {
+        return this.getStepComponent();
+    }
 }
 
 export {

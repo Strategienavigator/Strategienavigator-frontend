@@ -19,13 +19,17 @@ declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
  * @param data Inhalt des Requests
  * @param token Authentifizierungstoken
  */
-const callAPI = async (URL: string, method: Methods, data?: FormData | Blob, token?: string) => {
+const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | URLSearchParams, token?: string) => {
     let callURL = process.env.REACT_APP_API + URL;
 
     // METHOD
     if (data?.constructor.name === "FormData" && method === "PUT") {
         (data as FormData).append("_method", "PUT");
         method = "POST";
+    }
+    if (data?.constructor.name === "URLSearchParams") {
+        callURL = callURL.concat("?" + (data as URLSearchParams).toString());
+        data = undefined;
     }
 
     // HEADER

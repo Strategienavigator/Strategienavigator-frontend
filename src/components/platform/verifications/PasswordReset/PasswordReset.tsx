@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import {RouteComponentProps} from "react-router";
-import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
+import {PasswordField} from "../../../../general-components/PasswordField/PasswordField";
 import {Button, Form, Spinner} from "react-bootstrap";
-import {extractFromForm} from "../../../general-components/FormHelper";
-import "./password-reset.scss";
-import {forgotPassword, updatePassword} from "../../../general-components/API/calls/Password";
+import {extractFromForm} from "../../../../general-components/FormHelper";
+import {forgotPassword, updatePassword} from "../../../../general-components/API/calls/Password";
 import {Link} from "react-router-dom";
+
+import "./password-reset.scss";
 
 export interface RouteMatches {
     token?: string
