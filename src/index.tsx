@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.scss';
 import {Nav} from "./components/platform/nav/Nav";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
@@ -18,25 +16,21 @@ import {Session} from "./general-components/Session/Session";
 import {Container} from "react-bootstrap";
 import {Loader} from "./general-components/Loader/Loader";
 
-import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
-import {PairwiseComparisonHome} from "./components/tools/pairwise-comparison/PairwiseComparisonHome";
-
-import {SWOTAnalysisHome} from "./components/tools/swot-analysis/SWOTAnalysisHome";
-import {SWOTAnalysis} from "./components/tools/swot-analysis/SWOTAnalysis";
 import {Messages} from "./general-components/Messages/Messages";
 import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
 import {AboutUs} from "./components/platform/abous-us/AboutUs";
 import {ControlFooter} from "./general-components/ControlFooter/ControlFooter";
-import {EmailVerification} from "./components/platform/verification/EmailVerification";
-import {PasswordReset} from "./components/platform/verification/PasswordReset";
-import {ABCAnalysisHome} from "./components/tools/abc-analysis/ABCAnalysisHome";
+import {EmailVerification} from "./components/platform/verifications/EMail/EmailVerification";
+import {PasswordReset} from "./components/platform/verifications/PasswordReset/PasswordReset";
+import {SWOTAnalysis} from "./components/tools/swot-analysis/SWOTAnalysis";
 import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
+import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
-import {PortfolioAnalysisHome} from "./components/tools/portfolio-analysis/PortfolioAnalysisHome";
-import {UtilityAnalysisHome} from "./components/tools/utility-analysis/UtilityAnalysisHome";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
-// import reportWebVitals from './reportWebVitals';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.scss';
 
 const reload_app = () => {
     ReactDOM.render(
@@ -69,20 +63,11 @@ const reload_app = () => {
                                 <Route path={"/reset-password/:token"} component={PasswordReset}/>
                                 <Route path={"/reset-password"} exact component={PasswordReset}/>
 
-                                <Route path={"/pairwise-comparison/new"} exact component={PairwiseComparison}/>
-                                <Route path={"/pairwise-comparison"} exact component={PairwiseComparisonHome}/>
-
-                                <Route path={"/swot-analysis/new"} exact component={SWOTAnalysis}/>
-                                <Route path={"/swot-analysis"} exact component={SWOTAnalysisHome}/>
-
-                                <Route path={"/abc-analysis/new"} exact component={ABCAnalysis}/>
-                                <Route path={"/abc-analysis"} exact component={ABCAnalysisHome}/>
-
-                                <Route path={"/portfolio-analysis/new"} exact component={PortfolioAnalysis}/>
-                                <Route path={"/portfolio-analysis"} exact component={PortfolioAnalysisHome}/>
-
-                                <Route path={"/utility-analysis/new"} exact component={UtilityAnalysis}/>
-                                <Route path={"/utility-analysis"} exact component={UtilityAnalysisHome}/>
+                                <Route path={"/pairwise-comparison"} component={PairwiseComparison}/>
+                                <Route path={"/abc-analysis"} component={ABCAnalysis}/>
+                                <Route path={"/swot-analysis"} component={SWOTAnalysis}/>
+                                <Route path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
+                                <Route path={"/utility-analysis"} component={UtilityAnalysis}/>
 
                                 <Route path={"/"} component={Home}/>
                             </Switch>
