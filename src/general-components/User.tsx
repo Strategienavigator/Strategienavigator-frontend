@@ -1,5 +1,6 @@
 import {updateData} from "./API/calls/User";
 
+
 class User {
     private id: number;
     private username: string;

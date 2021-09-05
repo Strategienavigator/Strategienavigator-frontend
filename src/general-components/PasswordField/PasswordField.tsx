@@ -8,6 +8,7 @@ import {faEyeSlash} from "@fortawesome/free-solid-svg-icons/faEyeSlash";
 
 import "./password-field.scss";
 
+
 const checkPassword = (password: string): PasswordFieldState => {
     let regexValidChars = "[A-Za-zäöüßÄÖÜ\\d$&§+,:;=?@#|'<>.^*()%!_-]";
     let obj: PasswordFieldState = {

@@ -1,5 +1,6 @@
 import {callAPI} from "../API";
 
+
 /**
  * Zeigt alle an einem Speicherstand beteiligten Personen an
  *

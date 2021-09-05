@@ -6,6 +6,7 @@ import {PCPairComparison} from "./steps/PCPairComparison";
 
 import "./pairwise-comparison.scss";
 
+
 class PairwiseComparison extends Tool {
 
     constructor(props: any) {

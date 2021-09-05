@@ -18,6 +18,7 @@ import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 import "./nav.scss";
 
+
 interface NavState {
     expanded: boolean
 }

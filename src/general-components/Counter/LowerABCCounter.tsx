@@ -1,5 +1,6 @@
 import {CounterInterface} from "./CounterInterface";
 
+
 export class LowerABCCounter implements CounterInterface {
     private readonly alphabet = new Array<string>();
 

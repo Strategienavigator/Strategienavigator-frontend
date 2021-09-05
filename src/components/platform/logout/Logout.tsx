@@ -7,6 +7,7 @@ import {Messages} from "../../../general-components/Messages/Messages";
 
 import "./logout.scss";
 
+
 export class LogoutComponent extends Component<any, any> {
 
     logout = async () => {

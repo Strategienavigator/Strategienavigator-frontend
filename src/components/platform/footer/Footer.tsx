@@ -6,6 +6,7 @@ import {faBalanceScale, faCog, faInfoCircle, faShieldAlt} from "@fortawesome/fre
 
 import "./footer.scss";
 
+
 class Footer extends Component<any, any> {
 
     render() {

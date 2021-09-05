@@ -8,6 +8,7 @@ import {faCaretRight, faHome, faSave, faUndo} from "@fortawesome/free-solid-svg-
 
 import "./control-footer.scss";
 
+
 export interface ControlFooterProps {
     places: number
 }

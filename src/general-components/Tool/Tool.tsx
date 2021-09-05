@@ -13,6 +13,7 @@ import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepC
 
 import "./tool.scss";
 
+
 type ToolViewValidation = {
     isNotOwn?: boolean
     isOtherTool?: boolean

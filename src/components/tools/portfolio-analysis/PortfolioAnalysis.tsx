@@ -9,6 +9,7 @@ import {PortResult} from "./steps/PortResult";
 
 import "./portfolio-analysis.scss";
 
+
 class PortfolioAnalysis extends Tool {
 
     constructor(props: any) {

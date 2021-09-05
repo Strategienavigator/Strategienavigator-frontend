@@ -7,6 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {SWOTAlternativeActionsValues} from "./SWOTAlternativeActions";
 import {CardComponentField} from "../../../../general-components/CardComponent/CardComponent";
 
+
 interface ClassifiedAlternateAction {
     name: string
     index: number

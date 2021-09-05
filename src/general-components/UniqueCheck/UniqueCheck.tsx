@@ -10,6 +10,7 @@ import {Loader} from "../Loader/Loader";
 
 import "./unique-check.scss";
 
+
 export interface UniqueCheckProps {
     callback?: ((input: string) => Promise<CallInterface>)
     failMessage?: string

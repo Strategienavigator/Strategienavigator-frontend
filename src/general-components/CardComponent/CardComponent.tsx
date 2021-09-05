@@ -8,6 +8,7 @@ import {CounterInterface} from "../Counter/CounterInterface";
 
 import "./card-component.scss";
 
+
 export interface CardProps {
     name: string
     id: string | null

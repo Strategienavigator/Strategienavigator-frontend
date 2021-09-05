@@ -11,6 +11,7 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import "./step-component.scss";
 import "./step-component-desk.scss";
 
+
 export interface StepProp {
     id: string
     title: string

@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 
 import "./password-reset.scss";
 
+
 export interface RouteMatches {
     token?: string
 }

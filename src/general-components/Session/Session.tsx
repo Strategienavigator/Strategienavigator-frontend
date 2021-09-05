@@ -4,6 +4,7 @@ import {Token} from "./token/Token";
 import {AuthToken} from "./token/AuthToken";
 import {RefreshToken} from "./token/RefreshToken";
 
+
 class Session {
     static currentUser: User | null = null;
 

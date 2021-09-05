@@ -15,6 +15,7 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 import "./tool-home.scss";
 
+
 export interface ToolHomeInfo {
     shortDescription?: ReactNode
     tutorial?: ReactNode

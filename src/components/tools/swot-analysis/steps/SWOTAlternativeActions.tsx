@@ -10,6 +10,7 @@ import {
 import {isDesktop} from "../../../../general-components/Desktop";
 import {extractCardComponentField, extractFromForm} from "../../../../general-components/FormHelper";
 
+
 export interface AlternateAction {
     name: string
     hasNone: boolean

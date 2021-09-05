@@ -4,6 +4,7 @@ import {SaveResource} from "../../../general-components/Datastructures";
 
 import "./abc-analysis.scss";
 
+
 class ABCAnalysis extends Tool {
 
     constructor(props: any) {

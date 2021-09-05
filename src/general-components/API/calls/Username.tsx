@@ -1,5 +1,6 @@
 import {callAPI} from "../API";
 
+
 const checkUsername = async (input: string) => {
     let data = new FormData();
     data.append("username", input);

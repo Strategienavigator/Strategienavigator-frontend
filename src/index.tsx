@@ -32,6 +32,7 @@ import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalys
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
 
+
 const reload_app = () => {
     ReactDOM.render(
         <React.StrictMode>

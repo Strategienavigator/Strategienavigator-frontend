@@ -9,6 +9,7 @@ import {UtilResult} from "./steps/UtilResult";
 
 import "./utility-analysis.scss";
 
+
 class UtilityAnalysis extends Tool {
 
     constructor(props: any) {

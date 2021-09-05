@@ -1,5 +1,6 @@
 import {callAPI} from "../API";
 
+
 /**
  * Verifiziert eine E-Mail-Adresse
  *

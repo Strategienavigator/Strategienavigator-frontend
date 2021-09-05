@@ -7,6 +7,7 @@ import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeAct
 
 import "./swot-analysis.scss";
 
+
 class SWOTAnalysis extends Tool {
 
     constructor(props: any) {

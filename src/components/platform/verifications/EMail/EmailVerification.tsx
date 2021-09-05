@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 
 import "./email-verification.scss";
 
+
 export interface EmailVerificationState {
     loaded: boolean
     success?: boolean

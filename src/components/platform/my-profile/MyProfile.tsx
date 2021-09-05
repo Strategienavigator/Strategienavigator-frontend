@@ -16,6 +16,7 @@ import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 
 import "./my-profile.scss";
 
+
 export interface MyProfileState {
     user: User
     edit: boolean

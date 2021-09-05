@@ -2,6 +2,7 @@ import {FormComponent, ResetType} from "../../../../general-components/Tool/Form
 import {FormEvent} from "react";
 import {PCCriteriasValues} from "./PCCriterias";
 
+
 export interface PCPairComparisonValues {
 
 }

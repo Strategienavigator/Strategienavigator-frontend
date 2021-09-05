@@ -9,6 +9,7 @@ import {checkEmail} from "../../../general-components/API/calls/Email";
 
 import "./register.scss";
 
+
 interface RegisterState {
     isRegistering: boolean
     loaded?: boolean

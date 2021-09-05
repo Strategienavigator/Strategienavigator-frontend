@@ -9,6 +9,7 @@ import {LowerABCCounter} from "../../../../general-components/Counter/LowerABCCo
 import {UpperABCCounter} from "../../../../general-components/Counter/UpperABCCounter";
 import {isDesktop} from "../../../../general-components/Desktop";
 
+
 export interface SwotFactorsValues {
     factors: {
         chances: CardComponentFields

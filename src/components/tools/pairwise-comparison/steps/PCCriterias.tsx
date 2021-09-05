@@ -4,6 +4,7 @@ import {extractCardComponentField} from "../../../../general-components/FormHelp
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {Messages} from "../../../../general-components/Messages/Messages";
 
+
 export interface PCCriteriasValues {
     criterias: CardComponentFields
 }
