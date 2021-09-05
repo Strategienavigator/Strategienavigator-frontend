@@ -1,9 +1,0 @@
-Name                    Datum               NPM install befehl
-SCSS                    14.07.2021          node-sass --save
-React Bootstrap         14.07.2021          react-bootstrap bootstrap@5.0.2 --save
-React Router            14.07.2021          react-router-dom --save
-Fontawesome SVG Core    14.07.2021          @fortawesome/fontawesome-svg-core --save
-Fontawesome Solid SVGs  14.07.2021          @fortawesome/free-solid-svg-icons --save
-Fontawesome React       14.07.2021          @fortawesome/react-fontawesome --save
-string-similarity       30.08.2021          string-similarity --save
-react-beautiful-dnd	01.09.2021	    react-beautiful-dnd --save
