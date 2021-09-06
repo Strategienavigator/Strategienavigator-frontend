@@ -45,7 +45,7 @@ class Session {
         Session.refreshToken.delete();
     }
 
-    static checkLogin = async (): Promise<any> => {
+    static checkLogin = async (): Promise<null | User> => {
         let validToken = Session.token.getValidTokenBreakdown();
         if (validToken !== null) {
             let token = Session.token.getToken() as string;
