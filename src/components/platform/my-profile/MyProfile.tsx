@@ -3,7 +3,7 @@ import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faPencilAlt, faSave, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
-import {Button, Form, Modal} from "react-bootstrap";
+import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {deleteUser, updateData, updateUser} from "../../../general-components/API/calls/User";
@@ -26,6 +26,7 @@ export interface MyProfileState {
     passwordNotMatching?: boolean
     isSaving: boolean
     isSaved?: boolean
+    userLoaded: boolean
 }
 
 export class MyProfileComponent extends Component<any, MyProfileState> {
@@ -43,7 +44,9 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             showDeleteModal: true,
             passwordFieldTouched: false,
             isSaving: false,
+            userLoaded:false
         }
+        console.log(Session.currentUser);
     }
 
     isSamePassword = () => {
@@ -232,6 +235,24 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
                 <hr/>
 
+                {(!this.state.edit) && (
+                    <div>
+                        <Row>
+                            <h5>Überblick Analysen</h5>
+                        </Row>
+                        <Row>
+                            <Col>Eigene Analysen</Col>
+                            <Col>Geteilte Analysen</Col>
+                        </Row>
+                        <Row>
+                            <Col>{this.state.user.getOwnedSavesAmount()}</Col>
+                            <Col>{this.state.user.getSharedSavesAmount()}</Col>
+                        </Row>
+                        <hr/>
+                    </div>
+
+                )}
+
                 {(this.state.isSaved !== undefined && this.state.isSaved) && (
                     <div className={"feedback text-success"}>
                         Ihre Benutzerdaten wurden abgespeichert!
@@ -289,6 +310,18 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
             </Form>
         );
+    }
+
+    componentDidMount = async () => {
+        Session.checkLogin();
+        this.setState({
+            user: Session.currentUser as User
+        });
+        if(this.state.user) {
+            this.setState({
+                userLoaded: true
+            });
+        }
     }
 
 }
