@@ -68,7 +68,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     getTutorialCanvas = () => {
         return (
-            <Offcanvas placement={"top"} show={this.state.showTutorial}>
+            <Offcanvas placement={"start"} show={this.state.showTutorial}>
                 <OffcanvasHeader closeButton onClick={() => this.setState({showTutorial: false})}>
                     <Offcanvas.Title>{this.props.tool?.getToolName()}</Offcanvas.Title>
                 </OffcanvasHeader>
