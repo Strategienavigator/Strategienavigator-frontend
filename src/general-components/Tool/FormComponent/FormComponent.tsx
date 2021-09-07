@@ -1,10 +1,9 @@
 import {Component, FormEvent, ReactNode} from "react";
 import {Form} from "react-bootstrap";
-import {Messages} from "../Messages/Messages";
+import {Messages} from "../../Messages/Messages";
 import StepComponent from "../StepComponent/StepComponent";
-
-import "../../scss/feedback.scss";
 import {randomBytes} from "crypto";
+
 
 export interface FormComponentProps {
     id?: string
@@ -38,13 +37,13 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         );
     }
 
-    public reset = (): void => {
+    public reset = (type: ResetType): void => {
         this.values = {};
         this.disabled = false;
         this.error.clear();
         this.key = randomBytes(200).toString();
-        this.onReset({all: true, same: false});
-
+        this.onReset(type);
+        this.changeControlFooter();
         this.forceUpdate();
     }
 

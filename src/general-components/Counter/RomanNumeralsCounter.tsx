@@ -1,5 +1,6 @@
 import {CounterInterface} from "./CounterInterface";
 
+
 export class RomanNumeralsCounter implements CounterInterface {
     private readonly romanMatrix: [(number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[], (number | string)[]];
 

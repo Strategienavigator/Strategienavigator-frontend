@@ -1,12 +1,13 @@
 import React, {Component, ReactNode} from "react";
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faPlusSquare} from "@fortawesome/free-solid-svg-icons";
 import {NavLink} from "react-router-dom";
-
-import "./control-footer.scss";
 import {RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {faCaretRight, faHome, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
+
+import "./control-footer.scss";
+
 
 export interface ControlFooterProps {
     places: number
@@ -31,14 +32,14 @@ export interface ResetStepsItem {
 export interface ButtonItem {
     button: {
         text: string
-        icon: IconProp
+        icon: IconDefinition
         callback: () => any
     }
 }
 
 export interface ToolItem {
     tool: {
-        icon: IconProp
+        icon: IconDefinition
         title: string
         link: string
     }
@@ -47,10 +48,11 @@ export interface ToolItem {
 export type SettingItem = {
     settings: boolean
 }
+
 export type NewToolItem = {
     newTool: {
         title: string,
-        link: string
+        callback: () => any
     }
 }
 
@@ -142,6 +144,16 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
         });
     }
 
+    /**
+     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
+     * This is considered pretty hacky, but using history.push from react-router, this could be considered a considerable solution
+     */
+    componentWillUnmount() {
+        this.setState = (() => {
+            return;
+        });
+    }
+
     private getItem = (item: ControlFooterItem | undefined): null | ReactNode => {
         if (item !== undefined && item !== null) {
             if ("home" in item) {
@@ -189,9 +201,10 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             }
             if ("newTool" in item) {
                 return (
-                    <NavLink key={"newTool"} to={item.newTool?.link} exact>
+                    <button key={"newTool"} type={"button"} className={"btn-transparent"}
+                            onClick={() => item.newTool.callback()}>
                         <FontAwesomeIcon icon={faPlusSquare}/> {item.newTool?.title}
-                    </NavLink>
+                    </button>
                 );
             }
             if ("button" in item) {

@@ -3,6 +3,7 @@ import {Spinner} from "react-bootstrap";
 
 import "./loader.scss";
 
+
 export interface LoaderState {
     loaded: boolean
 }

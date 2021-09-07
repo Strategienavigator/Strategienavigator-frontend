@@ -1,4 +1,4 @@
-import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent, RefObject} from "react";
 import {SwotFactorsValues} from "./SWOTFactors";
 import {Col, Form, ProgressBar, Row, Tab} from "react-bootstrap";
@@ -9,6 +9,7 @@ import {
 } from "../../../../general-components/CardComponent/CardComponent";
 import {isDesktop} from "../../../../general-components/Desktop";
 import {extractCardComponentField, extractFromForm} from "../../../../general-components/FormHelper";
+
 
 export interface AlternateAction {
     name: string
@@ -344,10 +345,10 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
             return {
                 actions: actions
             }
-        }, () => {
+        }/*, () => {
             if (this.currentAction !== this.state.actions.length - 1 && value) {
                 this.nextAction();
             }
-        });
+        }*/);
     }
 }

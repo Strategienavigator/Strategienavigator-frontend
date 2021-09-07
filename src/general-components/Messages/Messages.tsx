@@ -4,6 +4,7 @@ import {Alert} from "react-bootstrap";
 
 import "./messages.scss";
 
+
 export type MessageTypes = "WARNING" | "DANGER" | "INFO" | "SUCCESS";
 export type xAlignments = "CENTER" | "LEFT" | "RIGHT";
 export type yAlignments = "MIDDLE" | "TOP" | "BOTTOM";

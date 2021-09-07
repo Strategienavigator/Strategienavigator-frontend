@@ -1,13 +1,15 @@
 import React, {Component} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
-import "./email-verification.scss";
 import {RouteComponentProps} from "react-router";
-import {verifyEmail} from "../../../general-components/API/calls/Email";
+import {verifyEmail} from "../../../../general-components/API/calls/Email";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
-import {Loader} from "../../../general-components/Loader/Loader";
+import {Loader} from "../../../../general-components/Loader/Loader";
 import {Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
+
+import "./email-verification.scss";
+
 
 export interface EmailVerificationState {
     loaded: boolean

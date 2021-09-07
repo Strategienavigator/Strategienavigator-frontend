@@ -2,9 +2,10 @@ import {Component} from "react";
 import {Col, Nav, Row} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBalanceScale, faInfoCircle, faShieldAlt} from "@fortawesome/free-solid-svg-icons";
+import {faBalanceScale, faCog, faInfoCircle, faShieldAlt} from "@fortawesome/free-solid-svg-icons";
 
 import "./footer.scss";
+
 
 class Footer extends Component<any, any> {
 
@@ -25,6 +26,11 @@ class Footer extends Component<any, any> {
                     <Col className={"text-center"}>
                         <NavLink to={"/data-privacy"} className={"nav-link"}>
                             <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;Datenschutz
+                        </NavLink>
+                    </Col>
+                    <Col className={"text-center"}>
+                        <NavLink to={"/settings"} className={"nav-link"}>
+                            <FontAwesomeIcon icon={faCog}/>&nbsp;Einstellungen
                         </NavLink>
                     </Col>
                 </Row>

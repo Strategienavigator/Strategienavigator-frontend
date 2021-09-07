@@ -5,6 +5,9 @@ import {reload_app} from "../../../index";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {Messages} from "../../../general-components/Messages/Messages";
 
+import "./logout.scss";
+
+
 export class LogoutComponent extends Component<any, any> {
 
     logout = async () => {

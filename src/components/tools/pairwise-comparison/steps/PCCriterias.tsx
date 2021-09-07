@@ -1,8 +1,9 @@
-import {FormComponent, ResetType} from "../../../../general-components/Form/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {Messages} from "../../../../general-components/Messages/Messages";
+
 
 export interface PCCriteriasValues {
     criterias: CardComponentFields

@@ -1,5 +1,6 @@
 import {callAPI} from "../API";
 
+
 /**
  * Zeigt alle Einladungslinks zum ausgewählten Speicherstand an
  *

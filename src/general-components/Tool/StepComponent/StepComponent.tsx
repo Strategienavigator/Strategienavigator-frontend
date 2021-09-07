@@ -1,13 +1,16 @@
 import React, {Component, RefObject} from "react";
+import {Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import {isDesktop} from "../../Desktop";
+import {clearControlFooter, setControlFooterItem} from "../../ControlFooter/ControlFooter";
+import {FormComponent} from "../FormComponent/FormComponent";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCaretLeft, faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
+import {Tool} from "../Tool";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 import "./step-component.scss";
 import "./step-component-desk.scss";
-import {Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
-import {isDesktop} from "../Desktop";
-import {clearControlFooter, setControlFooterItem, ToolItem} from "../ControlFooter/ControlFooter";
-import {FormComponent} from "../Form/FormComponent";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretLeft, faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
+
 
 export interface StepProp {
     id: string
@@ -17,11 +20,14 @@ export interface StepProp {
 }
 
 export interface StepComponentProps {
-    steps: StepProp[]
-    controlFooterTool: ToolItem
+    steps?: StepProp[]
+    tool?: Tool
+    values?: {
+        id: string,
+        values: any
+    }[]
     header?: string
     onSave?: (data: any, forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
-    maintenance?: boolean
 }
 
 export interface StepComponentState {
@@ -48,7 +54,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         this.completedSteps = new Array<RefObject<FormComponent<any, any>>>();
         this.allRefs = new Array<RefObject<FormComponent<any, any>>>();
 
-        this.props.steps.map((value) => {
+        this.props.steps?.map((value) => {
             let ref = React.createRef<FormComponent<any, any>>();
             this.allRefs.push(ref);
 
@@ -70,7 +76,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         let i = 0;
         let e = 0;
 
-        if (this.props.steps.length < 1 || this.props.maintenance) {
+        if (this.props.steps?.length !== undefined && this.props.steps?.length < 1) {
             return (
                 <Card body>
                     Diese Analyse ist in Bearbeitung...
@@ -110,6 +116,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                             variant={"dark"}
                                             type={"submit"}
                                             form={this.allSteps[this.currentStep - 1].id} className={"mt-2"}
+                                            key={"saveOrNextButton"}
                                         >
                                             <FontAwesomeIcon
                                                 icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
@@ -120,9 +127,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                             type={"button"}
                                             onClick={this.state.customNextButton?.callback}
                                             className={"mt-2"}
+                                            key={"customNextButton"}
                                         >
                                             <FontAwesomeIcon
-                                                icon={faCaretRight}/> Nächster
+                                                icon={faCaretRight}/> {this.state.customNextButton?.text}
                                         </Button>
                                     )}
                                     <Button
@@ -130,6 +138,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                         type={"button"}
                                         className={"mt-2 mx-2"}
                                         onClick={() => this.setState({onReset: true, showResetModal: true})}
+                                        key={"resetButton"}
                                     >
                                         <FontAwesomeIcon
                                             icon={faUndo}/> Zurücksetzen
@@ -189,7 +198,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                     this.resetSteps(this.currentStep);
                                 }}
                             >
-                                Ja, ab dem aktuellen Schritt neu beginnen!
+                                Ja, ab diesem Schritt neu beginnen!
                             </Button>
                         </Modal.Footer>
                     </Modal>
@@ -199,10 +208,24 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     componentDidMount = async () => {
-        if (this.props.steps.length > 1 && !this.props.maintenance) {
+        if ((this.props.steps?.length !== undefined && this.props.steps?.length > 1)) {
             this.restoreFooter();
         } else {
             setControlFooterItem(2, {home: true});
+        }
+
+        if (this.props.values) {
+            this.props.values.map((item) => {
+                this.props.steps?.map((step, index) => {
+                    let ref = this.allRefs[index];
+                    if (item.id === step.id) {
+                        let values = JSON.parse(item.values);
+                        ref.current?.setValues(values);
+                    }
+                    return null;
+                })
+                return null;
+            });
         }
     }
 
@@ -305,7 +328,13 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     public restoreFooter = () => {
-        setControlFooterItem(1, this.props.controlFooterTool);
+        setControlFooterItem(1, {
+            tool: {
+                icon: this.props.tool?.getToolIcon() as IconDefinition,
+                title: this.props.tool?.getToolName() as string,
+                link: this.props.tool?.getLink() as string
+            }
+        });
         setControlFooterItem(2, {
             reset: () => {
                 this.setState({
@@ -330,16 +359,14 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     private resetSteps(currentStep?: number) {
-        let i = (currentStep !== undefined) ? (currentStep) : 0;
+        let i = (currentStep !== undefined) ? currentStep : 0;
 
         if (currentStep !== undefined) {
             this.currentStep = currentStep;
             this.currentProgress = currentStep;
 
             let form = this.allRefs[currentStep - 1].current;
-            form?.setDisabled(false);
-            form?.onReset({same: true, all: false});
-            form?.changeControlFooter();
+            form?.reset({same: true, all: false});
         } else {
             this.currentStep = 1;
             this.currentProgress = 1;
@@ -347,7 +374,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
         for (i; i < this.allSteps.length; i++) {
             let step = this.allRefs[i];
-            step.current?.reset();
+            step.current?.reset({same: false, all: true});
         }
 
         this.forceUpdate();

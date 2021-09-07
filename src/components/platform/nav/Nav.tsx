@@ -13,10 +13,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Session} from "../../../general-components/Session/Session";
-
-import "./nav.scss";
 import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+
+import "./nav.scss";
+
 
 interface NavState {
     expanded: boolean
@@ -55,12 +56,6 @@ export class Nav extends Component<any, NavState> {
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <BootstrapNav className="me-auto">
-                            {(isDesktop()) && (
-                                <NavLink onClick={navOnClick} to={"/settings"} className={"nav-link"}>
-                                    <FontAwesomeIcon icon={faCog}/>&nbsp;
-                                    Einstellungen
-                                </NavLink>
-                            )}
                         </BootstrapNav>
                         <BootstrapNav>
                             {(!Session.isLoggedIn()) && (

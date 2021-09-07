@@ -34,6 +34,10 @@ $theme-colors: (
   color: white;
 }
 
+.badge.bg-dark, .badge.bg-dark * {
+  color: white;
+}
+
 .btn-transparent {
   background-color: transparent;
   border-color: transparent;

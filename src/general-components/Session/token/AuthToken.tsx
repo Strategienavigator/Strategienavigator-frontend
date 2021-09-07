@@ -1,6 +1,7 @@
 import {Token} from "./Token";
 import {Buffer} from "buffer";
 
+
 export interface JWTTokenPayloadInterface {
     userId: number;
     expiryDate: Date;

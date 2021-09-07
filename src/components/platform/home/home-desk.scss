@@ -7,9 +7,11 @@
     align-items: flex-start;
 
     .tool {
-      max-width: 20%;
+      align-items: center;
       padding-left: 3rem;
       padding-right: 3rem;
+      min-width: 20%;
+      max-width: 20%;
 
       .text {
         flex: 0 0 20%;
@@ -18,11 +20,12 @@
       }
 
       .icon {
-        svg {
-          font-size: 200%;
-        }
+        max-width: 75%;
+      }
+
+      .icon svg {
+        font-size: 150%;
       }
     }
   }
-
 }

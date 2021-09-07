@@ -1,13 +1,14 @@
 import React, {Component, FormEvent} from "react";
 import {Button, Form} from "react-bootstrap";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-
-import "./register.scss";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {checkEmail} from "../../../general-components/API/calls/Email";
+
+import "./register.scss";
+
 
 interface RegisterState {
     isRegistering: boolean

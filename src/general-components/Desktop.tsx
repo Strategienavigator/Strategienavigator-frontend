@@ -1,5 +1,6 @@
 import {reload_app} from "../index";
 
+
 let breakPoint: number = 1200;
 let width: number = window.innerWidth;
 let reloadedMobile: boolean = false;

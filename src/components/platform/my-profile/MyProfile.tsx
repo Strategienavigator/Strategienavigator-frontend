@@ -3,9 +3,7 @@ import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faPencilAlt, faSave, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
-import {Button, Form, Modal} from "react-bootstrap";
-
-import "./my-profile.scss";
+import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {deleteUser, updateData, updateUser} from "../../../general-components/API/calls/User";
@@ -15,6 +13,10 @@ import {Messages} from "../../../general-components/Messages/Messages";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
+import {Loader} from "../../../general-components/Loader/Loader";
+
+import "./my-profile.scss";
+
 
 export interface MyProfileState {
     user: User
@@ -25,6 +27,7 @@ export interface MyProfileState {
     passwordNotMatching?: boolean
     isSaving: boolean
     isSaved?: boolean
+    userLoaded: boolean
 }
 
 export class MyProfileComponent extends Component<any, MyProfileState> {
@@ -42,6 +45,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             showDeleteModal: true,
             passwordFieldTouched: false,
             isSaving: false,
+            userLoaded: false
         }
     }
 
@@ -149,9 +153,15 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
     }
 
     render() {
+        if (!this.state.userLoaded) {
+            return (
+                <Loader payload={[]} loaded={false} transparent fullscreen/>
+            );
+        }
+
         return (
-            <Form onSubmit={(e) => {
-                this.saveChanges(e)
+            <Form onSubmit={async (e) => {
+                await this.saveChanges(e)
             }} className={"profile"}>
                 <h4>
                     <FontAwesomeIcon icon={faUser}/> &nbsp;{this.state.user.getUsername()}
@@ -231,6 +241,24 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
                 <hr/>
 
+                {(!this.state.edit) && (
+                    <div>
+                        <h5>Überblick Analysen</h5>
+                        <Row>
+                            <Col>
+                                Eigene Analysen <br/>
+                                {this.state.user.getOwnedSavesAmount()}
+                            </Col>
+                            <Col>
+                                Geteilte Analysen <br/>
+                                {this.state.user.getSharedSavesAmount()}
+                            </Col>
+                        </Row>
+                        <hr/>
+                    </div>
+
+                )}
+
                 {(this.state.isSaved !== undefined && this.state.isSaved) && (
                     <div className={"feedback text-success"}>
                         Ihre Benutzerdaten wurden abgespeichert!
@@ -288,6 +316,16 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
             </Form>
         );
+    }
+
+    componentDidMount = async () => {
+        let user = await Session.checkLogin();
+        if (user) {
+            this.setState({
+                userLoaded: true,
+                user: user
+            });
+        }
     }
 
 }

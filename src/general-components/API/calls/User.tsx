@@ -1,5 +1,6 @@
 import {callAPI} from "../API";
 
+
 export type updateData = {
     username?: string
     password?: string

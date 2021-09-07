@@ -4,6 +4,7 @@ import {Token} from "./token/Token";
 import {AuthToken} from "./token/AuthToken";
 import {RefreshToken} from "./token/RefreshToken";
 
+
 class Session {
     static currentUser: User | null = null;
 
@@ -44,7 +45,7 @@ class Session {
         Session.refreshToken.delete();
     }
 
-    static checkLogin = async (): Promise<any> => {
+    static checkLogin = async (): Promise<null | User> => {
         let validToken = Session.token.getValidTokenBreakdown();
         if (validToken !== null) {
             let token = Session.token.getToken() as string;

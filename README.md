@@ -18,7 +18,7 @@ Das Toolbox-Backend ist [hier:link:](https://github.com/ricom/toolbox-backend) z
 
 Programm/Package | min. Version
 ------------ | -------------
-NodeJS | > = 16.2.0
+NodeJS | > = 14.17.6
 npm  | > = 7.19.1
 
 #### Mögliche IDE's

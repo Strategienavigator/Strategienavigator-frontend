@@ -1,5 +1,6 @@
 import {CounterInterface} from "./CounterInterface";
 
+
 export class StaticCounter implements CounterInterface {
 
     private readonly count: string;
