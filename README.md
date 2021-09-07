@@ -14,7 +14,7 @@ Das Toolbox-Backend ist [hier:link:](https://github.com/ricom/toolbox-backend) z
 
 [Interne Projektinformationen:link:](https://moodle.jade-hs.de/moodle/course/view.php?id=521&section=4)
 
-## Vorraussetzungen
+## Voraussetzungen
 
 Programm/Package | min. Version
 ------------ | -------------
