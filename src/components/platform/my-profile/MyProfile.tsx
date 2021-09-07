@@ -13,6 +13,7 @@ import {Messages} from "../../../general-components/Messages/Messages";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
+import {Loader} from "../../../general-components/Loader/Loader";
 
 import "./my-profile.scss";
 
@@ -44,9 +45,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             showDeleteModal: true,
             passwordFieldTouched: false,
             isSaving: false,
-            userLoaded:false
+            userLoaded: false
         }
-        console.log(Session.currentUser);
     }
 
     isSamePassword = () => {
@@ -153,9 +153,15 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
     }
 
     render() {
+        if (!this.state.userLoaded) {
+            return (
+                <Loader payload={[]} loaded={false} transparent fullscreen/>
+            );
+        }
+
         return (
-            <Form onSubmit={(e) => {
-                this.saveChanges(e)
+            <Form onSubmit={async (e) => {
+                await this.saveChanges(e)
             }} className={"profile"}>
                 <h4>
                     <FontAwesomeIcon icon={faUser}/> &nbsp;{this.state.user.getUsername()}
@@ -237,16 +243,16 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
                 {(!this.state.edit) && (
                     <div>
+                        <h5>Überblick Analysen</h5>
                         <Row>
-                            <h5>Überblick Analysen</h5>
-                        </Row>
-                        <Row>
-                            <Col>Eigene Analysen</Col>
-                            <Col>Geteilte Analysen</Col>
-                        </Row>
-                        <Row>
-                            <Col>{this.state.user.getOwnedSavesAmount()}</Col>
-                            <Col>{this.state.user.getSharedSavesAmount()}</Col>
+                            <Col>
+                                Eigene Analysen <br/>
+                                {this.state.user.getOwnedSavesAmount()}
+                            </Col>
+                            <Col>
+                                Geteilte Analysen <br/>
+                                {this.state.user.getSharedSavesAmount()}
+                            </Col>
                         </Row>
                         <hr/>
                     </div>
@@ -313,13 +319,11 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
     }
 
     componentDidMount = async () => {
-        Session.checkLogin();
-        this.setState({
-            user: Session.currentUser as User
-        });
-        if(this.state.user) {
+        let user = await Session.checkLogin();
+        if (user) {
             this.setState({
-                userLoaded: true
+                userLoaded: true,
+                user: user
             });
         }
     }
