@@ -11,12 +11,12 @@ interface PaginationFooterProps {
     /**
      * Welche Seite gerade ausgewählt ist
      *
-     * startet bei 0
+     * startet bei 1
      */
     currentPage: number
     /**
      * callback, wenn eine Seite ausgewählt wurde
-     * @param pageNumber nummer der ausgewählten Seite (startet bei 0)
+     * @param pageNumber nummer der ausgewählten Seite (startet bei 1)
      */
     pageChosen: (pageNumber: number) => void
 
@@ -32,6 +32,10 @@ interface PaginationFooterProps {
 class PaginationFooter extends Component<PaginationFooterProps, {}> {
 
 
+    static defaultProps = {
+        currentPage: 1
+    };
+
     itemClicked(pageNumber: number, e: React.MouseEvent) {
         e.preventDefault();
         if (pageNumber !== this.props.currentPage)
@@ -41,38 +45,37 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
     nextClicked = (e: React.MouseEvent) => {
         e.preventDefault();
         this.props.pageChosen(this.props.currentPage + 1)
-    }
+    };
 
     previousClicked = (e: React.MouseEvent) => {
         e.preventDefault();
         this.props.pageChosen(this.props.currentPage - 1)
-    }
+    };
 
     render() {
-        let active = this.props.currentPage;
+                    // clamp active value between 1 and this.props.pageCount
+        let active = this.props.currentPage < 1 ? 1 : (this.props.currentPage > this.props.pageCount ? this.props.pageCount : this.props.currentPage);
         let items = [];
-
-        for (let number = 0; number < 5; number++) {
+                                            // always have at least one page
+        for (let number = 1; number <= (this.props.pageCount < 1 ? 1 : this.props.pageCount); number++) {
             let isActive = number === active;
             items.push(
                 <PageItem key={number} active={isActive} disabled={!isActive && this.props.disabled}
                           onClick={this.itemClicked.bind(this, number)}>
-                    {number + 1}
+                    {number}
                 </PageItem>,
             );
         }
 
         return (
-            <div>
-                <Pagination>
-                    <PageItem key={"previous"} disabled={this.props.currentPage === 0 || this.props.disabled}
-                              onClick={this.previousClicked}>Vorherige</PageItem>
-                    {items}
-                    <PageItem key={"next"}
-                              disabled={this.props.currentPage === this.props.pageCount - 1 || this.props.disabled}
-                              onClick={this.nextClicked}>Nächste</PageItem>
-                </Pagination>
-            </div>);
+            <Pagination className={"paginationContainer"}>
+                <PageItem key={"previous"} disabled={this.props.currentPage === 1 || this.props.disabled}
+                          onClick={this.previousClicked}>Vorherige</PageItem>
+                {items}
+                <PageItem key={"next"}
+                          disabled={this.props.currentPage === this.props.pageCount || this.props.disabled}
+                          onClick={this.nextClicked}>Nächste</PageItem>
+            </Pagination>);
     }
 }
 
