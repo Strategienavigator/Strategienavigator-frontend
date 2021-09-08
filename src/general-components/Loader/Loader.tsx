@@ -62,13 +62,14 @@ export class Loader extends Component<LoaderProps, LoaderState> {
     }
 
     render() {
+        let loaded = (this.props.loaded !== undefined) ? this.props.loaded : this.state.loaded;
         return (
             <>
-                {(this.props.animate || !this.state.loaded) && (
+                {(this.props.animate || !loaded) && (
                     <div
                         className={
                             ["loader",
-                                this.state.loaded ? "loaded" : "",
+                                loaded ? "loaded" : "",
                                 this.props.fullscreen ? "fullscreen" : "",
                                 this.props.animate ? "animate" : "",
                                 this.props.transparent ? "transparent" : "",
@@ -83,7 +84,7 @@ export class Loader extends Component<LoaderProps, LoaderState> {
                     </div>
                 )}
 
-                {(this.state.loaded) && (
+                {(loaded) && (
                     this.props.children
                 )}
             </>
