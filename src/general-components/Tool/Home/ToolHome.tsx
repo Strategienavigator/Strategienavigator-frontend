@@ -5,13 +5,14 @@ import {isDesktop} from "../../Desktop";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {Loader} from "../../Loader/Loader";
-import {SimpleSaveResource} from "../../Datastructures";
+import {SaveResource, SimpleSaveResource} from "../../Datastructures";
 import {Link} from "react-router-dom";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import {Session} from "../../Session/Session";
 import {getSaves} from "../../API/calls/Saves";
 import {setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
+import {SavePagination} from "./SavePagination/SavePagination";
 
 import "./tool-home.scss";
 
@@ -27,7 +28,6 @@ export interface ToolHomeProps {
 }
 
 interface ToolHomeState {
-    saves: Array<any>
     showTutorial: boolean
 }
 
@@ -37,22 +37,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         super(props);
 
         this.state = {
-            saves: [],
             showTutorial: false,
-        }
-    }
-
-    loadToolSaves = async () => {
-        if (Session.isLoggedIn()) {
-            let userID = Session.currentUser?.getID() as number;
-
-            let call = await getSaves(userID, Session.getToken(), this.props.tool?.getID());
-            if (call.success) {
-                let saves = call.callData.data;
-                this.setState({
-                    saves: saves
-                })
-            }
         }
     }
 
@@ -103,26 +88,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 {this.props.info?.shortDescription}
 
                 <div className={"saves mt-2"}>
-                    <Loader alignment={"left"} size={50} transparent animate={false}
-                            payload={[this.loadToolSaves]}>
-                        <ListGroup>
-                            {this.state.saves?.length <= 0 && (
-                                <ListGroupItem>Sie haben aktuell keine Speicherstände.</ListGroupItem>
-                            )}
-
-                            {this.state.saves?.map(value => {
-                                let save = value as SimpleSaveResource;
-                                return (
-                                    <ListGroupItem as={Link} to={this.props.tool?.getLink() + "/" + save.id}
-                                                   key={save.id}
-                                                   action>
-                                        {save.name}
-                                    </ListGroupItem>
-                                );
-                            })}
-
-                        </ListGroup>
-                    </Loader>
+                    <SavePagination tool={this.props.tool!}/>
                 </div>
 
                 {this.props.children}
