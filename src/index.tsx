@@ -29,6 +29,7 @@ import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
 import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
+import { Forbidden } from './components/platform/forbidden/Fordidden';
 
 
 const reload_app = () => {
@@ -57,6 +58,7 @@ const reload_app = () => {
                                 <Route path={"/register"} exact component={Register}/>
                                 <Route path={"/settings"} exact component={Settings}/>
                                 <Route path={"/my-profile"} exact component={MyProfile}/>
+                                <Route path={"/forbidden"} exact component={Forbidden}/>
 
                                 <Route path={"/verify-email/:token"} component={EmailVerification}/>
                                 <Route path={"/reset-password/:token"} component={PasswordReset}/>
