@@ -30,6 +30,7 @@ import {PairwiseComparison} from "./components/tools/pairwise-comparison/Pairwis
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import { Forbidden } from './components/platform/forbidden/Fordidden';
+import { NotFound } from './components/platform/not-found/NotFound';
 
 
 const reload_app = () => {
@@ -59,6 +60,7 @@ const reload_app = () => {
                                 <Route path={"/settings"} exact component={Settings}/>
                                 <Route path={"/my-profile"} exact component={MyProfile}/>
                                 <Route path={"/forbidden"} exact component={Forbidden}/>
+                                <Route path={"/notfound"} exact component={NotFound}/>
 
                                 <Route path={"/verify-email/:token"} component={EmailVerification}/>
                                 <Route path={"/reset-password/:token"} component={PasswordReset}/>
