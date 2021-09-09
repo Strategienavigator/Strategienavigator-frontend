@@ -16,7 +16,7 @@ export class NotFound extends Component<any, any> {
             <img src={stop}/>
         </div>
         <h4>Die Seite die Sie suchen, wurde leider nicht gefunden</h4>
-        <button type="button" className="main-btn">Home</button>
+        <Link className = "main-btn" to ="/">Home</Link>
     </div>
         );
     }
