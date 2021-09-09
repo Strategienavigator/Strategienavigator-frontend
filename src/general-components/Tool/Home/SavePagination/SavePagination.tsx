@@ -8,6 +8,9 @@ import {ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {Tool} from "../../Tool";
 
+import './save-pagination.scss'
+
+
 interface SavePaginationState {
     saves: Array<Array<SimpleSaveResource>>
     page: number
