@@ -3,22 +3,23 @@ import {PageItem, Pagination} from 'react-bootstrap';
 
 import './paginationFooter.scss'
 
+
 interface PaginationFooterProps {
     /**
      * Anzahl der Seiten, welche zur Auswahl angezeigt werden sollen
      */
-    pageCount: i
+    pageCount: number
     /**
      * Welche Seite gerade ausgewählt ist
      *
      * startet bei 1
      */
-    currentPage: i
+    currentPage: number
     /**
      * callback, wenn eine Seite ausgewählt wurde
      * @param pageNumber nummer der ausgewählten Seite (startet bei 1)
      */
-    pageChosen: (pageNumber: i) => void
+    pageChosen: (pageNumber: number) => void
 
     /**
      * legt fest ob eingaben möglich sein sollen
@@ -36,7 +37,7 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
         currentPage: 1
     };
 
-    itemClicked(pageNumber: i, e: React.MouseEvent) {
+    itemClicked(pageNumber: number, e: React.MouseEvent) {
         e.preventDefault();
         if (pageNumber !== this.props.currentPage)
             this.props.pageChosen(pageNumber);
