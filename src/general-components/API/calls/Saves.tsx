@@ -1,4 +1,5 @@
-import {callAPI} from "../API";
+import {callAPI, CallInterface} from "../API";
+import {PaginationResource, SimpleSaveResource} from "../../Datastructures";
 
 
 /**
@@ -7,14 +8,21 @@ import {callAPI} from "../API";
  * @param userID Die ID des Benutzers
  * @param token Der Token zur Authentifizierung
  * @param toolID ID des Strategietools
+ * @param page Nummer der Seite, startet bei 1
  */
-const getSaves = async (userID: number, token: string | null, toolID?: number) => {
-    let data;
+const getSaves = async (userID: number, token: string | null, toolID?: number, page?: number) => {
+    let data = new URLSearchParams();
+    let searchParams = false;
     if (toolID) {
-        data = new URLSearchParams();
         data.append("tool_id", String(toolID));
+        searchParams = true;
     }
-    return await callAPI("api/users/" + userID + "/saves", "GET", data, (token !== null) ? token : undefined);
+    if (page) {
+        data.append("page", String(page));
+        searchParams = true;
+    }
+
+    return await callAPI("api/users/" + userID + "/saves", "GET", searchParams ? data : undefined, (token !== null) ? token : undefined);
 }
 
 /**
