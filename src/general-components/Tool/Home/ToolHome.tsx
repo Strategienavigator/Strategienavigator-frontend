@@ -1,15 +1,10 @@
 import React, {Component, ReactNode} from "react";
 import {Tool} from "../Tool";
-import {Badge, Button, ListGroup, ListGroupItem, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
+import {Badge, Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
-import {Loader} from "../../Loader/Loader";
-import {SaveResource, SimpleSaveResource} from "../../Datastructures";
-import {Link} from "react-router-dom";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
-import {Session} from "../../Session/Session";
-import {getSaves} from "../../API/calls/Saves";
 import {setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {SavePagination} from "./SavePagination/SavePagination";
