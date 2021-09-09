@@ -27,7 +27,7 @@ export interface StepComponentProps {
         values: any
     }[]
     header?: string
-    onSave?: (data: any, forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
+    onSave?: (data: object, forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
 }
 
 export interface StepComponentState {
@@ -215,17 +215,21 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         }
 
         if (this.props.values) {
+            let currentStep = 0;
             this.props.values.map((item) => {
                 this.props.steps?.map((step, index) => {
                     let ref = this.allRefs[index];
                     if (item.id === step.id) {
                         let values = JSON.parse(item.values);
                         ref.current?.setValues(values);
+                        currentStep++;
                     }
                     return null;
                 })
                 return null;
             });
+            this.currentProgress = currentStep;
+            this.currentStep = currentStep;
         }
     }
 

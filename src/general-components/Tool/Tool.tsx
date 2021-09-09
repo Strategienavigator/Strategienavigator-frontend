@@ -6,12 +6,13 @@ import {ToolHome, ToolHomeInfo} from "./Home/ToolHome";
 import {extractFromForm} from "../FormHelper";
 import {Button, Card, Form, Modal} from "react-bootstrap";
 import {Loader} from "../Loader/Loader";
-import {getSave} from "../API/calls/Saves";
+import {createSave, getSave, updateSave} from "../API/calls/Saves";
 import {Session} from "../Session/Session";
 import {SaveResource} from "../Datastructures";
 import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepComponent";
 
 import "./tool.scss";
+import {FormComponent} from "./FormComponent/FormComponent";
 
 
 type ToolViewValidation = {
@@ -21,6 +22,7 @@ type ToolViewValidation = {
 
 interface ToolState {
     showInputModal: boolean
+    isSaving: boolean
     viewValidationError?: ToolViewValidation
     view?: SaveResource
     nameError?: {
@@ -45,11 +47,11 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
     // STEP COMPONENT
     private steps: Array<StepProp> = [];
 
-    // CURRENT TOOL
-    private currentTool?: SaveResource;
-    private currentToolID?: number;
-    private currentToolName?: string;
-    private currentToolDescription?: string;
+    // CURRENT SAVE
+    private currentSave?: SaveResource;
+    private currentSaveID?: number;
+    private currentSaveName?: string;
+    private currentSaveDescription?: string;
     private readonly stepComponent: RefObject<StepComponent>;
 
     protected constructor(props: RouteComponentProps<any, StaticContext, unknown> | Readonly<RouteComponentProps<any, StaticContext, unknown>>) {
@@ -57,10 +59,18 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
 
         this.state = {
             showInputModal: true,
+            isSaving: false,
             viewValidationError: {}
         }
         this.stepComponent = React.createRef<StepComponent>();
         this.toolLink = this.props.match.path;
+
+        this.props.history.listen(() => {
+            this.currentSaveID = undefined;
+            this.currentSaveName = undefined;
+            this.currentSaveDescription = undefined;
+            this.currentSave = undefined;
+        });
     }
 
     public getLink(): string {
@@ -132,6 +142,10 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
                 </Route>
 
                 {(this.state.showInputModal) && this.getNameAndDescInputModal()}
+
+                {(this.state.isSaving) && (
+                    <Loader payload={[]} fullscreen transparent loaded={false}/>
+                )}
             </Switch>
         );
     }
@@ -140,9 +154,45 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
         this.props.history.push(this.getLink() + "/" + page);
     }
 
+    public save = async (data: object, forms: Map<string, FormComponent<any, any>>): Promise<boolean> => {
+        this.setState({
+            isSaving: true
+        });
+
+        let saveData = new FormData();
+        saveData.append("data", JSON.stringify(data));
+        saveData.append("name", this.currentSaveName as string);
+        saveData.append("description", this.currentSaveDescription as string);
+
+        let call;
+        if (this.currentSaveID === undefined) {
+            // Create new
+            saveData.append("tool_id", String(this.toolID));
+            call = await createSave(saveData, Session.getToken());
+        } else {
+            // Update current
+            call = await updateSave(this.currentSaveID, saveData, Session.getToken());
+        }
+
+        this.setState({
+            isSaving: false
+        });
+        return call.success;
+    }
+
     protected getStepComponent(props?: StepComponentProps) {
-        return <StepComponent header={this.getToolName()} ref={this.stepComponent} steps={this.steps}
-                              tool={this} {...props} />;
+        return (
+            <StepComponent
+                onSave={async (data, forms) => {
+                    return await this.save(data, forms);
+                }}
+                header={this.getToolName()}
+                ref={this.stepComponent}
+                steps={this.steps}
+                tool={this}
+                {...props}
+            />
+        );
     }
 
     protected addStep(step: StepProp) {
@@ -150,7 +200,7 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
     }
 
     protected hasCurrentTool(): boolean {
-        return this.currentToolDescription !== undefined && this.currentToolName !== undefined;
+        return this.currentSaveDescription !== undefined && this.currentSaveName !== undefined;
     }
 
     protected setID = (toolID: number) => {
@@ -180,7 +230,7 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
 
         if (!isNaN(parseInt(ID))) {
             ID = parseInt(ID);
-            this.currentToolID = ID;
+            this.currentSaveID = ID;
             return ID;
         } else {
             if (ID !== "new" && this.getLink() !== ID) {
@@ -198,12 +248,12 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
 
         if (call.success) {
             if (data.tool_id === this.toolID) {
-                this.currentTool = data;
-                this.currentToolName = data.name;
-                this.currentToolDescription = data.description;
-                this.currentToolID = data.tool_id;
+                this.currentSave = data;
+                this.currentSaveName = data.name;
+                this.currentSaveDescription = data.description;
+                this.currentSaveID = data.id;
             } else {
-                this.currentToolName = data.name;
+                this.currentSaveName = data.name;
                 call.success = false;
                 isOtherTool = true;
             }
@@ -332,8 +382,8 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
         }
 
         if (!error) {
-            this.currentToolName = name;
-            this.currentToolDescription = desc;
+            this.currentSaveName = name;
+            this.currentSaveDescription = desc;
 
             this.setState({
                 showInputModal: false
