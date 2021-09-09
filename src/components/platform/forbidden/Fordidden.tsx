@@ -16,7 +16,7 @@ export class Forbidden extends Component<any, any> {
                         <img src= {stop}/>
                     </div>
                 <h4>Sie haben keine Berechtigung für diese Anfrage</h4>
-                <button type="button" className="main-btn">Home</button>
+                <Link className = "main-btn" to ="/">Home</Link>
             </div>
         );
     }
