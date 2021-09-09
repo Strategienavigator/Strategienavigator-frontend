@@ -12,9 +12,9 @@ import {Session} from "../../Session/Session";
 import {getSaves} from "../../API/calls/Saves";
 import {setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
+import {SavePagination} from "./SavePagination/SavePagination";
 
 import "./tool-home.scss";
-import {SavePagination} from "./SavePagination/SavePagination";
 
 
 export interface ToolHomeInfo {

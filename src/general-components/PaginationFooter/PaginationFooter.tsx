@@ -7,18 +7,18 @@ interface PaginationFooterProps {
     /**
      * Anzahl der Seiten, welche zur Auswahl angezeigt werden sollen
      */
-    pageCount: number
+    pageCount: i
     /**
      * Welche Seite gerade ausgewählt ist
      *
      * startet bei 1
      */
-    currentPage: number
+    currentPage: i
     /**
      * callback, wenn eine Seite ausgewählt wurde
      * @param pageNumber nummer der ausgewählten Seite (startet bei 1)
      */
-    pageChosen: (pageNumber: number) => void
+    pageChosen: (pageNumber: i) => void
 
     /**
      * legt fest ob eingaben möglich sein sollen
@@ -27,7 +27,7 @@ interface PaginationFooterProps {
 }
 
 /**
- *
+ * Komponent, welche eine Pagination Leiste anzeigt.
  */
 class PaginationFooter extends Component<PaginationFooterProps, {}> {
 
@@ -36,7 +36,7 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
         currentPage: 1
     };
 
-    itemClicked(pageNumber: number, e: React.MouseEvent) {
+    itemClicked(pageNumber: i, e: React.MouseEvent) {
         e.preventDefault();
         if (pageNumber !== this.props.currentPage)
             this.props.pageChosen(pageNumber);
@@ -53,16 +53,17 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
     };
 
     render() {
-                    // clamp active value between 1 and this.props.pageCount
+        // clamp active value between 1 and this.props.pageCount
         let active = this.props.currentPage < 1 ? 1 : (this.props.currentPage > this.props.pageCount ? this.props.pageCount : this.props.currentPage);
         let items = [];
-                                            // always have at least one page
-        for (let number = 1; number <= (this.props.pageCount < 1 ? 1 : this.props.pageCount); number++) {
-            let isActive = number === active;
+        // clamp value to always be above one
+        let maxPages = (this.props.pageCount < 1 ? 1 : this.props.pageCount);
+        for (let i = 1; i <= maxPages; i++) {
+            let isActive = i === active;
             items.push(
-                <PageItem key={number} active={isActive} disabled={!isActive && this.props.disabled}
-                          onClick={this.itemClicked.bind(this, number)}>
-                    {number}
+                <PageItem key={i} active={isActive} disabled={!isActive && this.props.disabled}
+                          onClick={this.itemClicked.bind(this, i)}>
+                    {i}
                 </PageItem>,
             );
         }

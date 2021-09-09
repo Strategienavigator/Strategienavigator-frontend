@@ -11,8 +11,7 @@ import {PaginationResource, SimpleSaveResource} from "../../Datastructures";
  * @param page Nummer der Seite, startet bei 1
  */
 const getSaves = async (userID: number, token: string | null, toolID?: number, page?: number) => {
-    let data;
-    data = new URLSearchParams();
+    let data = new URLSearchParams();
     let searchParams = false;
     if (toolID) {
         data.append("tool_id", String(toolID));
