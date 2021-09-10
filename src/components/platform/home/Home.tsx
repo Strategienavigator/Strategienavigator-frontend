@@ -1,9 +1,8 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
-import {Col, Form, FormControl, Row} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowsAlt, faBorderAll, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
-import {compareTwoStrings} from "string-similarity";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 import "./home.scss";
@@ -20,7 +19,6 @@ interface HomeState {
 
 export class Home extends Component<any, HomeState> {
     private readonly items;
-    private searchMatch = 0.2;
 
     constructor(props: any) {
         super(props);
@@ -61,19 +59,6 @@ export class Home extends Component<any, HomeState> {
     render() {
         return (
             <div className={"container"}>
-                <Form className="searchbar d-flex justify-content-center align-items-center">
-                    <FormControl
-                        size={"sm"}
-                        type="search"
-                        onChange={(e) => {
-                            let text = e.target.value;
-                            this.search(text);
-                        }}
-                        placeholder="Suchen"
-                        aria-label="Suchen"
-                    />
-                </Form>
-
                 <Row className={"tools"}>
                     {(this.state.tools.map(value => {
                         return (
@@ -92,30 +77,6 @@ export class Home extends Component<any, HomeState> {
                 </Row>
             </div>
         );
-    }
-
-    search(searchValue: string) {
-        let items = this.items;
-        let results = [];
-
-        if (searchValue !== "") {
-            for (let i = 0; i < items.length; i++) {
-                let match = compareTwoStrings(searchValue.toLowerCase(), items[i].name.toLowerCase());
-                if (match > this.searchMatch) {
-                    results.push(items[i]);
-                }
-            }
-
-            if (results.length <= 0) {
-                results = this.items;
-            }
-        } else {
-            results = this.items;
-        }
-
-        this.setState({
-            tools: results
-        });
     }
 
 }
