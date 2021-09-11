@@ -140,13 +140,13 @@ class Nav extends Component<RouteComponentProps, NavState> {
 
                                     <div className={"searchOutputContainer " + (this.state.showSearchOutput ? "show" : "")}>
                                         <div className={"header"}>
-                                            Ergebnisse &nbsp;
                                             <Badge pill bg={"dark"}>
                                                 <Loader payload={[]} variant={"dark"} loaded={!this.state.searchLoading} transparent
                                                         size={10}>
                                                     {this.state.searchResult.length}
                                                 </Loader>
-                                            </Badge>
+                                            </Badge>&nbsp;
+                                            Ergebnisse
                                         </div>
                                         <div className={"output"}>
                                             <Loader payload={[]} variant={"light"} loaded={!this.state.searchLoading} transparent
@@ -162,7 +162,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                                     )
                                                 })}
                                                 {this.state.searchResult.length === 0 && (
-                                                    <Card body className={"result"}>
+                                                    <Card body className={"result none"}>
                                                         Keine Ergebnisse
                                                     </Card>
                                                 )}
