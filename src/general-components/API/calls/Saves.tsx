@@ -8,16 +8,27 @@ import {callAPI} from "../API";
  * @param token Der Token zur Authentifizierung
  * @param toolID ID des Strategietools
  * @param page Nummer der Seite, startet bei 1
+ * @param name Name als Suchparameter
+ * @param description Beschreibung als Suchparameter
  */
-const getSaves = async (userID: number, token: string | null, toolID?: number, page?: number) => {
+const getSaves = async (userID: number, token: string | null, toolID?: number, page?: number, name?: string, description?: string) => {
     let data = new URLSearchParams();
     let searchParams = false;
+
     if (toolID) {
         data.append("tool_id", String(toolID));
         searchParams = true;
     }
     if (page) {
         data.append("page", String(page));
+        searchParams = true;
+    }
+    if (name) {
+        data.append("name", name);
+        searchParams = true;
+    }
+    if (description) {
+        data.append("description", description);
         searchParams = true;
     }
 

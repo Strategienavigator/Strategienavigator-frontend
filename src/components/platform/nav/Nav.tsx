@@ -1,5 +1,5 @@
 import {ChangeEvent, Component} from "react";
-import {Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
+import {Badge, Card, Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
     faBalanceScale,
@@ -17,20 +17,30 @@ import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 import "./nav.scss";
+import {getSaves} from "../../../general-components/API/calls/Saves";
+import {PaginationResource, SaveResource} from "../../../general-components/Datastructures";
+import {Loader} from "../../../general-components/Loader/Loader";
+import {RouteComponentProps, withRouter} from "react-router";
 
 
 interface NavState {
     expanded: boolean
+    showSearchOutput: boolean
+    searchResult: SaveResource[]
+    searchLoading: boolean
 }
 
-export class Nav extends Component<any, NavState> {
+class Nav extends Component<RouteComponentProps, NavState> {
     private timeout: NodeJS.Timeout | undefined;
 
     constructor(props: any) {
         super(props);
 
         this.state = {
-            expanded: false
+            expanded: false,
+            showSearchOutput: false,
+            searchResult: [],
+            searchLoading: false
         }
     }
 
@@ -41,24 +51,64 @@ export class Nav extends Component<any, NavState> {
     }
 
     search = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-        }
+        let value = e.target.value;
 
-        this.timeout = setTimeout(async () => {
-            let value = e.target.value;
-        }, 300);
+        if (value === "") {
+            this.setState({showSearchOutput: false});
+        } else {
+            this.setState({showSearchOutput: true});
+
+            if (this.timeout) {
+                clearTimeout(this.timeout);
+            }
+
+            this.timeout = setTimeout(async () => {
+                this.setState({
+                    searchLoading: true,
+                    searchResult: []
+                });
+
+                let call = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, value, undefined);
+                let callData = call.callData as PaginationResource<SaveResource>;
+
+                this.setState({
+                    searchLoading: false,
+                    searchResult: callData.data
+                });
+            }, 400);
+        }
+    }
+
+    getToolLink(toolID: number, saveID: number) {
+        if (toolID === 1) {
+            return "/utility-analysis/" + saveID;
+        } else if (toolID === 2) {
+            return "/swot-analysis/" + saveID;
+        } else if (toolID === 3) {
+            return "/paarwise-comparison/" + saveID;
+        }
+        return "/";
+    }
+
+    getToolName(toolID: number) {
+        if (toolID === 1) {
+            return "Nutzwertanalyse";
+        } else if (toolID === 2) {
+            return "SWOT Analyse";
+        } else if (toolID === 3) {
+            return "Paarweiser Vergleich";
+        }
     }
 
     render() {
-        const navOnClick = (e: any) => {
+        const navOnClick = () => {
             this.setExpanded(false);
         };
 
         return (
             <Navbar onToggle={(e) => {
                 this.setExpanded(!this.state.expanded)
-            }} bg="light" expanded={this.state.expanded} expand="lg">
+            }} expanded={this.state.expanded} expand="lg">
                 <Container>
                     <Navbar.Brand onClick={navOnClick} as={NavLink} to={"/"} exact className={"nav-link"}>
                         <FontAwesomeIcon icon={faHome}/>&nbsp;
@@ -69,14 +119,58 @@ export class Nav extends Component<any, NavState> {
 
                     <Navbar.Collapse>
                         <BootstrapNav className="m-auto">
-                            <FormControl
-                                type={"search"}
-                                title={"Suchen..."}
-                                placeholder={"Suchen..."}
-                                onChange={(e) => {
-                                    this.search(e);
-                                }}
-                            />
+                            {(Session.isLoggedIn()) && (
+                                <div className={"searchContainer"}>
+                                    <FormControl
+                                        type={"search"}
+                                        title={"Nach Analysen suchen"}
+                                        placeholder={"Nach Analysen suchen..."}
+                                        onFocus={(e) => {
+                                            if (e.target.value !== "") {
+                                                this.setState({showSearchOutput: true});
+                                            }
+                                        }}
+                                        onBlur={() => {
+                                            this.setState({showSearchOutput: false});
+                                        }}
+                                        onChange={(e) => {
+                                            this.search(e);
+                                        }}
+                                    />
+
+                                    <div className={"searchOutputContainer " + (this.state.showSearchOutput ? "show" : "")}>
+                                        <div className={"header"}>
+                                            Ergebnisse &nbsp;
+                                            <Badge pill bg={"dark"}>
+                                                <Loader payload={[]} variant={"dark"} loaded={!this.state.searchLoading} transparent
+                                                        size={10}>
+                                                    {this.state.searchResult.length}
+                                                </Loader>
+                                            </Badge>
+                                        </div>
+                                        <div className={"output"}>
+                                            <Loader payload={[]} variant={"light"} loaded={!this.state.searchLoading} transparent
+                                                    size={100} alignment={"center"}>
+                                                {this.state.searchResult.map((value) => {
+                                                    let link = this.getToolLink(value.tool_id, value.id);
+                                                    return (
+                                                        <Card as={NavLink} to={link} onMouseDown={() => {
+                                                            this.props.history.push(link);
+                                                        }} key={"SAVE" + value.id} body className={"result"}>
+                                                            {value.name} | {this.getToolName(value.tool_id)}
+                                                        </Card>
+                                                    )
+                                                })}
+                                                {this.state.searchResult.length === 0 && (
+                                                    <Card body className={"result"}>
+                                                        Keine Ergebnisse
+                                                    </Card>
+                                                )}
+                                            </Loader>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </BootstrapNav>
                         <BootstrapNav>
                             {(!Session.isLoggedIn()) && (
@@ -141,3 +235,5 @@ export class Nav extends Component<any, NavState> {
     }
 
 }
+
+export default withRouter(Nav);

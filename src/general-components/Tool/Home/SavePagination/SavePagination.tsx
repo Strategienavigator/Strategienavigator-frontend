@@ -95,8 +95,8 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
     }
 
     render(): ReactNode {
-        console.log(this.state);
-        console.log(!this.state.loading);
+        // console.log(this.state);
+        // console.log(!this.state.loading);
         return (
             <div>
                 <Loader payload={[]} loaded={(!this.state.loading)}>
