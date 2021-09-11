@@ -1,5 +1,5 @@
-import {Component} from "react";
-import {Container, Dropdown, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
+import {ChangeEvent, Component} from "react";
+import {Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
     faBalanceScale,
@@ -24,6 +24,7 @@ interface NavState {
 }
 
 export class Nav extends Component<any, NavState> {
+    private timeout: NodeJS.Timeout | undefined;
 
     constructor(props: any) {
         super(props);
@@ -37,6 +38,16 @@ export class Nav extends Component<any, NavState> {
         this.setState({
             expanded: value
         });
+    }
+
+    search = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+
+        this.timeout = setTimeout(async () => {
+            let value = e.target.value;
+        }, 300);
     }
 
     render() {
@@ -53,9 +64,19 @@ export class Nav extends Component<any, NavState> {
                         <FontAwesomeIcon icon={faHome}/>&nbsp;
                         {process.env.REACT_APP_NAME}
                     </Navbar.Brand>
+
                     <Navbar.Toggle/>
+
                     <Navbar.Collapse>
-                        <BootstrapNav className="me-auto">
+                        <BootstrapNav className="m-auto">
+                            <FormControl
+                                type={"search"}
+                                title={"Suchen..."}
+                                placeholder={"Suchen..."}
+                                onChange={(e) => {
+                                    this.search(e);
+                                }}
+                            />
                         </BootstrapNav>
                         <BootstrapNav>
                             {(!Session.isLoggedIn()) && (
