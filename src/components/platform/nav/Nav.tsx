@@ -178,7 +178,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                                 {this.state.searchResult.map((value) => {
                                                     let link = this.getToolLink(value.tool_id, value.id);
                                                     return (
-                                                        <Card as={NavLink} title={"Beschreibung: " + value.description}
+                                                        <Card as={NavLink} title={(value.description !== null) ? "Beschreibung: " + value.description : ""}
                                                               to={link} onMouseDown={() => {
                                                             this.props.history.push(link);
                                                         }} key={"SAVE" + value.id} body className={"result"}>
