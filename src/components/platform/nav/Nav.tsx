@@ -68,7 +68,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                     searchResult: []
                 });
 
-                let call = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, value, undefined);
+                let call = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, value, value);
                 let callData = call.callData as PaginationResource<SaveResource>;
 
                 this.setState({
@@ -138,10 +138,12 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                         }}
                                     />
 
-                                    <div className={"searchOutputContainer " + (this.state.showSearchOutput ? "show" : "")}>
+                                    <div
+                                        className={"searchOutputContainer " + (this.state.showSearchOutput ? "show" : "")}>
                                         <div className={"header"}>
                                             <Badge pill bg={"dark"}>
-                                                <Loader payload={[]} variant={"dark"} loaded={!this.state.searchLoading} transparent
+                                                <Loader payload={[]} variant={"dark"} loaded={!this.state.searchLoading}
+                                                        transparent
                                                         size={10}>
                                                     {this.state.searchResult.length}
                                                 </Loader>
@@ -149,7 +151,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                             Ergebnisse
                                         </div>
                                         <div className={"output"}>
-                                            <Loader payload={[]} variant={"light"} loaded={!this.state.searchLoading} transparent
+                                            <Loader payload={[]} variant={"light"} loaded={!this.state.searchLoading}
+                                                    transparent
                                                     size={100} alignment={"center"}>
                                                 {this.state.searchResult.map((value) => {
                                                     let link = this.getToolLink(value.tool_id, value.id);
