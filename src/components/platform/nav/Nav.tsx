@@ -68,15 +68,36 @@ class Nav extends Component<RouteComponentProps, NavState> {
                     searchResult: []
                 });
 
-                let call = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, value, value);
-                let callData = call.callData as PaginationResource<SaveResource>;
+                let nameCall = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, value, undefined);
+                let nameCallData = nameCall.callData as PaginationResource<SaveResource>;
+
+                let descriptionCall = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, undefined, value);
+                let descriptionCallData = descriptionCall.callData as PaginationResource<SaveResource>;
+
+                let data = nameCallData.data.concat(descriptionCallData.data);
+                let uniqueData = this.removeDuplicateSaves(data);
 
                 this.setState({
                     searchLoading: false,
-                    searchResult: callData.data
+                    searchResult: uniqueData
                 });
             }, 400);
         }
+    }
+
+    removeDuplicateSaves = (saves: SaveResource[]): SaveResource[] => {
+        let newSaves = [];
+        let ids = new Map<number, null>();
+
+        for (const save of saves) {
+            if (!ids.has(save.id)) {
+                newSaves.push(save);
+            }
+
+            ids.set(save.id, null);
+        }
+
+        return newSaves;
     }
 
     getToolLink(toolID: number, saveID: number) {
@@ -157,7 +178,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                                 {this.state.searchResult.map((value) => {
                                                     let link = this.getToolLink(value.tool_id, value.id);
                                                     return (
-                                                        <Card as={NavLink} to={link} onMouseDown={() => {
+                                                        <Card as={NavLink} title={"Beschreibung: " + value.description}
+                                                              to={link} onMouseDown={() => {
                                                             this.props.history.push(link);
                                                         }} key={"SAVE" + value.id} body className={"result"}>
                                                             {value.name} | {this.getToolName(value.tool_id)}
