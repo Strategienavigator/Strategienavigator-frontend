@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Nav} from "./components/platform/nav/Nav";
+import Nav from "./components/platform/nav/Nav";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
