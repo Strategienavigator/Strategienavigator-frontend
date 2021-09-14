@@ -71,6 +71,14 @@ class SWOTAnalysis extends Tool {
                 {
                     id: "factors",
                     values: data
+                },
+                {
+                    id: "alternative-actions",
+                    values: data
+                },
+                {
+                    id: "swot-classify-alternate-actions",
+                    values: data
                 }
             ]
         });

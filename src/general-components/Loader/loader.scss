@@ -12,10 +12,17 @@
 
 // SPINNER
 .loader .spinner {
-  margin-right: 1rem;
   width: 12vh;
   height: 12vh;
   border-width: 0.5vh;
+}
+
+// TEXT
+.loader .text:empty {
+  margin-left: 0 !important;
+}
+.loader .text:empty {
+  margin-left: 1rem;
 }
 
 // ALIGNMENTS
