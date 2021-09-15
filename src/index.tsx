@@ -68,7 +68,20 @@ const getRouterSwitch = () => {
 
             <Route path={"/error/:code"} component={ErrorPages}/>
 
-            <Route path={"/"} component={Home}/>
+            <Route render={(props) => {
+                let match = Object.assign(
+                    props.match, {
+                        params: {
+                            code: String(404)
+                        }
+                    }
+                );
+                return <ErrorPages
+                    history={props.history}
+                    location={props.location}
+                    match={match}
+                />;
+            }}/>
         </Switch>
     );
 }
@@ -142,10 +155,7 @@ const manageLoading = async () => {
         <React.StrictMode>
             <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
         </React.StrictMode>,
-        document.getElementById('root'),
-        () => {
-            return true;
-        }
+        document.getElementById('root')
     );
     await Session.checkLogin();
 }
@@ -161,7 +171,7 @@ const buildApp = async () => {
 }
 
 buildApp().then(() => {
-    console.log("app build");
+    // do absolutely nothing
 });
 
 // If you want to start measuring performance in your app, pass a function
