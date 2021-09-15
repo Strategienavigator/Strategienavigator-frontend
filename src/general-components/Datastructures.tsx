@@ -44,19 +44,19 @@ export type PaginationResource<D> = {
         prev: string | null
         next: string | null
     }
-    meta : {
+    meta: {
         current_page: number
         from: number
-        last_page:number
-        links:Array<{
-            url:string|null
-            label:string|null
-            active:boolean
+        last_page: number
+        links: Array<{
+            url: string | null
+            label: string | null
+            active: boolean
         }>
         path: string
         per_page: number
         to: number
-        total:number
+        total: number
     }
 }
 

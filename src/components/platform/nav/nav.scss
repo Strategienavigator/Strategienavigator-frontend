@@ -65,6 +65,7 @@ nav .dropdown-menu .dropdown-item:active * {
       .result.active, .result.none {
         background-color: darken($navBGColor, 2%);
       }
+
       .result.none {
         cursor: auto !important;
       }

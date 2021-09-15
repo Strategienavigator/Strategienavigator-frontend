@@ -76,7 +76,7 @@ class User {
         return this.owned_saves.length;
     }
 
-    getSharedSavesAmount():number {
+    getSharedSavesAmount(): number {
         return this.shared_saves.length;
     }
 }

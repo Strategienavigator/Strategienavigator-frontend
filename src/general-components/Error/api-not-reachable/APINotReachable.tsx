@@ -10,7 +10,8 @@ export class APINotReachable extends Component<any, any> {
             <div>
                 <h2>Ups! Unsere Datenbank ist aktuell nicht erreichbar...</h2>
 
-                <p>Statische Inhalte können Sie weiterhin abrufen. Wir entschuldigen uns für die Unnahnnehmlichkeiten.</p>
+                <p>Statische Inhalte können Sie weiterhin abrufen. Wir entschuldigen uns für die
+                    Unnahnnehmlichkeiten.</p>
             </div>
         );
     }
