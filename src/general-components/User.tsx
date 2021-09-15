@@ -1,4 +1,4 @@
-import {updateData} from "./API/calls/User";
+import {UpdateData} from "./API/calls/User";
 
 
 class User {
@@ -25,7 +25,7 @@ class User {
         return new User(data.id, data.username, data.email, data.anonym, data.owned_saves, data.shared_saves, data.created_at);
     }
 
-    update = (data: updateData) => {
+    update = (data: UpdateData) => {
         if (data.username !== undefined)
             this.setUsername(data.username);
         if (data.email !== undefined)

@@ -44,20 +44,24 @@ export type PaginationResource<D> = {
         prev: string | null
         next: string | null
     }
-    meta : {
+    meta: {
         current_page: number
         from: number
-        last_page:number
-        links:Array<{
-            url:string|null
-            label:string|null
-            active:boolean
+        last_page: number
+        links: Array<{
+            url: string | null
+            label: string | null
+            active: boolean
         }>
         path: string
         per_page: number
         to: number
-        total:number
+        total: number
     }
+}
+
+export type DefaultResponse<D> = {
+    data:D
 }
 
 export type UserResource = {
@@ -71,7 +75,27 @@ export type UserResource = {
     invitations: Array<SharedSaveUserResource>
 }
 
-export type ToolRescource = {
+
+export type TokenCreatedResource = {
+    /**
+     * Type des Tokens, normalerweise "Bearer"
+     */
+    token_type:string
+    /**
+     * Zeit in sekunden, nachdem der Token abläuft
+     */
+    expires_in: number
+    /**
+     * Der Access Token
+     */
+    access_token: string
+    /**
+     * Der Refresh Token
+     */
+    refresh_token: string
+}
+
+export type ToolResource = {
     id: number
     name: string
 }
@@ -89,4 +113,8 @@ export type SharedSaveResource = {
 export type SharedSaveUserResource = {
     save_id: number
     permission: number
+}
+
+export type AvailabilityCheckResource = {
+    available: boolean
 }

@@ -1,4 +1,5 @@
 import {callAPI} from "../API";
+import {DefaultResponse, PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
 
 
 /**
@@ -32,7 +33,7 @@ const getSaves = async (userID: number, token: string | null, toolID?: number, p
         searchParams = true;
     }
 
-    return await callAPI("api/users/" + userID + "/saves", "GET", searchParams ? data : undefined, (token !== null) ? token : undefined);
+    return await callAPI<PaginationResource<SimpleSaveResource>>("api/users/" + userID + "/saves", "GET", searchParams ? data : undefined, (token !== null) ? token : undefined);
 }
 
 /**
@@ -42,7 +43,7 @@ const getSaves = async (userID: number, token: string | null, toolID?: number, p
  * @param token Der Token zur Authentifizierung
  */
 const getSave = async (saveID: number, token: string | null) => {
-    return await callAPI("api/saves/" + saveID, "GET", undefined, (token !== null) ? token : undefined);
+    return await callAPI<DefaultResponse<SaveResource>>("api/saves/" + saveID, "GET", undefined, (token !== null) ? token : undefined);
 }
 
 /**

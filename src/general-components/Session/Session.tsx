@@ -3,6 +3,7 @@ import {callAPI, CallInterface} from "../API/API";
 import {Token} from "./token/Token";
 import {AuthToken} from "./token/AuthToken";
 import {RefreshToken} from "./token/RefreshToken";
+import {DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
 
 
 class Session {
@@ -49,7 +50,7 @@ class Session {
         let validToken = Session.token.getValidTokenBreakdown();
         if (validToken !== null) {
             let token = Session.token.getToken() as string;
-            let call = await callAPI("api/users/" + validToken.userId, "GET", undefined, token);
+            let call = await callAPI<DefaultResponse<UserResource>>("api/users/" + validToken.userId, "GET", undefined, token);
 
             if (call.success) {
                 let user = User.from(call.callData.data);
@@ -71,9 +72,9 @@ class Session {
             formData.append("client_secret", process.env.REACT_APP_CLIENT_SECRET);
             formData.append("scope", "");
 
-            let call = await callAPI("oauth/token", "POST", formData);
+            let call = await callAPI<TokenCreatedResource>("oauth/token", "POST", formData);
             if (call.success) {
-                let data: any = call.callData;
+                let data = call.callData;
                 Session.updateTokens(data.access_token, data.refresh_token);
                 return await Session.checkLogin();
             } else {
@@ -92,17 +93,17 @@ class Session {
         formData.append('password', password);
         formData.append('scope', '');
 
-        let call = await callAPI('oauth/token', 'POST', formData);
+        let call = await callAPI<TokenCreatedResource>('oauth/token', 'POST', formData);
 
         if (call.success) {
-            let data: any = call.callData;
+            let data = call.callData;
             Session.updateTokens(data.access_token, (rememberMe) ? data.refresh_token : undefined);
             return await Session.checkLogin();
         }
         return null;
     }
 
-    static register = async (email: string, username: string, password: string): Promise<CallInterface> => {
+    static register = async (email: string, username: string, password: string): Promise<CallInterface<object>> => {
         let formData: FormData = new FormData();
         formData.append('email', email);
         formData.append('username', username);

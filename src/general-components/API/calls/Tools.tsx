@@ -1,4 +1,5 @@
 import {callAPI} from "../API";
+import {DefaultResponse, PaginationResource, ToolResource} from "../../Datastructures";
 
 
 /**
@@ -7,7 +8,7 @@ import {callAPI} from "../API";
  * @param token Der Token zur Authentifizierung
  */
 const getTools = async (token: string | null) => {
-    return await callAPI("api/tools", "GET", undefined, (token !== null) ? token : undefined);
+    return await callAPI<PaginationResource<ToolResource>>("api/tools", "GET", undefined, (token !== null) ? token : undefined);
 }
 
 /**
@@ -17,7 +18,7 @@ const getTools = async (token: string | null) => {
  * @param token Der Token zur Authentifizierung
  */
 const getTool = async (toolID: number, token: string | null) => {
-    return await callAPI("api/tools/" + toolID, "GET", undefined, (token !== null) ? token : undefined);
+    return await callAPI<DefaultResponse<ToolResource>>("api/tools/" + toolID, "GET", undefined, (token !== null) ? token : undefined);
 }
 
 export {
