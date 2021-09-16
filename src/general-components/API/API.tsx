@@ -1,5 +1,5 @@
-export interface CallInterface {
-    callData: any
+export interface CallInterface<D> {
+    callData: D
     success: boolean
     status: number
     response: Response
@@ -19,7 +19,7 @@ declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
  * @param data Inhalt des Requests
  * @param token Authentifizierungstoken
  */
-const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | URLSearchParams, token?: string) => {
+const callAPI = async <D extends object>(URL: string, method: Methods, data?: FormData | Blob | URLSearchParams, token?: string) => {
     let callURL = process.env.REACT_APP_API + URL;
 
     // METHOD
@@ -62,7 +62,7 @@ const callAPI = async (URL: string, method: Methods, data?: FormData | Blob | UR
     }
 
     // BUILD RESPONSE
-    let response: CallInterface = {
+    let response: CallInterface<D> = {
         callData: callData,
         success: (call.status >= 200 && call.status < 300),
         status: call.status,

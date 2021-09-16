@@ -1,4 +1,5 @@
 import {callAPI} from "../API";
+import {DefaultResponse, PaginationResource, SharedSaveResource, UserResource} from "../../Datastructures";
 
 
 /**
@@ -8,7 +9,7 @@ import {callAPI} from "../API";
  * @param token Der Token zur Authentifizierung
  */
 const getContributors = async (saveID: number, token: string | null) => {
-    return await callAPI("api/saves/" + saveID + "/contributors", "GET", undefined, (token !== null ? token : undefined))
+    return await callAPI<PaginationResource<SharedSaveResource>>("api/saves/" + saveID + "/contributors", "GET", undefined, (token !== null ? token : undefined))
 }
 
 /**
@@ -18,7 +19,7 @@ const getContributors = async (saveID: number, token: string | null) => {
  * @param token Der Token zur Authentifizierung
  */
 const showContributions = async (userID: number, token: string | null) => {
-    return await callAPI("api/users/" + userID + "/constributions", "GET", undefined, (token !== null ? token : undefined));
+    return await callAPI<PaginationResource<SharedSaveResource>>("api/users/" + userID + "/contributions", "GET", undefined, (token !== null ? token : undefined));
 }
 
 /**
@@ -28,7 +29,7 @@ const showContributions = async (userID: number, token: string | null) => {
  * @param token
  */
 const showContribution = async (contributionID: number, token: string | null) => {
-    return await callAPI("api/contribution/" + contributionID, "GET", undefined, (token !== null ? token : undefined))
+    return await callAPI<DefaultResponse<SharedSaveResource>>("api/contribution/" + contributionID, "GET", undefined, (token !== null ? token : undefined))
 }
 
 interface CreateContribution {

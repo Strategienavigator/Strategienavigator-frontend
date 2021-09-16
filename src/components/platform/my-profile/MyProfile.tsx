@@ -6,7 +6,7 @@ import {faArrowLeft, faPencilAlt, faSave, faTrash, faUser} from "@fortawesome/fr
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {deleteUser, updateData, updateUser} from "../../../general-components/API/calls/User";
+import {deleteUser, UpdateData, updateUser} from "../../../general-components/API/calls/User";
 import {reload_app} from "../../../index";
 import {withRouter} from "react-router";
 import {Messages} from "../../../general-components/Messages/Messages";
@@ -100,7 +100,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         let current_password: string = extractFromForm(e, "current_password") as string;
         let new_password: string = extractFromForm(e, "new_password") as string;
 
-        let data: updateData = {
+        let data: UpdateData = {
             current_password: current_password,
             email: email,
             username: username

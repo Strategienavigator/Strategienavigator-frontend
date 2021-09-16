@@ -18,7 +18,7 @@ import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 import "./nav.scss";
 import {getSaves} from "../../../general-components/API/calls/Saves";
-import {PaginationResource, SaveResource} from "../../../general-components/Datastructures";
+import {PaginationResource, SaveResource, SimpleSaveResource} from "../../../general-components/Datastructures";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {RouteComponentProps, withRouter} from "react-router";
 
@@ -26,7 +26,7 @@ import {RouteComponentProps, withRouter} from "react-router";
 interface NavState {
     expanded: boolean
     showSearchOutput: boolean
-    searchResult: SaveResource[]
+    searchResult: SimpleSaveResource[]
     searchLoading: boolean
 }
 
@@ -69,7 +69,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                 });
 
                 let searchCall = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, value, value);
-                let searchCallData = searchCall.callData as PaginationResource<SaveResource>;
+                let searchCallData = searchCall.callData;
 
                 this.setState({
                     searchLoading: false,
@@ -79,7 +79,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
         }
     }
 
-    removeDuplicateSaves = (saves: SaveResource[]): SaveResource[] => {
+    removeDuplicateSaves = (saves: SimpleSaveResource[]): SimpleSaveResource[] => {
         let newSaves = [];
         let ids = new Map<number, null>();
 
