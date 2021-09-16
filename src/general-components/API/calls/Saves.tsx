@@ -11,8 +11,9 @@ import {DefaultResponse, PaginationResource, SaveResource, SimpleSaveResource} f
  * @param page Nummer der Seite, startet bei 1
  * @param name Name als Suchparameter
  * @param description Beschreibung als Suchparameter
+ * @param searchBoth Ob in dem Speicherstand der Suchwert von dem Namen und der Beschreibung enthalten sein muss oder nur eins der beiden
  */
-const getSaves = async (userID: number, token: string | null, toolID?: number, page?: number, name?: string, description?: string) => {
+const getSaves = async (userID: number, token: string | null, toolID?: number, page?: number, name?: string, description?: string, searchBoth?: boolean) => {
     let data = new URLSearchParams();
     let searchParams = false;
 
@@ -30,6 +31,11 @@ const getSaves = async (userID: number, token: string | null, toolID?: number, p
     }
     if (description) {
         data.append("description", description);
+        searchParams = true;
+    }
+
+    if (searchBoth) {
+        data.append("search_both", searchBoth ? "1" : "0");
         searchParams = true;
     }
 
