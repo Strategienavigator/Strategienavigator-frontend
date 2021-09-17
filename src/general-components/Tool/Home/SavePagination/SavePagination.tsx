@@ -29,20 +29,20 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
     constructor(props: Readonly<SavePaginationProps> | SavePaginationProps, context?: any) {
         super(props, context);
         this.state = {
-            page : 1,
+            page: 1,
             saves: new Array<Array<SimpleSaveResource>>(),
             pageCount: 1,
-            loading:false
+            loading: false
         }
     }
 
 
-    shouldComponentUpdate (nextProps: Readonly<SavePaginationProps>, nextState: Readonly<SavePaginationState>, nextContext: any): boolean{
+    shouldComponentUpdate(nextProps: Readonly<SavePaginationProps>, nextState: Readonly<SavePaginationState>, nextContext: any): boolean {
         return true;
         // return nextState.page !== this.state.page || this.checkIfSavesDiffer(nextState.saves[nextState.page], this.state.saves[nextState.page]);
     }
 
-    checkIfSavesDiffer(oldSaves: Array<SimpleSaveResource>, newSaves: Array<SimpleSaveResource>): boolean{
+    checkIfSavesDiffer(oldSaves: Array<SimpleSaveResource>, newSaves: Array<SimpleSaveResource>): boolean {
         return oldSaves !== newSaves;
     }
 
@@ -55,36 +55,38 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
 
     };
 
-    loadToolSaves = async (page:number = 1) => {
+    loadToolSaves = async (page: number = 1) => {
         if (Session.isLoggedIn()) {
             let userID = Session.currentUser?.getID() as number;
 
             this.setState({
-                loading:true
+                loading: true
             });
             let call = await getSaves(userID, Session.getToken(), this.props.tool.getID(), page);
-            if (call.success && call.callData.data.length > 0) {
-                let saves = call.callData.data;
-                this.updateSaves(call.callData.meta.current_page, saves);
+            if (call.success) {
+                if(call.callData.data.length > 0){
+                    let saves = call.callData.data;
+                    this.updateSaves(call.callData.meta.current_page, saves);
+                }
                 this.setState({
                     pageCount: call.callData.meta.last_page,
-                    loading:false
+                    loading: false
                 })
             }
         }
     };
 
 
-    private updateSaves(page:number, newSaves:Array<SimpleSaveResource>){
+    private updateSaves(page: number, newSaves: Array<SimpleSaveResource>) {
         this.setState((s) => {
-            let newState = {saves:s.saves.slice()};
+            let newState = {saves: s.saves.slice()};
             newState.saves[page] = newSaves;
             return newState;
         });
     }
 
-    private loadSavesIfNeeded(page:number = 1){
-        if(this.state.saves[page] === null || this.state.saves[page] === undefined){
+    private loadSavesIfNeeded(page: number = 1) {
+        if (this.state.saves[page] === null || this.state.saves[page] === undefined) {
             this.loadToolSaves(page);
         }
     }
@@ -102,7 +104,7 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                 <Loader payload={[]} loaded={(!this.state.loading)}>
 
                     <ListGroup>
-                        {this.state.saves[this.state.page]?.length <= 0 && (
+                        {(this.state.saves[this.state.page]?.length <= 0 || this.state.saves[this.state.page] === undefined) && (
                             <ListGroupItem>Sie haben aktuell keine Speicherstände.</ListGroupItem>
                         )}
 
@@ -112,7 +114,11 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                                 <ListGroupItem as={Link} to={this.props.tool?.getLink() + "/" + save.id}
                                                key={save.id}
                                                action>
-                                    {save.name}
+                                    <div>
+                                        <strong>{save.name}</strong><br/>
+                                        <span className={"save-desc text-muted"}>{save.description}</span>
+                                    </div>
+
                                 </ListGroupItem>
                             );
                         })}
@@ -120,7 +126,11 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                     </ListGroup>
 
                 </Loader>
-                <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback} currentPage={this.state.page} disabled={this.state.loading}/>
+                <div className={"mt-3"}>
+                    <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
+                                      currentPage={this.state.page} disabled={this.state.loading}/>
+                </div>
+
             </div>
         );
     }

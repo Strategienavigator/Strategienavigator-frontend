@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, ComponentPropsWithoutRef} from 'react';
 import {PageItem, Pagination} from 'react-bootstrap';
 
 import './paginationFooter.scss'
