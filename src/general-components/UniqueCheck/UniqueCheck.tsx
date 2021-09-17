@@ -9,10 +9,11 @@ import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import {Loader} from "../Loader/Loader";
 
 import "./unique-check.scss";
+import {AvailabilityCheckResource, DefaultResponse} from "../Datastructures";
 
 
 export interface UniqueCheckProps {
-    callback?: ((input: string) => Promise<CallInterface>)
+    callback?: ((input: string) => Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>>>)
     failMessage?: string
     successMessage?: string
 }

@@ -31,6 +31,7 @@ export type SimpleSaveResource = {
     last_locked: Date
     owner_id: number
     tool_id: number
+    description: string
     // TODO: Überprüfen was vom Backend geliefert wird
     contributors: Array<number>
 }
@@ -60,6 +61,10 @@ export type PaginationResource<D> = {
     }
 }
 
+export type DefaultResponse<D> = {
+    data:D
+}
+
 export type UserResource = {
     id: number
     username: string
@@ -71,7 +76,27 @@ export type UserResource = {
     invitations: Array<SharedSaveUserResource>
 }
 
-export type ToolRescource = {
+
+export type TokenCreatedResource = {
+    /**
+     * Type des Tokens, normalerweise "Bearer"
+     */
+    token_type:string
+    /**
+     * Zeit in sekunden, nachdem der Token abläuft
+     */
+    expires_in: number
+    /**
+     * Der Access Token
+     */
+    access_token: string
+    /**
+     * Der Refresh Token
+     */
+    refresh_token: string
+}
+
+export type ToolResource = {
     id: number
     name: string
 }
@@ -89,4 +114,8 @@ export type SharedSaveResource = {
 export type SharedSaveUserResource = {
     save_id: number
     permission: number
+}
+
+export type AvailabilityCheckResource = {
+    available: boolean
 }

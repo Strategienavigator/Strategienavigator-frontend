@@ -1,4 +1,5 @@
 import {callAPI} from "../API";
+import {DefaultResponse, InvitationLinkResource, PaginationResource} from "../../Datastructures";
 
 
 /**
@@ -8,7 +9,7 @@ import {callAPI} from "../API";
  * @param token Der Token zur Authentifizierung
  */
 const showInvitationLinks = async (saveID: number, token: string | null) => {
-    return await callAPI("api/saves/" + saveID + "/invitation-link", "GET", undefined, (token !== null) ? token : undefined)
+    return await callAPI<PaginationResource<InvitationLinkResource>>("api/saves/" + saveID + "/invitation-link", "GET", undefined, (token !== null) ? token : undefined)
 }
 
 /**
@@ -18,10 +19,10 @@ const showInvitationLinks = async (saveID: number, token: string | null) => {
  * @param token Der Token zur Authentifizierung
  */
 const showInvitationLink = async (invitationToken: string, token: string | null) => {
-    return await callAPI("api/invitation-link/" + invitationToken, "GET", undefined, (token !== null) ? token : undefined)
+    return await callAPI<DefaultResponse<InvitationLinkResource>>("api/invitation-link/" + invitationToken, "GET", undefined, (token !== null) ? token : undefined)
 }
 
-export interface createInviteInterface {
+export interface CreateInviteInterface {
     permission: number
     expiry_date: Date
 }
@@ -32,7 +33,7 @@ export interface createInviteInterface {
  * @param data Daten der neuen Invitation
  * @param token Der Token zur Authentifizierung
  */
-const createInvitationLink = async (data: createInviteInterface, token: string | null) => {
+const createInvitationLink = async (data: CreateInviteInterface, token: string | null) => {
     let apiData = new FormData();
     apiData.append("permission", String(data.permission))
     apiData.append("expiry_date", String(data.expiry_date));
@@ -47,7 +48,7 @@ const createInvitationLink = async (data: createInviteInterface, token: string |
  * @param invitationToken Token der Invitation (Hex-Code)
  * @param token Der Token zur Authentifizierung
  */
-const updateInvitationLink = async (data: createInviteInterface, invitationToken: string, token: string | null) => {
+const updateInvitationLink = async (data: CreateInviteInterface, invitationToken: string, token: string | null) => {
     let apiData = new FormData();
     apiData.append("permission", String(data.permission));
     apiData.append("expiry_date", String(data.expiry_date));

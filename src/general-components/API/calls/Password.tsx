@@ -1,4 +1,5 @@
 import {callAPI} from "../API";
+import {DefaultResponse, PasswordResetResource} from "../../Datastructures";
 
 
 /**
@@ -7,7 +8,7 @@ import {callAPI} from "../API";
  * @param passwordResetToken Token des Password-resets
  */
 const showPasswordReset = async (passwordResetToken: string) => {
-    return await callAPI("api/password/" + passwordResetToken, "GET");
+    return await callAPI<DefaultResponse<PasswordResetResource>>("api/password/" + passwordResetToken, "GET");
 }
 
 interface ForgotPassword {

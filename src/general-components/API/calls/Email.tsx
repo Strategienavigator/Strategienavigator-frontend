@@ -1,4 +1,5 @@
 import {callAPI} from "../API";
+import {AvailabilityCheckResource, DefaultResponse} from "../../Datastructures";
 
 
 /**
@@ -14,7 +15,7 @@ const checkEmail = async (input: string) => {
     let data = new FormData();
     data.append("email", input);
 
-    return await callAPI("api/checkEmail", "POST", data);
+    return await callAPI<DefaultResponse<AvailabilityCheckResource>>("api/checkEmail", "POST", data);
 }
 
 export {

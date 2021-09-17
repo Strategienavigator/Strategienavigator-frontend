@@ -1,7 +1,7 @@
 import {callAPI} from "../API";
 
 
-export type updateData = {
+export type UpdateData = {
     username?: string
     password?: string
     email?: string
@@ -14,7 +14,7 @@ export type updateData = {
  * @param userID Die ID des Benutzers
  * @param token Der Token zur Authentifizierung
  */
-const updateUser = async (userID: number, data: updateData, token: string | null) => {
+const updateUser = async (userID: number, data: UpdateData, token: string | null) => {
     let formData = new FormData();
 
     if (data.username !== undefined)
