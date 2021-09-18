@@ -1,0 +1,38 @@
+.errorpage {
+  text-align: center;
+  color: #2c2c2c;
+  max-width: 600px;
+  margin: auto;
+
+  .header {
+    font-size: 2.5rem;
+    margin: 1rem 0;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    margin: 1rem 0;
+  }
+
+  p, h4 {
+    font-size: 1.1rem;
+  }
+
+  img {
+    width: 300px;
+    max-width: 75%;
+    margin: 2rem auto;
+  }
+
+  .error {
+    padding: 0.75rem 0;
+  }
+
+  .button button {
+    padding: 0.6rem 1.75rem;
+  }
+
+}
