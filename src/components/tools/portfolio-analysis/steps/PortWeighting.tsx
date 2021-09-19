@@ -21,7 +21,11 @@ class PortWeighting extends FormComponent<PortWeightingValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    buildPreviousValues = async (): Promise<void> => {
+
+    }
+
+    rebuildValues = async (values: PortWeightingValues) => {
 
     }
 

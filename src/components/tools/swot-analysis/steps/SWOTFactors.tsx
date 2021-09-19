@@ -1,4 +1,8 @@
-import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
+import {
+    FormComponent,
+    FormComponentProps,
+    ResetType
+} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
@@ -37,7 +41,10 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
         }
     }
 
-    prepareValues = async () => {
+    rebuildValues = async (values: SwotFactorsValues) => {
+    }
+
+    buildPreviousValues = async () => {
 
     }
 

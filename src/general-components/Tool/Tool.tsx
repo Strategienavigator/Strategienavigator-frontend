@@ -1,5 +1,5 @@
 import React, {Component, FormEvent, ReactElement, ReactNode, RefObject} from "react";
-import {RouteComponentProps, StaticContext} from "react-router";
+import {matchPath, RouteComponentProps, StaticContext} from "react-router";
 import {Route, Switch} from "react-router-dom";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {ToolHome, ToolHomeInfo} from "./Home/ToolHome";
@@ -24,7 +24,7 @@ interface ToolState {
     showInputModal: boolean
     isSaving: boolean
     viewValidationError?: ToolViewValidation
-    view?: SaveResource
+    view?: SaveResource<any>
     nameError?: {
         empty?: boolean
     }
@@ -33,22 +33,30 @@ interface ToolState {
     }
 }
 
-abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
+abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolState> {
+    // TOOL META DATA
+    public isNew: boolean = false;
+    public isView: boolean = false;
+    public isHome: boolean = false;
+    private readonly homePath?;
+    private readonly newPath?;
+    private readonly viewPath?;
+
     // TOOL INFO
     private toolName: string = "";
     private toolIcon?: IconDefinition;
     private toolID?: number;
-    private maintenance = false;
     private readonly toolLink: string = "";
+    private maintenance = false;
 
     // TOOL HOME
     private toolHomeRef?: RefObject<ToolHome>
 
     // STEP COMPONENT
-    private steps: Array<StepProp> = [];
+    private steps: Array<StepProp<any>> = [];
 
     // CURRENT SAVE
-    private currentSave?: SaveResource;
+    private currentSave?: SaveResource<any>;
     private currentSaveID?: number;
     private currentSaveName?: string;
     private currentSaveDescription?: string;
@@ -65,12 +73,10 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
         this.stepComponent = React.createRef<StepComponent>();
         this.toolLink = this.props.match.path;
 
-        this.props.history.listen(() => {
-            this.currentSaveID = undefined;
-            this.currentSaveName = undefined;
-            this.currentSaveDescription = undefined;
-            this.currentSave = undefined;
-        });
+        // setup route paths
+        this.homePath = this.getLink();
+        this.newPath = this.getLink() + "/new";
+        this.viewPath = this.getLink() + "/:id";
     }
 
     public getLink(): string {
@@ -99,8 +105,6 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
     }
 
     public render = () => {
-        let ID = this.getPathParam() as number;
-
         if (this.maintenance) {
             return (
                 <Card body>
@@ -125,21 +129,32 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
                     ) : this.getStepComponent()}
                 </Route>
 
-                <Route exact path={this.getLink() + "/:id"}>
-                    <Loader payload={[() => this.validateViewID(ID)]} transparent
-                            alignment={"center"} fullscreen animate={false}>
-                        {(this.state.viewValidationError === undefined) ? this.renderView(this.state.view as SaveResource) : (
-                            <Card body>
-                                {(this.state.viewValidationError.isNotOwn) && (
-                                    <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
+                <Route
+                    exact
+                    render={(props) => {
+                        let ID = parseInt(props.match.params.id as string);
+
+                        return (
+                            <Loader payload={[() => this.validateViewID(ID)]} transparent
+                                    alignment={"center"} fullscreen animate={false}>
+                                {(this.state.viewValidationError === undefined) ? (
+                                    this.renderView(this.state.view as SaveResource<any>)
+                                ) : (
+                                    <Card body>
+                                        {(this.state.viewValidationError.isNotOwn) && (
+                                            <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
+                                        )}
+                                        {(this.state.viewValidationError.isOtherTool) && (
+                                            <>Bei dieser Analyse handelt es sich nicht um
+                                                eine <b>{this.toolName}</b>!</>
+                                        )}
+                                    </Card>
                                 )}
-                                {(this.state.viewValidationError.isOtherTool) && (
-                                    <>Bei dieser Analyse handelt es sich nicht um eine <b>{this.toolName}</b>!</>
-                                )}
-                            </Card>
-                        )}
-                    </Loader>
-                </Route>
+                            </Loader>
+                        );
+                    }}
+                    path={this.getLink() + "/:id"}
+                />
 
                 {(this.state.showInputModal) && this.getNameAndDescInputModal()}
 
@@ -148,6 +163,19 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
                 )}
             </Switch>
         );
+    }
+
+    componentDidMount() {
+        this.checkForPage(this.props.location.pathname);
+
+        this.props.history.listen((location) => {
+            this.currentSaveID = undefined;
+            this.currentSaveName = undefined;
+            this.currentSaveDescription = undefined;
+            this.currentSave = undefined;
+
+            this.checkForPage(location.pathname);
+        });
     }
 
     public switchPage(page: string) {
@@ -177,7 +205,7 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
         this.setState({
             isSaving: false
         });
-        return call.success;
+        return (call !== null && call.success);
     }
 
     protected getStepComponent(props?: StepComponentProps) {
@@ -186,7 +214,7 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
                 onSave={async (data, forms) => {
                     return await this.save(data, forms);
                 }}
-                header={this.getToolName()}
+                key={"stepComponent"}
                 ref={this.stepComponent}
                 steps={this.steps}
                 tool={this}
@@ -195,8 +223,19 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
         );
     }
 
-    protected addStep(step: StepProp) {
+    protected addStep<E>(step: StepProp<E>) {
         this.steps.push(step);
+    }
+
+    protected setValues(id: string, values: any): boolean {
+        for (let i = 0; i < this.steps.length; i++) {
+            let step = this.steps[i];
+            if (step.id.toLowerCase() === id.toLowerCase()) {
+                step.values = values;
+                return true;
+            }
+        }
+        return false;
     }
 
     protected hasCurrentTool(): boolean {
@@ -213,7 +252,7 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
 
     protected abstract renderTutorial(): ReactNode;
 
-    protected abstract renderView(tool: SaveResource): ReactNode;
+    protected abstract renderView(tool: SaveResource<any>): ReactNode;
 
     protected abstract renderNew(): ReactNode;
 
@@ -225,55 +264,57 @@ abstract class Tool extends Component<RouteComponentProps<any>, ToolState> {
         this.toolIcon = toolIcon;
     }
 
-    private getPathParam = (): number | string => {
-        let ID: string | number = this.props.history.location.pathname.replace(this.getLink() + "/", "");
+    private checkForPage = (location: string) => {
+        this.isNew = false;
+        this.isHome = false;
+        this.isView = false;
 
-        if (!isNaN(parseInt(ID))) {
-            ID = parseInt(ID);
-            this.currentSaveID = ID;
-            return ID;
-        } else {
-            if (ID !== "new" && this.getLink() !== ID) {
-                this.props.history.push("/");
-            }
+        if (matchPath(location, {path: this.newPath, exact: true})) {
+            this.isNew = true;
+        } else if (matchPath(location, {path: this.viewPath, exact: true})) {
+            this.isView = true;
+        } else if (matchPath(location, {path: this.homePath, exact: true})) {
+            this.isHome = true;
         }
-        return ID;
     }
 
     private validateViewID = async (ID: number) => {
         let call = await getSave(ID, Session.getToken());
-        let data = call.callData as SaveResource;
+        if (call) {
+            let data = call.callData as SaveResource<any>;
+            data.data = JSON.parse(data.data);
 
-        let isNotOwn, isOtherTool;
+            let isNotOwn, isOtherTool;
 
-        if (call.success) {
-            if (data.tool_id === this.toolID) {
-                this.currentSave = data;
-                this.currentSaveName = data.name;
-                this.currentSaveDescription = data.description;
-                this.currentSaveID = data.id;
+            if (call.success) {
+                if (data.tool_id === this.toolID) {
+                    this.currentSave = data;
+                    this.currentSaveName = data.name;
+                    this.currentSaveDescription = data.description;
+                    this.currentSaveID = data.id;
+                } else {
+                    this.currentSaveName = data.name;
+                    call.success = false;
+                    isOtherTool = true;
+                }
             } else {
-                this.currentSaveName = data.name;
-                call.success = false;
-                isOtherTool = true;
+                isNotOwn = true;
             }
-        } else {
-            isNotOwn = true;
+
+            let validation: ToolViewValidation = {
+                isNotOwn: isNotOwn,
+                isOtherTool: isOtherTool
+            };
+
+            if (!isNotOwn && !isOtherTool) {
+                validation = undefined;
+            }
+
+            this.setState({
+                view: data,
+                viewValidationError: validation
+            });
         }
-
-        let validation: ToolViewValidation = {
-            isNotOwn: isNotOwn,
-            isOtherTool: isOtherTool
-        };
-
-        if (!isNotOwn && !isOtherTool) {
-            validation = undefined;
-        }
-
-        this.setState({
-            view: data,
-            viewValidationError: validation
-        });
     }
 
     private getNameAndDescInputModal = () => {

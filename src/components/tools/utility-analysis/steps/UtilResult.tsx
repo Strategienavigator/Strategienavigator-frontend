@@ -21,7 +21,11 @@ class UtilResult extends FormComponent<UtilResultValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: UtilResultValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

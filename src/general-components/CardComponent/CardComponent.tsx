@@ -133,92 +133,104 @@ export interface CardComponentProps {
     placeholder?: CardComponentFieldPlaceholder
 }
 
-class CardComponent extends Component<CardComponentProps, any> {
-    private cards = new Map<number, ReactElement<CardProps, any>>();
-    private cardRefs = new Map<number, RefObject<Card>>();
-    private index: number = 0;
+export type CardsInterface = Map<number, {
+    card: ReactElement<CardProps, any>,
+    ref: RefObject<Card>
+}>;
+
+interface CardComponentState {
+    cards: CardsInterface,
+    index: number
+}
+
+class CardComponent extends Component<CardComponentProps, CardComponentState> {
 
     constructor(props: CardComponentProps | Readonly<CardComponentProps>) {
         super(props);
 
-        if (this.props.values) {
-            for (const value of this.props.values) {
-                let designation = value.name;
-                let desc = value.desc;
-
-                this.addCard(designation, desc);
-            }
-        } else {
-            for (let i = 0; i < this.props.min; i++) {
-                this.addCard();
-            }
+        this.state = {
+            index: 1,
+            cards: new Map<number, {
+                card: ReactElement<CardProps, any>,
+                ref: RefObject<Card>
+            }>()
         }
     }
 
-    getValues = () => {
-        return this.cardRefs;
+    getCards = () => {
+        return this.state.cards;
     }
 
-    componentDidUpdate(prevProps: Readonly<CardComponentProps>, prevState: Readonly<any>): any {
-        if (prevProps.values === undefined && this.props.values !== undefined) {
-            this.cards.clear();
-
-            for (const value of this.props.values) {
-                let designation = value.name;
-                let desc = value.desc;
-
-                this.addCard(designation, desc);
-            }
-        }
+    getRefs = (): Array<RefObject<Card>> => {
+        let values = Array<RefObject<Card>>();
+        this.state.cards.forEach(value => {
+            values.push(value.ref);
+        });
+        return values;
     }
 
     addCard = (designation?: string, desc?: string) => {
-        if (this.cards.size < this.props.max && !this.props.disabled) {
-            let index = this.index;
+        if (this.state.cards.size < this.props.max) {
+            this.setState(state => {
+                let ref = React.createRef<Card>();
+                let index = state.index;
+                let cards = state.cards;
 
-            let ref = React.createRef<Card>();
+                cards.set(
+                    index,
+                    {
+                        card: (
+                            <Card id={this.props.counter?.get(this.state.cards.size) || null}
+                                  disabled={this.props.disabled}
+                                  onDelete={() => this.removeCard(index)}
+                                  key={index}
+                                  name={this.props.name}
+                                  designation={designation}
+                                  ref={ref}
+                                  desc={desc}
+                            />
+                        ),
+                        ref: ref
+                    }
+                );
+                index = index + 1;
 
-            this.cards.set(
-                index,
-                <Card id={this.props.counter?.get(this.cards.size) || null}
-                      disabled={this.props.disabled}
-                      onDelete={() => this.removeCard(index)}
-                      key={index}
-                      name={this.props.name}
-                      designation={designation}
-                      ref={ref}
-                      desc={desc}
-                />
-            );
-            this.cardRefs.set(index, ref);
-            this.index++;
-
-            this.forceUpdate();
+                return {
+                    cards: cards,
+                    index: index
+                };
+            });
         }
     }
 
     removeAllCards = () => {
-        this.cards.clear();
-        this.cardRefs.clear();
-        this.forceUpdate();
+        this.setState(state => {
+            let cards = state.cards;
+            cards.clear();
+
+            return {
+                cards: cards
+            }
+        });
     }
 
     removeCard = (index: number) => {
-        if (!(this.cards.size <= this.props.min)) {
-            this.cards.delete(index);
-            this.cardRefs.delete(index);
-            this.forceUpdate();
+        if (!(this.state.cards.size <= this.props.min)) {
+            this.setState(state => {
+                state.cards.delete(index);
+                return state;
+            });
         } else {
             Messages.add("Sie müssen mindestens " + this.props.min + " Punkte angeben, um fortfahren zu können.", "DANGER", Messages.TIMER);
         }
     }
 
     getAllCards = () => {
-        let cards = Array<ReactElement<CardProps, any>>();
+        let cards = Array<ReactElement<CardProps>>();
         let i = 1;
 
-        this.cards.forEach((value) => {
-            cards.push(React.cloneElement(value, {
+        this.state.cards.forEach((value) => {
+            cards.push(React.cloneElement(value.card, {
                 disabled: this.props.disabled,
                 id: this.props.counter?.get(i) || null,
                 placeholder: this.props.placeholder
@@ -234,7 +246,7 @@ class CardComponent extends Component<CardComponentProps, any> {
             <div>
                 {this.getAllCards()}
 
-                {((this.cards.size < this.props.max) && !this.props.disabled) && (
+                {((this.state.cards.size < this.props.max) && !this.props.disabled) && (
                     <BootstrapCard onClick={() => this.addCard()}
                                    className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
                         <div className={"icon"}>
@@ -244,6 +256,24 @@ class CardComponent extends Component<CardComponentProps, any> {
                 )}
             </div>
         );
+    }
+
+    componentDidMount() {
+        if (this.state.cards.size <= 0) {
+            if (this.props.values) {
+                // set values
+                for (const value of this.props.values) {
+                    let designation = value.name;
+                    let desc = value.desc;
+                    this.addCard(designation, desc);
+                }
+            } else {
+                // add min
+                for (let i = 0; i < this.props.min; i++) {
+                    this.addCard();
+                }
+            }
+        }
     }
 
 }

@@ -1,9 +1,9 @@
-export type SaveResource = {
+export type SaveResource<D = object> = {
     id: number
     owner_id: number
     tool_id: number
+    data: D
     name: string
-    data: any
     description: string
     locked_by: number | null
     last_locked: string | null

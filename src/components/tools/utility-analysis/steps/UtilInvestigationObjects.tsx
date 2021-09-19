@@ -21,7 +21,11 @@ class UtilInvestigationObjects extends FormComponent<UtilInvestigationObjectsVal
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: UtilInvestigationObjectsValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

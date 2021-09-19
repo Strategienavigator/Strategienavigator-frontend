@@ -12,25 +12,25 @@ import "./step-component.scss";
 import "./step-component-desk.scss";
 
 
-export interface StepProp {
+export interface StepProp<T> {
     id: string
     title: string
     form: JSX.Element
-    ref?: React.Ref<any>
+    values?: T
+}
+
+interface Step<T> extends StepProp<T> {
+    ref: RefObject<FormComponent<any, any>>
 }
 
 export interface StepComponentProps {
-    steps?: StepProp[]
+    steps?: StepProp<any>[]
     tool?: Tool
-    values?: {
-        id: string,
-        values: any
-    }[]
-    header?: string
     onSave?: (data: object, forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
 }
 
 export interface StepComponentState {
+    steps: Array<Step<any>>
     onReset: boolean
     showResetModal: boolean
     hasCustomNextButton: boolean
@@ -41,30 +41,36 @@ export interface StepComponentState {
 }
 
 class StepComponent extends Component<StepComponentProps, StepComponentState> {
-    private allSteps: Array<StepProp> = new Array<StepProp>();
     private currentStep: number = 1;
     private currentProgress: number = 1;
-
-    private readonly completedSteps: Array<RefObject<FormComponent<any, any>>>;
-    private readonly allRefs: Array<RefObject<FormComponent<any, any>>> = new Array<RefObject<FormComponent<any, any>>>();
 
     constructor(props: any) {
         super(props);
 
-        this.completedSteps = new Array<RefObject<FormComponent<any, any>>>();
-        this.allRefs = new Array<RefObject<FormComponent<any, any>>>();
-
+        let steps: Array<Step<any>> = [];
         this.props.steps?.map((value) => {
             let ref = React.createRef<FormComponent<any, any>>();
-            this.allRefs.push(ref);
+            let form = React.cloneElement(value.form, {
+                ref: ref,
+                id: value.id,
+                title: value.title,
+                tool: this.props.tool,
+                stepComp: this
+            });
 
-            value.form = React.cloneElement(value.form, {ref: ref, id: value.id, title: value.title, stepComp: this});
-            this.allSteps.push(value);
+            steps.push({
+                values: value.values,
+                ref: ref,
+                title: value.title,
+                id: value.id,
+                form: form
+            });
 
             return null;
         });
 
         this.state = {
+            steps: steps,
             onReset: false,
             showResetModal: false,
             hasCustomNextButton: false,
@@ -95,12 +101,12 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                     <Row className={"stepContainer"}>
                         <Col className={"stepTabContainer"}>
 
-                            {(isDesktop() && this.props.header !== undefined) ? (
-                                <div className={"stepHeader"}>{this.props.header}</div>
+                            {(isDesktop() && this.props.tool !== undefined) ? (
+                                <div className={"stepHeader"}>{this.props.tool?.getToolName()}</div>
                             ) : ""}
 
                             <Nav className={"stepTabs"}>
-                                {this.allSteps.map((value) => {
+                                {this.state.steps.map((value) => {
                                     i++;
                                     return (
                                         <Nav.Link key={i} as={NavItem} disabled={i > this.currentProgress}
@@ -115,7 +121,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                         <Button
                                             variant={"dark"}
                                             type={"submit"}
-                                            form={this.allSteps[this.currentStep - 1].id} className={"mt-2"}
+                                            form={this.state.steps[this.currentStep - 1].id} className={"mt-2"}
                                             key={"saveOrNextButton"}
                                         >
                                             <FontAwesomeIcon
@@ -148,7 +154,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                         </Col>
                         <Col className={"tabsContent"}>
                             <Tab.Content>
-                                {this.allSteps.map((value) => {
+                                {this.state.steps.map((value) => {
                                     e++;
 
                                     return (
@@ -214,22 +220,19 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             setControlFooterItem(2, {home: true});
         }
 
-        if (this.props.values) {
-            let currentStep = 0;
-            this.props.values.map((item) => {
-                this.props.steps?.map((step, index) => {
-                    let ref = this.allRefs[index];
-                    if (item.id === step.id) {
-                        let values = JSON.parse(item.values);
-                        ref.current?.setValues(values);
-                        currentStep++;
-                    }
-                    return null;
-                })
-                return null;
-            });
-            this.currentProgress = currentStep;
-            this.currentStep = currentStep;
+        let progress = 0;
+        this.state.steps?.map((step) => {
+            if (step.values) {
+                progress++;
+                step.ref.current?.setValues(step.values);
+                step.ref.current?.setDisabled(true);
+                step.ref.current?.rebuildValues(step.values);
+                step.ref.current?.forceUpdate();
+            }
+            return null;
+        });
+        if (progress > 0) {
+            this.currentProgress = progress;
         }
     }
 
@@ -237,18 +240,20 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         clearControlFooter();
     }
 
-    public getPreviousStep = (): null | FormComponent<any, any> => {
-        if ((this.currentStep - 1 <= this.completedSteps.length) && this.completedSteps.length !== 0) {
-            return this.completedSteps[this.currentStep - 2].current;
+    public getPreviousStep = <D extends unknown>(): null | D => {
+        if (this.currentStep <= 1) {
+            return null;
         }
-        return null;
+        let previousStep = this.state.steps[this.currentStep - 2];
+        return (previousStep.ref.current?.getValues() as D);
     }
 
-    public getForm = (index: number) => {
-        if (index <= this.completedSteps.length) {
-            return this.completedSteps[index].current?.getValues();
+    public getFormValues = <D extends unknown>(index: number) => {
+        if (index < 1 || index > this.state.steps.length) {
+            return null;
         }
-        return null;
+        let step = this.state.steps[index];
+        return (step.ref.current?.getValues() as D);
     }
 
     public isAt = (currentStep: number): boolean => {
@@ -256,34 +261,33 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     public isFirstStep = (): boolean => {
-        return this.currentStep === 1;
+        return this.currentStep <= 1;
     }
 
     public isLastStep = (): boolean => {
-        return this.currentStep === this.allSteps.length;
+        return this.currentStep >= this.state.steps.length;
     }
 
     public nextStep = async () => {
         this.restoreFooter();
 
         let step;
-        if (this.currentProgress < this.allSteps.length && this.currentStep >= this.currentProgress) {
-            step = this.allRefs[this.currentProgress - 1];
-            this.completedSteps.push(step);
+        if (this.currentProgress < this.state.steps.length && this.currentStep >= this.currentProgress) {
+            step = this.state.steps[this.currentProgress - 1].ref;
             step.current?.setDisabled(true);
 
             this.currentStep++;
             this.currentProgress = this.currentStep;
 
-            step = this.allRefs[this.currentProgress - 1];
-            await step.current?.prepareValues();
+            step = this.state.steps[this.currentProgress - 1].ref;
+            await step.current?.buildPreviousValues();
             step.current?.forceUpdate();
         } else {
-            if (this.currentStep < this.allSteps.length) {
+            if (this.currentStep < this.state.steps.length) {
                 this.currentStep++;
 
-                step = this.allRefs[this.currentStep - 1];
-                await step.current?.prepareValues();
+                step = this.state.steps[this.currentStep - 1].ref;
+                await step.current?.buildPreviousValues();
                 step.current?.forceUpdate();
             }
         }
@@ -292,7 +296,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             this.restoreFooter();
         }
 
-        step = this.allRefs[this.currentProgress - 1];
+        step = this.state.steps[this.currentProgress - 1].ref;
         if (!step.current?.isDisabled()) {
             step.current?.changeControlFooter();
         }
@@ -305,10 +309,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             let allForms = new Map<string, FormComponent<any, any>>();
 
             let data = {};
-            for (const {current} of this.allRefs) {
-                Object.assign(data, current?.getValues());
-                current?.setDisabled(true);
-                allForms.set(current?.props.id as string, current as FormComponent<any, any>);
+            for (const {ref} of this.state.steps) {
+                Object.assign(data, ref.current?.getValues());
+                ref.current?.setDisabled(true);
+                allForms.set(ref.current?.props.id as string, ref.current as FormComponent<any, any>);
             }
 
             return await this.props.onSave(data, allForms);
@@ -348,7 +352,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             }
         });
 
-        let id = this.allSteps[this.currentStep - 1].id;
+        let id = this.state.steps[this.currentStep - 1].id;
 
         if (this.isLastStep()) {
             setControlFooterItem(3, {saveSteps: id});
@@ -369,15 +373,15 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             this.currentStep = currentStep;
             this.currentProgress = currentStep;
 
-            let form = this.allRefs[currentStep - 1].current;
+            let form = this.state.steps[currentStep - 1].ref.current;
             form?.reset({same: true, all: false});
         } else {
             this.currentStep = 1;
             this.currentProgress = 1;
         }
 
-        for (i; i < this.allSteps.length; i++) {
-            let step = this.allRefs[i];
+        for (i; i < this.state.steps.length; i++) {
+            let step = this.state.steps[i].ref;
             step.current?.reset({same: false, all: true});
         }
 
@@ -395,7 +399,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             this.currentStep = newProgress;
             this.restoreFooter();
 
-            let step = this.allRefs[newProgress - 1];
+            let step = this.state.steps[newProgress - 1].ref;
             if (!step.current?.isDisabled()) {
                 step.current?.changeControlFooter();
             }

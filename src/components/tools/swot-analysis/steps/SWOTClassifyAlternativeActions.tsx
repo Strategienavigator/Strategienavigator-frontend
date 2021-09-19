@@ -22,7 +22,7 @@ type Classification = {
     actions: Map<string, ClassifiedAlternateAction>
 }
 
-interface SWOTClassifyAlternativeActionsValues {
+export interface SWOTClassifyAlternativeActionsValues {
     classifications: Classification[]
 }
 
@@ -70,7 +70,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
         this.classifications.clear();
         this.actions.clear();
         if (type.same) {
-            this.prepareValues();
+            this.buildPreviousValues();
             this.forceUpdate();
         }
     }
@@ -330,13 +330,15 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
         };
     }
 
-    prepareValues = async () => {
-        let previousStep = this.props.stepComp?.getPreviousStep();
-        if (previousStep && this.actions.size <= 0) {
-            let values = previousStep.getValues() as SWOTAlternativeActionsValues;
+    rebuildValues = async (values: SWOTClassifyAlternativeActionsValues) => {
 
-            for (let i = 0; i < values.actions.length; i++) {
-                let action = values.actions[i];
+    }
+
+    buildPreviousValues = async () => {
+        let previousStep = this.props.stepComp?.getPreviousStep<SWOTAlternativeActionsValues>();
+        if (previousStep && this.actions.size <= 0) {
+            for (let i = 0; i < previousStep.actions.length; i++) {
+                let action = previousStep.actions[i];
                 for (let e = 0; e < action.alternatives.length; e++) {
                     let indexName = action.name + "-" + e;
 

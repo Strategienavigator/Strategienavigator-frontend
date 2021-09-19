@@ -1,5 +1,6 @@
 import {showErrorPage} from "../../index";
 
+
 export interface CallInterface<D> {
     callData: D
     success: boolean
@@ -21,7 +22,7 @@ declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
  * @param data Inhalt des Requests
  * @param token Authentifizierungstoken
  */
-const callAPI = async <D extends object>(URL: string, method: Methods, data?: FormData | Blob | URLSearchParams, token?: string) => {
+const callAPI = async <D extends object>(URL: string, method: Methods, data?: FormData | Blob | URLSearchParams, token?: string): Promise<CallInterface<D> | null> => {
     try {
         let callURL = process.env.REACT_APP_API + URL;
 
@@ -65,25 +66,15 @@ const callAPI = async <D extends object>(URL: string, method: Methods, data?: Fo
         }
 
         // BUILD RESPONSE
-        let response: CallInterface<D> = {
+        return {
             callData: callData,
             success: (call.status >= 200 && call.status < 300),
             status: call.status,
             response: call
-        }
-
-        return response;
+        };
     } catch (e) {
         showErrorPage(500);
-
-        // BUILD EMPTY RESPONSE
-        let emptyResponse: CallInterface<object> = {
-            callData: {},
-            success: false,
-            status: 500,
-            response: new Response()
-        }
-        return emptyResponse;
+        return null;
     }
 }
 

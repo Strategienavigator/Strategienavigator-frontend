@@ -36,10 +36,12 @@ export class EmailVerification extends Component<RouteComponentProps<RouteMatche
     componentDidMount = async () => {
         let call = await verifyEmail(this.token);
 
-        this.setState({
-            loaded: true,
-            success: call.success
-        });
+        if (call) {
+            this.setState({
+                loaded: true,
+                success: call.success
+            });
+        }
     }
 
     render() {
