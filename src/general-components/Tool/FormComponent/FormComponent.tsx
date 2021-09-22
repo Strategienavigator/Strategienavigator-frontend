@@ -128,27 +128,23 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         e.preventDefault();
         let newValues = this.extractValues(e);
 
-        if (this.disabled) {
-            this.props.stepComp?.nextStep();
-        } else {
-            if (this.validate(newValues)) {
-                await this.submit(newValues);
-                this.values = newValues;
+        if (this.validate(newValues)) {
+            this.values = newValues;
+            await this.submit(newValues);
 
-                if (this.props.stepComp?.isLastStep()) {
-                    if (await this.props.stepComp.onSave()) {
-                        Messages.add(<span>Das Tool wurde erfolgreich abgespeichert!</span>, "SUCCESS", Messages.TIMER);
-                    } else {
-                        Messages.add(
-                            <span>Beim Abspeichern des Tools ist ein Fehler aufgetreten!</span>, "DANGER", Messages.TIMER);
-                    }
+            if (this.props.stepComp?.isLastStep()) {
+                if (await this.props.stepComp.onSave()) {
+                    Messages.add(<span>Das Tool wurde erfolgreich abgespeichert!</span>, "SUCCESS", Messages.TIMER);
                 } else {
-                    this.props.stepComp?.nextStep();
+                    Messages.add(
+                        <span>Beim Abspeichern des Tools ist ein Fehler aufgetreten!</span>, "DANGER", Messages.TIMER);
                 }
             } else {
-                Messages.add(
-                    <span>In Ihren Eingaben befinden sich Fehler!<br/> Bitte überprüfen Sie diese erneut.</span>, "DANGER", Messages.TIMER);
+                this.props.stepComp?.nextStep();
             }
+        } else {
+            Messages.add(
+                <span>In Ihren Eingaben befinden sich Fehler!<br/> Bitte überprüfen Sie diese erneut.</span>, "DANGER", Messages.TIMER);
         }
     }
 

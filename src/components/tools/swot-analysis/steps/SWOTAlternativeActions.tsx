@@ -30,7 +30,13 @@ export interface ActionInterface {
 }
 
 interface SWOTAlternativeActionsState extends SwotFactorsValues {
-    actions: AlternateAction[]
+    actions: AlternateAction[],
+    factors: {
+        chances: CardComponentFields
+        risks: CardComponentFields
+        strengths: CardComponentFields
+        weaknesses: CardComponentFields
+    }
 }
 
 export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, SWOTAlternativeActionsState> {
@@ -103,12 +109,11 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
         let maxAlternativeActions = 2;
 
         let currentAction = this.state.actions[this.currentActionIndex];
+        let currentActionName = currentAction?.name.split("-");
         let firstValue, secondValue;
 
-        if (!this.disabled) {
-            firstValue = currentAction?.first?.id + "|" + currentAction?.first?.name;
-            secondValue = currentAction?.second?.id + "|" + currentAction?.second?.name;
-        }
+        firstValue = (currentActionName !== undefined) ? currentActionName[0] : "";
+        secondValue = (currentActionName !== undefined) ? currentActionName[1] : "";
 
         // PROGRESS
         let currentProgress = ((this.currentActionIndex + 1) / this.state.actions.length) * 100;
@@ -276,8 +281,9 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
     }
 
     rebuildValues = async (values: SWOTAlternativeActionsValues) => {
-        let factors = this.props.stepComp?.getFormValues(1) as SwotFactorsValues;
+        let factors = this.props.stepComp?.getFormValues("factors") as SwotFactorsValues;
         let actions: AlternateAction[] = [];
+
         for (let action of values.actions) {
             actions.push(action);
             let ref = React.createRef<CardComponent>();
@@ -286,7 +292,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
 
         this.setState({
             actions: actions,
-            factors: factors?.factors
+            factors: factors.factors
         });
     }
 

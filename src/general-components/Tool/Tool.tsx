@@ -205,6 +205,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.setState({
             isSaving: false
         });
+
         return (call !== null && call.success);
     }
 
@@ -236,6 +237,21 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             }
         }
         return false;
+    }
+
+    public getValues<D>(id: string): object | null {
+        let values = null;
+
+        for (let i = 0; i < this.steps.length; i++) {
+            let step = this.steps[i];
+            if (step.id.toLowerCase() === id.toLowerCase()) {
+                values = this.stepComponent.current?.getFormValues<D>(id);
+            }
+        }
+
+        return {
+            [id]: values
+        };
     }
 
     protected hasCurrentTool(): boolean {

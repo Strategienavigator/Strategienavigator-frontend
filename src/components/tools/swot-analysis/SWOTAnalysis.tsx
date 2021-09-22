@@ -11,6 +11,12 @@ import {
 import "./swot-analysis.scss";
 
 
+interface SWOTAnalysisValues {
+    factors: SwotFactorsValues,
+    "alternative-actions": SWOTAlternativeActionsValues,
+    "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
+}
+
 class SWOTAnalysis extends Tool {
 
     constructor(props: any) {
@@ -67,10 +73,10 @@ class SWOTAnalysis extends Tool {
         return this.getStepComponent();
     }
 
-    protected renderView(save: SaveResource<SwotFactorsValues & SWOTAlternativeActionsValues & SWOTClassifyAlternativeActionsValues>) {
-        this.setValues("factors", save.data);
-        this.setValues("alternative-actions", save.data);
-        this.setValues("swot-classify-alternate-actions", save.data);
+    protected renderView(save: SaveResource<SWOTAnalysisValues>) {
+        this.setValues("factors", save.data.factors);
+        this.setValues("alternative-actions", save.data["alternative-actions"]);
+        this.setValues("swot-classify-alternate-actions", save.data["swot-classify-alternate-actions"]);
 
         return this.getStepComponent();
     }

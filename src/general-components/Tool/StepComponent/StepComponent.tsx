@@ -248,12 +248,25 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         return (previousStep.ref.current?.getValues() as D);
     }
 
-    public getFormValues = <D extends unknown>(index: number) => {
-        if (index < 1 || index > this.state.steps.length) {
-            return null;
+    public getFormValues<D>(indexOrID: number | string) {
+        let step;
+        if (typeof indexOrID === "number") {
+            if (indexOrID < 1 || indexOrID > this.state.steps.length) {
+                return null;
+            }
+            step = this.state.steps[indexOrID];
+        } else {
+            for (const stepValue of this.state.steps) {
+                if (stepValue.id === indexOrID) {
+                    step = stepValue;
+                    break;
+                }
+            }
         }
-        let step = this.state.steps[index];
-        return (step.ref.current?.getValues() as D);
+        if (step) {
+            return (step?.ref.current?.getValues() as D);
+        }
+        return null;
     }
 
     public isAt = (currentStep: number): boolean => {
@@ -307,10 +320,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     public onSave = async (): Promise<boolean> => {
         if (this.props.onSave !== undefined) {
             let allForms = new Map<string, FormComponent<any, any>>();
-
             let data = {};
-            for (const {ref} of this.state.steps) {
-                Object.assign(data, ref.current?.getValues());
+
+            for (const {ref, id} of this.state.steps) {
+                Object.assign(data, {[id]: ref.current?.getValues()});
                 ref.current?.setDisabled(true);
                 allForms.set(ref.current?.props.id as string, ref.current as FormComponent<any, any>);
             }

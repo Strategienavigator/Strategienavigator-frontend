@@ -217,8 +217,12 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
     removeCard = (index: number) => {
         if (!(this.state.cards.size <= this.props.min)) {
             this.setState(state => {
-                state.cards.delete(index);
-                return state;
+                let cards = state.cards;
+                cards.delete(index);
+
+                return {
+                    cards: cards
+                };
             });
         } else {
             Messages.add("Sie müssen mindestens " + this.props.min + " Punkte angeben, um fortfahren zu können.", "DANGER", Messages.TIMER);

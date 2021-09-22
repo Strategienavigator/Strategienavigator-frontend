@@ -16,14 +16,21 @@ interface ClassifiedAlternateAction {
     action: CardComponentField
 }
 
-type Classification = {
+interface Classification {
     droppableID: string,
     name: string | null,
     actions: Map<string, ClassifiedAlternateAction>
 }
 
+interface ClassificationValues {
+    droppableID: string,
+    name: string | null,
+    actions: ClassifiedAlternateAction[]
+}
+
 export interface SWOTClassifyAlternativeActionsValues {
-    classifications: Classification[]
+    classifications: ClassificationValues[],
+    actions: ClassifiedAlternateAction[]
 }
 
 class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternativeActionsValues, any> {
@@ -68,11 +75,9 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
 
     onReset = (type: ResetType) => {
         this.classifications.clear();
-        this.actions.clear();
-        if (type.same) {
-            this.buildPreviousValues();
-            this.forceUpdate();
-        }
+        this.actions.forEach((value) => {
+           value.alreadyAdded = false;
+        });
     }
 
     addClassification = (droppableID: string | undefined) => {
@@ -179,6 +184,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                                                     type={"text"}
                                                     required={true}
                                                     disabled={this.disabled}
+                                                    defaultValue={classification.name as string}
                                                     onChange={(e) => this.onClassificationNameChange(e, droppableID)}
                                                     placeholder={"Klassifikation"}
                                                 />
@@ -319,19 +325,56 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     }
 
     extractValues(e: FormEvent<HTMLFormElement>): SWOTClassifyAlternativeActionsValues {
-        let classifications: Classification[] = [];
+        let classifications: ClassificationValues[] = [];
 
-        this.classifications.forEach((value) => {
-            classifications.push(value);
+        this.classifications.forEach((classification) => {
+            let actions: ClassifiedAlternateAction[] = [];
+            classification.actions.forEach((action) => {
+                actions.push(action);
+            });
+            let classificationValue: ClassificationValues = {
+                name: classification.name,
+                droppableID: classification.droppableID,
+                actions: actions
+            };
+            classifications.push(classificationValue);
+        });
+
+        let actions: ClassifiedAlternateAction[] = [];
+        this.actions.forEach((value) => {
+            actions.push(value);
         });
 
         return {
-            classifications
+            classifications,
+            actions: actions
         };
     }
 
     rebuildValues = async (values: SWOTClassifyAlternativeActionsValues) => {
+        let classifications = new Map<string, Classification>();
+        for (const classificationValue of values.classifications) {
+            let actions = new Map<string, ClassifiedAlternateAction>();
 
+            for (const action of classificationValue.actions) {
+                actions.set(action.indexName, action);
+            }
+
+            let classification: Classification = {
+                name: classificationValue.name,
+                droppableID: classificationValue.droppableID,
+                actions: actions
+            }
+
+            classifications.set(classification.droppableID, classification);
+        }
+        this.classifications = classifications;
+
+        let actions = new Map<string, ClassifiedAlternateAction>();
+        values.actions.forEach((value) => {
+            actions.set(value.indexName, value);
+        });
+        this.actions = actions;
     }
 
     buildPreviousValues = async () => {
@@ -368,7 +411,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
                 this.addError(value.droppableID + "-classification", "Bitte ausfüllen!");
                 validated = false;
             }
-            if (value.actions.size <= 0) {
+            if (value.actions.length <= 0) {
                 this.addError(value.droppableID + "-action-size", "Die Klassifikation muss mindestens eine Handlungsalternative haben");
                 validated = false;
             }

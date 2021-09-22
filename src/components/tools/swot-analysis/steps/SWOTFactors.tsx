@@ -73,9 +73,9 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
 
         return (
             <div className={"swot-factors"}>
-                <Accordion activeKey={this.disabled ? activeKey : undefined}
+                <Accordion flush={true} activeKey={this.disabled ? activeKey : undefined}
                            defaultActiveKey={isDesktop() ? "strengths" : undefined}>
-                    <Accordion.Item eventKey={this.disabled ? activeKey : "strengths"}>
+                    <Accordion.Item  eventKey={this.disabled ? activeKey : "strengths"}>
                         <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} -
                             Stärken (Interne Faktoren)</Accordion.Header>
                         <Accordion.Body>
