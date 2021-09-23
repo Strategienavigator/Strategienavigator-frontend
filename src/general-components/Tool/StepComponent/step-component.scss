@@ -2,6 +2,16 @@
 
 $tabColor: #6e6e6e;
 
+.stepContainer > .stepTabContainer, .stepHeaderAccordion {
+  margin-bottom: 0.75rem;
+}
+
+.stepHeaderAccordion {
+  .accordion-header * {
+    font-weight: 700;
+  }
+}
+
 .stepContainer > .stepTabContainer, .stepContainer > .tabsContent {
   flex: 1 1 100%;
 }
@@ -37,6 +47,6 @@ $tabColor: #6e6e6e;
   font-size: 12pt;
   font-weight: 600;
   padding: 0.5rem 0 0.5rem 0.5rem;
-  margin: 0.75rem 0;
+  margin-bottom: 0.75rem;
 }
 

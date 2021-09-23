@@ -21,7 +21,11 @@ class PortCreateObjects extends FormComponent<PortCreateObjectsValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: PortCreateObjectsValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

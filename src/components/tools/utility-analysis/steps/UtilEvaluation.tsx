@@ -21,7 +21,11 @@ class UtilEvaluation extends FormComponent<UtilEvaluationValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: UtilEvaluationValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

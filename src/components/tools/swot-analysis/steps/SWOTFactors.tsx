@@ -1,5 +1,5 @@
 import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
-import {FormEvent} from "react";
+import React, {FormEvent, RefObject} from "react";
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
 import {Accordion} from "react-bootstrap";
@@ -20,6 +20,7 @@ export interface SwotFactorsValues {
 }
 
 export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
+    private cardComponentRefs: Array<RefObject<CardComponent>> = [];
 
     extractValues(e: FormEvent<HTMLFormElement>): SwotFactorsValues {
         let chances: CardComponentFields = extractCardComponentField(e, "chances") as CardComponentFields;
@@ -37,7 +38,10 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
         }
     }
 
-    prepareValues = async () => {
+    rebuildValues = async (values: SwotFactorsValues) => {
+    }
+
+    buildPreviousValues = async () => {
 
     }
 
@@ -49,7 +53,23 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
     }
 
     validate(values: SwotFactorsValues): boolean {
+        for (const cardComponentRef of this.cardComponentRefs) {
+            if (cardComponentRef.current?.hasInvalidValue()) {
+                this.addError("invalidCardComponent", "Überprüfen Sie Ihre Eingaben.");
+                return false;
+            }
+        }
         return true;
+    }
+
+    buildCardComponentRefs() {
+        if (this.cardComponentRefs.length <= 0) {
+            let cardcomponentRefs = Array<RefObject<CardComponent>>();
+            for (let i = 0; i < 4; i++) {
+                cardcomponentRefs.push(React.createRef<CardComponent>());
+            }
+            this.cardComponentRefs = cardcomponentRefs;
+        }
     }
 
     build(): JSX.Element {
@@ -63,16 +83,18 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
         let lowerABCCounter = new LowerABCCounter();
 
         let values = (this.values as SwotFactorsValues).factors;
+        this.buildCardComponentRefs();
 
         return (
             <div className={"swot-factors"}>
-                <Accordion activeKey={this.disabled ? activeKey : undefined}
+                <Accordion flush={true} activeKey={this.disabled ? activeKey : undefined}
                            defaultActiveKey={isDesktop() ? "strengths" : undefined}>
                     <Accordion.Item eventKey={this.disabled ? activeKey : "strengths"}>
                         <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} -
                             Stärken (Interne Faktoren)</Accordion.Header>
                         <Accordion.Body>
-                            <CardComponent values={values?.strengths} counter={upperABCCounter} name={"strengths"}
+                            <CardComponent required={false} values={values?.strengths} ref={this.cardComponentRefs[0]}
+                                           counter={upperABCCounter} name={"strengths"}
                                            disabled={this.disabled}
                                            min={min} max={max}/>
                         </Accordion.Body>
@@ -82,7 +104,8 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
                         <Accordion.Header>{lowerABCCounter.get(1) + "-" + lowerABCCounter.get(max)} -
                             Schwächen (Interne Faktoren)</Accordion.Header>
                         <Accordion.Body>
-                            <CardComponent values={values?.weaknesses} counter={lowerABCCounter} name={"weaknesses"}
+                            <CardComponent required={false} values={values?.weaknesses} ref={this.cardComponentRefs[1]}
+                                           counter={lowerABCCounter} name={"weaknesses"}
                                            disabled={this.disabled}
                                            min={min} max={max}/>
                         </Accordion.Body>
@@ -91,7 +114,8 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
                         <Accordion.Header>{numberCounter.get(1) + "-" + numberCounter.get(max)} -
                             Chancen (Externe Faktoren)</Accordion.Header>
                         <Accordion.Body>
-                            <CardComponent values={values?.chances} counter={numberCounter} name={"chances"}
+                            <CardComponent required={false} values={values?.chances} ref={this.cardComponentRefs[2]}
+                                           counter={numberCounter} name={"chances"}
                                            disabled={this.disabled}
                                            min={min} max={max}/>
                         </Accordion.Body>
@@ -101,12 +125,15 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
                         <Accordion.Header>{romanNumeralCounter.get(1) + "-" + romanNumeralCounter.get(max)} -
                             Risiken (Externe Faktoren)</Accordion.Header>
                         <Accordion.Body>
-                            <CardComponent values={values?.risks} counter={romanNumeralCounter} name={"risks"}
+                            <CardComponent required={false} values={values?.risks} ref={this.cardComponentRefs[3]}
+                                           counter={romanNumeralCounter} name={"risks"}
                                            disabled={this.disabled}
                                            min={min} max={max}/>
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>
+
+                {this.getError("invalidCardComponent")}
             </div>
         );
     }
