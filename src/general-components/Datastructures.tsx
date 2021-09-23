@@ -62,7 +62,7 @@ export type PaginationResource<D> = {
 }
 
 export type DefaultResponse<D> = {
-    data:D
+    data: D
 }
 
 export type UserResource = {
@@ -81,7 +81,7 @@ export type TokenCreatedResource = {
     /**
      * Type des Tokens, normalerweise "Bearer"
      */
-    token_type:string
+    token_type: string
     /**
      * Zeit in sekunden, nachdem der Token abläuft
      */

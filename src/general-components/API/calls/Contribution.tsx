@@ -1,5 +1,5 @@
 import {callAPI} from "../API";
-import {DefaultResponse, PaginationResource, SharedSaveResource, UserResource} from "../../Datastructures";
+import {DefaultResponse, PaginationResource, SharedSaveResource} from "../../Datastructures";
 
 
 /**

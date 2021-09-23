@@ -76,7 +76,7 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     onReset = (type: ResetType) => {
         this.classifications.clear();
         this.actions.forEach((value) => {
-           value.alreadyAdded = false;
+            value.alreadyAdded = false;
         });
     }
 
