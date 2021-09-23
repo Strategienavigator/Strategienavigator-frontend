@@ -209,6 +209,25 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         return (call !== null && call.success);
     }
 
+    public getValues<D>(id: string): object | null {
+        let values = null;
+
+        for (let i = 0; i < this.steps.length; i++) {
+            let step = this.steps[i];
+            if (step.id.toLowerCase() === id.toLowerCase()) {
+                values = this.stepComponent.current?.getFormValues<D>(id);
+            }
+        }
+
+        return {
+            [id]: values
+        };
+    }
+
+    public getCurrentTool(): SaveResource<any> | undefined {
+        return this.currentSave;
+    }
+
     protected getStepComponent(props?: StepComponentProps) {
         return (
             <StepComponent
@@ -237,21 +256,6 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             }
         }
         return false;
-    }
-
-    public getValues<D>(id: string): object | null {
-        let values = null;
-
-        for (let i = 0; i < this.steps.length; i++) {
-            let step = this.steps[i];
-            if (step.id.toLowerCase() === id.toLowerCase()) {
-                values = this.stepComponent.current?.getFormValues<D>(id);
-            }
-        }
-
-        return {
-            [id]: values
-        };
     }
 
     protected hasCurrentTool(): boolean {
@@ -441,6 +445,18 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         if (!error) {
             this.currentSaveName = name;
             this.currentSaveDescription = desc;
+            this.currentSave = {
+                name: name,
+                description: desc,
+                id: 0,
+                tool_id: this.toolID as number,
+                data: {},
+                contributors: [],
+                invited: [],
+                last_locked: null,
+                locked_by: null,
+                owner_id: 0
+            };
 
             this.setState({
                 showInputModal: false

@@ -1,5 +1,5 @@
 import React, {Component, RefObject} from "react";
-import {Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import {Accordion, Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
 import {clearControlFooter, setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {FormComponent} from "../FormComponent/FormComponent";
@@ -99,10 +99,29 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                     onSelect={(e) => this.onStepSelect(e)}
                 >
                     <Row className={"stepContainer"}>
-                        <Col className={"stepTabContainer"}>
+                        {(!isDesktop() && this.props.tool !== undefined) ? (
+                            <Accordion className={"stepHeaderAccordion"}>
+                                <Accordion.Item eventKey={"description"}>
+                                    <Accordion.Header>
+                                        {this.props.tool?.getCurrentTool()?.name}
+                                    </Accordion.Header>
+                                    <Accordion.Body>
+                                        {this.props.tool?.getCurrentTool()?.description}
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+                        ) : ""}
 
+                        <Col className={"stepTabContainer"}>
                             {(isDesktop() && this.props.tool !== undefined) ? (
-                                <div className={"stepHeader"}>{this.props.tool?.getToolName()}</div>
+                                <>
+                                    <div className={"stepHeader"}>
+                                        {this.props.tool?.getCurrentTool()?.name}
+                                    </div>
+                                    <p>
+                                        {this.props.tool?.getCurrentTool()?.description}
+                                    </p>
+                                </>
                             ) : ""}
 
                             <Nav className={"stepTabs"}>

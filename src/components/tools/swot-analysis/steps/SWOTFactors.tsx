@@ -1,8 +1,4 @@
-import {
-    FormComponent,
-    FormComponentProps,
-    ResetType
-} from "../../../../general-components/Tool/FormComponent/FormComponent";
+import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
@@ -75,7 +71,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
             <div className={"swot-factors"}>
                 <Accordion flush={true} activeKey={this.disabled ? activeKey : undefined}
                            defaultActiveKey={isDesktop() ? "strengths" : undefined}>
-                    <Accordion.Item  eventKey={this.disabled ? activeKey : "strengths"}>
+                    <Accordion.Item eventKey={this.disabled ? activeKey : "strengths"}>
                         <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} -
                             Stärken (Interne Faktoren)</Accordion.Header>
                         <Accordion.Body>
