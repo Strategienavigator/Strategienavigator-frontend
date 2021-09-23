@@ -13,6 +13,7 @@ export interface CardProps {
     name: string
     id: string | null
     disabled: boolean
+    required: boolean
     onDelete: () => void
     designation?: string
     desc?: string
@@ -35,6 +36,9 @@ class Card extends Component<CardProps, CardState> {
             showDesc: isDesktop(),
             descChanged: false
         };
+
+        this.currentDesc = this.props.designation;
+        this.currentName = this.props.name;
     }
 
     isValid = () => {
@@ -70,7 +74,7 @@ class Card extends Component<CardProps, CardState> {
                         {this.props.id}
                     </div>
                     <FormControl
-                        required={true}
+                        required={this.props.required}
                         disabled={this.props.disabled}
                         onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
                         onChange={(e) => this.nameChanged(e)}
@@ -88,7 +92,7 @@ class Card extends Component<CardProps, CardState> {
                 <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
                     <div>
                         <FormControl
-                            required
+                            required={this.props.required}
                             disabled={this.props.disabled}
                             onChange={(e) => this.descChanged(e)}
                             onFocus={() => this.setState({showDesc: true})}
@@ -128,6 +132,7 @@ export interface CardComponentProps {
     disabled: boolean
     min: number
     max: number
+    required?: boolean
     counter?: CounterInterface
     values?: CardComponentFields
     placeholder?: CardComponentFieldPlaceholder
@@ -163,15 +168,27 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
 
     getRefs = (): Array<RefObject<Card>> => {
         let values = Array<RefObject<Card>>();
-        this.state.cards.forEach(value => {
+        this.state.cards.forEach((value) => {
             values.push(value.ref);
         });
         return values;
     }
 
+    hasInvalidValue = (): boolean => {
+        let isInValid: boolean = false;
+        this.state.cards.forEach((value) => {
+            if (!value.ref.current?.isValid()) {
+                isInValid = true;
+                return;
+            }
+        })
+        return isInValid;
+    }
+
     addCard = (designation?: string, desc?: string) => {
         if (this.state.cards.size < this.props.max) {
             this.setState(state => {
+                let required = (this.props.required !== undefined) ? this.props.required : true;
                 let ref = React.createRef<Card>();
                 let index = state.index;
                 let cards = state.cards;
@@ -184,6 +201,7 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
                                   disabled={this.props.disabled}
                                   onDelete={() => this.removeCard(index)}
                                   key={index}
+                                  required={required}
                                   name={this.props.name}
                                   designation={designation}
                                   ref={ref}
@@ -231,11 +249,13 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
 
     getAllCards = () => {
         let cards = Array<ReactElement<CardProps>>();
+        let required = (this.props.required !== undefined) ? this.props.required : true;
         let i = 1;
 
         this.state.cards.forEach((value) => {
             cards.push(React.cloneElement(value.card, {
                 disabled: this.props.disabled,
+                required: required,
                 id: this.props.counter?.get(i) || null,
                 placeholder: this.props.placeholder
             }));

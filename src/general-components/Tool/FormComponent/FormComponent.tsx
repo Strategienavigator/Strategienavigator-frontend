@@ -120,8 +120,8 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         );
     }
 
-    protected hasError = (): boolean => {
-        return false;
+    protected hasError = (id: string): boolean => {
+        return this.error.has(id);
     }
 
     private onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
