@@ -82,12 +82,6 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
                 {this.props.info?.shortDescription}
 
-                <div className={"saves mt-2"}>
-                    <SavePagination tool={this.props.tool!}/>
-                </div>
-
-                {this.props.children}
-
                 <div className={"mt-4"}>
                     {isDesktop() && (
                         <Button onClick={() => this.props.tool?.switchPage("new")} size={"sm"} variant={"dark"}>
@@ -95,6 +89,12 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Button>
                     )}
                 </div>
+
+                <div className={"saves mt-2"}>
+                    <SavePagination tool={this.props.tool!}/>
+                </div>
+
+                {this.props.children}
 
                 {(this.state.showTutorial && this.props.tool?.hasTutorial()) && this.getTutorialCanvas()}
             </div>
