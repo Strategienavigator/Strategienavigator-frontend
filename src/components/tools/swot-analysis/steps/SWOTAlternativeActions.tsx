@@ -281,7 +281,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
     }
 
     rebuildValues = async (values: SWOTAlternativeActionsValues) => {
-        let factors = this.props.stepComp?.getFormValues("factors") as SwotFactorsValues;
+        let factors = this.props.stepComp?.getFormValues("swot-factors") as SwotFactorsValues;
         let actions: AlternateAction[] = [];
 
         for (let action of values.actions) {
@@ -300,7 +300,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
         let values = this.props.stepComp?.getPreviousStep<SwotFactorsValues>();
         let factors = values?.factors;
 
-        if (factors !== undefined) {
+        if (factors !== undefined && this.state.actions.length <= 0) {
             let strengths = factors.strengths;
             let weaknesses = factors.weaknesses;
             let chances = factors.chances;

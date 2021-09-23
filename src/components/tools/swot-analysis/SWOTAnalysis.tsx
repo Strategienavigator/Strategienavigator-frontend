@@ -12,7 +12,7 @@ import "./swot-analysis.scss";
 
 
 interface SWOTAnalysisValues {
-    factors: SwotFactorsValues,
+    "swot-factors": SwotFactorsValues,
     "alternative-actions": SWOTAlternativeActionsValues,
     "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
 }
@@ -27,7 +27,7 @@ class SWOTAnalysis extends Tool {
         this.setToolIcon(faThLarge);
 
         this.addStep<SwotFactorsValues>({
-            id: "factors",
+            id: "swot-factors",
             title: "1. Faktoren festlegen",
             form: <SWOTFactors/>
         });
@@ -74,7 +74,7 @@ class SWOTAnalysis extends Tool {
     }
 
     protected renderView(save: SaveResource<SWOTAnalysisValues>) {
-        this.setValues("factors", save.data.factors);
+        this.setValues("swot-factors", save.data["swot-factors"]);
         this.setValues("alternative-actions", save.data["alternative-actions"]);
         this.setValues("swot-classify-alternate-actions", save.data["swot-classify-alternate-actions"]);
 
