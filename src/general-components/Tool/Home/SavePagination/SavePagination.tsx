@@ -64,7 +64,7 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
             });
             let call = await getSaves(userID, Session.getToken(), this.props.tool.getID(), page);
             if (call.success) {
-                if(call.callData.data.length > 0){
+                if (call.callData.data.length > 0) {
                     let saves = call.callData.data;
                     this.updateSaves(call.callData.meta.current_page, saves);
                 }
@@ -127,8 +127,9 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
 
                 </Loader>
                 <div className={"mt-3"}>
-                    <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
-                                      currentPage={this.state.page} disabled={this.state.loading}/>
+                    {this.state.pageCount > 1 && (
+                        <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
+                                          currentPage={this.state.page} disabled={this.state.loading}/>)}
                 </div>
 
             </div>
