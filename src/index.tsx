@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Nav from "./components/platform/nav/Nav";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, matchPath, Route, Switch} from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
@@ -29,68 +29,161 @@ import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
 import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
-import { Forbidden } from './components/platform/forbidden/Fordidden';
-import { NotFound } from './components/platform/not-found/NotFound';
+import {Forbidden} from './general-components/Error/forbidden/Fordidden';
+import {NotFound} from './general-components/Error/not-found/NotFound';
+import {ErrorPages} from "./general-components/Error/ErrorPages";
 
 
-const reload_app = () => {
-    ReactDOM.render(
-        <React.StrictMode>
+/**
+ *
+ * APP
+ *
+ */
+const routerRef = React.createRef<Router>();
 
-            <Messages
-                xAlignment={"CENTER"}
-                yAlignment={"BOTTOM"}
-                style={{marginBottom: 65}}
-            />
+const getRouterSwitch = () => {
+    return (
+        <Switch>
+            <Route path={"/"} exact component={Home}/>
+            <Route path={"/legal-notice"} exact component={Imprint}/>
+            <Route path={"/data-privacy"} exact component={DataPrivacy}/>
+            <Route path={"/about-us"} exact component={AboutUs}/>
+            <Route path={"/login"} exact component={Login}/>
+            <Route path={"/logout"} exact component={Logout}/>
+            <Route path={"/register"} exact component={Register}/>
+            <Route path={"/settings"} exact component={Settings}/>
+            <Route path={"/my-profile"} exact component={MyProfile}/>
+            <Route path={"/forbidden"} exact component={Forbidden}/>
+            <Route path={"/notfound"} exact component={NotFound}/>
 
-            <Loader animate fullscreen variant={"dark"} payload={[Session.checkLogin]}>
-                <Router>
+            <Route path={"/verify-email/:token"} component={EmailVerification}/>
+            <Route path={"/reset-password/:token"} component={PasswordReset}/>
+            <Route path={"/reset-password"} exact component={PasswordReset}/>
+
+            <Route path={"/pairwise-comparison"} component={PairwiseComparison}/>
+            <Route path={"/abc-analysis"} component={ABCAnalysis}/>
+            <Route path={"/swot-analysis"} component={SWOTAnalysis}/>
+            <Route path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
+            <Route path={"/utility-analysis"} component={UtilityAnalysis}/>
+
+            <Route path={"/error/:code"} component={ErrorPages}/>
+
+            <Route render={(props) => {
+                let match = Object.assign(
+                    props.match, {
+                        params: {
+                            code: String(404)
+                        }
+                    }
+                );
+                return <ErrorPages
+                    history={props.history}
+                    location={props.location}
+                    match={match}
+                />;
+            }}/>
+        </Switch>
+    );
+}
+
+const getAppFooter = () => {
+    return isDesktop() ? <Footer/> : <ControlFooter places={3}/>;
+}
+
+const getAppContent = () => {
+    return (
+        <>
+            <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
+                <Messages
+                    xAlignment={"CENTER"}
+                    yAlignment={"BOTTOM"}
+                    style={{marginBottom: 65}}
+                />
+
+                <Router ref={routerRef}>
                     <Nav/>
 
                     <div id={"content"}>
                         <Container fluid={false}>
-                            <Switch>
-                                <Route path={"/"} exact component={Home}/>
-                                <Route path={"/legal-notice"} exact component={Imprint}/>
-                                <Route path={"/data-privacy"} exact component={DataPrivacy}/>
-                                <Route path={"/about-us"} exact component={AboutUs}/>
-                                <Route path={"/login"} exact component={Login}/>
-                                <Route path={"/logout"} exact component={Logout}/>
-                                <Route path={"/register"} exact component={Register}/>
-                                <Route path={"/settings"} exact component={Settings}/>
-                                <Route path={"/my-profile"} exact component={MyProfile}/>
-                                <Route path={"/forbidden"} exact component={Forbidden}/>
-                                <Route path={"/notfound"} exact component={NotFound}/>
-
-                                <Route path={"/verify-email/:token"} component={EmailVerification}/>
-                                <Route path={"/reset-password/:token"} component={PasswordReset}/>
-                                <Route path={"/reset-password"} exact component={PasswordReset}/>
-
-                                <Route path={"/pairwise-comparison"} component={PairwiseComparison}/>
-                                <Route path={"/abc-analysis"} component={ABCAnalysis}/>
-                                <Route path={"/swot-analysis"} component={SWOTAnalysis}/>
-                                <Route path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
-                                <Route path={"/utility-analysis"} component={UtilityAnalysis}/>
-
-                                <Route path={"/"} component={Home}/>
-                            </Switch>
+                            {getRouterSwitch()}
                         </Container>
                     </div>
-                    {isDesktop() ? <Footer/> : <ControlFooter places={3}/>}
+
+                    {getAppFooter()}
                 </Router>
             </Loader>
+        </>
+    );
+}
+
+const renderApp = () => {
+    ReactDOM.render(
+        <React.StrictMode>
+            {getAppContent()}
         </React.StrictMode>,
         document.getElementById('root')
     );
 }
 
-reload_app();
+/**
+ *
+ * ERROR
+ *
+ */
+const showErrorPage = (code: number, callback?: (...args: any) => any) => {
+    renderApp();
+
+    if (!matchPath(document.location.pathname, {
+        exact: true,
+        path: "/error/:id"
+    })) {
+        (routerRef.current as any).history.push("/error/" + code);
+    }
+
+    if (callback) {
+        callback(callback?.arguments);
+    }
+}
+
+/**
+ *
+ * LOADING
+ *
+ */
+const manageLoading = async () => {
+    ReactDOM.render(
+        <React.StrictMode>
+            <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
+        </React.StrictMode>,
+        document.getElementById('root')
+    );
+    await Session.checkLogin();
+}
+
+/**
+ *
+ * BUILD THE APP
+ *
+ */
+const buildApp = async () => {
+    await manageLoading();
+    renderApp();
+}
+
+buildApp().then(() => {
+    // do absolutely nothing
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // reportWebVitals(console.log);
 
+const reload_app = () => {
+    renderApp();
+}
+
 export {
-    reload_app
+    reload_app,
+    showErrorPage
 };
