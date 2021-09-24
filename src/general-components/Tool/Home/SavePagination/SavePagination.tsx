@@ -1,5 +1,5 @@
 import React, {Component, ReactNode} from "react";
-import {SimpleSaveResource} from "../../../Datastructures";
+import {PaginationResource, SimpleSaveResource} from "../../../Datastructures";
 import {PaginationFooter} from "../../../PaginationFooter/PaginationFooter";
 import {Loader} from "../../../Loader/Loader";
 import {Session} from "../../../Session/Session";
@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import {Tool} from "../../Tool";
 
 import './save-pagination.scss'
+import {CallInterface} from "../../../API/API";
 
 
 interface SavePaginationState {
@@ -54,7 +55,6 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         });
 
     };
-
     loadToolSaves = async (page: number = 1) => {
         if (Session.isLoggedIn()) {
             let userID = Session.currentUser?.getID() as number;
@@ -76,7 +76,6 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         }
     };
 
-
     private updateSaves(page: number, newSaves: Array<SimpleSaveResource>) {
         this.setState((s) => {
             let newState = {saves: s.saves.slice()};
@@ -91,14 +90,11 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         }
     }
 
-
     componentDidMount(): void {
         this.loadToolSaves();
     }
 
     render(): ReactNode {
-        // console.log(this.state);
-        // console.log(!this.state.loading);
         return (
             <div>
                 <Loader payload={[]} loaded={(!this.state.loading)}>
@@ -114,10 +110,11 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                             let save = value;
                             return (
                                 <Card as={Link} to={this.props.tool?.getLink() + "/" + save.id}
-                                               key={save.id} className={"mt-2 mb-2 save-card"}>
+                                      key={save.id} className={"mt-2 mb-2 save-card"}>
                                     <Card.Body className={"save-body"}>
                                         <Card.Title>{save.name}</Card.Title>
-                                        <Card.Text className={"save-desc text-muted mb-1"}>{save.description ? save.description : "Keine Beschreibung vorhanden"}</Card.Text>
+                                        <Card.Text
+                                            className={"save-desc text-muted mb-1"}>{save.description ? save.description : "Keine Beschreibung vorhanden"}</Card.Text>
                                     </Card.Body>
 
                                 </Card>
@@ -132,12 +129,9 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                         <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
                                           currentPage={this.state.page} disabled={this.state.loading}/>)}
                 </div>
-
             </div>
         );
     }
-
-
 }
 
 
