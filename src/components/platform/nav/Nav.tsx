@@ -18,7 +18,7 @@ import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 import "./nav.scss";
 import {getSaves} from "../../../general-components/API/calls/Saves";
-import {PaginationResource, SaveResource, SimpleSaveResource} from "../../../general-components/Datastructures";
+import {SimpleSaveResource} from "../../../general-components/Datastructures";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {RouteComponentProps, withRouter} from "react-router";
 
@@ -69,11 +69,16 @@ class Nav extends Component<RouteComponentProps, NavState> {
                 });
 
                 let searchCall = await getSaves(Session.currentUser?.getID() as number, Session.getToken(), undefined, undefined, value, value);
-                let searchCallData = searchCall.callData;
 
+                if (searchCall && searchCall.success) {
+                    let searchCallData = searchCall.callData;
+
+                    this.setState({
+                        searchResult: searchCallData?.data
+                    });
+                }
                 this.setState({
-                    searchLoading: false,
-                    searchResult: searchCallData.data
+                    searchLoading: false
                 });
             }, 400);
         }

@@ -112,18 +112,15 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
         let call = await updateUser(Session.currentUser?.getID() as number, data, Session.getToken());
 
-        if (call.success) {
+        if (call && call.success) {
             Session.currentUser?.update(data);
             reload_app();
 
             this.setState({
-                isSaved: true
+                isSaved: true,
+                isSaving: false
             });
         }
-
-        this.setState({
-            isSaving: false
-        });
     }
 
     showDeleteModal = () => {

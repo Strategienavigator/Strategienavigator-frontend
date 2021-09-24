@@ -13,7 +13,7 @@ import {AvailabilityCheckResource, DefaultResponse} from "../Datastructures";
 
 
 export interface UniqueCheckProps {
-    callback?: ((input: string) => Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>>>)
+    callback?: ((input: string) => Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>)
     failMessage?: string
     successMessage?: string
 }

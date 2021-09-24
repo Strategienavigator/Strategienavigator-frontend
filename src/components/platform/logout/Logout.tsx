@@ -12,11 +12,10 @@ export class LogoutComponent extends Component<any, any> {
 
     logout = async () => {
         let call = await Session.logout();
-        if (call.success) {
+        if (call && call.success) {
             reload_app();
 
             Messages.add("Bis bald!", "SUCCESS", Messages.TIMER);
-
             this.props.history.push("/home");
         }
     }

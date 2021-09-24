@@ -63,11 +63,10 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                 loading: true
             });
             let call = await getSaves(userID, Session.getToken(), this.props.tool.getID(), page);
-            if (call.success) {
-                if (call.callData.data.length > 0) {
-                    let saves = call.callData.data;
-                    this.updateSaves(call.callData.meta.current_page, saves);
-                }
+
+            if (call && call.success && call.callData.data.length > 0) {
+                let saves = call.callData.data;
+                this.updateSaves(call.callData.meta.current_page, saves);
                 this.setState({
                     pageCount: call.callData.meta.last_page,
                     loading: false

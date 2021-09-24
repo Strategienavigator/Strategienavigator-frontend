@@ -21,7 +21,11 @@ class UtilCriterias extends FormComponent<UtilCriteriasValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: UtilCriteriasValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

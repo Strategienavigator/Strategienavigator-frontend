@@ -11,7 +11,11 @@ export interface PCCriteriasValues {
 
 export class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
 
-    prepareValues = async () => {
+    rebuildValues = async (values: PCCriteriasValues) => {
+
+    }
+
+    buildPreviousValues = async () => {
     }
 
     changeControlFooter(): void {

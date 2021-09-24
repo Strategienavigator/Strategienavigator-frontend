@@ -30,7 +30,7 @@ class Session {
     static logout = async () => {
         let call = await callAPI("oauth/token/" + Session.token.breakDown()?.id, "DELETE", undefined, Session.token.getToken() as string);
 
-        if (call.success) {
+        if (call && call.success) {
             Session.setCurrent(null);
             Session.removeTokens();
         }
@@ -52,13 +52,15 @@ class Session {
             let token = Session.token.getToken() as string;
             let call = await callAPI<DefaultResponse<UserResource>>("api/users/" + validToken.userId, "GET", undefined, token);
 
-            if (call.success) {
-                let user = User.from(call.callData.data);
-                Session.setCurrent(user);
-                return user;
-            } else {
-                if (call.status === 401) {
-                    Session.removeTokens();
+            if (call) {
+                if (call.success) {
+                    let user = User.from(call.callData.data);
+                    Session.setCurrent(user);
+                    return user;
+                } else {
+                    if (call.status === 401) {
+                        Session.removeTokens();
+                    }
                 }
             }
         }
@@ -73,12 +75,14 @@ class Session {
             formData.append("scope", "");
 
             let call = await callAPI<TokenCreatedResource>("oauth/token", "POST", formData);
-            if (call.success) {
-                let data = call.callData;
-                Session.updateTokens(data.access_token, data.refresh_token);
-                return await Session.checkLogin();
-            } else {
-                Session.removeTokens();
+            if (call) {
+                if (call.success) {
+                    let data = call.callData;
+                    Session.updateTokens(data.access_token, data.refresh_token);
+                    return await Session.checkLogin();
+                } else {
+                    Session.removeTokens();
+                }
             }
         }
         return null;
@@ -95,7 +99,7 @@ class Session {
 
         let call = await callAPI<TokenCreatedResource>('oauth/token', 'POST', formData);
 
-        if (call.success) {
+        if (call && call.success) {
             let data = call.callData;
             Session.updateTokens(data.access_token, (rememberMe) ? data.refresh_token : undefined);
             return await Session.checkLogin();
@@ -103,7 +107,7 @@ class Session {
         return null;
     }
 
-    static register = async (email: string, username: string, password: string): Promise<CallInterface<object>> => {
+    static register = async (email: string, username: string, password: string): Promise<CallInterface<object> | null> => {
         let formData: FormData = new FormData();
         formData.append('email', email);
         formData.append('username', username);

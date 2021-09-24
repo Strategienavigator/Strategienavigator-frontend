@@ -21,7 +21,11 @@ class PortResult extends FormComponent<PortResultValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: PortResultValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

@@ -1,12 +1,21 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
 import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
-import {SWOTFactors} from "./steps/SWOTFactors";
-import {SWOTAlternativeActions} from "./steps/SWOTAlternativeActions";
-import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions";
+import {SWOTFactors, SwotFactorsValues} from "./steps/SWOTFactors";
+import {SWOTAlternativeActions, SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions";
+import {
+    SWOTClassifyAlternativeActions,
+    SWOTClassifyAlternativeActionsValues
+} from "./steps/SWOTClassifyAlternativeActions";
 
 import "./swot-analysis.scss";
 
+
+interface SWOTAnalysisValues {
+    "swot-factors": SwotFactorsValues,
+    "alternative-actions": SWOTAlternativeActionsValues,
+    "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
+}
 
 class SWOTAnalysis extends Tool {
 
@@ -17,17 +26,17 @@ class SWOTAnalysis extends Tool {
         this.setToolname("SWOT Analyse");
         this.setToolIcon(faThLarge);
 
-        this.addStep({
-            id: "factors",
+        this.addStep<SwotFactorsValues>({
+            id: "swot-factors",
             title: "1. Faktoren festlegen",
             form: <SWOTFactors/>
         });
-        this.addStep({
+        this.addStep<SWOTAlternativeActionsValues>({
             id: "alternative-actions",
             title: "2. Handlungsalternativen festlegen",
             form: <SWOTAlternativeActions/>
         });
-        this.addStep({
+        this.addStep<SWOTClassifyAlternativeActionsValues>({
             id: "swot-classify-alternate-actions",
             title: "3. Handlungsalternativen klassifizieren",
             form: <SWOTClassifyAlternativeActions/>
@@ -64,24 +73,12 @@ class SWOTAnalysis extends Tool {
         return this.getStepComponent();
     }
 
-    protected renderView(tool: SaveResource) {
-        let data = tool.data;
-        return this.getStepComponent({
-            values: [
-                {
-                    id: "factors",
-                    values: data
-                },
-                {
-                    id: "alternative-actions",
-                    values: data
-                },
-                {
-                    id: "swot-classify-alternate-actions",
-                    values: data
-                }
-            ]
-        });
+    protected renderView(save: SaveResource<SWOTAnalysisValues>) {
+        this.setValues("swot-factors", save.data["swot-factors"]);
+        this.setValues("alternative-actions", save.data["alternative-actions"]);
+        this.setValues("swot-classify-alternate-actions", save.data["swot-classify-alternate-actions"]);
+
+        return this.getStepComponent();
     }
 }
 

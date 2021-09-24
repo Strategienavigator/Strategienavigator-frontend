@@ -49,10 +49,12 @@ export class PasswordReset extends Component<RouteComponentProps<RouteMatches>, 
         let email: string = extractFromForm(e, "email") as string;
         let call = await forgotPassword({email: email});
 
-        this.setState({
-            requestSuccess: call.success,
-            isRequesting: false
-        });
+        if (call) {
+            this.setState({
+                requestSuccess: call.success,
+                isRequesting: false
+            });
+        }
     }
 
     renderPasswordReset = () => {

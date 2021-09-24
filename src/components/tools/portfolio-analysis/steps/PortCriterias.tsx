@@ -21,7 +21,11 @@ class PortCriterias extends FormComponent<PortCriteriasValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: PortCriteriasValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

@@ -21,7 +21,11 @@ class UtilWeighting extends FormComponent<UtilWeightingValues, any> {
     onReset(type: ResetType): void {
     }
 
-    prepareValues = async (): Promise<void> => {
+    rebuildValues = async (values: UtilWeightingValues) => {
+
+    }
+
+    buildPreviousValues = async (): Promise<void> => {
 
     }
 

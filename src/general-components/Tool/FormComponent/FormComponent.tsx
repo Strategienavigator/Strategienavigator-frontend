@@ -3,12 +3,14 @@ import {Form} from "react-bootstrap";
 import {Messages} from "../../Messages/Messages";
 import StepComponent from "../StepComponent/StepComponent";
 import {randomBytes} from "crypto";
+import {Tool} from "../Tool";
 
 
 export interface FormComponentProps {
     id?: string
     title?: string
     stepComp?: StepComponent
+    tool?: Tool
 }
 
 export interface ResetType {
@@ -21,9 +23,11 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
     protected disabled: boolean = false;
     private error: Map<string, ReactNode[]> = new Map<string, ReactNode[]>();
     private key: string = randomBytes(200).toString();
+    private buildValues: boolean = false;
 
     public componentDidMount = async () => {
-        await this.prepareValues();
+        await this.buildPreviousValues();
+        this.buildValues = true;
         this.forceUpdate();
     }
 
@@ -32,7 +36,7 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
             <Form key={this.key} aria-disabled={this.disabled} name={this.props.id}
                   onSubmit={(e) => this.onFormSubmit(e)}
                   id={this.props.id}>
-                {this.build()}
+                {this.buildValues && this.build()}
             </Form>
         );
     }
@@ -47,7 +51,9 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         this.forceUpdate();
     }
 
-    public abstract prepareValues(): Promise<void>;
+    public abstract buildPreviousValues(): Promise<void>;
+
+    public abstract rebuildValues(values: V): Promise<void>;
 
     public abstract build(): JSX.Element;
 
@@ -114,35 +120,31 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         );
     }
 
-    protected hasError = (): boolean => {
-        return false;
+    protected hasError = (id: string): boolean => {
+        return this.error.has(id);
     }
 
     private onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         let newValues = this.extractValues(e);
 
-        if (this.disabled) {
-            this.props.stepComp?.nextStep();
-        } else {
-            if (this.validate(newValues)) {
-                await this.submit(newValues);
-                this.values = newValues;
+        if (this.validate(newValues)) {
+            this.values = newValues;
+            await this.submit(newValues);
 
-                if (this.props.stepComp?.isLastStep()) {
-                    if (await this.props.stepComp.onSave()) {
-                        Messages.add(<span>Das Tool wurde erfolgreich abgespeichert!</span>, "SUCCESS", Messages.TIMER);
-                    } else {
-                        Messages.add(
-                            <span>Beim Abspeichern des Tools ist ein Fehler aufgetreten!</span>, "DANGER", Messages.TIMER);
-                    }
+            if (this.props.stepComp?.isLastStep()) {
+                if (await this.props.stepComp.onSave()) {
+                    Messages.add(<span>Das Tool wurde erfolgreich abgespeichert!</span>, "SUCCESS", Messages.TIMER);
                 } else {
-                    this.props.stepComp?.nextStep();
+                    Messages.add(
+                        <span>Beim Abspeichern des Tools ist ein Fehler aufgetreten!</span>, "DANGER", Messages.TIMER);
                 }
             } else {
-                Messages.add(
-                    <span>In Ihren Eingaben befinden sich Fehler!<br/> Bitte überprüfen Sie diese erneut.</span>, "DANGER", Messages.TIMER);
+                this.props.stepComp?.nextStep();
             }
+        } else {
+            Messages.add(
+                <span>In Ihren Eingaben befinden sich Fehler!<br/> Bitte überprüfen Sie diese erneut.</span>, "DANGER", Messages.TIMER);
         }
     }
 
