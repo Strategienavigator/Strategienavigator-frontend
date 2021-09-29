@@ -10,10 +10,11 @@ import {Tool} from "../../Tool";
 
 import './save-pagination.scss'
 import {CallInterface} from "../../../API/API";
+import {PaginationLoader} from "../../../API/PaginationLoader";
 
 
 interface SavePaginationState {
-    saves: Array<Array<SimpleSaveResource>>
+    saves: Array<SimpleSaveResource>|null
     page: number
     pageCount: number
     loading: boolean
@@ -25,72 +26,44 @@ interface SavePaginationProps {
 
 class SavePagination extends Component<SavePaginationProps, SavePaginationState> {
 
+    private paginationLoader: PaginationLoader<SimpleSaveResource>;
+
     constructor(props: Readonly<SavePaginationProps> | SavePaginationProps);
     constructor(props: SavePaginationProps, context: any);
     constructor(props: Readonly<SavePaginationProps> | SavePaginationProps, context?: any) {
         super(props, context);
+        this.paginationLoader = new PaginationLoader(async (page) => {
+            if (Session.isLoggedIn()) {
+                let userId = Session.currentUser?.getID() as number;
+                return await getSaves(userId, Session.getToken(), this.props.tool.getID(), page);
+            }
+            return null;
+        });
         this.state = {
             page: 1,
-            saves: new Array<Array<SimpleSaveResource>>(),
+            saves: [],
             pageCount: 1,
             loading: false
         }
+
     }
 
-
-    shouldComponentUpdate(nextProps: Readonly<SavePaginationProps>, nextState: Readonly<SavePaginationState>, nextContext: any): boolean {
-        return true;
-        // return nextState.page !== this.state.page || this.checkIfSavesDiffer(nextState.saves[nextState.page], this.state.saves[nextState.page]);
-    }
-
-    checkIfSavesDiffer(oldSaves: Array<SimpleSaveResource>, newSaves: Array<SimpleSaveResource>): boolean {
-        return oldSaves !== newSaves;
-    }
-
-    private pageChosenCallback = (currentPage: number) => {
+    private pageChosenCallback = async (currentPage: number) => {
         this.setState({
-            page: currentPage
-        }, () => {
-            this.loadSavesIfNeeded(this.state.page);
+            page: currentPage,
+            loading: true
+        });
+        let et  = await this.paginationLoader.getPage(currentPage);
+        this.setState({
+            saves: et,
+            loading:false,
+            pageCount: this.paginationLoader.pageCount
         });
 
     };
-    loadToolSaves = async (page: number = 1) => {
-        if (Session.isLoggedIn()) {
-            let userID = Session.currentUser?.getID() as number;
 
-            this.setState({
-                loading: true
-            });
-            let call = await getSaves(userID, Session.getToken(), this.props.tool.getID(), page);
-
-            if (call && call.success && call.callData.data.length > 0) {
-                let saves = call.callData.data;
-                this.updateSaves(call.callData.meta.current_page, saves);
-                this.setState({
-                    pageCount: call.callData.meta.last_page,
-                    loading: false
-                })
-            }
-        }
-    };
-
-    private updateSaves(page: number, newSaves: Array<SimpleSaveResource>) {
-        this.setState((s) => {
-            let newState = {saves: s.saves.slice()};
-            newState.saves[page] = newSaves;
-            return newState;
-        });
-    }
-
-    private loadSavesIfNeeded(page: number = 1) {
-        if (this.state.saves[page] === null || this.state.saves[page] === undefined) {
-            this.loadToolSaves(page);
-        }
-    }
-
-    componentDidMount(): void {
-        this.loadToolSaves();
+    async componentDidMount() {
+        this.pageChosenCallback(this.state.page);
     }
 
     render(): ReactNode {
@@ -99,13 +72,13 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                 <Loader payload={[]} loaded={(!this.state.loading)}>
 
                     <div>
-                        {(this.state.saves[this.state.page]?.length <= 0 || this.state.saves[this.state.page] === undefined) && (
+                        {(this.state.saves === null || this.state.saves.length <= 0) && (
                             <Card>
                                 <Card.Body>Sie haben aktuell keine Speicherstände.</Card.Body>
                             </Card>
                         )}
 
-                        {this.state.saves[this.state.page]?.map(value => {
+                        {this.state.saves?.map(value => {
                             let save = value;
                             return (
                                 <Card as={Link} to={this.props.tool?.getLink() + "/" + save.id}
