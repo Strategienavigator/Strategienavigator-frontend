@@ -1,3 +1,5 @@
+import {rename} from "fs";
+
 export type SaveResource<D = object> = {
     id: number
     owner_id: number
@@ -118,4 +120,17 @@ export type SharedSaveUserResource = {
 
 export type AvailabilityCheckResource = {
     available: boolean
+}
+export type UserSettingResource = {
+    user_id:number
+    setting_id:number
+    value:number
+}
+
+export type SettingResource = {
+    id: number
+    name:string
+    description:string
+    type:string
+    extras:string
 }
