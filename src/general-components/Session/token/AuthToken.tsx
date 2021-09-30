@@ -14,6 +14,18 @@ export class AuthToken extends Token {
         super("token");
     }
 
+    public setToken = (token: string) => {
+        sessionStorage.setItem(this.identifier, token);
+    }
+
+    public getToken = (): null | string => {
+        return sessionStorage.getItem(this.identifier);
+    }
+
+    public delete = () => {
+        sessionStorage.removeItem(this.identifier);
+    }
+
     getValidTokenBreakdown = (): null | JWTTokenPayloadInterface => {
         if (this.exists()) {
             let breakDown = this.breakDown();
