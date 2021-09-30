@@ -59,7 +59,7 @@ class SWOTAnalysis extends Tool {
                 Interne Einflussfaktoren zeichnen sich in erster Linie dadurch aus, dass sie sich direkt durch
                 das Unternehmen beeinflussen lassen. Folglich spricht man hier auch
                 von <b>"Stärken"</b> und <b>"Schwächen"</b>.
-                Beispiele hierzu wären ein besonders guter Kundenservice oder eine besonders hohe Mitareitermotivation.
+                Beispiele hierzu wären ein besonders guter Kundenservice oder eine besonders hohe Mitarbeitermotivation.
                 Externe Einflussfaktoren bezeichnen dahingegen <b>"Chancen"</b> und <b>"Risiken"</b>, welche sich nicht
                 durch
                 das Unternehmen beeinflussen lassen und demzufolge auf eine gesamte Branche oder sogar Markt einwirken.
