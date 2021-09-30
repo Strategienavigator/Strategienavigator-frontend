@@ -1,15 +1,14 @@
 import React, {Component, ReactNode} from "react";
-import {PaginationResource, SimpleSaveResource} from "../../../Datastructures";
+import {SimpleSaveResource} from "../../../Datastructures";
 import {PaginationFooter} from "../../../PaginationFooter/PaginationFooter";
 import {Loader} from "../../../Loader/Loader";
 import {Session} from "../../../Session/Session";
 import {getSaves} from "../../../API/calls/Saves";
-import {Card, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {Tool} from "../../Tool";
 
 import './save-pagination.scss'
-import {CallInterface} from "../../../API/API";
 
 
 interface SavePaginationState {

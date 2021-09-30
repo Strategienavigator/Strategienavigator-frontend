@@ -1,7 +1,6 @@
 import {Component} from "react";
 
 import "./imprint.scss";
-import {Container} from "react-bootstrap";
 
 
 export class Imprint extends Component<any, any> {
