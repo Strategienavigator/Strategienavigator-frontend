@@ -96,7 +96,7 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
     render(): ReactNode {
         return (
             <div>
-                <Loader payload={[]} loaded={(!this.state.loading)}>
+                <Loader payload={[]} transparent loaded={(!this.state.loading)}>
 
                     <div>
                         {(this.state.saves[this.state.page]?.length <= 0 || this.state.saves[this.state.page] === undefined) && (
