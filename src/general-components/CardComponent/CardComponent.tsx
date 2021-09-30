@@ -132,6 +132,7 @@ export interface CardComponentProps {
     disabled: boolean
     min: number
     max: number
+    hide?: boolean
     required?: boolean
     counter?: CounterInterface
     values?: CardComponentFields
@@ -211,11 +212,10 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
                         ref: ref
                     }
                 );
-                index = index + 1;
 
                 return {
                     cards: cards,
-                    index: index
+                    index: index + 1
                 };
             });
         }
@@ -236,7 +236,9 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
         if (!(this.state.cards.size <= this.props.min)) {
             this.setState(state => {
                 let cards = state.cards;
-                cards.delete(index);
+                let bool = cards.delete(index);
+                console.log(cards);
+                console.log("remove " + index, bool);
 
                 return {
                     cards: cards
@@ -267,7 +269,7 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
 
     render = () => {
         return (
-            <div>
+            <div className={this.props.hide ? "d-none" : ""}>
                 {this.getAllCards()}
 
                 {((this.state.cards.size < this.props.max) && !this.props.disabled) && (

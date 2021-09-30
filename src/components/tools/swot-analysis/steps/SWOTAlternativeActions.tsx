@@ -210,6 +210,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                                         disabled={this.disabled}
                                         min={minAlternativeActions}
                                         max={maxAlternativeActions}
+                                        hide={value.hasNone}
                                         values={value.alternatives}
                                         ref={this.cardComponentFieldsRefs[index]}
                                         placeholder={{
