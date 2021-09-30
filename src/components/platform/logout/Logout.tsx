@@ -16,7 +16,7 @@ export class LogoutComponent extends Component<any, any> {
             reload_app();
 
             Messages.add("Bis bald!", "SUCCESS", Messages.TIMER);
-            this.props.history.push("/home");
+            this.props.history.push("/");
         }
     }
 
