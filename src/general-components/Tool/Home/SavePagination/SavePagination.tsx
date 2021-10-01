@@ -46,14 +46,6 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         return oldSaves !== newSaves;
     }
 
-    private pageChosenCallback = (currentPage: number) => {
-        this.setState({
-            page: currentPage
-        }, () => {
-            this.loadSavesIfNeeded(this.state.page);
-        });
-
-    };
     loadToolSaves = async (page: number = 1) => {
         if (Session.isLoggedIn()) {
             let userID = Session.currentUser?.getID() as number;
@@ -73,20 +65,6 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
             }
         }
     };
-
-    private updateSaves(page: number, newSaves: Array<SimpleSaveResource>) {
-        this.setState((s) => {
-            let newState = {saves: s.saves.slice()};
-            newState.saves[page] = newSaves;
-            return newState;
-        });
-    }
-
-    private loadSavesIfNeeded(page: number = 1) {
-        if (this.state.saves[page] === null || this.state.saves[page] === undefined) {
-            this.loadToolSaves(page);
-        }
-    }
 
     componentDidMount(): void {
         this.loadToolSaves();
@@ -129,6 +107,29 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                 </div>
             </div>
         );
+    }
+
+    private pageChosenCallback = (currentPage: number) => {
+        this.setState({
+            page: currentPage
+        }, () => {
+            this.loadSavesIfNeeded(this.state.page);
+        });
+
+    };
+
+    private updateSaves(page: number, newSaves: Array<SimpleSaveResource>) {
+        this.setState((s) => {
+            let newState = {saves: s.saves.slice()};
+            newState.saves[page] = newSaves;
+            return newState;
+        });
+    }
+
+    private loadSavesIfNeeded(page: number = 1) {
+        if (this.state.saves[page] === null || this.state.saves[page] === undefined) {
+            this.loadToolSaves(page);
+        }
     }
 }
 

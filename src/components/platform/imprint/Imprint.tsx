@@ -9,13 +9,14 @@ export class Imprint extends Component<any, any> {
         return (<>
                 <h1>Impressum</h1>
                 <p> Dies ist ein Projekt der Jade Hochschule Wilhelmshaven/Oldenburg/Elsfleth<br/>
-                    Für weitere Information siehe <a href={"https://www.jade-hs.de/impressum"} rel={"noreferrer"} target={"_blank"}>Impressum der Jade Hochschule</a></p>
+                    Für weitere Information siehe <a href={"https://www.jade-hs.de/impressum"} rel={"noreferrer"}
+                                                     target={"_blank"}>Impressum der Jade Hochschule</a></p>
                 <p><strong>Name und Kontaktdaten der Verantwortlichen (auch für Datenschutz):</strong>
                     <ul>
                         <li>Prof. Christian Gündling</li>
                         <li>Rico Meiner</li>
                     </ul>
-                    </p>
+                </p>
                 <p><strong>Adresse:</strong><br/>Friedrich Paffrath Straße 101<br/>26389
                     Wilhelmshaven</p>
                 <p><strong>Telefon:</strong> 04421 9852424<br/>

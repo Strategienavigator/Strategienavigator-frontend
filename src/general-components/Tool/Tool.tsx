@@ -1,10 +1,10 @@
 import React, {Component, FormEvent, ReactElement, ReactNode, RefObject} from "react";
-import {matchPath, RouteComponentProps, StaticContext} from "react-router";
+import {matchPath, Prompt, RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {Route, Switch} from "react-router-dom";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {ToolHome, ToolHomeInfo} from "./Home/ToolHome";
 import {extractFromForm} from "../FormHelper";
-import {Button, Card, Form, Modal} from "react-bootstrap";
+import {Button, Card, Fade, Form, Modal} from "react-bootstrap";
 import {Loader} from "../Loader/Loader";
 import {createSave, getSave, updateSave} from "../API/calls/Saves";
 import {Session} from "../Session/Session";
@@ -13,6 +13,7 @@ import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepC
 
 import "./tool.scss";
 import {FormComponent} from "./FormComponent/FormComponent";
+import * as H from "history";
 
 
 type ToolViewValidation = {
@@ -23,6 +24,8 @@ type ToolViewValidation = {
 interface ToolState {
     showInputModal: boolean
     isSaving: boolean
+    showRouteChangeModal: boolean
+    lastLocation: H.Location | null
     viewValidationError?: ToolViewValidation
     view?: SaveResource<any>
     nameError?: {
@@ -68,6 +71,8 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.state = {
             showInputModal: true,
             isSaving: false,
+            lastLocation: null,
+            showRouteChangeModal: false,
             viewValidationError: {}
         }
         this.stepComponent = React.createRef<StepComponent>();
@@ -114,55 +119,104 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         }
 
         return (
-            <Switch>
-                <Route exact path={this.getLink()}>
-                    {this.getRenderedToolHome()}
-                </Route>
+            <>
+                <Switch>
+                    <Route exact path={this.getLink()}>
+                        {this.getRenderedToolHome()}
+                    </Route>
 
-                <Route exact path={this.getLink() + "/new"}>
-                    {!this.hasCurrentTool() ? (
-                        <div>
-                            <Loader payload={[]} transparent animate={false} fullscreen alignment={"center"}
-                                    loaded={false}/>
-                            {this.getNameAndDescInputModal()}
-                        </div>
-                    ) : this.getStepComponent()}
-                </Route>
+                    <Route exact path={this.getLink() + "/new"}>
+                        {!this.hasCurrentTool() ? (
+                            <div>
+                                <Loader payload={[]} transparent animate={false} fullscreen alignment={"center"}
+                                        loaded={false}/>
+                                {this.getNameAndDescInputModal()}
+                            </div>
+                        ) : this.getStepComponent()}
+                        <Prompt message={this.denyRouteChange}/>
+                    </Route>
 
-                <Route
-                    exact
-                    render={(props) => {
-                        let ID = parseInt(props.match.params.id as string);
+                    <Route
+                        exact
+                        render={(props) => {
+                            let ID = parseInt(props.match.params.id as string);
 
-                        return (
-                            <Loader payload={[() => this.validateViewID(ID)]} transparent
-                                    alignment={"center"} fullscreen animate={false}>
-                                {(this.state.viewValidationError === undefined) ? (
-                                    this.renderView(this.state.view as SaveResource<any>)
-                                ) : (
-                                    <Card body>
-                                        {(this.state.viewValidationError.isNotOwn) && (
-                                            <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
+                            return (
+                                <>
+                                    <Loader payload={[() => this.validateViewID(ID)]} transparent
+                                            alignment={"center"} fullscreen animate={false}>
+                                        {(this.state.viewValidationError === undefined) ? (
+                                            this.renderView(this.state.view as SaveResource<any>)
+                                        ) : (
+                                            <Card body>
+                                                {(this.state.viewValidationError.isNotOwn) && (
+                                                    <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
+                                                )}
+                                                {(this.state.viewValidationError.isOtherTool) && (
+                                                    <>Bei dieser Analyse handelt es sich nicht um
+                                                        eine <b>{this.toolName}</b>!</>
+                                                )}
+                                            </Card>
                                         )}
-                                        {(this.state.viewValidationError.isOtherTool) && (
-                                            <>Bei dieser Analyse handelt es sich nicht um
-                                                eine <b>{this.toolName}</b>!</>
-                                        )}
-                                    </Card>
-                                )}
-                            </Loader>
-                        );
-                    }}
-                    path={this.getLink() + "/:id"}
-                />
+                                    </Loader>
+                                    <Prompt message={this.denyRouteChange}/>
+                                </>
+                            );
+                        }}
+                        path={this.getLink() + "/:id"}
+                    />
 
-                {(this.state.showInputModal) && this.getNameAndDescInputModal()}
+                    {(this.state.showInputModal) && this.getNameAndDescInputModal()}
 
-                {(this.state.isSaving) && (
-                    <Loader payload={[]} fullscreen transparent loaded={false}/>
-                )}
-            </Switch>
+                    {(this.state.isSaving) && (
+                        <Loader payload={[]} fullscreen transparent loaded={false}/>
+                    )}
+
+                </Switch>
+
+                <Modal
+                    show={this.state.showRouteChangeModal}
+                    backdrop="static"
+                    animate={Fade}
+                    keyboard
+                >
+                    <Modal.Header>
+                        <Modal.Title>Wollen Sie wirklich die Seite verlassen?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        Nicht gespeicherte Änderungen können verloren gehen.
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={() => {
+                            this.props.history.push(this.state.lastLocation?.pathname as string);
+                            if ((this.state.lastLocation?.pathname as string).startsWith(this.toolLink)) {
+                                this.setState({
+                                    showRouteChangeModal: false
+                                });
+                            }
+                        }} variant={"light"} type={"button"}>
+                            Ja
+                        </Button>
+                        <Button onClick={() => {
+                            this.setState({
+                                showRouteChangeModal: false,
+                                lastLocation: null
+                            });
+                        }} variant={"dark"} type={"button"}>
+                            Nein
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
         );
+    }
+
+    denyRouteChange = (location: H.Location, action: H.Action): boolean => {
+        this.setState({
+            showRouteChangeModal: true,
+            lastLocation: location
+        });
+        return (location.pathname === this.state.lastLocation?.pathname);
     }
 
     componentDidMount() {
@@ -176,6 +230,18 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
             this.checkForPage(location.pathname);
         });
+
+        window.onbeforeunload = (e) => {
+            if (this.isView || this.isNew) {
+                return true;
+            } else {
+                delete e['returnValue'];
+            }
+        };
+    }
+
+    componentWillUnmount() {
+        window.onbeforeunload = null;
     }
 
     public switchPage(page: string) {
@@ -491,6 +557,8 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         });
     }
 }
+
+withRouter<RouteComponentProps<{ id: string }>, any>(Tool);
 
 export {
     Tool

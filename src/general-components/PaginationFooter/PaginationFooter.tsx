@@ -138,7 +138,7 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
         if (rightSkip > 0) {
             numbers.push(-1);
         }
-        if(numbers[numbers.length - 1] !== maxPages){
+        if (numbers[numbers.length - 1] !== maxPages) {
             numbers.push(maxPages);
         }
 
