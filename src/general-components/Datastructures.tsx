@@ -123,7 +123,7 @@ export type AvailabilityCheckResource = {
 export type UserSettingResource = {
     user_id:number
     setting_id:number
-    value:number
+    value:string
 }
 
 export type SettingResource = {
@@ -132,4 +132,5 @@ export type SettingResource = {
     description:string
     type:string
     extras:string
+    default:string
 }

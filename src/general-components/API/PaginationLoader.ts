@@ -9,7 +9,7 @@ import {CallInterface} from "./API";
 export class PaginationLoader<D extends object> {
     private readonly data: Array<Array<D>>;
     private readonly getPageCallback?: (page: number) => Promise<CallInterface<PaginationResource<D>> | null>;
-    private _pageCount: number = 0;
+    private _pageCount: number = -1;
 
     constructor(cb?: (page: number) => Promise<CallInterface<PaginationResource<D>> | null>) {
         this.data = [];
@@ -36,6 +36,26 @@ export class PaginationLoader<D extends object> {
             return this.getPageData(page);
         }
         return null;
+    }
+
+    public async getAll() {
+        let allData = new Array<D>();
+        let result = await this.getPage(1);
+        let callbacks = new Array<Promise<D[] | null>>();
+        if (result) {
+            allData.push(...result);
+        }
+        for (let i = 2; i <= this.pageCount; i++) {
+            callbacks.push(this.getPage(i));
+        }
+
+        let results = await Promise.all(callbacks);
+        for (let r of results){
+            if(r){
+                allData.concat(r);
+            }
+        }
+        return allData
     }
 
 

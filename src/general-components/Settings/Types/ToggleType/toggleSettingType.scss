@@ -1,3 +1,32 @@
-.settingTextContainer{
-  display: inline-block;
+.parent{
+  display:flex;
+  cursor:pointer;
+}
+
+.title{
+  display:inline-block;
+  flex-grow:1;
+  cursor:inherit;
+}
+
+.title span{
+  overflow-y: hidden;
+}
+
+.type{
+  display:inline-block;
+  margin-top:auto;
+  margin-bottom:auto;
+  transform: scale(1.8);
+  cursor:initial;
+}
+
+
+.spacer{
+  flex-grow:100;
+  cursor:initial;
+}
+
+.type input{
+  cursor:pointer;
 }

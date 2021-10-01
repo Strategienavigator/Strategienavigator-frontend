@@ -19,8 +19,15 @@ const getSetting = (token: string, settingId: number) => {
 }
 
 
-const getUserSettings = (userId: number, token: string) => {
-    return callAPI<PaginationResource<UserSettingResource>>(`api/users/${userId}/settings`, "GET", undefined, token);
+const getUserSettings = (userId: number, token: string, page?:number) => {
+    let data = new URLSearchParams();
+    let searchParams = false;
+
+    if (page) {
+        data.append("page", String(page));
+        searchParams = true;
+    }
+    return callAPI<PaginationResource<UserSettingResource>>(`api/users/${userId}/settings`, "GET", searchParams ? data : undefined, token);
 }
 
 const getUserSetting = (userId: number, settingId: number, token: string) => {
@@ -45,4 +52,14 @@ const updateUserSettings = <D extends object>(userID: number, setttingID: number
 
 const deleteUserSettings = (userID: number, settingID: number, token: string) => {
     return callAPI(`api/users/${userID}/settings/${settingID}`, "DELETE", undefined, token);
+}
+
+export {
+    getSettings,
+    getSetting,
+    getUserSettings,
+    getUserSetting,
+    createUserSettings,
+    updateUserSettings,
+    deleteUserSettings
 }
