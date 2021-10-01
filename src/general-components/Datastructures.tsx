@@ -1,4 +1,3 @@
-import {rename} from "fs";
 
 export type SaveResource<D = object> = {
     id: number
