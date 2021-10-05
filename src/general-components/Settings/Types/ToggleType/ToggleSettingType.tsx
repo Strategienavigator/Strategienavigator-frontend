@@ -1,4 +1,5 @@
 import {ChangeEvent, Component} from "react";
+import {Form} from "react-bootstrap";
 import {SettingsTypeProps} from "../SettingsTypeProps";
 
 
@@ -15,20 +16,18 @@ export class ToggleSettingType extends Component<ToggleSettingTypeProps, {}> {
     constructor(props: ToggleSettingTypeProps, context: any);
     constructor(props: ToggleSettingTypeProps | Readonly<ToggleSettingTypeProps>, context?: any) {
         super(props, context);
-
     }
 
     getValue(): boolean {
         return JSON.parse(this.props.value);
     }
 
-    parseValue(checked:boolean){
+    parseValue(checked: boolean) {
         return checked.toString();
     }
 
     valueChangedListener = (event: ChangeEvent) => {
-        event.preventDefault();
-
+        event.stopPropagation();
         this.props.valueChanged(this.parseValue((event.target as HTMLInputElement).checked));
     }
 
@@ -37,16 +36,15 @@ export class ToggleSettingType extends Component<ToggleSettingTypeProps, {}> {
 
         return (
             <div className="parent">
-                <label className="title" htmlFor={"checkbox-" + this.props.name}>
+                <Form.Check.Label className="title" htmlFor={"checkbox-" + this.props.name}>
                     <span>{this.props.name}</span><br/>
                     <span className={"text-muted"}>{this.props.description}</span>
-                    <div/>
 
 
-                </label>
+                </Form.Check.Label>
                 <div className="type">
-                    <input type="checkbox" id={"checkbox-" + this.props.name} checked={this.getValue()}
-                           onChange={this.valueChangedListener}/>
+                    <Form.Check.Input aria-label={this.props.name} id={"checkbox-" + this.props.name}
+                                      onChange={this.valueChangedListener} checked={this.getValue()}/>
                 </div>
             </div>
 

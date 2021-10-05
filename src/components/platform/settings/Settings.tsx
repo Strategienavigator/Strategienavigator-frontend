@@ -1,10 +1,7 @@
 import {Component} from "react";
 
 import "./settings.scss";
-import {
-    ToggleSettingType,
-    ToggleSettingTypeProps
-} from "../../../general-components/Settings/Types/ToggleType/ToggleSettingType";
+import {ToggleSettingType} from "../../../general-components/Settings/Types/ToggleType/ToggleSettingType";
 import {Loader} from "../../../general-components/Loader/Loader";
 import * as SettingsAPI from "../../../general-components/API/calls/Settings"
 import {SettingResource, UserSettingResource} from "../../../general-components/Datastructures";
@@ -12,18 +9,23 @@ import {PaginationLoader} from "../../../general-components/API/PaginationLoader
 import {Session} from "../../../general-components/Session/Session";
 import {SettingsTypeProps} from "../../../general-components/Settings/Types/SettingsTypeProps";
 
+export interface UserSettingProxy extends UserSettingResource {
+    dirty: boolean
+    newResource: boolean
+    oldValue:string
+}
 
 export interface SettingsState {
     settings: SettingResource[],
-    userSettings: UserSettingResource[],
+    userSettings: UserSettingProxy[],
 }
 
 export class Settings extends Component<{}, SettingsState> {
 
 
-    static typeDict: { [id: string]: (props: SettingsTypeProps) => JSX.Element } = {
-        "toggle": (props: SettingsTypeProps) => {
-            return <ToggleSettingType {...props}/>
+    static typeDict: { [id: string]: (props: SettingsTypeProps, key: string|number) => JSX.Element } = {
+        "toggle": (props: SettingsTypeProps, key: string|number) => {
+            return <ToggleSettingType {...props} key={key}/>
         }
     }
     private settingsLoader: PaginationLoader<SettingResource>;
@@ -54,15 +56,42 @@ export class Settings extends Component<{}, SettingsState> {
         });
     }
 
-    settingChanged(id: number, value: string) {
 
+
+    settingChanged(id: number, value: string) {
+        let userSettingProxy = this.getUserSettingProxy(id);
+        let userSettingsArray = this.state.userSettings.slice();
+        if(userSettingProxy){
+            userSettingProxy.dirty = userSettingProxy.oldValue !== value
+            userSettingProxy.value = value;
+        }else{
+            let userId = Session.currentUser?.getID();
+            if(userId){
+                userSettingProxy = {setting_id:id,user_id:userId,dirty:true,newResource:true,oldValue:"",value:value};
+                userSettingsArray.push(userSettingProxy);
+            }else{
+                // TODO navigate to home screen
+                return;
+            }
+        }
+
+        this.setState({
+            userSettings: userSettingsArray
+        });
+    }
+
+    getUserSettingProxy(settingId:number){
+        return this.state.userSettings.find(value => value.setting_id === settingId);
     }
 
     async loadSettings() {
+        let userSettings = (await this.userSettingsLoader.getAll()).map(value => {
+            return {dirty: false, newResource: false,oldValue:value.value, ...value} as UserSettingProxy;
+        });
 
         this.setState({
             settings: await this.settingsLoader.getAll(),
-            userSettings: await this.userSettingsLoader.getAll()
+            userSettings: userSettings
         });
     }
 
@@ -83,8 +112,8 @@ export class Settings extends Component<{}, SettingsState> {
                     description: setting.description,
                     extras: setting.extras,
                     value: v,
-                    valueChanged: this.settingChanged.bind(this,setting.id)
-                });
+                    valueChanged: this.settingChanged.bind(this, setting.id)
+                }, setting.id);
             }
             return null;
         });
