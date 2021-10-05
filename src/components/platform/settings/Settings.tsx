@@ -8,23 +8,25 @@ import {SettingResource, UserSettingResource} from "../../../general-components/
 import {PaginationLoader} from "../../../general-components/API/PaginationLoader";
 import {Session} from "../../../general-components/Session/Session";
 import {SettingsTypeProps} from "../../../general-components/Settings/Types/SettingsTypeProps";
+import {callAPI, CallInterface} from "../../../general-components/API/API";
+import {Button} from "react-bootstrap";
 
 export interface UserSettingProxy extends UserSettingResource {
-    dirty: boolean
     newResource: boolean
-    oldValue:string
+    oldValue: string
 }
 
 export interface SettingsState {
     settings: SettingResource[],
     userSettings: UserSettingProxy[],
+    saving: boolean
 }
 
 export class Settings extends Component<{}, SettingsState> {
 
 
-    static typeDict: { [id: string]: (props: SettingsTypeProps, key: string|number) => JSX.Element } = {
-        "toggle": (props: SettingsTypeProps, key: string|number) => {
+    static typeDict: { [id: string]: (props: SettingsTypeProps, key: string | number) => JSX.Element } = {
+        "toggle": (props: SettingsTypeProps, key: string | number) => {
             return <ToggleSettingType {...props} key={key}/>
         }
     }
@@ -36,7 +38,7 @@ export class Settings extends Component<{}, SettingsState> {
     constructor(props: {}, context: any);
     constructor(props: {} | Readonly<{}>, context?: any) {
         super(props, context);
-        this.state = {settings: [], userSettings: []};
+        this.state = {settings: [], userSettings: [], saving: false};
 
         this.settingsLoader = new PaginationLoader(async (page) => {
             let token = Session.getToken();
@@ -57,19 +59,17 @@ export class Settings extends Component<{}, SettingsState> {
     }
 
 
-
     settingChanged(id: number, value: string) {
         let userSettingProxy = this.getUserSettingProxy(id);
         let userSettingsArray = this.state.userSettings.slice();
-        if(userSettingProxy){
-            userSettingProxy.dirty = userSettingProxy.oldValue !== value
+        if (userSettingProxy) {
             userSettingProxy.value = value;
-        }else{
+        } else {
             let userId = Session.currentUser?.getID();
-            if(userId){
-                userSettingProxy = {setting_id:id,user_id:userId,dirty:true,newResource:true,oldValue:"",value:value};
+            if (userId) {
+                userSettingProxy = {setting_id: id, user_id: userId, newResource: true, oldValue: "", value: value};
                 userSettingsArray.push(userSettingProxy);
-            }else{
+            } else {
                 // TODO navigate to home screen
                 return;
             }
@@ -80,19 +80,49 @@ export class Settings extends Component<{}, SettingsState> {
         });
     }
 
-    getUserSettingProxy(settingId:number){
+    getUserSettingProxy(settingId: number) {
         return this.state.userSettings.find(value => value.setting_id === settingId);
     }
 
     async loadSettings() {
         let userSettings = (await this.userSettingsLoader.getAll()).map(value => {
-            return {dirty: false, newResource: false,oldValue:value.value, ...value} as UserSettingProxy;
+            return {dirty: false, newResource: false, oldValue: value.value, ...value} as UserSettingProxy;
         });
 
         this.setState({
             settings: await this.settingsLoader.getAll(),
             userSettings: userSettings
         });
+    }
+
+    async saveSettings(userSettings: UserSettingProxy[]) {
+        if (Session.isLoggedIn()) {
+            let userId = Session.currentUser?.getID();
+            let token = Session.getToken();
+            if (typeof userId === "number" && typeof token === "string") {
+                let safeUserId = userId; // stupid but it works. Compiler thinks the above if doesn't apply to the map callback
+                let safeToken = token;
+                this.setState({
+                    saving:true
+                })
+                let promises = userSettings.filter(value => value.value !== value.oldValue || value.newResource).map(setting => {
+                    let f = SettingsAPI.updateUserSettings;
+                    if(setting.newResource){
+                        f = SettingsAPI.createUserSettings;
+                    }
+                    let result = f(safeUserId, setting.setting_id, safeToken, setting.value);
+                    setting.newResource = false;
+                    setting.oldValue = setting.value;
+                    return result;
+                });
+
+                await Promise.all(promises);
+                this.setState({
+                    saving:false,
+                    userSettings:userSettings
+                });
+            }
+        }
     }
 
     render() {
@@ -119,7 +149,13 @@ export class Settings extends Component<{}, SettingsState> {
         });
         return (
             <>
-                <Loader payload={[this.loadSettings.bind(this)]} children={settings}/>
+                <Loader payload={[this.loadSettings.bind(this)]}>
+                    {settings}
+                    <Button variant={"primary"} className={"mt-3"} onClick={async (event) => await this.saveSettings(this.state.userSettings)} disabled={this.state.saving}>
+                        {this.state.saving ? "Speichert...":"Speichern"}
+                    </Button>
+                </Loader>
+
             </>
         );
     }
