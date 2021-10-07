@@ -26,6 +26,7 @@ export class AboutUs extends Component<any, any> {
             <p>
                 <h3>Motivation</h3>
                 Wenn Du interesse daran hast, in einem jungen und agilen Team mitzuwirken, dann melde Dich bei uns. Da es ein Open-Source Projekt ist, ist jeder ist herzlich willkommen.
+                Du erreichst uns unter der Email: <a href={"mailto:strategie-navigator@jade-hs.de?subject=Interesse+Mitwirkung+" + process.env.REACT_APP_NAME}>strategie-navigator@jade-hs.de</a>
             </p>
 
             <h3>Entwicklerteam</h3>
