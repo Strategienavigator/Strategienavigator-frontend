@@ -39,11 +39,11 @@ export class AboutUs extends Component<any, any> {
                 <li><a href="https://github.com/ricom" rel="noreferrer" target="_blank">Rico</a></li>
             </ul>
 
-            <h3>Professorenteam</h3>
+            <h3>Projektverantworliche Professoren</h3>
             <ul>
-                <li>Prof. Güntling</li>
-                <li>Prof. Prehm</li>
-                <li>Prof. Szeliga</li>
+                <li>Prof. Gündling</li>
+                <li>Prof. Dr. Prehm</li>
+                <li>Prof. Dr. Szeliga</li>
             </ul>
 
 
