@@ -25,18 +25,18 @@ export class AboutUs extends Component<any, any> {
             </p>
             <p>
                 <h3>Motivation</h3>
-                Wenn Du interesse daran hast, in einem jungen und agilen Team mitzuwirken, dann melde Dich bei uns. Da es ein Open-Source Projekt ist, ist jeder ist herzlich willkommen.
+                Wenn Du Interesse daran hast, in einem jungen und agilen Team mitzuwirken, dann melde Dich bei uns. Da es ein Open-Source Projekt ist, ist jeder ist herzlich willkommen.
                 Du erreichst uns unter der Email: <a href={"mailto:strategie-navigator@jade-hs.de?subject=Interesse+Mitwirkung+" + process.env.REACT_APP_NAME}>strategie-navigator@jade-hs.de</a>
             </p>
 
             <h3>Entwicklerteam</h3>
 
             <ul>
-                <li><a href="https://github.com/Geist5000" rel="noreferrer" target="_blank">Claas</a></li>
-                <li><a href="https://github.com/Marce200700" rel="noreferrer" target="_blank">Marcel</a></li>
-                <li><a href="https://github.com/ma1160" rel="noreferrer" target="_blank">Marco</a></li>
-                <li><a href="https://github.com/nic-schi" rel="noreferrer" target="_blank">Nichlas</a></li>
-                <li><a href="https://github.com/ricom" rel="noreferrer" target="_blank">Rico</a></li>
+                <li><a href="https://github.com/Geist5000" rel="noreferrer" target="_blank">Claas Wittig</a></li>
+                <li><a href="https://github.com/Marce200700" rel="noreferrer" target="_blank">Marcel Bankert</a></li>
+                <li><a href="https://github.com/ma1160" rel="noreferrer" target="_blank">Marco Janssen</a></li>
+                <li><a href="https://github.com/nic-schi" rel="noreferrer" target="_blank">Nichlas Schipper</a></li>
+                <li><a href="https://github.com/ricom" rel="noreferrer" target="_blank">Rico Meiner</a></li>
             </ul>
 
             <h3>Projektverantworliche Professoren</h3>
