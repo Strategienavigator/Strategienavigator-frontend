@@ -8,6 +8,7 @@ import {PasswordField} from "../../../general-components/PasswordField/PasswordF
 import {Messages} from "../../../general-components/Messages/Messages";
 
 import "./login.scss";
+import {Link} from "react-router-dom";
 
 
 export interface LoginState {
@@ -65,7 +66,6 @@ export class LoginComponent extends Component<any, LoginState> {
             }}>
                 <h2>Anmelden</h2>
 
-
                 <hr/>
 
                 <Form.Floating className={"mb-2 mt-2"}>
@@ -97,6 +97,8 @@ export class LoginComponent extends Component<any, LoginState> {
                         </div>
                     )}
                 </div>
+
+                <Link to={"/reset-password"}>Passwort vergessen?</Link>
 
                 <hr/>
 

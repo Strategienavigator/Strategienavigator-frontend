@@ -241,7 +241,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
         let progress = 0;
         this.state.steps?.map((step) => {
-            if (step.values) {
+            if (step.values && Object.keys(step.values).length !== 0) {
                 progress++;
                 step.ref.current?.setValues(step.values);
                 step.ref.current?.setDisabled(true);
@@ -314,6 +314,9 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             step = this.state.steps[this.currentProgress - 1].ref;
             await step.current?.buildPreviousValues();
             step.current?.forceUpdate();
+
+            await this.onSave();
+            await this.props.tool?.lock();
         } else {
             if (this.currentStep < this.state.steps.length) {
                 this.currentStep++;
@@ -343,7 +346,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
             for (const {ref, id} of this.state.steps) {
                 Object.assign(data, {[id]: ref.current?.getValues()});
-                ref.current?.setDisabled(true);
+                // ref.current?.setDisabled(true);
                 allForms.set(ref.current?.props.id as string, ref.current as FormComponent<any, any>);
             }
 

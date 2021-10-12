@@ -76,6 +76,24 @@ const updateSave = async (saveID: number, data: FormData, token: string | null) 
 }
 
 /**
+ * Lockt einen Save
+ *
+ * @param {number} saveID
+ * @param {boolean} lock
+ * @param {string | null} token
+ * @returns {Promise<CallInterface<object> | null>}
+ */
+const lockSave = async (saveID: number, lock: boolean, token: string | null) => {
+    let data = new FormData();
+    data.append("_method", "PUT");
+
+    let locking = String(lock ? 1 : 0);
+    data.append("lock", locking);
+
+    return await callAPI("api/saves/" + saveID, "POST", data, (token !== null) ? token : undefined);
+}
+
+/**
  * Erstellt einen neuen Save
  *
  * @param data Daten des Save
@@ -90,5 +108,6 @@ export {
     getSave,
     deleteSaves,
     updateSave,
+    lockSave,
     createSave
 }

@@ -6,7 +6,7 @@ import {ToolHome, ToolHomeInfo} from "./Home/ToolHome";
 import {extractFromForm} from "../FormHelper";
 import {Button, Card, Fade, Form, Modal} from "react-bootstrap";
 import {Loader} from "../Loader/Loader";
-import {createSave, getSave, updateSave} from "../API/calls/Saves";
+import {createSave, getSave, lockSave, updateSave} from "../API/calls/Saves";
 import {Session} from "../Session/Session";
 import {SaveResource} from "../Datastructures";
 import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepComponent";
@@ -19,6 +19,7 @@ import * as H from "history";
 type ToolViewValidation = {
     isNotOwn?: boolean
     isOtherTool?: boolean
+    isLocked?: boolean
 } | undefined;
 
 interface ToolState {
@@ -109,6 +110,14 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         return (tutorial !== null && tutorial !== undefined);
     }
 
+    public lock = async () => {
+        await this.lockSave(true);
+    }
+
+    public unlock = async () => {
+        await this.lockSave(false);
+    }
+
     public render = () => {
         if (this.maintenance) {
             return (
@@ -155,6 +164,9 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                                                 {(this.state.viewValidationError.isOtherTool) && (
                                                     <>Bei dieser Analyse handelt es sich nicht um
                                                         eine <b>{this.toolName}</b>!</>
+                                                )}
+                                                {(this.state.viewValidationError.isLocked) && (
+                                                    <>Dieser Speicherstand wird aktuell bearbeitet!</>
                                                 )}
                                             </Card>
                                         )}
@@ -223,25 +235,46 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.checkForPage(this.props.location.pathname);
 
         this.props.history.listen((location) => {
-            this.currentSaveID = undefined;
-            this.currentSaveName = undefined;
-            this.currentSaveDescription = undefined;
-            this.currentSave = undefined;
-
             this.checkForPage(location.pathname);
+
+            if (this.isNew) {
+                this.currentSaveID = undefined;
+                this.currentSaveName = undefined;
+                this.currentSaveDescription = undefined;
+                this.currentSave = undefined;
+                this.forceUpdate();
+            }
         });
 
-        window.onbeforeunload = (e) => {
+        window.onbeforeunload = async (e) => {
             if (this.isView || this.isNew) {
                 return true;
             } else {
                 delete e['returnValue'];
             }
         };
+        window.onunload = () => {
+            let data = new FormData();
+            data.append("_method", "PUT");
+            data.append("lock", String(0));
+
+            let headers = new Headers();
+            headers.append("Authorization", "Bearer " + Session.getToken());
+
+            fetch(process.env.REACT_APP_API + "api/saves/" + this.currentSaveID, {
+                method: "POST",
+                body: data,
+                headers: headers,
+                keepalive: true
+            });
+        }
+        // navigator.sendBeacon(process.env.REACT_APP_API + "api/saves/" + this.currentSaveID, data);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = async () => {
         window.onbeforeunload = null;
+        window.onunload = null;
+        await this.unlock();
     }
 
     public switchPage(page: string) {
@@ -263,6 +296,12 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             // Create new
             saveData.append("tool_id", String(this.toolID));
             call = await createSave(saveData, Session.getToken());
+
+            if (call && call.success) {
+                let callData = call.callData as SaveResource;
+                this.currentSave = callData;
+                this.currentSaveID = callData.id;
+            }
         } else {
             // Update current
             call = await updateSave(this.currentSaveID, saveData, Session.getToken());
@@ -350,6 +389,10 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.toolIcon = toolIcon;
     }
 
+    private lockSave = async (lock: boolean) => {
+        await lockSave(this.currentSaveID as number, lock, Session.getToken());
+    }
+
     private checkForPage = (location: string) => {
         this.isNew = false;
         this.isHome = false;
@@ -368,16 +411,21 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         let call = await getSave(ID, Session.getToken());
         if (call) {
             let data = call.callData as SaveResource<any>;
-            data.data = JSON.parse(data.data);
-
-            let isNotOwn, isOtherTool;
+            let isNotOwn, isOtherTool, isLocked;
 
             if (call.success) {
+                data.data = JSON.parse(data.data);
                 if (data.tool_id === this.toolID) {
-                    this.currentSave = data;
-                    this.currentSaveName = data.name;
-                    this.currentSaveDescription = data.description;
-                    this.currentSaveID = data.id;
+                    if ((data.locked_by === null) || data.locked_by === Session.currentUser?.getID()) {
+                        this.currentSave = data;
+                        this.currentSaveName = data.name;
+                        this.currentSaveDescription = data.description;
+                        this.currentSaveID = data.id;
+
+                        await this.lock();
+                    } else {
+                        isLocked = true;
+                    }
                 } else {
                     this.currentSaveName = data.name;
                     call.success = false;
@@ -389,10 +437,11 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
             let validation: ToolViewValidation = {
                 isNotOwn: isNotOwn,
-                isOtherTool: isOtherTool
+                isOtherTool: isOtherTool,
+                isLocked: isLocked
             };
 
-            if (!isNotOwn && !isOtherTool) {
+            if (!isNotOwn && !isOtherTool && !isLocked) {
                 validation = undefined;
             }
 
