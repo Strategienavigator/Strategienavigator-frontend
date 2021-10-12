@@ -1,3 +1,13 @@
+@import "src/scss/variables/variables";
+
 footer {
   background-color: #fff;
+
+  a {
+    color: $color !important;
+  }
+
+  a:hover {
+    color: inherit !important;
+  }
 }
