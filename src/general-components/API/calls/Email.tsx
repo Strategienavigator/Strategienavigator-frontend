@@ -12,10 +12,10 @@ const verifyEmail = async (emailToken: string) => {
 }
 
 const checkEmail = async (input: string) => {
-    let data = new FormData();
+    let data = new URLSearchParams();
     data.append("email", input);
 
-    return await callAPI<DefaultResponse<AvailabilityCheckResource>>("api/checkEmail", "POST", data);
+    return await callAPI<DefaultResponse<AvailabilityCheckResource>>("api/checkEmail", "GET", data);
 }
 
 export {
