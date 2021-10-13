@@ -53,7 +53,8 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                 if(call?.success){
                     this.setState({
                         success: call.callData.data.available,
-                        isLoading: false
+                        isLoading: false,
+                        error: false
                     });
                 }else{
                     this.setState({
@@ -66,7 +67,8 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
             }, 600);
         } else {
             this.setState({
-                success: undefined
+                success: undefined,
+                error: false
             });
         }
 
