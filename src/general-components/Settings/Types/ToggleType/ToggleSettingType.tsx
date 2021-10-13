@@ -11,13 +11,6 @@ export interface ToggleSettingTypeProps extends SettingsTypeProps {
 
 export class ToggleSettingType extends Component<ToggleSettingTypeProps, {}> {
 
-
-    constructor(props: Readonly<ToggleSettingTypeProps> | ToggleSettingTypeProps);
-    constructor(props: ToggleSettingTypeProps, context: any);
-    constructor(props: ToggleSettingTypeProps | Readonly<ToggleSettingTypeProps>, context?: any) {
-        super(props, context);
-    }
-
     getValue(): boolean {
         return JSON.parse(this.props.value);
     }

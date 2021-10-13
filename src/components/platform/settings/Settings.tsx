@@ -8,7 +8,6 @@ import {SettingResource, UserSettingResource} from "../../../general-components/
 import {PaginationLoader} from "../../../general-components/API/PaginationLoader";
 import {Session} from "../../../general-components/Session/Session";
 import {SettingsTypeProps} from "../../../general-components/Settings/Types/SettingsTypeProps";
-import {callAPI, CallInterface} from "../../../general-components/API/API";
 import {Button} from "react-bootstrap";
 
 export interface UserSettingProxy extends UserSettingResource {
