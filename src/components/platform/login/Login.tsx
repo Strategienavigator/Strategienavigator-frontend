@@ -98,7 +98,7 @@ export class LoginComponent extends Component<any, LoginState> {
                     )}
                 </div>
 
-                <Link to={"/reset-password"}>Passwort vergessen?</Link>
+                <Link to={"/reset-password"} className={"link-primary"}>Passwort vergessen?</Link>
 
                 <hr/>
 
