@@ -116,7 +116,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
         secondValue = (currentActionName !== undefined) ? currentActionName[1] : "";
 
         // PROGRESS
-        let currentProgress = ((this.currentActionIndex + 1) / this.state.actions.length) * 100;
+        let currentProgress = ((this.currentActionIndex) / this.state.actions.length) * 100;
         if (this.disabled) {
             currentProgress = 100;
         }
