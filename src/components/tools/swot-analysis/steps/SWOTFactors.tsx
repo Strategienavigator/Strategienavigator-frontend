@@ -55,7 +55,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, any> {
     validate(values: SwotFactorsValues): boolean {
         for (const cardComponentRef of this.cardComponentRefs) {
             if (cardComponentRef.current?.hasInvalidValue()) {
-                this.addError("invalidCardComponent", "Überprüfen Sie Ihre Eingaben.");
+                this.addError("invalidCardComponent", "Es müssen alle Felder ausgefüllt werden!");
                 return false;
             }
         }
