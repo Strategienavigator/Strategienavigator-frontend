@@ -42,7 +42,12 @@ class Card extends Component<CardProps, CardState> {
     }
 
     isValid = () => {
-        return (this.currentDesc !== undefined && this.currentName !== undefined);
+        if (this.currentDesc !== undefined && this.currentDesc !== "") {
+            if (this.currentName !== undefined && this.currentName !== "") {
+                return true;
+            }
+        }
+        return false;
     }
 
     getDescription = () => {
