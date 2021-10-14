@@ -1,3 +1,4 @@
+
 export type SaveResource<D = object> = {
     id: number
     owner_id: number
@@ -118,4 +119,18 @@ export type SharedSaveUserResource = {
 
 export type AvailabilityCheckResource = {
     available: boolean
+}
+export type UserSettingResource = {
+    user_id:number
+    setting_id:number
+    value:string
+}
+
+export type SettingResource = {
+    id: number
+    name:string
+    description:string
+    type:string
+    extras:string
+    default:string
 }
