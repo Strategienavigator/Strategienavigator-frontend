@@ -425,6 +425,8 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             step.current?.reset({same: false, all: true});
         }
 
+        this.restoreFooter();
+        this.state.steps[(currentStep !== undefined) ? (currentStep - 1) : 0].ref.current?.changeControlFooter();
         this.forceUpdate();
     }
 
