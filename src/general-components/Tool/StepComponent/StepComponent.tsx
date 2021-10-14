@@ -304,6 +304,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         this.restoreFooter();
 
         let step;
+        let isProgress: boolean = false;
         if (this.currentProgress < this.state.steps.length && this.currentStep >= this.currentProgress) {
             step = this.state.steps[this.currentProgress - 1].ref;
             step.current?.setDisabled(true);
@@ -315,8 +316,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             await step.current?.buildPreviousValues();
             step.current?.forceUpdate();
 
-            await this.onSave();
-            await this.props.tool?.lock();
+            isProgress = true;
         } else {
             if (this.currentStep < this.state.steps.length) {
                 this.currentStep++;
@@ -334,6 +334,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         step = this.state.steps[this.currentProgress - 1].ref;
         if (!step.current?.isDisabled()) {
             step.current?.changeControlFooter();
+        }
+
+        if (isProgress) {
+            await this.onSave();
+            await this.props.tool?.lock();
         }
 
         this.forceUpdate();
