@@ -12,9 +12,8 @@ import {PaginationLoader} from "../../../API/PaginationLoader";
 import './save-pagination.scss'
 
 
-
 interface SavePaginationState {
-    saves: Array<SimpleSaveResource>|null
+    saves: Array<SimpleSaveResource> | null
     page: number
     pageCount: number
     loading: boolean
@@ -47,20 +46,6 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         }
 
     }
-
-    private pageChosenCallback = async (currentPage: number) => {
-        this.setState({
-            page: currentPage,
-            loading: true
-        });
-        let et  = await this.paginationLoader.getPage(currentPage);
-        this.setState({
-            saves: et,
-            loading:false,
-            pageCount: this.paginationLoader.pageCount
-        });
-
-    };
 
     async componentDidMount() {
         this.pageChosenCallback(this.state.page);
@@ -104,6 +89,20 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
             </div>
         );
     }
+
+    private pageChosenCallback = async (currentPage: number) => {
+        this.setState({
+            page: currentPage,
+            loading: true
+        });
+        let et = await this.paginationLoader.getPage(currentPage);
+        this.setState({
+            saves: et,
+            loading: false,
+            pageCount: this.paginationLoader.pageCount
+        });
+
+    };
 }
 
 

@@ -10,6 +10,7 @@ import {Session} from "../../../general-components/Session/Session";
 import {SettingsTypeProps} from "../../../general-components/Settings/Types/SettingsTypeProps";
 import {Button} from "react-bootstrap";
 
+
 export interface UserSettingProxy extends UserSettingResource {
     newResource: boolean
     oldValue: string
@@ -102,11 +103,11 @@ export class Settings extends Component<{}, SettingsState> {
                 let safeUserId = userId; // stupid but it works. Compiler thinks the above if doesn't apply to the map callback
                 let safeToken = token;
                 this.setState({
-                    saving:true
+                    saving: true
                 })
                 let promises = userSettings.filter(value => value.value !== value.oldValue || value.newResource).map(setting => {
                     let f = SettingsAPI.updateUserSettings;
-                    if(setting.newResource){
+                    if (setting.newResource) {
                         f = SettingsAPI.createUserSettings;
                     }
                     let result = f(safeUserId, setting.setting_id, safeToken, setting.value);
@@ -117,8 +118,8 @@ export class Settings extends Component<{}, SettingsState> {
 
                 await Promise.all(promises);
                 this.setState({
-                    saving:false,
-                    userSettings:userSettings
+                    saving: false,
+                    userSettings: userSettings
                 });
             }
         }
@@ -150,8 +151,10 @@ export class Settings extends Component<{}, SettingsState> {
             <>
                 <Loader transparent payload={[this.loadSettings.bind(this)]}>
                     {settings}
-                    <Button variant={"primary"} className={"mt-3"} onClick={async (event) => await this.saveSettings(this.state.userSettings)} disabled={this.state.saving}>
-                        {this.state.saving ? "Speichert...":"Speichern"}
+                    <Button variant={"primary"} className={"mt-3"}
+                            onClick={async (event) => await this.saveSettings(this.state.userSettings)}
+                            disabled={this.state.saving}>
+                        {this.state.saving ? "Speichert..." : "Speichern"}
                     </Button>
                 </Loader>
 

@@ -1,6 +1,7 @@
 import {PaginationResource} from "../Datastructures";
 import {CallInterface} from "./API";
 
+
 /**
  * Klasse welche das Laden der Seiten einer Pagination übernimmt. Die Ergebnisse werden gecached.
  *
@@ -9,11 +10,20 @@ import {CallInterface} from "./API";
 export class PaginationLoader<D extends object> {
     private readonly data: Array<Array<D>>;
     private readonly getPageCallback?: (page: number) => Promise<CallInterface<PaginationResource<D>> | null>;
-    private _pageCount: number = -1;
 
     constructor(cb?: (page: number) => Promise<CallInterface<PaginationResource<D>> | null>) {
         this.data = [];
         this.getPageCallback = cb;
+    }
+
+    private _pageCount: number = -1;
+
+    public get pageCount(): number {
+        return this._pageCount;
+    }
+
+    private set pageCount(value: number) {
+        this._pageCount = value;
     }
 
     public async getPage(page: number) {
@@ -50,21 +60,12 @@ export class PaginationLoader<D extends object> {
         }
 
         let results = await Promise.all(callbacks);
-        for (let r of results){
-            if(r){
+        for (let r of results) {
+            if (r) {
                 allData.concat(r);
             }
         }
         return allData
-    }
-
-
-    public get pageCount(): number {
-        return this._pageCount;
-    }
-
-    private set pageCount(value: number) {
-        this._pageCount = value;
     }
 
     private setPageData(page: number, data: D[]) {

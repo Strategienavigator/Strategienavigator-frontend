@@ -5,6 +5,7 @@ import {SettingsTypeProps} from "../SettingsTypeProps";
 
 import './toggleSettingType.scss'
 
+
 export interface ToggleSettingTypeProps extends SettingsTypeProps {
 
 }

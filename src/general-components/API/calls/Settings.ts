@@ -1,6 +1,7 @@
 import {callAPI} from "../API";
 import {DefaultResponse, PaginationResource, SettingResource, UserSettingResource} from "../../Datastructures";
 
+
 const getSettings = (token: string, page?: number) => {
     let data = new URLSearchParams();
     let searchParams = false;
@@ -19,7 +20,7 @@ const getSetting = (token: string, settingId: number) => {
 }
 
 
-const getUserSettings = (userId: number, token: string, page?:number) => {
+const getUserSettings = (userId: number, token: string, page?: number) => {
     let data = new URLSearchParams();
     let searchParams = false;
 
@@ -37,7 +38,7 @@ const getUserSetting = (userId: number, settingId: number, token: string) => {
 const createUserSettings = (userID: number, setttingID: number, token: string, value: string) => {
     let data = new FormData();
     data.append("value", value);
-    data.append("setting",setttingID.toString());
+    data.append("setting", setttingID.toString());
     return callAPI(`api/users/${userID}/settings`, "POST", data, token);
 }
 
