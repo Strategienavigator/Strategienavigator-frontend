@@ -8,9 +8,9 @@ export class Imprint extends Component<any, any> {
     render() {
         return (<>
                 <h1>Impressum</h1>
-                <p> Dies ist ein Projekt der Jade Hochschule Wilhelmshaven/Oldenburg/Elsfleth<br/>
+                <p> Dies ist ein Projekt der Jade Hochschule Wilhelmshaven/Oldenburg/Elsfleth.<br/>
                     Für weitere Information siehe <a href={"https://www.jade-hs.de/impressum"} rel={"noreferrer"}
-                                                     target={"_blank"}>Impressum der Jade Hochschule</a></p>
+                                                     target={"_blank"}>Impressum der Jade Hochschule.</a></p>
                 <p><strong>Name und Kontaktdaten der Verantwortlichen (auch für Datenschutz):</strong>
                     <ul>
                         <li>Prof. Christian Gündling</li>
