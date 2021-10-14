@@ -22,7 +22,7 @@ export class DataPrivacy extends Component<any, any> {
                 <p><strong>Name und Kontaktdaten des / der Verantwortlichen</strong><br/> Unser/e Verantwortliche/r
                     (nachfolgend
                     „Verantwortlicher“) i.S.d. Art. 4 Zif. 7 DS-GVO ist Prof. Christian Gündling und Rico Meiner
-                    (Kontaktdaten siehe <Link to={"legal-notice"}>Impressum</Link>)<br/> <br/>
+                    (Kontaktdaten siehe <Link to={"legal-notice"}>Impressum</Link>).<br/> <br/>
                     <strong>Datenarten,
                         Zwecke der Verarbeitung und Kategorien betroffener Personen</strong></p>
                 <p>Nachfolgend informieren wir Sie über Art, Umfang und Zweck der Erhebung, Verarbeitung und Nutzung
@@ -84,7 +84,7 @@ export class DataPrivacy extends Component<any, any> {
                     Auftragsverarbeiter geeignete
                     technische und organisatorische Maßnahmen getroffen haben und die Datenschutzvorschriften gem. BDSG
                     n.F. und DS-GVO
-                    einhalten</p>
+                    einhalten.</p>
                 <p><br/><strong>Welche Daten werden über dich gespeichert?</strong></p>
                 <p>Wenn ein Nutzer ein Konto erstellt, wird dabei seine E-Mail gespeichert. Die E-Mailadresse dient als
                     Identifikation zum Anmelden.
