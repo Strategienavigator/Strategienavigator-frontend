@@ -237,9 +237,6 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
             this.setState(state => {
                 let cards = state.cards;
                 let bool = cards.delete(index);
-                console.log(cards);
-                console.log("remove " + index, bool);
-
                 return {
                     cards: cards
                 };
