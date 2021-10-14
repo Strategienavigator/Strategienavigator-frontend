@@ -21,6 +21,7 @@ export interface UniqueCheckProps {
 export interface UniqueCheckState {
     isLoading: boolean
     success?: boolean
+    error: boolean
 }
 
 export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProps> & UniqueCheckProps, UniqueCheckState> {
@@ -30,7 +31,8 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
         super(props);
 
         this.state = {
-            isLoading: false
+            isLoading: false,
+            error: false
         };
     }
 
@@ -48,14 +50,25 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
 
                 let call = await this.props.callback?.call(this.props.callback, value);
 
-                this.setState({
-                    success: call?.success,
-                    isLoading: false
-                });
+                if(call?.success){
+                    this.setState({
+                        success: call.callData.data.available,
+                        isLoading: false,
+                        error: false
+                    });
+                }else{
+                    this.setState({
+                        success: undefined,
+                        error: true,
+                        isLoading: false
+                    });
+                }
+
             }, 600);
         } else {
             this.setState({
-                success: undefined
+                success: undefined,
+                error: false
             });
         }
 
@@ -91,12 +104,17 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                         </div>
                     )}
 
-                    {(!this.state.isLoading && this.state.success !== undefined && this.state.success) && (
+                    {(!this.state.isLoading && this.state.error) && (
+                        <div className={"feedback DANGER"}>
+                            <FontAwesomeIcon icon={faTimes}/> Die Verfügbarkeit konnte nicht überprüft werden.
+                        </div>
+                    )}
+                    {(!this.state.isLoading && this.state.success !== undefined && !this.state.success) && (
                         <div className={"feedback DANGER"}>
                             <FontAwesomeIcon icon={faTimes}/> {this.props.failMessage}
                         </div>
                     )}
-                    {(!this.state.isLoading && this.state.success !== undefined && !this.state.success) && (
+                    {(!this.state.isLoading && this.state.success !== undefined && this.state.success) && (
                         <div className={"feedback SUCCESS"}>
                             <FontAwesomeIcon icon={faCheck}/> {this.props.successMessage}
                         </div>
