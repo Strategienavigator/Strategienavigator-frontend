@@ -125,7 +125,6 @@ export class Settings extends Component<{}, SettingsState> {
     }
 
     render() {
-
         let settings = this.state.settings.map(setting => {
             let f = Settings.typeDict[setting.type];
             if (f) {
@@ -146,9 +145,10 @@ export class Settings extends Component<{}, SettingsState> {
             }
             return null;
         });
+
         return (
             <>
-                <Loader payload={[this.loadSettings.bind(this)]}>
+                <Loader transparent payload={[this.loadSettings.bind(this)]}>
                     {settings}
                     <Button variant={"primary"} className={"mt-3"} onClick={async (event) => await this.saveSettings(this.state.userSettings)} disabled={this.state.saving}>
                         {this.state.saving ? "Speichert...":"Speichern"}
