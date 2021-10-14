@@ -80,6 +80,7 @@ class Card extends Component<CardProps, CardState> {
                         onChange={(e) => this.nameChanged(e)}
                         onFocus={() => this.setState({showDesc: true})}
                         name={this.props.name + "[][name]"}
+                        spellCheck={false}
                         defaultValue={this.props.designation}
                         placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
                     />
@@ -98,6 +99,7 @@ class Card extends Component<CardProps, CardState> {
                             onFocus={() => this.setState({showDesc: true})}
                             onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
                             as="textarea"
+                            spellCheck={false}
                             style={{maxHeight: 500}}
                             name={this.props.name + "[][desc]"}
                             defaultValue={this.props.desc}
