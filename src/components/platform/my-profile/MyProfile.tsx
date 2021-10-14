@@ -178,6 +178,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         id={"username"}
                         type={"text"}
                         readOnly={!this.state.edit}
+                        suppressErrors={!this.state.edit}
                         defaultValue={this.state.user.getUsername()}
                         callback={checkUsername}
                         failMessage={"Username bereits vorhanden!"}
@@ -192,6 +193,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         id={"email"}
                         type={"text"}
                         readOnly={!this.state.edit}
+                        suppressErrors={!this.state.edit}
                         defaultValue={this.state.user.getEmail()}
                         callback={checkEmail}
                         failMessage={"E-Mail bereits vorhanden!"}
