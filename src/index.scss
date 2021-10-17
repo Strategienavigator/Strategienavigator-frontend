@@ -38,6 +38,10 @@ footer {
   grid-area: footer;
 }
 
+textarea {
+  max-height: 500px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   monospace;
