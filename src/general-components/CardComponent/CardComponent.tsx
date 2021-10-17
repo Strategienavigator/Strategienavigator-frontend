@@ -243,7 +243,7 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
         if (!(this.state.cards.size <= this.props.min)) {
             this.setState(state => {
                 let cards = state.cards;
-                let bool = cards.delete(index);
+                cards.delete(index);
                 return {
                     cards: cards
                 };

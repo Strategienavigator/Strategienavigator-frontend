@@ -285,10 +285,34 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
         let factors = this.props.stepComp?.getFormValues("swot-factors") as SwotFactorsValues;
         let actions: AlternateAction[] = [];
 
+        let i = 0;
         for (let action of values.actions) {
             actions.push(action);
+
+            if (action.hasNone) {
+                i++;
+            } else if (action.alternatives.length > 0) {
+                let invalidAlernative = false;
+                for (const alernative of action.alternatives) {
+                    if (alernative.name === "") {
+                        invalidAlernative = true;
+                    }
+                    if (alernative.desc === "") {
+                        invalidAlernative = true;
+                    }
+                }
+                if (!invalidAlernative) {
+                    i++;
+                }
+            }
+
             let ref = React.createRef<CardComponent>();
             this.cardComponentFieldsRefs.push(ref);
+        }
+
+        this.currentActionIndex = i;
+        if (i >= actions.length) {
+            this.currentActionIndex--;
         }
 
         this.setState({

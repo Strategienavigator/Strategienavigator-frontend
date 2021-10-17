@@ -124,9 +124,12 @@ class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternati
     removeAction = (droppableID: string, draggableID: string): boolean => {
         let classification = this.getClassification(droppableID);
         if (classification) {
-            let action = classification.actions.get(draggableID);
-            if (action) {
-                action.alreadyAdded = false;
+            let classificationAction = classification.actions.get(draggableID);
+            if (classificationAction) {
+                let action = this.actions.get(draggableID);
+                if (action) {
+                    action.alreadyAdded = false;
+                }
                 let deleted = classification.actions.delete(draggableID);
                 this.forceUpdate();
                 return deleted;

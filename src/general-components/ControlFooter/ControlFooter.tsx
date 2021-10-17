@@ -14,22 +14,26 @@ export interface ControlFooterProps {
 }
 
 export interface ControlFooterState {
-    items: Map<number, ControlFooterItem>
+    items: Map<number, ControlFooterItemType>
 }
 
-export interface NextStepItem {
+interface ControlFooterItem {
+    disabled?: boolean
+}
+
+export interface NextStepItem extends ControlFooterItem {
     nextStep: string
 }
 
-export interface SaveStepsItem {
+export interface SaveStepsItem extends ControlFooterItem {
     saveSteps: string
 }
 
-export interface ResetStepsItem {
+export interface ResetStepsItem extends ControlFooterItem {
     reset: () => any
 }
 
-export interface ButtonItem {
+export interface ButtonItem extends ControlFooterItem {
     button: {
         text: string
         icon: IconDefinition
@@ -37,7 +41,7 @@ export interface ButtonItem {
     }
 }
 
-export interface ToolItem {
+export interface ToolItem extends ControlFooterItem {
     tool: {
         icon: IconDefinition
         title: string
@@ -45,22 +49,22 @@ export interface ToolItem {
     }
 }
 
-export type SettingItem = {
+export interface SettingItem extends ControlFooterItem {
     settings: boolean
 }
 
-export type NewToolItem = {
+export interface NewToolItem extends ControlFooterItem {
     newTool: {
         title: string,
         callback: () => any
     }
 }
 
-export type HomeItem = {
+export interface HomeItem extends ControlFooterItem {
     home: boolean
 }
 
-export type ControlFooterItem =
+export type ControlFooterItemType =
     null
     | NextStepItem
     | SaveStepsItem
@@ -71,8 +75,12 @@ export type ControlFooterItem =
     | HomeItem
     | ButtonItem;
 
-export const setControlFooterItem = (place: number, item: ControlFooterItem) => {
+export const setControlFooterItem = (place: number, item: ControlFooterItemType) => {
     ControlFooterComponent._instance?.setItem(place, item);
+}
+
+export const disableControlFooterItem = (place: number, disable: boolean) => {
+    ControlFooterComponent._instance?.disableItem(place, disable);
 }
 
 export const clearControlFooter = () => {
@@ -81,13 +89,13 @@ export const clearControlFooter = () => {
 
 export class ControlFooterComponent extends Component<ControlFooterProps & RouteComponentProps, ControlFooterState> {
     public static _instance: undefined | ControlFooterComponent = undefined;
-    private static oldItems: Map<number, ControlFooterItem> | undefined;
+    private static oldItems: Map<number, ControlFooterItemType> | undefined;
 
     constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
 
         this.state = {
-            items: new Map<number, ControlFooterItem>()
+            items: new Map<number, ControlFooterItemType>()
         }
 
         ControlFooterComponent._instance = this;
@@ -128,7 +136,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
         );
     }
 
-    public setItem = (place: number, item: ControlFooterItem) => {
+    public setItem = (place: number, item: ControlFooterItemType) => {
         this.setState(state => {
             const items = state.items.set(place, item);
 
@@ -138,9 +146,25 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
         });
     }
 
+    public disableItem = (place: number, disabled: boolean) => {
+        if (this.state.items.has(place)) {
+            this.setState(state => {
+                const items = state.items;
+                const item = items.get(place);
+                if (item) {
+                    item.disabled = disabled;
+                }
+
+                return {
+                    items: items
+                }
+            });
+        }
+    }
+
     public clear = () => {
         this.setState({
-            items: new Map<number, ControlFooterItem>()
+            items: new Map<number, ControlFooterItemType>()
         });
     }
 
@@ -154,7 +178,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
         });
     }
 
-    private getItem = (item: ControlFooterItem | undefined): null | ReactNode => {
+    private getItem = (item: ControlFooterItemType | undefined): null | ReactNode => {
         if (item !== undefined && item !== null) {
             if ("home" in item) {
                 return (
@@ -165,21 +189,24 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             }
             if ("nextStep" in item) {
                 return (
-                    <button key={"nextStep"} className={"btn-transparent"} form={item.nextStep} type={"submit"}>
+                    <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"} form={item.nextStep}
+                            type={"submit"}>
                         <FontAwesomeIcon icon={faCaretRight}/> Weiter
                     </button>
                 );
             }
             if ("saveSteps" in item) {
                 return (
-                    <button key={"saveSteps"} className={"btn-transparent"} form={item.saveSteps} type={"submit"}>
+                    <button disabled={item.disabled} key={"saveSteps"} className={"btn-transparent"}
+                            form={item.saveSteps} type={"submit"}>
                         <FontAwesomeIcon icon={faSave}/> Speichern
                     </button>
                 );
             }
             if ("reset" in item) {
                 return (
-                    <button key={"reset"} onClick={() => item.reset()} className={"btn-transparent"}
+                    <button disabled={item.disabled} key={"reset"} onClick={() => item.reset()}
+                            className={"btn-transparent"}
                             type={"button"}>
                         <FontAwesomeIcon icon={faUndo}/> Zurücksetzen
                     </button>
@@ -201,7 +228,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             }
             if ("newTool" in item) {
                 return (
-                    <button key={"newTool"} type={"button"} className={"btn-transparent"}
+                    <button disabled={item.disabled} key={"newTool"} type={"button"} className={"btn-transparent"}
                             onClick={() => item.newTool.callback()}>
                         <FontAwesomeIcon icon={faPlusSquare}/> {item.newTool?.title}
                     </button>
@@ -209,7 +236,8 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             }
             if ("button" in item) {
                 return (
-                    <button key={"button"} className={"btn-transparent"} onClick={() => item.button.callback()}
+                    <button disabled={item.disabled} key={"button"} className={"btn-transparent"}
+                            onClick={() => item.button.callback()}
                             type={"button"}>
                         <FontAwesomeIcon icon={item.button.icon}/> {item.button.text}
                     </button>

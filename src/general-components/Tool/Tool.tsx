@@ -196,7 +196,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                         <Modal.Title>Wollen Sie wirklich die Seite verlassen?</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        Nicht gespeicherte Änderungen können verloren gehen.
+                        Nicht gespeicherte Änderungen werden verloren gehen.
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={() => {
@@ -331,6 +331,12 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
     public getCurrentTool(): SaveResource<any> | undefined {
         return this.currentSave;
+    }
+
+    public setCurrentTool(currentSave?: SaveResource<any>, name?: string, desc?: string) {
+        if (currentSave) { this.currentSave = currentSave; }
+        if (name) { this.currentSaveName = name; }
+        if (desc) { this.currentSaveDescription = desc; }
     }
 
     protected getStepComponent(props?: StepComponentProps) {
