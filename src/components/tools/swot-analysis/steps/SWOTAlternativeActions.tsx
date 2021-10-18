@@ -256,7 +256,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                 cardComponent = [];
             }
 
-            let first = cardComponent[0] || null
+            let first = cardComponent[0] || null;
             let second = cardComponent[1] || null;
 
             actions.push({
