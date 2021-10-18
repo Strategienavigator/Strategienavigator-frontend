@@ -196,7 +196,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                         <Modal.Title>Wollen Sie wirklich die Seite verlassen?</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        Nicht gespeicherte Änderungen werden verloren gehen.
+                        Nicht gespeicherte Änderungen gehen verloren.
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={() => {
