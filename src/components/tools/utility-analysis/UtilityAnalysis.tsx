@@ -18,6 +18,8 @@ class UtilityAnalysis extends Tool {
         this.setID(1);
         this.setToolname("Nutzwertanalyse");
         this.setToolIcon(faBorderAll);
+        // Maintenance Mode
+        this.setMaintenance(true);
 
         this.addStep({
             id: "utility-objects",
