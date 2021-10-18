@@ -200,7 +200,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                         type={"button"}
                                         disabled={this.state.isSaving}
                                         onClick={async () => {
-                                            await this.save();
+                                            await this.saveTool();
                                         }}
                                         key={"saveButton"}
                                     >
@@ -404,20 +404,13 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         }
 
         if (isProgress) {
-            await this.onSave();
-            await this.props.tool?.lock();
-
-            Messages.add(
-                "Ergebnisse zwischengespeichert!",
-                "SUCCESS",
-                Messages.TIMER
-            );
+            await this.saveTool();
         }
 
         this.forceUpdate();
     }
 
-    public save = async () => {
+    public saveTool = async () => {
         this.setState({
             isSaving: true
         });
@@ -429,22 +422,37 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             current?.triggerFormSubmit();
         }
 
-        await this.onSave();
-        await this.props.tool?.lock();
+        const addErrorMessage = () => {
+            Messages.add(
+                "Speichern fehlgeschlagen! Bitte versuchen Sie es später erneut.",
+                "DANGER",
+                Messages.TIMER
+            );
+        }
+
+        let lockCall = await this.props.tool?.lock();
+        if (lockCall && lockCall.success) {
+            let saveCall = await this.callOnSaveProp();
+            if (saveCall) {
+                Messages.add(
+                    "Erfolgreich abgespeichert!",
+                    "SUCCESS",
+                    Messages.TIMER
+                );
+            } else {
+                addErrorMessage();
+            }
+        } else {
+            addErrorMessage();
+        }
 
         disableControlFooterItem(2, false);
         this.setState({
             isSaving: false
         });
-
-        Messages.add(
-            "Erfolgreich abgespeichert!",
-            "SUCCESS",
-            Messages.TIMER
-        );
     }
 
-    public onSave = async (): Promise<boolean> => {
+    public callOnSaveProp = async (): Promise<boolean> => {
         if (this.props.onSave !== undefined) {
             let allForms = new Map<string, FormComponent<any, any>>();
             let data = {};
@@ -495,7 +503,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         setControlFooterItem(2, {
             button: {
                 callback: async () => {
-                    await this.save();
+                    await this.saveTool();
                 },
                 text: "Speichern",
                 icon: faSave

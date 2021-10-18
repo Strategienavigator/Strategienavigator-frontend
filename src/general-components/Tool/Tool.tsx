@@ -111,11 +111,11 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     public lock = async () => {
-        await this.lockSave(true);
+        return await this.lockSave(true);
     }
 
     public unlock = async () => {
-        await this.lockSave(false);
+        return await this.lockSave(false);
     }
 
     public render = () => {
@@ -396,7 +396,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     private lockSave = async (lock: boolean) => {
-        await lockSave(this.currentSaveID as number, lock, Session.getToken());
+        return await lockSave(this.currentSaveID as number, lock, Session.getToken());
     }
 
     private checkForPage = (location: string) => {
