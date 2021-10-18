@@ -120,7 +120,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                               type={"textarea"}
                               as={"textarea"}
                               defaultValue={this.props.tool?.getCurrentTool()?.description}
-                              onChange={this.onChangeCurrentName}
+                              onChange={this.onChangeCurrentDescription}
                           />
                       </div>
                   </Collapse>
