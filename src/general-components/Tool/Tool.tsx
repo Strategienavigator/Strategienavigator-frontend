@@ -337,12 +337,12 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.currentSave = currentSave;
     }
 
-    public setCurrentSaveDescription = (name: string) => {
-        this.currentSaveName = name;
+    public setCurrentSaveDescription = (desc: string) => {
+        this.currentSaveDescription = desc;
     }
 
-    public setCurrentSaveName = (desc: string) => {
-        this.currentSaveDescription = desc;
+    public setCurrentSaveName = (name: string) => {
+        this.currentSaveName = name;
     }
 
     protected getStepComponent(props?: StepComponentProps) {
