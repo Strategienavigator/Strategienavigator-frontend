@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Nav from "./components/platform/nav/Nav";
-import {BrowserRouter as Router, matchPath, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, matchPath, Switch} from "react-router-dom";
+import {ProtectedRoute as Route} from "./general-components/ProtectedRoute";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
@@ -48,23 +49,21 @@ const getRouterSwitch = () => {
             <Route path={"/legal-notice"} exact component={Imprint}/>
             <Route path={"/data-privacy"} exact component={DataPrivacy}/>
             <Route path={"/about-us"} exact component={AboutUs}/>
-            <Route path={"/login"} exact component={Login}/>
-            <Route path={"/logout"} exact component={Logout}/>
-            <Route path={"/register"} exact component={Register}/>
-            <Route path={"/settings"} exact component={Settings}/>
-            <Route path={"/my-profile"} exact component={MyProfile}/>
-            <Route path={"/forbidden"} exact component={Forbidden}/>
-            <Route path={"/notfound"} exact component={NotFound}/>
+            <Route loggedIn={false} path={"/login"} exact component={Login}/>
+            <Route loggedIn={true} path={"/logout"} exact component={Logout}/>
+            <Route loggedIn={false} path={"/register"} exact component={Register}/>
+            <Route loggedIn={true} path={"/settings"} exact component={Settings}/>
+            <Route loggedIn={true} path={"/my-profile"} exact component={MyProfile}/>
 
             <Route path={"/verify-email/:token"} component={EmailVerification}/>
             <Route path={"/reset-password/:token"} component={PasswordReset}/>
             <Route path={"/reset-password"} exact component={PasswordReset}/>
 
-            <Route path={"/pairwise-comparison"} component={PairwiseComparison}/>
-            <Route path={"/abc-analysis"} component={ABCAnalysis}/>
-            <Route path={"/swot-analysis"} component={SWOTAnalysis}/>
-            <Route path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
-            <Route path={"/utility-analysis"} component={UtilityAnalysis}/>
+            <Route loggedIn={true} path={"/pairwise-comparison"} component={PairwiseComparison}/>
+            <Route loggedIn={true} path={"/abc-analysis"} component={ABCAnalysis}/>
+            <Route loggedIn={true} path={"/swot-analysis"} component={SWOTAnalysis}/>
+            <Route loggedIn={true} path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
+            <Route loggedIn={true} path={"/utility-analysis"} component={UtilityAnalysis}/>
 
             <Route path={"/error/:code"} component={ErrorPages}/>
 
