@@ -276,11 +276,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     onChangeCurrentName = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.setCurrentTool(undefined, e.currentTarget.value, undefined);
+        this.props.tool?.setCurrentSaveName(e.currentTarget.value);
     }
 
     onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.setCurrentTool(undefined, undefined, e.currentTarget.value);
+        this.props.tool?.setCurrentSaveDescription(e.currentTarget.value);
     }
 
     componentDidMount = async () => {
