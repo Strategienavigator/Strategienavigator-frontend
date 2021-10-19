@@ -1,15 +1,16 @@
 import React, {Component, RefObject} from "react";
-import {Accordion, Button, Card, Col, Fade, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import {Accordion, Button, Card, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
-import {clearControlFooter, setControlFooterItem} from "../../ControlFooter/ControlFooter";
+import {clearControlFooter, disableControlFooterItem, setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {FormComponent} from "../FormComponent/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretLeft, faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 import {Tool} from "../Tool";
-import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 import "./step-component.scss";
 import "./step-component-desk.scss";
+import {Messages} from "../../Messages/Messages";
+import {Loader} from "../../Loader/Loader";
 
 
 export interface StepProp<T> {
@@ -34,10 +35,12 @@ export interface StepComponentState {
     onReset: boolean
     showResetModal: boolean
     hasCustomNextButton: boolean
+    showStepHeaderDesc: boolean
     customNextButton: {
         text: string
         callback: () => void
     } | null
+    isSaving: boolean
 }
 
 class StepComponent extends Component<StepComponentProps, StepComponentState> {
@@ -74,13 +77,48 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             onReset: false,
             showResetModal: false,
             hasCustomNextButton: false,
-            customNextButton: null
+            showStepHeaderDesc: isDesktop(),
+            customNextButton: null,
+            isSaving: false
         }
     }
 
     render = () => {
         let i = 0;
         let e = 0;
+
+        const getStepHeader = () => {
+          return (
+              <div className={"stepHeader"}>
+                  <Form.Control
+                      type={"text"}
+                      defaultValue={this.props.tool?.getCurrentTool()?.name}
+                      onChange={this.onChangeCurrentName}
+                      onFocus={() => {
+                          this.setState({
+                              showStepHeaderDesc: true
+                          });
+                      }}
+                      onBlur={() => {
+                          this.setState({
+                              showStepHeaderDesc: isDesktop()
+                          });
+                      }}
+                  />
+
+                  <Collapse in={this.state.showStepHeaderDesc}>
+                      <div>
+                          <Form.Control
+                              type={"textarea"}
+                              as={"textarea"}
+                              defaultValue={this.props.tool?.getCurrentTool()?.description}
+                              onChange={this.onChangeCurrentDescription}
+                          />
+                      </div>
+                  </Collapse>
+              </div>
+          );
+        }
 
         return (
             <>
@@ -92,28 +130,12 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                 >
                     <Row className={"stepContainer"}>
                         {(!isDesktop() && this.props.tool !== undefined) ? (
-                            <Accordion className={"stepHeaderAccordion"}>
-                                <Accordion.Item eventKey={"description"}>
-                                    <Accordion.Header>
-                                        {this.props.tool?.getCurrentTool()?.name}
-                                    </Accordion.Header>
-                                    <Accordion.Body>
-                                        {this.props.tool?.getCurrentTool()?.description}
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            </Accordion>
+                            getStepHeader()
                         ) : ""}
 
                         <Col className={"stepTabContainer"}>
                             {(isDesktop() && this.props.tool !== undefined) ? (
-                                <>
-                                    <div className={"stepHeader"}>
-                                        {this.props.tool?.getCurrentTool()?.name}
-                                    </div>
-                                    <p>
-                                        {this.props.tool?.getCurrentTool()?.description}
-                                    </p>
-                                </>
+                                getStepHeader()
                             ) : ""}
 
                             <Nav className={"stepTabs"}>
@@ -132,18 +154,20 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                         <Button
                                             variant={"dark"}
                                             type={"submit"}
-                                            form={this.state.steps[this.currentStep - 1].id} className={"mt-2"}
-                                            key={"saveOrNextButton"}
+                                            form={this.state.steps[this.currentStep - 1].id}
+                                            disabled={this.isLastStep()}
+                                            className={"mt-2 mx-2"}
+                                            key={"nextButton"}
                                         >
-                                            <FontAwesomeIcon
-                                                icon={this.isLastStep() ? faSave : faCaretRight}/> {this.isLastStep() ? "Speichern" : "Weiter"}
+                                            <FontAwesomeIcon icon={faCaretRight}/> Weiter
                                         </Button>
                                     ) : (
                                         <Button
                                             variant={"dark"}
                                             type={"button"}
                                             onClick={this.state.customNextButton?.callback}
-                                            className={"mt-2"}
+                                            disabled={this.isLastStep()}
+                                            className={"mt-2 mx-2"}
                                             key={"customNextButton"}
                                         >
                                             <FontAwesomeIcon
@@ -153,12 +177,31 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                     <Button
                                         variant={"dark"}
                                         type={"button"}
-                                        className={"mt-2 mx-2"}
+                                        className={"mt-2"}
                                         onClick={() => this.setState({onReset: true, showResetModal: true})}
                                         key={"resetButton"}
                                     >
                                         <FontAwesomeIcon
                                             icon={faUndo}/> Zurücksetzen
+                                    </Button>
+
+                                    <hr/>
+
+                                    <Button
+                                        variant={"dark"}
+                                        type={"button"}
+                                        disabled={this.state.isSaving}
+                                        onClick={async () => {
+                                            await this.saveTool();
+                                        }}
+                                        key={"saveButton"}
+                                    >
+                                        {!this.state.isSaving ? (
+                                            <><FontAwesomeIcon icon={faSave}/> Speichern</>
+                                        ) : (
+                                            <Loader payload={[]} variant={"dark"} text={<span>&nbsp;Speichern</span>}
+                                                    transparent size={20} loaded={false}/>
+                                        )}
                                     </Button>
                                 </>
                             )}
@@ -224,6 +267,14 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         );
     }
 
+    onChangeCurrentName = (e: { currentTarget: { value: string; }; }) => {
+        this.props.tool?.setCurrentSaveName(e.currentTarget.value);
+    }
+
+    onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
+        this.props.tool?.setCurrentSaveDescription(e.currentTarget.value);
+    }
+
     componentDidMount = async () => {
         if ((this.props.steps?.length !== undefined && this.props.steps?.length > 1)) {
             this.restoreFooter();
@@ -236,12 +287,20 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             if (step.values && Object.keys(step.values).length !== 0) {
                 progress++;
                 step.ref.current?.setValues(step.values);
-                step.ref.current?.setDisabled(true);
                 step.ref.current?.rebuildValues(step.values);
+
+                if (
+                    progress < this.state.steps.length
+                    && Object.keys(this.state.steps[progress].values).length > 0
+                ) {
+                    step.ref.current?.setDisabled(true);
+                }
+
                 step.ref.current?.forceUpdate();
             }
             return null;
         });
+
         if (progress > 0) {
             this.currentProgress = progress;
         }
@@ -249,6 +308,14 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     componentWillUnmount() {
         clearControlFooter();
+    }
+
+    public getCurrentStep = () => {
+        return this.currentStep;
+    }
+
+    public getCurrentProgress = () => {
+        return this.currentProgress;
     }
 
     public getPreviousStep = <D extends unknown>(): null | D => {
@@ -329,14 +396,55 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         }
 
         if (isProgress) {
-            await this.onSave();
-            await this.props.tool?.lock();
+            await this.saveTool();
         }
 
         this.forceUpdate();
     }
 
-    public onSave = async (): Promise<boolean> => {
+    public saveTool = async () => {
+        this.setState({
+            isSaving: true
+        });
+        disableControlFooterItem(2, true);
+
+        for (let i = 0; i < this.currentProgress; i++) {
+            let {ref: {current}} = this.state.steps[i];
+            current?.setIsSaving(true);
+            current?.triggerFormSubmit();
+        }
+
+        const addErrorMessage = () => {
+            Messages.add(
+                "Speichern fehlgeschlagen! Bitte versuchen Sie es später erneut.",
+                "DANGER",
+                Messages.TIMER
+            );
+        }
+
+        let lockCall = await this.props.tool?.lock();
+        if (lockCall && lockCall.success) {
+            let saveCall = await this.callOnSaveProp();
+            if (saveCall) {
+                Messages.add(
+                    "Erfolgreich abgespeichert!",
+                    "SUCCESS",
+                    Messages.TIMER
+                );
+            } else {
+                addErrorMessage();
+            }
+        } else {
+            addErrorMessage();
+        }
+
+        disableControlFooterItem(2, false);
+        this.setState({
+            isSaving: false
+        });
+    }
+
+    public callOnSaveProp = async (): Promise<boolean> => {
         if (this.props.onSave !== undefined) {
             let allForms = new Map<string, FormComponent<any, any>>();
             let data = {};
@@ -369,13 +477,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     public restoreFooter = () => {
         setControlFooterItem(1, {
-            tool: {
-                icon: this.props.tool?.getToolIcon() as IconDefinition,
-                title: this.props.tool?.getToolName() as string,
-                link: this.props.tool?.getLink() as string
-            }
-        });
-        setControlFooterItem(2, {
             reset: () => {
                 this.setState({
                     onReset: true,
@@ -386,11 +487,20 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
         let id = this.state.steps[this.currentStep - 1].id;
 
-        if (this.isLastStep()) {
-            setControlFooterItem(3, {saveSteps: id});
-        } else {
-            setControlFooterItem(3, {nextStep: id});
-        }
+        setControlFooterItem(3, {
+            nextStep: id
+        });
+        disableControlFooterItem(3, this.isLastStep());
+
+        setControlFooterItem(2, {
+            button: {
+                callback: async () => {
+                    await this.saveTool();
+                },
+                text: "Speichern",
+                icon: faSave
+            }
+        });
 
         this.setState({
             hasCustomNextButton: false,

@@ -19,6 +19,7 @@ export interface ResetType {
 }
 
 export abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
+    public isSaving: boolean = false;
     protected values: V | object = {};
     protected disabled: boolean = false;
     private error: Map<string, ReactNode[]> = new Map<string, ReactNode[]>();
@@ -31,10 +32,17 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         this.forceUpdate();
     }
 
+    public setIsSaving(saving: boolean) {
+        this.isSaving = saving;
+    }
+
     public render = () => {
         return (
             <Form key={this.key} aria-disabled={this.disabled} name={this.props.id}
-                  onSubmit={(e) => this.onFormSubmit(e)}
+                  onSubmit={async (e) => {
+                      e.preventDefault();
+                      await this.onFormSubmit(e);
+                  }}
                   id={this.props.id}>
                 {this.buildValues && this.build()}
             </Form>
@@ -90,6 +98,13 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
         return this.disabled;
     }
 
+    public triggerFormSubmit = () => {
+        let element = document.getElementById(this.props.id as string) as HTMLFormElement | null;
+        if (element) {
+            element.requestSubmit();
+        }
+    }
+
     protected addError = (id: string, error: ReactNode) => {
         let errorArray = this.error.get(id);
 
@@ -125,26 +140,22 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
     }
 
     private onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
         let newValues = this.extractValues(e);
+        this.values = newValues;
 
-        if (this.validate(newValues)) {
-            this.values = newValues;
-            await this.submit(newValues);
-
-            if (this.props.stepComp?.isLastStep()) {
-                if (await this.props.stepComp.onSave()) {
-                    Messages.add(<span>Das Tool wurde erfolgreich abgespeichert!</span>, "SUCCESS", Messages.TIMER);
-                } else {
-                    Messages.add(
-                        <span>Beim Abspeichern des Tools ist ein Fehler aufgetreten!</span>, "DANGER", Messages.TIMER);
-                }
-            } else {
-                this.props.stepComp?.nextStep();
-            }
+        if (this.isSaving) {
+            this.isSaving = false;
         } else {
-            Messages.add(
-                <span>In Ihren Eingaben befinden sich Fehler!<br/> Bitte überprüfen Sie diese erneut.</span>, "DANGER", Messages.TIMER);
+            // is nextstep
+            if (this.validate(newValues)) {
+                await this.submit(newValues);
+                this.props.stepComp?.nextStep();
+            } else {
+                Messages.add(
+                    "Bitte überprüfen Sie vorher Ihre Eingaben!",
+                    "DANGER"
+                );
+            }
         }
     }
 

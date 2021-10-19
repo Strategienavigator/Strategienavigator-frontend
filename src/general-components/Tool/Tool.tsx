@@ -111,11 +111,11 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     public lock = async () => {
-        await this.lockSave(true);
+        return await this.lockSave(true);
     }
 
     public unlock = async () => {
-        await this.lockSave(false);
+        return await this.lockSave(false);
     }
 
     public render = () => {
@@ -196,7 +196,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                         <Modal.Title>Wollen Sie wirklich die Seite verlassen?</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        Nicht gespeicherte Änderungen können verloren gehen.
+                        Nicht gespeicherte Änderungen gehen verloren.
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={() => {
@@ -333,6 +333,18 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         return this.currentSave;
     }
 
+    public setCurrentSave = <D extends object>(currentSave: SaveResource<D>) => {
+        this.currentSave = currentSave;
+    }
+
+    public setCurrentSaveDescription = (desc: string) => {
+        this.currentSaveDescription = desc;
+    }
+
+    public setCurrentSaveName = (name: string) => {
+        this.currentSaveName = name;
+    }
+
     protected getStepComponent(props?: StepComponentProps) {
         return (
             <StepComponent
@@ -390,7 +402,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     private lockSave = async (lock: boolean) => {
-        await lockSave(this.currentSaveID as number, lock, Session.getToken());
+        return await lockSave(this.currentSaveID as number, lock, Session.getToken());
     }
 
     private checkForPage = (location: string) => {

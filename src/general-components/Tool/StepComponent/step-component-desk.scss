@@ -7,6 +7,10 @@
     order: 2;
   }
 
+  .stepTabContainer {
+    top: 0;
+  }
+
   .stepContainer > .tabsContent {
     flex: 0 1 70%;
     order: 1;
@@ -15,14 +19,6 @@
   .stepTabs > .nav-item {
     flex: 1 1 100%;
     text-align: left;
-  }
-
-  .stepHeader {
-    padding: 0.2rem 1rem;
-    margin-bottom: 1rem;
-    font-size: 13pt;
-    font-weight: 600;
-    border-left: 2px solid $color;
   }
 
 }

@@ -2,8 +2,25 @@
 
 $tabColor: #6e6e6e;
 
+.stepHeader {
+  padding: 0.2rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 13pt;
+  font-weight: 600;
+  border-left: 2px solid $color;
+}
+
 .stepTabContainer * {
   word-break: break-all;
+}
+
+.stepTabContainer {
+  top: -0.75rem;
+  background-color: $bgColor;
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 100;
+  align-self: flex-start
 }
 
 .stepContainer > .stepTabContainer, .stepHeaderAccordion {
