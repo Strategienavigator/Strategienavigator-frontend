@@ -15,6 +15,8 @@ class PairwiseComparison extends Tool {
         this.setID(3);
         this.setToolname("Paarweiser Vergleich");
         this.setToolIcon(faSortAmountDownAlt);
+        // Maintenance Mode
+        this.setMaintenance(true);
 
         this.addStep({
             form: <PCCriterias/>,

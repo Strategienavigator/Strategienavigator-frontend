@@ -68,6 +68,19 @@
       width: 100%;
     }
   }
+
+  .tool.maintenance {
+    color: #696969 !important;
+  }
+  .tool.maintenance .icon {
+    * {
+      color: black !important;
+    }
+
+    > div {
+      background-color: lightgrey;
+    }
+  }
 }
 
 @include media-breakpoint-down(lg) {

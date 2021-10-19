@@ -13,6 +13,8 @@ class ABCAnalysis extends Tool {
         this.setID(4);
         this.setToolname("ABC Analyse");
         this.setToolIcon(faChartPie);
+        // Maintenance Mode
+        this.setMaintenance(true);
     }
 
     protected renderToolHome() {
