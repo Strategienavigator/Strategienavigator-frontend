@@ -6,7 +6,7 @@ import {useState} from "react";
 import {reload_app} from "../index";
 import {Loader} from "./Loader/Loader";
 import {faCheckCircle, faExclamationTriangle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 interface ProtectedRouteProps extends RouteProps {
@@ -36,7 +36,7 @@ export function AnonymousModal(props: {
             </Modal.Header>
             <Modal.Body>
                 <b>Wollen Sie sich als anonymer Nutzer anmelden?</b><br/>
-                <br />
+                <br/>
                 Als anonymer Nutzer können Sie nur auf Ihrem aktuellen Gerät und nur in
                 Ihrem aktuellen Browser auf eventuell erstellte Analysen zugreifen.<br/><br/>
 
