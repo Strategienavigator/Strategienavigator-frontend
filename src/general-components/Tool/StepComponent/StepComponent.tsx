@@ -88,36 +88,36 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         let e = 0;
 
         const getStepHeader = () => {
-          return (
-              <div className={"stepHeader"}>
-                  <Form.Control
-                      type={"text"}
-                      defaultValue={this.props.tool?.getCurrentTool()?.name}
-                      onChange={this.onChangeCurrentName}
-                      onFocus={() => {
-                          this.setState({
-                              showStepHeaderDesc: true
-                          });
-                      }}
-                      onBlur={() => {
-                          this.setState({
-                              showStepHeaderDesc: isDesktop()
-                          });
-                      }}
-                  />
+            return (
+                <div className={"stepHeader"}>
+                    <Form.Control
+                        type={"text"}
+                        defaultValue={this.props.tool?.getCurrentTool()?.name}
+                        onChange={this.onChangeCurrentName}
+                        onFocus={() => {
+                            this.setState({
+                                showStepHeaderDesc: true
+                            });
+                        }}
+                        onBlur={() => {
+                            this.setState({
+                                showStepHeaderDesc: isDesktop()
+                            });
+                        }}
+                    />
 
-                  <Collapse in={this.state.showStepHeaderDesc}>
-                      <div>
-                          <Form.Control
-                              type={"textarea"}
-                              as={"textarea"}
-                              defaultValue={this.props.tool?.getCurrentTool()?.description}
-                              onChange={this.onChangeCurrentDescription}
-                          />
-                      </div>
-                  </Collapse>
-              </div>
-          );
+                    <Collapse in={this.state.showStepHeaderDesc}>
+                        <div>
+                            <Form.Control
+                                type={"textarea"}
+                                as={"textarea"}
+                                defaultValue={this.props.tool?.getCurrentTool()?.description}
+                                onChange={this.onChangeCurrentDescription}
+                            />
+                        </div>
+                    </Collapse>
+                </div>
+            );
         }
 
         return (

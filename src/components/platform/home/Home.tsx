@@ -76,7 +76,8 @@ export class Home extends Component<any, HomeState> {
                         }
 
                         return (
-                            <Col title={title} key={value.name} as={(value.maintenance) ? Col : Link} className={classes.join(" ")} to={value.link}>
+                            <Col title={title} key={value.name} as={(value.maintenance) ? Col : Link}
+                                 className={classes.join(" ")} to={value.link}>
                                 <div className={"icon"}>
                                     <div>
                                         <FontAwesomeIcon icon={value.icon}/>
