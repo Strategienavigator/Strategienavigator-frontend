@@ -38,7 +38,7 @@ export function AnonymousModal(props: {
                 <b>Wollen Sie sich als anonymer Nutzer anmelden?</b><br/>
                 <br/>
                 Als anonymer Nutzer können Sie nur auf Ihrem aktuellen Gerät und nur in
-                Ihrem aktuellen Browser auf eventuell erstellte Analysen zugreifen.<br/><br/>
+                Ihrem aktuellen Browser auf erstellte Analysen zugreifen.<br/><br/>
 
                 <b>Die Daten von anonymen Nutzern werden nach 30 Tagen gelöscht.</b><br/><br/>
 
