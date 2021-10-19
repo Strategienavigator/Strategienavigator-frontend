@@ -82,14 +82,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         let i = 0;
         let e = 0;
 
-        if (this.props.steps?.length !== undefined && this.props.steps?.length < 1) {
-            return (
-                <Card body>
-                    Diese Analyse ist in Bearbeitung...
-                </Card>
-            );
-        }
-
         return (
             <>
                 <Tab.Container

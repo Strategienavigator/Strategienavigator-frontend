@@ -18,6 +18,8 @@ class PortfolioAnalysis extends Tool {
         this.setID(5);
         this.setToolname("Portfolio Analyse");
         this.setToolIcon(faArrowsAlt);
+        // Maintenance Mode
+        this.setMaintenance(true);
 
         this.addStep({
             id: "portfolio-objects",

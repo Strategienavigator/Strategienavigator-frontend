@@ -122,7 +122,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         if (this.maintenance) {
             return (
                 <Card body>
-                    Diese Analyse ist in Bearbeitung.
+                    Diese Analyse befindet sich im Wartungsmodus. Bitte Schauen Sie zu einem späteren Zeitpunkt erneut vorbei.
                 </Card>
             );
         }
