@@ -26,6 +26,7 @@ interface ToolState {
     showInputModal: boolean
     isSaving: boolean
     showRouteChangeModal: boolean
+    isCreatingNewSave: boolean,
     lastLocation: H.Location | null
     viewValidationError?: ToolViewValidation
     view?: SaveResource<any>
@@ -74,6 +75,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             isSaving: false,
             lastLocation: null,
             showRouteChangeModal: false,
+            isCreatingNewSave: false,
             viewValidationError: {}
         }
         this.stepComponent = React.createRef<StepComponent>();
@@ -135,14 +137,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                     </Route>
 
                     <Route exact path={this.getLink() + "/new"}>
-                        {!this.hasCurrentTool() ? (
-                            <div>
-                                <Loader payload={[]} transparent animate={false} fullscreen alignment={"center"}
-                                        loaded={false}/>
-                                {this.getNameAndDescInputModal()}
-                            </div>
-                        ) : this.getStepComponent()}
-                        <Prompt message={this.denyRouteChange}/>
+                        {this.getNameAndDescInputModal()}
                     </Route>
 
                     <Route
@@ -247,7 +242,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         });
 
         window.onbeforeunload = async (e) => {
-            if (this.isView || this.isNew) {
+            if (this.isView) {
                 return true;
             } else {
                 delete e['returnValue'];
@@ -480,7 +475,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
                     <br/>
 
-                    <Form className={"mt-3"} onSubmit={(e) => this.finishNameAndDescInput(e)} id={"toolhomeInput"}>
+                    <Form className={"mt-3"} onSubmit={async (e) => {await this.finishNameAndDescInput(e)}} id={"toolhomeInput"}>
                         <Form.Floating className={"mb-2"}>
                             <Form.Control
                                 id="name"
@@ -532,15 +527,17 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                     }} variant={"light"} type={"button"}>
                         Zurück
                     </Button>
-                    <Button variant={"dark"} type={"submit"} form={"toolhomeInput"}>
-                        Jetzt beginnen
+                    <Button variant={"dark"} disabled={this.state.isCreatingNewSave} type={"submit"} form={"toolhomeInput"}>
+                        <Loader payload={[]} loaded={!this.state.isCreatingNewSave} transparent variant={"dark"} size={15} text={<span>&nbsp;Jetzt beginnen</span>}>
+                            Jetzt beginnen
+                        </Loader>
                     </Button>
                 </Modal.Footer>
             </Modal>
         );
     }
 
-    private finishNameAndDescInput = (e: FormEvent<HTMLFormElement>) => {
+    private finishNameAndDescInput = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         this.setState({
@@ -572,22 +569,29 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         if (!error) {
             this.currentSaveName = name;
             this.currentSaveDescription = desc;
-            this.currentSave = {
-                name: name,
-                description: desc,
-                id: 0,
-                tool_id: this.toolID as number,
-                data: {},
-                contributors: [],
-                invited: [],
-                last_locked: null,
-                locked_by: null,
-                owner_id: 0
-            };
 
             this.setState({
-                showInputModal: false
+                isCreatingNewSave: true,
+                showInputModal: true
             });
+
+            let saved = await this.save({}, new Map<string, FormComponent<any, any>>());
+            if (saved) {
+                this.props.history.push(this.getLink() + "/" + this.currentSaveID);
+            }
+
+            // this.currentSave = {
+            //     name: name,
+            //     description: desc,
+            //     id: 0,
+            //     tool_id: this.toolID as number,
+            //     data: {},
+            //     contributors: [],
+            //     invited: [],
+            //     last_locked: null,
+            //     locked_by: null,
+            //     owner_id: 0
+            // };
         }
     }
 
