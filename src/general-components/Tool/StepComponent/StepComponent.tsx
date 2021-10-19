@@ -451,7 +451,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
             for (const {ref, id} of this.state.steps) {
                 Object.assign(data, {[id]: ref.current?.getValues()});
-                // ref.current?.setDisabled(true);
                 allForms.set(ref.current?.props.id as string, ref.current as FormComponent<any, any>);
             }
 
