@@ -1,4 +1,4 @@
-import React, {Component, FormEvent, ReactElement, ReactNode, RefObject} from "react";
+import React, {Component, FormEvent, ReactComponentElement, ReactElement, ReactNode, RefObject} from "react";
 import {matchPath, Prompt, RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {Route, Switch} from "react-router-dom";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
@@ -14,6 +14,7 @@ import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepC
 import "./tool.scss";
 import {FormComponent} from "./FormComponent/FormComponent";
 import * as H from "history";
+import {MatrixComponent} from "./MatrixComponent/MatrixComponent";
 
 
 type ToolViewValidation = {
@@ -59,13 +60,16 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
     // STEP COMPONENT
     private steps: Array<StepProp<any>> = [];
+    private readonly stepComponent: RefObject<StepComponent>;
 
     // CURRENT SAVE
     private currentSave?: SaveResource<any>;
     private currentSaveID?: number;
     private currentSaveName?: string;
     private currentSaveDescription?: string;
-    private readonly stepComponent: RefObject<StepComponent>;
+
+    // Matrix
+    private matrix?: ReactComponentElement<any>;
 
     protected constructor(props: RouteComponentProps<any, StaticContext, unknown> | Readonly<RouteComponentProps<any, StaticContext, unknown>>) {
         super(props);
@@ -348,6 +352,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                 }}
                 key={"stepComponent"}
                 ref={this.stepComponent}
+                matrix={this.matrix}
                 steps={this.steps}
                 tool={this}
                 {...props}
@@ -387,6 +392,10 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     protected abstract renderView(tool: SaveResource<any>): ReactNode;
 
     protected abstract renderNew(): ReactNode;
+
+    protected setMatrix(matrix: ReactComponentElement<any>) {
+        this.matrix = matrix;
+    }
 
     protected setToolname = (toolName: string) => {
         this.toolName = toolName;

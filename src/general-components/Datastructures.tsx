@@ -32,7 +32,6 @@ export type SimpleSaveResource = {
     owner_id: number
     tool_id: number
     description: string
-    // TODO: Überprüfen was vom Backend geliefert wird
     contributors: Array<number>
 }
 

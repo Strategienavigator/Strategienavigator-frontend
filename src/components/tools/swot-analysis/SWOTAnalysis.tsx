@@ -9,6 +9,7 @@ import {
 } from "./steps/SWOTClassifyAlternativeActions";
 
 import "./swot-analysis.scss";
+import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
 
 
 interface SWOTAnalysisValues {
@@ -25,6 +26,7 @@ class SWOTAnalysis extends Tool {
         this.setID(2);
         this.setToolname("SWOT Analyse");
         this.setToolIcon(faThLarge);
+        this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
 
         this.addStep<SwotFactorsValues>({
             id: "swot-factors",
