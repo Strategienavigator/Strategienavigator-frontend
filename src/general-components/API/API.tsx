@@ -1,4 +1,5 @@
 import {showErrorPage} from "../../index";
+import {Session} from "../Session/Session";
 
 
 export interface CallInterface<D> {
@@ -8,10 +9,20 @@ export interface CallInterface<D> {
     response: Response
 }
 
+export interface APIArgs {
+    errorCallback?: APIErrorCallback
+}
+
+export const DefaultAPIArgs = {
+    errorCallback: undefined
+}
+
 /**
  * Alle API Übermittlungsmethoden
  */
 declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
+
+export type APIErrorCallback = ((reason: Error) => void);
 
 /**
  * Führt eine HTTP-Request auf der genannten URL aus.
@@ -20,9 +31,16 @@ declare type Methods = "GET" | "POST" | "DELETE" | "PUT";
  * @param URL URL zur Backend-Route/ ohne slash am Anfang
  * @param method API Übermittlungsmethode
  * @param data Inhalt des Requests
- * @param token Authentifizierungstoken
+ * @param token
+ * @param apiArgs
  */
-const callAPI = async <D extends object>(URL: string, method: Methods, data?: FormData | Blob | URLSearchParams, token?: string): Promise<CallInterface<D> | null> => {
+const callAPI = async <D extends object>(
+    URL: string,
+    method: Methods,
+    data?: FormData | Blob | URLSearchParams,
+    token?: boolean,
+    apiArgs?: APIArgs
+): Promise<CallInterface<D> | null> => {
     try {
         let callURL = process.env.REACT_APP_API + URL;
 
@@ -41,8 +59,9 @@ const callAPI = async <D extends object>(URL: string, method: Methods, data?: Fo
         headers.append("Accept", "application/json");
 
         // TOKEN
-        if (token !== undefined) {
-            headers.append("Authorization", "Bearer " + token);
+        if (token !== undefined && token) {
+            let apiToken = Session.getToken() as string;
+            headers.append("Authorization", "Bearer " + apiToken);
         }
 
         // REQUEST-INIT
@@ -73,7 +92,11 @@ const callAPI = async <D extends object>(URL: string, method: Methods, data?: Fo
             response: call
         };
     } catch (e) {
-        showErrorPage(500);
+        if (apiArgs !== undefined && apiArgs.errorCallback !== undefined) {
+            apiArgs.errorCallback(e as Error);
+        } else {
+            showErrorPage(500);
+        }
         return null;
     }
 }

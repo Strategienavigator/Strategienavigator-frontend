@@ -110,7 +110,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             data.password = new_password;
         }
 
-        let call = await updateUser(Session.currentUser?.getID() as number, data, Session.getToken());
+        let call = await updateUser(Session.currentUser?.getID() as number, data);
 
         if (call && call.success) {
             Session.currentUser?.update(data);
@@ -138,7 +138,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
     }
 
     delete = async () => {
-        await deleteUser(Session.currentUser?.getID() as number, Session.getToken());
+        await deleteUser(Session.currentUser?.getID() as number);
 
         Session.setCurrent(null);
         Session.removeTokens();

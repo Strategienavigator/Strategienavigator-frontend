@@ -41,18 +41,13 @@ export class Settings extends Component<{}, SettingsState> {
         this.state = {settings: [], userSettings: [], saving: false};
 
         this.settingsLoader = new PaginationLoader(async (page) => {
-            let token = Session.getToken();
-            if (token !== null) {
-                return await SettingsAPI.getSettings(token, page);
-            }
-            return null;
+            return await SettingsAPI.getSettings(page);
         });
 
         this.userSettingsLoader = new PaginationLoader(async (page) => {
-            let token = Session.getToken();
             let userId = Session.currentUser?.getID();
-            if (token && userId) {
-                return await SettingsAPI.getUserSettings(userId, token, page);
+            if (userId) {
+                return await SettingsAPI.getUserSettings(userId, page);
             }
             return null;
         });
@@ -110,7 +105,7 @@ export class Settings extends Component<{}, SettingsState> {
                     if (setting.newResource) {
                         f = SettingsAPI.createUserSettings;
                     }
-                    let result = f(safeUserId, setting.setting_id, safeToken, setting.value);
+                    let result = f(safeUserId, setting.setting_id, setting.value);
                     setting.newResource = false;
                     setting.oldValue = setting.value;
                     return result;

@@ -1,4 +1,4 @@
-import {callAPI} from "../API";
+import {APIArgs, callAPI} from "../API";
 
 
 export type UpdateData = {
@@ -8,13 +8,34 @@ export type UpdateData = {
     current_password?: string
 }
 /**
+ * Erstellt einen neuen Nutzer in der Datenbank
+ * @param username Benutzername des neuen Nutzers
+ * @param email Email Adresse des neuen Nutzers
+ * @param password Passwort des neuen Nutzers
+ * @param anonymousID id des anonymen Nutzers, wenn er angegeben wird, werden alle Speicherstände und Einstellungen des anonymen Nutzers übernommen
+ * @param apiArgs Normale api Argumente
+ */
+const createUser = async (username:string, email:string,password:string, anonymousID?:number, apiArgs?:APIArgs) => {
+    let formData = new FormData();
+
+
+    formData.append("email",email);
+    formData.append("username", username);
+    formData.append("password", password);
+    if (anonymousID !== undefined)
+        formData.append("anonymous_id", anonymousID.toString(10));
+
+    return await callAPI("api/users" , "POST", formData, false,  apiArgs);
+}
+
+/**
  * Bearbeitet den Benutzer mit den übermittelten Daten
  *
  * @param data Die zu übernehmenden Daten
  * @param userID Die ID des Benutzers
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs Normale api Argumente
  */
-const updateUser = async (userID: number, data: UpdateData, token: string | null) => {
+const updateUser = async (userID: number, data: UpdateData, apiArgs?:APIArgs) => {
     let formData = new FormData();
 
     if (data.username !== undefined)
@@ -24,19 +45,17 @@ const updateUser = async (userID: number, data: UpdateData, token: string | null
     if (data.current_password !== undefined)
         formData.append("current_password", data.current_password);
 
-    formData.append("_method", "PUT");
-
-    return await callAPI("api/users/" + userID, "POST", formData, (token !== null) ? token : undefined);
+    return await callAPI("api/users/" + userID, "PUT", formData, true,  apiArgs);
 }
 
 /**
  * Löscht einen Benutzer
  *
  * @param userID Die ID des Benutzers
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs Normale api Argumente
  */
-const deleteUser = async (userID: number, token: string | null) => {
-    return await callAPI("api/users/" + userID, "DELETE", undefined, (token !== null) ? token : undefined);
+const deleteUser = async (userID: number, apiArgs?:APIArgs) => {
+    return await callAPI("api/users/" + userID, "DELETE", undefined, true, apiArgs);
 }
 
 export {

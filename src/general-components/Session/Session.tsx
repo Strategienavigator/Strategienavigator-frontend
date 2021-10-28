@@ -35,7 +35,7 @@ class Session {
     }
 
     static logout = async () => {
-        let call = await callAPI("oauth/token/" + Session.token.breakDown()?.id, "DELETE", undefined, Session.token.getToken() as string);
+        let call = await callAPI("oauth/token/" + Session.token.breakDown()?.id, "DELETE", undefined, true);
 
         if (call && call.success) {
             Session.setCurrent(null);
@@ -56,8 +56,7 @@ class Session {
     static checkLogin = async (): Promise<null | User> => {
         let validToken = Session.token.getValidTokenBreakdown();
         if (validToken !== null) {
-            let token = Session.token.getToken() as string;
-            let call = await callAPI<DefaultResponse<UserResource>>("api/users/" + validToken.userId, "GET", undefined, token);
+            let call = await callAPI<DefaultResponse<UserResource>>("api/users/" + validToken.userId, "GET", undefined, true);
 
             if (call) {
                 if (call.success) {

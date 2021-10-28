@@ -291,7 +291,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         if (this.currentSaveID === undefined) {
             // Create new
             saveData.append("tool_id", String(this.toolID));
-            call = await createSave(saveData, Session.getToken());
+            call = await createSave(saveData, {errorCallback: this.onAPIError});
 
             if (call && call.success) {
                 let callData = call.callData as SaveResource;
@@ -300,7 +300,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             }
         } else {
             // Update current
-            call = await updateSave(this.currentSaveID, saveData, Session.getToken());
+            call = await updateSave(this.currentSaveID, saveData, {errorCallback: this.onAPIError});
         }
 
         this.setState({
@@ -308,6 +308,10 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         });
 
         return (call !== null && call.success);
+    }
+
+    public onAPIError = (error: Error) => {
+
     }
 
     public getValues<D>(id: string): object | null {
@@ -398,7 +402,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     private lockSave = async (lock: boolean) => {
-        return await lockSave(this.currentSaveID as number, lock, Session.getToken());
+        return await lockSave(this.currentSaveID as number, lock,{errorCallback: this.onAPIError});
     }
 
     private checkForPage = (location: string) => {
@@ -416,7 +420,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     private validateViewID = async (ID: number) => {
-        let call = await getSave(ID, Session.getToken());
+        let call = await getSave(ID, {errorCallback: this.onAPIError});
         if (call) {
             let data = call.callData as SaveResource<any>;
             let isNotOwn, isOtherTool, isLocked;
