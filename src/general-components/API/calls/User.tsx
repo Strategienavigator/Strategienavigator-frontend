@@ -59,6 +59,7 @@ const deleteUser = async (userID: number, apiArgs?:APIArgs) => {
 }
 
 export {
+    createUser,
     updateUser,
     deleteUser
 }

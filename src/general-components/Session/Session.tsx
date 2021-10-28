@@ -4,6 +4,7 @@ import {Token} from "./token/Token";
 import {AuthToken} from "./token/AuthToken";
 import {RefreshToken} from "./token/RefreshToken";
 import {AnonymousUserResource, DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
+import {createUser} from "../API/calls/User";
 
 
 class Session {
@@ -123,12 +124,7 @@ class Session {
     }
 
     static register = async (email: string, username: string, password: string): Promise<CallInterface<object> | null> => {
-        let formData: FormData = new FormData();
-        formData.append('email', email);
-        formData.append('username', username);
-        formData.append('password', password);
-
-        return await callAPI('api/users', 'POST', formData);
+        return await createUser(username,email,password);
     }
 
 }

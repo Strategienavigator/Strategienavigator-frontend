@@ -8,6 +8,7 @@ import {checkUsername} from "../../../general-components/API/calls/Username";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 
 import "./register.scss";
+import {Messages} from "../../../general-components/Messages/Messages";
 
 
 interface RegisterState {
@@ -36,7 +37,15 @@ export class Register extends Component<any, RegisterState> {
         let username: string = extractFromForm(e, "username") as string;
         let password: string = extractFromForm(e, "password") as string;
 
-        await Session.register(email, username, password);
+        let call = await Session.register(email, username, password);
+        this.setState({
+            isRegistering:false
+        });
+        if(call?.success){
+            Messages.add("Konto erstellt!\nÜberprüfe deine Emails!","SUCCESS", Messages.TIMER);
+        }else{
+            Messages.add("Fehlgeschlagen!","DANGER", Messages.TIMER);
+        }
     }
 
     render() {
