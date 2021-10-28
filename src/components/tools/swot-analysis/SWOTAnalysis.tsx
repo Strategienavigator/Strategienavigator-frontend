@@ -9,6 +9,7 @@ import {
 } from "./steps/SWOTClassifyAlternativeActions";
 
 import "./swot-analysis.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 
 
 interface SWOTAnalysisValues {
@@ -17,7 +18,7 @@ interface SWOTAnalysisValues {
     "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
 }
 
-class SWOTAnalysis extends Tool {
+class SWOTAnalysis extends SteppableTool {
 
     constructor(props: any) {
         super(props);
@@ -43,10 +44,6 @@ class SWOTAnalysis extends Tool {
         });
     }
 
-    protected renderToolHome() {
-        return null;
-    }
-
     protected renderShortDescription() {
         return null;
     }
@@ -67,10 +64,6 @@ class SWOTAnalysis extends Tool {
                 Corona-Pandemie.
             </p>
         );
-    }
-
-    protected renderNew() {
-        return this.getStepComponent();
     }
 
     protected renderView(save: SaveResource<SWOTAnalysisValues>) {

@@ -1,16 +1,16 @@
 import React, {Component, RefObject} from "react";
 import {Accordion, Button, Card, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
-import {isDesktop} from "../../Desktop";
-import {clearControlFooter, disableControlFooterItem, setControlFooterItem} from "../../ControlFooter/ControlFooter";
-import {FormComponent} from "../FormComponent/FormComponent";
+import {isDesktop} from "../../../Desktop";
+import {clearControlFooter, disableControlFooterItem, setControlFooterItem} from "../../../ControlFooter/ControlFooter";
+import {FormComponent} from "../../FormComponent/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretLeft, faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
-import {Tool} from "../Tool";
+import {Tool} from "../../Tool";
 
 import "./step-component.scss";
 import "./step-component-desk.scss";
-import {Messages} from "../../Messages/Messages";
-import {Loader} from "../../Loader/Loader";
+import {Messages} from "../../../Messages/Messages";
+import {Loader} from "../../../Loader/Loader";
 
 
 export interface StepProp<T> {
@@ -92,7 +92,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                 <div className={"stepHeader"}>
                     <Form.Control
                         type={"text"}
-                        defaultValue={this.props.tool?.getCurrentTool()?.name}
+                        defaultValue={this.props.tool?.getCurrentSave()?.name}
                         onChange={this.onChangeCurrentName}
                         onFocus={() => {
                             this.setState({
@@ -111,7 +111,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                             <Form.Control
                                 type={"textarea"}
                                 as={"textarea"}
-                                defaultValue={this.props.tool?.getCurrentTool()?.description}
+                                defaultValue={this.props.tool?.getCurrentSave()?.description}
                                 onChange={this.onChangeCurrentDescription}
                             />
                         </div>

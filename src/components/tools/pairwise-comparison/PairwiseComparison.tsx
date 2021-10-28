@@ -5,9 +5,10 @@ import {PCCriterias} from "./steps/PCCriterias";
 import {PCPairComparison} from "./steps/PCPairComparison";
 
 import "./pairwise-comparison.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 
 
-class PairwiseComparison extends Tool {
+class PairwiseComparison extends SteppableTool {
 
     constructor(props: any) {
         super(props);
@@ -15,7 +16,6 @@ class PairwiseComparison extends Tool {
         this.setID(3);
         this.setToolname("Paarweiser Vergleich");
         this.setToolIcon(faSortAmountDownAlt);
-        // Maintenance Mode
         this.setMaintenance(true);
 
         this.addStep({
@@ -45,10 +45,6 @@ class PairwiseComparison extends Tool {
 
     protected renderTutorial() {
         return null;
-    }
-
-    protected renderNew() {
-        return this.getStepComponent();
     }
 
     protected renderView(tool: SaveResource) {

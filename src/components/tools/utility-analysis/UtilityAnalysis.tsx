@@ -8,9 +8,10 @@ import {UtilEvaluation} from "./steps/UtilEvaluation";
 import {UtilResult} from "./steps/UtilResult";
 
 import "./utility-analysis.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 
 
-class UtilityAnalysis extends Tool {
+class UtilityAnalysis extends SteppableTool {
 
     constructor(props: any) {
         super(props);
@@ -18,7 +19,6 @@ class UtilityAnalysis extends Tool {
         this.setID(1);
         this.setToolname("Nutzwertanalyse");
         this.setToolIcon(faBorderAll);
-        // Maintenance Mode
         this.setMaintenance(true);
 
         this.addStep({
@@ -58,10 +58,6 @@ class UtilityAnalysis extends Tool {
 
     protected renderTutorial() {
         return null;
-    }
-
-    protected renderNew() {
-        return this.getStepComponent();
     }
 
     protected renderView(tool: SaveResource) {

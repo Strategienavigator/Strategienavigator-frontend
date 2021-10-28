@@ -3,17 +3,17 @@ import {matchPath, Prompt, RouteComponentProps, StaticContext, withRouter} from 
 import {Route, Switch} from "react-router-dom";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {ToolHome, ToolHomeInfo} from "./Home/ToolHome";
-import {extractFromForm} from "../FormHelper";
 import {Button, Card, Fade, Form, Modal} from "react-bootstrap";
 import {Loader} from "../Loader/Loader";
 import {createSave, getSave, lockSave, updateSave} from "../API/calls/Saves";
 import {Session} from "../Session/Session";
 import {SaveResource} from "../Datastructures";
-import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepComponent";
-
-import "./tool.scss";
 import {FormComponent} from "./FormComponent/FormComponent";
 import * as H from "history";
+import {CreateToolModal} from "./CreateToolModal/CreateToolModal";
+
+import "./tool.scss";
+import {ConfirmToolRouteChangeModal} from "./ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 
 
 type ToolViewValidation = {
@@ -23,19 +23,11 @@ type ToolViewValidation = {
 } | undefined;
 
 interface ToolState {
-    showInputModal: boolean
-    isSaving: boolean
-    showRouteChangeModal: boolean
-    isCreatingNewSave: boolean,
+    showInputModal:boolean
+    showConfirmToolRouteChangeModal: boolean
     lastLocation: H.Location | null
     viewValidationError?: ToolViewValidation
     view?: SaveResource<any>
-    nameError?: {
-        empty?: boolean
-    }
-    descriptionError?: {
-        empty?: boolean
-    }
 }
 
 abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolState> {
@@ -57,28 +49,21 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     // TOOL HOME
     private toolHomeRef?: RefObject<ToolHome>
 
-    // STEP COMPONENT
-    private steps: Array<StepProp<any>> = [];
-
     // CURRENT SAVE
     private currentSave?: SaveResource<any>;
     private currentSaveID?: number;
     private currentSaveName?: string;
     private currentSaveDescription?: string;
-    private readonly stepComponent: RefObject<StepComponent>;
 
     protected constructor(props: RouteComponentProps<any, StaticContext, unknown> | Readonly<RouteComponentProps<any, StaticContext, unknown>>) {
         super(props);
 
         this.state = {
             showInputModal: true,
-            isSaving: false,
             lastLocation: null,
-            showRouteChangeModal: false,
-            isCreatingNewSave: false,
+            showConfirmToolRouteChangeModal: false,
             viewValidationError: {}
         }
-        this.stepComponent = React.createRef<StepComponent>();
         this.toolLink = this.props.match.path;
 
         // setup route paths
@@ -133,12 +118,12 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         return (
             <>
                 <Switch>
-                    <Route exact path={this.getLink()}>
+                    <Route exact path={this.homePath}>
                         {this.getRenderedToolHome()}
                     </Route>
 
-                    <Route exact path={this.getLink() + "/new"}>
-                        {this.getNameAndDescInputModal()}
+                    <Route exact path={this.newPath}>
+                        <CreateToolModal tool={this} history={this.props.history} location={this.props.location} match={this.props.match}/>
                     </Route>
 
                     <Route
@@ -171,57 +156,34 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                                 </>
                             );
                         }}
-                        path={this.getLink() + "/:id"}
+                        path={this.viewPath}
                     />
-
-                    {(this.state.showInputModal) && this.getNameAndDescInputModal()}
-
-                    {(this.state.isSaving) && (
-                        <Loader payload={[]} fullscreen transparent loaded={false}/>
-                    )}
-
                 </Switch>
 
-                <Modal
-                    show={this.state.showRouteChangeModal}
-                    backdrop="static"
-                    animate={Fade}
-                    keyboard
-                >
-                    <Modal.Header>
-                        <Modal.Title>Wollen Sie wirklich die Seite verlassen?</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        Nicht gespeicherte Änderungen gehen verloren.
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={() => {
-                            this.props.history.push(this.state.lastLocation?.pathname as string);
-                            if ((this.state.lastLocation?.pathname as string).startsWith(this.toolLink)) {
-                                this.setState({
-                                    showRouteChangeModal: false
-                                });
-                            }
-                        }} variant={"light"} type={"button"}>
-                            Ja
-                        </Button>
-                        <Button onClick={() => {
+                <ConfirmToolRouteChangeModal
+                    show={this.state.showConfirmToolRouteChangeModal}
+                    onNo={() => {
+                        this.setState({
+                            showConfirmToolRouteChangeModal: false,
+                            lastLocation: null
+                        });
+                    }}
+                    onYes={() => {
+                        this.props.history.push(this.state.lastLocation?.pathname as string);
+                        if ((this.state.lastLocation?.pathname as string).startsWith(this.toolLink)) {
                             this.setState({
-                                showRouteChangeModal: false,
-                                lastLocation: null
+                                showConfirmToolRouteChangeModal: false
                             });
-                        }} variant={"dark"} type={"button"}>
-                            Nein
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                        }
+                    }}
+                />
             </>
         );
     }
 
-    denyRouteChange = (location: H.Location, action: H.Action): boolean => {
+    denyRouteChange = (location: H.Location): boolean => {
         this.setState({
-            showRouteChangeModal: true,
+            showConfirmToolRouteChangeModal: true,
             lastLocation: location
         });
         return (location.pathname === this.state.lastLocation?.pathname);
@@ -232,14 +194,6 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
         this.props.history.listen((location) => {
             this.checkForPage(location.pathname);
-
-            if (this.isNew) {
-                this.currentSaveID = undefined;
-                this.currentSaveName = undefined;
-                this.currentSaveDescription = undefined;
-                this.currentSave = undefined;
-                this.forceUpdate();
-            }
         });
 
         window.onbeforeunload = async (e) => {
@@ -249,7 +203,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                 delete e['returnValue'];
             }
         };
-        window.onunload = () => {
+        window.onunload = async () => {
             let data = new FormData();
             data.append("_method", "PUT");
             data.append("lock", String(0));
@@ -257,14 +211,13 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             let headers = new Headers();
             headers.append("Authorization", "Bearer " + Session.getToken());
 
-            fetch(process.env.REACT_APP_API + "api/saves/" + this.currentSaveID, {
+            await fetch(process.env.REACT_APP_API + "api/saves/" + this.currentSaveID, {
                 method: "POST",
                 body: data,
                 headers: headers,
                 keepalive: true
             });
         }
-        // navigator.sendBeacon(process.env.REACT_APP_API + "api/saves/" + this.currentSaveID, data);
     }
 
     componentWillUnmount = async () => {
@@ -278,10 +231,6 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     public save = async (data: object, forms: Map<string, FormComponent<any, any>>): Promise<boolean> => {
-        this.setState({
-            isSaving: true
-        });
-
         let saveData = new FormData();
         saveData.append("data", JSON.stringify(data));
         saveData.append("name", this.currentSaveName as string);
@@ -289,47 +238,26 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
         let call;
         if (this.currentSaveID === undefined) {
-            // Create new
             saveData.append("tool_id", String(this.toolID));
             call = await createSave(saveData, {errorCallback: this.onAPIError});
 
             if (call && call.success) {
                 let callData = call.callData as SaveResource;
                 this.currentSave = callData;
+                this.currentSaveName = callData.name;
+                this.currentSaveDescription = callData.description;
                 this.currentSaveID = callData.id;
             }
         } else {
-            // Update current
             call = await updateSave(this.currentSaveID, saveData, {errorCallback: this.onAPIError});
         }
-
-        this.setState({
-            isSaving: false
-        });
 
         return (call !== null && call.success);
     }
 
-    public onAPIError = (error: Error) => {
+    public abstract onAPIError(error: Error): void;
 
-    }
-
-    public getValues<D>(id: string): object | null {
-        let values = null;
-
-        for (let i = 0; i < this.steps.length; i++) {
-            let step = this.steps[i];
-            if (step.id.toLowerCase() === id.toLowerCase()) {
-                values = this.stepComponent.current?.getFormValues<D>(id);
-            }
-        }
-
-        return {
-            [id]: values
-        };
-    }
-
-    public getCurrentTool(): SaveResource<any> | undefined {
+    public getCurrentSave(): SaveResource<any> | undefined {
         return this.currentSave;
     }
 
@@ -345,53 +273,27 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.currentSaveName = name;
     }
 
-    protected getStepComponent(props?: StepComponentProps) {
-        return (
-            <StepComponent
-                onSave={async (data, forms) => {
-                    return await this.save(data, forms);
-                }}
-                key={"stepComponent"}
-                ref={this.stepComponent}
-                steps={this.steps}
-                tool={this}
-                {...props}
-            />
-        );
-    }
-
-    protected addStep<E>(step: StepProp<E>) {
-        this.steps.push(step);
-    }
-
-    protected setValues(id: string, values: any): boolean {
-        for (let i = 0; i < this.steps.length; i++) {
-            let step = this.steps[i];
-            if (step.id.toLowerCase() === id.toLowerCase()) {
-                step.values = values;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected hasCurrentTool(): boolean {
+    public hasCurrentSave(): boolean {
         return this.currentSaveDescription !== undefined && this.currentSaveName !== undefined;
     }
+
+    public abstract getValues<D>(id: string): object | null;
+
+    public abstract setValues(id: string, values: any): boolean;
 
     protected setID = (toolID: number) => {
         this.toolID = toolID;
     }
 
-    protected abstract renderToolHome(): ReactElement<any, "ToolHome"> | null | undefined;
+    protected renderToolHome(): ReactElement<any, "ToolHome"> | null | undefined {
+        return <ToolHome />;
+    }
 
     protected abstract renderShortDescription(): ReactNode;
 
     protected abstract renderTutorial(): ReactNode;
 
-    protected abstract renderView(tool: SaveResource<any>): ReactNode;
-
-    protected abstract renderNew(): ReactNode;
+    protected abstract renderView(save: SaveResource<any>): ReactNode;
 
     protected setToolname = (toolName: string) => {
         this.toolName = toolName;
@@ -464,149 +366,6 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         }
     }
 
-    private getNameAndDescInputModal = () => {
-        return (
-            <Modal
-                show={this.state.showInputModal}
-                backdrop="static"
-                centered
-                keyboard={true}
-            >
-                <Modal.Header>
-                    <Modal.Title>Bezeichnung und Beschreibung</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Für Ihre neue Analyse müssen Sie nur noch eine Bezeichnung und Beschreibung angeben.
-
-                    <br/>
-
-                    <Form className={"mt-3"} onSubmit={async (e) => {
-                        await this.finishNameAndDescInput(e)
-                    }} id={"toolhomeInput"}>
-                        <Form.Floating className={"mb-2"}>
-                            <Form.Control
-                                id="name"
-                                type="text"
-                                name={"name"}
-                                size={"sm"}
-                                placeholder="Bezeichnung"
-                            />
-                            <Form.Label htmlFor={"name"}>Bezeichnung</Form.Label>
-                        </Form.Floating>
-
-                        {(this.state.nameError) && (
-                            <div className={"feedbackContainer mb-2"}>
-                                {this.state.nameError.empty && (
-                                    <div className={"feedback DANGER"}>
-                                        Bitte geben Sie eine Bezeichnung an.
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        <Form.Floating className={"mb-2"}>
-                            <Form.Control
-                                as="textarea"
-                                style={{height: 100}}
-                                id="description"
-                                name={"description"}
-                                rows={10}
-                                size={"sm"}
-                                placeholder="Beschreibung"
-                            />
-                            <Form.Label htmlFor={"description"}>Beschreibung</Form.Label>
-                        </Form.Floating>
-
-                        {(this.state.descriptionError) && (
-                            <div className={"feedbackContainer mb-2"}>
-                                {this.state.descriptionError.empty && (
-                                    <div className={"feedback DANGER"}>
-                                        Bitte geben Sie eine Beschreibung an.
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={() => {
-                        this.props.history.goBack();
-                    }} variant={"light"} type={"button"}>
-                        Zurück
-                    </Button>
-                    <Button variant={"dark"} disabled={this.state.isCreatingNewSave} type={"submit"}
-                            form={"toolhomeInput"}>
-                        <Loader payload={[]} loaded={!this.state.isCreatingNewSave} transparent variant={"dark"}
-                                size={15} text={<span>&nbsp;Jetzt beginnen</span>}>
-                            Jetzt beginnen
-                        </Loader>
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        );
-    }
-
-    private finishNameAndDescInput = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        this.setState({
-            nameError: undefined,
-            descriptionError: undefined
-        });
-
-        let error = false;
-        let name: string = extractFromForm(e, "name") as string;
-        let desc: string = extractFromForm(e, "description") as string;
-
-        if (name === "" || name === null || name === undefined) {
-            error = true;
-            this.setState({
-                nameError: {
-                    empty: true
-                }
-            });
-        }
-        if (desc === "" || desc === null || desc === undefined) {
-            error = true;
-            this.setState({
-                descriptionError: {
-                    empty: true
-                }
-            });
-        }
-
-        if (!error) {
-            this.currentSaveName = name;
-            this.currentSaveDescription = desc;
-
-            this.setState({
-                isCreatingNewSave: true,
-                showInputModal: true
-            });
-
-            let saved = await this.save({}, new Map<string, FormComponent<any, any>>());
-            if (saved) {
-                this.setState({
-                    isCreatingNewSave: false
-                });
-                this.props.history.push(this.getLink() + "/" + this.currentSaveID);
-            }
-
-            // this.currentSave = {
-            //     name: name,
-            //     description: desc,
-            //     id: 0,
-            //     tool_id: this.toolID as number,
-            //     data: {},
-            //     contributors: [],
-            //     invited: [],
-            //     last_locked: null,
-            //     locked_by: null,
-            //     owner_id: 0
-            // };
-        }
-    }
-
     private getRenderedToolHome = () => {
         let ref: RefObject<ToolHome>;
         if (this.toolHomeRef) {
@@ -617,7 +376,6 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.toolHomeRef = ref;
 
         let home = this.renderToolHome();
-
         if (home === undefined || home === null) {
             home = <ToolHome/>;
         }

@@ -1,7 +1,7 @@
 import {Component, FormEvent, ReactNode} from "react";
 import {Form} from "react-bootstrap";
 import {Messages} from "../../Messages/Messages";
-import StepComponent from "../StepComponent/StepComponent";
+import StepComponent from "../SteppableTool/StepComponent/StepComponent";
 import {randomBytes} from "crypto";
 import {Tool} from "../Tool";
 

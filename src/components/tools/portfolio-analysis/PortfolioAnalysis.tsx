@@ -8,9 +8,10 @@ import {PortEvaluation} from "./steps/PortEvaluation";
 import {PortResult} from "./steps/PortResult";
 
 import "./portfolio-analysis.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 
 
-class PortfolioAnalysis extends Tool {
+class PortfolioAnalysis extends SteppableTool {
 
     constructor(props: any) {
         super(props);
@@ -18,7 +19,6 @@ class PortfolioAnalysis extends Tool {
         this.setID(5);
         this.setToolname("Portfolio Analyse");
         this.setToolIcon(faArrowsAlt);
-        // Maintenance Mode
         this.setMaintenance(true);
 
         this.addStep({
@@ -58,10 +58,6 @@ class PortfolioAnalysis extends Tool {
 
     protected renderTutorial() {
         return null;
-    }
-
-    protected renderNew() {
-        return this.getStepComponent();
     }
 
     protected renderView(tool: SaveResource) {
