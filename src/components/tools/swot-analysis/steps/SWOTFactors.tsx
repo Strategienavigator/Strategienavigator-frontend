@@ -1,4 +1,5 @@
-import {FormComponent, FormComponentProps,
+import {
+    FormComponent, FormComponentProps,
     ResetType
 } from "../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent} from "react";

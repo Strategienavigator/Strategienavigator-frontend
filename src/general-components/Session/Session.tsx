@@ -3,7 +3,7 @@ import {callAPI, CallInterface} from "../API/API";
 import {Token} from "./token/Token";
 import {AuthToken} from "./token/AuthToken";
 import {RefreshToken} from "./token/RefreshToken";
-import {DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
+import {AnonymousUserResource, DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
 
 
 class Session {
@@ -14,6 +14,13 @@ class Session {
 
     static isLoggedIn = (): boolean => {
         return Session.currentUser !== null;
+    }
+
+    static isAnonymous = (): boolean => {
+        if (Session.currentUser !== null) {
+            return Session.currentUser.isAnonymous();
+        }
+        return false;
     }
 
     static setCurrent = (user: User | null) => {
@@ -103,6 +110,15 @@ class Session {
             let data = call.callData;
             Session.updateTokens(data.access_token, (rememberMe) ? data.refresh_token : undefined);
             return await Session.checkLogin();
+        }
+        return null;
+    }
+
+    static loginAnonymous = async (): Promise<null | AnonymousUserResource> => {
+        let call = await callAPI('api/users/anonymous', 'POST');
+        if (call && call.success) {
+            let data = call.callData;
+            return data as AnonymousUserResource;
         }
         return null;
     }

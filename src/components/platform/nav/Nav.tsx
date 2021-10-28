@@ -213,10 +213,14 @@ class Nav extends Component<RouteComponentProps, NavState> {
                             {(Session.isLoggedIn()) && (
                                 <NavDropdown id={"profile-dropdown"} title={<><FontAwesomeIcon
                                     icon={faUser}/> &nbsp;{Session.currentUser?.getUsername()}</>}>
-                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/my-profile"} role={"button"}>
-                                        <FontAwesomeIcon icon={faUser}/>&nbsp;
-                                        Mein Profil
-                                    </Dropdown.Item>
+
+                                    {!Session.isAnonymous() && (
+                                        <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/my-profile"}
+                                                       role={"button"}>
+                                            <FontAwesomeIcon icon={faUser}/>&nbsp;
+                                            Mein Profil
+                                        </Dropdown.Item>
+                                    )}
 
                                     <Dropdown.Item as={"div"} className="p-0">
                                         <NavLink onClick={navOnClick} to={"/logout"} role={"button"}

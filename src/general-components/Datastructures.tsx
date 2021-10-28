@@ -76,6 +76,10 @@ export type UserResource = {
     invitations: Array<SharedSaveUserResource>
 }
 
+export type AnonymousUserResource = {
+    username: string,
+    password: string
+}
 
 export type TokenCreatedResource = {
     /**

@@ -53,17 +53,17 @@ const getRouterSwitch = () => {
             <Route loggedIn={true} path={"/logout"} exact component={Logout}/>
             <Route loggedIn={false} path={"/register"} exact component={Register}/>
             <Route loggedIn={true} path={"/settings"} exact component={Settings}/>
-            <Route loggedIn={true} path={"/my-profile"} exact component={MyProfile}/>
+            <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact component={MyProfile}/>
 
             <Route path={"/verify-email/:token"} component={EmailVerification}/>
             <Route path={"/reset-password/:token"} component={PasswordReset}/>
             <Route path={"/reset-password"} exact component={PasswordReset}/>
 
-            <Route loggedIn={true} path={"/pairwise-comparison"} component={PairwiseComparison}/>
-            <Route loggedIn={true} path={"/abc-analysis"} component={ABCAnalysis}/>
-            <Route loggedIn={true} path={"/swot-analysis"} component={SWOTAnalysis}/>
-            <Route loggedIn={true} path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
-            <Route loggedIn={true} path={"/utility-analysis"} component={UtilityAnalysis}/>
+            <Route loginAnonymous={true} loggedIn={true} path={"/pairwise-comparison"} component={PairwiseComparison}/>
+            <Route loginAnonymous={true} loggedIn={true} path={"/abc-analysis"} component={ABCAnalysis}/>
+            <Route loginAnonymous={true} loggedIn={true} path={"/swot-analysis"} component={SWOTAnalysis}/>
+            <Route loginAnonymous={true} loggedIn={true} path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
+            <Route loginAnonymous={true} loggedIn={true} path={"/utility-analysis"} component={UtilityAnalysis}/>
 
             <Route path={"/error/:code"} component={ErrorPages}/>
 

@@ -124,7 +124,8 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         if (this.maintenance) {
             return (
                 <Card body>
-                    Diese Analyse befindet sich im Wartungsmodus. Bitte Schauen Sie zu einem späteren Zeitpunkt erneut vorbei.
+                    Diese Analyse befindet sich im Wartungsmodus. Bitte Schauen Sie zu einem späteren Zeitpunkt erneut
+                    vorbei.
                 </Card>
             );
         }
@@ -475,7 +476,9 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
                     <br/>
 
-                    <Form className={"mt-3"} onSubmit={async (e) => {await this.finishNameAndDescInput(e)}} id={"toolhomeInput"}>
+                    <Form className={"mt-3"} onSubmit={async (e) => {
+                        await this.finishNameAndDescInput(e)
+                    }} id={"toolhomeInput"}>
                         <Form.Floating className={"mb-2"}>
                             <Form.Control
                                 id="name"
@@ -527,8 +530,10 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                     }} variant={"light"} type={"button"}>
                         Zurück
                     </Button>
-                    <Button variant={"dark"} disabled={this.state.isCreatingNewSave} type={"submit"} form={"toolhomeInput"}>
-                        <Loader payload={[]} loaded={!this.state.isCreatingNewSave} transparent variant={"dark"} size={15} text={<span>&nbsp;Jetzt beginnen</span>}>
+                    <Button variant={"dark"} disabled={this.state.isCreatingNewSave} type={"submit"}
+                            form={"toolhomeInput"}>
+                        <Loader payload={[]} loaded={!this.state.isCreatingNewSave} transparent variant={"dark"}
+                                size={15} text={<span>&nbsp;Jetzt beginnen</span>}>
                             Jetzt beginnen
                         </Loader>
                     </Button>
@@ -577,6 +582,9 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
             let saved = await this.save({}, new Map<string, FormComponent<any, any>>());
             if (saved) {
+                this.setState({
+                    isCreatingNewSave: false
+                });
                 this.props.history.push(this.getLink() + "/" + this.currentSaveID);
             }
 
