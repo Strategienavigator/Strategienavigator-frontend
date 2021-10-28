@@ -18,10 +18,10 @@ interface CreateToolModalState {
 }
 
 interface CreateToolModalProps {
-    tool:Tool
+    tool: Tool
 }
 
-export class CreateToolModal extends Component<CreateToolModalProps & RouteComponentProps<{}>, CreateToolModalState>{
+export class CreateToolModal extends Component<CreateToolModalProps & RouteComponentProps<{}>, CreateToolModalState> {
 
 
     constructor(props: Readonly<CreateToolModalProps & RouteComponentProps<{}>> | (CreateToolModalProps & RouteComponentProps<{}>));
@@ -29,8 +29,12 @@ export class CreateToolModal extends Component<CreateToolModalProps & RouteCompo
     constructor(props: (CreateToolModalProps & RouteComponentProps<{}>) | Readonly<CreateToolModalProps & RouteComponentProps<{}>>, context?: any) {
         super(props, context);
         this.state = {
-            isCreatingNewSave : false,
+            isCreatingNewSave: false,
         }
+    }
+
+    render() {
+        return this.getNewToolModal();
     }
 
     private getNewToolModal = () => {
@@ -160,10 +164,5 @@ export class CreateToolModal extends Component<CreateToolModalProps & RouteCompo
                 this.props.history.push(this.props.tool.getLink() + "/" + (this.props.tool.getCurrentSave()?.id as number));
             }
         }
-    }
-
-
-    render() {
-        return this.getNewToolModal();
     }
 }

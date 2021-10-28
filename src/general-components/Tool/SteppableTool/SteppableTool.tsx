@@ -17,25 +17,6 @@ abstract class SteppableTool extends Tool {
         this.stepComponent = React.createRef<StepComponent>();
     }
 
-    protected addStep<E>(step: StepProp<E>) {
-        this.steps.push(step);
-    }
-
-    protected getStepComponent(props?: StepComponentProps) {
-        return (
-            <StepComponent
-                onSave={async (data, forms) => {
-                    return await this.save(data, forms);
-                }}
-                key={"stepComponent"}
-                ref={this.stepComponent}
-                steps={this.steps}
-                tool={this}
-                {...props}
-            />
-        );
-    }
-
     public onAPIError(error: Error) {
 
     }
@@ -64,6 +45,25 @@ abstract class SteppableTool extends Tool {
         return {
             [id]: values
         };
+    }
+
+    protected addStep<E>(step: StepProp<E>) {
+        this.steps.push(step);
+    }
+
+    protected getStepComponent(props?: StepComponentProps) {
+        return (
+            <StepComponent
+                onSave={async (data, forms) => {
+                    return await this.save(data, forms);
+                }}
+                key={"stepComponent"}
+                ref={this.stepComponent}
+                steps={this.steps}
+                tool={this}
+                {...props}
+            />
+        );
     }
 }
 

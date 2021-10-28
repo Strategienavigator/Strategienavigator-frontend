@@ -1,5 +1,5 @@
 import React, {Component, RefObject} from "react";
-import {Accordion, Button, Card, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import {Button, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
 import {clearControlFooter, disableControlFooterItem, setControlFooterItem} from "../../../ControlFooter/ControlFooter";
 import {FormComponent} from "../../FormComponent/FormComponent";

@@ -15,17 +15,17 @@ export type UpdateData = {
  * @param anonymousID id des anonymen Nutzers, wenn er angegeben wird, werden alle Speicherstände und Einstellungen des anonymen Nutzers übernommen
  * @param apiArgs Normale api Argumente
  */
-const createUser = async (username:string, email:string,password:string, anonymousID?:number, apiArgs?:APIArgs) => {
+const createUser = async (username: string, email: string, password: string, anonymousID?: number, apiArgs?: APIArgs) => {
     let formData = new FormData();
 
 
-    formData.append("email",email);
+    formData.append("email", email);
     formData.append("username", username);
     formData.append("password", password);
     if (anonymousID !== undefined)
         formData.append("anonymous_id", anonymousID.toString(10));
 
-    return await callAPI("api/users" , "POST", formData, false,  apiArgs);
+    return await callAPI("api/users", "POST", formData, false, apiArgs);
 }
 
 /**
@@ -35,7 +35,7 @@ const createUser = async (username:string, email:string,password:string, anonymo
  * @param userID Die ID des Benutzers
  * @param apiArgs Normale api Argumente
  */
-const updateUser = async (userID: number, data: UpdateData, apiArgs?:APIArgs) => {
+const updateUser = async (userID: number, data: UpdateData, apiArgs?: APIArgs) => {
     let formData = new FormData();
 
     if (data.username !== undefined)
@@ -45,7 +45,7 @@ const updateUser = async (userID: number, data: UpdateData, apiArgs?:APIArgs) =>
     if (data.current_password !== undefined)
         formData.append("current_password", data.current_password);
 
-    return await callAPI("api/users/" + userID, "PUT", formData, true,  apiArgs);
+    return await callAPI("api/users/" + userID, "PUT", formData, true, apiArgs);
 }
 
 /**
@@ -54,7 +54,7 @@ const updateUser = async (userID: number, data: UpdateData, apiArgs?:APIArgs) =>
  * @param userID Die ID des Benutzers
  * @param apiArgs Normale api Argumente
  */
-const deleteUser = async (userID: number, apiArgs?:APIArgs) => {
+const deleteUser = async (userID: number, apiArgs?: APIArgs) => {
     return await callAPI("api/users/" + userID, "DELETE", undefined, true, apiArgs);
 }
 

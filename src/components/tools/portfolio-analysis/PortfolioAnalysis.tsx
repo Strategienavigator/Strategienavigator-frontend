@@ -1,5 +1,4 @@
 import {faArrowsAlt} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
 import {PortCreateObjects} from "./steps/PortCreateObjects";
 import {PortCriterias} from "./steps/PortCriterias";

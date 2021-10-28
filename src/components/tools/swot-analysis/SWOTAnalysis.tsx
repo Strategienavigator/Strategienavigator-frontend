@@ -1,5 +1,4 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
 import {SWOTFactors, SwotFactorsValues} from "./steps/SWOTFactors";
 import {SWOTAlternativeActions, SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions";

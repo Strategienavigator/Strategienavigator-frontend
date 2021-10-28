@@ -1,4 +1,4 @@
-import {APIArgs, APIErrorCallback, callAPI} from "../API";
+import {APIArgs, callAPI} from "../API";
 import {DefaultResponse, PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
 
 

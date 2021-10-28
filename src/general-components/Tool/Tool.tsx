@@ -1,9 +1,9 @@
-import React, {Component, FormEvent, ReactElement, ReactNode, RefObject} from "react";
+import React, {Component, ReactElement, ReactNode, RefObject} from "react";
 import {matchPath, Prompt, RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {Route, Switch} from "react-router-dom";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {ToolHome, ToolHomeInfo} from "./Home/ToolHome";
-import {Button, Card, Fade, Form, Modal} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import {Loader} from "../Loader/Loader";
 import {createSave, getSave, lockSave, updateSave} from "../API/calls/Saves";
 import {Session} from "../Session/Session";
@@ -23,7 +23,7 @@ type ToolViewValidation = {
 } | undefined;
 
 interface ToolState {
-    showInputModal:boolean
+    showInputModal: boolean
     showConfirmToolRouteChangeModal: boolean
     lastLocation: H.Location | null
     viewValidationError?: ToolViewValidation
@@ -123,7 +123,8 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                     </Route>
 
                     <Route exact path={this.newPath}>
-                        <CreateToolModal tool={this} history={this.props.history} location={this.props.location} match={this.props.match}/>
+                        <CreateToolModal tool={this} history={this.props.history} location={this.props.location}
+                                         match={this.props.match}/>
                     </Route>
 
                     <Route
@@ -286,7 +287,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     protected renderToolHome(): ReactElement<any, "ToolHome"> | null | undefined {
-        return <ToolHome />;
+        return <ToolHome/>;
     }
 
     protected abstract renderShortDescription(): ReactNode;
@@ -304,7 +305,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     private lockSave = async (lock: boolean) => {
-        return await lockSave(this.currentSaveID as number, lock,{errorCallback: this.onAPIError});
+        return await lockSave(this.currentSaveID as number, lock, {errorCallback: this.onAPIError});
     }
 
     private checkForPage = (location: string) => {

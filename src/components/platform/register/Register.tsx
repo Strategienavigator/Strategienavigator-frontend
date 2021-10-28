@@ -39,12 +39,12 @@ export class Register extends Component<any, RegisterState> {
 
         let call = await Session.register(email, username, password);
         this.setState({
-            isRegistering:false
+            isRegistering: false
         });
-        if(call?.success){
-            Messages.add("Konto erstellt!\nÜberprüfe deine Emails!","SUCCESS", Messages.TIMER);
-        }else{
-            Messages.add("Fehlgeschlagen!","DANGER", Messages.TIMER);
+        if (call?.success) {
+            Messages.add("Konto erstellt!\nÜberprüfe deine Emails!", "SUCCESS", Messages.TIMER);
+        } else {
+            Messages.add("Fehlgeschlagen!", "DANGER", Messages.TIMER);
         }
     }
 

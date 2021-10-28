@@ -124,7 +124,7 @@ class Session {
     }
 
     static register = async (email: string, username: string, password: string): Promise<CallInterface<object> | null> => {
-        return await createUser(username,email,password);
+        return await createUser(username, email, password);
     }
 
 }

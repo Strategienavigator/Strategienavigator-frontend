@@ -1,5 +1,4 @@
 import {faChartPie} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
 
 import "./abc-analysis.scss";
