@@ -1,0 +1,42 @@
+.flex-container{
+    display: flex;
+  }
+  
+  .grid-container,
+  .grid-head,
+  .grid-left {    
+    display: grid;
+  }
+  
+  .grid-container {   
+    grid-template-columns: auto auto auto auto auto auto auto auto auto; 
+    
+  }
+  .grid-head {        
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto; 
+    background-color: grey;
+    text-align: center;
+    
+  }
+  .grid-left {        
+    grid-template-columns: auto; 
+    background-color: darkgrey;
+    text-align: center;
+  }    
+  
+  
+  .grid-container>div,
+  .grid-head>div,
+  .grid-left>div {
+    border: 2px solid transparent;
+    margin: 5px;
+    height: 30px;
+    width: 30px;
+  }
+  
+  .grid-container>div{
+  border: 2px solid grey;
+  border-radius:5px;
+  background-color: #D8D8D8;
+    
+  }
