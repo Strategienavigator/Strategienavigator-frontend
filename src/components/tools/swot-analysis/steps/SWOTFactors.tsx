@@ -117,7 +117,7 @@ export class SWOTFactors extends FormComponent<SwotFactorsValues, SWOTFactorsSta
 
     build(): JSX.Element {
         let min = 2;
-        let max = 6;
+        let max = 8;
         let activeKey = "view";
 
         let numberCounter = new NumberCounter();
