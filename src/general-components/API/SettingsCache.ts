@@ -1,10 +1,9 @@
 import {PaginationLoader} from "./PaginationLoader";
 import {SettingResource, UserSettingResource} from "../Datastructures";
 import * as Settings from "../../general-components/API/calls/Settings";
+import {SettingsList, UserSetting} from "../Settings/SettingsList";
 
-export interface UserSetting extends SettingResource {
-    value: string
-}
+
 
 
 /**
@@ -23,7 +22,7 @@ export class SettingsCache {
      * all settings with the current value
      * @private
      */
-    private _userSettings: UserSetting[];
+    private _userSettings: SettingsList;
 
     private settingsLoader: PaginationLoader<SettingResource>;
     private userSettingsLoader: PaginationLoader<UserSettingResource>;
@@ -31,7 +30,7 @@ export class SettingsCache {
     constructor(token: string, userId: number) {
         this._userId = userId;
         this._lastLoad = new Date(0);
-        this._userSettings = [];
+        this._userSettings = new SettingsList();
 
         this.settingsLoader = new PaginationLoader<SettingResource>((page) => {
             return Settings.getSettings(token, page)
@@ -55,7 +54,7 @@ export class SettingsCache {
     }
 
     public async updateData() {
-        this._userSettings = await this.loadData();
+        this._userSettings = SettingsList.FromList(await this.loadData());
         this._lastLoad = new Date();
     }
 
@@ -77,11 +76,11 @@ export class SettingsCache {
         this._userId = value;
     }
 
-    get userSettings(): UserSetting[] {
+    get userSettings(): SettingsList {
         return this._userSettings;
     }
 
-    private set userSettings(value: UserSetting[]) {
+    private set userSettings(value: SettingsList) {
         this._userSettings = value;
     }
 
