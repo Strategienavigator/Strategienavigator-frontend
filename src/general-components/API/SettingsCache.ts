@@ -4,8 +4,6 @@ import * as Settings from "../../general-components/API/calls/Settings";
 import {SettingsList, UserSetting} from "../Settings/SettingsList";
 
 
-
-
 /**
  * Speichert alle Einstellungsmöglichkeiten und aktualisiert diese regelmäßig
  */
@@ -42,19 +40,23 @@ export class SettingsCache {
     }
 
     private async loadData() {
-        let settings = await this.settingsLoader.getAll();
-        let userSettings = await this.userSettingsLoader.getAll();
+        let settings = await this.settingsLoader.getAll(false);
+        let userSettings = await this.userSettingsLoader.getAll(false);
         return settings.map((s) => {
             let userS = userSettings.find((su) => su.setting_id === s.id);
             let v = s.default;
-            if (userS && userS.value && userS.value.length > 0)
-                v = userS.value;
-            return {...s, value: v} as UserSetting;
+            const exists = !!userS && !!userS.value;
+            if (exists) {
+                //TODO make beautiful
+                v = userS?.value ?? v;
+            }
+
+            return {...s, value: v, exists:exists} as UserSetting;
         })
     }
 
     public async updateData() {
-        this._userSettings = SettingsList.FromList(await this.loadData());
+        this._userSettings = SettingsList.FromArray(await this.loadData());
         this._lastLoad = new Date();
     }
 
@@ -84,7 +86,7 @@ export class SettingsCache {
         this._userSettings = value;
     }
 
-    public shouldUpdate(){
+    public shouldUpdate() {
         let today = new Date();
         let diff = today.getTime() - this.lastLoad.getTime()
         return diff > 300000// 1000*60*5 5min

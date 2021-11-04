@@ -2,39 +2,92 @@ import {Component, createContext} from "react";
 import {SettingsCache} from "../API/SettingsCache";
 import {SettingsList} from "../Settings/SettingsList";
 import {Session} from "../Session/Session";
+import {User} from "../User";
 
 
 export interface ISettingsContext {
-    causeUpdate:()=>void,
-    settings:SettingsList
+    causeUpdate: () => void,
+    settings: SettingsList,
+    isLoading: boolean
 }
 
 export interface AppState {
     settingsContext: ISettingsContext
 }
 
-export const SettingsContext = createContext<ISettingsContext>({causeUpdate:()=>{},settings:new SettingsList()});
+export const SettingsContext = createContext<ISettingsContext>({
+    causeUpdate: () => {
+    },
+    settings: new SettingsList(),
+    isLoading: false
+});
 
 export class GlobalContexts extends Component<{}, AppState> {
-    private settingsCache: SettingsCache;
+    private settingsCache?: SettingsCache;
 
     constructor(props: Readonly<{}> | {});
     constructor(props: {}, context: any);
     constructor(props: Readonly<{}> | {}, context?: any) {
         super(props, context);
-        // TODO use real user data
-        this.settingsCache = new SettingsCache(Session.getToken() as string,Session.currentUser?.getID() as number);
         this.state = {
-            settingsContext: {causeUpdate: this.updateSettings,settings:this.settingsCache.userSettings}
+            settingsContext: {
+                causeUpdate: this.updateSettings, settings: new SettingsList(), isLoading: false
+            }
         };
     }
 
-    updateSettings = async () => {
-        await this.settingsCache.updateData()
+    private setLoading(isLoading: boolean) {
 
         this.setState({
-            settingsContext: {causeUpdate: this.updateSettings, settings: this.settingsCache.userSettings}
+            settingsContext: {
+                settings: this.state.settingsContext.settings,
+                causeUpdate: this.updateSettings,
+                isLoading: isLoading
+            }
         });
+
+    }
+
+
+    userChanged = async (user: User | null) => {
+        if (Session.isLoggedIn()) {
+            this.settingsCache = new SettingsCache(Session.getToken() as string, user?.getID() as number);
+            await this.updateSettings();
+        } else {
+            delete this.settingsCache;
+            this.setState({
+                settingsContext: {
+                    settings: new SettingsList(),
+                    causeUpdate: this.updateSettings,
+                    isLoading: false
+                }
+            });
+        }
+    }
+
+    componentDidMount() {
+        Session.addUserChangedCallback(this.userChanged);
+    }
+
+
+    componentWillUnmount() {
+        Session.removeUserChangedCallback(this.userChanged);
+    }
+
+    updateSettings = async () => {
+        if (this.settingsCache) {
+            this.setLoading(true);
+
+            await this.settingsCache.updateData()
+
+            this.setState({
+                settingsContext: {
+                    causeUpdate: this.updateSettings,
+                    settings: this.settingsCache.userSettings,
+                    isLoading: false
+                }
+            });
+        }
     }
 
 
