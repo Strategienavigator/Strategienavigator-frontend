@@ -1,497 +1,133 @@
-import {MatrixComponent} from "../../../../general-components/Tool/MatrixComponent/MatrixComponent";
-
+import { MatrixComponent } from "../../../../general-components/Tool/MatrixComponent/MatrixComponent";
 import "./swot-analysis-matrix.scss";
-import {Image} from "react-bootstrap";
-
-
+import { Image } from "react-bootstrap";
 import Beispiel from "./beispiel.png";
 
 
 class SWOTAnalysisMatrix extends MatrixComponent<any> {
 
     render() {
-        // TODO: Zur Swot-Analyse die Matrix bauen
         console.log(this.getData());
+        let headernumber = [];
+        let numberLength = 5;
+        for (let i = 0; i < numberLength; i++) {
+            headernumber[i]= <div>{i +1}</div>;
+        }
 
+        let headerCapitals = [];
+        let headerCapitalLength = 5;
+        for (let i = 0; i < headerCapitalLength; i++) {
+            headerCapitals[i] = <div>{String.fromCharCode(65 + i)}</div>;
+        }
+
+        let leftLetters = [];
+        let leftLettersLength = 5;
+        for (let i = 0; i < leftLettersLength; i++) {
+            leftLetters[i] = <div>{String.fromCharCode(97 + i)}</div>;
+        }
+        
+        let headerRomanCapitals = [];
+        let headerRomanCapitalsLength = 5;
+        let romanCapitals = ["I","II","III","IV","V","VI","VII","VIII","IX"];
+        for (let i = 0; i < headerRomanCapitalsLength; i ++){
+            headerRomanCapitals[i] = <div>{romanCapitals[i]}</div>;
+        }
+
+        let bodyone = [];
+        let bodyoneLength = numberLength * headerCapitalLength;
+        for (let i = 0; i < bodyoneLength; i++) {
+            bodyone[i] = <div></div>;
+            
+        }
+
+        let bodytwo = [];
+        let bodytwoLength = headerRomanCapitalsLength * headerCapitalLength;
+        for (let i = 0; i < bodytwoLength; i++) {
+            bodytwo[i] = <div></div>;
+            
+        }
+        
+        let bodythree = [];
+        let bodythreeLength = numberLength * leftLettersLength;
+        for (let i = 0; i <  bodythreeLength; i++) {
+            bodythree[i] = <div></div>;
+            
+        }
+        let bodyfour = [];
+        let bodyfourLength = headerRomanCapitalsLength * leftLettersLength;
+        for (let i = 0; i < bodyfourLength; i++) {
+            bodyfour[i] = <div></div>;
+            
+        }
+        
         return (
             <>
-                <div className="alle-container"> 
+                <div className="alle-container">
+               
+                    <div className="flex-container">
+                        <div>
+                            <div className="page">
+                                <div className="grid-head">
+                                    {headernumber}
+                                </div>
+                            
+                                <div className="grid-left">
+                                    {headerCapitals}
+                                </div>
+                                 <div className="grid-container">
+                                    {bodyone}
+                                </div>
+                            </div>
+                        </div>
 
-<div className="flex-container">
-<div>
+                        <div>
 
-<div className="flex-container">
-     <div className="grid-head">
-        <div></div>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-        
-    </div>
-</div>
-<div className="flex-container">
-    <div className="grid-left">
-        <div>A</div>
-        <div>B</div>
-        <div>C</div>
-        <div>D</div>
-        <div>E</div>
-        <div>F</div>
-        <div>G</div>
-        <div>H</div>
-        <div>I</div>
-        <div>J</div>
-    </div>
+                            <div className="page">
+                                <div className="grid-head">
+                                    {headerRomanCapitals}
+                                </div>
+                                <div className="grid-left">
+                                    {headerCapitals}
+                                </div>
+                                <div className="grid-container">
+                                    {bodytwo}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <div className="grid-container">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        
-    </div>
-</div>
-</div>
+                    <div className="flex-container">
+                        <div>
 
-<div>
+                            <div className="page">
+                                <div className="grid-head">
+                                    {headernumber}
+                                </div>
+                            <div className="grid-left">
+                                {leftLetters}
+                            </div>
+                            <div className="grid-container"> 
+                                {bodythree}
+                            </div>
+                            </div>
+                        </div>
 
-<div className="flex-container">
-     <div className="grid-head">
-        <div></div>
-        <div>I</div>
-        <div>II</div>
-        <div>III</div>
-        <div>IV</div>
-        <div>V</div>
-        <div>VI</div>
-        <div>VII</div>
-        <div>VIII</div>
-        <div>IX</div>
-    </div>
-</div>
-<div className="flex-container">
-    <div className="grid-left">
-        <div>A</div>
-        <div>B</div>
-        <div>C</div>
-        <div>D</div>
-        <div>E</div>
-        <div>F</div>
-        <div>G</div>
-        <div>H</div>
-        <div>I</div>
-        <div>J</div>
-    </div>
+                        <div>
+                            <div className="page">
+                                <div className="grid-head">
+                                    {headerRomanCapitals}
+                                </div> 
+                                <div className="grid-left">
+                                    {leftLetters}
+                                </div>
+                                <div className="grid-container">
+                                    {bodyfour}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <div className="grid-container">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-</div>
-</div>
-
-</div>					
-<!---Ende der Flexcontainer Gesamt----->
-
-
-<div className="flex-container">
-<div>
-
-<div className="flex-container">
-     <div className="grid-head">
-       <div></div>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-    </div>
-</div>
-<div className="flex-container">
-    <div className="grid-left">
-        <div>a</div>
-        <div>b</div>
-        <div>c</div>
-        <div>d</div>
-        <div>e</div>
-        <div>f</div>
-        <div>g</div>
-        <div>h</div>
-        <div>i</div>
-        <div>j</div>
-        
-    </div>
-
-    <div className="grid-container">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-</div>
-</div>
-
-<div>
-
-<div className="flex-container">
-     <div className="grid-head">
-        <div></div>
-        <div>I</div>
-        <div>II</div>
-        <div>III</div>
-        <div>IV</div>
-        <div>V</div>
-        <div>VI</div>
-        <div>VII</div>
-        <div>VIII</div>
-        <div>IX</div>
-    </div>
-</div>
-<div className="flex-container">
-    <div className="grid-left">
-        <div>a</div>
-        <div>b</div>
-        <div>c</div>
-        <div>d</div>
-        <div>e</div>
-        <div>f</div>
-        <div>g</div>
-        <div>h</div>
-        <div>i</div>
-        <div>j</div>
-    </div>
-
-    <div className="grid-container">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-</div>
-</div>
-</div>
-
-</div>
+                </div>
             </>
         );
     }

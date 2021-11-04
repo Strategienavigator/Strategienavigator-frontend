@@ -1,42 +1,67 @@
 .flex-container{
-    display: flex;
-  }
-  
-  .grid-container,
-  .grid-head,
-  .grid-left {    
-    display: grid;
-  }
-  
-  .grid-container {   
-    grid-template-columns: auto auto auto auto auto auto auto auto auto; 
-    
-  }
-  .grid-head {        
-    grid-template-columns: auto auto auto auto auto auto auto auto auto auto; 
-    background-color: grey;
-    text-align: center;
-    
-  }
-  .grid-left {        
-    grid-template-columns: auto; 
-    background-color: darkgrey;
-    text-align: center;
-  }    
-  
-  
-  .grid-container>div,
-  .grid-head>div,
-  .grid-left>div {
-    border: 2px solid transparent;
-    margin: 5px;
-    height: 30px;
-    width: 30px;
-  }
-  
-  .grid-container>div{
-  border: 2px solid grey;
-  border-radius:5px;
-  background-color: #D8D8D8;
-    
-  }
+  display: flex;
+}
+
+
+//-----------------------------------------------------
+
+.page {
+  display: grid;
+  width: min-content;
+  height: min-content;
+  grid-template-areas: "head head" "nav  main";
+}
+
+.page>.grid-head {
+  grid-area: head;
+  grid-column: 2;
+}
+
+.page > .grid-left {
+  grid-area: nav;
+}
+
+.page>.grid-container {
+  grid-area: main;
+}
+
+
+.grid-head {
+  display: flex;
+}
+
+
+.grid-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-rows: repeat(auto-fit, 44px);
+  grid-template-columns: repeat(auto-fit, 44px);
+}
+
+.grid-head>div .grid-left>div {
+  flex-shrink: 0;
+}
+
+.grid-head>div,
+.grid-left>div {
+  text-align: center;
+  margin: 7px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+}
+
+.grid-container > div {
+  display: inline-block;
+  background-color: green;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-left:5px;
+  margin-top: 1px;
+  height: 30px;
+  width: 30px;
+}
