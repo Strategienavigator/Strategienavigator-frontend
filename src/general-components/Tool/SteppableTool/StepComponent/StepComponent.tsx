@@ -1,16 +1,16 @@
-import React, {Component, RefObject} from "react";
-import {Button, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import React, {Component, ReactComponentElement, ReactNode, RefObject} from "react";
+import {Accordion, Button, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
 import {clearControlFooter, disableControlFooterItem, setControlFooterItem} from "../../../ControlFooter/ControlFooter";
 import {FormComponent} from "../../FormComponent/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretLeft, faCaretRight, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
+import {faCaretLeft, faCaretRight, faSave, faSyncAlt, faUndo} from "@fortawesome/free-solid-svg-icons/";
 import {Tool} from "../../Tool";
-
 import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
 import {Loader} from "../../../Loader/Loader";
+import {MatrixComponent} from "../../MatrixComponent/MatrixComponent";
 
 
 export interface StepProp<T> {
@@ -27,6 +27,7 @@ interface Step<T> extends StepProp<T> {
 export interface StepComponentProps {
     steps?: StepProp<any>[]
     tool?: Tool
+    matrix?: ReactComponentElement<any>
     onSave?: (data: object, forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
 }
 
@@ -46,6 +47,8 @@ export interface StepComponentState {
 class StepComponent extends Component<StepComponentProps, StepComponentState> {
     private currentStep: number = 1;
     private currentProgress: number = 1;
+
+    private matrixRef?: RefObject<MatrixComponent<any>>;
 
     constructor(props: any) {
         super(props);
@@ -185,7 +188,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                             icon={faUndo}/> Zurücksetzen
                                     </Button>
 
-                                    <hr/>
+                                    <br/>
 
                                     <Button
                                         variant={"dark"}
@@ -194,6 +197,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                         onClick={async () => {
                                             await this.saveTool();
                                         }}
+                                        className={"mt-2"}
                                         key={"saveButton"}
                                     >
                                         {!this.state.isSaving ? (
@@ -204,6 +208,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                         )}
                                     </Button>
                                 </>
+                            )}
+
+                            {this.shouldMatrixRender() && (
+                                this.getMatrix()
                             )}
                         </Col>
                         <Col className={"tabsContent"}>
@@ -408,11 +416,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         });
         disableControlFooterItem(2, true);
 
-        for (let i = 0; i < this.currentProgress; i++) {
-            let {ref: {current}} = this.state.steps[i];
-            current?.setIsSaving(true);
-            current?.triggerFormSubmit();
-        }
+        this.triggerFormSubmits(this.currentProgress, true);
 
         const addErrorMessage = () => {
             Messages.add(
@@ -446,13 +450,8 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     public callOnSaveProp = async (): Promise<boolean> => {
         if (this.props.onSave !== undefined) {
-            let allForms = new Map<string, FormComponent<any, any>>();
-            let data = {};
-
-            for (const {ref, id} of this.state.steps) {
-                Object.assign(data, {[id]: ref.current?.getValues()});
-                allForms.set(ref.current?.props.id as string, ref.current as FormComponent<any, any>);
-            }
+            let allForms = this.getAllForms();
+            let data = this.getAllData();
 
             return await this.props.onSave(data, allForms);
         }
@@ -507,6 +506,30 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         });
     }
 
+    public getAllData = (): object => {
+        let data = {};
+        for (const {ref, id} of this.state.steps) {
+            Object.assign(data, {[id]: ref.current?.getValues()});
+        }
+        return data;
+    }
+
+    public getAllForms = (): Map<string, FormComponent<any, any>> => {
+        let forms = new Map<string, FormComponent<any, any>>();
+        for (const {ref, id} of this.state.steps) {
+            forms.set(id, ref.current as FormComponent<any, any>);
+        }
+        return forms;
+    }
+
+    private triggerFormSubmits(to: number, saving: boolean) {
+        for (let i = 0; i < to; i++) {
+            let {ref: {current}} = this.state.steps[i];
+            current?.setIsSaving(saving);
+            current?.triggerFormSubmit();
+        }
+    }
+
     private resetSteps(currentStep?: number) {
         let i = (currentStep !== undefined) ? currentStep : 0;
 
@@ -550,6 +573,75 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             this.forceUpdate();
         }
     }
+
+    private getMatrix(): undefined | ReactNode {
+        if (this.props.matrix === undefined) return null;
+
+        this.triggerFormSubmits(this.currentProgress, true);
+        let data = this.getAllData();
+
+        let matrix = React.cloneElement(this.props.matrix, {
+            tool: this.props.tool,
+            stepComponent: this,
+            data: data
+        });
+
+        const getMatrixContainer = () => {
+            return (
+                <div className={"matrixContainer"}>
+                    <div className={"matrix"}>
+                        {matrix}
+                    </div>
+                    <div className={"matrixButtons"}>
+                        <Button
+                            type={"button"}
+                            variant={"dark"}
+                            onClick={() => {
+                                this.refreshMatrix();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faSyncAlt}/> Matrix aktualisieren
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
+        if (isDesktop()) {
+            return getMatrixContainer();
+        } else {
+            return (
+                <Accordion onSelect={() => {
+                    this.refreshMatrix();
+                }} className={"matrixAccordion"}>
+                    <Accordion.Item eventKey={"matrix"}>
+                        <Accordion.Header>
+                            Matrix
+                        </Accordion.Header>
+                        <Accordion.Body>
+                            {getMatrixContainer()}
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            );
+        }
+    }
+
+    private refreshMatrix() {
+        this.forceUpdate();
+    }
+
+    private shouldMatrixRender(): boolean {
+        if (this.props.matrix !== undefined) {
+            for (const n of this.props.matrix.props.steps) {
+                if (n === this.currentStep) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
 
 export default StepComponent;

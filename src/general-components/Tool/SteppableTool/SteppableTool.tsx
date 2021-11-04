@@ -2,7 +2,7 @@ import {Tool} from "../Tool";
 
 import "./steppable-tool.scss";
 import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepComponent";
-import React, {RefObject} from "react";
+import React, {ReactComponentElement, RefObject} from "react";
 import {RouteComponentProps, StaticContext} from "react-router";
 
 
@@ -12,6 +12,9 @@ abstract class SteppableTool extends Tool {
     private steps: Array<StepProp<any>> = [];
     private readonly stepComponent: RefObject<StepComponent>;
 
+    // Matrix
+    private matrix?: ReactComponentElement<any>;
+
     protected constructor(props: RouteComponentProps<any, StaticContext, unknown> | Readonly<RouteComponentProps<any, StaticContext, unknown>>) {
         super(props);
         this.stepComponent = React.createRef<StepComponent>();
@@ -19,6 +22,10 @@ abstract class SteppableTool extends Tool {
 
     public onAPIError(error: Error) {
 
+    }
+
+    protected setMatrix(matrix: ReactComponentElement<any>) {
+        this.matrix = matrix;
     }
 
     public setValues(id: string, values: any): boolean {
@@ -59,6 +66,7 @@ abstract class SteppableTool extends Tool {
                 }}
                 key={"stepComponent"}
                 ref={this.stepComponent}
+                matrix={this.matrix}
                 steps={this.steps}
                 tool={this}
                 {...props}

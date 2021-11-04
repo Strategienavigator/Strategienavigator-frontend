@@ -11,7 +11,6 @@ import {SaveResource} from "../Datastructures";
 import {FormComponent} from "./FormComponent/FormComponent";
 import * as H from "history";
 import {CreateToolModal} from "./CreateToolModal/CreateToolModal";
-
 import "./tool.scss";
 import {ConfirmToolRouteChangeModal} from "./ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 
