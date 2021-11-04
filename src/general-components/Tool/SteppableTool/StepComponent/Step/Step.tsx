@@ -1,6 +1,8 @@
 import {FormComponent, FormComponentProps} from "../../../FormComponent/FormComponent";
 import StepComponent from "../StepComponent";
 
+import './step.scss';
+
 export interface SteppableProp extends FormComponentProps{
     stepComp?: StepComponent
 }

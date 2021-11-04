@@ -2,7 +2,6 @@ import React, {Component, ReactComponentElement, ReactNode, RefObject} from "rea
 import {Accordion, Button, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
 import {clearControlFooter, disableControlFooterItem, setControlFooterItem} from "../../../ControlFooter/ControlFooter";
-import {FormComponent} from "../../FormComponent/FormComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretLeft, faCaretRight, faSave, faSyncAlt, faUndo} from "@fortawesome/free-solid-svg-icons/";
 import {Tool} from "../../Tool";
@@ -10,8 +9,9 @@ import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
 import {Loader} from "../../../Loader/Loader";
-import {MatrixComponent} from "../../MatrixComponent/MatrixComponent";
 import {Step} from "./Step/Step";
+import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeaderProp";
+import {LoadingButton} from "../../../LoadingButton/LoadingButton";
 
 
 export interface StepProp<T> {
@@ -26,10 +26,10 @@ interface InternalStep<T> extends StepProp<T> {
 }
 
 export interface StepComponentProps {
-    steps?: StepProp<any>[]
-    tool?: Tool
+    steps: StepProp<any>[]
+    tool: Tool
     matrix?: ReactComponentElement<any>
-    onSave?: (data: object, forms: Map<string, Step<any, any>>) => Promise<boolean>
+    onSave: (data: object, forms: Map<string, Step<any, any>>) => Promise<boolean>
 }
 
 export interface StepComponentState {
@@ -37,7 +37,6 @@ export interface StepComponentState {
     onReset: boolean
     showResetModal: boolean
     hasCustomNextButton: boolean
-    showStepHeaderDesc: boolean
     customNextButton: {
         text: string
         callback: () => void
@@ -49,13 +48,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     private currentStep: number = 1;
     private currentProgress: number = 1;
 
-    private matrixRef?: RefObject<MatrixComponent<any>>;
-
     constructor(props: any) {
         super(props);
 
         let steps: Array<InternalStep<any>> = [];
-        this.props.steps?.map((value) => {
+        this.props.steps.map((value) => {
             let ref = React.createRef<Step<any, any>>();
             let form = React.cloneElement(value.form, {
                 ref: ref,
@@ -81,7 +78,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             onReset: false,
             showResetModal: false,
             hasCustomNextButton: false,
-            showStepHeaderDesc: isDesktop(),
             customNextButton: null,
             isSaving: false
         }
@@ -90,39 +86,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     render = () => {
         let i = 0;
         let e = 0;
-
-        const getStepHeader = () => {
-            return (
-                <div className={"stepHeader"}>
-                    <Form.Control
-                        type={"text"}
-                        defaultValue={this.props.tool?.getCurrentSave()?.name}
-                        onChange={this.onChangeCurrentName}
-                        onFocus={() => {
-                            this.setState({
-                                showStepHeaderDesc: true
-                            });
-                        }}
-                        onBlur={() => {
-                            this.setState({
-                                showStepHeaderDesc: isDesktop()
-                            });
-                        }}
-                    />
-
-                    <Collapse in={this.state.showStepHeaderDesc}>
-                        <div>
-                            <Form.Control
-                                type={"textarea"}
-                                as={"textarea"}
-                                defaultValue={this.props.tool?.getCurrentSave()?.description}
-                                onChange={this.onChangeCurrentDescription}
-                            />
-                        </div>
-                    </Collapse>
-                </div>
-            );
-        }
 
         return (
             <>
@@ -133,14 +96,14 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                     onSelect={(e) => this.onStepSelect(e)}
                 >
                     <Row className={"stepContainer"}>
-                        {(!isDesktop() && this.props.tool !== undefined) ? (
-                            getStepHeader()
-                        ) : ""}
+                        {(!isDesktop()) && (
+                            <StepComponentHeader tool={this.props.tool}/>
+                        )}
 
                         <Col className={"stepTabContainer"}>
-                            {(isDesktop() && this.props.tool !== undefined) ? (
-                                getStepHeader()
-                            ) : ""}
+                            {(isDesktop() ) && (
+                                <StepComponentHeader tool={this.props.tool}/>
+                            )}
 
                             <Nav className={"stepTabs"}>
                                 {this.state.steps.map((value) => {
@@ -191,23 +154,18 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
                                     <br/>
 
-                                    <Button
+                                    <LoadingButton
                                         variant={"dark"}
                                         type={"button"}
-                                        disabled={this.state.isSaving}
                                         onClick={async () => {
                                             await this.save();
                                         }}
                                         className={"mt-2"}
                                         key={"saveButton"}
-                                    >
-                                        {!this.state.isSaving ? (
-                                            <><FontAwesomeIcon icon={faSave}/> Speichern</>
-                                        ) : (
-                                            <Loader payload={[]} variant={"dark"} text={<span>&nbsp;Speichern</span>}
-                                                    transparent size={20} loaded={false}/>
-                                        )}
-                                    </Button>
+                                        isSaving={this.state.isSaving}
+                                        savingChild={"Speichern"}
+                                        defaultChild={"Speichern"}
+                                    />
                                 </>
                             )}
 
@@ -274,14 +232,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                 )}
             </>
         );
-    }
-
-    onChangeCurrentName = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.setCurrentSaveName(e.currentTarget.value);
-    }
-
-    onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.setCurrentSaveDescription(e.currentTarget.value);
     }
 
     componentDidMount = async () => {

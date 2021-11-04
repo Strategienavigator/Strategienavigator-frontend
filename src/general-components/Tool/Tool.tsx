@@ -13,7 +13,6 @@ import * as H from "history";
 import {CreateToolModal} from "./CreateToolModal/CreateToolModal";
 import "./tool.scss";
 import {ConfirmToolRouteChangeModal} from "./ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
-import {Step} from "./SteppableTool/StepComponent/Step/Step";
 
 
 type ToolViewValidation = {
