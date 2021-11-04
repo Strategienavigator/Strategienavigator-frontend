@@ -1,15 +1,20 @@
-import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
+import {
+    FormComponent,
+    FormComponentProps,
+    ResetType
+} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
 import {extractCardComponentField} from "../../../../general-components/FormHelper";
 import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {Messages} from "../../../../general-components/Messages/Messages";
+import {Step, SteppableProp} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 export interface PCCriteriasValues {
     criterias: CardComponentFields
 }
 
-export class PCCriterias extends FormComponent<PCCriteriasValues, {}> {
+export class PCCriterias extends Step<PCCriteriasValues, {}> {
 
     rebuildValues = async (values: PCCriteriasValues) => {
 

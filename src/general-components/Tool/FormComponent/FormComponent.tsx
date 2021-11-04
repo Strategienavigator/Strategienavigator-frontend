@@ -1,7 +1,6 @@
 import {Component, FormEvent, ReactNode} from "react";
 import {Form} from "react-bootstrap";
 import {Messages} from "../../Messages/Messages";
-import StepComponent from "../SteppableTool/StepComponent/StepComponent";
 import {randomBytes} from "crypto";
 import {Tool} from "../Tool";
 
@@ -9,7 +8,6 @@ import {Tool} from "../Tool";
 export interface FormComponentProps {
     id?: string
     title?: string
-    stepComp?: StepComponent
     tool?: Tool
 }
 
@@ -18,7 +16,7 @@ export interface ResetType {
     same: boolean
 }
 
-export abstract class FormComponent<V, S> extends Component<FormComponentProps, S> {
+export abstract class FormComponent<V, P, S> extends Component<FormComponentProps & P, S> {
     public isSaving: boolean = false;
     protected values: V | object = {};
     protected disabled: boolean = false;
@@ -149,11 +147,11 @@ export abstract class FormComponent<V, S> extends Component<FormComponentProps, 
             // is nextstep
             if (this.validate(newValues)) {
                 await this.submit(newValues);
-                this.props.stepComp?.nextStep();
             } else {
                 Messages.add(
                     "Bitte überprüfen Sie vorher Ihre Eingaben!",
-                    "DANGER"
+                    "DANGER",
+                    Messages.TIMER
                 );
             }
         }

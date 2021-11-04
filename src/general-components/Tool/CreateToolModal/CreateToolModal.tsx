@@ -3,9 +3,9 @@ import React, {Component, FormEvent} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {Loader} from "../../Loader/Loader";
 import {extractFromForm} from "../../FormHelper";
-import {FormComponent} from "../FormComponent/FormComponent";
 import {Tool} from "../Tool";
 import {RouteComponentProps} from "react-router";
+import {Step} from "../SteppableTool/StepComponent/Step/Step";
 
 interface CreateToolModalState {
     nameError?: {
@@ -156,7 +156,7 @@ export class CreateToolModal extends Component<CreateToolModalProps & RouteCompo
             this.props.tool.setCurrentSaveName(name);
             this.props.tool.setCurrentSaveDescription(desc);
 
-            let saved = await this.props.tool.save({}, new Map<string, FormComponent<any, any>>());
+            let saved = await this.props.tool.save({}, new Map<string, Step<any, any>>());
             if (saved) {
                 this.setState({
                     isCreatingNewSave: false

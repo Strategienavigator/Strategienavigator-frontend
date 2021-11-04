@@ -13,6 +13,7 @@ import * as H from "history";
 import {CreateToolModal} from "./CreateToolModal/CreateToolModal";
 import "./tool.scss";
 import {ConfirmToolRouteChangeModal} from "./ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
+import {Step} from "./SteppableTool/StepComponent/Step/Step";
 
 
 type ToolViewValidation = {
@@ -230,7 +231,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.props.history.push(this.getLink() + "/" + page);
     }
 
-    public save = async (data: object, forms: Map<string, FormComponent<any, any>>): Promise<boolean> => {
+    public save = async (data: object, forms: Map<string, FormComponent<any, any, any>>): Promise<boolean> => {
         let saveData = new FormData();
         saveData.append("data", JSON.stringify(data));
         saveData.append("name", this.currentSaveName as string);

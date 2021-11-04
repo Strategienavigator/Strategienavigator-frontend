@@ -11,6 +11,7 @@ import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
 import {Loader} from "../../../Loader/Loader";
 import {MatrixComponent} from "../../MatrixComponent/MatrixComponent";
+import {Step} from "./Step/Step";
 
 
 export interface StepProp<T> {
@@ -19,20 +20,20 @@ export interface StepProp<T> {
     form: JSX.Element
     values?: T
 }
-
-interface Step<T> extends StepProp<T> {
-    ref: RefObject<FormComponent<any, any>>
+// TODO: vielleicht besseren namen überlegen
+interface InternalStep<T> extends StepProp<T> {
+    ref: RefObject<Step<any, any>>
 }
 
 export interface StepComponentProps {
     steps?: StepProp<any>[]
     tool?: Tool
     matrix?: ReactComponentElement<any>
-    onSave?: (data: object, forms: Map<string, FormComponent<any, any>>) => Promise<boolean>
+    onSave?: (data: object, forms: Map<string, Step<any, any>>) => Promise<boolean>
 }
 
 export interface StepComponentState {
-    steps: Array<Step<any>>
+    steps: Array<InternalStep<any>>
     onReset: boolean
     showResetModal: boolean
     hasCustomNextButton: boolean
@@ -53,9 +54,9 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     constructor(props: any) {
         super(props);
 
-        let steps: Array<Step<any>> = [];
+        let steps: Array<InternalStep<any>> = [];
         this.props.steps?.map((value) => {
-            let ref = React.createRef<FormComponent<any, any>>();
+            let ref = React.createRef<Step<any, any>>();
             let form = React.cloneElement(value.form, {
                 ref: ref,
                 id: value.id,
@@ -195,7 +196,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                         type={"button"}
                                         disabled={this.state.isSaving}
                                         onClick={async () => {
-                                            await this.saveTool();
+                                            await this.save();
                                         }}
                                         className={"mt-2"}
                                         key={"saveButton"}
@@ -404,13 +405,13 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         }
 
         if (isProgress) {
-            await this.saveTool();
+            await this.save();
         }
 
         this.forceUpdate();
     }
 
-    public saveTool = async () => {
+    public save = async () => {
         this.setState({
             isSaving: true
         });
@@ -493,7 +494,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         setControlFooterItem(2, {
             button: {
                 callback: async () => {
-                    await this.saveTool();
+                    await this.save();
                 },
                 text: "Speichern",
                 icon: faSave
@@ -514,10 +515,10 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         return data;
     }
 
-    public getAllForms = (): Map<string, FormComponent<any, any>> => {
-        let forms = new Map<string, FormComponent<any, any>>();
+    public getAllForms = (): Map<string, Step<any, any>> => {
+        let forms = new Map<string, Step<any, any>>();
         for (const {ref, id} of this.state.steps) {
-            forms.set(id, ref.current as FormComponent<any, any>);
+            forms.set(id, ref.current as Step<any, any>);
         }
         return forms;
     }
