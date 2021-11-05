@@ -6,8 +6,17 @@ import {User} from "../User";
 
 
 export interface ISettingsContext {
+    /**
+     * sorgt dafür, dass alle Einstellungen aus Backend neu geladen werden
+     */
     causeUpdate: () => void,
+    /**
+     * Liste aller Einstellungen
+     */
     settings: SettingsList,
+    /**
+     * Ob die Einstellungen gerade aus dem geladen werden
+     */
     isLoading: boolean
 }
 
@@ -36,6 +45,11 @@ export class GlobalContexts extends Component<{}, AppState> {
         };
     }
 
+    /**
+     * Ändert den State
+     * @param isLoading ob das die Einstellungen gerade aus dem Backend abgerufen werden
+     * @private
+     */
     private setLoading(isLoading: boolean) {
 
         this.setState({
@@ -49,6 +63,10 @@ export class GlobalContexts extends Component<{}, AppState> {
     }
 
 
+    /**
+     * Listener der aufgerufen wird, wenn sich der aktuell angemeldete Nutzer ändert
+     * @param user Der aktuelle Nutzer, null wenn kein Nutzer angemeldet ist
+     */
     userChanged = async (user: User | null) => {
         if (Session.isLoggedIn()) {
             this.settingsCache = new SettingsCache(Session.getToken() as string, user?.getID() as number);
@@ -65,20 +83,29 @@ export class GlobalContexts extends Component<{}, AppState> {
         }
     }
 
+    /**
+     * registriert den UserChanged Listener
+     */
     componentDidMount() {
         Session.addUserChangedCallback(this.userChanged);
     }
 
 
+    /**
+     * Entfernt den UserChanged Listener
+     */
     componentWillUnmount() {
         Session.removeUserChangedCallback(this.userChanged);
     }
 
+    /**
+     * Lädt alle Einstellungen aus dem Backend neu, ändert die State variable zu den neuen Werten
+     */
     updateSettings = async () => {
         if (this.settingsCache) {
             this.setLoading(true);
 
-            await this.settingsCache.updateData()
+            await this.settingsCache.updateUserData();
 
             this.setState({
                 settingsContext: {

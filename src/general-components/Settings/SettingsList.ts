@@ -11,14 +11,34 @@ export interface UserSetting extends SettingResource {
     exists: boolean
 }
 
+/**
+ * Klasse um alle Einstellungen verwalten, um Einstellungen hinzuzufügen muss eine neue Instanz erstellt werden
+ *
+ * Die Klasse wird verwendet um doppelte Einträge auszuschließen und das abrufen einzelner Einstellungen effizienter und einfacher zu machen
+ */
 export class SettingsList{
-    private readonly settings:Array<UserSetting>;
+    /**
+     * Alle Einstellungen, die id wird als key verwendet
+     * @private
+     */
+    private readonly idDict:Array<UserSetting>;
+    /**
+     * Alle Einstellungen, der Name der Einstellung wird als key verwendet
+     * @private
+     */
+    private readonly nameDict:{[id: string]:UserSetting};
 
 
     constructor() {
-        this.settings = [];
+        this.idDict = [];
+        this.nameDict = {};
     }
 
+    /**
+     * Erstellt eine neue Instanz auf der Datengrundlage des übergeben Arrays
+     * @param settings Alle Einstellungen
+     * @constructor
+     */
     public static FromArray(settings: UserSetting[]) {
         let sList = new SettingsList();
         for (const s of settings) {
@@ -27,34 +47,45 @@ export class SettingsList{
         return sList;
     }
 
-    public addSetting(setting: UserSetting) {
-        if (!(setting.name in this.settings)) {
-            this.settings[setting.id] = setting;
+    /**
+     * FÜgt eine Einstellung in das Array hinzu
+     * @param setting
+     * @private
+     */
+    private addSetting(setting: UserSetting) {
+        if (!(setting.name in this.idDict)) {
+            this.idDict[setting.id] = setting;
+            this.nameDict[setting.name] = setting;
         } else {
             throw new Error("Use set setting to replace a setting");
         }
     }
 
-    public setSetting(setting: UserSetting) {
-        this.settings[setting.id] = setting;
-    }
-
-    public removeSetting(setting: UserSetting | number) {
-        let key:number;
-        if(typeof setting === "number"){
-            key = setting as number;
-        }else{
-            key = (setting as UserSetting).id;
-        }
-
-        delete this.settings[key];
-    }
-
+    /**
+     * Gibt die Einstellung zurück welche die übergebene id besitzt
+     * @param settingId
+     */
     public getSetting(settingId: number){
-        return this.settings[settingId];
+        return this.idDict[settingId];
     }
 
+    /**
+     * Gibt die Einstellung zurück welche den übergeben Namen besitzt
+     */
+    public getSettingByName(settingName: string){
+        return this.nameDict[settingName];
+    }
+
+    /**
+     * Gibt alle Einstellungen als Array zurück
+     */
     public toArray(){
-        return this.settings.slice();
+        let newArray = new Array<UserSetting>();
+        for(let u of this.idDict){
+            if(u){
+                newArray.push(u);
+            }
+        }
+        return newArray;
     }
 }

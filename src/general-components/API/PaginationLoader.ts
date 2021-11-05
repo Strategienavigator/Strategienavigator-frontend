@@ -26,6 +26,12 @@ export class PaginationLoader<D extends object> {
         this._pageCount = value;
     }
 
+    /**
+     * Lädt die angegebene Seite, wenn nicht anders definiert werden die Daten erst versucht aus dem Cache zu laden,
+     * nur wenn kein Cache Eintrag vorhanden wird, wird eine Netzwerkabfrage durchgeführt
+     * @param page Seite der Pagination
+     * @param cached Ob der Cache berücksichtigt werden soll
+     */
     public async getPage(page: number,cached: boolean = true) {
         if (this.getPageData(page) === null || this.getPageData(page) === undefined || !cached) {
             if (this.getPageCallback) {
@@ -48,6 +54,10 @@ export class PaginationLoader<D extends object> {
         return null;
     }
 
+    /**
+     * Lädt alle Daten aus dem Backend und potentiel auch aus den Cached und gibt sie als ein Array zurück
+     * @param cached ob die Daten auch gechached sein dürfen
+     */
     public async getAll(cached:boolean = true) {
         let allData = new Array<D>();
         let result = await this.getPage(1,cached);
