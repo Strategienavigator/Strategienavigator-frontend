@@ -73,7 +73,7 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
             <div className={"count-display"}>
                 {!this.state.loading && (
                     <span
-                        className={"text-muted" + (this.state.pageCount <= 1?"count-display-text":"")}
+                        className={"text-muted" + (this.state.pageCount > 1?" count-display-text":"")}
                         style={s}>{text}</span>
                 )}
 
