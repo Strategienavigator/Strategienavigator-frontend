@@ -63,17 +63,25 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
      */
     private renderFooter(bottom: boolean) {
         let s = bottom ? {bottom: 0} : {top: 0};
+
         let from = this.state.from;
-        let to = this.state.from + this.state.saves.length -1;
+        let to = this.state.from + this.state.saves.length - 1;
 
-        const fromto = from + (this.state.pageCount>1?" - " + to:"");
+        let text: JSX.Element = <>{this.state.total} Speicherstände</>;
+        if (this.state.pageCount > 1) {
+            text = <>{from + " - " + to} von {this.state.total} Speicherständen</>;
+        }else if(this.state.total < 1){
+            text = <></>;
+        }else if(this.state.total === 1){
+            text = <>{this.state.total} Speicherstand</>;
+        }
 
-        let text = <>{fromto} von {this.state.total}</>;
+
         return (
             <div className={"count-display"}>
                 {!this.state.loading && (
                     <span
-                        className={"text-muted" + (this.state.pageCount > 1?" count-display-text":"")}
+                        className={"text-muted" + (this.state.pageCount > 1 ? " count-display-text" : "")}
                         style={s}>{text}</span>
                 )}
 
