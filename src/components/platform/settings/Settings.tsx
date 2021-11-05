@@ -11,24 +11,47 @@ import {Loader} from "../../../general-components/Loader/Loader";
 
 
 export interface UserSettingProxy {
+    /**
+     * id der Einstellung
+     */
     setting_id: number
+    /**
+     * Wert nachdem der User ihn geändert hat (kann der den selben Wert haben wie die Einstellung wenn der User den wert mehrfach ändert)
+     */
     newValue: string
 }
 
 export interface SettingsState {
+    /**
+     * Every User Setting which the user changed after last reset
+     */
     settings: UserSettingProxy[]
+    /**
+     * whether the app is currently saving the settings
+     */
     saving: boolean
 }
 
+/**
+ * Zeigt alle Einstellungen an und gibt die Möglichkeit diese zu ändern
+ */
 export class Settings extends Component<{}, SettingsState> {
 
 
+    /**
+     * Map die ein JSXElement für den angegeben Einstellungstype liefter
+     *
+     * Schlüssel ist der Name des Typs
+     */
     static typeDict: { [id: string]: (props: SettingsTypeProps, key: string | number) => JSX.Element } = {
         "toggle": (props: SettingsTypeProps, key: string | number) => {
             return <ToggleSettingType {...props} key={key}/>
         }
     }
 
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
     static contextType = SettingsContext;
     context!: React.ContextType<typeof SettingsContext>
 
@@ -40,6 +63,11 @@ export class Settings extends Component<{}, SettingsState> {
     }
 
 
+    /**
+     * Callback wenn eine Einstellung geändert wird
+     * @param id id der Einstellung
+     * @param value neuer Wert der Einstellung
+     */
     settingChanged(id: number, value: string) {
         let userProxy = this.getUserSettingProxy(id);
         let userSettingsArray = this.state.settings.slice();
@@ -61,10 +89,18 @@ export class Settings extends Component<{}, SettingsState> {
         });
     }
 
+    /**
+     * gibt den UserProxy eintrag in settings zurück, welcher die gegebene id besitzt
+     * @param settingId die Id der Einstellung
+     */
     getUserSettingProxy(settingId: number) {
         return this.state.settings.find(value => value.setting_id === settingId);
     }
 
+    /**
+     * Setzt alle Änderungen der Users zurück
+     * @private
+     */
     private reset() {
         this.setState({
             settings: []
@@ -107,6 +143,10 @@ export class Settings extends Component<{}, SettingsState> {
         );
     }
 
+    /**
+     * Speichert alle geänderten Einstellungen, nach dem Speichern werden alle Einstellungen aus den Backend neu geladen
+     * @private
+     */
     private async saveSettings() {
         this.setState({
             saving: true
