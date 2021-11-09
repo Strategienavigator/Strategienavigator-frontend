@@ -26,8 +26,8 @@ export class PaginationLoader<D extends object> {
         this._pageCount = value;
     }
 
-    public async getPage(page: number) {
-        if (this.getPageData(page) === null || this.getPageData(page) === undefined) {
+    public async getPage(page: number, forced?: boolean) {
+        if (this.getPageData(page) === null || this.getPageData(page) === undefined || forced === true) {
             if (this.getPageCallback) {
                 let result = await this.getPageCallback(page);
                 if (result !== null && result !== undefined) {
@@ -41,7 +41,6 @@ export class PaginationLoader<D extends object> {
             } else {
                 throw new Error("No PageCallback given!");
             }
-
         } else {
             return this.getPageData(page);
         }

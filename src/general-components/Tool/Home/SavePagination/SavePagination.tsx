@@ -1,15 +1,18 @@
 import React, {Component, ReactNode} from "react";
-import {SimpleSaveResource} from "../../../Datastructures";
+import {SaveResource, SimpleSaveResource} from "../../../Datastructures";
 import {PaginationFooter} from "../../../PaginationFooter/PaginationFooter";
 import {Loader} from "../../../Loader/Loader";
 import {Session} from "../../../Session/Session";
-import {getSaves} from "../../../API/calls/Saves";
-import {Card} from "react-bootstrap";
+import {deleteSaves, getSaves} from "../../../API/calls/Saves";
+import {Button, Card} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {Tool} from "../../Tool";
 import {PaginationLoader} from "../../../API/PaginationLoader";
 
 import './save-pagination.scss'
+import {faTrash} from "@fortawesome/free-solid-svg-icons/";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {DeleteSaveModal} from "../DeleteSaveModal/DeleteSaveModal";
 
 
 interface SavePaginationState {
@@ -17,6 +20,7 @@ interface SavePaginationState {
     page: number
     pageCount: number
     loading: boolean
+    lastDeleteSave: SimpleSaveResource | null
 }
 
 interface SavePaginationProps {
@@ -38,25 +42,26 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
             }
             return null;
         });
+
         this.state = {
             page: 1,
             saves: [],
             pageCount: 1,
-            loading: false
+            loading: false,
+            lastDeleteSave: null
         }
-
     }
 
     async componentDidMount() {
-        this.pageChosenCallback(this.state.page);
+        await this.pageChosenCallback(this.state.page);
     }
 
     render(): ReactNode {
         return (
-            <div>
+            <>
                 <Loader payload={[]} transparent loaded={(!this.state.loading)}>
 
-                    <div>
+                    <div className={"savesContainer"}>
                         {(this.state.saves === null || this.state.saves.length <= 0) && (
                             <Card>
                                 <Card.Body>Sie haben aktuell keine Speicherstände.</Card.Body>
@@ -65,16 +70,26 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
 
                         {this.state.saves?.map(value => {
                             let save = value;
-                            return (
-                                <Card as={Link} to={this.props.tool?.getLink() + "/" + save.id}
-                                      key={save.id} className={"mt-2 mb-2 save-card"}>
-                                    <Card.Body className={"save-body"}>
-                                        <Card.Title>{save.name}</Card.Title>
-                                        <Card.Text
-                                            className={"save-desc text-muted mb-1"}>{save.description ? save.description : "Keine Beschreibung vorhanden"}</Card.Text>
-                                    </Card.Body>
 
-                                </Card>
+                            return (
+                                <div key={save.id} className={"save"}>
+                                    <Card as={Link} to={this.props.tool?.getLink() + "/" + save.id} className={"mt-2 mb-2 save-card"}>
+                                        <Card.Body className={"save-body"}>
+                                            <Card.Title>{save.name}</Card.Title>
+                                            <Card.Text
+                                                className={"save-desc text-muted mb-1"}>{save.description ? save.description : "Keine Beschreibung vorhanden"}</Card.Text>
+
+                                        </Card.Body>
+                                    </Card>
+
+                                    <Button type={"button"} variant={"danger"} className={"deleteSave"} onClick={() => {
+                                        this.setState({
+                                           lastDeleteSave: save
+                                        });
+                                    }}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </Button>
+                                </div>
                             );
                         })}
 
@@ -86,16 +101,36 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                         <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
                                           currentPage={this.state.page} disabled={this.state.loading}/>)}
                 </div>
-            </div>
+
+                <DeleteSaveModal
+                    show={this.state.lastDeleteSave !== null}
+                    save={this.state.lastDeleteSave}
+                    onClose={() => {
+                        this.setState({
+                            lastDeleteSave: null
+                        });
+                    }}
+                    onDelete={async (id) => {
+                        await deleteSaves(id);
+                        this.setState({
+                            lastDeleteSave: null
+                        }, async () => {
+                            await this.pageChosenCallback(this.state.page, true);
+                        });
+                    }}
+                />
+            </>
         );
     }
 
-    private pageChosenCallback = async (currentPage: number) => {
+    private pageChosenCallback = async (currentPage: number, forced?: boolean) => {
         this.setState({
             page: currentPage,
             loading: true
         });
-        let et = await this.paginationLoader.getPage(currentPage);
+
+        let et = await this.paginationLoader.getPage(currentPage, forced);
+
         this.setState({
             saves: et,
             loading: false,
@@ -104,7 +139,6 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
 
     };
 }
-
 
 export {
     SavePagination
