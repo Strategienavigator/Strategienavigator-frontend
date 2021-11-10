@@ -51,13 +51,11 @@ export class SettingsCache {
         return settings.map((s) => {
             let userS = userSettings.find((su) => su.setting_id === s.id);
             let v = s.default;
-            const exists = !!userS && !!userS.value;
-            if (exists) {
-                //TODO make beautiful
-                v = userS?.value ?? v;
+            if (!!userS && !!userS.value) {
+                v = userS.value;
             }
 
-            return {...s, value: v, exists: exists} as UserSetting;
+            return {...s, value: v, exists: !!userS} as UserSetting;
         })
     }
 

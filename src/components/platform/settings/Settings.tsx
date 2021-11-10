@@ -39,7 +39,7 @@ export class Settings extends Component<{}, SettingsState> {
 
 
     /**
-     * Map die ein JSXElement für den angegeben Einstellungstype liefter
+     * Map die ein JSXElement für den angegeben Einstellungstyp liefter
      *
      * Schlüssel ist der Name des Typs
      */
