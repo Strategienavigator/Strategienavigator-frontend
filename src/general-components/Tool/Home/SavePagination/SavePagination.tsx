@@ -3,16 +3,14 @@ import {SaveResource, SimpleSaveResource} from "../../../Datastructures";
 import {PaginationFooter} from "../../../PaginationFooter/PaginationFooter";
 import {Loader} from "../../../Loader/Loader";
 import {Session} from "../../../Session/Session";
-import {deleteSaves, getSaves} from "../../../API/calls/Saves";
+import {deleteSave, getSaves} from "../../../API/calls/Saves";
 import {Button, Card} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import {Tool} from "../../Tool";
 import {PaginationLoader} from "../../../API/PaginationLoader";
 
 import './save-pagination.scss'
-import {faTrash} from "@fortawesome/free-solid-svg-icons/";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {DeleteSaveModal} from "../DeleteSaveModal/DeleteSaveModal";
+import {SaveCard} from "../SaveCard/SaveCard";
 
 
 interface SavePaginationState {
@@ -70,26 +68,12 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
 
                         {this.state.saves?.map(value => {
                             let save = value;
-
                             return (
-                                <div key={save.id} className={"save"}>
-                                    <Card as={Link} to={this.props.tool?.getLink() + "/" + save.id} className={"mt-2 mb-2 save-card"}>
-                                        <Card.Body className={"save-body"}>
-                                            <Card.Title>{save.name}</Card.Title>
-                                            <Card.Text
-                                                className={"save-desc text-muted mb-1"}>{save.description ? save.description : "Keine Beschreibung vorhanden"}</Card.Text>
-
-                                        </Card.Body>
-                                    </Card>
-
-                                    <Button type={"button"} variant={"danger"} className={"deleteSave"} onClick={() => {
-                                        this.setState({
-                                           lastDeleteSave: save
-                                        });
-                                    }}>
-                                        <FontAwesomeIcon icon={faTrash} />
-                                    </Button>
-                                </div>
+                                <SaveCard key={save.id} save={value} toolLink={this.props.tool.getLink()} onTrash={() => {
+                                    this.setState({
+                                        lastDeleteSave: save
+                                    });
+                                }}/>
                             );
                         })}
 
@@ -111,7 +95,7 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                         });
                     }}
                     onDelete={async (id) => {
-                        await deleteSaves(id);
+                        await deleteSave(id);
                         this.setState({
                             lastDeleteSave: null
                         }, async () => {

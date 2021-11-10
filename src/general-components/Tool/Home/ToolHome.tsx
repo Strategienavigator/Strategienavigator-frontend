@@ -10,6 +10,7 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {SavePagination} from "./SavePagination/SavePagination";
 
 import "./tool-home.scss";
+import {SaveInfinityScroll} from "./SaveInfinityScroll/SaveInfinityScroll";
 
 
 export interface ToolHomeInfo {
@@ -91,7 +92,17 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 </div>
 
                 <div className={"saves mt-2"}>
-                    <SavePagination tool={this.props.tool!}/>
+                    {
+                        isDesktop() && (
+                            <SavePagination tool={this.props.tool!}/>
+                        )
+                    }
+                    {
+                        !isDesktop() && (
+                            <SaveInfinityScroll tool={this.props.tool!}/>
+                        )
+                    }
+
                 </div>
 
                 {this.props.children}
