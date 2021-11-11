@@ -1,6 +1,10 @@
 
+.controlFooter.show {
+    display: flex !important;
+}
+
 .controlFooter {
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   background-color: #f8f9fa;

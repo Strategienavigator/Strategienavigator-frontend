@@ -4,10 +4,10 @@ import "./settings.scss";
 import {ToggleSettingType} from "../../../general-components/Settings/Types/ToggleType/ToggleSettingType";
 import {SettingsTypeProps} from "../../../general-components/Settings/Types/SettingsTypeProps";
 import {Button} from "react-bootstrap";
-import {ISettingsContext, SettingsContext} from "../../../general-components/Contexts/GlobalContexts";
 import * as SettingsAPI from "../../../general-components/API/calls/Settings";
 import {Session} from "../../../general-components/Session/Session";
 import {Loader} from "../../../general-components/Loader/Loader";
+import {SettingsContext} from "../../../general-components/Contexts/SettingsContextComponent";
 
 
 export interface UserSettingProxy {

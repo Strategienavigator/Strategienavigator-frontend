@@ -285,10 +285,6 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.toolID = toolID;
     }
 
-    protected renderToolHome(): ReactElement<any, "ToolHome"> | null | undefined {
-        return <ToolHome/>;
-    }
-
     protected abstract renderShortDescription(): ReactNode;
 
     protected abstract renderTutorial(): ReactNode;
@@ -374,11 +370,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             ref = React.createRef();
         }
         this.toolHomeRef = ref;
-
-        let home = this.renderToolHome();
-        if (home === undefined || home === null) {
-            home = <ToolHome/>;
-        }
+        let home = <ToolHome/>;
 
         let info: ToolHomeInfo = {
             shortDescription: this.renderShortDescription(),

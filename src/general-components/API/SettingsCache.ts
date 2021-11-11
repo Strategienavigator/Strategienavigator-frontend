@@ -25,16 +25,16 @@ export class SettingsCache {
     private settingsLoader: PaginationLoader<SettingResource>;
     private userSettingsLoader: PaginationLoader<UserSettingResource>;
 
-    constructor(token: string, userId: number) {
+    constructor(userId: number) {
         this._userId = userId;
         this._lastLoad = new Date(0);
         this._userSettings = new SettingsList();
 
         this.settingsLoader = new PaginationLoader<SettingResource>((page) => {
-            return Settings.getSettings(token, page)
+            return Settings.getSettings(page)
         })
         this.userSettingsLoader = new PaginationLoader<UserSettingResource>((page) => {
-            return Settings.getUserSettings(userId, token, page)
+            return Settings.getUserSettings(userId, page)
         })
 
     }

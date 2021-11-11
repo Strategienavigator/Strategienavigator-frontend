@@ -19,7 +19,6 @@ import {Session} from "./general-components/Session/Session";
 import {Container} from "react-bootstrap";
 import {Loader} from "./general-components/Loader/Loader";
 import {Messages} from "./general-components/Messages/Messages";
-import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
 import {AboutUs} from "./components/platform/abous-us/AboutUs";
 import {ControlFooter} from "./general-components/ControlFooter/ControlFooter";
@@ -85,7 +84,12 @@ const getRouterSwitch = () => {
 }
 
 const getAppFooter = () => {
-    return isDesktop() ? <Footer/> : <ControlFooter places={3}/>;
+    return (
+        <>
+            <Footer />
+            <ControlFooter places={3}/>
+        </>
+    );
 }
 
 const getAppContent = () => {

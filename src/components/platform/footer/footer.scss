@@ -1,7 +1,12 @@
 @import "src/scss/variables/variables";
 
+footer.show {
+    display: block !important;
+}
+
 footer {
   background-color: #fff;
+  display: none !important;
 
   a {
     color: $color !important;

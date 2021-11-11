@@ -1,7 +1,6 @@
 import React, {Component, ReactComponentElement, ReactNode, RefObject} from "react";
 import {Accordion, Button, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
-import {clearControlFooter, disableControlFooterItem, setControlFooterItem} from "../../../ControlFooter/ControlFooter";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretLeft, faCaretRight, faSave, faSyncAlt, faUndo} from "@fortawesome/free-solid-svg-icons/";
 import {Tool} from "../../Tool";
@@ -12,6 +11,7 @@ import {Loader} from "../../../Loader/Loader";
 import {Step} from "./Step/Step";
 import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeaderProp";
 import {LoadingButton} from "../../../LoadingButton/LoadingButton";
+import {FooterContext} from "../../../Contexts/FooterContextComponent";
 
 
 export interface StepProp<T> {
@@ -48,6 +48,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     private currentStep: number = 1;
     private currentProgress: number = 1;
 
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = FooterContext;
+    context!: React.ContextType<typeof FooterContext>
     constructor(props: any) {
         super(props);
 
@@ -238,7 +243,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         if ((this.props.steps?.length !== undefined && this.props.steps?.length > 1)) {
             this.restoreFooter();
         } else {
-            setControlFooterItem(2, {home: true});
+            this.context.setItem(2, {home: true});
         }
 
         let progress = 0;
@@ -266,7 +271,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
     }
 
     componentWillUnmount() {
-        clearControlFooter();
+        this.context.clearItems();
     }
 
     public getCurrentStep = () => {
@@ -365,7 +370,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         this.setState({
             isSaving: true
         });
-        disableControlFooterItem(2, true);
+        this.context.disableItem(2, true);
 
         this.triggerFormSubmits(this.currentProgress, true);
 
@@ -393,7 +398,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             addErrorMessage();
         }
 
-        disableControlFooterItem(2, false);
+        this.context.disableItem(2, false);
         this.setState({
             isSaving: false
         });
@@ -417,15 +422,15 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             customNextButton: button
         });
 
-        setControlFooterItem(3, {button: button});
+        this.context.setItem(3, {button: button});
     }
 
     public addCustomPreviousButton = (text: string, callback: () => any) => {
-        setControlFooterItem(1, {button: {text: text, callback: callback, icon: faCaretLeft}});
+        this.context.setItem(1, {button: {text: text, callback: callback, icon: faCaretLeft}});
     }
 
     public restoreFooter = () => {
-        setControlFooterItem(1, {
+        this.context.setItem(1, {
             reset: () => {
                 this.setState({
                     onReset: true,
@@ -436,12 +441,12 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
         let id = this.state.steps[this.currentStep - 1].id;
 
-        setControlFooterItem(3, {
+        this.context.setItem(3, {
             nextStep: id
         });
-        disableControlFooterItem(3, this.isLastStep());
+        this.context.disableItem(3, this.isLastStep());
 
-        setControlFooterItem(2, {
+        this.context.setItem(2, {
             button: {
                 callback: async () => {
                     await this.save();
