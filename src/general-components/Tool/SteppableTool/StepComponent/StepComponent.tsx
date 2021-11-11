@@ -1,17 +1,17 @@
 import React, {Component, ReactComponentElement, ReactNode, RefObject} from "react";
-import {Accordion, Button, Col, Collapse, Fade, Form, Modal, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import {Accordion, Button, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretLeft, faCaretRight, faSave, faSyncAlt, faUndo} from "@fortawesome/free-solid-svg-icons/";
+import {faCaretLeft, faCaretRight, faSave, faSyncAlt} from "@fortawesome/free-solid-svg-icons/";
 import {Tool} from "../../Tool";
 import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
-import {Loader} from "../../../Loader/Loader";
 import {Step} from "./Step/Step";
 import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeaderProp";
-import {LoadingButton} from "../../../LoadingButton/LoadingButton";
 import {FooterContext} from "../../../Contexts/FooterContextComponent";
+import {DesktopButtons} from "./DesktopButtons/DesktopButtons";
+import {ResetStepsModal} from "./ResetStepsModal/ResetStepsModal";
 
 
 export interface StepProp<T> {
@@ -20,6 +20,7 @@ export interface StepProp<T> {
     form: JSX.Element
     values?: T
 }
+
 // TODO: vielleicht besseren namen überlegen
 interface InternalStep<T> extends StepProp<T> {
     ref: RefObject<Step<any, any>>
@@ -32,15 +33,16 @@ export interface StepComponentProps {
     onSave: (data: object, forms: Map<string, Step<any, any>>) => Promise<boolean>
 }
 
+export type CustomNextButton = {
+    text: string
+    callback: () => void
+} | null;
+
 export interface StepComponentState {
     steps: Array<InternalStep<any>>
-    onReset: boolean
     showResetModal: boolean
     hasCustomNextButton: boolean
-    customNextButton: {
-        text: string
-        callback: () => void
-    } | null
+    customNextButton: CustomNextButton
     isSaving: boolean
 }
 
@@ -53,6 +55,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
      */
     static contextType = FooterContext;
     context!: React.ContextType<typeof FooterContext>
+
     constructor(props: any) {
         super(props);
 
@@ -80,7 +83,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
         this.state = {
             steps: steps,
-            onReset: false,
             showResetModal: false,
             hasCustomNextButton: false,
             customNextButton: null,
@@ -106,7 +108,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                         )}
 
                         <Col className={"stepTabContainer"}>
-                            {(isDesktop() ) && (
+                            {(isDesktop()) && (
                                 <StepComponentHeader tool={this.props.tool}/>
                             )}
 
@@ -121,57 +123,19 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                             </Nav>
 
                             {(isDesktop()) && (
-                                <>
-                                    {(!this.state.hasCustomNextButton) ? (
-                                        <Button
-                                            variant={"dark"}
-                                            type={"submit"}
-                                            form={this.state.steps[this.currentStep - 1].id}
-                                            disabled={this.isLastStep()}
-                                            className={"mt-2 mx-2"}
-                                            key={"nextButton"}
-                                        >
-                                            <FontAwesomeIcon icon={faCaretRight}/> Weiter
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            variant={"dark"}
-                                            type={"button"}
-                                            onClick={this.state.customNextButton?.callback}
-                                            disabled={this.isLastStep()}
-                                            className={"mt-2 mx-2"}
-                                            key={"customNextButton"}
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faCaretRight}/> {this.state.customNextButton?.text}
-                                        </Button>
-                                    )}
-                                    <Button
-                                        variant={"dark"}
-                                        type={"button"}
-                                        className={"mt-2"}
-                                        onClick={() => this.setState({onReset: true, showResetModal: true})}
-                                        key={"resetButton"}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faUndo}/> Zurücksetzen
-                                    </Button>
-
-                                    <br/>
-
-                                    <LoadingButton
-                                        variant={"dark"}
-                                        type={"button"}
-                                        onClick={async () => {
-                                            await this.save();
-                                        }}
-                                        className={"mt-2"}
-                                        key={"saveButton"}
-                                        isSaving={this.state.isSaving}
-                                        savingChild={"Speichern"}
-                                        defaultChild={"Speichern"}
-                                    />
-                                </>
+                                <DesktopButtons
+                                    hasCustomNextButton={this.state.hasCustomNextButton}
+                                    customNextButton={this.state.customNextButton}
+                                    formID={this.state.steps[this.currentStep - 1].id}
+                                    nextDisabled={this.isLastStep()}
+                                    isSaving={this.state.isSaving}
+                                    onReset={() => {
+                                        this.setState({showResetModal: true})
+                                    }}
+                                    onSave={async () => {
+                                        await this.save();
+                                    }}
+                                />
                             )}
 
                             {this.shouldMatrixRender() && (
@@ -195,46 +159,20 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                     </Row>
                 </Tab.Container>
 
-                {(this.state.onReset) && (
-                    <Modal
-                        show={this.state.showResetModal}
-                        backdrop="static"
-                        keyboard={true}
-                    >
-                        <Modal.Header>
-                            <Modal.Title>Sind Sie sich sicher?</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Sind Sie sich sicher, dass Sie mit dem zurücksetzen fortfahren möchten?
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button
-                                onClick={() => this.setState({showResetModal: false, onReset: false})}
-                                variant={"light"}
-                            >
-                                Nein!
-                            </Button>
-                            <Button
-                                variant="dark"
-                                onClick={() => {
-                                    this.setState({showResetModal: false, onReset: false});
-                                    this.resetSteps();
-                                }}
-                            >
-                                Ja, ALLE Schritte zurücksetzen!
-                            </Button>
-                            <Button
-                                variant="dark"
-                                onClick={() => {
-                                    this.setState({showResetModal: false, onReset: false});
-                                    this.resetSteps(this.currentStep);
-                                }}
-                            >
-                                Ja, ab diesem Schritt neu beginnen!
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                )}
+                <ResetStepsModal
+                    show={this.state.showResetModal}
+                    onYes={() => {
+                        this.setState({showResetModal: false});
+                        this.resetSteps(this.currentStep);
+                    }}
+                    onAllReset={() => {
+                        this.setState({showResetModal: false});
+                        this.resetSteps();
+                    }}
+                    onNo={() => {
+                        this.setState({showResetModal: false})
+                    }}
+                />
             </>
         );
     }
@@ -325,6 +263,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     public nextStep = async () => {
         this.restoreFooter();
+        console.log("hallooooo");
 
         let step;
         let isProgress: boolean = false;
@@ -433,7 +372,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         this.context.setItem(1, {
             reset: () => {
                 this.setState({
-                    onReset: true,
                     showResetModal: true
                 })
             }
