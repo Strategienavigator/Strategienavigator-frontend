@@ -31,6 +31,7 @@ import {PairwiseComparison} from "./components/tools/pairwise-comparison/Pairwis
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import {ErrorPages} from "./general-components/Error/ErrorPages";
+import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
 
 
 /**
@@ -90,25 +91,27 @@ const getAppFooter = () => {
 const getAppContent = () => {
     return (
         <>
-            <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
-                <Messages
-                    xAlignment={"CENTER"}
-                    yAlignment={"BOTTOM"}
-                    style={{marginBottom: 65}}
-                />
+            <GlobalContexts key={"global-contexts"}>
+                <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
+                    <Messages
+                        xAlignment={"CENTER"}
+                        yAlignment={"BOTTOM"}
+                        style={{marginBottom: 65}}
+                    />
+                    <Router ref={routerRef}>
+                        <Nav/>
 
-                <Router ref={routerRef}>
-                    <Nav/>
+                        <div id={"content"}>
+                            <Container fluid={false}>
+                                {getRouterSwitch()}
+                            </Container>
+                        </div>
 
-                    <div id={"content"}>
-                        <Container fluid={false}>
-                            {getRouterSwitch()}
-                        </Container>
-                    </div>
+                        {getAppFooter()}
+                    </Router>
 
-                    {getAppFooter()}
-                </Router>
-            </Loader>
+                </Loader>
+            </GlobalContexts>
         </>
     );
 }
@@ -150,7 +153,9 @@ const showErrorPage = (code: number, callback?: (...args: any) => any) => {
 const manageLoading = async () => {
     ReactDOM.render(
         <React.StrictMode>
-            <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
+            <GlobalContexts key={"global-contexts"}>
+                <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
+            </GlobalContexts>
         </React.StrictMode>,
         document.getElementById('root')
     );

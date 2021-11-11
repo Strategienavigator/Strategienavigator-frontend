@@ -2,133 +2,120 @@ import {Component} from "react";
 
 import "./settings.scss";
 import {ToggleSettingType} from "../../../general-components/Settings/Types/ToggleType/ToggleSettingType";
-import {Loader} from "../../../general-components/Loader/Loader";
-import * as SettingsAPI from "../../../general-components/API/calls/Settings"
-import {SettingResource, UserSettingResource} from "../../../general-components/Datastructures";
-import {PaginationLoader} from "../../../general-components/API/PaginationLoader";
-import {Session} from "../../../general-components/Session/Session";
 import {SettingsTypeProps} from "../../../general-components/Settings/Types/SettingsTypeProps";
 import {Button} from "react-bootstrap";
+import {ISettingsContext, SettingsContext} from "../../../general-components/Contexts/GlobalContexts";
+import * as SettingsAPI from "../../../general-components/API/calls/Settings";
+import {Session} from "../../../general-components/Session/Session";
+import {Loader} from "../../../general-components/Loader/Loader";
 
 
-export interface UserSettingProxy extends UserSettingResource {
-    newResource: boolean
-    oldValue: string
+export interface UserSettingProxy {
+    /**
+     * id der Einstellung
+     */
+    setting_id: number
+    /**
+     * Wert nachdem der User ihn geändert hat (kann der den selben Wert haben wie die Einstellung wenn der User den wert mehrfach ändert)
+     */
+    newValue: string
 }
 
 export interface SettingsState {
-    settings: SettingResource[],
-    userSettings: UserSettingProxy[],
+    /**
+     * Every User Setting which the user changed after last reset
+     */
+    settings: UserSettingProxy[]
+    /**
+     * whether the app is currently saving the settings
+     */
     saving: boolean
 }
 
+/**
+ * Zeigt alle Einstellungen an und gibt die Möglichkeit diese zu ändern
+ */
 export class Settings extends Component<{}, SettingsState> {
 
 
+    /**
+     * Map die ein JSXElement für den angegeben Einstellungstype liefter
+     *
+     * Schlüssel ist der Name des Typs
+     */
     static typeDict: { [id: string]: (props: SettingsTypeProps, key: string | number) => JSX.Element } = {
         "toggle": (props: SettingsTypeProps, key: string | number) => {
             return <ToggleSettingType {...props} key={key}/>
         }
     }
-    private settingsLoader: PaginationLoader<SettingResource>;
-    private userSettingsLoader: PaginationLoader<UserSettingResource>;
 
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = SettingsContext;
+    context!: React.ContextType<typeof SettingsContext>
 
     constructor(props: Readonly<{}> | {});
     constructor(props: {}, context: any);
     constructor(props: {} | Readonly<{}>, context?: any) {
         super(props, context);
-        this.state = {settings: [], userSettings: [], saving: false};
-
-        this.settingsLoader = new PaginationLoader(async (page) => {
-            return await SettingsAPI.getSettings(page);
-        });
-
-        this.userSettingsLoader = new PaginationLoader(async (page) => {
-            let userId = Session.currentUser?.getID();
-            if (userId) {
-                return await SettingsAPI.getUserSettings(userId, page);
-            }
-            return null;
-        });
+        this.state = {settings: [], saving: false};
     }
 
 
+    /**
+     * Callback wenn eine Einstellung geändert wird
+     * @param id id der Einstellung
+     * @param value neuer Wert der Einstellung
+     */
     settingChanged(id: number, value: string) {
-        let userSettingProxy = this.getUserSettingProxy(id);
-        let userSettingsArray = this.state.userSettings.slice();
-        if (userSettingProxy) {
-            userSettingProxy.value = value;
-        } else {
-            let userId = Session.currentUser?.getID();
-            if (userId) {
-                userSettingProxy = {setting_id: id, user_id: userId, newResource: true, oldValue: "", value: value};
-                userSettingsArray.push(userSettingProxy);
+        let userProxy = this.getUserSettingProxy(id);
+        let userSettingsArray = this.state.settings.slice();
+        if (userProxy) {
+            if (value) {
+                userProxy.newValue = value;
             } else {
-                // TODO navigate to home screen
-                return;
+                userSettingsArray.splice(userSettingsArray.indexOf(userProxy), 1);
             }
+        } else {
+            userSettingsArray.push({
+                setting_id: id,
+                newValue: value
+            });
         }
 
         this.setState({
-            userSettings: userSettingsArray
+            settings: userSettingsArray
         });
     }
 
+    /**
+     * gibt den UserProxy eintrag in settings zurück, welcher die gegebene id besitzt
+     * @param settingId die Id der Einstellung
+     */
     getUserSettingProxy(settingId: number) {
-        return this.state.userSettings.find(value => value.setting_id === settingId);
+        return this.state.settings.find(value => value.setting_id === settingId);
     }
 
-    async loadSettings() {
-        let userSettings = (await this.userSettingsLoader.getAll()).map(value => {
-            return {dirty: false, newResource: false, oldValue: value.value, ...value} as UserSettingProxy;
-        });
-
+    /**
+     * Setzt alle Änderungen der Users zurück
+     * @private
+     */
+    private reset() {
         this.setState({
-            settings: await this.settingsLoader.getAll(),
-            userSettings: userSettings
+            settings: []
         });
-    }
-
-    async saveSettings(userSettings: UserSettingProxy[]) {
-        if (Session.isLoggedIn()) {
-            let userId = Session.currentUser?.getID();
-            let token = Session.getToken();
-            if (typeof userId === "number" && typeof token === "string") {
-                let safeUserId = userId; // stupid but it works. Compiler thinks the above if doesn't apply to the map callback
-                let safeToken = token;
-                this.setState({
-                    saving: true
-                })
-                let promises = userSettings.filter(value => value.value !== value.oldValue || value.newResource).map(setting => {
-                    let f = SettingsAPI.updateUserSettings;
-                    if (setting.newResource) {
-                        f = SettingsAPI.createUserSettings;
-                    }
-                    let result = f(safeUserId, setting.setting_id, setting.value);
-                    setting.newResource = false;
-                    setting.oldValue = setting.value;
-                    return result;
-                });
-
-                await Promise.all(promises);
-                this.setState({
-                    saving: false,
-                    userSettings: userSettings
-                });
-            }
-        }
     }
 
     render() {
-        let settings = this.state.settings.map(setting => {
+        let settings = this.context.settings.toArray().map(setting => {
             let f = Settings.typeDict[setting.type];
             if (f) {
-                let userSetting = this.state.userSettings.find(us => us.setting_id === setting.id);
-                let v = setting.default;
+                let userSetting = this.state.settings.find(us => us.setting_id === setting.id);
+                let v = setting.value;
                 if (userSetting) {
-                    if (userSetting.value) {
-                        v = userSetting.value;
+                    if (userSetting.newValue) {
+                        v = userSetting.newValue;
                     }
                 }
                 return f({
@@ -144,17 +131,43 @@ export class Settings extends Component<{}, SettingsState> {
 
         return (
             <>
-                <Loader transparent payload={[this.loadSettings.bind(this)]}>
+                <Loader payload={[]} loaded={!this.context.isLoading} transparent={true}>
                     {settings}
                     <Button variant={"primary"} className={"mt-3"}
-                            onClick={async (event) => await this.saveSettings(this.state.userSettings)}
+                            onClick={async () => await this.saveSettings()}
                             disabled={this.state.saving}>
                         {this.state.saving ? "Speichert..." : "Speichern"}
                     </Button>
                 </Loader>
-
             </>
         );
     }
 
+    /**
+     * Speichert alle geänderten Einstellungen, nach dem Speichern werden alle Einstellungen aus den Backend neu geladen
+     * @private
+     */
+    private async saveSettings() {
+        this.setState({
+            saving: true
+        });
+        const promises = [];
+        const context = this.context;
+        let settingsList = context.settings;
+        for (let s of this.state.settings) {
+            let setting = settingsList.getSetting(s.setting_id);
+            if (!Object.is(setting.value, s.newValue)) {
+                let f = SettingsAPI.createUserSettings;
+                if (setting.exists)
+                    f = SettingsAPI.updateUserSettings;
+                promises.push(f(Session.currentUser!.getID(), setting.id, s.newValue));
+            }
+        }
+        await Promise.all(promises);
+        context.causeUpdate();
+        this.setState({
+            saving: false
+        });
+        this.reset();
+    }
 }
