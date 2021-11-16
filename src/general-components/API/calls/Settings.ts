@@ -1,8 +1,14 @@
-import {callAPI} from "../API";
+import {APIArgs, callAPI} from "../API";
 import {DefaultResponse, PaginationResource, SettingResource, UserSettingResource} from "../../Datastructures";
 
 
-const getSettings = (token: string, page?: number) => {
+/**
+ * Holt sich alle Einstellungen
+ *
+ * @param page Optional: Seite der Einstellungen
+ * @param apiArgs API Argumente
+ */
+const getSettings = (page?: number, apiArgs?: APIArgs) => {
     let data = new URLSearchParams();
     let searchParams = false;
 
@@ -11,16 +17,27 @@ const getSettings = (token: string, page?: number) => {
         searchParams = true;
     }
 
-
-    return callAPI<PaginationResource<SettingResource>>("api/settings", "GET", searchParams ? data : undefined, token);
+    return callAPI<PaginationResource<SettingResource>>("api/settings", "GET", searchParams ? data : undefined, true, apiArgs);
 }
 
-const getSetting = (token: string, settingId: number) => {
-    return callAPI<DefaultResponse<SettingResource>>(`api/settings/${settingId}`, "GET", undefined, token);
+/**
+ * Holt sich eine einzelne Einstellungen des Benutzers
+ *
+ * @param settingId ID der Einstellung
+ * @param apiArgs API Argumente
+ */
+const getSetting = (settingId: number, apiArgs?: APIArgs) => {
+    return callAPI<DefaultResponse<SettingResource>>(`api/settings/${settingId}`, "GET", undefined, true, apiArgs);
 }
 
-
-const getUserSettings = (userId: number, token: string, page?: number) => {
+/**
+ * Holt sich alle Einstellungen eines Benutzers
+ *
+ * @param userId Benutzer-ID
+ * @param page Optional: Seite der Einstellungen
+ * @param apiArgs API Argumente
+ */
+const getUserSettings = (userId: number, page?: number, apiArgs?: APIArgs) => {
     let data = new URLSearchParams();
     let searchParams = false;
 
@@ -28,32 +45,62 @@ const getUserSettings = (userId: number, token: string, page?: number) => {
         data.append("page", String(page));
         searchParams = true;
     }
-    return callAPI<PaginationResource<UserSettingResource>>(`api/users/${userId}/settings`, "GET", searchParams ? data : undefined, token);
+    return callAPI<PaginationResource<UserSettingResource>>(`api/users/${userId}/settings`, "GET", searchParams ? data : undefined, true, apiArgs);
 }
 
-const getUserSetting = (userId: number, settingId: number, token: string) => {
-    return callAPI<DefaultResponse<UserSettingResource>>(`api/users/${userId}/settings/${settingId}`, "GET", undefined, token);
+/**
+ * Holt sich eine einzelne Benutzereinstellung
+ *
+ * @param userId Benutzer-ID
+ * @param settingId ID der Einstellung
+ * @param apiArgs API Argumente
+ */
+const getUserSetting = (userId: number, settingId: number, apiArgs?: APIArgs) => {
+    return callAPI<DefaultResponse<UserSettingResource>>(`api/users/${userId}/settings/${settingId}`, "GET", undefined, true, apiArgs);
 }
 
-const createUserSettings = (userID: number, setttingID: number, token: string, value: string) => {
+/**
+ * Erstellt eine neue Benutzereinstellung
+ *
+ * @param userID Benutzer-ID
+ * @param settingID ID der Einstellung
+ * @param value Wert der Einstellung
+ * @param apiArgs API Argumente
+ */
+const createUserSettings = (userID: number, settingID: number, value: string, apiArgs?: APIArgs) => {
     let data = new FormData();
     data.append("value", value);
-    data.append("setting", setttingID.toString());
-    return callAPI(`api/users/${userID}/settings`, "POST", data, token);
+    data.append("setting", settingID.toString());
+    return callAPI(`api/users/${userID}/settings`, "POST", data, true, apiArgs);
 }
 
-const updateUserSettings = (userID: number, setttingID: number, token: string, value: string) => {
+/**
+ * Aktualisiert eine neue Benutzereinstellung
+ *
+ * @param userID Benutzer-ID
+ * @param settingID ID der Einstellung
+ * @param value Wert der Einstellung
+ * @param apiArgs API Argumente
+ */
+const updateUserSettings = (userID: number, settingID: number, value: string, apiArgs?: APIArgs) => {
     let data = new FormData();
     let bodyData = false;
     if (value) {
         bodyData = true;
         data.append("value", value);
     }
-    return callAPI(`api/users/${userID}/settings/${setttingID}`, "PUT", bodyData ? data : undefined, token);
+    return callAPI(`api/users/${userID}/settings/${settingID}`, "PUT", bodyData ? data : undefined, true, apiArgs);
 }
 
-const deleteUserSettings = (userID: number, settingID: number, token: string) => {
-    return callAPI(`api/users/${userID}/settings/${settingID}`, "DELETE", undefined, token);
+/**
+ * Aktualisiert eine neue Benutzereinstellung
+ *
+ * @param userID Benutzer-ID
+ * @param settingID ID der Einstellung
+ * @param apiArgs API Argumente
+ */
+const deleteUserSettings = (userID: number, settingID: number, apiArgs?: APIArgs) => {
+    return callAPI(`api/users/${userID}/settings/${settingID}`, "DELETE", undefined, true, apiArgs);
 }
 
 export {

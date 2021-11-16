@@ -1,11 +1,11 @@
 import {faChartPie} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
 
 import "./abc-analysis.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 
 
-class ABCAnalysis extends Tool {
+class ABCAnalysis extends SteppableTool {
 
     constructor(props: any) {
         super(props);
@@ -13,7 +13,6 @@ class ABCAnalysis extends Tool {
         this.setID(4);
         this.setToolname("ABC Analyse");
         this.setToolIcon(faChartPie);
-        // Maintenance Mode
         this.setMaintenance(true);
     }
 
@@ -27,10 +26,6 @@ class ABCAnalysis extends Tool {
 
     protected renderTutorial() {
         return null;
-    }
-
-    protected renderNew() {
-        return this.getStepComponent();
     }
 
     protected renderView(tool: SaveResource) {

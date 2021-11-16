@@ -1,4 +1,4 @@
-import {callAPI} from "../API";
+import {APIArgs, callAPI} from "../API";
 import {DefaultResponse, InvitationLinkResource, PaginationResource} from "../../Datastructures";
 
 
@@ -6,20 +6,20 @@ import {DefaultResponse, InvitationLinkResource, PaginationResource} from "../..
  * Zeigt alle Einladungslinks zum ausgewählten Speicherstand an
  *
  * @param saveID ID des Speicherstandes
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs API Argumente
  */
-const showInvitationLinks = async (saveID: number, token: string | null) => {
-    return await callAPI<PaginationResource<InvitationLinkResource>>("api/saves/" + saveID + "/invitation-link", "GET", undefined, (token !== null) ? token : undefined)
+const showInvitationLinks = async (saveID: number, apiArgs?: APIArgs) => {
+    return await callAPI<PaginationResource<InvitationLinkResource>>("api/saves/" + saveID + "/invitation-link", "GET", undefined, true, apiArgs);
 }
 
 /**
  * Zeigt die Meta-Daten eines Eindladungslinks an
  *
  * @param invitationToken Token der Invitation (Hex-Code)
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs API Argumente
  */
-const showInvitationLink = async (invitationToken: string, token: string | null) => {
-    return await callAPI<DefaultResponse<InvitationLinkResource>>("api/invitation-link/" + invitationToken, "GET", undefined, (token !== null) ? token : undefined)
+const showInvitationLink = async (invitationToken: string, apiArgs?: APIArgs) => {
+    return await callAPI<DefaultResponse<InvitationLinkResource>>("api/invitation-link/" + invitationToken, "GET", undefined, true, apiArgs);
 }
 
 export interface CreateInviteInterface {
@@ -31,14 +31,14 @@ export interface CreateInviteInterface {
  * Erstellt eine neue Invitation
  *
  * @param data Daten der neuen Invitation
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs API Argumente
  */
-const createInvitationLink = async (data: CreateInviteInterface, token: string | null) => {
+const createInvitationLink = async (data: CreateInviteInterface, apiArgs?: APIArgs) => {
     let apiData = new FormData();
     apiData.append("permission", String(data.permission))
     apiData.append("expiry_date", String(data.expiry_date));
 
-    return await callAPI("api/invitation-link", "POST", apiData, (token !== null ? token : undefined))
+    return await callAPI("api/invitation-link", "POST", apiData, true, apiArgs);
 }
 
 /**
@@ -46,24 +46,24 @@ const createInvitationLink = async (data: CreateInviteInterface, token: string |
  *
  * @param data Daten der Invitation
  * @param invitationToken Token der Invitation (Hex-Code)
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs API Argumente
  */
-const updateInvitationLink = async (data: CreateInviteInterface, invitationToken: string, token: string | null) => {
+const updateInvitationLink = async (data: CreateInviteInterface, invitationToken: string, apiArgs?: APIArgs) => {
     let apiData = new FormData();
     apiData.append("permission", String(data.permission));
     apiData.append("expiry_date", String(data.expiry_date));
 
-    return await callAPI("api/invitation-link/" + invitationToken, "PUT", apiData, (token !== null ? token : undefined))
+    return await callAPI("api/invitation-link/" + invitationToken, "PUT", apiData, true, apiArgs);
 }
 
 /**
  * Akzeptiert die Invitation
  *
  * @param invitationToken Token der Invitation (Hex-Code)
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs API Argumente
  */
-const acceptInvitationLink = async (invitationToken: string | null, token: string | null) => {
-    return await callAPI("api/invitation-link/" + invitationToken + "/accept", "PUT", undefined, (token !== null ? token : undefined))
+const acceptInvitationLink = async (invitationToken: string | null, apiArgs?: APIArgs) => {
+    return await callAPI("api/invitation-link/" + invitationToken + "/accept", "PUT", undefined, true, apiArgs);
 }
 
 export {

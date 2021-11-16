@@ -1,4 +1,4 @@
-import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
+import {ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent, RefObject} from "react";
 import {SwotFactorsValues} from "./SWOTFactors";
 import {Col, Form, ProgressBar, Row, Tab} from "react-bootstrap";
@@ -9,6 +9,7 @@ import {
 } from "../../../../general-components/CardComponent/CardComponent";
 import {isDesktop} from "../../../../general-components/Desktop";
 import {extractCardComponentField, extractFromForm} from "../../../../general-components/FormHelper";
+import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 export interface AlternateAction {
@@ -39,7 +40,7 @@ interface SWOTAlternativeActionsState extends SwotFactorsValues {
     }
 }
 
-export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActionsValues, SWOTAlternativeActionsState> {
+export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, SWOTAlternativeActionsState> {
     private currentActionIndex: number = 0;
     private cardComponentFieldsRefs = Array<RefObject<CardComponent>>();
 
@@ -63,7 +64,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
                 this.currentActionIndex++;
 
                 if (this.currentActionIndex >= this.state.actions.length - 1) {
-                    this.props.stepComp?.restoreFooter();
+                    this.requireStepComponent().restoreFooter();
                 }
                 this.forceUpdate();
             }
@@ -277,12 +278,12 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
 
     changeControlFooter(): void {
         if (this.currentActionIndex < this.state.actions.length - 1) {
-            this.props.stepComp?.addCustomNextButton("Nächster", this.nextAction);
+            this.requireStepComponent().addCustomNextButton("Nächster", this.nextAction);
         }
     }
 
     rebuildValues = async (values: SWOTAlternativeActionsValues) => {
-        let factors = this.props.stepComp?.getFormValues("swot-factors") as SwotFactorsValues;
+        let factors = this.requireStepComponent().getFormValues("swot-factors") as SwotFactorsValues;
         let actions: AlternateAction[] = [];
 
         let i = 0;
@@ -322,7 +323,7 @@ export class SWOTAlternativeActions extends FormComponent<SWOTAlternativeActions
     }
 
     buildPreviousValues = async () => {
-        let values = this.props.stepComp?.getPreviousStep<SwotFactorsValues>();
+        let values = this.requireStepComponent().getPreviousStep<SwotFactorsValues>();
         let factors = values?.factors;
 
         if (factors !== undefined && this.state.actions.length <= 0) {

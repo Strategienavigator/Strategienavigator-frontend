@@ -1,5 +1,6 @@
 import {
-    FormComponent, FormComponentProps,
+    FormComponent,
+    FormComponentProps,
     ResetType
 } from "../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent} from "react";
@@ -11,6 +12,7 @@ import {RomanNumeralsCounter} from "../../../../general-components/Counter/Roman
 import {LowerABCCounter} from "../../../../general-components/Counter/LowerABCCounter";
 import {UpperABCCounter} from "../../../../general-components/Counter/UpperABCCounter";
 import {isDesktop} from "../../../../general-components/Desktop";
+import {Step, SteppableProp} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 export interface SwotFactorsValues {
@@ -26,12 +28,11 @@ interface SWOTFactorsState {
     collapseAll: boolean
 }
 
-export class SWOTFactors extends FormComponent<SwotFactorsValues, SWOTFactorsState> {
+export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
     private cardComponentRefs = new Map<string, React.RefObject<CardComponent>>();
 
-    constructor(props: FormComponentProps | Readonly<FormComponentProps>) {
-        super(props);
-
+    constructor(props: FormComponentProps & SteppableProp, context: any) {
+        super(props, context);
         this.state = {
             collapseAll: false
         }

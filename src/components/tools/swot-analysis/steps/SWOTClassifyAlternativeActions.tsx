@@ -1,4 +1,4 @@
-import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
+import {ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent} from "react";
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 import {Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
@@ -6,6 +6,7 @@ import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {SWOTAlternativeActionsValues} from "./SWOTAlternativeActions";
 import {CardComponentField} from "../../../../general-components/CardComponent/CardComponent";
+import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 interface ClassifiedAlternateAction {
@@ -33,7 +34,7 @@ export interface SWOTClassifyAlternativeActionsValues {
     actions: ClassifiedAlternateAction[]
 }
 
-class SWOTClassifyAlternativeActions extends FormComponent<SWOTClassifyAlternativeActionsValues, any> {
+class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActionsValues, any> {
     private actions = new Map<string, ClassifiedAlternateAction>();
     private classifications = new Map<string, Classification>();
     private noneDroppableID = "classifications-draggables";

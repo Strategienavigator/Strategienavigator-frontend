@@ -34,7 +34,7 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         this.paginationLoader = new PaginationLoader(async (page) => {
             if (Session.isLoggedIn()) {
                 let userId = Session.currentUser?.getID() as number;
-                return await getSaves(userId, Session.getToken(), this.props.tool.getID(), page);
+                return await getSaves(userId, this.props.tool.getID(), page);
             }
             return null;
         });

@@ -1,13 +1,14 @@
 import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
 import {PCCriteriasValues} from "./PCCriterias";
+import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 export interface PCPairComparisonValues {
 
 }
 
-export class PCPairComparison extends FormComponent<PCPairComparisonValues, {}> {
+export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
 
     onReset = (type: ResetType) => {
 
