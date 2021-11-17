@@ -90,7 +90,7 @@ class Card extends Component<CardProps, CardState> {
                         placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
                     />
                     {(!this.props.disabled) && (
-                        <Button onClick={() => this.props.onDelete()} variant={"link"}>
+                        <Button className={"noButton"} onClick={() => this.props.onDelete()} variant={"link"}>
                             <FontAwesomeIcon icon={faTimes}/>
                         </Button>
                     )}
