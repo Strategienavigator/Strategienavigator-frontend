@@ -40,6 +40,9 @@ const callAPI = async <D extends object>(URL: string, method: Methods, data?: Fo
         let headers: HeadersInit = new Headers();
         headers.append("Accept", "application/json");
 
+        // TODO: CAN BE REMOVED LATER
+        headers.append("Bypass-Tunnel-Reminder", "bypass");
+
         // TOKEN
         if (token !== undefined) {
             headers.append("Authorization", "Bearer " + token);
