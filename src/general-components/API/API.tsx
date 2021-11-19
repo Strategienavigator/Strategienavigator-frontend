@@ -58,6 +58,9 @@ const callAPI = async <D extends object>(
         let headers: HeadersInit = new Headers();
         headers.append("Accept", "application/json");
 
+        // TODO: CAN BE REMOVED LATER
+        headers.append("Bypass-Tunnel-Reminder", "bypass");
+
         // TOKEN
         if (token !== undefined && token) {
             let apiToken = Session.getToken() as string;
