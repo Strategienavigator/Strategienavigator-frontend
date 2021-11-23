@@ -1,16 +1,15 @@
 import React, {Component, ReactNode} from "react";
-import {SaveResource, SimpleSaveResource} from "../../../Datastructures";
+import {SimpleSaveResource} from "../../../Datastructures";
 import {PaginationFooter} from "../../../PaginationFooter/PaginationFooter";
 import {Loader} from "../../../Loader/Loader";
 import {Session} from "../../../Session/Session";
-import {deleteSave, getSaves} from "../../../API/calls/Saves";
-import {Button, Card} from "react-bootstrap";
+import {getSaves} from "../../../API/calls/Saves";
+import {Card} from "react-bootstrap";
 import {Tool} from "../../Tool";
 import {PaginationLoader} from "../../../API/PaginationLoader";
 
 import './save-pagination.scss'
-import {DeleteSaveModal} from "../DeleteSaveModal/DeleteSaveModal";
-import {SaveCard} from "../SaveCard/SaveCard";
+import {Link} from "react-router-dom";
 
 
 interface SavePaginationState {
@@ -156,6 +155,7 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
 export {
     SavePagination
 }
+
 
 export type {
     SavePaginationProps,

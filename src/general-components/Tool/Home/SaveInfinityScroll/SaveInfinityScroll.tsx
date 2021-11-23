@@ -5,7 +5,7 @@ import {SimpleSaveResource} from "../../../Datastructures";
 import {Tool} from "../../Tool";
 import {deleteSave, getSaves} from "../../../API/calls/Saves";
 import {DeleteSaveModal} from "../DeleteSaveModal/DeleteSaveModal";
-import {PaginationLoader} from "../../../API/PaginationLoader";
+import {PaginationLoader, PaginationPage} from "../../../API/PaginationLoader";
 import {Session} from "../../../Session/Session";
 import {Card} from "react-bootstrap";
 import {SaveCard} from "../SaveCard/SaveCard";
@@ -15,7 +15,7 @@ export interface SaveInfinityScrollState {
     /**
      * Alle Speicherstände, der Index ist identisch mit der Seitennummer
      */
-    saves: Array<Array<SimpleSaveResource>>
+    saves: Array<PaginationPage<SimpleSaveResource>>
     /**
      * Die letzte geladene Seite (aka. die Anzahl der geladenen Seiten)
      */
@@ -81,7 +81,7 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
                     )}
 
                     {this.state.saves.flatMap(value => {
-                        return value.map(v => {
+                        return value.data.map(v => {
                             let save = v;
                             return (
                                 <SaveCard key={save.id} save={save} toolLink={this.props.tool.getLink()}
@@ -127,7 +127,7 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
         for (let i = 1; i < this.state.saves.length + 1; i++) {
             let savePage = this.state.saves[i];
 
-            if (savePage.some(s => s.id === id)) {
+            if (savePage.data.some(s => s.id === id)) {
                 return i;
             }
         }
@@ -176,7 +176,13 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
             this.isLoading = false;
             this.setState((prev) => {
                 let newSaves = prev.saves.slice();
-                newSaves[currentPage] = et ?? [];
+                if(!et){
+                    delete newSaves[currentPage];
+                }else{
+                    newSaves[currentPage] = et;
+                }
+
+
                 return {
                     ...prev,
                     saves: newSaves,
