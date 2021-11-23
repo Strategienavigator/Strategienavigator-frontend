@@ -19,7 +19,6 @@ import {Session} from "./general-components/Session/Session";
 import {Container} from "react-bootstrap";
 import {Loader} from "./general-components/Loader/Loader";
 import {Messages} from "./general-components/Messages/Messages";
-import {isDesktop} from "./general-components/Desktop";
 import Footer from "./components/platform/footer/Footer";
 import {AboutUs} from "./components/platform/abous-us/AboutUs";
 import {ControlFooter} from "./general-components/ControlFooter/ControlFooter";
@@ -31,6 +30,7 @@ import {PairwiseComparison} from "./components/tools/pairwise-comparison/Pairwis
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import {ErrorPages} from "./general-components/Error/ErrorPages";
+import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
 
 
 /**
@@ -84,31 +84,38 @@ const getRouterSwitch = () => {
 }
 
 const getAppFooter = () => {
-    return isDesktop() ? <Footer/> : <ControlFooter places={3}/>;
+    return (
+        <>
+            <Footer />
+            <ControlFooter places={3}/>
+        </>
+    );
 }
 
 const getAppContent = () => {
     return (
         <>
-            <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
-                <Messages
-                    xAlignment={"CENTER"}
-                    yAlignment={"BOTTOM"}
-                    style={{marginBottom: 65}}
-                />
+            <GlobalContexts key={"global-contexts"}>
+                <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
+                    <Messages
+                        xAlignment={"CENTER"}
+                        yAlignment={"BOTTOM"}
+                        style={{marginBottom: 65}}
+                    />
+                    <Router ref={routerRef}>
+                        <Nav/>
 
-                <Router ref={routerRef}>
-                    <Nav/>
+                        <div id={"content"}>
+                            <Container fluid={false}>
+                                {getRouterSwitch()}
+                            </Container>
+                        </div>
 
-                    <div id={"content"}>
-                        <Container fluid={false}>
-                            {getRouterSwitch()}
-                        </Container>
-                    </div>
+                        {getAppFooter()}
+                    </Router>
 
-                    {getAppFooter()}
-                </Router>
-            </Loader>
+                </Loader>
+            </GlobalContexts>
         </>
     );
 }
@@ -150,7 +157,9 @@ const showErrorPage = (code: number, callback?: (...args: any) => any) => {
 const manageLoading = async () => {
     ReactDOM.render(
         <React.StrictMode>
-            <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
+            <GlobalContexts key={"global-contexts"}>
+                <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
+            </GlobalContexts>
         </React.StrictMode>,
         document.getElementById('root')
     );

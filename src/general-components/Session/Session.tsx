@@ -6,12 +6,36 @@ import {RefreshToken} from "./token/RefreshToken";
 import {AnonymousUserResource, DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
 import {createUser} from "../API/calls/User";
 
+export type UserCallback = (user:User | null) => void;
 
 class Session {
+
+
+    static userChangedCallbacks: UserCallback[] = [];
     static currentUser: User | null = null;
 
     private static token: AuthToken = new AuthToken();
     private static refreshToken: Token = new RefreshToken();
+
+
+    private static callUserChangedCallback(user:User|null){
+        for(let cb of this.userChangedCallbacks){
+            cb(user);
+        }
+    }
+
+    static addUserChangedCallback(cb:UserCallback){
+        if(!Session.userChangedCallbacks.some((uCb)=> uCb === cb)){
+            Session.userChangedCallbacks.push(cb);
+        }
+    }
+
+    static removeUserChangedCallback(cb:UserCallback){
+        let index = Session.userChangedCallbacks.indexOf(cb);
+        if(index >= 0){
+            Session.userChangedCallbacks.slice(index,1);
+        }
+    }
 
     static isLoggedIn = (): boolean => {
         return Session.currentUser !== null;
@@ -26,6 +50,7 @@ class Session {
 
     static setCurrent = (user: User | null) => {
         Session.currentUser = user;
+        Session.callUserChangedCallback(Session.currentUser);
     }
 
     static updateTokens = (token: string, refreshToken?: string) => {

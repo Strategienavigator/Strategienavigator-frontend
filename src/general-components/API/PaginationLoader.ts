@@ -67,8 +67,14 @@ export class PaginationLoader<D extends object> {
         this._pageCount = value;
     }
 
-    public async getPage(page: number) {
-        if (this.getPageData(page) === null || this.getPageData(page) === undefined) {
+    /**
+     * Lädt die angegebene Seite, wenn nicht anders definiert werden die Daten erst versucht aus dem Cache zu laden,
+     * nur wenn kein Cache Eintrag vorhanden wird, wird eine Netzwerkabfrage durchgeführt
+     * @param page Seite der Pagination
+     * @param cached Ob der Cache berücksichtigt werden soll
+     */
+    public async getPage(page: number,cached: boolean = true) {
+        if (this.getPageData(page) === null || this.getPageData(page) === undefined || !cached) {
             if (this.getPageCallback) {
                 let result = await this.getPageCallback(page,this.perPage>0?this.perPage:undefined);
                 if (result !== null && result !== undefined) {
@@ -97,16 +103,20 @@ export class PaginationLoader<D extends object> {
         return null;
     }
 
-    public async getAll() {
+    /**
+     * Lädt alle Daten aus dem Backend und wenn verfügbar auch aus dem Cache und gibt sie als ein Array zurück
+     * @param cached ob die Daten auch gechached sein dürfen
+     */
+    public async getAll(cached:boolean = true) {
         let allData = new Array<D>();
-        let result = await this.getPage(1);
+        let result = await this.getPage(1,cached);
 
         let callbacks = new Array<Promise<PaginationPage<D> | null>>();
         if (result) {
             allData.push(...result.data);
         }
         for (let i = 2; i <= this.pageCount; i++) {
-            callbacks.push(this.getPage(i));
+            callbacks.push(this.getPage(i,cached));
         }
 
         let results = await Promise.all(callbacks);
