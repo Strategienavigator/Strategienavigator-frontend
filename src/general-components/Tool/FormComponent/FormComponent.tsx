@@ -103,7 +103,7 @@ export abstract class FormComponent<V, P, S> extends Component<FormComponentProp
         }
     }
 
-    protected addError = (id: string, error: ReactNode) => {
+    public addError = (id: string, error: ReactNode) => {
         let errorArray = this.error.get(id);
 
         if (errorArray === undefined) {
@@ -119,7 +119,7 @@ export abstract class FormComponent<V, P, S> extends Component<FormComponentProp
         });
     }
 
-    protected getError = (id: string): ReactNode => {
+    public getError = (id: string): ReactNode => {
         return (
             <div className={"feedbackContainer"}>
                 {this.error.get(id)?.map((value) => {
@@ -133,11 +133,11 @@ export abstract class FormComponent<V, P, S> extends Component<FormComponentProp
         );
     }
 
-    protected hasError = (id: string): boolean => {
+    public hasError = (id: string): boolean => {
         return this.error.has(id);
     }
 
-    private onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    protected onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         let newValues = this.extractValues(e);
         this.values = newValues;
 

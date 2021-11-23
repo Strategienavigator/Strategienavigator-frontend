@@ -1,44 +1,17 @@
-import {ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
-import React, {FormEvent} from "react";
+import React, {Component} from "react";
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 import {Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
-import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {SWOTAlternativeActionsValues} from "./SWOTAlternativeActions";
-import {CardComponentField} from "../../../../general-components/CardComponent/CardComponent";
-import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {SWOTClassifyAlternativeActions} from "./SWOTClassifyAlternativeActions";
 
 
-interface ClassifiedAlternateAction {
-    name: string
-    index: number
-    indexName: string
-    alreadyAdded: boolean
-    action: CardComponentField
+interface DragAndDropClassifyingProps {
+    step3Instance: SWOTClassifyAlternativeActions
 }
 
-interface Classification {
-    droppableID: string,
-    name: string | null,
-    actions: Map<string, ClassifiedAlternateAction>
-}
 
-interface ClassificationValues {
-    droppableID: string,
-    name: string | null,
-    actions: ClassifiedAlternateAction[]
-}
-
-export interface SWOTClassifyAlternativeActionsValues {
-    classifications: ClassificationValues[],
-    actions: ClassifiedAlternateAction[]
-}
-
-class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActionsValues, any> {
-    private actions = new Map<string, ClassifiedAlternateAction>();
-    private classifications = new Map<string, Classification>();
-    private noneDroppableID = "classifications-draggables";
-    private maxClassifications = 10;
+class DragAndDropClassifying extends Component<DragAndDropClassifyingProps, any> {
 
     onDragEnd = (result: DropResult) => {
         const {destination, source, draggableId} = result;
@@ -50,119 +23,34 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
             return;
         }
 
-        if (source.droppableId === this.noneDroppableID) {
-            let action = this.getAction(draggableId);
-            let classification = this.getClassification(destination.droppableId);
+        if (source.droppableId === this.props.step3Instance.getNoneDroppableID()) {
+            let action = this.props.step3Instance.getAction(draggableId);
+            let classification = this.props.step3Instance.getClassification(destination.droppableId);
             if (classification !== undefined && action !== undefined) {
                 action.alreadyAdded = true;
                 classification.actions.set(action?.indexName, action);
-                classification.actions = this.sortActionMap(classification.actions);
+                classification.actions = this.props.step3Instance.sortActionMap(classification.actions);
             }
         } else if (source.droppableId !== destination.droppableId) {
-            let action = this.getAction(draggableId);
-            let classification = this.getClassification(destination.droppableId);
+            let action = this.props.step3Instance.getAction(draggableId);
+            let classification = this.props.step3Instance.getClassification(destination.droppableId);
             if (classification !== undefined && action !== undefined) {
-                this.removeAction(source.droppableId, draggableId);
+                this.props.step3Instance.removeAction(source.droppableId, draggableId);
                 action.alreadyAdded = true;
                 classification.actions.set(action?.indexName, action);
-                classification.actions = this.sortActionMap(classification.actions);
+                classification.actions = this.props.step3Instance.sortActionMap(classification.actions);
             }
         }
     }
 
-    sortActionMap = (map: Map<string, ClassifiedAlternateAction>): Map<string, ClassifiedAlternateAction> => {
-        return new Map(Array.from(map).sort());
-    }
-
-    onReset = (type: ResetType) => {
-        this.classifications.clear();
-        this.actions.forEach((value) => {
-            value.alreadyAdded = false;
-        });
-    }
-
-    addClassification = (droppableID: string | undefined) => {
-        if (this.maxClassifications < this.classifications.size) {
-            return;
-        }
-
-        if (droppableID === undefined) {
-            droppableID = "droppable-" + 0;
-        } else {
-            let splitted = droppableID.split("-");
-            let newIndex = parseInt(splitted[1]) + 1;
-            droppableID = "droppable-" + newIndex;
-        }
-
-        let classification: Classification = {
-            actions: new Map<string, ClassifiedAlternateAction>(),
-            name: null,
-            droppableID: droppableID
-        };
-        this.classifications.set(droppableID, classification);
-
-        this.forceUpdate();
-    }
-
-    getClassification = (droppableID: string): Classification | undefined => {
-        return this.classifications.get(droppableID);
-    }
-
-    removeClassification = (droppableID: string): boolean => {
-        let classification = this.classifications.get(droppableID);
-        classification?.actions.forEach((value) => {
-            value.alreadyAdded = false;
-        });
-        let deleted = this.classifications.delete(droppableID);
-        this.forceUpdate();
-        return deleted;
-    }
-
-    getAction = (draggableID: string): ClassifiedAlternateAction | undefined => {
-        return this.actions.get(draggableID);
-    }
-
-    removeAction = (droppableID: string, draggableID: string): boolean => {
-        let classification = this.getClassification(droppableID);
-        if (classification) {
-            let classificationAction = classification.actions.get(draggableID);
-            if (classificationAction) {
-                let action = this.actions.get(draggableID);
-                if (action) {
-                    action.alreadyAdded = false;
-                }
-                let deleted = classification.actions.delete(draggableID);
-                this.forceUpdate();
-                return deleted;
-            }
-        }
-        return false;
-    }
-
-    onClassificationNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, droppableID: string) => {
-        let value = e.currentTarget.value;
-        let classification = this.getClassification(droppableID);
-        if (classification) {
-            classification.name = value;
-        }
-    }
-
-    build(): JSX.Element {
+    render() {
         let lastDropID: string;
         let i = -1;
-
-        if (this.actions.size <= 0) {
-            return (
-                <Card body>
-                    Es sind Keine Handlungsalternativen vorhanden...
-                </Card>
-            );
-        }
 
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
                 {
-                    Array.from(this.classifications.values()).map((classification) => {
+                    Array.from(this.props.step3Instance.getClassifications().values()).map((classification) => {
                         let e = -1;
                         let droppableID = classification.droppableID;
                         lastDropID = droppableID;
@@ -187,14 +75,14 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                                                 <FormControl
                                                     type={"text"}
                                                     required={true}
-                                                    disabled={this.disabled}
+                                                    disabled={this.props.step3Instance.isDisabled()}
                                                     defaultValue={classification.name as string}
-                                                    onChange={(e) => this.onClassificationNameChange(e, droppableID)}
+                                                    onChange={(e) => this.props.step3Instance.onClassificationNameChange(e, droppableID)}
                                                     placeholder={"Klassifikation"}
                                                 />
-                                                {!this.disabled && (
+                                                {!this.props.step3Instance.isDisabled() && (
                                                     <Button
-                                                        onClick={() => this.removeClassification(droppableID)}
+                                                        onClick={() => this.props.step3Instance.removeClassification(droppableID)}
                                                         variant={"link"}
                                                         className={"xButton"}>
                                                         <FontAwesomeIcon icon={faTimes}/>
@@ -202,7 +90,7 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                                                 )}
                                             </InputGroup>
 
-                                            {this.getError(droppableID + "-classification")}
+                                            {this.props.step3Instance.getError(droppableID + "-classification")}
 
                                             <Row
                                                 ref={provided.innerRef}
@@ -219,7 +107,7 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                                                     e++;
 
                                                     return (
-                                                        <Draggable isDragDisabled={this.disabled}
+                                                        <Draggable isDragDisabled={this.props.step3Instance.isDisabled()}
                                                                    key={action.indexName}
                                                                    draggableId={action.indexName}
                                                                    index={e}>
@@ -238,9 +126,9 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                                                                                 <Col className={"text"}>
                                                                                     <b>{action.name}</b> {action.action.name}
                                                                                 </Col>
-                                                                                {!this.disabled && (
+                                                                                {!this.props.step3Instance.isDisabled() && (
                                                                                     <Col
-                                                                                        onClick={() => this.removeAction(droppableID, action.indexName)}
+                                                                                        onClick={() => this.props.step3Instance.removeAction(droppableID, action.indexName)}
                                                                                         className={"icon"}>
                                                                                         <FontAwesomeIcon
                                                                                             icon={faTimes}/>
@@ -256,7 +144,7 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                                                 })}
                                                 {provided.placeholder}
 
-                                                {this.getError(droppableID + "-action-size")}
+                                                {this.props.step3Instance.getError(droppableID + "-action-size")}
                                             </Row>
                                         </div>
                                     );
@@ -266,13 +154,16 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                     })
                 }
 
-                {(!this.disabled && (this.maxClassifications > this.classifications.size)) && (
-                    <Button onClick={() => this.addClassification(lastDropID)} className={"addClassification"}>
+                {(!this.props.step3Instance.isDisabled() && (
+                    this.props.step3Instance.getMaxClassificationSize()
+                    > this.props.step3Instance.getClassifications().size)
+                ) && (
+                    <Button onClick={() => this.props.step3Instance.addClassification(lastDropID)} className={"addClassification"}>
                         <FontAwesomeIcon icon={faPlus} color={"white"}/>
                     </Button>
                 )}
 
-                <Droppable direction={"horizontal"} isDropDisabled={true} droppableId={this.noneDroppableID}>
+                <Droppable direction={"horizontal"} isDropDisabled={true} droppableId={this.props.step3Instance.getNoneDroppableID()}>
                     {(provided, snapshot) => (
                         <div className={"actions"}>
                             <>
@@ -285,7 +176,7 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    {Array.from(this.actions.values()).map((value) => {
+                                    {Array.from(this.props.step3Instance.getActions().values()).map((value) => {
                                         i++;
 
                                         if (value.alreadyAdded) {
@@ -293,7 +184,7 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
                                         }
 
                                         return (
-                                            <Draggable isDragDisabled={this.disabled} key={value.indexName}
+                                            <Draggable isDragDisabled={this.props.step3Instance.isDisabled()} key={value.indexName}
                                                        draggableId={value.indexName} index={i}>
                                                 {(provided2, snapshot2) => {
                                                     let classes = ["actionCol"];
@@ -327,108 +218,8 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
             </DragDropContext>
         );
     }
-
-    extractValues(e: FormEvent<HTMLFormElement>): SWOTClassifyAlternativeActionsValues {
-        let classifications: ClassificationValues[] = [];
-
-        this.classifications.forEach((classification) => {
-            let actions: ClassifiedAlternateAction[] = [];
-            classification.actions.forEach((action) => {
-                actions.push(action);
-            });
-            let classificationValue: ClassificationValues = {
-                name: classification.name,
-                droppableID: classification.droppableID,
-                actions: actions
-            };
-            classifications.push(classificationValue);
-        });
-
-        let actions: ClassifiedAlternateAction[] = [];
-        this.actions.forEach((value) => {
-            actions.push(value);
-        });
-
-        return {
-            classifications,
-            actions: actions
-        };
-    }
-
-    rebuildValues = async (values: SWOTClassifyAlternativeActionsValues) => {
-        let classifications = new Map<string, Classification>();
-        for (const classificationValue of values.classifications) {
-            let actions = new Map<string, ClassifiedAlternateAction>();
-
-            for (const action of classificationValue.actions) {
-                actions.set(action.indexName, action);
-            }
-
-            let classification: Classification = {
-                name: classificationValue.name,
-                droppableID: classificationValue.droppableID,
-                actions: actions
-            }
-
-            classifications.set(classification.droppableID, classification);
-        }
-        this.classifications = classifications;
-
-        let actions = new Map<string, ClassifiedAlternateAction>();
-        values.actions.forEach((value) => {
-            actions.set(value.indexName, value);
-        });
-        this.actions = actions;
-    }
-
-    buildPreviousValues = async () => {
-        let previousStep = this.props.stepComp?.getPreviousStep<SWOTAlternativeActionsValues>();
-        if (previousStep && this.actions.size <= 0) {
-            for (let i = 0; i < previousStep.actions.length; i++) {
-                let action = previousStep.actions[i];
-                for (let e = 0; e < action.alternatives.length; e++) {
-                    let indexName = action.name + "-" + e;
-
-                    let newAction: ClassifiedAlternateAction = {
-                        indexName: indexName,
-                        index: e,
-                        alreadyAdded: false,
-                        name: action.name,
-                        action: action.alternatives[e]
-                    }
-                    this.actions.set(indexName, newAction);
-                }
-            }
-            this.forceUpdate();
-        }
-    }
-
-    submit = async (values: SWOTClassifyAlternativeActionsValues) => {
-    }
-
-    validate(values: SWOTClassifyAlternativeActionsValues): boolean {
-        let validated = true;
-
-        for (let i = 0; i < values.classifications.length; i++) {
-            let value = values.classifications[i];
-            if (value.name === null || value.name === "") {
-                this.addError(value.droppableID + "-classification", "Bitte ausfüllen!");
-                validated = false;
-            }
-            if (value.actions.length <= 0) {
-                this.addError(value.droppableID + "-action-size", "Die Klassifikation muss mindestens eine Handlungsalternative haben");
-                validated = false;
-            }
-        }
-
-        return validated;
-    }
-
-    changeControlFooter(): void {
-    }
-
 }
 
 export {
-    SWOTClassifyAlternativeActions
+    DragAndDropClassifying
 }

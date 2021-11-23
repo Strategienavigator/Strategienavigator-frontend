@@ -5,7 +5,7 @@ import {SWOTAlternativeActions, SWOTAlternativeActionsValues} from "./steps/SWOT
 import {
     SWOTClassifyAlternativeActions,
     SWOTClassifyAlternativeActionsValues
-} from "./steps/SWOTClassifyAlternativeActions";
+} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
 
 import "./swot-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
