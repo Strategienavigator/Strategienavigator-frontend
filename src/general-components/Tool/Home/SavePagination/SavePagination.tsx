@@ -5,11 +5,11 @@ import {Loader} from "../../../Loader/Loader";
 import {Session} from "../../../Session/Session";
 import {getSaves} from "../../../API/calls/Saves";
 import {Card} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import {Tool} from "../../Tool";
 import {PaginationLoader} from "../../../API/PaginationLoader";
 
 import './save-pagination.scss'
+import {Link} from "react-router-dom";
 
 
 interface SavePaginationState {
@@ -18,6 +18,7 @@ interface SavePaginationState {
     pageCount: number
     total: number
     loading: boolean
+    lastDeleteSave: SimpleSaveResource | null
     from: number
 }
 
@@ -40,19 +41,20 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
             }
             return null;
         });
+
         this.state = {
             page: 1,
             saves: [],
             pageCount: 1,
             loading: false,
+            lastDeleteSave: null,
             total: 0,
             from: 0
         }
-
     }
 
     async componentDidMount() {
-        this.pageChosenCallback(this.state.page);
+        await this.pageChosenCallback(this.state.page);
     }
 
     /**
@@ -126,17 +128,17 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
                 <div className={"mt-2"}>
                     {this.renderFooter(false)}
                 </div>
-
             </>
         );
     }
 
-    private pageChosenCallback = async (currentPage: number) => {
+    private pageChosenCallback = async (currentPage: number, forced?: boolean) => {
         this.setState({
             page: currentPage,
             loading: true
         });
-        let et = await this.paginationLoader.getPage(currentPage);
+
+        let et = await this.paginationLoader.getPage(currentPage, forced);
         et = et ?? {page: 1, from: 0, data: []}
         this.setState({
             saves: et.data,
@@ -150,10 +152,10 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
     };
 }
 
-
 export {
     SavePagination
 }
+
 
 export type {
     SavePaginationProps,

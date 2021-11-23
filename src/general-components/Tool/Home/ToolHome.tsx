@@ -9,6 +9,7 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {SavePagination} from "./SavePagination/SavePagination";
 
 import "./tool-home.scss";
+import {SaveInfinityScroll} from "./SaveInfinityScroll/SaveInfinityScroll";
 import {FooterContext} from "../../Contexts/FooterContextComponent";
 
 
@@ -89,12 +90,24 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Button>
                     )}
                 </div>
-
+            
                 {this.props.info?.shortDescription}
 
                 <hr/>
+            
+                <div className={"saves mt-2"}>
+                    {
+                        isDesktop() && (
+                            <SavePagination tool={this.props.tool!}/>
+                        )
+                    }
+                    {
+                        !isDesktop() && (
+                            <SaveInfinityScroll tool={this.props.tool!}/>
+                        )
+                    }
 
-                <SavePagination tool={this.props.tool!}/>
+                </div>
 
                 {this.props.children}
 

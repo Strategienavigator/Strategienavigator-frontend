@@ -66,7 +66,7 @@ export class PaginationLoader<D extends object> {
     private set pageCount(value: number) {
         this._pageCount = value;
     }
-
+  
     /**
      * Lädt die angegebene Seite, wenn nicht anders definiert werden die Daten erst versucht aus dem Cache zu laden,
      * nur wenn kein Cache Eintrag vorhanden wird, wird eine Netzwerkabfrage durchgeführt
@@ -96,7 +96,6 @@ export class PaginationLoader<D extends object> {
             } else {
                 throw new Error("No PageCallback given!");
             }
-
         } else {
             return this.getPageData(page);
         }

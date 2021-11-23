@@ -58,7 +58,7 @@ const getSave = async (saveID: number, apiArgs?: APIArgs) => {
  * @param saveID Die ID des Speicherstandes
  * @param apiArgs API Argumente
  */
-const deleteSaves = async (saveID: number, apiArgs?: APIArgs) => {
+const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
     return await callAPI("api/saves/" + saveID, "DELETE", undefined, true, apiArgs);
 }
 
@@ -106,7 +106,7 @@ const createSave = async (data: FormData, apiArgs?: APIArgs) => {
 export {
     getSaves,
     getSave,
-    deleteSaves,
+    deleteSave,
     updateSave,
     lockSave,
     createSave
