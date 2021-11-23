@@ -55,7 +55,7 @@ export class PaginationLoader<D extends object> {
     }
 
     /**
-     * Lädt alle Daten aus dem Backend und potentiel auch aus den Cached und gibt sie als ein Array zurück
+     * Lädt alle Daten aus dem Backend und wenn verfügbar auch aus dem Cache und gibt sie als ein Array zurück
      * @param cached ob die Daten auch gechached sein dürfen
      */
     public async getAll(cached:boolean = true) {
