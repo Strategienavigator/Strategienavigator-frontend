@@ -7,14 +7,12 @@ import {RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {faCaretRight, faHome, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
 import "./control-footer.scss";
+import {isDesktop} from "../Desktop";
+import {FooterContext} from "../Contexts/FooterContextComponent";
 
 
 export interface ControlFooterProps {
     places: number
-}
-
-export interface ControlFooterState {
-    items: Map<number, ControlFooterItemType>
 }
 
 interface ControlFooterItem {
@@ -75,47 +73,16 @@ export type ControlFooterItemType =
     | HomeItem
     | ButtonItem;
 
-export const setControlFooterItem = (place: number, item: ControlFooterItemType) => {
-    ControlFooterComponent._instance?.setItem(place, item);
-}
+export class ControlFooterComponent extends Component<ControlFooterProps & RouteComponentProps, {}> {
 
-export const disableControlFooterItem = (place: number, disable: boolean) => {
-    ControlFooterComponent._instance?.disableItem(place, disable);
-}
-
-export const clearControlFooter = () => {
-    ControlFooterComponent._instance?.clear();
-}
-
-export class ControlFooterComponent extends Component<ControlFooterProps & RouteComponentProps, ControlFooterState> {
-    public static _instance: undefined | ControlFooterComponent = undefined;
-    private static oldItems: Map<number, ControlFooterItemType> | undefined;
-
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = FooterContext;
+    context!: React.ContextType<typeof FooterContext>
     constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
-
-        this.state = {
-            items: new Map<number, ControlFooterItemType>()
-        }
-
-        ControlFooterComponent._instance = this;
-    }
-
-    componentDidMount() {
-        let oldMap = this.state.items;
-
-        if (ControlFooterComponent.oldItems) {
-            oldMap = ControlFooterComponent.oldItems;
-        } else {
-            for (let i = 1; i <= this.props.places; i++) {
-                oldMap.set(i, null);
-            }
-            ControlFooterComponent.oldItems = oldMap;
-        }
-        this.setState({
-            items: oldMap
-        });
-    }
+     }
 
     render() {
         let places = Array<number>();
@@ -123,59 +90,20 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             places.push(i);
         }
 
+        let classes = ["controlFooter", "nav"];
+        if (!isDesktop()) classes.push("show");
+
         return (
-            <div className={"controlFooter nav"}>
+            <div className={classes.join(" ")}>
                 {places.map(value => {
                     return (
                         <div key={value} className={"item"}>
-                            {this.getItem(this.state.items.get(value))}
+                            {this.getItem(this.context.items.get(value))}
                         </div>
                     );
                 })}
             </div>
         );
-    }
-
-    public setItem = (place: number, item: ControlFooterItemType) => {
-        this.setState(state => {
-            const items = state.items.set(place, item);
-
-            return {
-                items: items
-            }
-        });
-    }
-
-    public disableItem = (place: number, disabled: boolean) => {
-        if (this.state.items.has(place)) {
-            this.setState(state => {
-                const items = state.items;
-                const item = items.get(place);
-                if (item) {
-                    item.disabled = disabled;
-                }
-
-                return {
-                    items: items
-                }
-            });
-        }
-    }
-
-    public clear = () => {
-        this.setState({
-            items: new Map<number, ControlFooterItemType>()
-        });
-    }
-
-    /**
-     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
-     * This is considered pretty hacky, but using history.push from react-router, this could be considered a considerable solution
-     */
-    componentWillUnmount() {
-        this.setState = (() => {
-            return;
-        });
     }
 
     private getItem = (item: ControlFooterItemType | undefined): null | ReactNode => {

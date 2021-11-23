@@ -5,13 +5,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBalanceScale, faCog, faInfoCircle, faShieldAlt} from "@fortawesome/free-solid-svg-icons";
 
 import "./footer.scss";
+import {isDesktop} from "../../../general-components/Desktop";
 
 
 class Footer extends Component<any, any> {
 
     render() {
         return (
-            <Nav as={"footer"}>
+            <Nav as={"footer"} className={(isDesktop() ? "show" : "")}>
                 <Row className={"container pt-2 pb-2 m-auto justify-content-center align-items-center w-100"}>
                     <Col className={"text-center"}>
                         <NavLink to={"/about-us"} className={"nav-link"}>

@@ -5,12 +5,12 @@ import {isDesktop} from "../../Desktop";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
-import {setControlFooterItem} from "../../ControlFooter/ControlFooter";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {SavePagination} from "./SavePagination/SavePagination";
 
 import "./tool-home.scss";
 import {SaveInfinityScroll} from "./SaveInfinityScroll/SaveInfinityScroll";
+import {FooterContext} from "../../Contexts/FooterContextComponent";
 
 
 export interface ToolHomeInfo {
@@ -29,6 +29,11 @@ interface ToolHomeState {
 
 class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = FooterContext;
+    context!: React.ContextType<typeof FooterContext>
     constructor(props: ToolHomeProps | Readonly<ToolHomeProps>) {
         super(props);
 
@@ -38,13 +43,13 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
     }
 
     componentDidMount() {
-        setControlFooterItem(1, {
+        this.context.setItem(1, {
             newTool: {
                 callback: () => this.props.tool?.switchPage("new"),
                 title: "Neue Analyse"
             }
         });
-        setControlFooterItem(2, {settings: true});
+        this.context.setItem(2, {settings: true});
     }
 
     getTutorialCanvas = () => {
@@ -78,19 +83,18 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Badge>
                     )}
                 </h4>
-
-                <hr/>
-
-                {this.props.info?.shortDescription}
-
-                <div className={"mt-4"}>
+                <div className={"mb-0 mt-2"}>
                     {isDesktop() && (
                         <Button onClick={() => this.props.tool?.switchPage("new")} size={"sm"} variant={"dark"}>
                             <FontAwesomeIcon icon={faPlusSquare}/> Neue Analyse
                         </Button>
                     )}
                 </div>
+            
+                {this.props.info?.shortDescription}
 
+                <hr/>
+            
                 <div className={"saves mt-2"}>
                     {
                         isDesktop() && (
