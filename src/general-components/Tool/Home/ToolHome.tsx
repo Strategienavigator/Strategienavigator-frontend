@@ -82,12 +82,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Badge>
                     )}
                 </h4>
-
-                <hr/>
-
-                {this.props.info?.shortDescription}
-
-                <div className={"mt-4"}>
+                <div className={"mb-0 mt-2"}>
                     {isDesktop() && (
                         <Button onClick={() => this.props.tool?.switchPage("new")} size={"sm"} variant={"dark"}>
                             <FontAwesomeIcon icon={faPlusSquare}/> Neue Analyse
@@ -95,9 +90,11 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                     )}
                 </div>
 
-                <div className={"saves mt-2"}>
-                    <SavePagination tool={this.props.tool!}/>
-                </div>
+                {this.props.info?.shortDescription}
+
+                <hr/>
+
+                <SavePagination tool={this.props.tool!}/>
 
                 {this.props.children}
 
