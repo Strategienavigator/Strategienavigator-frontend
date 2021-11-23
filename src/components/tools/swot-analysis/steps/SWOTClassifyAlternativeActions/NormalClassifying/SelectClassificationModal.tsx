@@ -8,12 +8,37 @@ interface SelectClassificationModalProps {
     action: ClassifiedAlternateAction | null
     open: boolean
     classifications: Map<string, Classification>
-    onSelect: (classification: Classification, action: ClassifiedAlternateAction) => void
+    onNoneSelect: (
+        oldClassification: Classification,
+        action: ClassifiedAlternateAction
+    ) => void
+    onSelectOther: (
+        oldClassification: Classification,
+        newClassification: Classification,
+        action: ClassifiedAlternateAction
+    ) => void
+    onSelect: (
+        classification: Classification,
+        action: ClassifiedAlternateAction
+    ) => void
     onClose: () => void
+    withNone: boolean
 }
 
 
 function SelectClassificationModal(props: SelectClassificationModalProps) {
+
+    const findClassification = (action: ClassifiedAlternateAction): Classification | null => {
+        for (const classification of Array.from(props.classifications.values())) {
+            for (const classificationAction of Array.from(classification.actions.values())) {
+                if (classificationAction === action) {
+                    return classification;
+                }
+            }
+        }
+        return null;
+    }
+
     return (
         <Modal
             show={props.open}
@@ -43,17 +68,42 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                 <FormSelect
                     onChange={(e) => {
                         let option = e.target.selectedOptions[0];
-                        let droppableID = option.value;
+                        let droppableID, value;
+                        droppableID = value = option.value;
                         let classification = props.classifications.get(droppableID);
 
-                        if (classification) {
-                            props.onSelect(classification, props.action as ClassifiedAlternateAction);
+                        let foundClassification = findClassification(props.action as ClassifiedAlternateAction);
+
+                        if (foundClassification) {
+                            if (value === "_none") {
+                                props.onNoneSelect(
+                                    foundClassification as Classification,
+                                    props.action as ClassifiedAlternateAction
+                                );
+                            } else {
+                                props.onSelectOther(
+                                    foundClassification as Classification,
+                                    classification as Classification,
+                                    props.action as ClassifiedAlternateAction
+                                );
+                            }
+                        } else {
+                            props.onSelect(
+                                classification as Classification,
+                                props.action as ClassifiedAlternateAction
+                            );
                         }
+
                         props.onClose();
                     }}
                     multiple={false}
                 >
                     <option disabled={true} selected value={"none"}>--- Auswählen ---</option>
+
+                    {(props.withNone) && (
+                        <option value={"_none"}>Keine Klassifikation</option>
+                    )}
+
                     {Array.from(props.classifications.values()).map((classification) => {
                         let name = classification.name;
 
