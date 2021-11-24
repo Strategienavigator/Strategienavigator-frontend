@@ -42,14 +42,16 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
 
                 <FormSelect
                     onChange={(e) => {
-                        let option = e.target.selectedOptions[0];
-                        let droppableID = option.value;
-                        let classification = props.classifications.get(droppableID);
+                        if(e.target instanceof HTMLSelectElement){
+                            let option = e.target.selectedOptions[0];
+                            let droppableID = option.value;
+                            let classification = props.classifications.get(droppableID);
 
-                        if (classification) {
-                            props.onSelect(classification, props.action as ClassifiedAlternateAction);
+                            if (classification) {
+                                props.onSelect(classification, props.action as ClassifiedAlternateAction);
+                            }
+                            props.onClose();
                         }
-                        props.onClose();
                     }}
                     multiple={false}
                 >
