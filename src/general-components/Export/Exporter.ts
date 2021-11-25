@@ -47,7 +47,7 @@ abstract class Exporter<D> {
      */
     private save(data: Blob, saveName: string): void {
         let date = new Date();
-        let fileName = saveName + "-" + date.toLocaleString() + "." + this.getFileExtension();
+        let fileName = saveName + " - " + date.toLocaleString() + "." + this.getFileExtension();
         FileSaver.saveAs(data, fileName);
     }
 }

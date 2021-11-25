@@ -12,6 +12,8 @@ import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeaderProp
 import {FooterContext} from "../../../Contexts/FooterContextComponent";
 import {DesktopButtons} from "./DesktopButtons/DesktopButtons";
 import {ResetStepsModal} from "./ResetStepsModal/ResetStepsModal";
+import {faFileExport} from "@fortawesome/free-solid-svg-icons";
+import {ExportButton, ExportModal} from "../../ExportButton";
 
 
 export interface StepProp<T> {
@@ -41,6 +43,7 @@ export type CustomNextButton = {
 export interface StepComponentState {
     steps: Array<InternalStep<any>>
     showResetModal: boolean
+    showExportModal: boolean
     hasCustomNextButton: boolean
     customNextButton: CustomNextButton
     isSaving: boolean
@@ -125,6 +128,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
                             {(isDesktop()) && (
                                 <DesktopButtons
+                                    tool={this.props.tool}
                                     hasCustomNextButton={this.state.hasCustomNextButton}
                                     customNextButton={this.state.customNextButton}
                                     formID={this.state.steps[this.currentStep - 1].id}
@@ -135,6 +139,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                                     }}
                                     onSave={async () => {
                                         await this.save();
+                                    }}
+                                    onExportClick={() => {
+                                        this.setState({
+                                            showExportModal: true
+                                        });
                                     }}
                                 />
                             )}
@@ -173,6 +182,32 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                     onNo={() => {
                         this.setState({showResetModal: false})
                     }}
+                />
+
+                <ExportModal
+                    onClose={() => {
+                        this.setState({
+                            showExportModal: false
+                        });
+                    }}
+                    onSelect={(exporter) => {
+                        let save = this.props.tool.getCurrentSave();
+                        this.triggerFormSubmits(this.currentProgress, true);
+                        let data = this.getAllData();
+
+                        if(save){
+                            save.data = data;
+                            exporter.export(save);
+                        } else{
+                            Messages.add("Keine Daten vorhanden!","DANGER",Messages.TIMER);
+                        }
+
+                        this.setState({
+                            showExportModal: false
+                        });
+                    }}
+                    show={this.state.showExportModal}
+                    tool={this.props.tool}
                 />
             </>
         );
@@ -310,7 +345,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         this.setState({
             isSaving: true
         });
-        this.context.disableItem(2, true);
+        this.context.disableItem(3, true);
 
         this.triggerFormSubmits(this.currentProgress, true);
 
@@ -338,7 +373,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
             addErrorMessage();
         }
 
-        this.context.disableItem(2, false);
+        this.context.disableItem(3, false);
         this.setState({
             isSaving: false
         });
@@ -380,12 +415,19 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
         let id = this.state.steps[this.currentStep - 1].id;
 
-        this.context.setItem(3, {
-            nextStep: id
-        });
-        this.context.disableItem(3, this.isLastStep());
-
         this.context.setItem(2, {
+           button: {
+               text: "Exportieren",
+               icon: faFileExport,
+               callback: () => {
+                   this.setState({
+                       showExportModal: true
+                   });
+               }
+           }
+        });
+
+        this.context.setItem(3, {
             button: {
                 callback: async () => {
                     await this.save();
@@ -394,6 +436,11 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                 icon: faSave
             }
         });
+
+        this.context.setItem(4, {
+            nextStep: id
+        });
+        this.context.disableItem(4, this.isLastStep());
 
         this.setState({
             hasCustomNextButton: false,

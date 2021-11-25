@@ -1,6 +1,8 @@
 
 .controlFooter.show {
     display: flex !important;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .controlFooter {
@@ -13,7 +15,7 @@
   .item {
     flex: auto 0 0;
     text-align: center;
-    padding: 1rem 1.25rem;
+    padding: 1rem 0.5rem;
   }
 
   .item button, .item a {

@@ -1,6 +1,7 @@
 import {ExcelExporter} from "../../../../general-components/Export/ExcelExporter";
 import {SWOTAnalysisValues} from "../SWOTAnalysis";
 import {SaveResource} from "../../../../general-components/Datastructures";
+import XLSX from "xlsx";
 
 class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues>{
     protected buildExcel(workbook: XLSX.WorkBook, data: SaveResource<SWOTAnalysisValues>): boolean {

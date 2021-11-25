@@ -17,7 +17,10 @@ function ExportModal(props: ExportModalProps) {
     return (
         <Modal
             show={props.show}
-            backdrop={"static"}
+            backdrop={true}
+            onHide={() => {
+                props.onClose();
+            }}
             keyboard={true}
         >
             <Modal.Header>
@@ -64,43 +67,26 @@ function ExportModal(props: ExportModalProps) {
 
 interface ExportButtonProps {
     tool: Tool
+    onClick: () => void
 }
 
 function ExportButton(props: ExportButtonProps) {
-    let [showModal, setShowModal] = useState(false);
-
     return (
         <>
             <Button
                 variant={"dark"}
                 className={"mt-2"}
                 onClick={() => {
-                    setShowModal(true);
+                    props.onClick();
                 }}
             >
-                <FontAwesomeIcon icon={faFileExport} />
-                Exportieren
+                <FontAwesomeIcon icon={faFileExport} /> Exportieren
             </Button>
-
-            <ExportModal
-                onClose={() => {
-                    setShowModal(false);
-                }}
-                onSelect={(exporter: Exporter<any>) => {
-                    const save = props.tool.getCurrentSave();
-                    if(save){
-                        exporter.export(save);
-                    }else{
-                        Messages.add("Keine Daten vorhanden!","DANGER",Messages.TIMER);
-                    }
-                }}
-                tool={props.tool}
-                show={showModal}
-            />
         </>
     );
 }
 
 export {
-    ExportButton
+    ExportButton,
+    ExportModal
 }

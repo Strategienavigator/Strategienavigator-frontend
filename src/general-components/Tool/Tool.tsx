@@ -92,6 +92,10 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         return this.toolID;
     }
 
+    public getExporters = (): Exporter<object>[] => {
+        return this.exporters;
+    }
+
     public setMaintenance(maintenance: boolean) {
         this.maintenance = maintenance;
     }
