@@ -84,6 +84,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
         this.state = {
             steps: steps,
             showResetModal: false,
+            showExportModal:false,
             hasCustomNextButton: false,
             customNextButton: null,
             isSaving: false
