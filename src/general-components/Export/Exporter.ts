@@ -16,27 +16,27 @@ abstract class Exporter<D> {
      * Anzeigename für den User
      * @protected
      */
-    protected getName() {
+    public getName() {
         return this.name;
     }
 
-    protected getFileExtension() {
+    public getFileExtension() {
         return this.fileExtension;
     }
 
-    protected getFileType() {
+    public getFileType() {
         return this.fileType;
     }
 
     public export(save: SaveResource<D>): void {
-        const blobPart = this.onExport(save.data);
+        const blobPart = this.onExport(save);
         const blob = new Blob(blobPart,{
             type: this.fileType
         });
         this.save(blob, save.name);
     }
 
-    protected abstract onExport(data: D): BlobPart[];
+    protected abstract onExport(data: SaveResource<D>): BlobPart[];
 
     /**
      * Öffnet Download Dialog und startet Download
