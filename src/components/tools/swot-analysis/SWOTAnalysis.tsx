@@ -26,7 +26,7 @@ class SWOTAnalysis extends SteppableTool {
         this.setID(2);
         this.setToolname("SWOT Analyse");
         this.setToolIcon(faThLarge);
-        this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
+        // this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
 
         this.addStep<SwotFactorsValues>({
             id: "swot-factors",

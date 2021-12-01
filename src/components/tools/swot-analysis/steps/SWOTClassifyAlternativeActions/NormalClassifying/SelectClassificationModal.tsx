@@ -74,31 +74,32 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
 
                 <FormSelect
                     onChange={(e) => {
-                        let option = e.target.selectedOptions[0];
-                        let droppableID, value;
-                        droppableID = value = option.value;
-                        let classification = props.classifications.get(droppableID);
+                        if (e.target instanceof HTMLSelectElement) {
+                            let option = e.target.selectedOptions[0];
+                            let droppableID, value;
+                            droppableID = value = option.value;
+                            let classification = props.classifications.get(droppableID);
 
-                        if (props.action) {
-                            let foundClassification = findClassification(props.action);
-                            let oldClassification: Classification | null = null;
-                            let newClassification: Classification | null = null;
+                            if (props.action) {
+                                let foundClassification = findClassification(props.action);
+                                let oldClassification: Classification | null = null;
+                                let newClassification: Classification | null = null;
 
-                            if (foundClassification) {
-                                if (value === "_none") {
-                                    oldClassification = foundClassification
+                                if (foundClassification) {
+                                    if (value === "_none") {
+                                        oldClassification = foundClassification
+                                    } else {
+                                        oldClassification = foundClassification
+                                        // convert from undefined union type to null union type
+                                        newClassification = classification ?? null
+                                    }
                                 } else {
-                                    oldClassification = foundClassification
-                                    // convert from undefined union type to null union type
                                     newClassification = classification ?? null
                                 }
-                            } else {
-                                newClassification = classification ?? null
+                                props.onSelect(oldClassification, newClassification, props.action)
                             }
-                            props.onSelect(oldClassification, newClassification, props.action)
+
                         }
-
-
                         props.onClose();
                     }}
                     multiple={false}

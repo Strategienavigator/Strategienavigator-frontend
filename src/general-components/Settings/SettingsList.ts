@@ -12,8 +12,10 @@ export interface UserSetting extends SettingResource {
 }
 
 /**
- * Klasse um alle Einstellungen verwalten, um Einstellungen hinzuzufügen muss eine neue Instanz erstellt werden
+ * Klasse um alle Einstellungen zu verwalten.
  *
+ * Um Einstellungen hinzuzufügen muss eine neue Instanz erstellt werden.
+ * 
  * Die Klasse wird verwendet um doppelte Einträge auszuschließen und das abrufen einzelner Einstellungen effizienter und einfacher zu machen
  */
 export class SettingsList{

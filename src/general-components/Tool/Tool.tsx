@@ -196,9 +196,11 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             this.checkForPage(location.pathname);
         });
 
-        window.onbeforeunload = async (e) => {
+        window.onbeforeunload = (e) => {
             if (this.isView) {
-                return true;
+                e.preventDefault();
+                e.returnValue = "";
+                return "";
             } else {
                 delete e['returnValue'];
             }
