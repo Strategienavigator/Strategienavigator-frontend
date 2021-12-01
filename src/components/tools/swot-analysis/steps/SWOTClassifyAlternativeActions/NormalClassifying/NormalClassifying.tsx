@@ -157,7 +157,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                 <SelectClassificationModal
                     open={this.state.openClassificationModal}
                     withNone={this.state.withNone}
-                    action={this.state.lastSelectedAction}
+                    action={this.state.lastSelectedAction??undefined}
                     classifications={this.props.step3instance.getClassifications()}
                     onNoneSelect={(oldClassification, action) => {
                         oldClassification.actions.delete(action.indexName);

@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 interface SelectClassificationModalProps {
-    action: ClassifiedAlternateAction | null
+    action?: ClassifiedAlternateAction
     open: boolean
     classifications: Map<string, Classification>
     onNoneSelect: (
@@ -72,27 +72,31 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                         droppableID = value = option.value;
                         let classification = props.classifications.get(droppableID);
 
-                        let foundClassification = findClassification(props.action as ClassifiedAlternateAction);
+                        if (props.action){
+                            let foundClassification = findClassification(props.action);
 
-                        if (foundClassification) {
-                            if (value === "_none") {
-                                props.onNoneSelect(
-                                    foundClassification as Classification,
-                                    props.action as ClassifiedAlternateAction
-                                );
+                            if (foundClassification) {
+                                if (value === "_none") {
+                                    props.onNoneSelect(
+                                        foundClassification as Classification,
+                                        props.action
+                                    );
+                                } else {
+                                    props.onSelectOther(
+                                        foundClassification as Classification,
+                                        classification as Classification,
+                                        props.action
+                                    );
+                                }
                             } else {
-                                props.onSelectOther(
-                                    foundClassification as Classification,
+                                props.onSelect(
                                     classification as Classification,
-                                    props.action as ClassifiedAlternateAction
+                                    props.action
                                 );
                             }
-                        } else {
-                            props.onSelect(
-                                classification as Classification,
-                                props.action as ClassifiedAlternateAction
-                            );
                         }
+
+
 
                         props.onClose();
                     }}
