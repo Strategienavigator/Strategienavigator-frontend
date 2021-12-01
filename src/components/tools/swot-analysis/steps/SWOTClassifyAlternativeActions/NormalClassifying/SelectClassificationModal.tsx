@@ -6,21 +6,28 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface SelectClassificationModalProps {
     action?: ClassifiedAlternateAction
+    /**
+     * if the modal is open and visible
+     */
     open: boolean
     classifications: Map<string, Classification>
-    onNoneSelect: (
-        oldClassification: Classification,
-        action: ClassifiedAlternateAction
-    ) => void
-    onSelectOther: (
-        oldClassification: Classification,
-        newClassification: Classification,
-        action: ClassifiedAlternateAction
-    ) => void
+    /**
+     * Callback wenn eine Klassifikation gewählt wurde
+     *
+     * oldClassification wird null, wenn die aktion vorher noch keine Klassifikation hatte
+     * newClassification wird null, wenn die Klassifikation der aktion entfernt wurde
+     * @param oldClassification alte Klassifikation
+     * @param newClassification neue Klassifikation
+     * @param action Die Aktion bei der die Klassifikation geändert wird
+     */
     onSelect: (
-        classification: Classification,
+        oldClassification: Classification | null,
+        newClassification: Classification | null,
         action: ClassifiedAlternateAction
     ) => void
+    /**
+     * callback which requests to close the callback
+     */
     onClose: () => void
     withNone: boolean
 }
@@ -72,30 +79,24 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                         droppableID = value = option.value;
                         let classification = props.classifications.get(droppableID);
 
-                        if (props.action){
+                        if (props.action) {
                             let foundClassification = findClassification(props.action);
+                            let oldClassification: Classification | null = null;
+                            let newClassification: Classification | null = null;
 
                             if (foundClassification) {
                                 if (value === "_none") {
-                                    props.onNoneSelect(
-                                        foundClassification as Classification,
-                                        props.action
-                                    );
+                                    oldClassification = foundClassification
                                 } else {
-                                    props.onSelectOther(
-                                        foundClassification as Classification,
-                                        classification as Classification,
-                                        props.action
-                                    );
+                                    oldClassification = foundClassification
+                                    // convert from undefined union type to null union type
+                                    newClassification = classification ?? null
                                 }
                             } else {
-                                props.onSelect(
-                                    classification as Classification,
-                                    props.action
-                                );
+                                newClassification = classification ?? null
                             }
+                            props.onSelect(oldClassification, newClassification, props.action)
                         }
-
 
 
                         props.onClose();

@@ -159,27 +159,26 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                     withNone={this.state.withNone}
                     action={this.state.lastSelectedAction??undefined}
                     classifications={this.props.step3instance.getClassifications()}
-                    onNoneSelect={(oldClassification, action) => {
-                        oldClassification.actions.delete(action.indexName);
-                        action.alreadyAdded = false;
+                    onSelect={(oldClassification, newClassification, action) => {
+                        if(oldClassification != null){
+                            oldClassification.actions.delete(action.indexName);
+                        }else{
+                            action.alreadyAdded = true;
+                        }
+                        if(newClassification != null){
+                            newClassification.actions.set(action.indexName, action);
+                        }else{
+                            action.alreadyAdded = false;
+                        }
+
 
                         // sort
-                        oldClassification.actions = this.props.step3instance.sortActionMap(oldClassification.actions);
-                    }}
-                    onSelectOther={(oldClassification, newClassification, action) => {
-                        oldClassification.actions.delete(action.indexName);
-                        newClassification.actions.set(action.indexName, action);
-
-                        // sort
-                        oldClassification.actions = this.props.step3instance.sortActionMap(oldClassification.actions);
-                        newClassification.actions = this.props.step3instance.sortActionMap(newClassification.actions);
-                    }}
-                    onSelect={(classification, action) => {
-                        classification.actions.set(action.indexName, action);
-                        action.alreadyAdded = true;
-
-                        // sort
-                        classification.actions = this.props.step3instance.sortActionMap(classification.actions);
+                        if(oldClassification != null){
+                            oldClassification.actions = this.props.step3instance.sortActionMap(oldClassification.actions);
+                        }
+                        if(newClassification != null){
+                            newClassification.actions = this.props.step3instance.sortActionMap(newClassification.actions);
+                        }
                     }}
                     onClose={() => {
                         this.setState({
