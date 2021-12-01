@@ -147,7 +147,7 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
         let dragAndDropActionSize = 0; // good would be maximum 14
         let showNormal;
         if (!isDesktop()) {
-            showNormal = true;
+            showNormal = true; // change if you want drag and drop functionality
         } else if (this.actions.size > dragAndDropActionSize) {
             showNormal = true;
         }

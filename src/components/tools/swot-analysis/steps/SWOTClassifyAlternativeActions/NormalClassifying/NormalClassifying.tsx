@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {ClassifiedAlternateAction, SWOTClassifyAlternativeActions} from "../SWOTClassifyAlternativeActions";
 import {Accordion, Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEllipsisH, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faEllipsisH, faExchangeAlt, faPlus} from "@fortawesome/free-solid-svg-icons";
 
 import "./normal-classifying.scss";
 import {faTimes, faTrash} from "@fortawesome/free-solid-svg-icons/";
@@ -16,6 +16,7 @@ interface NormalClassifyingProps {
 interface NormalClassifyingState {
     openClassificationModal: boolean
     lastSelectedAction: ClassifiedAlternateAction | null
+    withNone: boolean
 }
 
 class NormalClassifying extends Component<NormalClassifyingProps, NormalClassifyingState> {
@@ -25,14 +26,16 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
 
         this.state = {
             openClassificationModal: false,
-            lastSelectedAction: null
+            lastSelectedAction: null,
+            withNone: false
         }
     }
 
-    openClassificationModal(action: ClassifiedAlternateAction) {
+    openClassificationModal(action: ClassifiedAlternateAction, withNone?: boolean) {
         this.setState({
             openClassificationModal: true,
-            lastSelectedAction: action
+            lastSelectedAction: action,
+            withNone: (withNone === undefined) ? false : withNone
         });
     }
 
@@ -51,12 +54,13 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                                 <Accordion.Header>
                                     <InputGroup>
                                         <Button
+                                            as={"div"}
                                             type={"button"}
                                             variant={"danger"}
                                             size={"sm"}
                                             onClick={() => this.props.step3instance.removeClassification(classification.droppableID)}
                                         >
-                                            <FontAwesomeIcon icon={faTrash}/>
+                                            <FontAwesomeIcon style={{verticalAlign: "middle"}} icon={faTrash}/>
                                         </Button>
                                         <FormControl
                                             type={"text"}
@@ -79,12 +83,12 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                                                         <Col>
                                                             <Button
                                                                 size={"sm"}
-                                                                variant={"danger"}
                                                                 onClick={() => {
-                                                                    this.props.step3instance.removeAction(classification.droppableID, action.indexName);
+                                                                    this.openClassificationModal(action, true);
+                                                                    // this.props.step3instance.removeAction(classification.droppableID, action.indexName);
                                                                 }}
                                                             >
-                                                                <FontAwesomeIcon icon={faTimes}/>
+                                                                <FontAwesomeIcon rotation={90} icon={faExchangeAlt}/>
                                                             </Button>
                                                         </Col>
                                                     </Row>
@@ -133,7 +137,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                                                 this.openClassificationModal(action);
                                             }}
                                         >
-                                            <FontAwesomeIcon icon={faEllipsisH}/>
+                                            <FontAwesomeIcon rotation={90} icon={faExchangeAlt}/>
                                         </Button>
                                     </Col>
                                 </Row>
@@ -152,14 +156,30 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
 
                 <SelectClassificationModal
                     open={this.state.openClassificationModal}
-                    action={this.state.lastSelectedAction}
+                    withNone={this.state.withNone}
+                    action={this.state.lastSelectedAction??undefined}
                     classifications={this.props.step3instance.getClassifications()}
-                    onSelect={((classification, action) => {
-                        action.alreadyAdded = true;
-                        classification.actions.set(action?.indexName, action);
-                        classification.actions = this.props.step3instance.sortActionMap(classification.actions);
-                        this.forceUpdate();
-                    })}
+                    onSelect={(oldClassification, newClassification, action) => {
+                        if(oldClassification != null){
+                            oldClassification.actions.delete(action.indexName);
+                        }else{
+                            action.alreadyAdded = true;
+                        }
+                        if(newClassification != null){
+                            newClassification.actions.set(action.indexName, action);
+                        }else{
+                            action.alreadyAdded = false;
+                        }
+
+
+                        // sort
+                        if(oldClassification != null){
+                            oldClassification.actions = this.props.step3instance.sortActionMap(oldClassification.actions);
+                        }
+                        if(newClassification != null){
+                            newClassification.actions = this.props.step3instance.sortActionMap(newClassification.actions);
+                        }
+                    }}
                     onClose={() => {
                         this.setState({
                             openClassificationModal: false,
