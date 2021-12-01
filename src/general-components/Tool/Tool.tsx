@@ -1,4 +1,4 @@
-import React, {Component, ReactElement, ReactNode, RefObject} from "react";
+import React, {Component, ReactNode, RefObject} from "react";
 import {matchPath, Prompt, RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {Route, Switch} from "react-router-dom";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
@@ -225,7 +225,9 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     componentWillUnmount = async () => {
         window.onbeforeunload = null;
         window.onunload = null;
-        await this.unlock();
+        if (this.hasCurrentSave()) {
+            await this.unlock();
+        }
     }
 
     public switchPage(page: string) {
@@ -302,7 +304,11 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     }
 
     private lockSave = async (lock: boolean) => {
-        return await lockSave(this.currentSaveID as number, lock, {errorCallback: this.onAPIError});
+        if (this.hasCurrentSave()) {
+            return await lockSave(this.currentSaveID as number, lock, {errorCallback: this.onAPIError});
+        }else{
+            console.warn("WARNING: Tried to send lock request without a current save!")
+        }
     }
 
     private checkForPage = (location: string) => {
