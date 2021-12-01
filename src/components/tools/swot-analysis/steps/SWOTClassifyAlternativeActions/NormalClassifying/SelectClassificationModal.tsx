@@ -26,7 +26,7 @@ interface SelectClassificationModalProps {
         action: ClassifiedAlternateAction
     ) => void
     /**
-     * callback which requests to close the callback
+     * callback wenn das Model geschlossen werden soll
      */
     onClose: () => void
     withNone: boolean
