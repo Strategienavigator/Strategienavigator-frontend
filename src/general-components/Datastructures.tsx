@@ -1,11 +1,14 @@
 export type SaveResource<D = object> = {
     id: number
+    owner: string
     owner_id: number
     tool_id: number
     data: D
     name: string
     description: string
     locked_by: number | null
+    created_at: string
+    updated_at: string
     last_locked: string | null
     contributors: Array<number>
     invited: Array<number>
