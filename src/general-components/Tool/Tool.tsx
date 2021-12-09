@@ -13,6 +13,7 @@ import * as H from "history";
 import {CreateToolModal} from "./CreateToolModal/CreateToolModal";
 import "./tool.scss";
 import {ConfirmToolRouteChangeModal} from "./ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
+import {CurrentSave} from "./CurrentSave";
 
 
 type ToolViewValidation = {
@@ -49,10 +50,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     private toolHomeRef?: RefObject<ToolHome>
 
     // CURRENT SAVE
-    private currentSave?: SaveResource<any>;
-    private currentSaveID?: number;
-    private currentSaveName?: string;
-    private currentSaveDescription?: string;
+    public currentSave: CurrentSave = new CurrentSave();
 
     protected constructor(props: RouteComponentProps<any, StaticContext, unknown> | Readonly<RouteComponentProps<any, StaticContext, unknown>>) {
         super(props);
@@ -213,7 +211,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
             let headers = new Headers();
             headers.append("Authorization", "Bearer " + Session.getToken());
 
-            await fetch(process.env.REACT_APP_API + "api/saves/" + this.currentSaveID, {
+            await fetch(process.env.REACT_APP_API + "api/saves/" + this.currentSave.getID(), {
                 method: "POST",
                 body: data,
                 headers: headers,
@@ -237,23 +235,22 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     public save = async (data: object, forms: Map<string, FormComponent<any, any, any>>): Promise<boolean> => {
         let saveData = new FormData();
         saveData.append("data", JSON.stringify(data));
-        saveData.append("name", this.currentSaveName as string);
-        saveData.append("description", this.currentSaveDescription as string);
+        saveData.append("name", this.currentSave.getName() as string);
+        saveData.append("description", this.currentSave.getDesc() as string);
 
         let call;
-        if (this.currentSaveID === undefined) {
+        let id = this.currentSave.getID();
+
+        if (!this.currentSave.isset()) {
             saveData.append("tool_id", String(this.toolID));
             call = await createSave(saveData, {errorCallback: this.onAPIError});
 
             if (call && call.success) {
                 let callData = call.callData as SaveResource;
-                this.currentSave = callData;
-                this.currentSaveName = callData.name;
-                this.currentSaveDescription = callData.description;
-                this.currentSaveID = callData.id;
+                this.currentSave.setSave(callData);
             }
         } else {
-            call = await updateSave(this.currentSaveID, saveData, {errorCallback: this.onAPIError});
+            call = await updateSave(id, saveData, {errorCallback: this.onAPIError});
         }
 
         return (call !== null && call.success);
@@ -261,24 +258,8 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
     public abstract onAPIError(error: Error): void;
 
-    public getCurrentSave(): SaveResource<any> | undefined {
-        return this.currentSave;
-    }
-
-    public setCurrentSave = <D extends object>(currentSave: SaveResource<D>) => {
-        this.currentSave = currentSave;
-    }
-
-    public setCurrentSaveDescription = (desc: string) => {
-        this.currentSaveDescription = desc;
-    }
-
-    public setCurrentSaveName = (name: string) => {
-        this.currentSaveName = name;
-    }
-
     public hasCurrentSave(): boolean {
-        return this.currentSaveDescription !== undefined && this.currentSaveName !== undefined;
+        return this.currentSave.getDesc() !== undefined && this.currentSave.getName()  !== undefined;
     }
 
     public abstract getValues<D>(id: string): object | null;
@@ -305,7 +286,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
     private lockSave = async (lock: boolean) => {
         if (this.hasCurrentSave()) {
-            return await lockSave(this.currentSaveID as number, lock, {errorCallback: this.onAPIError});
+            return await lockSave(this.currentSave.getID() as number, lock, {errorCallback: this.onAPIError});
         }else{
             console.warn("WARNING: Tried to send lock request without a current save!")
         }
@@ -335,17 +316,12 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
                 data.data = JSON.parse(data.data);
                 if (data.tool_id === this.toolID) {
                     if ((data.locked_by === null) || data.locked_by === Session.currentUser?.getID()) {
-                        this.currentSave = data;
-                        this.currentSaveName = data.name;
-                        this.currentSaveDescription = data.description;
-                        this.currentSaveID = data.id;
-
+                        this.currentSave.setSave(data);
                         await this.lock();
                     } else {
                         isLocked = true;
                     }
                 } else {
-                    this.currentSaveName = data.name;
                     call.success = false;
                     isOtherTool = true;
                 }

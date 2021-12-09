@@ -33,7 +33,7 @@ export class StepComponentHeader extends Component<StepComponentHeaderProp, Step
                 <div className={"stepHeader form"}>
                     <Form.Control
                         type={"text"}
-                        defaultValue={this.props.tool.getCurrentSave()?.name}
+                        defaultValue={this.props.tool.currentSave.getName()}
                         onChange={this.onChangeCurrentName}
                         onFocus={() => {
                             this.setState({
@@ -64,7 +64,7 @@ export class StepComponentHeader extends Component<StepComponentHeaderProp, Step
                                     });
 
                                 }}
-                                defaultValue={this.props.tool.getCurrentSave()?.description}
+                                defaultValue={this.props.tool.currentSave.getDesc()}
                                 onChange={this.onChangeCurrentDescription}
                             />
                         </div>
@@ -75,10 +75,10 @@ export class StepComponentHeader extends Component<StepComponentHeaderProp, Step
     }
 
     onChangeCurrentName = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.setCurrentSaveName(e.currentTarget.value);
+        this.props.tool?.currentSave.setName(e.currentTarget.value);
     }
 
     onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.setCurrentSaveDescription(e.currentTarget.value);
+        this.props.tool?.currentSave.setDesc(e.currentTarget.value);
     }
 }
