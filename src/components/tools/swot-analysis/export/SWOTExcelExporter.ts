@@ -36,50 +36,66 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
 
     private getAlternativesWorksheet(alternatives: SWOTAlternativeActionsValues) {
         let ws: WorkSheet = {};
-        ws["A1"] = {v: "Kombination:", t: "s"} as CellObject;
-        ws["B1"] = {v: "Entscheidung 1:", t: "s"} as CellObject;
-        ws["C1"] = {v: "Beschreibung 1:", t: "s"} as CellObject;
-        ws["D1"] = {v: "Entscheidung 2:", t: "s"} as CellObject;
-        ws["E1"] = {v: "Beschreibung 2:", t: "s"} as CellObject;
 
-        // set cell widths
-        ws["!cols"] = [
-            {
-                wch: 30
-            },
-            {
-                wch: 30
-            },
-            {
-                wch: 30
-            },
-            {
-                wch: 30
-            },
-            {
-                wch: 30
-            }
-        ];
+        let nameWidth1 = 0;
+        let descWidth1 = 0;
+        let nameWidth2, descWidth2;
+
+        ws["A1"] = {v: "Kombination", t: "s", s: this.getHeaderStyle()} as CellObject;
+
+        ws["B1"] = {v: "Entscheidung 1", t: "s", s: this.getHeaderStyle()} as CellObject;
+        nameWidth1 = this.updateWidth(nameWidth1, "Entscheidung 1".length);
+        ws["C1"] = {v: "Beschreibung 1", t: "s", s: this.getHeaderStyle()} as CellObject;
+        descWidth1 = this.updateWidth(descWidth1, "Beschreibung 1".length);
+
+        ws["D1"] = {v: "Entscheidung 2", t: "s", s: this.getHeaderStyle()} as CellObject;
+        ws["E1"] = {v: "Beschreibung 2", t: "s", s: this.getHeaderStyle()} as CellObject;
+
+        nameWidth2 = nameWidth1;
+        descWidth2 = descWidth1;
 
         let i = 2;
-
         for (const action of alternatives.actions) {
 
             ws["A" + i] = {v: action.name, t: "s"} as CellObject;
             if (action.hasNone) {
-                ws["B" + i] = {v: "/", t: "s"} as CellObject;
-                ws["C" + i] = {v: "/", t: "s"} as CellObject;
-                ws["D" + i] = {v: "/", t: "s"} as CellObject;
-                ws["E" + i] = {v: "/", t: "s"} as CellObject;
+                ws["B" + i] = {v: "", t: "s"} as CellObject;
+                ws["C" + i] = {v: "", t: "s"} as CellObject;
+                ws["D" + i] = {v: "", t: "s"} as CellObject;
+                ws["E" + i] = {v: "", t: "s"} as CellObject;
             } else {
-                ws["B" + i] = {v: action.first ? action.first.name : "/", t: "s"} as CellObject;
-                ws["C" + i] = {v: action.first ? action.first.desc : "/", t: "s"} as CellObject;
-                ws["D" + i] = {v: action.second ? action.second.name : "/", t: "s"} as CellObject;
-                ws["E" + i] = {v: action.second ? action.second.desc : "/", t: "s"} as CellObject;
+                ws["B" + i] = {v: action.first ? action.first.name : "", t: "s"} as CellObject;
+                nameWidth1 = action.first ? this.updateWidth(nameWidth1, action.first?.name.length) : nameWidth1;
+                ws["C" + i] = {v: action.first ? action.first.desc : "", t: "s"} as CellObject;
+                descWidth1 = action.first ? this.updateWidth(descWidth1, action.first.desc.length) : descWidth1;
+                ws["D" + i] = {v: action.second ? action.second.name : "", t: "s"} as CellObject;
+                nameWidth2 = action.second ? this.updateWidth(nameWidth2, action.second.name.length) : nameWidth2;
+                ws["E" + i] = {v: action.second ? action.second.desc : "", t: "s"} as CellObject;
+                descWidth2 = action.second ? this.updateWidth(descWidth2, action.second.desc.length) : descWidth2;
             }
 
             i++;
         }
+
+        // set cell widths
+        ws["!cols"] = [
+            {
+                wch: 11
+            },
+            {
+                wch: nameWidth1
+            },
+            {
+                wch: descWidth1
+            },
+            {
+                wch: nameWidth2
+            },
+            {
+                wch: descWidth2
+            }
+        ];
+
         let range: Range = {s: {r: 0, c: 0}, e: {r: i, c: 5}}
 
         ws["!ref"] = XLSX.utils.encode_range(range);
@@ -90,9 +106,12 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
         let ws: WorkSheet = {};
         let cell = {r: 0, c: 0};
 
+        let alternativeWidth = 0;
+        let descWidth = 0;
+
         for (const classification of classifications.classifications) {
             ws[this.encodeCell(cell)] = {
-                v: "Klassifikation " + classification.name, t: "s", s: this.getHeaderStyle() && {
+                v: "Klassifikation | " + classification.name, t: "s", s: this.getHeaderStyle() && {
                     font: {
                         sz: 13
                     }
@@ -107,24 +126,23 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
             ws[this.encodeCell(cell)] = {
                 v: "Handlungsalternative", t: "s", s: this.getHeaderStyle()
             };
+            alternativeWidth = this.updateWidth(alternativeWidth, "Handlungsalternative".length);
             cell.c += 1;
             ws[this.encodeCell(cell)] = {
-                v: "Beschreibung", t: "s", s: this.getHeaderStyle() && {
-                    fill: {
-                        bgColor: {rgb: "B33F3F3F"}
-                    }
-                }
+                v: "Beschreibung", t: "s", s: this.getHeaderStyle()
             };
+            descWidth = this.updateWidth(descWidth, "Beschreibung".length);
             cell.c = 0;
             cell.r += 1;
 
             for (const action of classification.actions) {
-                console.log(action);
                 ws[this.encodeCell(cell)] = {v: action.name, t: "s"};
                 cell.c += 1;
                 ws[this.encodeCell(cell)] = {v: action.action.name, t: "s"};
+                alternativeWidth = this.updateWidth(alternativeWidth, action.action.name.length);
                 cell.c += 1;
                 ws[this.encodeCell(cell)] = {v: action.action.desc, t: "s"};
+                descWidth = this.updateWidth(descWidth, action.action.desc.length);
                 cell.r += 1;
                 cell.c = 0;
             }
@@ -132,19 +150,54 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
             cell.r += 2;
         }
 
+        ws[this.encodeCell(cell)] = {
+            v: "Keine Klassifikation (" +
+                classifications.actions.filter((value => {
+                    return !value.alreadyAdded;
+                })).length
+                + ")", t: "s", s: this.getHeaderStyle()
+        };
+        cell.r += 1;
+        ws[this.encodeCell(cell)] = {
+            v: "Kombination", t: "s", s: this.getHeaderStyle()
+        };
+        cell.c += 1;
+        ws[this.encodeCell(cell)] = {
+            v: "Handlungsalternative", t: "s", s: this.getHeaderStyle()
+        };
+        alternativeWidth = this.updateWidth(alternativeWidth, "Handlungsalternative".length);
+        cell.c += 1;
+        ws[this.encodeCell(cell)] = {
+            v: "Beschreibung", t: "s", s: this.getHeaderStyle()
+        };
+        descWidth = this.updateWidth(descWidth, "Beschreibung".length);
+        cell.c = 0;
+        cell.r += 1;
+
+        for (const action of classifications.actions) {
+            if (!action.alreadyAdded) {
+                ws[this.encodeCell(cell)] = {v: action.name, t: "s"};
+                cell.c += 1;
+                ws[this.encodeCell(cell)] = {v: action.action.name, t: "s"};
+                alternativeWidth = this.updateWidth(alternativeWidth, action.action.name.length);
+                cell.c += 1;
+                ws[this.encodeCell(cell)] = {v: action.action.desc, t: "s"};
+                descWidth = this.updateWidth(descWidth, action.action.desc.length);
+                cell.c = 0;
+                cell.r += 1;
+            }
+        }
+
         ws["!cols"] = [
             {
-                wch: 40
+                wch: 11
             },
             {
-                wch: 40
+                wch: alternativeWidth
             },
             {
-                wch: 40
-            },
-            {
-                wch: 40
-            },
+                wch: descWidth
+            }
         ];
 
         cell.c = 4;
@@ -177,26 +230,28 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
             {name: "Risiken", d: risks}
         ];
         let nameWidth = 0;
+        let descWidth = 0;
 
-        const updateWidth = (w: number) => {
-            if (nameWidth < w) {
-                nameWidth = w;
-            }
-        }
         for (const table of tablesData) {
             ws[this.encodeCell(cell)] = {v: table.name, t: "s", s: this.getHeaderStyle()};
-            updateWidth(table.name.length);
             cell.r++;
+
+            ws[this.encodeCell(cell)] = {v: "Bezeichnung", t: "s", s: this.getHeaderStyle()};
+            cell.c++;
             ws[this.encodeCell(cell)] = {v: "Name", t: "s", s: this.getHeaderStyle()};
             cell.c++;
             ws[this.encodeCell(cell)] = {v: "Beschreibung", t: "s", s: this.getHeaderStyle()};
             cell.c = 0;
             cell.r++;
+
             for (const tableElement of table.d as CardComponentFields) {
+                ws[this.encodeCell(cell)] = {v: tableElement.id, t: "s"};
+                cell.c++;
                 ws[this.encodeCell(cell)] = {v: tableElement.name, t: "s"};
-                updateWidth(tableElement.name.length);
+                nameWidth = this.updateWidth(nameWidth, tableElement.name.length);
                 cell.c++;
                 ws[this.encodeCell(cell)] = {v: tableElement.desc, t: "s"};
+                descWidth = this.updateWidth(descWidth, tableElement.desc.length);
                 cell.r++;
                 cell.c = 0;
             }
@@ -207,7 +262,13 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
 
         ws["!cols"] = [
             {
+                wch: 11
+            },
+            {
                 wch: nameWidth
+            },
+            {
+                wch: descWidth
             }
         ]
 

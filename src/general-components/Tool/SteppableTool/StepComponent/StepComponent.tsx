@@ -13,7 +13,7 @@ import {FooterContext} from "../../../Contexts/FooterContextComponent";
 import {DesktopButtons} from "./DesktopButtons/DesktopButtons";
 import {ResetStepsModal} from "./ResetStepsModal/ResetStepsModal";
 import {faFileExport} from "@fortawesome/free-solid-svg-icons";
-import {ExportButton, ExportModal} from "../../ExportButton";
+import {ExportModal} from "../../ExportButton";
 
 
 export interface StepProp<T> {

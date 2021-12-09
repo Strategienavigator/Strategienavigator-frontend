@@ -30,6 +30,13 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         return [buffer];
     }
 
+    protected updateWidth = (variable: number, w: number) => {
+        if (variable < w) {
+            return w;
+        }
+        return variable;
+    }
+
     protected abstract buildExcel(workbook: WorkBook, data: SaveResource<D>): boolean;
 
     protected addSheet(name: string, worksheet: WorkSheet) {
