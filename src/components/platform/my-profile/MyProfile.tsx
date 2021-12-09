@@ -298,9 +298,9 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                             <Modal.Title>Wollen Sie Ihr Profil wirklich löschen?</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            Sie sind bis zu eine Woche nach dem Löschen Ihres Accounts dazu in der
-                            Lage das Löschen rückgängig zu machen. Nach Ablauf dieses Zeitraumes wird
-                            Ihr Account unwideruflich gelöscht!
+                            Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
+                            Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses Zeitraumes wird
+                            Ihr Account unwiderruflich gelöscht!
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant={"light"} onClick={this.hideDeleteModal}>
