@@ -12,7 +12,7 @@ import "./swot-analysis.scss";
 import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
 
 
-interface SWOTAnalysisValues {
+export interface SWOTAnalysisValues {
     "swot-factors": SwotFactorsValues,
     "alternative-actions": SWOTAlternativeActionsValues,
     "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues

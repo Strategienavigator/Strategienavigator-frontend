@@ -9,7 +9,7 @@ export interface MatrixComponentProps {
     steps: Array<number>
     tool?: Tool
     stepComponent?: StepComponent
-    data?: object
+    data?: any
 }
 
 class MatrixComponent<S> extends Component<MatrixComponentProps, S> {
