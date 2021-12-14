@@ -191,6 +191,7 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
                 step.ref.current?.setValues(step.values);
                 step.ref.current?.rebuildValues(step.values);
 
+                console.log(this.state.steps[progress].values);
                 if (
                     progress < this.state.steps.length
                     && Object.keys(this.state.steps[progress].values).length > 0
@@ -263,7 +264,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     public nextStep = async () => {
         this.restoreFooter();
-        console.log("hallooooo");
 
         let step;
         let isProgress: boolean = false;

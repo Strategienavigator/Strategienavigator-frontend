@@ -1,11 +1,15 @@
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
 import {SaveResource} from "../../../general-components/Datastructures";
-import {PCCriterias} from "./steps/PCCriterias";
-import {PCPairComparison} from "./steps/PCPairComparison";
+import {PCCriterias, PCCriteriasValues} from "./steps/PCCriterias";
+import {PCPairComparison, PCPairComparisonValues} from "./steps/PCPairComparison";
 
 import "./pairwise-comparison.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 
+interface PairwiseComparisonValues {
+    "pc-criterias": PCCriteriasValues,
+    "pc-comparison": PCPairComparisonValues
+}
 
 class PairwiseComparison extends SteppableTool {
 
@@ -15,7 +19,7 @@ class PairwiseComparison extends SteppableTool {
         this.setID(3);
         this.setToolname("Paarweiser Vergleich");
         this.setToolIcon(faSortAmountDownAlt);
-        this.setMaintenance(true);
+        this.setMaintenance(false);
 
         this.addStep({
             form: <PCCriterias/>,
@@ -34,19 +38,17 @@ class PairwiseComparison extends SteppableTool {
     }
 
     protected renderShortDescription() {
-        return (
-            <>
-                Es sollten Kriterien festgelegt werden, welche anschließend Paarweise verglichen und gewichtet
-                werden.
-            </>
-        );
+        return null;
     }
 
     protected renderTutorial() {
         return null;
     }
 
-    protected renderView(tool: SaveResource) {
+    protected renderView(save: SaveResource<PairwiseComparisonValues>) {
+        this.setValues("pc-criterias", save.data["pc-criterias"])
+        this.setValues("pc-comparison", save.data["pc-comparison"])
+
         return this.getStepComponent();
     }
 }

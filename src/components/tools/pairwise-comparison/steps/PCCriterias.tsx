@@ -31,15 +31,18 @@ export class PCCriterias extends Step<PCCriteriasValues, {}> {
     }
 
     build() {
+        let values = this.values as PCCriteriasValues;
+
         return (
-            <div>
+            <>
                 <CardComponent
                     name={"criterias"}
                     disabled={this.disabled}
+                    values={values.criterias}
                     min={2}
                     max={10}
                 />
-            </div>
+            </>
         );
     }
 

@@ -1,7 +1,10 @@
-import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
+import {ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
-import {PCCriteriasValues} from "./PCCriterias";
 import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {CompareComponent} from "../../../../general-components/CompareComponent/CompareComponent";
+import {CompareNumberHeader} from "../../../../general-components/CompareComponent/Header/CompareNumberHeader";
+import {CardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/CardComponentFieldsAdapter";
+import {PCCriteriasValues} from "./PCCriterias";
 
 
 export interface PCPairComparisonValues {
@@ -9,6 +12,8 @@ export interface PCPairComparisonValues {
 }
 
 export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
+
+    private criterias: null | PCCriteriasValues | undefined;
 
     onReset = (type: ResetType) => {
 
@@ -19,19 +24,26 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
     }
 
     buildPreviousValues = async () => {
-        let previous = this.props.stepComp?.getPreviousStep<PCCriteriasValues>();
-        console.log("STEP 1 Values: ", previous);
+        this.criterias = this.props.stepComp?.getPreviousStep<PCCriteriasValues>();
     }
 
     changeControlFooter(): void {
     }
 
     build() {
-        return (
-            <div>
-                Im Aufbau...
-            </div>
-        );
+        if (this.criterias) {
+            let adapter = new CardComponentFieldsAdapter(this.criterias.criterias);
+
+            return (
+                <div>
+                    <CompareComponent
+                        values={adapter}
+                        header={new CompareNumberHeader(3)}
+                    />
+                </div>
+            );
+        }
+        return <></>;
     }
 
     submit = async (values: PCPairComparisonValues) => {
