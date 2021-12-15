@@ -3,7 +3,7 @@ import {FormEvent} from "react";
 import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {CompareComponent} from "../../../../general-components/CompareComponent/CompareComponent";
 import {CompareNumberHeader} from "../../../../general-components/CompareComponent/Header/CompareNumberHeader";
-import {CardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/CardComponentFieldsAdapter";
+import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PCCriteriasValues} from "./PCCriterias";
 
 
@@ -32,7 +32,7 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
 
     build() {
         if (this.criterias) {
-            let adapter = new CardComponentFieldsAdapter(this.criterias.criterias);
+            let adapter = new MatchCardComponentFieldsAdapter(this.criterias.criterias);
 
             return (
                 <div>

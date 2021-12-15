@@ -2,11 +2,17 @@ import {CompareAdapter} from "./CompareAdapter";
 import {SingleComparison} from "../CompareComponent";
 import {CardComponentFields} from "../../CardComponent/CardComponent";
 
-
-class CardComponentFieldsAdapter extends CompareAdapter {
+/**
+ * Erstellt aus den übergebenen CardComponentFields kombinationen zum Vergleichen von allen Feldern miteinander.
+ */
+class MatchCardComponentFieldsAdapter extends CompareAdapter {
 
     private cardComponentFields: CardComponentFields;
 
+    /**
+     * Erstellt eine neue Adapter Instanz
+     * @param cardComponentFields muss mindestens 2 Felder enthalten
+     */
     constructor(cardComponentFields: CardComponentFields) {
         super();
         if (cardComponentFields.length < 2) {
@@ -27,8 +33,9 @@ class CardComponentFieldsAdapter extends CompareAdapter {
 
         // TODO make formula instead of loop
         let i = 0;
-        while (secondIndex > this.cardComponentFields.length - 1 - i) {
-            secondIndex -= this.cardComponentFields.length - 1 - i;
+        const maxMatchCount = this.cardComponentFields.length-1;
+        while (secondIndex > maxMatchCount - i) {
+            secondIndex -= maxMatchCount - i;
             i++;
         }
         let firstIndex = i;
@@ -40,6 +47,11 @@ class CardComponentFieldsAdapter extends CompareAdapter {
         };
     }
 
+    /**
+     * Berechnet die Faktultät der übergebenen Zahl
+     * @param num übergebene Zahl
+     * @private
+     */
     private factorial(num: number): number {
         if (num === 0) return 1
         else return num * this.factorial(num - 1)
@@ -47,5 +59,5 @@ class CardComponentFieldsAdapter extends CompareAdapter {
 }
 
 export {
-    CardComponentFieldsAdapter
+    MatchCardComponentFieldsAdapter
 }
