@@ -57,7 +57,7 @@
 
 .grid-container > div {
   display: inline-block;
-  background-color: green;
+  
   border: 1px solid black;
   border-radius: 5px;
   margin-left:5px;
@@ -65,3 +65,10 @@
   height: 30px;
   width: 30px;
 }
+.red{
+  background-color: red;
+}
+.green{
+  background-color: green;
+}
+

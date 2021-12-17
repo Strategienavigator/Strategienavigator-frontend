@@ -74,8 +74,8 @@ class SWOTAnalysisMatrix extends MatrixComponent<any> {
             //Hier entstehen die Kombinationen zwischen Chancen und Stärken
             let bodyone = [];
             let j = 0;
-            for (let i = 0; i < numberLength; i++) {
-                for (let e = 0; e < headerCapitalLength; e++) {
+            for (let e = 0; e < headerCapitalLength; e++) {
+                for  (let i = 0; i < numberLength; i++){
                     let action = this.getAction(actions, upperCounter.get(e + 1) as string, i + 1);
                     bodyone[j] = <div className={this.getClassName(action)}></div>;
                     j++;
@@ -86,8 +86,8 @@ class SWOTAnalysisMatrix extends MatrixComponent<any> {
             let bodytwo = [];
             let bodytwoLength = headerRomanCapitalsLength * headerCapitalLength;
             j = 0;
-            for (let i = 0; i < headerRomanCapitalsLength; i++) {
-                for (let e = 0; e < headerCapitalLength; e++) {
+            for (let e = 0; e < headerCapitalLength; e++) {
+                for (let i = 0; i < headerRomanCapitalsLength; i++){
                     let action = this.getAction(actions, upperCounter.get(e + 1) as string, romanCounter.get(i + 1) as string);
                     bodytwo[j] = <div className={this.getClassName(action)}></div>;
                     j++;
@@ -97,8 +97,8 @@ class SWOTAnalysisMatrix extends MatrixComponent<any> {
             //Hier entstehen die Kombinationen zwischen Chancen und Schwächen
             let bodythree = [];
             j = 0;
-            for (let i = 0; i < numberLength; i++) {
-                for (let e = 0; e < leftLettersLength; e++) {
+            for (let e = 0; e < leftLettersLength; e++) {
+                for  (let i = 0; i < numberLength; i++){
                     let action = this.getAction(actions, lowerCounter.get(e + 1) as string, i + 1);
                     bodythree[j] = <div className={this.getClassName(action)}></div>;
                     j++;
@@ -109,9 +109,9 @@ class SWOTAnalysisMatrix extends MatrixComponent<any> {
             let bodyfour = [];
             let bodyfourLength = headerRomanCapitalsLength * leftLettersLength;
             j = 0;
-            for (let i = 0; i < headerRomanCapitalsLength; i++) {
-                for (let e = 0; e < leftLettersLength; e++) {
-                    let action = this.getAction(actions, romanCounter.get(e + 1) as string, lowerCounter.get(i + 1));
+            for (let e = 0; e < leftLettersLength; e++) {
+                for (let i = 0; i < headerRomanCapitalsLength; i++){
+                    let action = this.getAction(actions, lowerCounter.get(e + 1) as string, romanCounter.get(i + 1) as string);
                     bodyfour[j] = <div className={this.getClassName(action)}></div>;
                     j++;
                 }
