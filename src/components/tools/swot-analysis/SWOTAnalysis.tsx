@@ -10,6 +10,8 @@ import {
 import "./swot-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
+import {JSONExporter} from "../../../general-components/Export/JSONExporter";
+import {SWOTExcelExporter} from "./export/SWOTExcelExporter";
 
 
 interface SWOTAnalysisValues {
@@ -27,6 +29,9 @@ class SWOTAnalysis extends SteppableTool {
         this.setToolname("SWOT Analyse");
         this.setToolIcon(faThLarge);
         // this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
+
+        this.addExporter(new JSONExporter());
+        this.addExporter(new SWOTExcelExporter());
 
         this.addStep<SwotFactorsValues>({
             id: "swot-factors",
@@ -78,4 +83,8 @@ class SWOTAnalysis extends SteppableTool {
 
 export {
     SWOTAnalysis
+}
+
+export type {
+    SWOTAnalysisValues
 }

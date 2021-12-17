@@ -13,6 +13,7 @@ import * as H from "history";
 import {CreateToolModal} from "./CreateToolModal/CreateToolModal";
 import "./tool.scss";
 import {ConfirmToolRouteChangeModal} from "./ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
+import {Exporter} from "../Export/Exporter";
 
 
 type ToolViewValidation = {
@@ -54,6 +55,9 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
     private currentSaveName?: string;
     private currentSaveDescription?: string;
 
+    // Export
+    private exporters: Exporter<object>[];
+
     protected constructor(props: RouteComponentProps<any, StaticContext, unknown> | Readonly<RouteComponentProps<any, StaticContext, unknown>>) {
         super(props);
 
@@ -69,6 +73,7 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
         this.homePath = this.getLink();
         this.newPath = this.getLink() + "/new";
         this.viewPath = this.getLink() + "/:id";
+        this.exporters = [];
     }
 
     public getLink(): string {
@@ -85,6 +90,10 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
     public getID = (): number | undefined => {
         return this.toolID;
+    }
+
+    public getExporters = (): Exporter<object>[] => {
+        return this.exporters;
     }
 
     public setMaintenance(maintenance: boolean) {
@@ -301,6 +310,21 @@ abstract class Tool extends Component<RouteComponentProps<{ id: string }>, ToolS
 
     protected setToolIcon = (toolIcon: IconDefinition) => {
         this.toolIcon = toolIcon;
+    }
+
+    /**
+     * Fügt den übergebenen Exporter hinzu.
+     *
+     * Es darf kein exporter doppelt existieren und keine zwei Exporter mit dem selben Namen existieren
+     * @param exporter Eine Exporter Instanz
+     * @protected
+     */
+    protected addExporter(exporter:Exporter<object>){
+        if(!this.exporters.some(e => e === exporter || e.getName() === exporter.getName())){
+            this.exporters.push(exporter);
+        }else{
+            throw new Error("Already added Export with this name");
+        }
     }
 
     private lockSave = async (lock: boolean) => {
