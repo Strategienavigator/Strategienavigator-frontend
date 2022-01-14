@@ -7,9 +7,11 @@ import {getSaves} from "../../../API/calls/Saves";
 import {Card} from "react-bootstrap";
 import {Tool} from "../../Tool";
 import {PaginationLoader} from "../../../API/PaginationLoader";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import './save-pagination.scss'
 import {Link} from "react-router-dom";
+import {faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 
 
 interface SavePaginationState {
@@ -20,6 +22,11 @@ interface SavePaginationState {
     loading: boolean
     lastDeleteSave: SimpleSaveResource | null
     from: number
+    /**
+     * Gibt an, ob die Speicherstände nach Erstelldatum absteigend sortiert werden sollen (sonst aufsteigend)
+     */
+    orderDesc: boolean
+
 }
 
 interface SavePaginationProps {
@@ -37,7 +44,11 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         this.paginationLoader = new PaginationLoader(async (page) => {
             if (Session.isLoggedIn()) {
                 let userId = Session.currentUser?.getID() as number;
-                return await getSaves(userId, this.props.tool.getID(), page);
+                return await getSaves(userId, {
+                    toolID: this.props.tool.getID(),
+                    page: page,
+                    orderDesc: this.state.orderDesc
+                });
             }
             return null;
         });
@@ -49,8 +60,18 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
             loading: false,
             lastDeleteSave: null,
             total: 0,
-            from: 0
+            from: 0,
+            orderDesc: true,
         }
+    }
+
+    orderingChangedCallback = () => {
+        this.setState({
+            orderDesc: !this.state.orderDesc
+        }, () => {
+            this.paginationLoader.clearCache();
+            this.pageChosenCallback(1);
+        });
     }
 
     async componentDidMount() {
@@ -59,12 +80,11 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
 
     /**
      * Rendert die Zahlen und welche Speicherstände aktuell angezeigt werden
-     * @param bottom Ob die Anzahl der Speicherstände am unteren Rand des divs angezeigt werden soll (true)
-     * , oder oben (false)
+     * @param top Ob dieser Footer auf der oberen Seite der Seite angezeigt werden soll
      * @private
      */
-    private renderFooter(bottom: boolean) {
-        let s = bottom ? {bottom: 0} : {top: 0};
+    private renderFooter(top: boolean) {
+        let s = top ? {bottom: 0} : {top: 0};
 
         let from = this.state.from;
         let to = this.state.from + this.state.saves.length - 1;
@@ -82,15 +102,27 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         return (
             <div className={"count-display"}>
                 {!this.state.loading && (
+                    <>
                     <span
                         className={"text-muted" + (this.state.pageCount > 1 ? " count-display-text" : "")}
                         style={s}>{text}</span>
+
+
+                        {this.state.pageCount > 1 && (
+                            <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
+                                              currentPage={this.state.page} disabled={this.state.loading}/>)}
+
+                        {top && (
+                            <button type={"button"} className={"btn btn-primary count-display-sort"}
+                                    onClick={this.orderingChangedCallback}>
+                                <FontAwesomeIcon icon={this.state.orderDesc ? faSortAmountDown : faSortAmountUp}/>
+                            </button>
+                        )}
+
+                    </>
                 )}
 
 
-                {this.state.pageCount > 1 && (
-                    <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
-                                      currentPage={this.state.page} disabled={this.state.loading}/>)}
             </div>
         );
     }

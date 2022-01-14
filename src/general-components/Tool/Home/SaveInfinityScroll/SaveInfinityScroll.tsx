@@ -44,18 +44,21 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
         this.paginationLoader = new PaginationLoader(async (page) => {
             if (Session.isLoggedIn()) {
                 let userId = Session.currentUser?.getID() as number;
-                return await getSaves(userId, this.props.tool.getID(), page);
+                return await getSaves(userId, {
+                    toolID: this.props.tool.getID(),
+                    page: page
+                });
             }
             return null;
         });
 
         this.isLoading = false;
         this.state = {
-                page: 1,
-                saves: [],
-                pageCount: 1,
-                loading: false,
-                lastDeleteSave: null
+            page: 1,
+            saves: [],
+            pageCount: 1,
+            loading: false,
+            lastDeleteSave: null
         };
     }
 
@@ -141,7 +144,10 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
         this.paginationLoader = new PaginationLoader(async (page) => {
             if (Session.isLoggedIn()) {
                 let userId = Session.currentUser?.getID() as number;
-                return await getSaves(userId, this.props.tool.getID(), page);
+                return await getSaves(userId, {
+                    toolID: this.props.tool.getID(),
+                    page: page
+                });
             }
             return null;
         });

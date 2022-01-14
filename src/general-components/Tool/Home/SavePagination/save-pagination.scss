@@ -17,7 +17,14 @@
 .count-display{
   position: relative;
 }
+
 .count-display-text{
   position: absolute;
   bottom: 0;
+}
+
+.count-display-sort {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }

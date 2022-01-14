@@ -16,7 +16,7 @@ export interface PaginationPage<D> {
  * Man muss der Klasse eine function im Konstruktor übergeben, welche die Daten vom Backend lädt
  */
 export class PaginationLoader<D extends object> {
-    private readonly data: Array<PaginationPage<D>>;
+    private data: Array<PaginationPage<D>>;
     private readonly getPageCallback?: PageCallback<D>;
 
     constructor(cb?: PageCallback<D>) {
@@ -66,7 +66,7 @@ export class PaginationLoader<D extends object> {
     private set pageCount(value: number) {
         this._pageCount = value;
     }
-  
+
     /**
      * Lädt die angegebene Seite, wenn nicht anders definiert werden die Daten erst versucht aus dem Cache zu laden,
      * nur wenn kein Cache Eintrag vorhanden wird, wird eine Netzwerkabfrage durchgeführt
@@ -133,5 +133,9 @@ export class PaginationLoader<D extends object> {
 
     private getPageData(page: number) {
         return this.data[page];
+    }
+
+    public clearCache(){
+        this.data = [];
     }
 }
