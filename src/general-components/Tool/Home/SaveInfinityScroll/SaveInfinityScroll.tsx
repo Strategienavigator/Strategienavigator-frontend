@@ -23,6 +23,7 @@ export interface SaveInfinityScrollState {
     pageCount: number
     loading: boolean
     lastDeleteSave: SimpleSaveResource | null
+    orderDesc: boolean
 }
 
 export interface SaveInfinityScrollProps {
@@ -46,7 +47,8 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
                 let userId = Session.currentUser?.getID() as number;
                 return await getSaves(userId, {
                     toolID: this.props.tool.getID(),
-                    page: page
+                    page: page,
+                    orderDesc: this.state.orderDesc
                 });
             }
             return null;
@@ -58,7 +60,8 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
             saves: [],
             pageCount: 1,
             loading: false,
-            lastDeleteSave: null
+            lastDeleteSave: null,
+            orderDesc:true
         };
     }
 
@@ -141,16 +144,7 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
      * @private
      */
     private resetSaves() {
-        this.paginationLoader = new PaginationLoader(async (page) => {
-            if (Session.isLoggedIn()) {
-                let userId = Session.currentUser?.getID() as number;
-                return await getSaves(userId, {
-                    toolID: this.props.tool.getID(),
-                    page: page
-                });
-            }
-            return null;
-        });
+        this.paginationLoader.clearCache();
 
         this.isLoading = false;
         this.setState(() => {
