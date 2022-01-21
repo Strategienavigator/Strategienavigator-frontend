@@ -1,76 +1,39 @@
 import React, {Component, ReactNode} from "react";
 import {SimpleSaveResource} from "../../../../Datastructures";
 import {PaginationFooter} from "../../../../PaginationFooter/PaginationFooter";
-import {Loader} from "../../../../Loader/Loader";
-import {Session} from "../../../../Session/Session";
-import {getSaves} from "../../../../API/calls/Saves";
 import {Card} from "react-bootstrap";
-import {Tool} from "../../../Tool";
-import {PaginationLoader} from "../../../../API/PaginationLoader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import './save-pagination.scss'
-import {Link} from "react-router-dom";
 import {faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
+import {SaveResourceListProps} from "../SaveResourceList";
+import {SaveCard} from "../../SaveCard/SaveCard";
 
 
 interface SavePaginationState {
-    saves: Array<SimpleSaveResource>
     page: number
-    pageCount: number
-    total: number
-    loading: boolean
     lastDeleteSave: SimpleSaveResource | null
-    from: number
-    /**
-     * Gibt an, ob die Speicherstände nach Erstelldatum absteigend sortiert werden sollen (sonst aufsteigend)
-     */
-    orderDesc: boolean
 
 }
 
-interface SavePaginationProps {
-    tool: Tool
-}
 
-class SavePagination extends Component<SavePaginationProps, SavePaginationState> {
+class SavePagination extends Component<SaveResourceListProps, SavePaginationState> {
 
-    private paginationLoader: PaginationLoader<SimpleSaveResource>;
-
-    constructor(props: Readonly<SavePaginationProps> | SavePaginationProps);
-    constructor(props: SavePaginationProps, context: any);
-    constructor(props: Readonly<SavePaginationProps> | SavePaginationProps, context?: any) {
+    constructor(props: Readonly<SaveResourceListProps> | SaveResourceListProps);
+    constructor(props: SaveResourceListProps, context: any);
+    constructor(props: Readonly<SaveResourceListProps> | SaveResourceListProps, context?: any) {
         super(props, context);
-        this.paginationLoader = new PaginationLoader(async (page) => {
-            if (Session.isLoggedIn()) {
-                let userId = Session.currentUser?.getID() as number;
-                return await getSaves(userId, {
-                    toolID: this.props.tool.getID(),
-                    page: page,
-                    orderDesc: this.state.orderDesc
-                });
-            }
-            return null;
-        });
 
         this.state = {
             page: 1,
-            saves: [],
-            pageCount: 1,
-            loading: false,
             lastDeleteSave: null,
-            total: 0,
-            from: 0,
-            orderDesc: true,
         }
     }
 
     orderingChangedCallback = () => {
-        this.setState({
-            orderDesc: !this.state.orderDesc
-        }, () => {
-            this.paginationLoader.clearCache();
-            this.pageChosenCallback(1);
+        this.props.savesControlCallbacks.updateSettings({
+            ...this.props.paginationSettings,
+            orderDesc: !this.props.paginationSettings.orderDesc,
         });
     }
 
@@ -85,76 +48,77 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
      */
     private renderFooter(top: boolean) {
         let s = top ? {bottom: 0} : {top: 0};
+        let page = this.getCurrentPage();
+        let saves = this.props.saves;
 
-        let from = this.state.from;
-        let to = this.state.from + this.state.saves.length - 1;
+        let text: JSX.Element = <></>;
+        if (this.props.saves !== undefined) {
+            saves = this.props.saves; // <- type checking things
+            text = <>{saves.totalResults} Speicherstände</>;
+            if (page !== undefined) {
+                let from = page.from;
+                let to = from + page.data.length - 1;
 
-        let text: JSX.Element = <>{this.state.total} Speicherstände</>;
-        if (this.state.pageCount > 1) {
-            text = <>{from + " - " + to} von {this.state.total} Speicherständen</>;
-        }else if(this.state.total < 1){
-            text = <></>;
-        }else if(this.state.total === 1){
-            text = <>{this.state.total} Speicherstand</>;
+
+                if (saves.pageCount > 1) {
+                    text = <>{from + " - " + to} von {saves.totalResults} Speicherständen</>;
+                } else if (saves.totalResults < 1) {
+                    text = <></>;
+                } else if (saves.totalResults === 1) {
+                    text = <>{saves.totalResults} Speicherstand</>;
+                }
+            }
         }
-
-
         return (
-            <div className={"count-display"}>
-                {!this.state.loading && (
-                    <>
+            <div className={"count-display mb-1"}>
                     <span
-                        className={"text-muted" + (this.state.pageCount > 1 ? " count-display-text" : "")}
+                        className={"text-muted count-display-text"}
                         style={s}>{text}</span>
 
 
-                        {this.state.pageCount > 1 && (
-                            <PaginationFooter pageCount={this.state.pageCount} pageChosen={this.pageChosenCallback}
-                                              currentPage={this.state.page} disabled={this.state.loading}/>)}
+                {saves !== undefined && saves.pageCount > 1 && (
+                    <PaginationFooter pageCount={saves.pageCount} pageChosen={this.pageChosenCallback}
+                                      currentPage={this.state.page} disabled={this.props.pageIsLoading}/>)}
 
-                        {top && (
-                            <button type={"button"} className={"btn btn-primary count-display-sort"}
-                                    onClick={this.orderingChangedCallback}>
-                                <FontAwesomeIcon icon={this.state.orderDesc ? faSortAmountDown : faSortAmountUp}/>
-                            </button>
-                        )}
-
-                    </>
+                {top && (
+                    <button type={"button"} className={"btn btn-primary count-display-sort"}
+                            onClick={this.orderingChangedCallback}>
+                        <FontAwesomeIcon
+                            icon={this.props.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
+                    </button>
                 )}
-
-
             </div>
         );
+
     }
 
     render(): ReactNode {
+
+        let page = this.getCurrentPage();
         return (
             <>
                 <div className={"mb-3"}>
                     {this.renderFooter(true)}
                 </div>
 
-                <Loader payload={[]} transparent loaded={(!this.state.loading)} alignment={"center"}/>
-                <div style={{"visibility": this.state.loading ? "hidden" : "visible"}}>
-                    {(this.state.saves.length <= 0) && (
+                <div>
+                    {((page ? page.data.length : 1) <= 0) && (
                         <Card>
                             <Card.Body>Sie haben aktuell keine Speicherstände.</Card.Body>
                         </Card>
                     )}
 
-                    {this.state.saves?.map(value => {
-                        let save = value;
-                        return (
-                            <Card as={Link} to={this.props.tool?.getLink() + "/" + save.id}
-                                  key={save.id} className={"mt-2 mb-2 save-card"}>
-                                <Card.Body className={"save-body"}>
-                                    <Card.Title>{save.name}</Card.Title>
-                                    <Card.Text
-                                        className={"save-desc text-muted mb-1"}>{save.description ? save.description : "Keine Beschreibung vorhanden"}</Card.Text>
-                                </Card.Body>
-                            </Card>
-                        );
-                    })}
+                    {page?.data.map(save => {
+                            return (
+                                <SaveCard save={save} toolLink={this.props.tool!.getLink()}/>
+                            );
+                        })
+                        ?? // alternative if page is undefined
+                        Array.from(new Array(15).keys()).map(value => {
+                            return (
+                                <SaveCard/>
+                            );
+                        })}
 
                 </div>
                 <div className={"mt-2"}>
@@ -164,24 +128,29 @@ class SavePagination extends Component<SavePaginationProps, SavePaginationState>
         );
     }
 
-    private pageChosenCallback = async (currentPage: number, forced?: boolean) => {
+    private pageChosenCallback = async (nextPage: number, forced?: boolean) => {
+        let requestedPage = this.getPage(nextPage);
         this.setState({
-            page: currentPage,
-            loading: true
+            page: nextPage
         });
+        if (requestedPage === undefined) {
+            this.props.savesControlCallbacks.loadPage(nextPage);
+            return;
+        }
 
-        let et = await this.paginationLoader.getPage(currentPage, forced);
-        et = et ?? {page: 1, from: 0, data: []}
-        this.setState({
-            saves: et.data,
-            page: et.page,
-            loading: false,
-            pageCount: this.paginationLoader.pageCount,
-            total: this.paginationLoader.totalResults,
-            from: et.from
-        });
 
-    };
+    }
+
+    private getCurrentPage() {
+        return this.getPage(this.state.page);
+    }
+
+    private getPage(page: number) {
+        if (this.props.saves !== undefined) {
+            return this.props.saves.pages[page];
+        }
+        return undefined;
+    }
 }
 
 export {
@@ -190,6 +159,5 @@ export {
 
 
 export type {
-    SavePaginationProps,
     SavePaginationState
 }

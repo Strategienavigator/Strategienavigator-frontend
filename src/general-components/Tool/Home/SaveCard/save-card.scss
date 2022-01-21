@@ -1,6 +1,8 @@
 
 .save {
+  transition: background-color 0.3s ease-out;
   position: relative;
+  overflow: hidden;
 }
 
 .save-desc {
@@ -25,3 +27,12 @@
   right: 10px;
   padding: 0.25rem 0.75rem;
 }
+
+
+.dummy {
+  display: inline-block;
+  color:#eeeeee;
+  background-color: #eeeeee;
+  border-radius: 5px;
+}
+

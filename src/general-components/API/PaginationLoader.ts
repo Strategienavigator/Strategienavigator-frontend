@@ -10,6 +10,14 @@ export interface PaginationPage<D> {
     from: number
 }
 
+
+export interface PaginationPages<D> {
+    pages: Array<PaginationPage<D>>
+    perPage: number
+    pageCount: number
+    totalResults: number
+}
+
 /**
  * Klasse welche das Laden der Seiten einer Pagination übernimmt. Die Ergebnisse werden gecached.
  *
@@ -100,11 +108,17 @@ export class PaginationLoader<D extends object> {
                 allData.concat(r.data);
             }
         }
+        // TODO change to PaginationPages return type
         return allData
     }
 
-    public getAllLoaded() {
-        return this.data.slice();
+    public getAllLoaded():PaginationPages<D> {
+        return {
+            pages: this.data.slice(),
+            perPage: this.perPage,
+            pageCount: this.pageCount,
+            totalResults: this.totalResults
+        };
     }
 
     public async loadPage(page: number, cached: boolean = true) {

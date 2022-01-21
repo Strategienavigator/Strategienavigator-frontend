@@ -7,6 +7,16 @@ import {SaveInfinityScroll} from "./SaveInfinityScroll/SaveInfinityScroll";
 
 interface SaveResourceListProps {
     tool: Tool
+    /**
+     * Alle Speicherstände und zugehörige Metadaten der Pagination
+     */
+    saves?: PaginationPages<SimpleSaveResource>
+
+    savesControlCallbacks: SavesControlCallbacks
+
+    paginationSettings: SavesPaginationSetting
+
+    pageIsLoading: boolean
 }
 
 interface SaveResourceListState {
@@ -29,7 +39,7 @@ class SaveResourceList extends Component<SaveResourceListProps, SaveResourceList
             <>
                 {
                     isDesktop() && (
-                        <SavePagination tool={this.props.tool!}/>
+                        <SavePagination {...this.props}/>
                     )
                 }
                 {

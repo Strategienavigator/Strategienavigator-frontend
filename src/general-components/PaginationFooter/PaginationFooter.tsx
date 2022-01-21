@@ -158,14 +158,16 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
         return numbers.map((i, index) => {
             let isActive = i === active;
             if (i === -1) {
-                return (<PageItem key={"ellipsis" + index} disabled={true}>
-                    ...
-                </PageItem>)
+                return (
+                    <PageItem key={"ellipsis" + index} disabled={true}>
+                        ...
+                    </PageItem>)
             } else {
-                return (<PageItem key={i} active={isActive} disabled={!isActive && this.props.disabled}
-                                  onClick={this.itemClicked.bind(this, i)}>
-                    {i}
-                </PageItem>);
+                return (
+                    <PageItem key={i} active={isActive} disabled={!isActive && this.props.disabled}
+                              onClick={this.itemClicked.bind(this, i)}>
+                        {i}
+                    </PageItem>);
             }
 
         });

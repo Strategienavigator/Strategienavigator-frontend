@@ -16,15 +16,24 @@
 
 .count-display{
   position: relative;
+  // 1rem * 1.5 <- line-height
+  // 0.75rem <- padding of pagination items
+  // 2px <- border of pagination items
+  height:calc(1rem * 1.5 + 0.75rem + 2px)
+}
+
+.count-display-text,.count-display-sort{
+  position: absolute;
 }
 
 .count-display-text{
-  position: absolute;
-  bottom: 0;
+  left:0;
+  bottom:0;
 }
 
 .count-display-sort {
-  position: absolute;
-  bottom: 0;
   right: 0;
+  bottom: 0;
 }
+
+

@@ -6,14 +6,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
-import {SavePagination} from "./SaveResourceList/SavePagination/SavePagination";
 
 import "./tool-home.scss";
-import {SaveInfinityScroll} from "./SaveResourceList/SaveInfinityScroll/SaveInfinityScroll";
 import {FooterContext} from "../../Contexts/FooterContextComponent";
 import {SaveResourceList} from "./SaveResourceList/SaveResourceList";
-import {PaginationPage} from "../../API/PaginationLoader";
+import {PaginationLoader, PaginationPages} from "../../API/PaginationLoader";
 import {SimpleSaveResource} from "../../Datastructures";
+import {Session} from "../../Session/Session";
+import {getSaves} from "../../API/calls/Saves";
 
 
 export interface ToolHomeInfo {
@@ -26,8 +26,22 @@ export interface ToolHomeProps {
     info?: ToolHomeInfo
 }
 
+export interface SavesPaginationSetting {
+    orderDesc: boolean
+}
+
 interface ToolHomeState {
     showTutorial: boolean
+    saves?: PaginationPages<SimpleSaveResource>
+    paginationSettings: SavesPaginationSetting
+    isLoadingPage: boolean
+}
+
+export interface SavesControlCallbacks {
+    loadPage: (page: number) => void
+    updatePages: () => void
+    updateSettings: (settings: SavesPaginationSetting) => void
+
 }
 
 class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
@@ -36,13 +50,45 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
      * Definiert auf welchen Context zugegriffen werden soll
      */
     static contextType = FooterContext;
+
     context!: React.ContextType<typeof FooterContext>
+
+
+    private paginationLoader: PaginationLoader<SimpleSaveResource>;
+    private savesControlCallbacks: SavesControlCallbacks;
+
     constructor(props: ToolHomeProps | Readonly<ToolHomeProps>) {
         super(props);
 
+        this.savesControlCallbacks = {
+            loadPage: this.loadPage,
+            updatePages: this.updatePages,
+            updateSettings: this.updateSettings
+        };
+
+        this.paginationLoader = new PaginationLoader<SimpleSaveResource>(async (page, perPage) => {
+            let userId = Session.currentUser?.getID() as number;
+            if (this.props.tool !== undefined) {
+                return await getSaves(userId, {
+                    toolID: this.props.tool.getID(),
+                    page: page,
+                    ...this.state.paginationSettings
+                });
+            } else {
+                return null;
+            }
+
+        });
+
         this.state = {
             showTutorial: false,
+            isLoadingPage:false,
+            paginationSettings: {
+                orderDesc: true
+            }
         }
+
+        this.loadPage(0);
     }
 
     componentDidMount() {
@@ -93,13 +139,16 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Button>
                     )}
                 </div>
-            
+
                 {this.props.info?.shortDescription}
 
                 <hr/>
-            
+
                 <div className={"saves mt-2"}>
-                    <SaveResourceList tool={this.props.tool!}/>
+                    <SaveResourceList tool={this.props.tool!} saves={this.state.saves}
+                                      savesControlCallbacks={this.savesControlCallbacks}
+                                      paginationSettings={this.state.paginationSettings}
+                                      pageIsLoading={this.state.isLoadingPage}/>
                 </div>
 
                 {this.props.children}
@@ -109,6 +158,41 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         );
     }
 
+
+    private loadPage = async (page: number) => {
+        this.setState({
+            isLoadingPage: true
+        });
+        await this.paginationLoader.loadPage(page);
+        this.updateSavesState();
+        this.setState({
+            isLoadingPage: false
+        });
+    }
+
+    private updatePages = async () => {
+        this.setState({
+            saves: undefined
+        });
+        this.paginationLoader.clearCache();
+        await this.paginationLoader.loadPage(0);
+        this.updateSavesState();
+
+    }
+
+    private updateSavesState = () => {
+        this.setState({
+            saves: this.paginationLoader.getAllLoaded()
+        });
+    }
+
+    private updateSettings = (settings: SavesPaginationSetting) => {
+        this.setState({
+            paginationSettings: settings
+        }, () => {
+            this.updatePages();
+        });
+    }
 }
 
 export {
