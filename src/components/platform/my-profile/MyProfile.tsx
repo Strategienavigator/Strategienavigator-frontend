@@ -88,6 +88,10 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         });
     }
 
+    applyCurrentStateValues = () => {
+
+    }
+
     saveChanges = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -180,6 +184,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         readOnly={!this.state.edit}
                         suppressErrors={!this.state.edit}
                         defaultValue={this.state.user.getUsername()}
+                        value={this.state.edit ? undefined : this.state.user.getUsername()}
                         callback={checkUsername}
                         failMessage={"Username bereits vorhanden!"}
                         successMessage={"Username verfügbar!"}
@@ -195,6 +200,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         readOnly={!this.state.edit}
                         suppressErrors={!this.state.edit}
                         defaultValue={this.state.user.getEmail()}
+                        value={this.state.edit ? undefined : this.state.user.getEmail()}
                         callback={checkEmail}
                         failMessage={"E-Mail bereits vorhanden!"}
                         successMessage={"E-Mail verfügbar!"}
@@ -209,6 +215,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 {(this.state.edit) && (
                     <PasswordField id={"new_password"} text={"Neues Passwort"} required={false} className={"field"}
                                    check={true}
+                                   value={this.state.edit ? undefined : ""}
                                    eye/>
                 )}
 
@@ -217,7 +224,9 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     <>
                         <PasswordField id={"new_password_confirm"} text={"Neues Passwort wiederholen"}
                                        required={this.state.passwordFieldTouched}
-                                       className={"field"} check={false} eye/>
+                                       className={"field"} check={false}
+                                       value={this.state.edit ? undefined : ""}
+                                       eye/>
                         <div className={"feedback"}>
                             {(this.state.passwordNotMatching) && (
                                 <div className="invalid-feedback d-block">
@@ -234,7 +243,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     <>
                         <hr/>
                         <PasswordField id={"current_password"} text={"Aktuelles Passwort"} required={true}
-                                       className={"field"} check={false} eye/>
+                                       className={"field"} check={false}
+                                       value={this.state.edit ? undefined : ""}eye/>
                     </>
                 )}
 
@@ -299,7 +309,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         </Modal.Header>
                         <Modal.Body>
                             Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
-                            Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses Zeitraumes wird
+                            Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses
+                            Zeitraumes wird
                             Ihr Account unwiderruflich gelöscht!
                         </Modal.Body>
                         <Modal.Footer>
