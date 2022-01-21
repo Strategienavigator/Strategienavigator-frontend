@@ -88,10 +88,6 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         });
     }
 
-    applyCurrentStateValues = () => {
-
-    }
-
     saveChanges = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
