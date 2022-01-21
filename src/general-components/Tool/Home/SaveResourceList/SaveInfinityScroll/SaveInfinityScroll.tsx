@@ -1,15 +1,15 @@
 import React, {Component} from "react";
 
 import './save-infinity-scroll.scss';
-import {SimpleSaveResource} from "../../../Datastructures";
-import {Tool} from "../../Tool";
-import {deleteSave, getSaves} from "../../../API/calls/Saves";
-import {DeleteSaveModal} from "../DeleteSaveModal/DeleteSaveModal";
-import {PaginationLoader, PaginationPage} from "../../../API/PaginationLoader";
-import {Session} from "../../../Session/Session";
+import {SimpleSaveResource} from "../../../../Datastructures";
+import {Tool} from "../../../Tool";
+import {deleteSave, getSaves} from "../../../../API/calls/Saves";
+import {DeleteSaveModal} from "../../DeleteSaveModal/DeleteSaveModal";
+import {PaginationLoader, PaginationPage} from "../../../../API/PaginationLoader";
+import {Session} from "../../../../Session/Session";
 import {Card} from "react-bootstrap";
-import {SaveCard} from "../SaveCard/SaveCard";
-import {Loader} from "../../../Loader/Loader";
+import {SaveCard} from "../../SaveCard/SaveCard";
+import {Loader} from "../../../../Loader/Loader";
 
 export interface SaveInfinityScrollState {
     /**
@@ -172,20 +172,12 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
                 loading: this.isLoading
             });
 
-            let et = await this.paginationLoader.getPage(currentPage, forced);
+            await this.paginationLoader.loadPage(currentPage, forced);
             this.isLoading = false;
             this.setState((prev) => {
-                let newSaves = prev.saves.slice();
-                if(!et){
-                    delete newSaves[currentPage];
-                }else{
-                    newSaves[currentPage] = et;
-                }
-
-
                 return {
                     ...prev,
-                    saves: newSaves,
+                    saves: this.paginationLoader.getAllLoaded(),
                     loading: this.isLoading,
                     pageCount: this.paginationLoader.pageCount,
                     page: currentPage
@@ -195,12 +187,12 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
     };
 
     /**
-     * Lädt eine neue Seite wenn die letzte Seite noch noch nicht die letzte war.
+     * Lädt eine neue Seite wenn die letzte Seite noch nicht die letzte war.
      * @param forced Ob ein Cache berücksichtigt werden soll
      * @private
      */
     private loadNewPageIfExists(forced?: boolean) {
-        // -1 weil wir keinen 0 index haben aber dieser trotzdem in der Längenberechnung einbezogen wird
+        // length -1 weil es keinen 0 index gibt aber dieser trotzdem in der Längenberechnung einbezogen wird
         if (this.state.pageCount > this.state.saves.length - 1) {
             let nextPage = this.state.saves.length;
             this.loadNewPage(nextPage, forced);

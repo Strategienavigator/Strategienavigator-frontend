@@ -1,12 +1,12 @@
 import React, {Component, ReactNode} from "react";
-import {SimpleSaveResource} from "../../../Datastructures";
-import {PaginationFooter} from "../../../PaginationFooter/PaginationFooter";
-import {Loader} from "../../../Loader/Loader";
-import {Session} from "../../../Session/Session";
-import {getSaves} from "../../../API/calls/Saves";
+import {SimpleSaveResource} from "../../../../Datastructures";
+import {PaginationFooter} from "../../../../PaginationFooter/PaginationFooter";
+import {Loader} from "../../../../Loader/Loader";
+import {Session} from "../../../../Session/Session";
+import {getSaves} from "../../../../API/calls/Saves";
 import {Card} from "react-bootstrap";
-import {Tool} from "../../Tool";
-import {PaginationLoader} from "../../../API/PaginationLoader";
+import {Tool} from "../../../Tool";
+import {PaginationLoader} from "../../../../API/PaginationLoader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import './save-pagination.scss'

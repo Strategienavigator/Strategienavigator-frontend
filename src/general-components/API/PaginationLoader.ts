@@ -2,12 +2,12 @@ import {PaginationResource} from "../Datastructures";
 import {CallInterface} from "./API";
 
 
-type PageCallback<D> = (page: number, perPage?:number) => Promise<CallInterface<PaginationResource<D>> | null>;
+type PageCallback<D> = (page: number, perPage?: number) => Promise<CallInterface<PaginationResource<D>> | null>;
 
 export interface PaginationPage<D> {
-    page:number,
-    data:Array<D>,
-    from:number
+    page: number,
+    data: Array<D>,
+    from: number
 }
 
 /**
@@ -73,49 +73,25 @@ export class PaginationLoader<D extends object> {
      * @param page Seite der Pagination
      * @param cached Ob der Cache berücksichtigt werden soll
      */
-    public async getPage(page: number,cached: boolean = true) {
-        if (this.getPageData(page) === null || this.getPageData(page) === undefined || !cached) {
-            if (this.getPageCallback) {
-                let result = await this.getPageCallback(page,this.perPage>0?this.perPage:undefined);
-                if (result !== null && result !== undefined) {
-                    if (result.success) {
-                        let d = result.callData;
-                        const paginationPage:PaginationPage<D> = {
-                            page:page,
-                            from:d.meta.from??0,
-                            data:d.data
-                        }
-                        this.setPageData(d.meta.current_page, paginationPage);
-                        this.pageCount = d.meta.last_page;
-                        this.perPage = d.meta.per_page;
-                        this.totalResults = d.meta.total;
-
-                        return this.getPageData(d.meta.current_page);
-                    }
-                }
-            } else {
-                throw new Error("No PageCallback given!");
-            }
-        } else {
-            return this.getPageData(page);
-        }
-        return null;
+    public async getPage(page: number, cached: boolean = true) {
+        await this.loadPage(page, cached);
+        return this.getPageData(page);
     }
 
     /**
      * Lädt alle Daten aus dem Backend und wenn verfügbar auch aus dem Cache und gibt sie als ein Array zurück
      * @param cached ob die Daten auch gechached sein dürfen
      */
-    public async getAll(cached:boolean = true) {
+    public async getAll(cached: boolean = true) {
         let allData = new Array<D>();
-        let result = await this.getPage(1,cached);
+        let result = await this.getPage(1, cached);
 
         let callbacks = new Array<Promise<PaginationPage<D> | null>>();
         if (result) {
             allData.push(...result.data);
         }
         for (let i = 2; i <= this.pageCount; i++) {
-            callbacks.push(this.getPage(i,cached));
+            callbacks.push(this.getPage(i, cached));
         }
 
         let results = await Promise.all(callbacks);
@@ -127,6 +103,34 @@ export class PaginationLoader<D extends object> {
         return allData
     }
 
+    public getAllLoaded() {
+        return this.data.slice();
+    }
+
+    public async loadPage(page: number, cached: boolean = true) {
+        if (this.getPageData(page) === null || this.getPageData(page) === undefined || !cached) {
+            if (this.getPageCallback) {
+                let result = await this.getPageCallback(page, this.perPage > 0 ? this.perPage : undefined);
+                if (result !== null && result !== undefined) {
+                    if (result.success) {
+                        let d = result.callData;
+                        const paginationPage: PaginationPage<D> = {
+                            page: page,
+                            from: d.meta.from ?? 0,
+                            data: d.data
+                        }
+                        this.setPageData(d.meta.current_page, paginationPage);
+                        this.pageCount = d.meta.last_page;
+                        this.perPage = d.meta.per_page;
+                        this.totalResults = d.meta.total;
+                    }
+                }
+            } else {
+                throw new Error("No PageCallback given!");
+            }
+        }
+    }
+
     private setPageData(page: number, data: PaginationPage<D>) {
         this.data[page] = data;
     }
@@ -135,7 +139,7 @@ export class PaginationLoader<D extends object> {
         return this.data[page];
     }
 
-    public clearCache(){
+    public clearCache() {
         this.data = [];
     }
 }

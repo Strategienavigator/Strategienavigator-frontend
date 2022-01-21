@@ -6,11 +6,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
-import {SavePagination} from "./SavePagination/SavePagination";
+import {SavePagination} from "./SaveResourceList/SavePagination/SavePagination";
 
 import "./tool-home.scss";
-import {SaveInfinityScroll} from "./SaveInfinityScroll/SaveInfinityScroll";
+import {SaveInfinityScroll} from "./SaveResourceList/SaveInfinityScroll/SaveInfinityScroll";
 import {FooterContext} from "../../Contexts/FooterContextComponent";
+import {SaveResourceList} from "./SaveResourceList/SaveResourceList";
+import {PaginationPage} from "../../API/PaginationLoader";
+import {SimpleSaveResource} from "../../Datastructures";
 
 
 export interface ToolHomeInfo {
@@ -96,17 +99,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 <hr/>
             
                 <div className={"saves mt-2"}>
-                    {
-                        isDesktop() && (
-                            <SavePagination tool={this.props.tool!}/>
-                        )
-                    }
-                    {
-                        !isDesktop() && (
-                            <SaveInfinityScroll tool={this.props.tool!}/>
-                        )
-                    }
-
+                    <SaveResourceList tool={this.props.tool!}/>
                 </div>
 
                 {this.props.children}
