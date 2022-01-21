@@ -30,13 +30,6 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
         }
     }
 
-    orderingChangedCallback = () => {
-        this.props.savesControlCallbacks.updateSettings({
-            ...this.props.paginationSettings,
-            orderDesc: !this.props.paginationSettings.orderDesc,
-        });
-    }
-
     async componentDidMount() {
         await this.pageChosenCallback(this.state.page);
     }
@@ -79,14 +72,6 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
                 {saves !== undefined && saves.pageCount > 1 && (
                     <PaginationFooter pageCount={saves.pageCount} pageChosen={this.pageChosenCallback}
                                       currentPage={this.state.page} disabled={this.props.pageIsLoading}/>)}
-
-                {top && (
-                    <button type={"button"} className={"btn btn-primary count-display-sort"}
-                            onClick={this.orderingChangedCallback}>
-                        <FontAwesomeIcon
-                            icon={this.props.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
-                    </button>
-                )}
             </div>
         );
 

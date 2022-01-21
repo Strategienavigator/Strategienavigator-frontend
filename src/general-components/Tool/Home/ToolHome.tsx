@@ -3,7 +3,7 @@ import {Tool} from "../Tool";
 import {Badge, Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import {faInfoCircle, faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
@@ -82,7 +82,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
         this.state = {
             showTutorial: false,
-            isLoadingPage:false,
+            isLoadingPage: false,
             paginationSettings: {
                 orderDesc: true
             }
@@ -132,12 +132,19 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Badge>
                     )}
                 </h4>
-                <div className={"mb-0 mt-2"}>
+                <div className={"button-container mb-0 mt-2"}>
                     {isDesktop() && (
                         <Button onClick={() => this.props.tool?.switchPage("new")} size={"sm"} variant={"dark"}>
                             <FontAwesomeIcon icon={faPlusSquare}/> Neue Analyse
                         </Button>
                     )}
+
+
+                    <Button type={"button"} className={"btn btn-primary sorting-button"}
+                            onClick={this.orderingChangedCallback}>
+                        <FontAwesomeIcon
+                            icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
+                    </Button>
                 </div>
 
                 {this.props.info?.shortDescription}
@@ -191,6 +198,13 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             paginationSettings: settings
         }, () => {
             this.updatePages();
+        });
+    }
+
+    private orderingChangedCallback = () => {
+        this.updateSettings({
+            ...this.state.paginationSettings,
+            orderDesc: !this.state.paginationSettings.orderDesc,
         });
     }
 }

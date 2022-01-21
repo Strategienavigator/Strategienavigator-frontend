@@ -72,7 +72,7 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                             );
                         })
                     })}
-                    <Loader payload={[]} loaded={!this.props.pageIsLoading || this.props.saves === undefined} transparent={true}/>
+                    <Loader payload={[]} loaded={!(this.props.pageIsLoading || this.props.saves === undefined)} transparent={true}/>
                 </div>
                 <DeleteSaveModal
                     show={this.state.lastDeleteSave !== null}
