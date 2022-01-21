@@ -2,72 +2,44 @@ import React, {Component} from "react";
 
 import './save-infinity-scroll.scss';
 import {SimpleSaveResource} from "../../../../Datastructures";
-import {Tool} from "../../../Tool";
-import {deleteSave, getSaves} from "../../../../API/calls/Saves";
+import {deleteSave} from "../../../../API/calls/Saves";
 import {DeleteSaveModal} from "../../DeleteSaveModal/DeleteSaveModal";
-import {PaginationLoader, PaginationPage} from "../../../../API/PaginationLoader";
-import {Session} from "../../../../Session/Session";
 import {Card} from "react-bootstrap";
 import {SaveCard} from "../../SaveCard/SaveCard";
 import {Loader} from "../../../../Loader/Loader";
+import {SaveResourceListProps} from "../SaveResourceList";
 
 export interface SaveInfinityScrollState {
-    /**
-     * Alle Speicherstände, der Index ist identisch mit der Seitennummer
-     */
-    saves: Array<PaginationPage<SimpleSaveResource>>
+
     /**
      * Die letzte geladene Seite (aka. die Anzahl der geladenen Seiten)
      */
     page: number
-    pageCount: number
-    loading: boolean
     lastDeleteSave: SimpleSaveResource | null
     orderDesc: boolean
 }
 
-export interface SaveInfinityScrollProps {
-    /**
-     * Das Tool für das die Speicherstände angezeigt werden sollen
-     */
-    tool: Tool
-}
-
-export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveInfinityScrollState> {
+export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInfinityScrollState> {
     private static loadingTriggerModifier = 1;
 
 
-    private paginationLoader: PaginationLoader<SimpleSaveResource>;
     private isLoading = false;
 
-    constructor(props: SaveInfinityScrollProps, context: any) {
+    constructor(props: SaveResourceListProps, context: any) {
         super(props, context);
-        this.paginationLoader = new PaginationLoader(async (page) => {
-            if (Session.isLoggedIn()) {
-                let userId = Session.currentUser?.getID() as number;
-                return await getSaves(userId, {
-                    toolID: this.props.tool.getID(),
-                    page: page,
-                    orderDesc: this.state.orderDesc
-                });
-            }
-            return null;
-        });
+
 
         this.isLoading = false;
         this.state = {
             page: 1,
-            saves: [],
-            pageCount: 1,
-            loading: false,
             lastDeleteSave: null,
-            orderDesc:true
+            orderDesc: true
         };
     }
 
 
     componentDidMount() {
-        this.loadNewPage(this.state.page,true);
+        // this.loadNewPage(this.state.page, true);
         document.getElementById('content')?.addEventListener('scroll', this.onScroll);
     }
 
@@ -77,16 +49,17 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
     }
 
     render() {
+
         return (
             <>
                 <div className={"savesContainer"}>
-                    {((this.state.saves === null || this.state.saves.length <= 0) && !this.state.loading) && (
+                    {(this.props.saves !== undefined && this.props.saves.pages.length <= 0) && (
                         <Card>
                             <Card.Body>Sie haben aktuell keine Speicherstände.</Card.Body>
                         </Card>
                     )}
 
-                    {this.state.saves.flatMap(value => {
+                    {this.props.saves !== undefined && this.props.saves.pages.flatMap(value => {
                         return value.data.map(v => {
                             let save = v;
                             return (
@@ -99,7 +72,7 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
                             );
                         })
                     })}
-                    <Loader payload={[]} loaded={!this.state.loading} transparent={true}/>
+                    <Loader payload={[]} loaded={!this.props.pageIsLoading || this.props.saves === undefined} transparent={true}/>
                 </div>
                 <DeleteSaveModal
                     show={this.state.lastDeleteSave !== null}
@@ -116,7 +89,7 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
                         }, () => {
                             // alles neue laden, weil keys sonst doppelt sind
                             // TODO only reload own and following pages
-                            this.resetSaves();
+                            // this.resetSaves();
                         });
                     }}
                 />
@@ -129,36 +102,15 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
      * @param id Id eines Speicherstandes
      * @private
      */
-    private getPageOfSave(id: number) {
-        for (let i = 1; i < this.state.saves.length + 1; i++) {
-            let savePage = this.state.saves[i];
+    /*private getPageOfSave(id: number) {
+        for (let i = 1; i < this.props.saves.pages.length + 1; i++) {
+            let savePage = this.props.saves.pages[i];
 
             if (savePage.data.some(s => s.id === id)) {
                 return i;
             }
         }
-    }
-
-    /**
-     * Löscht alle geladenen Seiten und lädt die erste Seite neu
-     * @private
-     */
-    private resetSaves() {
-        this.paginationLoader.clearCache();
-
-        this.isLoading = false;
-        this.setState(() => {
-            return {
-                page: 1,
-                saves: [],
-                pageCount: 1,
-                loading: false,
-                lastDeleteSave: null
-            }
-        },async ()=>{
-            await this.loadNewPage(this.state.page, true);
-        });
-    }
+    }*/
 
     /**
      * Lädt eine neue Seite, wenn gerade noch keine lädt
@@ -166,24 +118,10 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
      * @param forced
      */
     private loadNewPage = async (currentPage: number, forced?: boolean) => {
-        if (!this.isLoading && !this.state.loading) {
-            this.isLoading = true;
-            this.setState({
-                loading: this.isLoading
-            });
-
-            await this.paginationLoader.loadPage(currentPage, forced);
-            this.isLoading = false;
-            this.setState((prev) => {
-                return {
-                    ...prev,
-                    saves: this.paginationLoader.getAllLoaded(),
-                    loading: this.isLoading,
-                    pageCount: this.paginationLoader.pageCount,
-                    page: currentPage
-                }
-            });
+        if (!this.isLoading && !this.props.pageIsLoading) {
+            this.props.savesControlCallbacks.loadPage(currentPage);
         }
+
     };
 
     /**
@@ -192,10 +130,12 @@ export class SaveInfinityScroll extends Component<SaveInfinityScrollProps, SaveI
      * @private
      */
     private loadNewPageIfExists(forced?: boolean) {
-        // length -1 weil es keinen 0 index gibt aber dieser trotzdem in der Längenberechnung einbezogen wird
-        if (this.state.pageCount > this.state.saves.length - 1) {
-            let nextPage = this.state.saves.length;
-            this.loadNewPage(nextPage, forced);
+        if(this.props.saves !== undefined){
+            // length -1 weil es keinen 0 index gibt aber dieser trotzdem in der Längenberechnung einbezogen wird
+            if (this.props.saves.pageCount > this.props.saves.pages.length - 1) {
+                let nextPage = this.props.saves.pages.length;
+                this.loadNewPage(nextPage, forced);
+            }
         }
     }
 

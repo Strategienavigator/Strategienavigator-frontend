@@ -4,6 +4,10 @@ import {Tool} from "../../Tool";
 import {isDesktop} from "../../../Desktop";
 import {SavePagination} from "./SavePagination/SavePagination";
 import {SaveInfinityScroll} from "./SaveInfinityScroll/SaveInfinityScroll";
+import {PaginationPages} from "../../../API/PaginationLoader";
+import {SimpleSaveResource} from "../../../Datastructures";
+import {SavesControlCallbacks, SavesPaginationSetting} from "../ToolHome";
+
 
 interface SaveResourceListProps {
     tool: Tool
@@ -44,7 +48,7 @@ class SaveResourceList extends Component<SaveResourceListProps, SaveResourceList
                 }
                 {
                     !isDesktop() && (
-                        <SaveInfinityScroll tool={this.props.tool!}/>
+                        <SaveInfinityScroll {...this.props}/>
                     )
                 }
             </>

@@ -87,8 +87,6 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 orderDesc: true
             }
         }
-
-        this.loadPage(0);
     }
 
     componentDidMount() {
@@ -99,6 +97,8 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             }
         });
         this.context.setItem(2, {settings: true});
+
+        this.loadPage(0);
     }
 
     getTutorialCanvas = () => {
