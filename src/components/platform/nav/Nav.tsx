@@ -68,7 +68,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                     searchResult: []
                 });
 
-                let searchCall = await getSaves(Session.currentUser?.getID() as number, undefined, undefined, value, value, false);
+                let searchCall = await getSaves(Session.currentUser?.getID() as number, {name:value, description:value, searchBoth: false});
 
                 if (searchCall && searchCall.success) {
                     let searchCallData = searchCall.callData;
