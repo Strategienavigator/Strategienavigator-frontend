@@ -16,6 +16,7 @@ import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {Loader} from "../../../general-components/Loader/Loader";
 
 import "./my-profile.scss";
+import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 
 
 export interface MyProfileState {
@@ -28,6 +29,7 @@ export interface MyProfileState {
     isSaving: boolean
     isSaved?: boolean
     userLoaded: boolean
+    savingError: boolean
 }
 
 export class MyProfileComponent extends Component<any, MyProfileState> {
@@ -45,7 +47,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             showDeleteModal: true,
             passwordFieldTouched: false,
             isSaving: false,
-            userLoaded: false
+            userLoaded: false,
+            savingError: false
         }
     }
 
@@ -84,15 +87,18 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
     changeView = () => {
         this.setState({
-            edit: !this.state.edit
+            edit: !this.state.edit,
+            savingError: false
         });
     }
 
     saveChanges = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+
         this.setState({
-            isSaving: true
+            isSaving: true,
+            savingError: false
         });
 
         let email: string = extractFromForm(e, "email") as string;
@@ -100,27 +106,45 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         let current_password: string = extractFromForm(e, "current_password") as string;
         let new_password: string = extractFromForm(e, "new_password") as string;
 
-        let data: UpdateData = {
-            current_password: current_password,
-            email: email,
-            username: username
-        }
+        let new_username = username !== this.state.user.getUsername() ? username : undefined
+        let new_email = email !== this.state.user.getEmail() ? email : undefined
 
-        if (new_password.length > 0) {
-            data.password = new_password;
-        }
+        let needs_update = new_email !== undefined || new_username !== undefined || new_password.length > 0;
 
-        let call = await updateUser(Session.currentUser?.getID() as number, data);
+        if (needs_update) {
 
-        if (call && call.success) {
-            Session.currentUser?.update(data);
-            reload_app();
+            let data: UpdateData = {
+                current_password: current_password,
+                email: new_email,
+                username: new_username
+            }
 
-            this.setState({
-                isSaved: true,
-                isSaving: false
+            if (new_password.length > 0) {
+                data.password = new_password;
+            }
+
+            let call = await updateUser(Session.currentUser?.getID() as number, data, {
+                errorCallback: (reason) => {
+                    this.setState({
+                        savingError: true
+                    })
+                }
             });
+
+            if (call && call.success) {
+                Session.currentUser?.update(data);
+                reload_app();
+                this.setState({
+                    isSaved: true
+                })
+            }
+        } else {
+            // fake load so the user thinks something is happening
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
+        this.setState({
+            isSaving: false
+        });
     }
 
     showDeleteModal = () => {
@@ -240,7 +264,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         <hr/>
                         <PasswordField id={"current_password"} text={"Aktuelles Passwort"} required={true}
                                        className={"field"} check={false}
-                                       value={this.state.edit ? undefined : ""}eye/>
+                                       value={this.state.edit ? undefined : ""} eye/>
                     </>
                 )}
 
@@ -278,11 +302,10 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 {(this.state.edit) && (
                     <>
                         <div className={"buttonGroup"}>
-                            <Button
+                            <LoadingButton
                                 disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
-                                size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}>
-                                <FontAwesomeIcon icon={faSave}/> &nbsp; Änderungen speichern
-                            </Button>
+                                size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}
+                                isSaving={this.state.isSaving} savingChild={"Speichert"} defaultChild={"Änderungen speichern"}/>
                         </div>
                         <div className={"buttonGroup"}>
                             <Button disabled={this.state.isSaving} size={"sm"} variant={"danger"}
