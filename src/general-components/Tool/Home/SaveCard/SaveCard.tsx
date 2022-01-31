@@ -19,6 +19,7 @@ export class SaveCard extends Component<SaveCardProps, {}> {
 
     render() {
         if(this.props.save !== undefined && this.props.toolLink !== undefined){
+            // EARLY RETURN
             return (
                 <div key={this.props.save.id} className={"save"}>
                     <Card as={Link} to={this.props.toolLink + "/" + this.props.save.id}

@@ -140,11 +140,15 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                     )}
 
 
-                    <Button type={"button"} className={"btn btn-primary sorting-button"}
-                            onClick={this.orderingChangedCallback}>
-                        <FontAwesomeIcon
-                            icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
-                    </Button>
+                    <span className={"sorting-button"}>
+                        <span className={"pr-1"}>Sortierrichtung Datum:{"  "}</span>
+                        <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
+                                className={"btn btn-primary"}
+                                onClick={this.orderingChangedCallback}>
+                            <FontAwesomeIcon
+                                icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
+                        </Button>
+                    </span>
                 </div>
 
                 {this.props.info?.shortDescription}

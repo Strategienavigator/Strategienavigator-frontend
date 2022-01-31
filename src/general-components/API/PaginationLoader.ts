@@ -129,7 +129,7 @@ export class PaginationLoader<D extends object> {
                     if (result.success) {
                         let d = result.callData;
                         const paginationPage: PaginationPage<D> = {
-                            page: page,
+                            page: d.meta.current_page,
                             from: d.meta.from ?? 0,
                             data: d.data
                         }

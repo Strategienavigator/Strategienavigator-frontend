@@ -2,10 +2,8 @@ import React, {Component, ReactNode} from "react";
 import {SimpleSaveResource} from "../../../../Datastructures";
 import {PaginationFooter} from "../../../../PaginationFooter/PaginationFooter";
 import {Card} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import './save-pagination.scss'
-import {faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 import {SaveResourceListProps} from "../SaveResourceList";
 import {SaveCard} from "../../SaveCard/SaveCard";
 
@@ -13,7 +11,6 @@ import {SaveCard} from "../../SaveCard/SaveCard";
 interface SavePaginationState {
     page: number
     lastDeleteSave: SimpleSaveResource | null
-
 }
 
 
@@ -77,7 +74,28 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
 
     }
 
+    /**
+     * Prüft ob die Seite gültig ist und ändert die state variable wenn die Seite ungügltig ist
+     * @private
+     */
+    private checkPage() {
+        let currentPage = this.getCurrentPage();
+        let pages = this.props.saves?.pages;
+        if (pages !== undefined && !this.props.pageIsLoading) {
+            if (currentPage === undefined) {
+                for (const page of pages) {
+                    if (page !== undefined) {
+                        this.setState({
+                            page: page.page
+                        })
+                    }
+                }
+            }
+        }
+    }
+
     render(): ReactNode {
+        this.checkPage();
 
         let page = this.getCurrentPage();
         return (
