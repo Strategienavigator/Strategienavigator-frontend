@@ -29,7 +29,6 @@ export interface MyProfileState {
     isSaving: boolean
     isSaved?: boolean
     userLoaded: boolean
-    savingError: boolean
 }
 
 export class MyProfileComponent extends Component<any, MyProfileState> {
@@ -47,8 +46,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             showDeleteModal: true,
             passwordFieldTouched: false,
             isSaving: false,
-            userLoaded: false,
-            savingError: false
+            userLoaded: false
         }
     }
 
@@ -87,8 +85,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
     changeView = () => {
         this.setState({
-            edit: !this.state.edit,
-            savingError: false
+            edit: !this.state.edit
         });
     }
 
@@ -97,8 +94,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
 
         this.setState({
-            isSaving: true,
-            savingError: false
+            isSaving: true
         });
 
         let email: string = extractFromForm(e, "email") as string;
@@ -125,9 +121,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
             let call = await updateUser(Session.currentUser?.getID() as number, data, {
                 errorCallback: (reason) => {
-                    this.setState({
-                        savingError: true
-                    })
+                    Messages.add("Beim speichern ist ein Fehler aufgetreten", "SUCCESS", Messages.TIMER);
+                    console.error(reason);
                 }
             });
 
