@@ -141,7 +141,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
 
                     <span className={"sorting-button"}>
-                        <span className={"pr-1"}>Sortierrichtung Datum:{"  "}</span>
+                        <span className={"pr-1"}>Nach Datum sortieren:{"  "}</span>
                         <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
                                 className={"btn btn-primary"}
                                 onClick={this.orderingChangedCallback}>

@@ -88,29 +88,15 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                             lastDeleteSave: null
                         }, () => {
                             // alles neue laden, weil keys sonst doppelt sind
-                            // TODO only reload own and following pages
-                            // this.resetSaves();
+                            
+                            this.props.savesControlCallbacks.updatePages();
                         });
                     }}
                 />
             </>
         );
     }
-
-    /**
-     * Gibt den die Seite zurück, die den Speicherstand mit der übergebenen ID enthält
-     * @param id Id eines Speicherstandes
-     * @private
-     */
-    /*private getPageOfSave(id: number) {
-        for (let i = 1; i < this.props.saves.pages.length + 1; i++) {
-            let savePage = this.props.saves.pages[i];
-
-            if (savePage.data.some(s => s.id === id)) {
-                return i;
-            }
-        }
-    }*/
+    
 
     /**
      * Lädt eine neue Seite, wenn gerade noch keine lädt
