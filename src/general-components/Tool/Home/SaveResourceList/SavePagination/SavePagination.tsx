@@ -113,7 +113,9 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
 
                     {page?.data.map(save => {
                             return (
-                                <SaveCard save={save} toolLink={this.props.tool!.getLink()}/>
+                                <SaveCard save={save} toolLink={this.props.tool!.getLink()} onTrash={() => {
+                                    this.props.savesControlCallbacks.deleteSave(save);
+                                }}/>
                             );
                         })
                         ?? // alternative if page is undefined

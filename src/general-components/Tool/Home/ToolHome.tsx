@@ -13,7 +13,8 @@ import {SaveResourceList} from "./SaveResourceList/SaveResourceList";
 import {PaginationLoader, PaginationPages} from "../../API/PaginationLoader";
 import {SimpleSaveResource} from "../../Datastructures";
 import {Session} from "../../Session/Session";
-import {getSaves} from "../../API/calls/Saves";
+import {deleteSave, getSaves} from "../../API/calls/Saves";
+import {DeleteSaveModal} from "./DeleteSaveModal/DeleteSaveModal";
 
 
 export interface ToolHomeInfo {
@@ -35,13 +36,15 @@ interface ToolHomeState {
     saves?: PaginationPages<SimpleSaveResource>
     paginationSettings: SavesPaginationSetting
     isLoadingPage: boolean
+    showDeleteModal: boolean
+    deleteSave?: SimpleSaveResource
 }
 
 export interface SavesControlCallbacks {
     loadPage: (page: number) => void
     updatePages: () => void
     updateSettings: (settings: SavesPaginationSetting) => void
-
+    deleteSave: (save: SimpleSaveResource) => void
 }
 
 class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
@@ -63,7 +66,8 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         this.savesControlCallbacks = {
             loadPage: this.loadPage,
             updatePages: this.updatePages,
-            updateSettings: this.updateSettings
+            updateSettings: this.updateSettings,
+            deleteSave: this.deleteSave
         };
 
         this.paginationLoader = new PaginationLoader<SimpleSaveResource>(async (page, perPage) => {
@@ -81,6 +85,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         });
 
         this.state = {
+            showDeleteModal: false,
             showTutorial: false,
             isLoadingPage: false,
             paginationSettings: {
@@ -165,6 +170,25 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 {this.props.children}
 
                 {(this.state.showTutorial && this.props.tool?.hasTutorial()) && this.getTutorialCanvas()}
+
+                <DeleteSaveModal
+                    show={this.state.showDeleteModal}
+                    save={this.state.deleteSave ?? null}
+                    onClose={() => {
+                        this.setState({
+                            showDeleteModal: false,
+                            deleteSave: undefined
+                        });
+                    }}
+                    onDelete={async (id) => {
+                        await deleteSave(id);
+                        this.setState({
+                            showDeleteModal: false,
+                            deleteSave: undefined
+                        }, () => {
+                            this.updatePages();
+                        });
+                    }}/>
             </div>
         );
     }
@@ -209,6 +233,13 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         this.updateSettings({
             ...this.state.paginationSettings,
             orderDesc: !this.state.paginationSettings.orderDesc,
+        });
+    }
+
+    private deleteSave = async (save: SimpleSaveResource) => {
+        this.setState({
+            showDeleteModal: true,
+            deleteSave: save
         });
     }
 }

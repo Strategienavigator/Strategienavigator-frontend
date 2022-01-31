@@ -15,7 +15,6 @@ export interface SaveInfinityScrollState {
      * Die letzte geladene Seite (aka. die Anzahl der geladenen Seiten)
      */
     page: number
-    lastDeleteSave: SimpleSaveResource | null
     orderDesc: boolean
 }
 
@@ -32,7 +31,6 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
         this.isLoading = false;
         this.state = {
             page: 1,
-            lastDeleteSave: null,
             orderDesc: true
         };
     }
@@ -65,38 +63,17 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                             return (
                                 <SaveCard key={save.id} save={save} toolLink={this.props.tool.getLink()}
                                           onTrash={() => {
-                                              this.setState({
-                                                  lastDeleteSave: save
-                                              });
+                                              this.props.savesControlCallbacks.deleteSave(save);
                                           }}/>
                             );
                         })
                     })}
                     <Loader payload={[]} loaded={!(this.props.pageIsLoading || this.props.saves === undefined)} transparent={true}/>
                 </div>
-                <DeleteSaveModal
-                    show={this.state.lastDeleteSave !== null}
-                    save={this.state.lastDeleteSave}
-                    onClose={() => {
-                        this.setState({
-                            lastDeleteSave: null
-                        });
-                    }}
-                    onDelete={async (id) => {
-                        await deleteSave(id);
-                        this.setState({
-                            lastDeleteSave: null
-                        }, () => {
-                            // alles neue laden, weil keys sonst doppelt sind
-                            
-                            this.props.savesControlCallbacks.updatePages();
-                        });
-                    }}
-                />
             </>
         );
     }
-    
+
 
     /**
      * Lädt eine neue Seite, wenn gerade noch keine lädt
