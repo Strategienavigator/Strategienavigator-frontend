@@ -1,11 +1,11 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
 import {SaveResource} from "../../../general-components/Datastructures";
-import {SWOTFactors, SwotFactorsValues} from "./steps/SWOTFactors";
-import {SWOTAlternativeActions, SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions";
+import {SWOTFactorsComponent, SwotFactorsValues} from "./steps/SWOTFactors/SWOTFactorsComponent";
+import {SWOTAlternativeActionsComponent, SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
 import {
-    SWOTClassifyAlternativeActions,
+    SWOTClassifyAlternativeActionsComponent,
     SWOTClassifyAlternativeActionsValues
-} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
+} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
 
 import "./swot-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
@@ -14,6 +14,9 @@ import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "./export/SWOTExcelExporter";
 import {RouteComponentProps} from "react-router";
 import {ToolSaveProps} from "../../../general-components/Tool/ToolSavePage/ToolSavePage";
+import {SWOTFactors} from "./steps/SWOTFactors/SWOTFactors";
+import {SWOTAlternativeActions} from "./steps/SWOTAlternativeActions/SWOTAlternativeActions";
+import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
 
 
 interface SWOTAnalysisValues {
@@ -34,22 +37,12 @@ class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
         this.addExporter(new JSONExporter());
         this.addExporter(new SWOTExcelExporter());
 
-        this.addStep<SwotFactorsValues>({
-            id: "swot-factors",
-            title: "1. Faktoren festlegen",
-            form: <SWOTFactors/>
-        });
-        this.addStep<SWOTAlternativeActionsValues>({
-            id: "alternative-actions",
-            title: "2. Handlungsalternativen festlegen",
-            form: <SWOTAlternativeActions/>
-        });
-        this.addStep<SWOTClassifyAlternativeActionsValues>({
-            id: "swot-classify-alternate-actions",
-            title: "3. Handlungsalternativen klassifizieren",
-            form: <SWOTClassifyAlternativeActions/>
-        });
+        this.addStep(new SWOTFactors());
+        this.addStep(new SWOTAlternativeActions());
+        this.addStep(new SWOTClassifyAlternativeActions());
     }
+
+
 
     protected renderShortDescription() {
         return null;
@@ -71,18 +64,6 @@ class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
                 Corona-Pandemie.
             </p>
         );
-    }
-
-
-    protected getSaveViewBuilder() {
-
-        return (props:ToolSaveProps<SWOTAnalysisValues>) => {
-            this.setValues("swot-factors", props.save.data["swot-factors"]);
-            this.setValues("alternative-actions", props.save.data["alternative-actions"]);
-            this.setValues("swot-classify-alternate-actions", props.save.data["swot-classify-alternate-actions"]);
-
-            return this.getStepComponent();
-        }
     }
 }
 

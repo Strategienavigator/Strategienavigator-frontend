@@ -2,12 +2,13 @@ import {ResetType} from "../../../../../general-components/Tool/FormComponent/Fo
 import React, {FormEvent} from "react";
 import {Draggable, DropResult} from "react-beautiful-dnd";
 import {Card} from "react-bootstrap";
-import {SWOTAlternativeActionsValues} from "../SWOTAlternativeActions";
+import {SWOTAlternativeActionsValues} from "../SWOTAlternativeActions/SWOTAlternativeActionsComponent";
 import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
 import {Step} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {DragAndDropClassifying} from "./DragAndDropClassifying";
 import {NormalClassifying} from "./NormalClassifying/NormalClassifying";
 import {isDesktop} from "../../../../../general-components/Desktop";
+import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 
 
 export interface ClassifiedAlternateAction {
@@ -35,7 +36,7 @@ export interface SWOTClassifyAlternativeActionsValues {
     actions: ClassifiedAlternateAction[]
 }
 
-class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActionsValues, any> {
+class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, any> {
     private actions = new Map<string, ClassifiedAlternateAction>();
     private classifications = new Map<string, Classification>();
     private noneDroppableID = "classifications-draggables";
@@ -269,5 +270,5 @@ class SWOTClassifyAlternativeActions extends Step<SWOTClassifyAlternativeActions
 }
 
 export {
-    SWOTClassifyAlternativeActions
+    SWOTClassifyAlternativeActionsComponent
 }

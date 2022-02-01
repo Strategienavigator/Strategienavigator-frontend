@@ -3,11 +3,11 @@ import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful
 import {Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons";
-import {SWOTClassifyAlternativeActions} from "./SWOTClassifyAlternativeActions";
+import {SWOTClassifyAlternativeActionsComponent} from "./SWOTClassifyAlternativeActionsComponent";
 
 
 interface DragAndDropClassifyingProps {
-    step3Instance: SWOTClassifyAlternativeActions
+    step3Instance: SWOTClassifyAlternativeActionsComponent
 }
 
 

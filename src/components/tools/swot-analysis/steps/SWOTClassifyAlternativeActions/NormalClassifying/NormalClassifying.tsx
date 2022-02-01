@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ClassifiedAlternateAction, SWOTClassifyAlternativeActions} from "../SWOTClassifyAlternativeActions";
+import {ClassifiedAlternateAction, SWOTClassifyAlternativeActionsComponent} from "../SWOTClassifyAlternativeActionsComponent";
 import {Accordion, Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisH, faExchangeAlt, faPlus} from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +10,7 @@ import {SelectClassificationModal} from "./SelectClassificationModal";
 
 
 interface NormalClassifyingProps {
-    step3instance: SWOTClassifyAlternativeActions
+    step3instance: SWOTClassifyAlternativeActionsComponent
 }
 
 interface NormalClassifyingState {

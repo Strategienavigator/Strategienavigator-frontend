@@ -1,7 +1,7 @@
 import {Tool} from "../Tool";
 
 import "./steppable-tool.scss";
-import StepComponent, {StepComponentProps, StepProp} from "./StepComponent/StepComponent";
+import StepComponent, {StepComponentProps, StepDefinition} from "./StepComponent/StepComponent";
 import React, {Component, ReactComponentElement, ReactNode, RefObject} from "react";
 import {RouteComponentProps, StaticContext} from "react-router";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
@@ -12,10 +12,8 @@ import {ToolSavePage, ToolSaveProps} from "../ToolSavePage/ToolSavePage";
 abstract class SteppableTool<D> extends Tool<D> {
 
     // STEP COMPONENT
-    private steps: Array<StepProp<any>> = [];
+    private steps: Array<StepDefinition<any>> = [];
 
-    // Matrix
-    private matrix?: ReactComponentElement<any>;
 
 
     constructor(props: RouteComponentProps, context: any, toolName: string, toolIcon: IconDefinition, toolID: number) {
@@ -26,18 +24,13 @@ abstract class SteppableTool<D> extends Tool<D> {
 
     }
 
-    protected setMatrix(matrix: ReactComponentElement<any>) {
-        this.matrix = matrix;
-    }
-
-    protected addStep<E>(step: StepProp<E>) {
+    protected addStep<E>(step: StepDefinition<E>) {
         this.steps.push(step);
     }
 
     protected getStepComponent(saveProps: ToolSaveProps<D>) {
         let props: StepComponentProps<D> & React.ComponentProps<any> = {
             key: "stepComponent",
-            matrix: this.matrix,
             steps: this.steps,
             tool: this,
             ...saveProps

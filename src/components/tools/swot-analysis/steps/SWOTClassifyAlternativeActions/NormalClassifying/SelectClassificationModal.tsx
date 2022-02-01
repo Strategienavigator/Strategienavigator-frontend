@@ -1,4 +1,4 @@
-import {Classification, ClassifiedAlternateAction} from "../SWOTClassifyAlternativeActions";
+import {Classification, ClassifiedAlternateAction} from "../SWOTClassifyAlternativeActionsComponent";
 import {Button, FormSelect, Modal} from "react-bootstrap";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

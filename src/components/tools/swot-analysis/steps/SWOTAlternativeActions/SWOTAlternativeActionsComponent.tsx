@@ -1,15 +1,16 @@
-import {ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
+import {ResetType} from "../../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent, RefObject} from "react";
-import {SwotFactorsValues} from "./SWOTFactors";
+import {SwotFactorsValues} from "../SWOTFactors/SWOTFactorsComponent";
 import {Col, Form, ProgressBar, Row, Tab} from "react-bootstrap";
 import {
     CardComponent,
     CardComponentField,
     CardComponentFields
-} from "../../../../general-components/CardComponent/CardComponent";
-import {isDesktop} from "../../../../general-components/Desktop";
-import {extractCardComponentField, extractFromForm} from "../../../../general-components/FormHelper";
-import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+} from "../../../../../general-components/CardComponent/CardComponent";
+import {isDesktop} from "../../../../../general-components/Desktop";
+import {extractCardComponentField, extractFromForm} from "../../../../../general-components/FormHelper";
+import {Step} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 
 
 export interface AlternateAction {
@@ -40,7 +41,7 @@ interface SWOTAlternativeActionsState extends SwotFactorsValues {
     }
 }
 
-export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, SWOTAlternativeActionsState> {
+export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SWOTAlternativeActionsState> {
     private currentActionIndex: number = 0;
     private cardComponentFieldsRefs = Array<RefObject<CardComponent>>();
 
@@ -118,7 +119,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
 
         // PROGRESS
         let currentProgress = ((this.currentActionIndex) / this.state.actions.length) * 100;
-        if (this.disabled) {
+        if (this.props.disabled) {
             currentProgress = 100;
         }
 
@@ -129,14 +130,14 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
 
                 <Row className={"mb-3 mt-3"}>
                     <Col sm={isDesktop() ? 6 : 12}>
-                        <Form.Select id={"first"} disabled={!this.disabled} onChange={(e) => {
+                        <Form.Select id={"first"} disabled={!this.props.disabled} onChange={(e) => {
                             this.changedSelected(e);
                         }} value={firstValue}>
                             {this.state.factors.strengths.map((value, index) => {
                                 return (
                                     <option
                                         key={"S" + index}
-                                        disabled={!this.disabled}
+                                        disabled={!this.props.disabled}
                                         value={String(value.id)}
                                     >
                                         {value.id + " " + value.name}
@@ -147,7 +148,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
                                 return (
                                     <option
                                         key={"W" + index}
-                                        disabled={!this.disabled}
+                                        disabled={!this.props.disabled}
                                         value={String(value.id)}
                                     >
                                         {value.id + " " + value.name}
@@ -157,7 +158,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
                         </Form.Select>
                     </Col>
                     <Col sm={isDesktop() ? 6 : 12}>
-                        <Form.Select id={"second"} disabled={!this.disabled}
+                        <Form.Select id={"second"} disabled={!this.props.disabled}
                                      value={secondValue}
                                      onChange={(e) => {
                                          this.changedSelected(e);
@@ -166,7 +167,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
                                 return (
                                     <option
                                         key={"C" + index}
-                                        disabled={!this.disabled}
+                                        disabled={!this.props.disabled}
                                         value={String(value.id)}
                                     >
                                         {value.id + " " + value.name}
@@ -177,7 +178,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
                                 return (
                                     <option
                                         key={"R" + index}
-                                        disabled={!this.disabled}
+                                        disabled={!this.props.disabled}
                                         value={String(value.id)}
                                     >
                                         {value.id + " " + value.name}
@@ -197,7 +198,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
                                     <Form.Check
                                         id={"no-alternative-" + index}
                                         className={"mb-3"}
-                                        disabled={this.disabled}
+                                        disabled={this.props.disabled}
                                         type={"checkbox"}
                                         name={value.name + "[][noalternative]"}
                                         label={"Keine Handlungsalternative"}
@@ -208,7 +209,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
                                     />
                                     <CardComponent
                                         name={value.name}
-                                        disabled={this.disabled}
+                                        disabled={this.props.disabled}
                                         min={minAlternativeActions}
                                         max={maxAlternativeActions}
                                         hide={value.hasNone}
@@ -245,7 +246,7 @@ export class SWOTAlternativeActions extends Step<SWOTAlternativeActionsValues, S
         }
     }
 
-    extractValues(e: FormEvent<HTMLFormElement>): SWOTAlternativeActionsValues {
+    extractValues(e: FormEvent<HTMLFormElement>) {
         let actions: AlternateAction[] = [];
 
         for (let action of this.state.actions) {

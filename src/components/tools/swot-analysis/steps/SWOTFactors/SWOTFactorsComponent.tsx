@@ -2,17 +2,18 @@ import {
     FormComponent,
     FormComponentProps,
     ResetType
-} from "../../../../general-components/Tool/FormComponent/FormComponent";
+} from "../../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent} from "react";
-import {CardComponent, CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
-import {extractCardComponentField} from "../../../../general-components/FormHelper";
+import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
+import {extractCardComponentField} from "../../../../../general-components/FormHelper";
 import {Accordion} from "react-bootstrap";
-import {NumberCounter} from "../../../../general-components/Counter/NumberCounter";
-import {RomanNumeralsCounter} from "../../../../general-components/Counter/RomanNumeralsCounter";
-import {LowerABCCounter} from "../../../../general-components/Counter/LowerABCCounter";
-import {UpperABCCounter} from "../../../../general-components/Counter/UpperABCCounter";
-import {isDesktop} from "../../../../general-components/Desktop";
-import {Step, SteppableProp} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
+import {RomanNumeralsCounter} from "../../../../../general-components/Counter/RomanNumeralsCounter";
+import {LowerABCCounter} from "../../../../../general-components/Counter/LowerABCCounter";
+import {UpperABCCounter} from "../../../../../general-components/Counter/UpperABCCounter";
+import {isDesktop} from "../../../../../general-components/Desktop";
+import {Step, SteppableProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 
 
 export interface SwotFactorsValues {
@@ -28,34 +29,15 @@ interface SWOTFactorsState {
     collapseAll: boolean
 }
 
-export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
+export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsState> {
     private cardComponentRefs = new Map<string, React.RefObject<CardComponent>>();
 
 
-    constructor(props: FormComponentProps<SwotFactorsValues> & SteppableProp<SwotFactorsValues>, context: any) {
+    constructor(props: FormComponentProps & SteppableProp<SWOTAnalysisValues>, context: any) {
         super(props, context);
         this.state = {
             collapseAll: false
         }
-    }
-
-    extractValues(e: FormEvent<HTMLFormElement>): SwotFactorsValues {
-        let chances: CardComponentFields = extractCardComponentField(e, "chances") as CardComponentFields;
-        let risks: CardComponentFields = extractCardComponentField(e, "risks") as CardComponentFields;
-        let strengths: CardComponentFields = extractCardComponentField(e, "strengths") as CardComponentFields;
-        let weaknesses: CardComponentFields = extractCardComponentField(e, "weaknesses") as CardComponentFields;
-
-        return {
-            factors: {
-                chances: chances,
-                risks: risks,
-                strengths: strengths,
-                weaknesses: weaknesses
-            }
-        }
-    }
-
-    rebuildValues = async (values: SwotFactorsValues) => {
     }
 
     buildPreviousValues = async () => {
@@ -63,9 +45,6 @@ export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
 
     onReset = (type: ResetType) => {
         this.collapseAll(false);
-    }
-
-    submit = async (values: SwotFactorsValues) => {
     }
 
     collapseAll(collapse: boolean) {
@@ -135,7 +114,7 @@ export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
                             <CardComponent required={false} values={values?.strengths}
                                            ref={this.cardComponentRefs.get("strengths")}
                                            counter={upperABCCounter} name={"strengths"}
-                                           disabled={this.disabled}
+                                           disabled={this.props.disabled}
                                            min={min} max={max}/>
                             {this.getError("strengthsError")}
                         </Accordion.Body>
@@ -148,7 +127,7 @@ export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
                             <CardComponent required={false} values={values?.weaknesses}
                                            ref={this.cardComponentRefs.get("weaknesses")}
                                            counter={lowerABCCounter} name={"weaknesses"}
-                                           disabled={this.disabled}
+                                           disabled={this.props.disabled}
                                            min={min} max={max}/>
                             {this.getError("weaknessesError")}
                         </Accordion.Body>
@@ -160,7 +139,7 @@ export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
                             <CardComponent required={false} values={values?.chances}
                                            ref={this.cardComponentRefs.get("chances")}
                                            counter={numberCounter} name={"chances"}
-                                           disabled={this.disabled}
+                                           disabled={this.props.disabled}
                                            min={min} max={max}/>
                             {this.getError("chancesError")}
                         </Accordion.Body>
@@ -172,7 +151,7 @@ export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
                             <CardComponent required={false} values={values?.risks}
                                            ref={this.cardComponentRefs.get("risks")}
                                            counter={romanNumeralCounter} name={"risks"}
-                                           disabled={this.disabled}
+                                           disabled={this.props.disabled}
                                            min={min} max={max}/>
                             {this.getError("risksError")}
                         </Accordion.Body>

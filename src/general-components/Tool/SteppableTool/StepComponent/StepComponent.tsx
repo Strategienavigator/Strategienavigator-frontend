@@ -20,19 +20,31 @@ import {ResetStepsModal} from "./ResetStepsModal/ResetStepsModal";
 import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 import {ExportModal} from "../../ExportButton";
 import {ToolSavePage, ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
+import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
+import {SaveResource} from "../../../Datastructures";
 
 
-export interface StepProp<T> {
+export interface StepDefinition<T> {
     id: string
     title: string
     form: FunctionComponent<SteppableProp<T>> | ComponentClass<SteppableProp<T>>
+    /**
+     * whether this step is selectable by the user
+     * @param data
+     */
+    isUnlocked: (data: T) => boolean
+    /**
+     * should change data in a way that isUnlocked returns false
+     * @param data
+     */
+    resetData: (data: T) => T
+    matrix?: FunctionComponent<MatrixComponentProps<T>> | ComponentClass<MatrixComponentProps<T>>
 }
 
 export interface StepComponentProps<D> extends ToolSaveProps<D> {
-    steps: StepProp<D>[]
+    steps: StepDefinition<D>[]
     tool: Tool<D>,
     savePage: ToolSavePage<D>
-    matrix?: ReactComponentElement<any>
 }
 
 export type CustomNextButton = {
@@ -71,22 +83,14 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
         let progress = 0;
         this.props.steps.forEach((step) => {
-            if (step.values && Object.keys(step.values).length !== 0) {
+            if (step.isUnlocked(this.getData())) {
                 progress++;
-
-                let value = step.fromValues(this.props.save.data);
-                if (
-                    progress < this.props.steps.length &&
-                    Object.keys(value).length > 0
-                ) {
-                    progress++;
-                }
             }
         });
 
         this.state = {
             currentProgress: progress,
-            currentStep: 0,
+            currentStep: progress,
             showExportModal: false,
             showResetModal: false,
             isSaving: false,
@@ -180,11 +184,11 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                     show={this.state.showResetModal}
                     onYes={() => {
                         this.setState({showResetModal: false});
-                        this.resetSteps(this.state.currentStep);
+                        this.resetStepsUntil(this.state.currentStep);
                     }}
                     onAllReset={() => {
                         this.setState({showResetModal: false});
-                        this.resetSteps();
+                        this.resetAllSteps();
                     }}
                     onNo={() => {
                         this.setState({showResetModal: false})
@@ -198,16 +202,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                         });
                     }}
                     onSelect={(exporter) => {
-                        let save = this.props.save;
-                        this.triggerFormSubmits(this.state.currentProgress, true);
-                        let data = this.getAllData();
-
-                        if (save) {
-                            save.data = data;
-                            exporter.export(save);
-                        } else {
-                            Messages.add("Keine Daten vorhanden!", "DANGER", Messages.TIMER);
-                        }
+                        exporter.export(this.props.save);
 
                         this.setState({
                             showExportModal: false
@@ -226,8 +221,6 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         } else {
             this.context.setItem(2, {home: true});
         }
-
-
     }
 
     componentWillUnmount() {
@@ -235,40 +228,15 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     }
 
     private getCurrentStep = () => {
-        return this.state.currentStep;
+        return this.props.steps[this.state.currentStep];
     }
 
     private getCurrentProgress = () => {
-        return this.state.currentProgress;
+        return this.props.steps[this.state.currentProgress];
     }
 
-    public getPreviousStep = <D extends unknown>(): null | D => {
-        if (this.state.currentStep <= 1) {
-            return null;
-        }
-        let previousStep = this.props.steps[this.state.currentStep - 2];
-        return previousStep.fromValues(this.props.save.data);
-    }
-
-    public getFormValues(indexOrID: number | string) {
-        let step;
-        if (typeof indexOrID === "number") {
-            if (indexOrID < 1 || indexOrID > this.props.steps.length) {
-                return null;
-            }
-            step = this.props.steps[indexOrID];
-        } else {
-            for (const stepValue of this.props.steps) {
-                if (stepValue.id === indexOrID) {
-                    step = stepValue;
-                    break;
-                }
-            }
-        }
-        if (step !== undefined) {
-            return step.fromValues(this.props.save.data);
-        }
-        return null;
+    private getData() {
+        return this.props.save.data;
     }
 
     public isAt = (currentStep: number): boolean => {
@@ -281,6 +249,30 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
     public isLastStep = (): boolean => {
         return this.state.currentStep >= this.props.steps.length;
+    }
+
+    /**
+     * Resetet alle steps, von hinten bis zu dem angegebenen index
+     * @param index
+     * @private
+     */
+    private resetStepsUntil(index: number) {
+        if (index < this.props.steps.length) {
+            let newData = {...this.props.save.data} as D;
+            for (let i = this.props.steps.length; i >= index; i--) {
+                newData = this.props.steps[i]?.resetData(newData) ?? newData;
+            }
+
+            let save = {
+                ...this.props.save,
+                data: newData
+            } as SaveResource<D>
+            this.props.saveController.onChanged(save);
+        }
+    }
+
+    private resetAllSteps() {
+        this.resetStepsUntil(0);
     }
 
     public nextStep = async () => {
@@ -323,7 +315,6 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         });
         this.context.disableItem(3, true);
 
-        this.triggerFormSubmits(this.state.currentProgress, true);
 
         const addErrorMessage = () => {
             Messages.add(
@@ -410,140 +401,62 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         });
     }
 
-    public getAllData = (): D => {
-        let data = {} as D;
-        for (const {ref, id} of this.props.steps) {
-            Object.assign(data, {[id]: step});
-        }
-        return data;
-    }
-
-    public getAllForms = (): Map<string, Step<any, any>> => {
-        let forms = new Map<string, Step<any, any>>();
-        for (const {ref, id} of this.props.steps) {
-            forms.set(id, ref.current as Step<any, any>);
-        }
-        return forms;
-    }
-
-    private triggerFormSubmits(to: number, saving: boolean) {
-        for (let i = 0; i < to; i++) {
-            let {ref: {current}} = this.props.steps[i];
-            current?.setIsSaving(saving);
-            current?.triggerFormSubmit();
-        }
-    }
-
-    private resetSteps(currentStep?: number) {
-        let i = (currentStep !== undefined) ? currentStep : 0;
-
-        if (currentStep !== undefined) {
-            this.state.currentStep = currentStep;
-            this.state.currentProgress = currentStep;
-
-            let form = this.props.steps[currentStep - 1].ref.current;
-            form?.reset({same: true, all: false});
-        } else {
-            this.state.currentStep = 1;
-            this.state.currentProgress = 1;
-        }
-
-        for (i; i < this.props.steps.length; i++) {
-            let step = this.props.steps[i].ref;
-            step.current?.reset({same: false, all: true});
-        }
-
-        this.restoreFooter();
-        this.props.steps[(currentStep !== undefined) ? (currentStep - 1) : 0].ref.current?.changeControlFooter();
-        this.forceUpdate();
-    }
-
     private onStepSelect = (title: string | null) => {
         if (title !== null) {
             let newProgress: number = parseInt(title);
 
+
+            this.setState({
+                currentStep: newProgress
+            });
+
             if (newProgress > this.state.currentProgress) {
-                this.state.currentProgress = newProgress;
+                this.setState({
+                    currentProgress: newProgress
+                });
             }
-
-            this.state.currentStep = newProgress;
-            this.restoreFooter();
-
-            let step = this.props.steps[newProgress - 1].ref;
-            if (!step.current?.isDisabled()) {
-                step.current?.changeControlFooter();
-            }
-
-            this.forceUpdate();
         }
     }
 
     private getMatrix(): undefined | ReactNode {
-        if (this.props.matrix === undefined) return null;
-
-        this.triggerFormSubmits(this.state.currentProgress, true);
-        let data = this.getAllData();
-
-        let matrix = React.cloneElement(this.props.matrix, {
-            tool: this.props.tool,
-            stepComponent: this,
-            data: data
-        });
-
-        const getMatrixContainer = () => {
-            return (
-                <div className={"matrixContainer"}>
-                    <div className={"matrix"}>
-                        {matrix}
+        let step = this.getCurrentStep();
+        if (step.matrix !== undefined) {
+            let matrix = React.createElement(step.matrix, {
+                tool: this.props.tool,
+                stepComponent: this,
+                data: this.props.save.data
+            });
+            const getMatrixContainer = () => {
+                return (
+                    <div className={"matrixContainer"}>
+                        <div className={"matrix"}>
+                            {matrix}
+                        </div>
                     </div>
-                    <div className={"matrixButtons"}>
-                        <Button
-                            type={"button"}
-                            variant={"dark"}
-                            onClick={() => {
-                                this.refreshMatrix();
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faSyncAlt}/> Matrix aktualisieren
-                        </Button>
-                    </div>
-                </div>
-            );
-        }
+                );
+            }
 
-        if (isDesktop()) {
-            return getMatrixContainer();
-        } else {
-            return (
-                <Accordion onSelect={() => {
-                    this.refreshMatrix();
-                }} className={"matrixAccordion"}>
-                    <Accordion.Item eventKey={"matrix"}>
-                        <Accordion.Header>
-                            Matrix
-                        </Accordion.Header>
-                        <Accordion.Body>
-                            {getMatrixContainer()}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
-            );
+            if (isDesktop()) {
+                return getMatrixContainer();
+            } else {
+                return (
+                    <Accordion className={"matrixAccordion"}>
+                        <Accordion.Item eventKey={"matrix"}>
+                            <Accordion.Header>
+                                Matrix
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                {getMatrixContainer()}
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                );
+            }
         }
-    }
-
-    private refreshMatrix() {
-        this.forceUpdate();
     }
 
     private shouldMatrixRender(): boolean {
-        if (this.props.matrix !== undefined) {
-            for (const n of this.props.matrix.props.steps) {
-                if (n === this.state.currentStep) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return this.getCurrentStep().matrix !== undefined
     }
 
 }
