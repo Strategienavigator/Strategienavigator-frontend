@@ -16,6 +16,7 @@ import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {Loader} from "../../../general-components/Loader/Loader";
 
 import "./my-profile.scss";
+import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 
 
 export interface MyProfileState {
@@ -91,6 +92,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
     saveChanges = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+
         this.setState({
             isSaving: true
         });
@@ -100,27 +102,44 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         let current_password: string = extractFromForm(e, "current_password") as string;
         let new_password: string = extractFromForm(e, "new_password") as string;
 
-        let data: UpdateData = {
-            current_password: current_password,
-            email: email,
-            username: username
-        }
+        let new_username = username !== this.state.user.getUsername() ? username : undefined
+        let new_email = email !== this.state.user.getEmail() ? email : undefined
 
-        if (new_password.length > 0) {
-            data.password = new_password;
-        }
+        let needs_update = new_email !== undefined || new_username !== undefined || new_password.length > 0;
 
-        let call = await updateUser(Session.currentUser?.getID() as number, data);
+        if (needs_update) {
 
-        if (call && call.success) {
-            Session.currentUser?.update(data);
-            reload_app();
+            let data: UpdateData = {
+                current_password: current_password,
+                email: new_email,
+                username: new_username
+            }
 
-            this.setState({
-                isSaved: true,
-                isSaving: false
+            if (new_password.length > 0) {
+                data.password = new_password;
+            }
+
+            let call = await updateUser(Session.currentUser?.getID() as number, data, {
+                errorCallback: (reason) => {
+                    Messages.add("Beim speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
+                    console.error(reason);
+                }
             });
+
+            if (call && call.success) {
+                Session.currentUser?.update(data);
+                reload_app();
+                this.setState({
+                    isSaved: true
+                })
+            }
+        } else {
+            // fake load so the user thinks something is happening
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
+        this.setState({
+            isSaving: false
+        });
     }
 
     showDeleteModal = () => {
@@ -180,6 +199,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         readOnly={!this.state.edit}
                         suppressErrors={!this.state.edit}
                         defaultValue={this.state.user.getUsername()}
+                        value={this.state.edit ? undefined : this.state.user.getUsername()}
                         callback={checkUsername}
                         failMessage={"Username bereits vorhanden!"}
                         successMessage={"Username verfügbar!"}
@@ -195,6 +215,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         readOnly={!this.state.edit}
                         suppressErrors={!this.state.edit}
                         defaultValue={this.state.user.getEmail()}
+                        value={this.state.edit ? undefined : this.state.user.getEmail()}
                         callback={checkEmail}
                         failMessage={"E-Mail bereits vorhanden!"}
                         successMessage={"E-Mail verfügbar!"}
@@ -209,6 +230,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 {(this.state.edit) && (
                     <PasswordField id={"new_password"} text={"Neues Passwort"} required={false} className={"field"}
                                    check={true}
+                                   value={this.state.edit ? undefined : ""}
                                    eye/>
                 )}
 
@@ -217,7 +239,9 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     <>
                         <PasswordField id={"new_password_confirm"} text={"Neues Passwort wiederholen"}
                                        required={this.state.passwordFieldTouched}
-                                       className={"field"} check={false} eye/>
+                                       className={"field"} check={false}
+                                       value={this.state.edit ? undefined : ""}
+                                       eye/>
                         <div className={"feedback"}>
                             {(this.state.passwordNotMatching) && (
                                 <div className="invalid-feedback d-block">
@@ -234,7 +258,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     <>
                         <hr/>
                         <PasswordField id={"current_password"} text={"Aktuelles Passwort"} required={true}
-                                       className={"field"} check={false} eye/>
+                                       className={"field"} check={false}
+                                       value={this.state.edit ? undefined : ""} eye/>
                     </>
                 )}
 
@@ -272,11 +297,10 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 {(this.state.edit) && (
                     <>
                         <div className={"buttonGroup"}>
-                            <Button
+                            <LoadingButton
                                 disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
-                                size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}>
-                                <FontAwesomeIcon icon={faSave}/> &nbsp; Änderungen speichern
-                            </Button>
+                                size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}
+                                isSaving={this.state.isSaving} savingChild={"Speichert"} defaultChild={"Änderungen speichern"}/>
                         </div>
                         <div className={"buttonGroup"}>
                             <Button disabled={this.state.isSaving} size={"sm"} variant={"danger"}
@@ -299,7 +323,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         </Modal.Header>
                         <Modal.Body>
                             Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
-                            Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses Zeitraumes wird
+                            Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses
+                            Zeitraumes wird
                             Ihr Account unwiderruflich gelöscht!
                         </Modal.Body>
                         <Modal.Footer>
