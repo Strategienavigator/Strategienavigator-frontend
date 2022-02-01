@@ -8,16 +8,15 @@ import {UtilResult} from "./steps/UtilResult";
 
 import "./utility-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {RouteComponentProps} from "react-router";
 
 
-class UtilityAnalysis extends SteppableTool {
+class UtilityAnalysis extends SteppableTool<any> {
 
-    constructor(props: any) {
-        super(props);
 
-        this.setID(1);
-        this.setToolname("Nutzwertanalyse");
-        this.setToolIcon(faBorderAll);
+    constructor(props: RouteComponentProps, context: any) {
+        super(props, context, "Nutzwertanalyse", faBorderAll, 1);
+
         this.setMaintenance(true);
 
         this.addStep({
@@ -59,7 +58,7 @@ class UtilityAnalysis extends SteppableTool {
         return null;
     }
 
-    protected renderView(tool: SaveResource) {
+    protected getSaveViewBuilder(save: SaveResource<any>) {
         return this.getStepComponent();
     }
 }

@@ -5,11 +5,11 @@ import './step.scss';
 import {FormEvent} from "react";
 import {Messages} from "../../../../Messages/Messages";
 
-export interface SteppableProp extends FormComponentProps{
-    stepComp?: StepComponent
+export interface SteppableProp<D> extends FormComponentProps{
+    stepComp?: StepComponent<D>
 }
 
-export abstract class Step<V, S> extends FormComponent<V, SteppableProp,S>{
+export abstract class Step<V, S> extends FormComponent<V, SteppableProp<V>,S>{
 
     protected getStepComponent(){
         return this.props.stepComp;
@@ -17,7 +17,7 @@ export abstract class Step<V, S> extends FormComponent<V, SteppableProp,S>{
 
     protected requireStepComponent(){
         if(this.props.stepComp){
-            return this.props.stepComp as StepComponent;
+            return this.props.stepComp as StepComponent<V>;
         }else{
             throw new Error("No Step Component Set");
         }

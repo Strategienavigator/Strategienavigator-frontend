@@ -1,34 +1,21 @@
 import {SaveResource} from "../Datastructures";
 
 
-class CurrentSave {
+class CurrentSave<D> {
 
-    public static INSTANCE: CurrentSave;
-    public save: SaveResource<any> = {
-        id: -1,
-        name: "",
-        description: "",
-        data: {},
-        locked_by: -1,
-        last_locked: "",
-        owner_id: -1,
-        invited: [],
-        contributors: [],
-        tool_id: -1
-    };
+    public save?: SaveResource<D>;
 
-    public CurrentSave(save?: SaveResource<any>) {
+    public CurrentSave(save?: SaveResource<D>) {
         if (save) {
             this.save = save;
         }
-        CurrentSave.INSTANCE = this;
     }
 
     public getSave() {
         return this.save;
     }
 
-    public setSave(save: SaveResource<any>) {
+    public setSave(save: SaveResource<D>) {
         this.save = save;
     }
 
@@ -41,7 +28,8 @@ class CurrentSave {
     }
 
     public setName(name: string) {
-        this.save.name = name;
+        if(this.save !== undefined)
+            this.requireSave().name = name;
     }
 
     public getDesc() {
@@ -49,7 +37,8 @@ class CurrentSave {
     }
 
     public setDesc(desc: string) {
-        this.save.description = desc;
+        if(this.isset())
+            this.requireSave().description = desc;
     }
 
     public getData() {
@@ -57,7 +46,14 @@ class CurrentSave {
     }
 
     public isset() {
-        return this.save.id !== -1;
+        return this.save !== undefined;
+    }
+
+    public requireSave(){
+        if(this.save !== undefined)
+            return this.save;
+        else
+            throw new Error("Save not set");
     }
 
 }

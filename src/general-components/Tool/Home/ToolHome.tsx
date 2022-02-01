@@ -23,7 +23,7 @@ export interface ToolHomeInfo {
 }
 
 export interface ToolHomeProps {
-    tool?: Tool
+    tool: Tool<any>
     info?: ToolHomeInfo
 }
 
@@ -72,15 +72,13 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
         this.paginationLoader = new PaginationLoader<SimpleSaveResource>(async (page, perPage) => {
             let userId = Session.currentUser?.getID() as number;
-            if (this.props.tool !== undefined) {
-                return await getSaves(userId, {
-                    toolID: this.props.tool.getID(),
-                    page: page,
-                    ...this.state.paginationSettings
-                });
-            } else {
-                return null;
-            }
+
+            return await getSaves(userId, {
+                toolID: this.props.tool.getID(),
+                page: page,
+                ...this.state.paginationSettings
+            });
+
 
         });
 
@@ -97,7 +95,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
     componentDidMount() {
         this.context.setItem(1, {
             newTool: {
-                callback: () => this.props.tool?.switchPage("new"),
+                callback: () => this.props.tool.switchPage("new"),
                 title: "Neue Analyse"
             }
         });
@@ -110,7 +108,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         return (
             <Offcanvas placement={"start"} show={this.state.showTutorial}>
                 <OffcanvasHeader closeButton onClick={() => this.setState({showTutorial: false})}>
-                    <Offcanvas.Title>{this.props.tool?.getToolName()}</Offcanvas.Title>
+                    <Offcanvas.Title>{this.props.tool.getToolName()}</Offcanvas.Title>
                 </OffcanvasHeader>
                 <OffcanvasBody>
                     {this.props.info?.tutorial}
@@ -120,14 +118,14 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
     }
 
     render = () => {
-        let title = this.props.tool?.getToolName();
+        let title = this.props.tool.getToolName();
 
         return (
             <div className={"toolHome"}>
                 <h4>
-                    <FontAwesomeIcon icon={this.props.tool?.getToolIcon() as IconDefinition}/> &nbsp; {title} &nbsp;
+                    <FontAwesomeIcon icon={this.props.tool.getToolIcon() as IconDefinition}/> &nbsp; {title} &nbsp;
 
-                    {(this.props.tool?.hasTutorial()) && (
+                    {(this.props.tool.hasTutorial()) && (
                         <Badge
                             bg="dark"
                             className={"description"}
@@ -139,14 +137,14 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 </h4>
                 <div className={"button-container mb-0 mt-2"}>
                     {isDesktop() && (
-                        <Button onClick={() => this.props.tool?.switchPage("new")} size={"sm"} variant={"dark"}>
+                        <Button onClick={() => this.props.tool.switchPage("new")} size={"sm"} variant={"dark"}>
                             <FontAwesomeIcon icon={faPlusSquare}/> Neue Analyse
                         </Button>
                     )}
 
 
                     <span className={"sorting-button"}>
-                        <span >Nach Erstelldatum sortieren: </span>
+                        <span>Nach Erstelldatum sortieren: </span>
                         <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
                                 className={"btn btn-primary"}
                                 onClick={this.orderingChangedCallback}>

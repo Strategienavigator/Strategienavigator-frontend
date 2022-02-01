@@ -127,8 +127,8 @@ const lockSave = async (saveID: number, lock: boolean, apiArgs?: APIArgs) => {
  * @param data Daten des Save
  * @param apiArgs API Argumente
  */
-const createSave = async (data: FormData, apiArgs?: APIArgs) => {
-    return await callAPI("api/saves", "POST", data, true, apiArgs);
+const createSave = async <D extends unknown>(data: FormData, apiArgs?: APIArgs) => {
+    return await callAPI<DefaultResponse<SaveResource<D>>>("api/saves", "POST", data, true, apiArgs);
 }
 
 export {

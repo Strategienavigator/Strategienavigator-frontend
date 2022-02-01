@@ -31,7 +31,8 @@ interface SWOTFactorsState {
 export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
     private cardComponentRefs = new Map<string, React.RefObject<CardComponent>>();
 
-    constructor(props: FormComponentProps & SteppableProp, context: any) {
+
+    constructor(props: FormComponentProps<SwotFactorsValues> & SteppableProp<SwotFactorsValues>, context: any) {
         super(props, context);
         this.state = {
             collapseAll: false
@@ -66,12 +67,6 @@ export class SWOTFactors extends Step<SwotFactorsValues, SWOTFactorsState> {
 
     submit = async (values: SwotFactorsValues) => {
     }
-
-    // Override
-    setDisabled = (disabled: boolean) => {
-        this.disabled = disabled;
-        this.collapseAll(true);
-    };
 
     collapseAll(collapse: boolean) {
         this.setState({

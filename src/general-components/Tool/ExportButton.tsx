@@ -10,7 +10,7 @@ interface ExportModalProps {
     onClose: () => void
     onSelect: (exporter: Exporter<any>) => void
     show: boolean
-    tool: Tool
+    tool: Tool<any>
 }
 
 function ExportModal(props: ExportModalProps) {
@@ -66,7 +66,7 @@ function ExportModal(props: ExportModalProps) {
 }
 
 interface ExportButtonProps {
-    tool: Tool
+    tool: Tool<any>
     onClick: () => void
 }
 

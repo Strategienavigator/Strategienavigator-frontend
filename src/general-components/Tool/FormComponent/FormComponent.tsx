@@ -2,13 +2,12 @@ import {Component, FormEvent, ReactNode} from "react";
 import {Form} from "react-bootstrap";
 import {Messages} from "../../Messages/Messages";
 import {randomBytes} from "crypto";
-import {Tool} from "../Tool";
 
 
 export interface FormComponentProps {
     id?: string
     title?: string
-    tool?: Tool
+    disabled: boolean
 }
 
 export interface ResetType {
@@ -16,10 +15,9 @@ export interface ResetType {
     same: boolean
 }
 
-export abstract class FormComponent<V, P, S> extends Component<FormComponentProps & P, S> {
+export abstract class FormComponent<V, P extends FormComponentProps, S> extends Component<P, S> {
     public isSaving: boolean = false;
     protected values: V | object = {};
-    protected disabled: boolean = false;
     private error: Map<string, ReactNode[]> = new Map<string, ReactNode[]>();
     private key: string = randomBytes(200).toString();
     private buildValues: boolean = false;
@@ -36,7 +34,7 @@ export abstract class FormComponent<V, P, S> extends Component<FormComponentProp
 
     public render = () => {
         return (
-            <Form key={this.key} aria-disabled={this.disabled} name={this.props.id}
+            <Form key={this.key} aria-disabled={this.props.disabled} name={this.props.id}
                   onSubmit={async (e) => {
                       e.preventDefault();
                       await this.onFormSubmit(e);
@@ -49,7 +47,6 @@ export abstract class FormComponent<V, P, S> extends Component<FormComponentProp
 
     public reset = (type: ResetType): void => {
         this.values = {};
-        this.disabled = false;
         this.error.clear();
         this.key = randomBytes(200).toString();
         this.onReset(type);
@@ -87,13 +84,8 @@ export abstract class FormComponent<V, P, S> extends Component<FormComponentProp
         return this.values !== {};
     }
 
-    public setDisabled = (disabled: boolean) => {
-        this.disabled = disabled;
-        this.forceUpdate();
-    }
-
     public isDisabled = (): boolean => {
-        return this.disabled;
+        return this.props.disabled;
     }
 
     public triggerFormSubmit = () => {

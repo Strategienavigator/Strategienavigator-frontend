@@ -12,6 +12,8 @@ import {SteppableTool} from "../../../general-components/Tool/SteppableTool/Step
 import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "./export/SWOTExcelExporter";
+import {RouteComponentProps} from "react-router";
+import {ToolSaveProps} from "../../../general-components/Tool/ToolSavePage/ToolSavePage";
 
 
 interface SWOTAnalysisValues {
@@ -20,14 +22,13 @@ interface SWOTAnalysisValues {
     "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
 }
 
-class SWOTAnalysis extends SteppableTool {
+class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
 
-    constructor(props: any) {
-        super(props);
 
-        this.setID(2);
-        this.setToolname("SWOT Analyse");
-        this.setToolIcon(faThLarge);
+    constructor(props: RouteComponentProps<{ id: string }>, context: any) {
+        super(props, context, "SWOT Analyse", faThLarge, 2);
+
+
         // this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
 
         this.addExporter(new JSONExporter());
@@ -72,12 +73,16 @@ class SWOTAnalysis extends SteppableTool {
         );
     }
 
-    protected renderView(save: SaveResource<SWOTAnalysisValues>) {
-        this.setValues("swot-factors", save.data["swot-factors"]);
-        this.setValues("alternative-actions", save.data["alternative-actions"]);
-        this.setValues("swot-classify-alternate-actions", save.data["swot-classify-alternate-actions"]);
 
-        return this.getStepComponent();
+    protected getSaveViewBuilder() {
+
+        return (props:ToolSaveProps<SWOTAnalysisValues>) => {
+            this.setValues("swot-factors", props.save.data["swot-factors"]);
+            this.setValues("alternative-actions", props.save.data["alternative-actions"]);
+            this.setValues("swot-classify-alternate-actions", props.save.data["swot-classify-alternate-actions"]);
+
+            return this.getStepComponent();
+        }
     }
 }
 

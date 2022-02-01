@@ -14,11 +14,11 @@ export interface DesktopButtonsState {
 }
 
 export interface DesktopButtonsProps {
-    tool: Tool
+    tool: Tool<any>
     hasCustomNextButton:boolean,
     formID:string,
     nextDisabled:boolean,
-    customNextButton:CustomNextButton
+    customNextButton: CustomNextButton
     isSaving:boolean,
     onSave:()=>void,
     onReset:()=>void

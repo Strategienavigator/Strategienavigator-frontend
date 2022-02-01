@@ -5,16 +5,15 @@ import {PCPairComparison} from "./steps/PCPairComparison";
 
 import "./pairwise-comparison.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {RouteComponentProps} from "react-router";
 
 
-class PairwiseComparison extends SteppableTool {
+class PairwiseComparison extends SteppableTool<any> {
 
-    constructor(props: any) {
-        super(props);
 
-        this.setID(3);
-        this.setToolname("Paarweiser Vergleich");
-        this.setToolIcon(faSortAmountDownAlt);
+    constructor(props: RouteComponentProps, context: any) {
+        super(props, context, "Paarweiser Vergleich", faSortAmountDownAlt, 3);
+
         this.setMaintenance(true);
 
         this.addStep({
@@ -46,7 +45,7 @@ class PairwiseComparison extends SteppableTool {
         return null;
     }
 
-    protected renderView(tool: SaveResource) {
+    protected getSaveViewBuilder(save:SaveResource<any>) {
         return this.getStepComponent();
     }
 }

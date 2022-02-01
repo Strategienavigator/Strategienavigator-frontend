@@ -3,9 +3,6 @@ import React, {Component, FormEvent} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {Loader} from "../../Loader/Loader";
 import {extractFromForm} from "../../FormHelper";
-import {Tool} from "../Tool";
-import {RouteComponentProps} from "react-router";
-import {Step} from "../SteppableTool/StepComponent/Step/Step";
 
 interface CreateToolModalState {
     nameError?: {
@@ -14,23 +11,22 @@ interface CreateToolModalState {
     descriptionError?: {
         empty?: boolean
     }
-    isCreatingNewSave: boolean
 }
 
 interface CreateToolModalProps {
-    tool: Tool
+    onSaveCreated: (name: string, description: string) => void
+    onCancel: () => void
+    isCreatingNewSave:boolean
 }
 
-export class CreateToolModal extends Component<CreateToolModalProps & RouteComponentProps<{}>, CreateToolModalState> {
+export class CreateToolModal extends Component<CreateToolModalProps, CreateToolModalState> {
 
 
-    constructor(props: Readonly<CreateToolModalProps & RouteComponentProps<{}>> | (CreateToolModalProps & RouteComponentProps<{}>));
-    constructor(props: CreateToolModalProps & RouteComponentProps<{}>, context: any);
-    constructor(props: (CreateToolModalProps & RouteComponentProps<{}>) | Readonly<CreateToolModalProps & RouteComponentProps<{}>>, context?: any) {
+    constructor(props: Readonly<CreateToolModalProps> | (CreateToolModalProps));
+    constructor(props: CreateToolModalProps, context: any);
+    constructor(props: (CreateToolModalProps) | Readonly<CreateToolModalProps>, context?: any) {
         super(props, context);
-        this.state = {
-            isCreatingNewSave: false,
-        }
+        this.state = {}
     }
 
     render() {
@@ -102,14 +98,12 @@ export class CreateToolModal extends Component<CreateToolModalProps & RouteCompo
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() => {
-                        this.props.history.goBack();
-                    }} variant={"light"} type={"button"}>
+                    <Button onClick={this.props.onCancel} variant={"light"} type={"button"}>
                         Zurück
                     </Button>
-                    <Button variant={"dark"} disabled={this.state.isCreatingNewSave} type={"submit"}
+                    <Button variant={"dark"} disabled={this.props.isCreatingNewSave} type={"submit"}
                             form={"toolhomeInput"}>
-                        <Loader payload={[]} loaded={!this.state.isCreatingNewSave} transparent variant={"dark"}
+                        <Loader payload={[]} loaded={!this.props.isCreatingNewSave} transparent variant={"dark"}
                                 size={15} text={<span>&nbsp;Jetzt beginnen</span>}>
                             Jetzt beginnen
                         </Loader>
@@ -149,20 +143,8 @@ export class CreateToolModal extends Component<CreateToolModalProps & RouteCompo
         }
 
         if (!error) {
-            this.setState({
-                isCreatingNewSave: true
-            });
 
-            this.props.tool.currentSave.setName(name);
-            this.props.tool.currentSave.setDesc(desc);
-
-            let saved = await this.props.tool.save({}, new Map<string, Step<any, any>>());
-            if (saved) {
-                this.setState({
-                    isCreatingNewSave: false
-                });
-                this.props.history.push(this.props.tool.getLink() + "/" + (this.props.tool.currentSave.getID() as number));
-            }
+            this.props.onSaveCreated(name, desc);
         }
     }
 }

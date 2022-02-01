@@ -3,16 +3,14 @@ import {SaveResource} from "../../../general-components/Datastructures";
 
 import "./abc-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {RouteComponentProps} from "react-router";
 
 
-class ABCAnalysis extends SteppableTool {
+class ABCAnalysis extends SteppableTool<any> {
 
-    constructor(props: any) {
-        super(props);
 
-        this.setID(4);
-        this.setToolname("ABC Analyse");
-        this.setToolIcon(faChartPie);
+    constructor(props: RouteComponentProps, context: any) {
+        super(props, context, "ABC Analyse", faChartPie, 4);
         this.setMaintenance(true);
     }
 
@@ -28,7 +26,7 @@ class ABCAnalysis extends SteppableTool {
         return null;
     }
 
-    protected renderView(tool: SaveResource) {
+    protected getSaveViewBuilder(save:SaveResource<any>) {
         return this.getStepComponent();
     }
 }
