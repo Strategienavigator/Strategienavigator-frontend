@@ -121,7 +121,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
             let call = await updateUser(Session.currentUser?.getID() as number, data, {
                 errorCallback: (reason) => {
-                    Messages.add("Beim speichern ist ein Fehler aufgetreten", "SUCCESS", Messages.TIMER);
+                    Messages.add("Beim speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
                     console.error(reason);
                 }
             });
