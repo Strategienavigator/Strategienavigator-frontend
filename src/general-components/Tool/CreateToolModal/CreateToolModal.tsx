@@ -153,15 +153,15 @@ export class CreateToolModal extends Component<CreateToolModalProps & RouteCompo
                 isCreatingNewSave: true
             });
 
-            this.props.tool.setCurrentSaveName(name);
-            this.props.tool.setCurrentSaveDescription(desc);
+            this.props.tool.currentSave.setName(name);
+            this.props.tool.currentSave.setDesc(desc);
 
             let saved = await this.props.tool.save({}, new Map<string, Step<any, any>>());
             if (saved) {
                 this.setState({
                     isCreatingNewSave: false
                 });
-                this.props.history.push(this.props.tool.getLink() + "/" + (this.props.tool.getCurrentSave()?.id as number));
+                this.props.history.push(this.props.tool.getLink() + "/" + (this.props.tool.currentSave.getID() as number));
             }
         }
     }
