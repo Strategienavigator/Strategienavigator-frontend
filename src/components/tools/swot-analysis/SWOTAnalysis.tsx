@@ -1,21 +1,17 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {SWOTFactorsComponent, SwotFactorsValues} from "./steps/SWOTFactors/SWOTFactorsComponent";
-import {SWOTAlternativeActionsComponent, SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
+import {SwotFactorsValues} from "./steps/SWOTFactors/SWOTFactorsComponent";
+import {SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
 import {
-    SWOTClassifyAlternativeActionsComponent,
     SWOTClassifyAlternativeActionsValues
 } from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
 
 import "./swot-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
-import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "./export/SWOTExcelExporter";
 import {RouteComponentProps} from "react-router";
 import {SWOTFactors} from "./steps/SWOTFactors/SWOTFactors";
-import {SWOTAlternativeActions} from "./steps/SWOTAlternativeActions/SWOTAlternativeActions";
-import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
+import {SaveResource} from "../../../general-components/Datastructures";
 
 
 interface SWOTAnalysisValues {
@@ -23,9 +19,7 @@ interface SWOTAnalysisValues {
     "alternative-actions"?: SWOTAlternativeActionsValues,
     "swot-classify-alternate-actions"?: SWOTClassifyAlternativeActionsValues
 }
-
 class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
-
 
     constructor(props: RouteComponentProps<{ id: string }>, context: any) {
         super(props, context, "SWOT Analyse", faThLarge, 2);
@@ -34,8 +28,6 @@ class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
         this.addExporter(new SWOTExcelExporter());
 
         this.addStep(new SWOTFactors());
-        this.addStep(new SWOTAlternativeActions());
-        this.addStep(new SWOTClassifyAlternativeActions());
     }
 
 
@@ -61,6 +53,13 @@ class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
             </p>
         );
     }
+
+    protected getInitData(): SWOTAnalysisValues {
+        let data: SWOTAnalysisValues = {};
+        data = this.getStep(0).dataHandler.fillFromPreviousValues(data);
+        return data;
+    }
+
 }
 
 export {

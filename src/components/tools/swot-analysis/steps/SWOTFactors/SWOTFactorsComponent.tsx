@@ -43,21 +43,26 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
     }
 
     private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {
-        const save = this.props.save.data["swot-factors"];
-        if(save !== undefined){
+        const save = this.props.save;
+        const data = save.data["swot-factors"];
+        if(data !== undefined){
             switch (type) {
                 case "strengths":
-                    save.factors.strengths = values;
+                    data.factors.strengths = values;
                     break;
                 case "weaknesses":
-                    save.factors.weaknesses = values;
+                    data.factors.weaknesses = values;
                     break;
                 case "chances":
-                    save.factors.chances = values;
+                    data.factors.chances = values;
                     break;
                 case "risks":
-                    save.factors.risks = values;
+                    data.factors.risks = values;
             }
+
+
+            save.data["swot-factors"] = data;
+            this.props.saveController.onChanged(save);
         }
     }
 

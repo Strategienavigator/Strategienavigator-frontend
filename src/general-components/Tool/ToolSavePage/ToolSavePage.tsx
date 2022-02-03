@@ -110,7 +110,8 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
                 isSaving: this.state.isSaving
             });
         } else {
-            showErrorPage(404);
+            // showErrorPage(404);
+            return "loading";
         }
     }
 
@@ -219,14 +220,16 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
 
             if (call.success) {
                 let data: SaveResource<D> = {
-                    ...call.callData.data,
-                    data: JSON.parse(call.callData.data.data)
+                    ...call.callData,
+                    data: JSON.parse(call.callData.data)
                 };
                 if (data.tool_id === this.props.tool.getID()) {
                     if ((data.locked_by === null) || data.locked_by === Session.currentUser?.getID()) {
                         await new Promise<void>(resolve => {
                             this.updateSave(data, resolve);
                         });
+
+                        return;
 
                     } else {
                         isLocked = true;

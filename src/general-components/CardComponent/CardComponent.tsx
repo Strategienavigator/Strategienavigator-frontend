@@ -73,7 +73,7 @@ class Card extends Component<CardProps, CardState> {
                         onFocus={() => this.setState({showDesc: true})}
                         name={this.props.name + "[][name]"}
                         spellCheck={false}
-                        defaultValue={this.props.designation}
+                        value={this.props.designation}
                         placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
                     />
                     {
@@ -96,7 +96,7 @@ class Card extends Component<CardProps, CardState> {
                             spellCheck={false}
                             style={{maxHeight: 500}}
                             name={this.props.name + "[][desc]"}
-                            defaultValue={this.props.desc}
+                            value={this.props.desc}
                             placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}
                         />
                     </div>

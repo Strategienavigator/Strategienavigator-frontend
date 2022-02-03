@@ -77,7 +77,7 @@ const getSaves = async (userID: number, getSavesArguments: GetSavesArguments, ap
  * @param apiArgs API Argumente
  */
 const getSave = async <D extends unknown>(saveID: number, apiArgs?: APIArgs) => {
-    return await callAPI<DefaultResponse<SaveResource<D>>>("api/saves/" + saveID, "GET", undefined, true, apiArgs);
+    return await callAPI<SaveResource<D>>("api/saves/" + saveID, "GET", undefined, true, apiArgs);
 }
 
 /**
@@ -102,7 +102,6 @@ const updateSave = async (save:SaveResource<any>, apiArgs?: APIArgs) => {
     data.append("data", JSON.stringify(data));
     data.append("name", save.name as string);
     data.append("description", save.description as string);
-    data.append("_method", "PUT");
     const saveID = save.id;
 
     return await updateSaveData(saveID, data, apiArgs);
@@ -137,6 +136,8 @@ const lockSave = async (saveID: number, lock: boolean, apiArgs?: APIArgs) => {
 
     return await callAPI("api/saves/" + saveID, "POST", data, true, apiArgs);
 }
+
+
 
 /**
  * Erstellt einen neuen Save

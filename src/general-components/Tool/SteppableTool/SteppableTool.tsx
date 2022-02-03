@@ -54,6 +54,10 @@ abstract class SteppableTool<D> extends Tool<D> {
 
     }
 
+    public getStep(index:number){
+        return this.steps[index];
+    }
+
 
     protected buildSaveBuilder(saveProps: ToolSaveProps<D>): JSX.Element {
         return this.getStepComponent(saveProps);

@@ -5,10 +5,11 @@ import {Collapse} from "react-bootstrap";
 import {Form} from "react-bootstrap";
 
 import "./step-header.scss";
+import {ToolSaveProps} from "../../../ToolSavePage/ToolSavePage";
 
 
-export interface StepComponentHeaderProp {
-    tool: Tool
+export interface StepComponentHeaderProp extends ToolSaveProps<any>{
+    tool: Tool<any>
 }
 
 export interface StepComponentState {
@@ -33,7 +34,7 @@ export class StepComponentHeader extends Component<StepComponentHeaderProp, Step
                 <div className={"stepHeader form"}>
                     <Form.Control
                         type={"text"}
-                        defaultValue={this.props.tool.currentSave.getName()}
+                        defaultValue={this.props.save.name}
                         onChange={this.onChangeCurrentName}
                         onFocus={() => {
                             this.setState({
@@ -64,7 +65,7 @@ export class StepComponentHeader extends Component<StepComponentHeaderProp, Step
                                     });
 
                                 }}
-                                defaultValue={this.props.tool.currentSave.getDesc()}
+                                defaultValue={this.props.save.description}
                                 onChange={this.onChangeCurrentDescription}
                             />
                         </div>
@@ -75,10 +76,14 @@ export class StepComponentHeader extends Component<StepComponentHeaderProp, Step
     }
 
     onChangeCurrentName = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.currentSave.setName(e.currentTarget.value);
+        const newSave = this.props.save;
+        newSave.name = e.currentTarget.value;
+        this.props.saveController.onChanged(newSave);
     }
 
     onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
-        this.props.tool?.currentSave.setDesc(e.currentTarget.value);
+        const newSave = this.props.save;
+        newSave.description = e.currentTarget.value;
+        this.props.saveController.onChanged(newSave);
     }
 }

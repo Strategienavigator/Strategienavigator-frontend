@@ -21,7 +21,7 @@ import {SaveResource} from "../../../Datastructures";
 export interface StepDefinition<T> {
     id: string
     title: string
-    dataHandler : StepDataHandler<T>
+    dataHandler: StepDataHandler<T>
     form: FunctionComponent<StepProp<T>> | ComponentClass<StepProp<T>>
     matrix?: FunctionComponent<MatrixComponentProps<T>> | ComponentClass<MatrixComponentProps<T>>
 }
@@ -102,7 +102,6 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     }
 
     render = () => {
-        let i = 0;
         let e = 0;
 
         return (
@@ -115,20 +114,21 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                 >
                     <Row className={"stepContainer"}>
                         {(!isDesktop()) && (
-                            <StepComponentHeader tool={this.props.tool}/>
+                            <StepComponentHeader {...this.props} />
                         )}
 
                         <Col className={"stepTabContainer"}>
                             {(isDesktop()) && (
-                                <StepComponentHeader tool={this.props.tool}/>
+                                <StepComponentHeader {...this.props} />
                             )}
 
                             <Nav className={"stepTabs"}>
-                                {this.props.steps.map((value) => {
-                                    i++;
+                                {this.props.steps.map((value, index) => {
+                                    const i = index + 1;
                                     return (
                                         <Nav.Link key={i} as={NavItem} disabled={i > this.state.currentProgress}
                                                   eventKey={i}>{isDesktop() ? value.title : i}</Nav.Link>
+
                                     );
                                 })}
                             </Nav>
@@ -171,7 +171,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                                             {React.createElement(value.form, {
                                                 id: value.id,
                                                 // title: value.title,
-                                                disabled: this.state.currentProgress > index,
+                                                disabled: this.state.currentProgress > index + 1,
                                                 ...this.props // TODO ...(this.props as ToolSaveProps<D>)
                                             })}
                                         </Tab.Pane>
@@ -230,11 +230,11 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     }
 
     private getCurrentStep = () => {
-        return this.props.steps[this.state.currentStep];
+        return this.props.steps[this.state.currentStep - 1];
     }
 
     private getCurrentProgress = () => {
-        return this.props.steps[this.state.currentProgress];
+        return this.props.steps[this.state.currentProgress - 1];
     }
 
     private getData() {

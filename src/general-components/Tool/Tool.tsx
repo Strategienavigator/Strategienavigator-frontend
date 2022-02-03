@@ -142,6 +142,8 @@ abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
         data.set("name", name);
         data.set("description", description);
         data.set("tool_id", this.getID().toString());
+        data.set("data", JSON.stringify(this.getInitData()));
+
         let saved = await createSave(data);
         if (saved) {
 
@@ -151,6 +153,8 @@ abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
             this.props.history.push(this.getLink() + "/" + saved.callData.data.id);
         }
     }
+
+    protected abstract getInitData():D;
 
     protected abstract renderShortDescription(): ReactNode;
 
