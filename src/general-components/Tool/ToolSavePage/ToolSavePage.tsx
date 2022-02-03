@@ -1,19 +1,17 @@
 import './tool-save-page.scss'
-import React, {Component, ComponentClass, JSXElementConstructor, ReactElement, ReactNode} from "react";
+import React, {Component} from "react";
 import {SaveResource} from "../../Datastructures";
-import {CurrentSave} from "../CurrentSave";
 import {Session} from "../../Session/Session";
 import {Loader} from "../../Loader/Loader";
-import {Prompt, RouteComponentProps, withRouter} from "react-router";
+import {Prompt, RouteComponentProps} from "react-router";
 import * as H from "history";
-import {FormComponent} from "../FormComponent/FormComponent";
-import {createSave, getSave, lockSave, updateSave} from "../../API/calls/Saves";
+import {getSave, lockSave, updateSave} from "../../API/calls/Saves";
 import {Tool} from "../Tool";
 import {Messages} from "../../Messages/Messages";
 import {Card} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
-import {LoadingButton} from "../../LoadingButton/LoadingButton";
+import {showErrorPage} from "../../../index";
 
 type ToolViewValidation = {
     isNotOwn?: boolean
@@ -21,10 +19,6 @@ type ToolViewValidation = {
     isLocked?: boolean
 };
 
-interface ToolSavePageProps<D> {
-    tool: Tool<D>
-    element: (saveProps:ToolSaveProps<D>) => JSX.Element
-}
 
 interface ToolSaveController<D> {
     save: () => Promise<boolean>
@@ -34,10 +28,17 @@ interface ToolSaveController<D> {
 interface ToolSaveProps<D> {
     saveController: ToolSaveController<D>
     save: SaveResource<D>
+    isSaving: boolean
+}
+
+interface ToolSavePageProps<D> {
+    tool: Tool<D>
+    element: (saveProps: ToolSaveProps<D>) => JSX.Element
 }
 
 interface ToolSavePageState<D> {
     save?: SaveResource<D>
+    isSaving: boolean
     showConfirmToolRouteChangeModal: boolean
     lastLocation?: H.Location
     viewValidationError?: ToolViewValidation
@@ -46,14 +47,17 @@ interface ToolSavePageState<D> {
 
 class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
 
-    // CURRENT SAVE
-    public currentSave: CurrentSave<D> = new CurrentSave();
-
+    private readonly saveController: ToolSaveController<D>;
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
         this.state = {
             showConfirmToolRouteChangeModal: false,
+            isSaving: false
+        }
+        this.saveController = {
+            save: this.save.bind(this),
+            onChanged: this.updateSave.bind(this)
         }
     }
 
@@ -79,24 +83,35 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
     }
 
     private onUnload = async () => {
-        let data = new FormData();
-        data.append("_method", "PUT");
-        data.append("lock", "0");
+        if (this.state.save !== undefined) {
+            // TODO use callAPI method
+            let data = new FormData();
+            data.append("_method", "PUT");
+            data.append("lock", "0");
 
-        let headers = new Headers();
-        headers.append("Authorization", "Bearer " + Session.getToken());
+            let headers = new Headers();
+            headers.append("Authorization", "Bearer " + Session.getToken());
 
-        await fetch(process.env.REACT_APP_API + "api/saves/" + this.currentSave.getID(), {
-            method: "POST",
-            body: data,
-            headers: headers,
-            keepalive: true
-        });
+            await fetch(process.env.REACT_APP_API + "api/saves/" + this.state.save.id, {
+                method: "POST",
+                body: data,
+                headers: headers,
+                keepalive: true
+            });
+        }
     }
 
 
-    private getView(){
-        React.createElement(this.props.element,)
+    private getView() {
+        if (this.state.save !== undefined) {
+            return this.props.element({
+                save: this.state.save,
+                saveController: this.saveController,
+                isSaving: this.state.isSaving
+            });
+        } else {
+            showErrorPage(404);
+        }
     }
 
 
@@ -104,9 +119,9 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
         let ID = parseInt(this.props.match.params.id as string);
         return (
             <Route>
-                <Loader payload={[() => this.validateViewID(ID)]} transparent
+                <Loader payload={[() => this.retrieveSave(ID)]} transparent
                         alignment={"center"} fullscreen animate={false}>
-                    {(this.state.viewValidationError === undefined) ? this.props.children : (
+                    {(this.state.viewValidationError === undefined) ? this.getView() : (
                         <Card body>
                             {(this.state.viewValidationError.isNotOwn) && (
                                 <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
@@ -153,68 +168,66 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
         return (location.pathname === this.state.lastLocation?.pathname);
     }
 
-    public save = async (data: object, forms: Map<string, FormComponent<any, any, any>>): Promise<boolean> => {
-        let saveData = new FormData();
-        saveData.append("data", JSON.stringify(data));
-        saveData.append("name", this.currentSave.getName() as string);
-        saveData.append("description", this.currentSave.getDesc() as string);
+    private save = async () => {
+        if (this.hasCurrentSave()) {
+            this.setState({
+                isSaving: true
+            });
+            // saveData.append("tool_id", String(save.tool_id)); no need to send tool_id because it is immutable
+            const call = await updateSave(this.state.save!, {errorCallback: this.onAPIError});
 
-        let call;
+            this.setState({
+                isSaving: false
+            });
 
-
-        if (!this.currentSave.isset()) {
-            saveData.append("tool_id", String(this.props.tool.getID()));
-            call = await createSave<D>(saveData, {errorCallback: this.onAPIError});
-
-            if (call && call.success) {
-                let callData = call.callData;
-                this.currentSave.setSave(callData.data);
-            }
+            return (call !== null && call.success);
         } else {
-            let id = this.currentSave.getID()!;
-            call = await updateSave(id, saveData, {errorCallback: this.onAPIError});
+            return false;
         }
 
-        return (call !== null && call.success);
+    }
+
+    private updateSave(save: SaveResource<D>, callback?: () => void) {
+        this.setState({
+            save: save
+        }, callback)
+
     }
 
     public onAPIError(error: Error): void {
         // TODO
-        Messages.add("FEHLER", "DANGER", Messages.TIMER);
+        Messages.add(error.name, "DANGER", Messages.TIMER);
     }
 
-    public hasCurrentSave(): boolean {
-        return this.currentSave.getDesc() !== undefined && this.currentSave.getName() !== undefined;
-    }
-
-    public getValues<D>(id: string) {
-
-    }
-
-    public setValues(id: string, values: D) {
-
+    private hasCurrentSave(): boolean {
+        return this.state.save !== undefined;
     }
 
     private lockSave = async (lock: boolean) => {
         if (this.hasCurrentSave()) {
-            return await lockSave(this.currentSave.getID() as number, lock, {errorCallback: this.onAPIError});
+            return await lockSave(this.state.save!.id as number, lock, {errorCallback: this.onAPIError});
         } else {
             console.warn("WARNING: Tried to send lock request without a current save!")
         }
     }
 
-    private validateViewID = async (ID: number) => {
-        let call = await getSave(ID, {errorCallback: this.onAPIError});
+    private retrieveSave = async (ID: number) => {
+        let call = await getSave<string>(ID, {errorCallback: this.onAPIError});
         if (call) {
-            let data = call.callData as SaveResource<any>;
+
             let isNotOwn, isOtherTool, isLocked;
 
             if (call.success) {
-                data.data = JSON.parse(data.data);
+                let data: SaveResource<D> = {
+                    ...call.callData.data,
+                    data: JSON.parse(call.callData.data.data)
+                };
                 if (data.tool_id === this.props.tool.getID()) {
                     if ((data.locked_by === null) || data.locked_by === Session.currentUser?.getID()) {
-                        this.currentSave.setSave(data);
-                        await this.lock();
+                        await new Promise<void>(resolve => {
+                            this.updateSave(data, resolve);
+                        });
+
                     } else {
                         isLocked = true;
                     }
@@ -237,7 +250,7 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
             }
 
             this.setState({
-                save: data,
+                save: undefined,
                 viewValidationError: validation
             });
         }

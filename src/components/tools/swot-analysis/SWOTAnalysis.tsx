@@ -13,16 +13,15 @@ import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "./export/SWOTExcelExporter";
 import {RouteComponentProps} from "react-router";
-import {ToolSaveProps} from "../../../general-components/Tool/ToolSavePage/ToolSavePage";
 import {SWOTFactors} from "./steps/SWOTFactors/SWOTFactors";
 import {SWOTAlternativeActions} from "./steps/SWOTAlternativeActions/SWOTAlternativeActions";
 import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
 
 
 interface SWOTAnalysisValues {
-    "swot-factors": SwotFactorsValues,
-    "alternative-actions": SWOTAlternativeActionsValues,
-    "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
+    "swot-factors"?: SwotFactorsValues,
+    "alternative-actions"?: SWOTAlternativeActionsValues,
+    "swot-classify-alternate-actions"?: SWOTClassifyAlternativeActionsValues
 }
 
 class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
@@ -30,9 +29,6 @@ class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
 
     constructor(props: RouteComponentProps<{ id: string }>, context: any) {
         super(props, context, "SWOT Analyse", faThLarge, 2);
-
-
-        // this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
 
         this.addExporter(new JSONExporter());
         this.addExporter(new SWOTExcelExporter());

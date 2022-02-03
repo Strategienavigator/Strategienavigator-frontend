@@ -1,4 +1,5 @@
-import {FormEvent} from "react";
+import React from "react";
+import {FormEvent, ReactNode} from "react";
 import {CardComponentFields} from "./CardComponent/CardComponent";
 
 
@@ -9,6 +10,20 @@ const getRadioNodeList = (element: RadioNodeList): Array<string> => {
         values.push(input.value);
     });
     return values;
+}
+
+
+function forEachChildrenRecursively(roots: ReactNode[], func: (node: ReactNode) => void){
+    React.Children.forEach(roots,(value => {
+
+        if(React.isValidElement(value)){
+            if("children" in value.props){
+                forEachChildrenRecursively(value.props.children, func);
+            }
+        }
+
+
+    }));
 }
 
 const extractCardComponentField = (form: FormEvent<HTMLFormElement>, name: string) => {
@@ -23,7 +38,7 @@ const extractCardComponentField = (form: FormEvent<HTMLFormElement>, name: strin
         if (names.constructor.name !== "RadioNodeList") {
             if (names as HTMLInputElement !== null) {
                 return [{
-                    desc: (descs as HTMLInputElement).value,
+                    desc: (descs as HTMLTextAreaElement).value,
                     name: (names as HTMLInputElement).value,
                     id: (ids as HTMLInputElement).value
                 }];
@@ -89,5 +104,6 @@ const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardCo
 
 export {
     extractCardComponentField,
-    extractFromForm
+    extractFromForm,
+    forEachChildrenRecursively
 }

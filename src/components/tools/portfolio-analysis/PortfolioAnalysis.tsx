@@ -59,7 +59,7 @@ class PortfolioAnalysis extends SteppableTool<any> {
         return null;
     }
 
-    protected getSaveViewBuilder(save:SaveResource<any>) {
+    protected buildSaveBuilder(save:SaveResource<any>) {
         return this.getStepComponent();
     }
 }

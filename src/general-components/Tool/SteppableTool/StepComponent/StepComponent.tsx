@@ -1,25 +1,19 @@
-import React, {
-    Component, ComponentClass,
-    FunctionComponent,
-    ReactComponentElement,
-    ReactNode,
-} from "react";
-import {Accordion, Button, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
+import React, {Component, ComponentClass, FunctionComponent, ReactNode,} from "react";
+import {Accordion, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretLeft, faCaretRight, faSave, faSyncAlt} from "@fortawesome/free-solid-svg-icons/";
+import {faCaretLeft, faCaretRight, faSave} from "@fortawesome/free-solid-svg-icons/";
 import {Tool} from "../../Tool";
 import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
-import {Step, SteppableProp} from "./Step/Step";
+import {StepProp} from "./Step/Step";
 import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeaderProp";
 import {FooterContext} from "../../../Contexts/FooterContextComponent";
 import {DesktopButtons} from "./DesktopButtons/DesktopButtons";
 import {ResetStepsModal} from "./ResetStepsModal/ResetStepsModal";
 import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 import {ExportModal} from "../../ExportButton";
-import {ToolSavePage, ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
+import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
 import {SaveResource} from "../../../Datastructures";
 
@@ -27,24 +21,33 @@ import {SaveResource} from "../../../Datastructures";
 export interface StepDefinition<T> {
     id: string
     title: string
-    form: FunctionComponent<SteppableProp<T>> | ComponentClass<SteppableProp<T>>
+    dataHandler : StepDataHandler<T>
+    form: FunctionComponent<StepProp<T>> | ComponentClass<StepProp<T>>
+    matrix?: FunctionComponent<MatrixComponentProps<T>> | ComponentClass<MatrixComponentProps<T>>
+}
+
+export interface StepDataHandler<T> {
     /**
      * whether this step is selectable by the user
      * @param data
      */
     isUnlocked: (data: T) => boolean
+
     /**
-     * should change data in a way that isUnlocked returns false
+     * change data in a way that isUnlocked returns true
      * @param data
      */
-    resetData: (data: T) => T
-    matrix?: FunctionComponent<MatrixComponentProps<T>> | ComponentClass<MatrixComponentProps<T>>
+    fillFromPreviousValues: (data: T) => T
+    /**
+     * change data in a way that isUnlocked returns false
+     * @param data
+     */
+    deleteData: (data: T) => T
 }
 
 export interface StepComponentProps<D> extends ToolSaveProps<D> {
     steps: StepDefinition<D>[]
-    tool: Tool<D>,
-    savePage: ToolSavePage<D>
+    tool: Tool<D>
 }
 
 export type CustomNextButton = {
@@ -52,7 +55,7 @@ export type CustomNextButton = {
     callback: () => void
 } | null;
 
-export interface StepComponentState<T> {
+export interface StepComponentState {
     /**
      * Aktuell sichtbarer Schritt
      */
@@ -65,10 +68,9 @@ export interface StepComponentState<T> {
     showExportModal: boolean
     hasCustomNextButton: boolean
     customNextButton: CustomNextButton
-    isSaving: boolean
 }
 
-class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentState<D>> {
+class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentState> {
 
 
     /**
@@ -78,12 +80,13 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     context!: React.ContextType<typeof FooterContext>
 
 
-    constructor(props: StepComponentProps<D>, context: any) {
+    constructor(props: Readonly<StepComponentProps<D>> | StepComponentProps<D>);
+    constructor(props: StepComponentProps<D>, context: any);
+    constructor(props: Readonly<StepComponentProps<D>> | StepComponentProps<D>, context?: any) {
         super(props, context);
-
         let progress = 0;
         this.props.steps.forEach((step) => {
-            if (step.isUnlocked(this.getData())) {
+            if (step.dataHandler.isUnlocked(this.getData())) {
                 progress++;
             }
         });
@@ -93,7 +96,6 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
             currentStep: progress,
             showExportModal: false,
             showResetModal: false,
-            isSaving: false,
             hasCustomNextButton: false,
             customNextButton: null,
         }
@@ -138,7 +140,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                                     customNextButton={this.state.customNextButton}
                                     formID={this.props.steps[this.state.currentStep - 1].id}
                                     nextDisabled={this.isLastStep()}
-                                    isSaving={this.state.isSaving}
+                                    isSaving={this.props.isSaving}
                                     onReset={() => {
                                         this.setState({showResetModal: true})
                                     }}
@@ -168,9 +170,9 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
                                             {React.createElement(value.form, {
                                                 id: value.id,
-                                                title: value.title,
-                                                stepComp: this,
-                                                disabled: this.state.currentProgress > index
+                                                // title: value.title,
+                                                disabled: this.state.currentProgress > index,
+                                                ...this.props // TODO ...(this.props as ToolSaveProps<D>)
                                             })}
                                         </Tab.Pane>
                                     );
@@ -260,8 +262,9 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         if (index < this.props.steps.length) {
             let newData = {...this.props.save.data} as D;
             for (let i = this.props.steps.length; i >= index; i--) {
-                newData = this.props.steps[i]?.resetData(newData) ?? newData;
+                newData = this.props.steps[i]?.dataHandler.deleteData(newData) ?? newData;
             }
+            newData = this.props.steps[index]?.dataHandler.fillFromPreviousValues(newData);
 
             let save = {
                 ...this.props.save,
@@ -310,9 +313,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     }
 
     public save = async () => {
-        this.setState({
-            isSaving: true
-        });
+        // TODO move in render method
         this.context.disableItem(3, true);
 
 
@@ -335,11 +336,8 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         } else {
             addErrorMessage();
         }
-
+        // TODO move in render method
         this.context.disableItem(3, false);
-        this.setState({
-            isSaving: false
-        });
     }
 
     public addCustomNextButton = (text: string, callback: () => any) => {

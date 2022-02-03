@@ -107,8 +107,7 @@ abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
                     <Route exact path={this.newPath}>
                         <CreateToolModal onSaveCreated={this.createNewSave}
                                          onCancel={() => {
-                                             this.props.history.push(this.getLink()
-                                             );
+                                             this.props.history.push(this.getLink());
                                          }}
                                          isCreatingNewSave={this.state.isCreatingNewSave}/>
                     </Route>
@@ -117,7 +116,7 @@ abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
                         exact
                         render={(routeProps) => {
                             return <ToolSavePage tool={this} history={routeProps.history} location={routeProps.location}
-                                                 match={routeProps.match} element={this.getSaveViewBuilder.bind(this)}/>
+                                                 match={routeProps.match} element={this.buildSaveBuilder.bind(this)}/>
                         }}
                         path={this.viewPath}/>
                 </Switch>
@@ -156,7 +155,7 @@ abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
     protected abstract renderShortDescription(): ReactNode;
 
 
-    protected abstract getSaveViewBuilder(saveProps: ToolSaveProps<D>): JSX.Element
+    protected abstract buildSaveBuilder(saveProps: ToolSaveProps<D>): JSX.Element
 
     protected abstract renderTutorial(): ReactNode;
 

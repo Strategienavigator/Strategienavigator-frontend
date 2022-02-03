@@ -1,19 +1,14 @@
-import {
-    FormComponent,
-    FormComponentProps,
-    ResetType
-} from "../../../../../general-components/Tool/FormComponent/FormComponent";
-import React, {FormEvent} from "react";
+import React from "react";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
-import {extractCardComponentField} from "../../../../../general-components/FormHelper";
 import {Accordion} from "react-bootstrap";
 import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
 import {RomanNumeralsCounter} from "../../../../../general-components/Counter/RomanNumeralsCounter";
 import {LowerABCCounter} from "../../../../../general-components/Counter/LowerABCCounter";
 import {UpperABCCounter} from "../../../../../general-components/Counter/UpperABCCounter";
 import {isDesktop} from "../../../../../general-components/Desktop";
-import {Step, SteppableProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
+import {SWOTFactors} from "./SWOTFactors";
 
 
 export interface SwotFactorsValues {
@@ -30,21 +25,15 @@ interface SWOTFactorsState {
 }
 
 export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsState> {
-    private cardComponentRefs = new Map<string, React.RefObject<CardComponent>>();
 
+    private static min = 2;
+    private static max = 8;
 
-    constructor(props: FormComponentProps & SteppableProp<SWOTAnalysisValues>, context: any) {
+    constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
         super(props, context);
         this.state = {
             collapseAll: false
         }
-    }
-
-    buildPreviousValues = async () => {
-    }
-
-    onReset = (type: ResetType) => {
-        this.collapseAll(false);
     }
 
     collapseAll(collapse: boolean) {
@@ -53,46 +42,28 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         });
     }
 
-    validate(values: SwotFactorsValues): boolean {
-        let validate = true;
-        const errorText = (text: string) => `Bitte füllen Sie alle ${text} aus!`;
-
-        if (this.cardComponentRefs.get("strengths")?.current?.hasInvalidValue()) {
-            this.addError("strengthsError", errorText("Stärken"));
-            validate = false;
-        }
-        if (this.cardComponentRefs.get("weaknesses")?.current?.hasInvalidValue()) {
-            this.addError("weaknessesError", errorText("Schwächen"));
-            validate = false;
-        }
-        if (this.cardComponentRefs.get("chances")?.current?.hasInvalidValue()) {
-            this.addError("chancesError", errorText("Chancen"));
-            validate = false;
-        }
-        if (this.cardComponentRefs.get("risks")?.current?.hasInvalidValue()) {
-            this.addError("risksError", errorText("Risiken"));
-            validate = false;
-        }
-
-        if (!validate) {
-            this.collapseAll(true);
-        }
-
-        return validate;
-    }
-
-    buildCardComponentRefs() {
-        if (this.cardComponentRefs.size <= 0) {
-            this.cardComponentRefs.set("strengths", React.createRef<CardComponent>());
-            this.cardComponentRefs.set("weaknesses", React.createRef<CardComponent>());
-            this.cardComponentRefs.set("chances", React.createRef<CardComponent>());
-            this.cardComponentRefs.set("risks", React.createRef<CardComponent>());
+    private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {
+        const save = this.props.save.data["swot-factors"];
+        if(save !== undefined){
+            switch (type) {
+                case "strengths":
+                    save.factors.strengths = values;
+                    break;
+                case "weaknesses":
+                    save.factors.weaknesses = values;
+                    break;
+                case "chances":
+                    save.factors.chances = values;
+                    break;
+                case "risks":
+                    save.factors.risks = values;
+            }
         }
     }
 
     build(): JSX.Element {
-        let min = 2;
-        let max = 8;
+        const min = SWOTFactors.min;
+        const max = SWOTFactors.max;
         let activeKey = "view";
 
         let numberCounter = new NumberCounter();
@@ -100,66 +71,82 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         let upperABCCounter = new UpperABCCounter();
         let lowerABCCounter = new LowerABCCounter();
 
-        let values = (this.values as SwotFactorsValues).factors;
-        this.buildCardComponentRefs();
+        let values = this.props.save.data["swot-factors"]?.factors;
+        if (values !== undefined) {
+            return (
+                <div className={"swot-factors"}>
+                    <Accordion flush={true} activeKey={this.state.collapseAll ? activeKey : undefined}
+                               defaultActiveKey={isDesktop() ? "strengths" : undefined}>
+                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "strengths"}>
+                            <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} -
+                                Stärken (Interne Faktoren)</Accordion.Header>
+                            <Accordion.Body>
+                                <CardComponent required={false}
+                                               values={values?.strengths}
+                                               counter={upperABCCounter}
+                                               name={"strengths"}
+                                               disabled={this.props.disabled}
+                                               min={min}
+                                               max={max}
+                                               onChanged={this.applyCardComponentChanges.bind(this, "strengths")}/>
+                                {/*{this.getError("strengthsError")}*/}
+                            </Accordion.Body>
+                        </Accordion.Item>
 
-        return (
-            <div className={"swot-factors"}>
-                <Accordion flush={true} activeKey={this.state.collapseAll ? activeKey : undefined}
-                           defaultActiveKey={isDesktop() ? "strengths" : undefined}>
-                    <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "strengths"}>
-                        <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} -
-                            Stärken (Interne Faktoren)</Accordion.Header>
-                        <Accordion.Body>
-                            <CardComponent required={false} values={values?.strengths}
-                                           ref={this.cardComponentRefs.get("strengths")}
-                                           counter={upperABCCounter} name={"strengths"}
-                                           disabled={this.props.disabled}
-                                           min={min} max={max}/>
-                            {this.getError("strengthsError")}
-                        </Accordion.Body>
-                    </Accordion.Item>
+                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "weaknesses"}>
+                            <Accordion.Header>{lowerABCCounter.get(1) + "-" + lowerABCCounter.get(max)} -
+                                Schwächen (Interne Faktoren)</Accordion.Header>
+                            <Accordion.Body>
+                                <CardComponent required={false}
+                                               values={values.weaknesses}
+                                               counter={lowerABCCounter}
+                                               name={"weaknesses"}
+                                               disabled={this.props.disabled}
+                                               min={min}
+                                               max={max}
+                                               onChanged={this.applyCardComponentChanges.bind(this,"weaknesses")}/>
+                                {/*{this.getError("weaknessesError")}*/}
+                            </Accordion.Body>
+                        </Accordion.Item>
+                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "chances"}>
+                            <Accordion.Header>{numberCounter.get(1) + "-" + numberCounter.get(max)} -
+                                Chancen (Externe Faktoren)</Accordion.Header>
+                            <Accordion.Body>
+                                <CardComponent required={false}
+                                               values={values.chances}
+                                               counter={numberCounter}
+                                               name={"chances"}
+                                               disabled={this.props.disabled}
+                                               min={min}
+                                               max={max}
+                                               onChanged={this.applyCardComponentChanges.bind(this,"chances")}/>
+                                {/*{this.getError("chancesError")}*/}
+                            </Accordion.Body>
+                        </Accordion.Item>
+                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "risks"}>
+                            <Accordion.Header>{romanNumeralCounter.get(1) + "-" + romanNumeralCounter.get(max)} -
+                                Risiken (Externe Faktoren)</Accordion.Header>
+                            <Accordion.Body>
+                                <CardComponent required={false}
+                                               values={values?.risks}
+                                               counter={romanNumeralCounter}
+                                               name={"risks"}
+                                               disabled={this.props.disabled}
+                                               min={min}
+                                               max={max}
+                                               onChanged={this.applyCardComponentChanges.bind(this,"risks")}/>
+                                {/*{this.getError("risksError")}*/}
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
 
-                    <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "weaknesses"}>
-                        <Accordion.Header>{lowerABCCounter.get(1) + "-" + lowerABCCounter.get(max)} -
-                            Schwächen (Interne Faktoren)</Accordion.Header>
-                        <Accordion.Body>
-                            <CardComponent required={false} values={values?.weaknesses}
-                                           ref={this.cardComponentRefs.get("weaknesses")}
-                                           counter={lowerABCCounter} name={"weaknesses"}
-                                           disabled={this.props.disabled}
-                                           min={min} max={max}/>
-                            {this.getError("weaknessesError")}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "chances"}>
-                        <Accordion.Header>{numberCounter.get(1) + "-" + numberCounter.get(max)} -
-                            Chancen (Externe Faktoren)</Accordion.Header>
-                        <Accordion.Body>
-                            <CardComponent required={false} values={values?.chances}
-                                           ref={this.cardComponentRefs.get("chances")}
-                                           counter={numberCounter} name={"chances"}
-                                           disabled={this.props.disabled}
-                                           min={min} max={max}/>
-                            {this.getError("chancesError")}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "risks"}>
-                        <Accordion.Header>{romanNumeralCounter.get(1) + "-" + romanNumeralCounter.get(max)} -
-                            Risiken (Externe Faktoren)</Accordion.Header>
-                        <Accordion.Body>
-                            <CardComponent required={false} values={values?.risks}
-                                           ref={this.cardComponentRefs.get("risks")}
-                                           counter={romanNumeralCounter} name={"risks"}
-                                           disabled={this.props.disabled}
-                                           min={min} max={max}/>
-                            {this.getError("risksError")}
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
+                </div>
+            );
+        }
 
-            </div>
-        );
+        return <p>"ERROR"</p>; // TODO
+
+
     }
 
     changeControlFooter(): void {

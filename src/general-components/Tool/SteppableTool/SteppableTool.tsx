@@ -2,11 +2,20 @@ import {Tool} from "../Tool";
 
 import "./steppable-tool.scss";
 import StepComponent, {StepComponentProps, StepDefinition} from "./StepComponent/StepComponent";
-import React, {Component, ReactComponentElement, ReactNode, RefObject} from "react";
+import React, {
+    Attributes,
+    ClassAttributes,
+    Component,
+    ComponentProps,
+    ReactComponentElement,
+    ReactNode,
+    RefObject
+} from "react";
 import {RouteComponentProps, StaticContext} from "react-router";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {SaveResource} from "../../Datastructures";
 import {ToolSavePage, ToolSaveProps} from "../ToolSavePage/ToolSavePage";
+import {type} from "os";
 
 
 abstract class SteppableTool<D> extends Tool<D> {
@@ -14,14 +23,13 @@ abstract class SteppableTool<D> extends Tool<D> {
     // STEP COMPONENT
     private steps: Array<StepDefinition<any>> = [];
 
+    private readonly typeStepComponent;
 
 
-    constructor(props: RouteComponentProps, context: any, toolName: string, toolIcon: IconDefinition, toolID: number) {
+
+    protected constructor(props: RouteComponentProps, context: any, toolName: string, toolIcon: IconDefinition, toolID: number) {
         super(props, context, toolName, toolIcon, toolID);
-    }
-
-    public onAPIError(error: Error) {
-
+        this.typeStepComponent = class TypeStepComponent extends StepComponent<D>{};
     }
 
     protected addStep<E>(step: StepDefinition<E>) {
@@ -29,15 +37,26 @@ abstract class SteppableTool<D> extends Tool<D> {
     }
 
     protected getStepComponent(saveProps: ToolSaveProps<D>) {
-        let props: StepComponentProps<D> & React.ComponentProps<any> = {
-            key: "stepComponent",
+        type stepProps = StepComponentProps<D> & ClassAttributes<StepComponent<D>>;
+        let props : stepProps = {
+            key: "stepcomponent",
             steps: this.steps,
             tool: this,
             ...saveProps
-        }
+        };
 
-        return React.createElement(StepComponent, props, null)
+        let typesProps = props as stepProps;
 
+
+
+
+        return React.createElement(this.typeStepComponent, typesProps,null);
+
+    }
+
+
+    protected buildSaveBuilder(saveProps: ToolSaveProps<D>): JSX.Element {
+        return this.getStepComponent(saveProps);
     }
 }
 

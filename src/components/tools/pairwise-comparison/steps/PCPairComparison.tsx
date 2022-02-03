@@ -26,7 +26,7 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
     changeControlFooter(): void {
     }
 
-    build() {
+    build(): JSX.Element {
         return (
             <div>
                 Im Aufbau...

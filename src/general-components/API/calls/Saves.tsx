@@ -76,8 +76,8 @@ const getSaves = async (userID: number, getSavesArguments: GetSavesArguments, ap
  * @param saveID Die ID des Saves
  * @param apiArgs API Argumente
  */
-const getSave = async (saveID: number, apiArgs?: APIArgs) => {
-    return await callAPI<DefaultResponse<SaveResource>>("api/saves/" + saveID, "GET", undefined, true, apiArgs);
+const getSave = async <D extends unknown>(saveID: number, apiArgs?: APIArgs) => {
+    return await callAPI<DefaultResponse<SaveResource<D>>>("api/saves/" + saveID, "GET", undefined, true, apiArgs);
 }
 
 /**
@@ -90,6 +90,23 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
     return await callAPI("api/saves/" + saveID, "DELETE", undefined, true, apiArgs);
 }
 
+
+/**
+ * Updatet einen Save
+ *
+ * @param save Der zu aktualisierende Speicherstand
+ * @param apiArgs API Argumente
+ */
+const updateSave = async (save:SaveResource<any>, apiArgs?: APIArgs) => {
+    let data = new FormData();
+    data.append("data", JSON.stringify(data));
+    data.append("name", save.name as string);
+    data.append("description", save.description as string);
+    data.append("_method", "PUT");
+    const saveID = save.id;
+
+    return await updateSaveData(saveID, data, apiArgs);
+}
 /**
  * Updatet einen Save
  *
@@ -97,7 +114,7 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
  * @param data Daten des Speicherstandes
  * @param apiArgs API Argumente
  */
-const updateSave = async (saveID: number, data: FormData, apiArgs?: APIArgs) => {
+const updateSaveData = async (saveID: number, data: FormData, apiArgs?: APIArgs) => {
     data.append("_method", "PUT");
 
     return await callAPI("api/saves/" + saveID, "POST", data, true, apiArgs);

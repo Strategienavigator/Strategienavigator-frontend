@@ -30,7 +30,7 @@ export class PCCriterias extends Step<PCCriteriasValues, {}> {
 
     }
 
-    build() {
+    build(): JSX.Element {
         return (
             <div>
                 <CardComponent

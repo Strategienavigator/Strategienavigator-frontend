@@ -1,22 +1,22 @@
-import React, {ChangeEvent, Component, ReactElement, RefObject} from "react";
+import React, {ChangeEvent, Component} from "react";
 import {Button, Card as BootstrapCard, Collapse, FormControl, InputGroup} from "react-bootstrap";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {isDesktop} from "../Desktop";
-import {Messages} from "../Messages/Messages";
 import {CounterInterface} from "../Counter/CounterInterface";
 
 import "./card-component.scss";
 
 
 export interface CardProps {
-    name: string
     id: string | null
+    name: string
+    desc: string
+    designation?: string
     disabled: boolean
     required: boolean
-    onDelete: () => void
-    designation?: string
-    desc?: string
+    onChange: (name: string, desc: string) => void
+    onDelete?: () => void
     placeholder?: CardComponentFieldPlaceholder
 }
 
@@ -26,8 +26,6 @@ export interface CardState {
 }
 
 class Card extends Component<CardProps, CardState> {
-    private currentDesc: string | undefined;
-    private currentName: string | undefined;
 
     constructor(props: CardProps | Readonly<CardProps>) {
         super(props);
@@ -36,39 +34,28 @@ class Card extends Component<CardProps, CardState> {
             showDesc: isDesktop(),
             descChanged: false
         };
-
-        this.currentDesc = this.props.designation;
-        this.currentName = this.props.name;
-    }
-
-    isValid = () => {
-        if (this.currentDesc !== undefined && this.currentDesc !== "") {
-            if (this.currentName !== undefined && this.currentName !== "") {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    getDescription = () => {
-        return this.currentDesc;
-    }
-
-    getName = () => {
-        return this.currentName;
     }
 
     nameChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        this.currentName = e.currentTarget.value;
+        e.preventDefault();
+        this.props.onChange(e.currentTarget.value, this.props.desc);
     }
 
     descChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        e.preventDefault();
         let value = e.currentTarget.value;
-        this.currentDesc = value;
-
         this.setState({
             descChanged: value.length > 0
         });
+        this.props.onChange(this.props.name, value);
+
+
+    }
+
+    onDelete = ()=> {
+        if(this.props.onDelete !== undefined){
+            this.props.onDelete();
+        }
     }
 
     render = () => {
@@ -89,11 +76,13 @@ class Card extends Component<CardProps, CardState> {
                         defaultValue={this.props.designation}
                         placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
                     />
-                    {(!this.props.disabled) && (
-                        <Button className={"noButton"} onClick={() => this.props.onDelete()} variant={"link"}>
-                            <FontAwesomeIcon icon={faTimes}/>
-                        </Button>
-                    )}
+                    {
+                        ((!this.props.disabled) && this.props.onDelete !== undefined) ? (
+                            <Button className={"noButton"} onClick={this.onDelete} variant={"link"}>
+                                <FontAwesomeIcon icon={faTimes}/>
+                            </Button>
+                        ) : undefined
+                    }
                 </InputGroup>
                 <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
                     <div>
@@ -136,139 +125,63 @@ export interface CardComponentFieldPlaceholder {
 
 export interface CardComponentProps {
     name: string
+    values: CardComponentFields
     disabled: boolean
     min: number
     max: number
+    onChanged: (values: CardComponentFields) => void
     hide?: boolean
     required?: boolean
     counter?: CounterInterface
-    values?: CardComponentFields
     placeholder?: CardComponentFieldPlaceholder
 }
 
-export type CardsInterface = Map<number, {
-    card: ReactElement<CardProps, any>,
-    ref: RefObject<Card>
-}>;
+class CardComponent extends Component<CardComponentProps, {}> {
 
-interface CardComponentState {
-    cards: CardsInterface,
-    index: number
-}
+    private cardUpdatedListener(index: number, name: string, desc: string) {
+        let newValues = this.props.values.slice();
+        newValues[index] = {
+            id: newValues[index].id,
+            name: name,
+            desc: desc
+        }
+        this.props.onChanged(newValues);
+    }
 
-class CardComponent extends Component<CardComponentProps, CardComponentState> {
-
-    constructor(props: CardComponentProps | Readonly<CardComponentProps>) {
-        super(props);
-
-        this.state = {
-            index: 1,
-            cards: new Map<number, {
-                card: ReactElement<CardProps, any>,
-                ref: RefObject<Card>
-            }>()
+    private removeCard(index: number) {
+        let newValues = this.props.values;
+        if (newValues.length > this.props.min) {
+            newValues.splice(index, 1);
+            this.props.onChanged(newValues);
         }
     }
 
-    getCards = () => {
-        return this.state.cards;
-    }
-
-    getRefs = (): Array<RefObject<Card>> => {
-        let values = Array<RefObject<Card>>();
-        this.state.cards.forEach((value) => {
-            values.push(value.ref);
-        });
-        return values;
-    }
-
-    hasInvalidValue = (): boolean => {
-        let isInValid: boolean = false;
-        this.state.cards.forEach((value) => {
-            if (!value.ref.current?.isValid()) {
-                isInValid = true;
-                return;
-            }
-        })
-        return isInValid;
-    }
-
-    addCard = (designation?: string, desc?: string) => {
-        if (this.state.cards.size < this.props.max) {
-            this.setState(state => {
-                let required = (this.props.required !== undefined) ? this.props.required : true;
-                let ref = React.createRef<Card>();
-                let index = state.index;
-                let cards = state.cards;
-
-                cards.set(
-                    index,
-                    {
-                        card: (
-                            <Card id={this.props.counter?.get(this.state.cards.size) || null}
-                                  disabled={this.props.disabled}
-                                  onDelete={() => this.removeCard(index)}
-                                  key={index}
-                                  required={required}
-                                  name={this.props.name}
-                                  designation={designation}
-                                  ref={ref}
-                                  desc={desc}
-                            />
-                        ),
-                        ref: ref
-                    }
-                );
-
-                return {
-                    cards: cards,
-                    index: index + 1
-                };
-            });
+    private addCard() {
+        let newValues = this.props.values.slice();
+        if (newValues.length < this.props.max) {
+            newValues.push({name: "", desc: "", id: this.props.counter?.get(this.props.values.length) ?? null})
+            this.props.onChanged(newValues);
         }
     }
 
-    removeAllCards = () => {
-        this.setState(state => {
-            let cards = state.cards;
-            cards.clear();
-
-            return {
-                cards: cards
-            }
-        });
-    }
-
-    removeCard = (index: number) => {
-        if (!(this.state.cards.size <= this.props.min)) {
-            this.setState(state => {
-                let cards = state.cards;
-                cards.delete(index);
-                return {
-                    cards: cards
-                };
-            });
-        } else {
-            Messages.add("Sie müssen mindestens " + this.props.min + " Punkte angeben, um fortfahren zu können.", "DANGER", Messages.TIMER);
-        }
-    }
 
     getAllCards = () => {
-        let cards = Array<ReactElement<CardProps>>();
-        let required = (this.props.required !== undefined) ? this.props.required : true;
-        let i = 1;
 
-        this.state.cards.forEach((value) => {
-            cards.push(React.cloneElement(value.card, {
-                disabled: this.props.disabled,
-                required: required,
-                id: this.props.counter?.get(i) || null,
-                placeholder: this.props.placeholder
-            }));
-            i++;
+        let required = (this.props.required !== undefined) ? this.props.required : true;
+
+        return this.props.values.map((value, index) => {
+            return (
+                <Card id={value.id}
+                          name={value.name}
+                          desc={value.desc}
+                          disabled={this.props.disabled}
+                          required={required}
+                          onDelete={this.removeCard.bind(this,index)}
+                          onChange={this.cardUpdatedListener.bind(this,index)}/>
+            );
         });
 
-        return cards;
+
     }
 
     render = () => {
@@ -276,8 +189,8 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
             <div className={this.props.hide ? "d-none" : ""}>
                 {this.getAllCards()}
 
-                {((this.state.cards.size < this.props.max) && !this.props.disabled) && (
-                    <BootstrapCard onClick={() => this.addCard()}
+                {((this.props.values.length < this.props.max) && !this.props.disabled) && (
+                    <BootstrapCard onClick={this.addCard.bind(this)}
                                    className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
                         <div className={"icon"}>
                             <FontAwesomeIcon icon={faPlus}/>
@@ -286,24 +199,6 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
                 )}
             </div>
         );
-    }
-
-    componentDidMount() {
-        if (this.state.cards.size <= 0) {
-            if (this.props.values) {
-                // set values
-                for (const value of this.props.values) {
-                    let designation = value.name;
-                    let desc = value.desc;
-                    this.addCard(designation, desc);
-                }
-            } else {
-                // add min
-                for (let i = 0; i < this.props.min; i++) {
-                    this.addCard();
-                }
-            }
-        }
     }
 
 }
