@@ -33,6 +33,8 @@ export type SimpleSaveResource = {
     name: string
     last_locked: Date
     owner_id: number
+    owner: string
+    owner_deleting: boolean
     tool_id: number
     description: string
     contributors: Array<number>
