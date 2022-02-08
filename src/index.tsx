@@ -87,7 +87,7 @@ const getAppFooter = () => {
     return (
         <>
             <Footer />
-            <ControlFooter places={3}/>
+            <ControlFooter places={4}/>
         </>
     );
 }

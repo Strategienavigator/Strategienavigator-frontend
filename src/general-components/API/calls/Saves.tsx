@@ -2,40 +2,68 @@ import {APIArgs, callAPI} from "../API";
 import {DefaultResponse, PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
 
 
+export interface GetSavesArguments {
+    /**
+     * ID des Strategietools
+     */
+    toolID?: number,
+    /**
+     * Nummer der Seite, startet bei 1
+     */
+    page?: number,
+    /**
+     * Name als Suchparameter
+     */
+    name?: string,
+    /**
+     * Beschreibung als Suchparameter
+     */
+    description?: string,
+    /**
+     * Ob in dem Speicherstand der Suchwert von dem Namen und der Beschreibung enthalten sein muss oder nur eins der beiden
+     */
+    searchBoth?: boolean,
+    /**
+     * Ob die speicherstände absteigend oder aufsteigend nach erstelldatum sortiert werden sollen
+     */
+    orderDesc?: boolean
+}
+
 /**
  * Holt sich alle Saves zum angegebenen Benutzer
  *
  * @param userID Die ID des Benutzers
- * @param toolID ID des Strategietools
- * @param page Nummer der Seite, startet bei 1
- * @param name Name als Suchparameter
- * @param description Beschreibung als Suchparameter
- * @param searchBoth Ob in dem Speicherstand der Suchwert von dem Namen und der Beschreibung enthalten sein muss oder nur eins der beiden
+ * @param getSavesArguments Argumente welche steuern, welche werte zurückgegeben werden
  * @param apiArgs API Argumente
  */
-const getSaves = async (userID: number, toolID?: number, page?: number, name?: string, description?: string, searchBoth?: boolean, apiArgs?: APIArgs) => {
+const getSaves = async (userID: number, getSavesArguments: GetSavesArguments, apiArgs?: APIArgs) => {
     let data = new URLSearchParams();
     let searchParams = false;
 
-    if (toolID) {
-        data.append("tool_id", String(toolID));
+    if (getSavesArguments.toolID) {
+        data.append("tool_id", String(getSavesArguments.toolID));
         searchParams = true;
     }
-    if (page) {
-        data.append("page", String(page));
+    if (getSavesArguments.page) {
+        data.append("page", String(getSavesArguments.page));
         searchParams = true;
     }
-    if (name) {
-        data.append("name", name);
+    if (getSavesArguments.name) {
+        data.append("name", getSavesArguments.name);
         searchParams = true;
     }
-    if (description) {
-        data.append("description", description);
+    if (getSavesArguments.description) {
+        data.append("description", getSavesArguments.description);
         searchParams = true;
     }
 
-    if (searchBoth) {
-        data.append("search_both", searchBoth ? "1" : "0");
+    if (getSavesArguments.searchBoth) {
+        data.append("search_both", getSavesArguments.searchBoth ? "1" : "0");
+        searchParams = true;
+    }
+
+    if (getSavesArguments.orderDesc !== undefined ) {
+        data.append("orderBy", getSavesArguments.orderDesc ? "DESC" : "ASC");
         searchParams = true;
     }
 
