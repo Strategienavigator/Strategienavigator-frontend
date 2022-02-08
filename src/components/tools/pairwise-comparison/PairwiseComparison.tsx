@@ -5,8 +5,11 @@ import {PCPairComparison, PCPairComparisonValues} from "./steps/PCPairComparison
 
 import "./pairwise-comparison.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {JSONExporter} from "../../../general-components/Export/JSONExporter";
+import {SWOTExcelExporter} from "../swot-analysis/export/SWOTExcelExporter";
+import {PCExcelExporter} from "./export/PCExcelExporter";
 
-interface PairwiseComparisonValues {
+export interface PairwiseComparisonValues {
     "pc-criterias": PCCriteriasValues,
     "pc-comparison": PCPairComparisonValues
 }
@@ -20,6 +23,9 @@ class PairwiseComparison extends SteppableTool {
         this.setToolname("Paarweiser Vergleich");
         this.setToolIcon(faSortAmountDownAlt);
         this.setMaintenance(false);
+
+        this.addExporter(new JSONExporter());
+        this.addExporter(new PCExcelExporter());
 
         this.addStep({
             form: <PCCriterias/>,

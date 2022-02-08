@@ -29,9 +29,9 @@ class MatchCardComponentFieldsAdapter extends CompareAdapter {
     public getEntry(index: number): SingleComparison {
         let secondIndex = index + 1;
 
+        // TODO make formula instead of loop
         // kriterien / (Fakultät von 2 * Fakultät von (kriterien - 2)
 
-        // TODO make formula instead of loop
         let i = 0;
         const maxMatchCount = this.cardComponentFields.length-1;
         while (secondIndex > maxMatchCount - i) {

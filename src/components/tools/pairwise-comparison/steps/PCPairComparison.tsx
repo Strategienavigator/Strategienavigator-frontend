@@ -84,7 +84,6 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
                         catch (e) {
 
                         }
-
                     }
                 }
 

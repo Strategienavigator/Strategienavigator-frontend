@@ -5,6 +5,8 @@ import XLSX, {BookType, CellObject, CellStyle, WorkBook, WorkSheet} from "xlsx-j
 
 abstract class ExcelExporter<D> extends Exporter<D> {
     private workbook: WorkBook;
+    protected encodeCell = XLSX.utils.encode_cell;
+    protected encodeRange = XLSX.utils.encode_range;
 
     constructor() {
         super("Excel", "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -79,8 +81,8 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         this.addSheet("Grundlagen", worksheet);
     }
 
-    protected getHeaderStyle():CellStyle{
-        return  {
+    protected getHeaderStyle(): CellStyle {
+        return {
             font: {
                 bold: true
             }
