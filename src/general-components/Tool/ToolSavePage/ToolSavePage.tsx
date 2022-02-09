@@ -272,6 +272,7 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
                         await new Promise<void>(resolve => {
                             this.updateSave(data, resolve);
                         });
+                        await this.lock();
 
                         return;
 
