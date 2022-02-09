@@ -6,9 +6,7 @@ import {CardComponentFields} from "../../CardComponent/CardComponent";
  * Ein CompareAdapter, welcher alle CardComponentFields eine kombination zuweist, und die zweite Kombinationsvariante leer lässt
  */
 class LinearCardComponentFieldsAdapter extends CompareAdapter {
-
     private cardComponentFields: CardComponentFields;
-
 
     constructor(cardComponentFields: CardComponentFields) {
         super();

@@ -13,12 +13,12 @@ abstract class CompareHeader {
     }
 
     /**
-     * Gibt ein Array mit allen Überschriften, welche angezeigt werden, zurück
+     * Gibt ein Array zurück mit allen Überschriften, welche angezeigt werden
      */
     public abstract getHeaders():Array<string>;
 
     /**
-     * Gibt eine Überschrift zurück, welche an der übergebenen stelle steht
+     * Gibt eine Überschrift zurück, welche an dem übergebenen index steht
      * @param index index des von getHeaders zurückgegeben Array
      */
     public getHeader(index: number): string {

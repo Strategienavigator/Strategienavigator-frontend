@@ -2,14 +2,25 @@ import {ExcelExporter} from "../../../../general-components/Export/ExcelExporter
 import {PairwiseComparisonValues} from "../PairwiseComparison";
 import {SaveResource} from "../../../../general-components/Datastructures";
 import {Range, WorkBook, WorkSheet} from "xlsx-js-style";
-import {PCCriteriasValues} from "../steps/PCCriterias";
 import {PCPairComparisonValues} from "../steps/PCPairComparison";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 
 
+/**
+ * Stellt den Excel-Export für den Paarweisen Vergleich dar
+ */
 class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
 
+    /**
+     * Baut die Excel-Datei
+     * Fügt insgesamt Zwei Seiten hinzu
+     *
+     * @param {WorkBook} workbook Die Excel-Datei
+     * @param {SaveResource<PairwiseComparisonValues>} data Die Daten des Paarweisen-Vergleichs
+     * @returns {boolean} Gibt zurück ob der Aufbau erfolgreich war
+     * @protected
+     */
     protected buildExcel(workbook: WorkBook, data: SaveResource<PairwiseComparisonValues>): boolean {
         let criterias = data.data["pc-criterias"];
         let comparison = data.data["pc-comparison"];
@@ -27,6 +38,13 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
         return true;
     }
 
+    /**
+     * Erstellt die Excel-Seite für die Kriterien
+     *
+     * @param {CardComponentFields} criterias Die Kriterien vom Paarweisen-Vergleich
+     * @returns {WorkSheet} Die erstellte Excel-Seite
+     * @private
+     */
     private getCriteriaSheet(criterias: CardComponentFields) {
         let ws: WorkSheet = {};
         let cell = {r: 0, c: 0};
@@ -74,6 +92,14 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
         return ws;
     }
 
+    /**
+     * Erstellt die Excel-Seite für den Vergleich
+     *
+     * @param {CardComponentFields} criterias Die Kriterien vom Paarweisen-Vergleich
+     * @param {PCPairComparisonValues} comparison Der Vergleich vom Paarweisen-Vergleich
+     * @returns {WorkSheet} Die erstellte Excel-Seite
+     * @private
+     */
     private getComparisonSheet(criterias: CardComponentFields, comparison: PCPairComparisonValues) {
         let ws: WorkSheet = {};
         let cell = {r: 0, c: 0};

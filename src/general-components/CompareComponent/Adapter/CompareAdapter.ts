@@ -1,7 +1,7 @@
 import {SingleComparison} from "../CompareComponent";
 
 /**
- * Abstrakte Klasse für das CompareComponent welche Methoden der Adapter Klasse zu definieren, welche genutzt werden, um alle Kombinationen anzuzeigen
+ * Abstrakte Klasse für das CompareComponent welche Methoden der Adapter Klasse definieren, welche genutzt werden, um alle Kombinationen anzuzeigen
  */
 abstract class CompareAdapter {
     /**
@@ -21,7 +21,7 @@ abstract class CompareAdapter {
     /**
      * Erstellt ein neues Array mit allen Werten, welche die getEntry Methode zurückgibt.
      *
-     * Die länge des Arrays entspricht immer dem Wert der von this.getLength() zurückgegeben wird.
+     * Die Länge des Arrays entspricht immer dem Wert der von this.getLength() zurückgegeben wird.
      */
     public toArray():Array<SingleComparison>{
         let a = new Array<SingleComparison>();

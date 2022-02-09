@@ -16,7 +16,7 @@ class MatchCardComponentFieldsAdapter extends CompareAdapter {
     constructor(cardComponentFields: CardComponentFields) {
         super();
         if (cardComponentFields.length < 2) {
-            throw new Error("")
+            throw new Error("Cardcomponentfield muss mindestends Zwei Einträge enthalten!");
         }
         this.cardComponentFields = cardComponentFields;
     }

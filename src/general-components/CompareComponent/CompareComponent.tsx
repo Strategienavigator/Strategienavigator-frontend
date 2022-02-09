@@ -5,17 +5,15 @@ import {CompareHeader} from "./Header/CompareHeader";
 import "./compare-component.scss";
 
 
+/**
+ * Stellt einen einzelne Value da, welche dann letztendlich als Array, zusammen mit dem SingleComparison, die Values vom Comparecomponent darstellt
+ */
 type CompareValue = {
     value: null | string,
     header: null | string,
 };
 
-interface SingleComparison {
-    first: string
-    second?: string
-}
-
-interface CompareComponentProps {
+export interface CompareComponentProps {
     /**
      * Die CompareHeader instanz, welche genutzt wird, um die Überschriften zu rendern und anzugeben wie viele auswahlmöglichkeiten es pro Kombination gibt
      */
@@ -34,7 +32,10 @@ interface CompareComponentProps {
     values: CompareValue[]
 }
 
-interface SingleComparison {
+/**
+ * Wird zusammen mit dem CompareValue zusammengemerged um somit die Values vom CompareComponent zu repräsentieren
+ */
+export interface SingleComparison {
     /**
      * Linke Auswahlmöglichkeit
      */
@@ -104,6 +105,12 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
         );
     }
 
+    /**
+     * Wird ausgeführt wenn ein neuer Vergleich vom Benutzer ausgefüllt wird
+     *
+     * @param {number} index der index vom ausgewählten Vergleich
+     * @param {number} headerIndex der index vom ausgewählten Header
+     */
     onRadioChange = (index: number, headerIndex: number) => {
         this.setState(state => {
             let fields = state.fields;
@@ -173,4 +180,3 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
 export {
     CompareComponent
 };
-export type {SingleComparison};

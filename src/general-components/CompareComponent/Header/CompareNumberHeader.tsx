@@ -1,6 +1,9 @@
 import {CompareHeader} from "./CompareHeader";
 
 
+/**
+ * Stellt eine/n Überschrift/Header mittels
+ */
 class CompareNumberHeader extends CompareHeader {
     private readonly length: number;
     private readonly start: number;
@@ -17,11 +20,11 @@ class CompareNumberHeader extends CompareHeader {
     }
 
     /**
-     * Erstellt ein Array welche alle Zahlen von start zu start + length - 1 enthält
+     * Erstellt ein Array welche alle Zahlen von start zu (start + length - 1) enthält
      */
     getHeaders(): Array<string> {
         let headers = [];
-        for (let i = this.start; i < this.start + this.length; i++) {
+        for (let i = this.start; i < (this.start + this.length); i++) {
             headers.push(String(i));
         }
         return headers;

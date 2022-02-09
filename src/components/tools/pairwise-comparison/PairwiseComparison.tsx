@@ -9,13 +9,26 @@ import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "../swot-analysis/export/SWOTExcelExporter";
 import {PCExcelExporter} from "./export/PCExcelExporter";
 
+
+/**
+ * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich
+ */
 export interface PairwiseComparisonValues {
     "pc-criterias": PCCriteriasValues,
     "pc-comparison": PCPairComparisonValues
 }
 
+/**
+ * Der Paarweise-Vergleich
+ */
 class PairwiseComparison extends SteppableTool {
 
+    /**
+     * Setzt die Grundinformationen für den Paarweisen-Vergleich fest und legt damit den Grundstein.
+     * Fügt die Schritte und die Exporter hinzu.
+     *
+     * @param props React Props
+     */
     constructor(props: any) {
         super(props);
 
@@ -51,6 +64,13 @@ class PairwiseComparison extends SteppableTool {
         return null;
     }
 
+    /**
+     * Baut den Paarweisen Vergleich aus einem Speicherstand auf
+     *
+     * @param {SaveResource<PairwiseComparisonValues>} save Der Speicherstand
+     * @returns {JSX.Element} StepComponent
+     * @protected
+     */
     protected renderView(save: SaveResource<PairwiseComparisonValues>) {
         this.setValues("pc-criterias", save.data["pc-criterias"])
         this.setValues("pc-comparison", save.data["pc-comparison"])

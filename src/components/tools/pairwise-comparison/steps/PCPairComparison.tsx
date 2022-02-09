@@ -8,6 +8,9 @@ import {PCCriteriasValues} from "./PCCriterias";
 import {extractFromForm} from "../../../../general-components/FormHelper";
 
 
+/**
+ * Die Werte des zweiten Schrittes des Paarweisen-Vergleiches
+ */
 export interface PCPairComparisonValues {
     comparisons: {
         value: string | null,
@@ -16,14 +19,15 @@ export interface PCPairComparisonValues {
     headers: string[]
 }
 
+/**
+ * Stellt den zweiten Schritt des Paarweisen-Vergleichs dar
+ */
 export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
     private header = new CompareNumberHeader(0, 3);
     private adapter: MatchCardComponentFieldsAdapter | undefined;
     private criterias: null | PCCriteriasValues | undefined;
 
-    onReset = (type: ResetType) => {
-        console.log(this.values);
-    }
+    onReset = (type: ResetType) => {}
 
     rebuildValues = async (values: PCPairComparisonValues) => {
         this.criterias = this.props.stepComp?.getFormValues<PCCriteriasValues>("pc-criterias");
@@ -36,6 +40,12 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
     changeControlFooter(): void {
     }
 
+    /**
+     * Baut die Ausgabe für den zweiten Schritt.
+     * Gibt ein CompareComponent zurück
+     *
+     * @returns {JSX.Element} CompareComponent
+     */
     build() {
         let values = this.values as PCPairComparisonValues;
 
@@ -43,14 +53,12 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
             this.adapter = new MatchCardComponentFieldsAdapter(this.criterias.criterias);
 
             return (
-                <div>
-                    <CompareComponent
-                        values={values.comparisons}
-                        showHeader={true}
-                        fields={this.adapter}
-                        header={this.header}
-                    />
-                </div>
+                <CompareComponent
+                    values={values.comparisons}
+                    showHeader={true}
+                    fields={this.adapter}
+                    header={this.header}
+                />
             );
         }
         return <></>;
@@ -63,6 +71,11 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
         return true;
     }
 
+    /**
+     *
+     * @param {React.FormEvent<HTMLFormElement>} e
+     * @returns {PCPairComparisonValues}
+     */
     extractValues(e: FormEvent<HTMLFormElement>): PCPairComparisonValues {
         let comparisons: PCPairComparisonValues = {
             comparisons: [],
