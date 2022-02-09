@@ -10,9 +10,18 @@ import "./card-component.scss";
 
 export interface CardProps {
     id: string | null
+    /**
+     * name des input feldes
+     */
     name: string
+    /**
+     * Wert des Beschreibungsfeldes der Karte
+     */
     desc: string
-    designation?: string
+    /**
+     * Wert des Hauptfeldes der Karte
+     */
+    value: string
     disabled: boolean
     required: boolean
     onChange: (name: string, desc: string) => void
@@ -47,7 +56,7 @@ class Card extends Component<CardProps, CardState> {
         this.setState({
             descChanged: value.length > 0
         });
-        this.props.onChange(this.props.name, value);
+        this.props.onChange(this.props.value, value);
 
 
     }
@@ -73,7 +82,7 @@ class Card extends Component<CardProps, CardState> {
                         onFocus={() => this.setState({showDesc: true})}
                         name={this.props.name + "[][name]"}
                         spellCheck={false}
-                        value={this.props.designation}
+                        value={this.props.value}
                         placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
                     />
                     {
@@ -84,6 +93,7 @@ class Card extends Component<CardProps, CardState> {
                         ) : undefined
                     }
                 </InputGroup>
+                {/*TODO put this logic into higher component*/}
                 <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
                     <div>
                         <FormControl
@@ -173,7 +183,7 @@ class CardComponent extends Component<CardComponentProps, {}> {
             return (
                 <Card id={value.id}
                       name={this.props.name}
-                      designation={value.name}
+                      value={value.name}
                       desc={value.desc}
                       disabled={this.props.disabled}
                       required={required}
