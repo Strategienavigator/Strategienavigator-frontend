@@ -52,8 +52,8 @@ class Card extends Component<CardProps, CardState> {
 
     }
 
-    onDelete = ()=> {
-        if(this.props.onDelete !== undefined){
+    onDelete = () => {
+        if (this.props.onDelete !== undefined) {
             this.props.onDelete();
         }
     }
@@ -172,12 +172,13 @@ class CardComponent extends Component<CardComponentProps, {}> {
         return this.props.values.map((value, index) => {
             return (
                 <Card id={value.id}
-                          name={value.name}
-                          desc={value.desc}
-                          disabled={this.props.disabled}
-                          required={required}
-                          onDelete={this.removeCard.bind(this,index)}
-                          onChange={this.cardUpdatedListener.bind(this,index)}/>
+                      name={this.props.name}
+                      designation={value.name}
+                      desc={value.desc}
+                      disabled={this.props.disabled}
+                      required={required}
+                      onDelete={this.removeCard.bind(this, index)}
+                      onChange={this.cardUpdatedListener.bind(this, index)}/>
             );
         });
 

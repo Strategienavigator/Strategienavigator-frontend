@@ -13,7 +13,7 @@ interface DragAndDropClassifyingProps {
 
 class DragAndDropClassifying extends Component<DragAndDropClassifyingProps, any> {
 
-    onDragEnd = (result: DropResult) => {
+    /*onDragEnd = (result: DropResult) => {
         const {destination, source, draggableId} = result;
 
         if (!destination) {
@@ -217,7 +217,7 @@ class DragAndDropClassifying extends Component<DragAndDropClassifyingProps, any>
                 </Droppable>
             </DragDropContext>
         );
-    }
+    }*/
 }
 
 export {

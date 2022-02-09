@@ -14,9 +14,9 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
     private encodeRange = XLSX.utils.encode_range;
 
     protected buildExcel(workbook: XLSX.WorkBook, data: SaveResource<SWOTAnalysisValues>): boolean {
-        let factors = data.data["swot-factors"];
-        let alternatives = data.data["alternative-actions"];
-        let classifications = data.data["swot-classify-alternate-actions"];
+        let factors = data.data["swot-factors"]!;
+        let alternatives = data.data["alternative-actions"]!;
+        let classifications = data.data["swot-classify-alternate-actions"]!;
 
         const isFilled = (o: object): boolean => {
             return o && Object.keys(o).length > 0;

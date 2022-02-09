@@ -1,4 +1,4 @@
-import {Component, ReactNode} from "react";
+import {Component} from "react";
 import {Form} from "react-bootstrap";
 import {randomBytes} from "crypto";
 

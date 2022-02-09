@@ -20,7 +20,7 @@ class PortfolioAnalysis extends SteppableTool<any> {
 
         this.setMaintenance(true);
 
-        this.addStep({
+        /*this.addStep({
             id: "portfolio-objects",
             title: "1. Objekte anlegen",
             form: <PortCreateObjects/>
@@ -44,7 +44,7 @@ class PortfolioAnalysis extends SteppableTool<any> {
             id: "portfolio-result",
             title: "5. Ergebnismatrix",
             form: <PortResult/>
-        });
+        });*/
     }
 
     protected renderToolHome() {
@@ -59,9 +59,9 @@ class PortfolioAnalysis extends SteppableTool<any> {
         return null;
     }
 
-    protected buildSaveBuilder(save:SaveResource<any>) {
-        return this.getStepComponent();
+    protected getInitData(): any {
     }
+
 }
 
 export {

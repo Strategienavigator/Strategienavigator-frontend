@@ -1,10 +1,8 @@
 import {faChartPie} from "@fortawesome/free-solid-svg-icons";
-import {SaveResource} from "../../../general-components/Datastructures";
 
 import "./abc-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {RouteComponentProps} from "react-router";
-import {ToolSaveProps} from "../../../general-components/Tool/ToolSavePage/ToolSavePage";
 
 
 class ABCAnalysis extends SteppableTool<any> {
@@ -27,9 +25,10 @@ class ABCAnalysis extends SteppableTool<any> {
         return null;
     }
 
-    protected buildSaveBuilder(saveProps: ToolSaveProps<any>): JSX.Element {
-        return this.getStepComponent(saveProps);
+    protected getInitData(): any {
     }
+
+
 }
 
 export {

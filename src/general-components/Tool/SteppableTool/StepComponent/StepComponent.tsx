@@ -16,6 +16,7 @@ import {ExportModal} from "../../ExportButton";
 import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
 import {SaveResource} from "../../../Datastructures";
+import {UIError} from "../../../Error/ErrorBag";
 
 
 export interface StepDefinition<T> {
@@ -24,6 +25,40 @@ export interface StepDefinition<T> {
     dataHandler: StepDataHandler<T>
     form: FunctionComponent<StepProp<T>> | ComponentClass<StepProp<T>>
     matrix?: FunctionComponent<MatrixComponentProps<T>> | ComponentClass<MatrixComponentProps<T>>
+    subStep?: SubStepDefinition<T>
+}
+
+
+/**
+ * Keine Methode darf einen internen state benötigen. Also sind instanzvariablen eigentlich ausgeschlossen
+ */
+export interface SubStepDefinition<T> {
+
+    /**
+     * gibt an wie viele sub-steps es in diesem step gibt.
+     *
+     * Sollte nach der fillFromPreviousValues methode immer dieselbe zahl zurückgeben.
+     * @param data
+     */
+    getStepCount: (data: T) => number
+
+    /**
+     * validates the given step. If the returned array has at least one error with level error the validation is considered failed
+     * @param subStep zero based index of the sub-steps
+     * @param data current data
+     */
+    validateStep: (subStep: number, data: T) => UIError[]
+
+    /**
+     * whether this step is selectable by the user
+     * @param data
+     */
+    isStepUnlocked: (subStep: number, data: T) => boolean
+
+    /**
+     * wenn nicht undefined wird dieser CustomNextButton im Step Component angezeigt, wenn nicht der letzte sub-step erreicht ist.
+     */
+    customNextButton?: CustomNextButton
 }
 
 export interface StepDataHandler<T> {
@@ -39,10 +74,16 @@ export interface StepDataHandler<T> {
      */
     fillFromPreviousValues: (data: T) => T
     /**
-     * change data in a way that isUnlocked returns false
+     * Diese Methode soll die Daten so verändern, dass isUnlocked false returned
      * @param data
      */
     deleteData: (data: T) => T
+
+    /**
+     * change data in a way that isUnlocked returns false
+     * @param data
+     */
+    validateData: (data: T) => UIError[]
 }
 
 export interface StepComponentProps<D> extends ToolSaveProps<D> {
@@ -50,10 +91,26 @@ export interface StepComponentProps<D> extends ToolSaveProps<D> {
     tool: Tool<D>
 }
 
+export interface StepController {
+    /**
+     * setzt den aktuellen schritt auf die den angegebenen Schritt
+     * @param step null basierter index der Schritte
+     * @returns ob der Schritt ausgewählt werden konnte
+     */
+    requestStep: (step: number) => boolean
+
+    /**
+     * setzt den aktuellen schritt auf die den angegebenen Schritt
+     * @param step null basierter index der Schritte
+     * @returns ob der Schritt ausgewählt werden konnte
+     */
+    requestSubStep: (step: number) => boolean
+
+}
+
 export type CustomNextButton = {
     text: string
-    callback: () => void
-} | null;
+};
 
 export interface StepComponentState {
     /**
@@ -63,11 +120,16 @@ export interface StepComponentState {
     /**
      * maximal freigeschalteter Schritt
      */
-    currentProgress: number;
+    // currentProgress: number
+
+    /**
+     * if the current step has substeps which state is currently displayed
+     */
+    currentSubStep: number
     showResetModal: boolean
     showExportModal: boolean
     hasCustomNextButton: boolean
-    customNextButton: CustomNextButton
+    customNextButton?: CustomNextButton
 }
 
 class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentState> {
@@ -80,38 +142,55 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     context!: React.ContextType<typeof FooterContext>
 
 
+    private readonly stepController: StepController;
+
+
     constructor(props: Readonly<StepComponentProps<D>> | StepComponentProps<D>);
     constructor(props: StepComponentProps<D>, context: any);
     constructor(props: Readonly<StepComponentProps<D>> | StepComponentProps<D>, context?: any) {
         super(props, context);
-        let progress = 0;
+        this.stepController = {
+            requestStep: this.changeStep,
+            requestSubStep: this.setSubStep
+        };
+        let progress = -1;
         this.props.steps.forEach((step) => {
             if (step.dataHandler.isUnlocked(this.getData())) {
                 progress++;
             }
         });
 
+        // TODO put in function, this part is copied into changeStep
+        let subStepProgress = 0;
+        const subStep = this.props.steps[progress].subStep;
+        const data = this.props.save.data;
+        if (subStep !== undefined) {
+
+            const count = subStep.getStepCount(data);
+            for (let i = 0; i < count; i++) {
+                if (subStep.isStepUnlocked(i, data)) {
+                    subStepProgress++;
+                }
+            }
+        }
+
         this.state = {
-            currentProgress: progress,
             currentStep: progress,
+            currentSubStep: subStepProgress,
             showExportModal: false,
             showResetModal: false,
             hasCustomNextButton: false,
-            customNextButton: null,
         }
     }
 
     render = () => {
-        let e = 0;
-
         return (
             <>
                 <Tab.Container
                     id="step"
                     activeKey={this.state.currentStep}
                     transition={Fade}
-                    onSelect={(e) => this.onStepSelect(e)}
-                >
+                    onSelect={this.onStepSelect}>
                     <Row className={"stepContainer"}>
                         {(!isDesktop()) && (
                             <StepComponentHeader {...this.props} />
@@ -124,10 +203,10 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
                             <Nav className={"stepTabs"}>
                                 {this.props.steps.map((value, index) => {
-                                    const i = index + 1;
                                     return (
-                                        <Nav.Link key={i} as={NavItem} disabled={i > this.state.currentProgress}
-                                                  eventKey={i}>{isDesktop() ? value.title : i}</Nav.Link>
+                                        <Nav.Link key={index} as={NavItem}
+                                                  disabled={!this.withData(value.dataHandler.isUnlocked)}
+                                                  eventKey={index}>{isDesktop() ? value.title : (index + 1)}</Nav.Link>
 
                                     );
                                 })}
@@ -136,17 +215,14 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                             {(isDesktop()) && (
                                 <DesktopButtons
                                     tool={this.props.tool}
-                                    hasCustomNextButton={this.state.hasCustomNextButton}
                                     customNextButton={this.state.customNextButton}
-                                    formID={this.props.steps[this.state.currentStep - 1].id}
-                                    nextDisabled={this.isLastStep()}
+                                    nextDisabled={this.isLastStep() && !this.hasNextSubStep()}
                                     isSaving={this.props.isSaving}
+                                    onNext={this.tryNextStep}
                                     onReset={() => {
                                         this.setState({showResetModal: true})
                                     }}
-                                    onSave={async () => {
-                                        await this.save();
-                                    }}
+                                    onSave={this.save}
                                     onExportClick={() => {
                                         this.setState({
                                             showExportModal: true
@@ -162,17 +238,18 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                         <Col className={"tabsContent"}>
                             <Tab.Content>
                                 {this.props.steps.map((value, index) => {
-                                    e++;
+
 
                                     return (
-                                        <Tab.Pane key={"2" + e} eventKey={e}>
+                                        <Tab.Pane key={"2" + (index)} eventKey={index}>
                                             <div className={"stepTitle"}>{value.title}</div>
 
                                             {React.createElement(value.form, {
+                                                ...this.props, // TODO ...(this.props as ToolSaveProps<D>)
                                                 id: value.id,
-                                                // title: value.title,
-                                                disabled: this.state.currentProgress > index + 1,
-                                                ...this.props // TODO ...(this.props as ToolSaveProps<D>)
+                                                disabled: !this.withData(value.dataHandler.isUnlocked),
+                                                stepController: this.stepController,
+                                                currentSubStep: this.state.currentSubStep,
                                             })}
                                         </Tab.Pane>
                                     );
@@ -230,27 +307,62 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     }
 
     private getCurrentStep = () => {
-        return this.props.steps[this.state.currentStep - 1];
-    }
-
-    private getCurrentProgress = () => {
-        return this.props.steps[this.state.currentProgress - 1];
+        return this.props.steps[this.state.currentStep];
     }
 
     private getData() {
         return this.props.save.data;
     }
 
-    public isAt = (currentStep: number): boolean => {
+    private hasSubSteps(stepIndex: number = this.state.currentStep): boolean {
+        const step = this.props.steps[stepIndex];
+        if (step.subStep === undefined) {
+            return false;
+        }
+
+        const stepCount = this.withData(step.subStep.getStepCount);
+        return this.state.currentSubStep < stepCount;
+
+    }
+
+    private hasNextSubStep(): boolean {
+        if (!this.hasSubSteps())
+            return false;
+        const step = this.getCurrentStep();
+        if (step.subStep === undefined) {
+            return false;
+        }
+
+        const stepCount = this.withData(step.subStep.getStepCount);
+        return this.state.currentSubStep < stepCount - 1;
+
+    }
+
+    private isStepUnlocked = (step: number) => {
+        return this.withData(this.props.steps[step].dataHandler.isUnlocked);
+    }
+
+
+    private withData<E>(fn: (data: D) => E): E
+    private withData(fn: undefined): undefined
+    private withData<E>(fn: ((data: D) => E) | undefined): E | undefined
+    private withData<E>(fn: ((data: D) => E) | undefined): E | undefined {
+        if (fn !== undefined) {
+            return fn(this.props.save.data);
+        }
+        return undefined;
+    }
+
+    private isAt = (currentStep: number): boolean => {
         return this.state.currentStep === currentStep;
     }
 
-    public isFirstStep = (): boolean => {
-        return this.state.currentStep <= 1;
+    private isFirstStep = (): boolean => {
+        return this.state.currentStep <= 0;
     }
 
-    public isLastStep = (): boolean => {
-        return this.state.currentStep >= this.props.steps.length;
+    private isLastStep = (): boolean => {
+        return this.state.currentStep >= this.props.steps.length - 1;
     }
 
     /**
@@ -278,42 +390,94 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         this.resetStepsUntil(0);
     }
 
-    public nextStep = async () => {
+    public tryNextStep = async () => {
+        const currentStep = this.getCurrentStep();
+
+        if (this.hasSubSteps()) {
+
+            this.setSubStep(this.state.currentSubStep + 1);
+
+        }
+        const errors = this.withData(currentStep.dataHandler.validateData);
+
+        if (errors.length < 1) {
+            await this.nextStep();
+        }
+
+    }
+
+    private nextSubStep = () => {
+        this.setSubStep(this.state.currentSubStep + 1)
+    }
+
+    private setSubStep = (step: number) => {
+        if (this.withData(this.getCurrentStep().subStep?.isStepUnlocked.bind(this, step))) {
+            this.setState({
+                currentSubStep: step
+            });
+            return true;
+        }
+        return false;
+
+    }
+
+    private nextStep = async () => {
         this.restoreFooter();
 
 
+        const currentStep = this.getCurrentStep();
         let isProgress: boolean = false;
-        let newProgress = this.state.currentProgress;
-        let newStep = this.state.currentStep;
-        if (this.state.currentProgress < this.props.steps.length && this.state.currentStep >= this.state.currentProgress) {
-            newStep++;
-            newProgress = this.state.currentStep;
+        let newStepIndex = this.state.currentStep + 1;
 
-            isProgress = true;
-        } else if (this.state.currentStep < this.props.steps.length) {
-            newStep++;
+        if (newStepIndex < this.props.steps.length) {
+            const newStep = this.props.steps[newStepIndex];
+            const newUnlocked = this.withData(newStep.dataHandler.isUnlocked);
+
+            if (newUnlocked) {
+                this.changeStep(newStepIndex);
+                return;
+            }
+
+            const currentValid = this.withData(currentStep.dataHandler.validateData).length === 0;
+
+            if (currentValid) {
+                if (this.unlockNextStep()) {
+                    isProgress = true;
+                    this.changeStep(newStepIndex, () => {
+                        if (this.isLastStep()) {
+                            this.restoreFooter();
+                        }
+                        this.save();
+                    });
+
+                }
+            }
         }
-
-        this.setState({
-            currentProgress: newProgress,
-            currentStep: newStep
-        });
-
-        if (this.isLastStep()) {
-            this.restoreFooter();
-        }
-
-        // TODO step control footer
-
-        if (isProgress) {
-            await this.save();
-        }
-
-        this.forceUpdate();
     }
 
-    public save = async () => {
-        // TODO move in render method
+    private unlockNextStep(): boolean {
+        const currenStep = this.getCurrentStep();
+
+        if (this.withData(currenStep.dataHandler.validateData).length === 0) {
+            const nextStepIndex = this.state.currentStep + 1;
+
+            if (nextStepIndex < this.props.steps.length) {
+                const nextStep = this.props.steps[nextStepIndex];
+
+                if (!this.withData(nextStep.dataHandler.isUnlocked)) {
+                    const save = this.props.save;
+                    save.data = this.withData(nextStep.dataHandler.fillFromPreviousValues);
+                    this.props.saveController.onChanged(save);
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+    private save = async () => {
+        // TODO move buttons in render method
         this.context.disableItem(3, true);
 
 
@@ -336,11 +500,11 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         } else {
             addErrorMessage();
         }
-        // TODO move in render method
+        // TODO move buttons in render method
         this.context.disableItem(3, false);
     }
 
-    public addCustomNextButton = (text: string, callback: () => any) => {
+    private addCustomNextButton = (text: string, callback: () => any) => {
         let button = {text: text, callback: callback, icon: faCaretRight};
 
         this.setState({
@@ -351,11 +515,11 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         this.context.setItem(3, {button: button});
     }
 
-    public addCustomPreviousButton = (text: string, callback: () => any) => {
+    private addCustomPreviousButton = (text: string, callback: () => any) => {
         this.context.setItem(1, {button: {text: text, callback: callback, icon: faCaretLeft}});
     }
 
-    public restoreFooter = () => {
+    private restoreFooter = () => {
         this.context.setItem(1, {
             reset: () => {
                 this.setState({
@@ -364,7 +528,6 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
             }
         });
 
-        let id = this.props.steps[this.state.currentStep - 1].id;
 
         this.context.setItem(2, {
             button: {
@@ -389,31 +552,57 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         });
 
         this.context.setItem(4, {
-            nextStep: id
+            nextStep: this.tryNextStep.bind(this)
         });
         this.context.disableItem(4, this.isLastStep());
 
         this.setState({
             hasCustomNextButton: false,
-            customNextButton: null
+            customNextButton: undefined
         });
     }
 
     private onStepSelect = (title: string | null) => {
         if (title !== null) {
             let newProgress: number = parseInt(title);
-
-
-            this.setState({
-                currentStep: newProgress
-            });
-
-            if (newProgress > this.state.currentProgress) {
-                this.setState({
-                    currentProgress: newProgress
-                });
-            }
+            this.changeStep(newProgress);
         }
+    }
+
+    private changeStep(step: number, callback: undefined | (() => void) = undefined) {
+
+        if (this.withData(this.props.steps[step].dataHandler.isUnlocked)) {
+            let subStepProgress = 0;
+            if (this.hasSubSteps(step)) {
+                // TODO put into function (same snippet as in constructor
+                const subStep = this.props.steps[step].subStep;
+                if (subStep !== undefined) {
+
+                    const count = this.withData(subStep.getStepCount);
+                    for (let i = 0; i < count; i++) {
+                        if (this.withData(subStep.isStepUnlocked.bind(this, i))) {
+                            subStepProgress++;
+                        }
+                    }
+                }
+
+            }
+            this.setState({
+                currentStep: step,
+                currentSubStep: subStepProgress,
+            }, callback);
+            return true;
+        }
+        return false;
+
+
+        /* the state to get into this step should never exist
+
+        if (step > this.state.currentProgress) {
+            this.setState({
+                currentProgress: step
+            });
+        }*/
     }
 
     private getMatrix(): undefined | ReactNode {

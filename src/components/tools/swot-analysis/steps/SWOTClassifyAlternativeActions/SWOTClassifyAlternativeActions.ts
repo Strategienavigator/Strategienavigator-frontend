@@ -3,14 +3,15 @@ import {
     StepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
-import {SteppableProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {
     ClassifiedAlternateAction,
     SWOTClassifyAlternativeActionsComponent
 } from "./SWOTClassifyAlternativeActionsComponent";
+import {UIError} from "../../../../../general-components/Error/ErrorBag";
 
 export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalysisValues>,StepDataHandler<SWOTAnalysisValues> {
-    form: React.FunctionComponent<SteppableProp<SWOTAnalysisValues>> | React.ComponentClass<SteppableProp<SWOTAnalysisValues>>;
+    form: React.FunctionComponent<StepProp<SWOTAnalysisValues>> | React.ComponentClass<StepProp<SWOTAnalysisValues>>;
     id: string;
     title: string;
     dataHandler: StepDataHandler<SWOTAnalysisValues>;
@@ -67,6 +68,11 @@ export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalys
 
         return data;
     }
+
+    validateData(data: SWOTAnalysisValues): UIError[] {
+        return [];
+    }
+
 
 
 

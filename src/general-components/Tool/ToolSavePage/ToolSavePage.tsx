@@ -12,6 +12,7 @@ import {Card} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
 import {showErrorPage} from "../../../index";
+import {SimpleErrorMap, UIError} from "../../Error/ErrorBag";
 
 type ToolViewValidation = {
     isNotOwn?: boolean
@@ -23,6 +24,49 @@ type ToolViewValidation = {
 interface ToolSaveController<D> {
     save: () => Promise<boolean>
     onChanged: (newData: SaveResource<D>) => void
+}
+
+
+/**
+ * Funktionen zum Verwalten von Errors.
+ *
+ * Ids können punkt separiert angegeben werden. Zum Beispiel "tool.name"
+ * Beim Abrufen durch hasError und getErrors kann dann nur "tool" angegeben werden und alle Error die mit "tool." angelegt wurden, werden mit berücksichtigt
+ */
+interface ToolErrorController {
+    /**
+     * Fügt einen Error hinzu
+     * @param id
+     * @param error
+     */
+    addError: (error: UIError) => void
+    /**
+     * Entfernt den Error mit genau dem fehler
+     * @param id
+     */
+    removeError: (id: string) => void
+    /**
+     * prüft, ob ein error mit exakt der Id vorliegt
+     * @param id
+     */
+    hasError: (id: string) => boolean
+    /**
+     * prüft, ob die id oder irgendwelche Tochter ids errors haben
+     * @param id
+     */
+    hasErrors: (id: string) => boolean
+
+    /**
+     * gibt genau den Error mit genau der Id zurück
+     * @param id
+     */
+    getError: (id: string) => UIError
+    /**
+     * gibt genau entweder den exakten Error oder alle tochter Errors zurück
+     * @param id
+     */
+    getErrors: (id: string) => SimpleErrorMap
+
 }
 
 interface ToolSaveProps<D> {
@@ -273,7 +317,8 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
 export type{
     ToolSavePageProps,
     ToolSavePageState,
-    ToolSaveProps
+    ToolSaveProps,
+    ToolErrorController
 }
 
 export {

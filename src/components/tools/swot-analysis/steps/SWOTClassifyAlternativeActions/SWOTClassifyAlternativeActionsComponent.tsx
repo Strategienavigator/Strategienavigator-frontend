@@ -1,4 +1,3 @@
-import {ResetType} from "../../../../../general-components/Tool/FormComponent/FormComponent";
 import React, {FormEvent} from "react";
 import {Draggable, DropResult} from "react-beautiful-dnd";
 import {Card} from "react-bootstrap";
@@ -37,7 +36,13 @@ export interface SWOTClassifyAlternativeActionsValues {
 }
 
 class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, any> {
-    private actions = new Map<string, ClassifiedAlternateAction>();
+
+
+    protected build(): JSX.Element {
+        return <p>Error</p>;
+    }
+
+    /*private actions = new Map<string, ClassifiedAlternateAction>();
     private classifications = new Map<string, Classification>();
     private noneDroppableID = "classifications-draggables";
     private maxClassifications = 10;
@@ -265,7 +270,7 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, a
     }
 
     changeControlFooter(): void {
-    }
+    }*/
 
 }
 

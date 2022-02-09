@@ -31,7 +31,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
         }
     }
 
-    openClassificationModal(action: ClassifiedAlternateAction, withNone?: boolean) {
+    /*openClassificationModal(action: ClassifiedAlternateAction, withNone?: boolean) {
         this.setState({
             openClassificationModal: true,
             lastSelectedAction: action,
@@ -190,7 +190,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
             </>
         )
 
-    }
+    }*/
 
 }
 

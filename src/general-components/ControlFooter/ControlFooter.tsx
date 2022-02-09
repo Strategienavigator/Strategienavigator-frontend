@@ -20,7 +20,7 @@ interface ControlFooterItem {
 }
 
 export interface NextStepItem extends ControlFooterItem {
-    nextStep: string
+    nextStep: ()=>{}
 }
 
 export interface SaveStepsItem extends ControlFooterItem {
@@ -117,8 +117,8 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             }
             if ("nextStep" in item) {
                 return (
-                    <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"} form={item.nextStep}
-                            type={"submit"}>
+                    <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"} onClick={item.nextStep}
+                            type={"button"}>
                         <FontAwesomeIcon icon={faCaretRight}/> Weiter
                     </button>
                 );
@@ -127,8 +127,10 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                 return (
                     <button disabled={item.disabled} key={"saveSteps"} className={"btn-transparent"}
                             form={item.saveSteps} type={"submit"}>
+                        {/*TODO change to non submit type*/}
                         <FontAwesomeIcon icon={faSave}/> Speichern
                     </button>
+
                 );
             }
             if ("reset" in item) {

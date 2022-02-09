@@ -15,14 +15,13 @@ export interface DesktopButtonsState {
 
 export interface DesktopButtonsProps {
     tool: Tool<any>
-    hasCustomNextButton:boolean,
-    formID:string,
-    nextDisabled:boolean,
-    customNextButton: CustomNextButton
-    isSaving:boolean,
-    onSave:()=>void,
-    onReset:()=>void
+    nextDisabled: boolean,
+    isSaving: boolean,
+    onNext: () => void,
+    onSave: () => void,
+    onReset: () => void
     onExportClick: () => void
+    customNextButton?: CustomNextButton
 }
 
 export class DesktopButtons extends Component<DesktopButtonsProps, DesktopButtonsState> {
@@ -30,30 +29,19 @@ export class DesktopButtons extends Component<DesktopButtonsProps, DesktopButton
     render() {
         return (
             <>
-                {(!this.props.hasCustomNextButton) ? (
-                    <Button
-                        variant={"dark"}
-                        type={"submit"}
-                        form={this.props.formID}
-                        disabled={this.props.nextDisabled}
-                        className={"mt-2 mx-2"}
-                        key={"nextButton"}
-                    >
-                        <FontAwesomeIcon icon={faCaretRight}/> Weiter
-                    </Button>
-                ) : (
-                    <Button
-                        variant={"dark"}
-                        type={"button"}
-                        onClick={this.props.customNextButton?.callback}
-                        disabled={this.props.nextDisabled}
-                        className={"mt-2 mx-2"}
-                        key={"customNextButton"}
-                    >
-                        <FontAwesomeIcon
-                            icon={faCaretRight}/> {this.props.customNextButton?.text}
-                    </Button>
-                )}
+
+                <Button
+                    variant={"dark"}
+                    type={"button"}
+                    onClick={this.props.onNext}
+                    disabled={this.props.nextDisabled}
+                    className={"mt-2 mx-2"}
+                    key={"customNextButton"}
+                >
+                    <FontAwesomeIcon
+                        icon={faCaretRight}/> {this.props.customNextButton?.text ?? "Weiter"}
+                </Button>
+
                 <Button
                     variant={"dark"}
                     type={"button"}
@@ -80,9 +68,7 @@ export class DesktopButtons extends Component<DesktopButtonsProps, DesktopButton
 
                 <ExportButton
                     tool={this.props.tool}
-                    onClick={() => {
-                        this.props.onExportClick();
-                    }}
+                    onClick={this.props.onExportClick}
                 />
             </>
         );

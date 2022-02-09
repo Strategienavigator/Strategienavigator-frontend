@@ -1,10 +1,4 @@
 import {faBorderAll} from "@fortawesome/free-solid-svg-icons";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {UtilInvestigationObjects} from "./steps/UtilInvestigationObjects";
-import {UtilWeighting} from "./steps/UtilWeighting";
-import {UtilCriterias} from "./steps/UtilCriterias";
-import {UtilEvaluation} from "./steps/UtilEvaluation";
-import {UtilResult} from "./steps/UtilResult";
 
 import "./utility-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
@@ -17,8 +11,9 @@ class UtilityAnalysis extends SteppableTool<any> {
     constructor(props: RouteComponentProps, context: any) {
         super(props, context, "Nutzwertanalyse", faBorderAll, 1);
 
-        this.setMaintenance(true);
 
+        this.setMaintenance(true);
+/*
         this.addStep({
             id: "utility-objects",
             title: "1. Untersuchungsobjekte",
@@ -43,7 +38,7 @@ class UtilityAnalysis extends SteppableTool<any> {
             id: "utility-result",
             title: "4. Bewertungsübersicht",
             form: <UtilResult/>
-        });
+        });*/
     }
 
     protected renderToolHome() {
@@ -58,9 +53,10 @@ class UtilityAnalysis extends SteppableTool<any> {
         return null;
     }
 
-    protected buildSaveBuilder(save: SaveResource<any>) {
-        return this.getStepComponent();
+    protected getInitData(): any {
     }
+
+
 }
 
 export {

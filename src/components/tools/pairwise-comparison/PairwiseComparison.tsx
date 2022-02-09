@@ -1,7 +1,4 @@
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {PCCriterias} from "./steps/PCCriterias";
-import {PCPairComparison} from "./steps/PCPairComparison";
 
 import "./pairwise-comparison.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
@@ -15,17 +12,6 @@ class PairwiseComparison extends SteppableTool<any> {
         super(props, context, "Paarweiser Vergleich", faSortAmountDownAlt, 3);
 
         this.setMaintenance(true);
-
-        this.addStep({
-            form: <PCCriterias/>,
-            title: "1. Kritierien festlegen",
-            id: "pc-criterias"
-        });
-        this.addStep({
-            form: <PCPairComparison/>,
-            title: "2. Paarvergleich",
-            id: "pc-comparison"
-        });
     }
 
     protected renderToolHome() {
@@ -45,9 +31,10 @@ class PairwiseComparison extends SteppableTool<any> {
         return null;
     }
 
-    protected buildSaveBuilder(save:SaveResource<any>) {
-        return this.getStepComponent();
+    protected getInitData(): any {
     }
+
+
 }
 
 export {

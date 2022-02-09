@@ -9,6 +9,7 @@ import {isDesktop} from "../../../../../general-components/Desktop";
 import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTFactors} from "./SWOTFactors";
+import {showErrorPage} from "../../../../../index";
 
 
 export interface SwotFactorsValues {
@@ -25,9 +26,6 @@ interface SWOTFactorsState {
 }
 
 export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsState> {
-
-    private static min = 2;
-    private static max = 8;
 
     constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
         super(props, context);
@@ -71,11 +69,6 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         const max = SWOTFactors.max;
         let activeKey = "view";
 
-        let numberCounter = new NumberCounter();
-        let romanNumeralCounter = new RomanNumeralsCounter();
-        let upperABCCounter = new UpperABCCounter();
-        let lowerABCCounter = new LowerABCCounter();
-
         let values = this.props.save.data["swot-factors"]?.factors;
         if (values !== undefined) {
             return (
@@ -83,12 +76,12 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                     <Accordion flush={true} activeKey={this.state.collapseAll ? activeKey : undefined}
                                defaultActiveKey={isDesktop() ? "strengths" : undefined}>
                         <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "strengths"}>
-                            <Accordion.Header>{upperABCCounter.get(1) + "-" + upperABCCounter.get(max)} -
+                            <Accordion.Header>{SWOTFactors.strengthsCounter.get(1) + "-" + SWOTFactors.strengthsCounter.get(max)} -
                                 Stärken (Interne Faktoren)</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values?.strengths}
-                                               counter={upperABCCounter}
+                                               counter={SWOTFactors.strengthsCounter}
                                                name={"strengths"}
                                                disabled={this.props.disabled}
                                                min={min}
@@ -99,12 +92,12 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                         </Accordion.Item>
 
                         <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "weaknesses"}>
-                            <Accordion.Header>{lowerABCCounter.get(1) + "-" + lowerABCCounter.get(max)} -
+                            <Accordion.Header>{SWOTFactors.weaknessesCounter.get(1) + "-" + SWOTFactors.weaknessesCounter.get(max)} -
                                 Schwächen (Interne Faktoren)</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.weaknesses}
-                                               counter={lowerABCCounter}
+                                               counter={SWOTFactors.weaknessesCounter}
                                                name={"weaknesses"}
                                                disabled={this.props.disabled}
                                                min={min}
@@ -114,12 +107,12 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "chances"}>
-                            <Accordion.Header>{numberCounter.get(1) + "-" + numberCounter.get(max)} -
+                            <Accordion.Header>{SWOTFactors.chancesCounter.get(1) + "-" + SWOTFactors.chancesCounter.get(max)} -
                                 Chancen (Externe Faktoren)</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.chances}
-                                               counter={numberCounter}
+                                               counter={SWOTFactors.chancesCounter}
                                                name={"chances"}
                                                disabled={this.props.disabled}
                                                min={min}
@@ -129,12 +122,12 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "risks"}>
-                            <Accordion.Header>{romanNumeralCounter.get(1) + "-" + romanNumeralCounter.get(max)} -
+                            <Accordion.Header>{SWOTFactors.risksCounter.get(1) + "-" + SWOTFactors.risksCounter.get(max)} -
                                 Risiken (Externe Faktoren)</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values?.risks}
-                                               counter={romanNumeralCounter}
+                                               counter={SWOTFactors.risksCounter}
                                                name={"risks"}
                                                disabled={this.props.disabled}
                                                min={min}
@@ -149,7 +142,8 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
             );
         }
 
-        return <p>"ERROR"</p>; // TODO
+        showErrorPage(404);
+        return <p>"ERROR"</p>;
 
 
     }
