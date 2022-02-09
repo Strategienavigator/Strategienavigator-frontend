@@ -59,7 +59,7 @@ export class SWOTFactors implements StepDefinition<SWOTAnalysisValues>, StepData
     }
 
     private static getDefaultArray(count: CounterInterface) {
-        let a = Array<CardComponentField>(SWOTFactors.min);
+        let a = Array<CardComponentField>();
         for (let i = 0; i < SWOTFactors.min; i++) {
             a.push(this.defaultCardComponent(count.get(i + 1)))
         }

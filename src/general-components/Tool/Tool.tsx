@@ -150,7 +150,7 @@ abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
             this.setState({
                 isCreatingNewSave: false
             });
-            this.props.history.push(this.getLink() + "/" + saved.callData.data.id);
+            this.props.history.push(this.getLink() + "/" + saved.callData.id);
         }
     }
 

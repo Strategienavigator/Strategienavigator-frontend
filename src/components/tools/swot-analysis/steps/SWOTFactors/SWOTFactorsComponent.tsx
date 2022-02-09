@@ -80,7 +80,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                 Stärken (Interne Faktoren)</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
-                                               values={values?.strengths}
+                                               values={values.strengths}
                                                counter={SWOTFactors.strengthsCounter}
                                                name={"strengths"}
                                                disabled={this.props.disabled}
@@ -126,7 +126,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                 Risiken (Externe Faktoren)</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
-                                               values={values?.risks}
+                                               values={values.risks}
                                                counter={SWOTFactors.risksCounter}
                                                name={"risks"}
                                                disabled={this.props.disabled}

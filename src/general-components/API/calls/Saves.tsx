@@ -99,7 +99,7 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
  */
 const updateSave = async (save:SaveResource<any>, apiArgs?: APIArgs) => {
     let data = new FormData();
-    data.append("data", JSON.stringify(data));
+    data.append("data", JSON.stringify(save.data));
     data.append("name", save.name as string);
     data.append("description", save.description as string);
     const saveID = save.id;
@@ -146,7 +146,7 @@ const lockSave = async (saveID: number, lock: boolean, apiArgs?: APIArgs) => {
  * @param apiArgs API Argumente
  */
 const createSave = async <D extends unknown>(data: FormData, apiArgs?: APIArgs) => {
-    return await callAPI<DefaultResponse<SaveResource<D>>>("api/saves", "POST", data, true, apiArgs);
+    return await callAPI<SaveResource<D>>("api/saves", "POST", data, true, apiArgs);
 }
 
 export {
