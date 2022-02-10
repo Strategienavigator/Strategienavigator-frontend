@@ -1,4 +1,4 @@
-import {ChangeEvent, Component} from "react";
+import {ChangeEvent, Component, PureComponent} from "react";
 import {Badge, Card, Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
@@ -42,6 +42,19 @@ class Nav extends Component<RouteComponentProps, NavState> {
             searchResult: [],
             searchLoading: false
         }
+    }
+
+
+    shouldComponentUpdate(nextProps: Readonly<RouteComponentProps>, nextState: Readonly<NavState>, nextContext: any): boolean {
+        if(nextState.expanded !== this.state.expanded)
+            return true;
+        if(nextState.showSearchOutput !== this.state.showSearchOutput)
+            return true;
+        if(nextState.searchLoading !== this.state.searchLoading)
+            return true;
+        if(nextState.searchResult !== this.state.searchResult)
+            return true;
+        return false;
     }
 
     setExpanded = (value: boolean) => {
@@ -119,18 +132,18 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return "Paarweiser Vergleich";
         }
     }
-
+    private navOnClick = () => {
+        this.setExpanded(false);
+    };
     render() {
-        const navOnClick = () => {
-            this.setExpanded(false);
-        };
+
 
         return (
             <Navbar onToggle={(e) => {
                 this.setExpanded(!this.state.expanded)
             }} expanded={this.state.expanded} expand="lg">
                 <Container>
-                    <Navbar.Brand onClick={navOnClick} as={NavLink} to={"/"} exact className={"nav-link"}>
+                    <Navbar.Brand onClick={this.navOnClick} as={NavLink} to={"/"} exact className={"nav-link"}>
                         <FontAwesomeIcon icon={faHome}/>&nbsp;
                         {process.env.REACT_APP_NAME}
                     </Navbar.Brand>
@@ -200,11 +213,11 @@ class Nav extends Component<RouteComponentProps, NavState> {
                         <BootstrapNav>
                             {(!Session.isLoggedIn()) && (
                                 <>
-                                    <NavLink onClick={navOnClick} to={"/login"} className={"nav-link"}>
+                                    <NavLink onClick={this.navOnClick} to={"/login"} className={"nav-link"}>
                                         <FontAwesomeIcon icon={faSignInAlt}/>&nbsp;
                                         Anmelden
                                     </NavLink>
-                                    <NavLink onClick={navOnClick} to={"/register"} className={"nav-link"}>
+                                    <NavLink onClick={this.navOnClick} to={"/register"} className={"nav-link"}>
                                         <FontAwesomeIcon icon={faUserPlus}/>&nbsp;
                                         Registrieren
                                     </NavLink>
@@ -215,7 +228,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                     icon={faUser}/> &nbsp;{Session.currentUser?.getUsername()}</>}>
 
                                     {!Session.isAnonymous() && (
-                                        <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/my-profile"}
+                                        <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/my-profile"}
                                                        role={"button"}>
                                             <FontAwesomeIcon icon={faUser}/>&nbsp;
                                             Mein Profil
@@ -223,7 +236,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                     )}
 
                                     <Dropdown.Item as={"div"} className="p-0">
-                                        <NavLink onClick={navOnClick} to={"/logout"} role={"button"}
+                                        <NavLink onClick={this.navOnClick} to={"/logout"} role={"button"}
                                                  className={"dropdown-item"}>
                                             <FontAwesomeIcon icon={faSignOutAlt}/>&nbsp;
                                             Abmelden
@@ -236,21 +249,21 @@ class Nav extends Component<RouteComponentProps, NavState> {
                         {(!isDesktop()) && (
                             <BootstrapNav>
                                 <NavDropdown id={"profile-dropdown"} title={"mehr"}>
-                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/settings"} role={"button"}>
+                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/settings"} role={"button"}>
                                         <FontAwesomeIcon icon={faCog}/>&nbsp;
                                         Einstellungen
                                     </Dropdown.Item>
-                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/data-privacy"}
+                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/data-privacy"}
                                                    role={"button"}>
                                         <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;
                                         Datenschutz
                                     </Dropdown.Item>
-                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/legal-notice"}
+                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/legal-notice"}
                                                    role={"button"}>
                                         <FontAwesomeIcon icon={faBalanceScale}/>&nbsp;
                                         Impressum
                                     </Dropdown.Item>
-                                    <Dropdown.Item as={NavLink} onClick={navOnClick} to={"/about-us"} role={"button"}>
+                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/about-us"} role={"button"}>
                                         <FontAwesomeIcon icon={faInfoCircle}/>&nbsp;
                                         Über uns
                                     </Dropdown.Item>

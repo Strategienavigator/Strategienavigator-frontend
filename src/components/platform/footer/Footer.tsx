@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, PureComponent} from "react";
 import {Col, Nav, Row} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -8,7 +8,7 @@ import "./footer.scss";
 import {isDesktop} from "../../../general-components/Desktop";
 
 
-class Footer extends Component<any, any> {
+class Footer extends PureComponent<{}, {}> {
 
     render() {
         return (

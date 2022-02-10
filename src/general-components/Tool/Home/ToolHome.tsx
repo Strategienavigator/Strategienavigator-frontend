@@ -117,19 +117,23 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         );
     }
 
+    onInfoClick = () => {
+        this.setState({showTutorial: true});
+    }
+
     render = () => {
         let title = this.props.tool.getToolName();
 
         return (
             <div className={"toolHome"}>
                 <h4>
-                    <FontAwesomeIcon icon={this.props.tool.getToolIcon() as IconDefinition}/> &nbsp; {title} &nbsp;
+                    <FontAwesomeIcon icon={this.props.tool.getToolIcon()}/> &nbsp; {title} &nbsp;
 
                     {(this.props.tool.hasTutorial()) && (
                         <Badge
                             bg="dark"
                             className={"description"}
-                            onClick={() => this.setState({showTutorial: true})}
+                            onClick={this.onInfoClick}
                         >
                             <FontAwesomeIcon icon={faInfoCircle}/>
                         </Badge>
@@ -137,7 +141,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 </h4>
                 <div className={"button-container mb-0 mt-2"}>
                     {isDesktop() && (
-                        <Button onClick={() => this.props.tool.switchPage("new")} size={"sm"} variant={"dark"}>
+                        <Button onClick={this.onNewSaveButtonClick} size={"sm"} variant={"dark"}>
                             <FontAwesomeIcon icon={faPlusSquare}/> Neue Analyse
                         </Button>
                     )}
@@ -172,23 +176,31 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 <DeleteSaveModal
                     show={this.state.showDeleteModal}
                     save={this.state.deleteSave ?? null}
-                    onClose={() => {
-                        this.setState({
-                            showDeleteModal: false,
-                            deleteSave: undefined
-                        });
-                    }}
-                    onDelete={async (id) => {
-                        await deleteSave(id);
-                        this.setState({
-                            showDeleteModal: false,
-                            deleteSave: undefined
-                        }, () => {
-                            this.updatePages();
-                        });
-                    }}/>
+                    onClose={this.onCloseDeleteModal}
+                    onDelete={this.onDeleteModal}/>
             </div>
         );
+    }
+
+    private onCloseDeleteModal = () => {
+        this.setState({
+            showDeleteModal: false,
+            deleteSave: undefined
+        });
+    };
+
+    private onDeleteModal = async (id:number) => {
+        await deleteSave(id);
+        this.setState({
+            showDeleteModal: false,
+            deleteSave: undefined
+        }, () => {
+            this.updatePages();
+        });
+    }
+
+    private onNewSaveButtonClick = () => {
+        this.props.tool.switchPage("new")
     }
 
 

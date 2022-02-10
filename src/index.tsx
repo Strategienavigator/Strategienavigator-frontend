@@ -102,7 +102,9 @@ const getAppContent = () => {
                         yAlignment={"BOTTOM"}
                         style={{marginBottom: 65}}
                     />
+
                     <Router ref={routerRef}>
+
                         <Nav/>
 
                         <div id={"content"}>
@@ -113,6 +115,7 @@ const getAppContent = () => {
 
                         {getAppFooter()}
                     </Router>
+
 
                 </Loader>
             </GlobalContexts>
