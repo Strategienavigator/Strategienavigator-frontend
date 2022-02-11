@@ -60,6 +60,7 @@ const extractCardComponentField = (form: FormEvent<HTMLFormElement>, name: strin
     return [];
 }
 
+
 /**
  * Methode zum Extrahieren von Werten aus verschiedenen HTMLFormElement
  *
@@ -78,7 +79,7 @@ const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardCo
 
      */
     if (element?.constructor.name === "RadioNodeList") {
-        return getRadioNodeList(element as RadioNodeList);
+        return element as RadioNodeList;
     }
 
     let input = element as HTMLInputElement;

@@ -299,7 +299,6 @@ class StepComponent extends Component<StepComponentProps, StepComponentState> {
 
     public nextStep = async () => {
         this.restoreFooter();
-        console.log("hallooooo");
 
         let step;
         let isProgress: boolean = false;
