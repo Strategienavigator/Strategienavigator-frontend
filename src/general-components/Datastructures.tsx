@@ -137,6 +137,7 @@ export type PasswordResetResource = {
     expiry_date: Date
 }
 
+
 /**
  * Sollte eine Abfrage stattfinden, wo eine Pagination eingebunden ist, wird diese hier dargestellt.
  * Der Typparameter D repräsentiert die in der Pagination eingebundende Ressource. Dabei kann es sich z.B. um einen Speicherstand oder Benutzer handeln.
