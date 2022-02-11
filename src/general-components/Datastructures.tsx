@@ -82,6 +82,16 @@ export type SimpleSaveResource = {
      * Die ID vom Besitzer
      */
     owner_id: number
+
+    /**
+     * name des Eigentümers
+     */
+    owner: string
+
+    /**
+     * ob das Konto des Eigentümers gerade gelöscht wird
+     */
+    owner_deleting: boolean
     /**
      * Die ID des dazugehörigen Tools
      */
