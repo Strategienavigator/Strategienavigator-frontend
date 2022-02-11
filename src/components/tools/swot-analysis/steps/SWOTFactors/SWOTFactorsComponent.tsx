@@ -64,6 +64,11 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         }
     }
 
+    private strengthsChanged = this.applyCardComponentChanges.bind(this,"strengths");
+    private weaknessesChanged = this.applyCardComponentChanges.bind(this,"weaknesses");
+    private chancesChanged = this.applyCardComponentChanges.bind(this,"strengths");
+    private risksChanged = this.applyCardComponentChanges.bind(this,"risks");
+
     build(): JSX.Element {
         const min = SWOTFactors.min;
         const max = SWOTFactors.max;
@@ -86,7 +91,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                disabled={this.props.disabled}
                                                min={min}
                                                max={max}
-                                               onChanged={this.applyCardComponentChanges.bind(this, "strengths")}/>
+                                               onChanged={this.strengthsChanged}/>
                                 {/*{this.getError("strengthsError")}*/}
                             </Accordion.Body>
                         </Accordion.Item>
@@ -102,7 +107,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                disabled={this.props.disabled}
                                                min={min}
                                                max={max}
-                                               onChanged={this.applyCardComponentChanges.bind(this,"weaknesses")}/>
+                                               onChanged={this.weaknessesChanged}/>
                                 {/*{this.getError("weaknessesError")}*/}
                             </Accordion.Body>
                         </Accordion.Item>
@@ -117,7 +122,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                disabled={this.props.disabled}
                                                min={min}
                                                max={max}
-                                               onChanged={this.applyCardComponentChanges.bind(this,"chances")}/>
+                                               onChanged={this.chancesChanged}/>
                                 {/*{this.getError("chancesError")}*/}
                             </Accordion.Body>
                         </Accordion.Item>
@@ -132,7 +137,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                disabled={this.props.disabled}
                                                min={min}
                                                max={max}
-                                               onChanged={this.applyCardComponentChanges.bind(this,"risks")}/>
+                                               onChanged={this.risksChanged}/>
                                 {/*{this.getError("risksError")}*/}
                             </Accordion.Body>
                         </Accordion.Item>

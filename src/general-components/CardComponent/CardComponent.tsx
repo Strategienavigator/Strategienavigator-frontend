@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Component} from "react";
+import React, {ChangeEvent, Component, PureComponent} from "react";
 import {Button, Card as BootstrapCard, Collapse, FormControl, InputGroup} from "react-bootstrap";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -6,6 +6,7 @@ import {isDesktop} from "../Desktop";
 import {CounterInterface} from "../Counter/CounterInterface";
 
 import "./card-component.scss";
+import {compareWithoutFunctions} from "../ComponentUtils";
 
 
 export interface CardProps {
@@ -45,6 +46,11 @@ class Card extends Component<CardProps, CardState> {
         };
     }
 
+
+    shouldComponentUpdate(nextProps: Readonly<CardProps>, nextState: Readonly<CardState>, nextContext: any): boolean {
+        return !(compareWithoutFunctions(this.props, nextProps) && compareWithoutFunctions(this.state, nextState));
+    }
+
     nameChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         this.props.onChange(e.currentTarget.value, this.props.desc);
@@ -67,6 +73,16 @@ class Card extends Component<CardProps, CardState> {
         }
     }
 
+    private showDescription = () => {
+        this.setState({showDesc: true})
+    }
+
+    private closeIfChanged = () => {
+        if(this.state.descChanged){
+            this.setState({showDesc: false})
+        }
+    }
+
     render = () => {
         return (
             <div>
@@ -77,14 +93,13 @@ class Card extends Component<CardProps, CardState> {
                     <FormControl
                         required={this.props.required}
                         disabled={this.props.disabled}
-                        onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
-                        onChange={(e) => this.nameChanged(e)}
-                        onFocus={() => this.setState({showDesc: true})}
+                        onBlur={this.closeIfChanged}
+                        onChange={this.nameChanged}
+                        onFocus={this.showDescription}
                         name={this.props.name + "[][name]"}
                         spellCheck={false}
                         value={this.props.value}
-                        placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
-                    />
+                        placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}/>
                     {
                         ((!this.props.disabled) && this.props.onDelete !== undefined) ? (
                             <Button className={"noButton"} onClick={this.onDelete} variant={"link"}>
@@ -99,7 +114,7 @@ class Card extends Component<CardProps, CardState> {
                         <FormControl
                             required={this.props.required}
                             disabled={this.props.disabled}
-                            onChange={(e) => this.descChanged(e)}
+                            onChange={this.descChanged}
                             onFocus={() => this.setState({showDesc: true})}
                             onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
                             as="textarea"
@@ -146,7 +161,8 @@ export interface CardComponentProps {
     placeholder?: CardComponentFieldPlaceholder
 }
 
-class CardComponent extends Component<CardComponentProps, {}> {
+class CardComponent extends PureComponent<CardComponentProps, {}> {
+
 
     private cardUpdatedListener(index: number, name: string, desc: string) {
         let newValues = this.props.values.slice();
@@ -166,7 +182,7 @@ class CardComponent extends Component<CardComponentProps, {}> {
         }
     }
 
-    private addCard() {
+    private addCard = () => {
         let newValues = this.props.values.slice();
         if (newValues.length < this.props.max) {
             newValues.push({name: "", desc: "", id: this.props.counter?.get(this.props.values.length) ?? null})
@@ -201,7 +217,7 @@ class CardComponent extends Component<CardComponentProps, {}> {
                 {this.getAllCards()}
 
                 {((this.props.values.length < this.props.max) && !this.props.disabled) && (
-                    <BootstrapCard onClick={this.addCard.bind(this)}
+                    <BootstrapCard onClick={this.addCard}
                                    className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
                         <div className={"icon"}>
                             <FontAwesomeIcon icon={faPlus}/>

@@ -7,10 +7,10 @@ import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
 import {StepProp} from "./Step/Step";
-import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeaderProp";
+import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeader";
 import {FooterContext} from "../../../Contexts/FooterContextComponent";
 import {DesktopButtons} from "./DesktopButtons/DesktopButtons";
-import {ResetStepsModal} from "./ResetStepsModal/ResetStepsModal";
+import ResetStepsModal from "./ResetStepsModal/ResetStepsModal";
 import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 import {ExportModal} from "../../ExportButton";
 import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
@@ -185,6 +185,10 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     }
 
     render = () => {
+        const header = <StepComponentHeader tool={this.props.tool}
+                                            saveName={this.props.save.name}
+                                            saveDescription={this.props.save.description}
+                                            saveMetaChanged={this.changeSaveMeta}/>;
         return (
             <>
                 <Tab.Container
@@ -193,14 +197,10 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                     transition={Fade}
                     onSelect={this.onStepSelect}>
                     <Row className={"stepContainer"}>
-                        {(!isDesktop()) && (
-                            <StepComponentHeader {...this.props} />
-                        )}
+                        {(!isDesktop()) && header}
 
                         <Col className={"stepTabContainer"}>
-                            {(isDesktop()) && (
-                                <StepComponentHeader {...this.props} />
-                            )}
+                            {(isDesktop()) && header}
 
                             <Nav className={"stepTabs"}>
                                 {this.props.steps.map((value, index) => {
@@ -291,7 +291,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         });
     }
 
-    private onExport = (exporter:Exporter<D>) => {
+    private onExport = (exporter: Exporter<D>) => {
         exporter.export(this.props.save);
 
         this.setState({
@@ -327,6 +327,19 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
     private getData() {
         return this.props.save.data;
+    }
+
+    private changeSaveMeta = (name: string, description: string) => {
+        const save = {...this.props.save};
+        if (name !== save.name) {
+            save.name = name;
+        }
+
+        if (description !== save.description) {
+            save.description = description;
+        }
+
+        this.props.saveController.onChanged(save);
     }
 
     private hasSubSteps(stepIndex: number = this.state.currentStep): boolean {
@@ -599,7 +612,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                             subStepProgress++;
                         }
                     }
-                    if(subStepProgress === count){
+                    if (subStepProgress === count) {
                         subStepProgress = 0;
                     }
                 }

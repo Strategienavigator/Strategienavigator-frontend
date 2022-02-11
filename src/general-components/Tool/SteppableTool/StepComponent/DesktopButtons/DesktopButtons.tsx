@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, PureComponent} from "react";
 
 import './desktop-buttons.scss';
 import {Button} from "react-bootstrap";
@@ -24,7 +24,7 @@ export interface DesktopButtonsProps {
     customNextButton?: CustomNextButton
 }
 
-export class DesktopButtons extends Component<DesktopButtonsProps, DesktopButtonsState> {
+export class DesktopButtons extends PureComponent<DesktopButtonsProps, DesktopButtonsState> {
 
     render() {
         return (
@@ -38,8 +38,7 @@ export class DesktopButtons extends Component<DesktopButtonsProps, DesktopButton
                     className={"mt-2 mx-2"}
                     key={"customNextButton"}
                 >
-                    <FontAwesomeIcon
-                        icon={faCaretRight}/> {this.props.customNextButton?.text ?? "Weiter"}
+                    <FontAwesomeIcon icon={faCaretRight}/> {this.props.customNextButton?.text ?? "Weiter"}
                 </Button>
 
                 <Button
@@ -67,7 +66,6 @@ export class DesktopButtons extends Component<DesktopButtonsProps, DesktopButton
                 />
 
                 <ExportButton
-                    tool={this.props.tool}
                     onClick={this.props.onExportClick}
                 />
             </>
