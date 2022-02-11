@@ -17,6 +17,7 @@ import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
 import {SaveResource} from "../../../Datastructures";
 import {UIError} from "../../../Error/ErrorBag";
+import {Exporter} from "../../../Export/Exporter";
 
 
 export interface StepDefinition<T> {
@@ -219,15 +220,9 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                                     nextDisabled={this.isLastStep() && !this.hasNextSubStep()}
                                     isSaving={this.props.isSaving}
                                     onNext={this.tryNextStep}
-                                    onReset={() => {
-                                        this.setState({showResetModal: true})
-                                    }}
+                                    onReset={this.showResetModal}
                                     onSave={this.save}
-                                    onExportClick={() => {
-                                        this.setState({
-                                            showExportModal: true
-                                        });
-                                    }}
+                                    onExportClick={this.showExportModal}
                                 />
                             )}
 
@@ -261,37 +256,57 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
                 <ResetStepsModal
                     show={this.state.showResetModal}
-                    onYes={() => {
-                        this.setState({showResetModal: false});
-                        this.resetStepsUntil(this.state.currentStep);
-                    }}
-                    onAllReset={() => {
-                        this.setState({showResetModal: false});
-                        this.resetAllSteps();
-                    }}
-                    onNo={() => {
-                        this.setState({showResetModal: false})
-                    }}
+                    onYes={this.onResetCurrent}
+                    onAllReset={this.onResetAll}
+                    onNo={this.hideResetModal}
                 />
 
                 <ExportModal
-                    onClose={() => {
-                        this.setState({
-                            showExportModal: false
-                        });
-                    }}
-                    onSelect={(exporter) => {
-                        exporter.export(this.props.save);
-
-                        this.setState({
-                            showExportModal: false
-                        });
-                    }}
+                    onClose={this.hideExportModal}
+                    onSelect={this.onExport}
                     show={this.state.showExportModal}
                     tool={this.props.tool}
                 />
             </>
         );
+    }
+
+    private showResetModal = () => {
+        this.setState({showResetModal: true})
+    }
+
+    private hideResetModal = () => {
+        this.setState({showResetModal: false})
+    }
+
+    private showExportModal = () => {
+        this.setState({
+            showExportModal: true
+        });
+    }
+
+    private hideExportModal = () => {
+        this.setState({
+            showExportModal: false
+        });
+    }
+
+    private onExport = (exporter:Exporter<D>) => {
+        exporter.export(this.props.save);
+
+        this.setState({
+            showExportModal: false
+        });
+    }
+
+    private onResetCurrent = () => {
+        this.setState({showResetModal: false});
+        this.resetStepsUntil(this.state.currentStep);
+    }
+
+    private onResetAll = () => {
+        this.setState({showResetModal: false});
+        this.resetAllSteps();
     }
 
     componentDidMount = async () => {
@@ -321,7 +336,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         }
 
         const stepCount = this.withData(step.subStep.getStepCount);
-        return this.state.currentSubStep < stepCount;
+        return stepCount > 1;
 
     }
 
@@ -334,7 +349,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         }
 
         const stepCount = this.withData(step.subStep.getStepCount);
-        return this.state.currentSubStep < stepCount - 1;
+        return this.state.currentSubStep < (stepCount - 1);
 
     }
 
@@ -393,7 +408,7 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     public tryNextStep = async () => {
         const currentStep = this.getCurrentStep();
 
-        if (this.hasSubSteps()) {
+        if (this.hasNextSubStep()) {
 
             this.setSubStep(this.state.currentSubStep + 1);
 
@@ -583,6 +598,9 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                         if (this.withData(subStep.isStepUnlocked.bind(this, i))) {
                             subStepProgress++;
                         }
+                    }
+                    if(subStepProgress === count){
+                        subStepProgress = 0;
                     }
                 }
 

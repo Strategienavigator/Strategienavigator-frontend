@@ -1,4 +1,7 @@
-import {Classification, ClassifiedAlternateAction} from "../SWOTClassifyAlternativeActionsComponent";
+import {
+    ClassificationValues,
+    ClassifiedAlternateAction
+} from "../SWOTClassifyAlternativeActionsComponent";
 import {Button, FormSelect, Modal} from "react-bootstrap";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -10,7 +13,7 @@ interface SelectClassificationModalProps {
      * if the modal is open and visible
      */
     open: boolean
-    classifications: Map<string, Classification>
+    classifications: ClassificationValues[]
     /**
      * Callback wenn eine Klassifikation gewählt wurde
      *
@@ -21,8 +24,8 @@ interface SelectClassificationModalProps {
      * @param action Die Aktion bei der die Klassifikation geändert wird
      */
     onSelect: (
-        oldClassification: Classification | null,
-        newClassification: Classification | null,
+        oldClassification: ClassificationValues | null,
+        newClassification: ClassificationValues | null,
         action: ClassifiedAlternateAction
     ) => void
     /**
@@ -35,9 +38,9 @@ interface SelectClassificationModalProps {
 
 function SelectClassificationModal(props: SelectClassificationModalProps) {
 
-    const findClassification = (action: ClassifiedAlternateAction): Classification | null => {
-        for (const classification of Array.from(props.classifications.values())) {
-            for (const classificationAction of Array.from(classification.actions.values())) {
+    const findClassification = (action: ClassifiedAlternateAction): ClassificationValues | null => {
+        for (const classification of props.classifications) {
+            for (const classificationAction of classification.actions) {
                 if (classificationAction === action) {
                     return classification;
                 }
@@ -50,9 +53,7 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
         <Modal
             show={props.open}
             backdrop={true}
-            onHide={() => {
-                props.onClose();
-            }}
+            onHide={props.onClose}
             keyboard={true}
         >
             <Modal.Header>
@@ -61,9 +62,7 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                     <Button
                         type={"button"}
                         variant={"light"}
-                        onClick={() => {
-                            props.onClose();
-                        }}
+                        onClick={props.onClose}
                     >
                         <FontAwesomeIcon icon={faTimes}/>
                     </Button>
@@ -76,14 +75,15 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                     onChange={(e) => {
                         if (e.target instanceof HTMLSelectElement) {
                             let option = e.target.selectedOptions[0];
-                            let droppableID, value;
-                            droppableID = value = option.value;
-                            let classification = props.classifications.get(droppableID);
+
+                            const droppableID = option.value;
+                            const value = droppableID;
+                            let classification = props.classifications.find(classification => classification.droppableID === droppableID);
 
                             if (props.action) {
                                 let foundClassification = findClassification(props.action);
-                                let oldClassification: Classification | null = null;
-                                let newClassification: Classification | null = null;
+                                let oldClassification: ClassificationValues | null = null;
+                                let newClassification: ClassificationValues | null = null;
 
                                 if (foundClassification) {
                                     if (value === "_none") {

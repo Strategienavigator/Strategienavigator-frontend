@@ -1,14 +1,20 @@
-import React, {FormEvent} from "react";
-import {Draggable, DropResult} from "react-beautiful-dnd";
+import React from "react";
 import {Card} from "react-bootstrap";
-import {SWOTAlternativeActionsValues} from "../SWOTAlternativeActions/SWOTAlternativeActionsComponent";
 import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
-import {Step} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {DragAndDropClassifying} from "./DragAndDropClassifying";
 import {NormalClassifying} from "./NormalClassifying/NormalClassifying";
 import {isDesktop} from "../../../../../general-components/Desktop";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
+import {SWOTClassifyAlternativeActions} from "./SWOTClassifyAlternativeActions";
 
+
+export interface ClassificationController {
+    addClassification: () => void
+    removeClassification: (id: string) => void
+    updateActionClassification: (oldClassificationId: string | null, newClassificationId: string | null, actionId: string) => void
+    classificationNameChanged: (id: string, newName: string) => void
+}
 
 export interface ClassifiedAlternateAction {
     name: string
@@ -18,131 +24,92 @@ export interface ClassifiedAlternateAction {
     action: CardComponentField
 }
 
-export interface Classification {
+export interface ClassificationValues {
     droppableID: string,
-    name: string | null,
-    actions: Map<string, ClassifiedAlternateAction>
-}
-
-interface ClassificationValues {
-    droppableID: string,
-    name: string | null,
+    name: string,
     actions: ClassifiedAlternateAction[]
 }
 
 export interface SWOTClassifyAlternativeActionsValues {
+    /**
+     * Klassifikationen mit zugeordneten Klassifikationen
+     */
     classifications: ClassificationValues[],
+    /**
+     * Nicht zugeordnete Handlungsalternativen
+     */
     actions: ClassifiedAlternateAction[]
 }
 
-class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, any> {
+class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {}> {
 
 
-    protected build(): JSX.Element {
-        return <p>Error</p>;
-    }
+    private classificationController: ClassificationController;
 
-    /*private actions = new Map<string, ClassifiedAlternateAction>();
-    private classifications = new Map<string, Classification>();
-    private noneDroppableID = "classifications-draggables";
-    private maxClassifications = 10;
+    constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
+        super(props, context);
 
-    getNoneDroppableID = () => {
-        return this.noneDroppableID;
-    }
-
-    sortActionMap = (map: Map<string, ClassifiedAlternateAction>): Map<string, ClassifiedAlternateAction> => {
-        return new Map(Array.from(map).sort());
-    }
-
-    onReset = (type: ResetType) => {
-        this.classifications.clear();
-        this.actions.forEach((value) => {
-            value.alreadyAdded = false;
-        });
-    }
-
-    addClassification = (droppableID: string | undefined) => {
-        if (this.maxClassifications < this.classifications.size) {
-            return;
+        this.classificationController = {
+            addClassification: this.addClassification,
+            removeClassification: this.removeClassification,
+            updateActionClassification: this.updateActionClassification,
+            classificationNameChanged: this.onClassificationNameChange
         }
 
-        if (droppableID === undefined) {
-            droppableID = "droppable-" + 0;
-        } else {
-            let splitted = droppableID.split("-");
-            let newIndex = parseInt(splitted[1]) + 1;
-            droppableID = "droppable-" + newIndex;
+    }
+
+    public static noneDroppableID = "classifications-draggables";
+
+    private requireStepData = () => {
+        const data = this.props.save.data["swot-classify-alternate-actions"];
+        if (data === undefined) {
+            throw new Error("Data missing");
         }
-
-        let classification: Classification = {
-            actions: new Map<string, ClassifiedAlternateAction>(),
-            name: null,
-            droppableID: droppableID
-        };
-        this.classifications.set(droppableID, classification);
-
-        this.forceUpdate();
+        return data;
     }
 
-    getClassifications = () => {
-        return this.classifications;
+    addClassification = () => {
+
     }
 
-    getClassification = (droppableID: string): Classification | undefined => {
-        return this.classifications.get(droppableID);
+    getClassification = (droppableID: string): ClassificationValues | undefined => {
+        return this.requireStepData().classifications.find(classification => classification.droppableID === droppableID);
     }
 
     removeClassification = (droppableID: string): boolean => {
-        let classification = this.classifications.get(droppableID);
+        let classification = this.getClassification(droppableID);
         classification?.actions.forEach((value) => {
             value.alreadyAdded = false;
         });
-        console.log();
-        let deleted = this.classifications.delete(droppableID);
-        this.forceUpdate();
-        return deleted;
+
+        // TODO remove classifications
+
+        return classification !== undefined;
     }
 
     getAction = (draggableID: string): ClassifiedAlternateAction | undefined => {
-        return this.actions.get(draggableID);
+        return undefined;
     }
 
-    removeAction = (droppableID: string, draggableID: string): boolean => {
+    onClassificationNameChange = (droppableID: string, newName: string) => {
         let classification = this.getClassification(droppableID);
+        // make classification copy
         if (classification) {
-            let classificationAction = classification.actions.get(draggableID);
-            if (classificationAction) {
-                let action = this.actions.get(draggableID);
-                if (action) {
-                    action.alreadyAdded = false;
-                }
-                let deleted = classification.actions.delete(draggableID);
-                this.forceUpdate();
-                return deleted;
-            }
-        }
-        return false;
-    }
-
-    onClassificationNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, droppableID: string) => {
-        let value = e.currentTarget.value;
-        let classification = this.getClassification(droppableID);
-        if (classification) {
-            classification.name = value;
+            classification.name = newName;
         }
     }
 
-    getActions() {
-        return this.actions;
-    }
 
-    getMaxClassificationSize() {
-        return this.maxClassifications;
+    updateActionClassification = () => {
+
     }
 
     build(): JSX.Element {
-        if (this.actions.size <= 0) {
+        const actions = this.props.save.data["swot-classify-alternate-actions"]?.actions;
+        const classifications = this.props.save.data["swot-classify-alternate-actions"]?.classifications;
+        const actionCount = actions?.length ?? 0;
+
+        if (actions === undefined || classifications === undefined || actionCount < 1) {
             return (
                 <Card body>
                     Es sind Keine Handlungsalternativen vorhanden...
@@ -150,17 +117,21 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, a
             );
         }
 
+
         let dragAndDropActionSize = 0; // good would be maximum 14
         let showNormal;
         if (!isDesktop()) {
             showNormal = true; // change if you want drag and drop functionality
-        } else if (this.actions.size > dragAndDropActionSize) {
+        } else if (actionCount > dragAndDropActionSize) {
             showNormal = true;
         }
 
         return (showNormal === true) ? (
             <NormalClassifying
-                step3instance={this}
+                actions={actions}
+                classifications={classifications}
+                classificationController={this.classificationController}
+
             />
         ) : (
             <DragAndDropClassifying
@@ -168,109 +139,6 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, a
             />
         );
     }
-
-    extractValues(e: FormEvent<HTMLFormElement>): SWOTClassifyAlternativeActionsValues {
-        let classifications: ClassificationValues[] = [];
-
-        this.classifications.forEach((classification) => {
-            let actions: ClassifiedAlternateAction[] = [];
-            classification.actions.forEach((action) => {
-                actions.push(action);
-            });
-            let classificationValue: ClassificationValues = {
-                name: classification.name,
-                droppableID: classification.droppableID,
-                actions: actions
-            };
-            classifications.push(classificationValue);
-        });
-
-        let actions: ClassifiedAlternateAction[] = [];
-        this.actions.forEach((value) => {
-            actions.push(value);
-        });
-
-        return {
-            classifications,
-            actions: actions
-        };
-    }
-
-    rebuildValues = async (values: SWOTClassifyAlternativeActionsValues) => {
-        let globalActions = new Map<string, ClassifiedAlternateAction>();
-        let classifications = new Map<string, Classification>();
-
-        for (const classificationValue of values.classifications) {
-            let actions = new Map<string, ClassifiedAlternateAction>();
-
-            for (const action of classificationValue.actions) {
-                actions.set(action.indexName, action);
-                globalActions.set(action.indexName, action);
-            }
-
-            let classification: Classification = {
-                name: classificationValue.name,
-                droppableID: classificationValue.droppableID,
-                actions: actions
-            }
-
-            classifications.set(classification.droppableID, classification);
-        }
-        this.classifications = classifications;
-
-        values.actions.forEach((value) => {
-            if (!globalActions.has(value.indexName)) {
-                globalActions.set(value.indexName, value);
-            }
-        });
-        this.actions = this.sortActionMap(globalActions);
-    }
-
-    buildPreviousValues = async () => {
-        let previousStep = this.props.stepComp?.getPreviousStep<SWOTAlternativeActionsValues>();
-        if (previousStep && this.actions.size <= 0) {
-            for (let i = 0; i < previousStep.actions.length; i++) {
-                let action = previousStep.actions[i];
-                for (let e = 0; e < action.alternatives.length; e++) {
-                    let indexName = action.name + "-" + e;
-
-                    let newAction: ClassifiedAlternateAction = {
-                        indexName: indexName,
-                        index: e,
-                        alreadyAdded: false,
-                        name: action.name,
-                        action: action.alternatives[e]
-                    }
-                    this.actions.set(indexName, newAction);
-                }
-            }
-            this.forceUpdate();
-        }
-    }
-
-    submit = async (values: SWOTClassifyAlternativeActionsValues) => {
-    }
-
-    validate(values: SWOTClassifyAlternativeActionsValues): boolean {
-        let validated = true;
-
-        for (let i = 0; i < values.classifications.length; i++) {
-            let value = values.classifications[i];
-            if (value.name === null || value.name === "") {
-                this.addError(value.droppableID + "-classification", "Bitte ausfüllen!");
-                validated = false;
-            }
-            if (value.actions.length <= 0) {
-                this.addError(value.droppableID + "-action-size", "Die Klassifikation muss mindestens eine Handlungsalternative haben");
-                validated = false;
-            }
-        }
-
-        return validated;
-    }
-
-    changeControlFooter(): void {
-    }*/
 
 }
 

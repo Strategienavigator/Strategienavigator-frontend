@@ -10,12 +10,15 @@ import {
 } from "./SWOTClassifyAlternativeActionsComponent";
 import {UIError} from "../../../../../general-components/Error/ErrorBag";
 
-export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalysisValues>,StepDataHandler<SWOTAnalysisValues> {
+export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalysisValues>, StepDataHandler<SWOTAnalysisValues> {
+
+    public static maxClassifications = 10;
+
+
     form: React.FunctionComponent<StepProp<SWOTAnalysisValues>> | React.ComponentClass<StepProp<SWOTAnalysisValues>>;
     id: string;
     title: string;
     dataHandler: StepDataHandler<SWOTAnalysisValues>;
-
 
 
     constructor() {
@@ -26,9 +29,8 @@ export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalys
     }
 
 
-
     isUnlocked(data: SWOTAnalysisValues): boolean {
-        return (data["alternative-actions"]?.actions.length ?? 0) > 0;
+        return (data["swot-classify-alternate-actions"]?.actions.length ?? 0) > 0;
     }
 
     deleteData(data: SWOTAnalysisValues): SWOTAnalysisValues {
@@ -38,7 +40,7 @@ export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalys
 
     fillFromPreviousValues(data: SWOTAnalysisValues): SWOTAnalysisValues {
         let ownData = data["swot-classify-alternate-actions"];
-        if(ownData === undefined){
+        if (ownData === undefined) {
             ownData = {
                 actions: [],
                 classifications: []
@@ -70,11 +72,36 @@ export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalys
     }
 
     validateData(data: SWOTAnalysisValues): UIError[] {
-        return [];
+        const values = data["swot-classify-alternate-actions"];
+        const errors = new Array<UIError>();
+        if (values !== undefined) {
+            for (let i = 0; i < values.classifications.length; i++) {
+                let value = values.classifications[i];
+                if (value.name === null || value.name === "") {
+                    errors.push({
+                        id: value.droppableID + "-classification",
+                        message: "Bitte ausfüllen!",
+                        level: "error"
+                    });
+                }
+                if (value.actions.length <= 0) {
+                    errors.push({
+                        id: value.droppableID + "-action-size",
+                        message: "Die Klassifikation muss mindestens eine Handlungsalternative haben",
+                        level: "error"
+                    });
+                }
+            }
+        }
+
+
+        return errors;
     }
 
 
-
+    public static compareClassifiedAlternateActions(action1: ClassifiedAlternateAction, action2: ClassifiedAlternateAction) {
+        return action1.indexName.localeCompare(action2.indexName);
+    }
 
 
 }
