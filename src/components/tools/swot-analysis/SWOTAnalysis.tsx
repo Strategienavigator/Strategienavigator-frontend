@@ -1,14 +1,17 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
 import {SWOTFactors, SwotFactorsValues} from "./steps/SWOTFactors";
 import {SWOTAlternativeActions, SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions";
 import {
     SWOTClassifyAlternativeActions,
     SWOTClassifyAlternativeActionsValues
-} from "./steps/SWOTClassifyAlternativeActions";
+} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
 
 import "./swot-analysis.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
+import {JSONExporter} from "../../../general-components/Export/JSONExporter";
+import {SWOTExcelExporter} from "./export/SWOTExcelExporter";
 
 
 interface SWOTAnalysisValues {
@@ -17,7 +20,7 @@ interface SWOTAnalysisValues {
     "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
 }
 
-class SWOTAnalysis extends Tool {
+class SWOTAnalysis extends SteppableTool {
 
     constructor(props: any) {
         super(props);
@@ -25,6 +28,10 @@ class SWOTAnalysis extends Tool {
         this.setID(2);
         this.setToolname("SWOT Analyse");
         this.setToolIcon(faThLarge);
+        // this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
+
+        this.addExporter(new JSONExporter());
+        this.addExporter(new SWOTExcelExporter());
 
         this.addStep<SwotFactorsValues>({
             id: "swot-factors",
@@ -41,10 +48,6 @@ class SWOTAnalysis extends Tool {
             title: "3. Handlungsalternativen klassifizieren",
             form: <SWOTClassifyAlternativeActions/>
         });
-    }
-
-    protected renderToolHome() {
-        return null;
     }
 
     protected renderShortDescription() {
@@ -69,10 +72,6 @@ class SWOTAnalysis extends Tool {
         );
     }
 
-    protected renderNew() {
-        return this.getStepComponent();
-    }
-
     protected renderView(save: SaveResource<SWOTAnalysisValues>) {
         this.setValues("swot-factors", save.data["swot-factors"]);
         this.setValues("alternative-actions", save.data["alternative-actions"]);
@@ -84,4 +83,8 @@ class SWOTAnalysis extends Tool {
 
 export {
     SWOTAnalysis
+}
+
+export type {
+    SWOTAnalysisValues
 }

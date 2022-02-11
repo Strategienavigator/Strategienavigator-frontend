@@ -6,3 +6,17 @@
     cursor: pointer;
   }
 }
+
+.button-container{
+  position: relative;
+}
+
+.sorting-button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.sorting-button>span {
+  display:inline-block;
+  margin-right: 0.5em;
+}

@@ -1,24 +1,24 @@
-import {callAPI} from "../API";
+import {APIArgs, callAPI} from "../API";
 import {DefaultResponse, PaginationResource, ToolResource} from "../../Datastructures";
 
 
 /**
  * Holt alle Tools
  *
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs Normale api Argumente
  */
-const getTools = async (token: string | null) => {
-    return await callAPI<PaginationResource<ToolResource>>("api/tools", "GET", undefined, (token !== null) ? token : undefined);
+const getTools = async (apiArgs?: APIArgs) => {
+    return await callAPI<PaginationResource<ToolResource>>("api/tools", "GET", undefined, true, apiArgs);
 }
 
 /**
  * Holt ein einzelnes Tool basierend auf der angegebenen ID
  *
  * @param toolID Die ID des Tools
- * @param token Der Token zur Authentifizierung
+ * @param apiArgs Normale api Argumente
  */
-const getTool = async (toolID: number, token: string | null) => {
-    return await callAPI<DefaultResponse<ToolResource>>("api/tools/" + toolID, "GET", undefined, (token !== null) ? token : undefined);
+const getTool = async (toolID: number, apiArgs?: APIArgs) => {
+    return await callAPI<DefaultResponse<ToolResource>>("api/tools/" + toolID, "GET", undefined, true, apiArgs);
 }
 
 export {

@@ -1,12 +1,13 @@
 import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
+import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 interface UtilResultValues {
 
 }
 
-class UtilResult extends FormComponent<UtilResultValues, any> {
+class UtilResult extends Step<UtilResultValues, any> {
     build(): JSX.Element {
         return <div/>;
     }

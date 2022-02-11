@@ -1,22 +1,44 @@
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
-import {PCCriterias} from "./steps/PCCriterias";
-import {PCPairComparison} from "./steps/PCPairComparison";
+import {PCCriterias, PCCriteriasValues} from "./steps/PCCriterias";
+import {PCPairComparison, PCPairComparisonValues} from "./steps/PCPairComparison";
 
 import "./pairwise-comparison.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {JSONExporter} from "../../../general-components/Export/JSONExporter";
+import {SWOTExcelExporter} from "../swot-analysis/export/SWOTExcelExporter";
+import {PCExcelExporter} from "./export/PCExcelExporter";
 
 
-class PairwiseComparison extends Tool {
+/**
+ * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich
+ */
+export interface PairwiseComparisonValues {
+    "pc-criterias": PCCriteriasValues,
+    "pc-comparison": PCPairComparisonValues
+}
 
+/**
+ * Der Paarweise-Vergleich
+ */
+class PairwiseComparison extends SteppableTool {
+
+    /**
+     * Setzt die Grundinformationen für den Paarweisen-Vergleich fest und legt damit den Grundstein.
+     * Fügt die Schritte und die Exporter hinzu.
+     *
+     * @param props React Props
+     */
     constructor(props: any) {
         super(props);
 
         this.setID(3);
         this.setToolname("Paarweiser Vergleich");
         this.setToolIcon(faSortAmountDownAlt);
-        // Maintenance Mode
-        this.setMaintenance(true);
+        this.setMaintenance(false);
+
+        this.addExporter(new JSONExporter());
+        this.addExporter(new PCExcelExporter());
 
         this.addStep({
             form: <PCCriterias/>,
@@ -35,23 +57,24 @@ class PairwiseComparison extends Tool {
     }
 
     protected renderShortDescription() {
-        return (
-            <>
-                Es sollten Kriterien festgelegt werden, welche anschließend Paarweise verglichen und gewichtet
-                werden.
-            </>
-        );
+        return null;
     }
 
     protected renderTutorial() {
         return null;
     }
 
-    protected renderNew() {
-        return this.getStepComponent();
-    }
+    /**
+     * Baut den Paarweisen Vergleich aus einem Speicherstand auf
+     *
+     * @param {SaveResource<PairwiseComparisonValues>} save Der Speicherstand
+     * @returns {JSX.Element} StepComponent
+     * @protected
+     */
+    protected renderView(save: SaveResource<PairwiseComparisonValues>) {
+        this.setValues("pc-criterias", save.data["pc-criterias"])
+        this.setValues("pc-comparison", save.data["pc-comparison"])
 
-    protected renderView(tool: SaveResource) {
         return this.getStepComponent();
     }
 }

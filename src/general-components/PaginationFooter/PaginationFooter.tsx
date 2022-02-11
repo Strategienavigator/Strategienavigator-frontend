@@ -158,14 +158,16 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
         return numbers.map((i, index) => {
             let isActive = i === active;
             if (i === -1) {
-                return (<PageItem key={"ellipsis" + index} disabled={true}>
-                    ...
-                </PageItem>)
+                return (
+                    <PageItem key={"ellipsis" + index} className={"non-select"} disabled={true}>
+                        ...
+                    </PageItem>)
             } else {
-                return (<PageItem key={i} active={isActive} disabled={!isActive && this.props.disabled}
-                                  onClick={this.itemClicked.bind(this, i)}>
-                    {i}
-                </PageItem>);
+                return (
+                    <PageItem key={i} className={"non-select"} active={isActive} disabled={!isActive && this.props.disabled}
+                              onClick={this.itemClicked.bind(this, i)}>
+                        {i}
+                    </PageItem>);
             }
 
         });
@@ -180,10 +182,13 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
         let items = this.getNumberButtons();
         return (
             <Pagination className={"paginationContainer"}>
-                <PageItem key={"previous"} disabled={this.props.currentPage === 1 || this.props.disabled}
+                <PageItem key={"previous"}
+                          className={"non-select"}
+                          disabled={this.props.currentPage === 1 || this.props.disabled}
                           onClick={this.previousClicked}>Vorherige</PageItem>
                 {items}
                 <PageItem key={"next"}
+                          className={"non-select"}
                           disabled={this.props.currentPage === this.props.pageCount || this.props.disabled}
                           onClick={this.nextClicked}>Nächste</PageItem>
             </Pagination>);

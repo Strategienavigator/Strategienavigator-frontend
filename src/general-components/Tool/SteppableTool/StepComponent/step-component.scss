@@ -1,14 +1,6 @@
-@import "src/scss/variables/variables";
+@import "/src/scss/variables/variables";
 
 $tabColor: #6e6e6e;
-
-.stepHeader {
-  padding: 0.2rem 1rem;
-  margin-bottom: 1rem;
-  font-size: 13pt;
-  font-weight: 600;
-  border-left: 2px solid $color;
-}
 
 .stepTabContainer * {
   word-break: break-all;
@@ -21,16 +13,6 @@ $tabColor: #6e6e6e;
   position: -webkit-sticky;
   z-index: 100;
   align-self: flex-start
-}
-
-.stepContainer > .stepTabContainer, .stepHeaderAccordion {
-  margin-bottom: 0.75rem;
-}
-
-.stepHeaderAccordion {
-  .accordion-header * {
-    font-weight: 700;
-  }
 }
 
 .stepContainer > .stepTabContainer, .stepContainer > .tabsContent {

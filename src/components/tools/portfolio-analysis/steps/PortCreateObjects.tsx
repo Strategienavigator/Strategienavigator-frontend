@@ -1,12 +1,13 @@
 import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
 import {FormEvent} from "react";
+import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 interface PortCreateObjectsValues {
 
 }
 
-class PortCreateObjects extends FormComponent<PortCreateObjectsValues, any> {
+class PortCreateObjects extends Step<PortCreateObjectsValues, any> {
     build(): JSX.Element {
         return <div/>;
     }
