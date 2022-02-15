@@ -3,13 +3,14 @@ import {SaveResource} from "../../../general-components/Datastructures";
 import {PCCriterias, PCCriteriasValues} from "./steps/PCCriterias";
 import {PCPairComparison, PCPairComparisonValues} from "./steps/PCPairComparison";
 
-import "./pairwise-comparison.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "../swot-analysis/export/SWOTExcelExporter";
 import {PCExcelExporter} from "./export/PCExcelExporter";
 import {PCResult, PCResultValues} from "./steps/PCResult";
 
+
+import "./pairwise-comparison.scss";
 
 /**
  * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich

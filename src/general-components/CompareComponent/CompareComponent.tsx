@@ -30,6 +30,10 @@ export interface CompareComponentProps {
      * Die Werte die angezeigt werden sollen
      */
     values: CompareValue[]
+    /**
+     * Gibt an ob die Werte veränderbar sind oder nicht
+     */
+    disabled: boolean
 }
 
 /**
@@ -86,6 +90,7 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                                                 onChange={() => {
                                                     this.onRadioChange(index, headerIndex);
                                                 }}
+                                                disabled={this.props.disabled}
                                                 type={"radio"}
                                                 name={"field-" + index}
                                             />

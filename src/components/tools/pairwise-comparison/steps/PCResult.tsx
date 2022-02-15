@@ -5,11 +5,13 @@ import {ResetType} from "../../../../general-components/Tool/FormComponent/FormC
 import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PCCriteriasValues} from "./PCCriterias";
 import {CardComponentField} from "../../../../general-components/CardComponent/CardComponent";
+import {Table} from "react-bootstrap";
 
 
 interface PointCriteria {
     criteria: CardComponentField
-    points: number
+    points: number,
+    rank: number
 }
 
 export interface PCResultValues {
@@ -25,8 +27,34 @@ class PCResult extends Step<PCResultValues, {}> {
 
         return (
             <div>
-                <b>Ergebnis:</b><br />
-                {values.resultAsString}
+                <div style={{marginBottom: "1.5rem"}}>
+                    <b>Ergebnis:</b><br />
+                    {values.resultAsString}
+                </div>
+
+                <Table className={"resultTable"} bordered={false} borderless={false} hover={true} variant={"light"} striped={true}>
+                    <thead>
+                        <tr>
+                            <th>Kriterium</th>
+                            <th className={"fixed"}>Punkte</th>
+                            <th className={"fixed"}>Rang</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {values.result && values.result.map((v) => {
+                            return (
+                                <tr>
+                                    <td>
+                                        {v.criteria.name}<br/>
+                                        <small>{v.criteria.desc}</small>
+                                    </td>
+                                    <td className={"fixed"}>{v.points}</td>
+                                    <td className={"fixed"}>{v.rank}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </Table>
             </div>
         );
     }
@@ -43,7 +71,8 @@ class PCResult extends Step<PCResultValues, {}> {
             for (const criteria of criterias.criterias) {
                 result.push({
                     criteria: criteria,
-                    points: 0
+                    points: 0,
+                    rank: 0
                 });
             }
 
@@ -90,6 +119,18 @@ class PCResult extends Step<PCResultValues, {}> {
                 }
                 return 0;
             })
+
+            // rank
+            let rank = 1;
+            i = 0;
+
+            for (const criteria of result) {
+                if(i > 0 && criteria.points < result[i - 1].points) {
+                    rank++;
+                }
+                criteria.rank = rank;
+                i++;
+            }
 
             // finish up
             this.values = {

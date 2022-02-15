@@ -56,6 +56,7 @@ export class PCPairComparison extends Step<PCPairComparisonValues, {}> {
                 <CompareComponent
                     values={values.comparisons}
                     showHeader={true}
+                    disabled={this.isDisabled()}
                     fields={this.adapter}
                     header={this.header}
                 />
