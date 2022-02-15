@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {ChangeEvent, Component, MouseEvent} from "react";
 import {
     ClassificationController,
     ClassificationValues,
@@ -12,6 +12,8 @@ import {SelectClassificationModal} from "./SelectClassificationModal";
 import {SWOTClassifyAlternativeActions} from "../SWOTClassifyAlternativeActions";
 
 import "./normal-classifying.scss";
+import {ClassifyingCard} from "./ClassifyingCard/ClassifyingCard";
+import {ClassifyingCardList} from "./ClassifyingCardList/ClassifyingCardList";
 
 interface NormalClassifyingProps extends FormControlProps {
     classificationController: ClassificationController
@@ -21,8 +23,7 @@ interface NormalClassifyingProps extends FormControlProps {
 
 interface NormalClassifyingState {
     openClassificationModal: boolean
-    lastSelectedAction?: ClassifiedAlternateAction
-    withNone: boolean
+    lastSelectedAction?: string
 }
 
 class NormalClassifying extends Component<NormalClassifyingProps, NormalClassifyingState> {
@@ -31,8 +32,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
         super(props);
 
         this.state = {
-            openClassificationModal: false,
-            withNone: false
+            openClassificationModal: false
         }
     }
 
@@ -51,55 +51,26 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                                 <Accordion.Header>
                                     <InputGroup>
                                         <Button
-                                            as={"div"}
-                                            type={"button"}
                                             variant={"danger"}
                                             size={"sm"}
-                                            onClick={() => this.props.classificationController.removeClassification(classification.droppableID)}
+                                            name={classification.droppableID}
+                                            onClick={this.onClassificationRemoveClick}
                                         >
                                             <FontAwesomeIcon style={{verticalAlign: "middle"}} icon={faTrash}/>
                                         </Button>
+
                                         <FormControl
                                             type={"text"}
+                                            name={classification.droppableID}
                                             placeholder={"Klassifikation..."}
-                                            onChange={(e) => {
-                                                const newName = e.target.value;
-                                                this.props.classificationController.classificationNameChanged(classification.droppableID, newName);
-                                            }}
+                                            onChange={this.onClassificationNameChanged}
                                             value={classification.name}
                                         />
                                     </InputGroup>
                                 </Accordion.Header>
                                 <Accordion.Body>
-                                    <div className={"actionCards"}>
-                                        {Array.from(classification.actions.values()).map((action) => {
-                                            return (
-                                                <Card key={action.indexName} className={"actionCard"} body>
-                                                    <Row>
-                                                        <Col>{action.name}</Col>
-                                                        <Col>{action.action.name}</Col>
-                                                        <Col>
-                                                            <Button
-                                                                size={"sm"}
-                                                                onClick={() => {
-                                                                    this.openClassificationModal(action, true);
-                                                                    // this.props.step3instance.removeAction(classification.droppableID, action.indexName);
-                                                                }}
-                                                            >
-                                                                <FontAwesomeIcon rotation={90}
-                                                                                 icon={faExchangeAlt}/>
-                                                            </Button>
-                                                        </Col>
-                                                    </Row>
-                                                </Card>
-                                            );
-                                        })}
-                                    </div>
-                                    {(classification.actions.length <= 0) && (
-                                        <span>
-                                            Keine Handlungsalternativen zugeordnet...
-                                        </span>
-                                    )}
+                                    <ClassifyingCardList actions={classification.actions}
+                                                         onOpenClassificationModalClick={this.onOpenClassificationModalClick}/>
                                 </Accordion.Body>
                             </Accordion.Item>
                         );
@@ -121,21 +92,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                 <div className={"actionCards"}>
                     {actions.filter(value => !value.alreadyAdded).map((action) => {
 
-                        return (
-                            <Card key={action.indexName} className={"actionCard"} body>
-                                <Row>
-                                    <Col>{action.name}</Col>
-                                    <Col>{action.action.name}</Col>
-                                    <Col>
-                                        <Button
-                                            size={"sm"}
-                                            onClick={this.openClassificationModal.bind(this, action, undefined)}>
-                                            <FontAwesomeIcon rotation={90} icon={faExchangeAlt}/>
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Card>
-                        );
+                        return <ClassifyingCard action={action} onChangeClick={this.onOpenClassificationModalClick}/>;
                     })}
 
                     {(!actions.some((v) => !v.alreadyAdded)) && (
@@ -155,8 +112,8 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
         )
     }
 
-    private changeClassification = (oldClassification: ClassificationValues | null, newClassification: ClassificationValues | null, action: ClassifiedAlternateAction) => {
-        this.props.classificationController.updateActionClassification(oldClassification?.droppableID ?? null, newClassification?.droppableID ?? null, action.indexName);
+    private changeClassification = (oldClassification: ClassificationValues | null, newClassification: ClassificationValues | null, action: string) => {
+        this.props.classificationController.updateActionClassification(oldClassification?.droppableID ?? null, newClassification?.droppableID ?? null, action);
     }
 
 
@@ -168,15 +125,31 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
     }
 
 
-    private openClassificationModal = (action: ClassifiedAlternateAction, withNone?: boolean) => {
+    private openClassificationModal = (action: string) => {
         this.setState({
             openClassificationModal: true,
             lastSelectedAction: action,
-            withNone: !!withNone
         });
     }
 
+    private onClassificationNameChanged = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const id = event.currentTarget.name;
+        const newName = event.target.value;
 
+        if (id.startsWith("droppable-")) {
+            this.props.classificationController.classificationNameChanged(id, newName);
+        }
+    };
+
+
+    private onOpenClassificationModalClick = (id: string) => {
+        this.openClassificationModal(id);
+    }
+
+    private onClassificationRemoveClick = (event: MouseEvent<HTMLButtonElement>) => {
+        const id = event.currentTarget.name;
+        this.props.classificationController.removeClassification(id);
+    };
 }
 
 export {

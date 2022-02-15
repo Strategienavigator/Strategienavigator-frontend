@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 interface SelectClassificationModalProps {
-    action?: ClassifiedAlternateAction
+    action?: string
     /**
      * if the modal is open and visible
      */
@@ -26,7 +26,7 @@ interface SelectClassificationModalProps {
     onSelect: (
         oldClassification: ClassificationValues | null,
         newClassification: ClassificationValues | null,
-        action: ClassifiedAlternateAction
+        action: string
     ) => void
     /**
      * callback wenn das Model geschlossen werden soll
@@ -38,12 +38,12 @@ interface SelectClassificationModalProps {
 function SelectClassificationModal(props: SelectClassificationModalProps) {
 
 
-    const findClassification = (action: ClassifiedAlternateAction|undefined): ClassificationValues | null => {
+    const findClassification = (action: string|undefined): ClassificationValues | null => {
         if(action === undefined)
             return null;
         for (const classification of props.classifications) {
             for (const classificationAction of classification.actions) {
-                if (classificationAction.indexName === action.indexName) {
+                if (classificationAction.indexName === action) {
                     return classification;
                 }
             }

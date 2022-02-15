@@ -37,7 +37,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                 <div className={"stepHeader form"}>
                     <Form.Control
                         type={"text"}
-                        defaultValue={this.props.saveName}
+                        value={this.props.saveName}
                         onChange={this.onChangeCurrentName}
                         onFocus={this.showDescription}
                         onBlur={this.showDescriptionIfDesktop}
@@ -50,7 +50,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                                 as={"textarea"}
                                 onFocus={this.showDescription}
                                 onBlur={this.showDescriptionIfDesktop}
-                                defaultValue={this.props.saveDescription}
+                                value={this.props.saveDescription}
                                 onChange={this.onChangeCurrentDescription}
                             />
                         </div>

@@ -6,9 +6,14 @@ import {
     CardComponentFields
 } from "../../../../../general-components/CardComponent/CardComponent";
 import {isDesktop} from "../../../../../general-components/Desktop";
-import {Step} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {
+    shallowCompareStepProps,
+    Step,
+    StepProp
+} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
+import {compareWithoutFunctions} from "../../../../../general-components/ComponentUtils";
 
 
 export interface AlternateAction {
@@ -27,6 +32,25 @@ interface SWOTAlternativeActionsState {
 }
 
 export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SWOTAlternativeActionsState> {
+
+
+    public constructor(props: Readonly<StepProp<SWOTAnalysisValues>> | StepProp<SWOTAnalysisValues>);
+    public constructor(props: StepProp<SWOTAnalysisValues>, context: any);
+    public constructor(props: StepProp<SWOTAnalysisValues> | Readonly<StepProp<SWOTAnalysisValues>>, context?: any) {
+        super(props, context);
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<StepProp<SWOTAnalysisValues>>, nextState: Readonly<SWOTAlternativeActionsState>, nextContext: any): boolean {
+         let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
+
+         if(!shouldUpdate){
+             shouldUpdate = this.props.save.data["alternative-actions"] !== nextProps.save.data["alternative-actions"];
+         }
+
+
+
+        return shouldUpdate;
+    }
 
     changedSelected = (e: FormEvent<HTMLSelectElement>) => {
         let currentAction = this.getCurrentAction();
@@ -154,7 +178,7 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         max={maxAlternativeActions}
                         hide={currentAction.hasNone}
                         values={currentAction.alternatives}
-                        onChanged={this.alternativesChanged.bind(this)}
+                        onChanged={this.alternativesChanged}
                         placeholder={{
                             name: "Strategische Handlungsoption"
                         }}
@@ -217,10 +241,10 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
         });
     }
 
-    private alternativesChanged(cardComponents: CardComponentFields) {
+    private alternativesChanged = (cardComponents: CardComponentFields) => {
         this.updateAlternative(this.props.currentSubStep, action => {
             action.alternatives = cardComponents;
             return action;
         });
-    }
+    };
 }
