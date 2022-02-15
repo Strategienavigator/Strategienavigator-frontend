@@ -175,8 +175,8 @@ class CardComponent extends PureComponent<CardComponentProps, {}> {
     }
 
     private removeCard(index: number) {
-        let newValues = this.props.values;
-        if (newValues.length > this.props.min) {
+        let newValues = this.props.values.slice();
+        if (newValues.length > Math.max(this.props.min, index)) {
             newValues.splice(index, 1);
             this.props.onChanged(newValues);
         }

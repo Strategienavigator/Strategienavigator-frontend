@@ -18,6 +18,7 @@ import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
 import {UIError} from "../../../Error/ErrorBag";
 import {Exporter} from "../../../Export/Exporter";
 import {Draft} from "immer";
+import {SaveResource} from "../../../Datastructures";
 
 
 export interface StepDefinition<T extends object> {
@@ -161,27 +162,30 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
             }
         });
 
-        // TODO put in function, this part is copied into changeStep
-        let subStepProgress = 0;
-        const subStep = this.props.steps[progress].subStep;
-        const data = this.props.save.data;
-        if (subStep !== undefined) {
-
-            const count = subStep.getStepCount(data);
-            for (let i = 0; i < count; i++) {
-                if (subStep.isStepUnlocked(i, data)) {
-                    subStepProgress++;
-                }
-            }
+        if (progress < -1) {
+            throw new Error("no substep is unlocked")
         }
 
         this.state = {
             currentStep: progress,
-            currentSubStep: subStepProgress,
+            currentSubStep: 0,
             showExportModal: false,
             showResetModal: false,
             hasCustomNextButton: false,
         }
+    }
+
+    /**
+     * does update the currentSubStep if no valid value is currently selected
+     * @param props
+     * @param state
+     */
+    public static getDerivedStateFromProps(props: StepComponentProps<any>, state: StepComponentState) {
+        const toChange: Partial<StepComponentState> = {};
+        if (state.currentSubStep !== 0 && !props.steps[state.currentStep].subStep?.isStepUnlocked(state.currentSubStep, props.save.data)) {
+            toChange.currentSubStep = StepComponent.getCurrentSubStepOfStep(props.steps, state.currentStep, props.save);
+        }
+        return toChange;
     }
 
     render = () => {
@@ -365,13 +369,13 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
 
     }
 
-    private isStepUnlocked = (step: number) => {
-        return this.withData(this.props.steps[step].dataHandler.isUnlocked);
-    }
 
-
+    /**
+     * does call the given function with the current data objects as first argument. If function isn't defined undefined is returned
+     * @param fn
+     * @private
+     */
     private withData<E>(fn: (data: D) => E): E
-    private withData(fn: undefined): undefined
     private withData<E>(fn: ((data: D) => E) | undefined): E | undefined
     private withData<E>(fn: ((data: D) => E) | undefined): E | undefined {
         if (fn !== undefined) {
@@ -392,17 +396,18 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
         return this.state.currentStep >= this.props.steps.length - 1;
     }
 
+
     /**
      * Resetet alle steps, von hinten bis zu dem angegebenen index
+     *
      * @param index
      * @private
      */
     private resetStepsUntil(index: number) {
-
         this.props.saveController.onChanged(save => {
             if (index < this.props.steps.length) {
                 const newData = save.data;
-                for (let i = this.props.steps.length; i >= index; i--) {
+                for (let i = this.props.steps.length - 1; i >= index; i--) {
                     this.props.steps[i]?.dataHandler.deleteData(newData);
                 }
                 this.props.steps[index]?.dataHandler.fillFromPreviousValues(newData);
@@ -415,7 +420,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
         this.resetStepsUntil(0);
     }
 
-    public tryNextStep = ():void => {
+    public tryNextStep = (): void => {
         const currentStep = this.getCurrentStep();
 
         if (this.hasNextSubStep()) {
@@ -445,6 +450,11 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
 
     }
 
+    /**
+     * changes the currently visible step to the next one. Does only change if the next step is unlocked or it is unlockable.
+     *
+     * Next step is unlocked if possible.
+     */
     private nextStep = () => {
         this.restoreFooter();
 
@@ -595,27 +605,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
     private changeStep(step: number, callback: undefined | (() => void) = undefined) {
 
         if (this.withData(this.props.steps[step].dataHandler.isUnlocked)) {
-            let subStepProgress = 0;
-            if (this.hasSubSteps(step)) {
-                // TODO put into function (same snippet as in constructor
-                const subStep = this.props.steps[step].subStep;
-                if (subStep !== undefined) {
-
-                    const count = this.withData(subStep.getStepCount);
-                    for (let i = 0; i < count; i++) {
-                        if (this.withData(subStep.isStepUnlocked.bind(this, i))) {
-                            subStepProgress++;
-                        }
-                    }
-                    if (subStepProgress === count) {
-                        subStepProgress = 0;
-                    }
-                }
-
-            }
             this.setState({
-                currentStep: step,
-                currentSubStep: subStepProgress,
+                currentStep: step
             }, callback);
             return true;
         }
@@ -631,6 +622,41 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
         }*/
     }
 
+    /**
+     * returns the first unfinished sub step of the given step. If every sub step is unlocked the first step is returned
+     *
+     *
+     * @param steps
+     * @param step
+     * @param save
+     * @private the index of the sub step
+     */
+    private static getCurrentSubStepOfStep(steps: Array<StepDefinition<any>>, step: number, save: SaveResource<any>) {
+        let subStepProgress = 0;
+
+        const subStep = steps[step].subStep;
+        if (subStep !== undefined) {
+
+            subStepProgress = -1;
+
+            const count = subStep.getStepCount(save.data);
+            for (let i = 0; i < count; i++) {
+                if (subStep.isStepUnlocked(i, save.data)) {
+                    subStepProgress++;
+                }
+            }
+            if (subStepProgress === count) {
+                subStepProgress = 0;
+            }
+
+        }
+        return subStepProgress;
+    }
+
+    /**
+     * does return the matrix if the current sub step has one
+     * @private
+     */
     private getMatrix(): undefined | ReactNode {
         let step = this.getCurrentStep();
         if (step.matrix !== undefined) {

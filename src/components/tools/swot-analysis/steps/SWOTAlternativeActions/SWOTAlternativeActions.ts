@@ -41,7 +41,7 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
 
     isUnlocked = (data: SWOTAnalysisValues): boolean => (data["alternative-actions"]?.actions.length ?? 0) > 0;
 
-    fillFromPreviousValues = (data: SWOTAnalysisValues): SWOTAnalysisValues => {
+    fillFromPreviousValues = (data: SWOTAnalysisValues) => {
         let analysisValues = data["alternative-actions"];
         if (analysisValues === undefined) {
             analysisValues = {actions: []};
@@ -70,12 +70,10 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
             }
         }
         data["alternative-actions"] = analysisValues
-        return data;
     };
 
-    deleteData = (data: SWOTAnalysisValues): SWOTAnalysisValues => {
+    deleteData = (data: SWOTAnalysisValues) => {
         data["alternative-actions"] = undefined;
-        return data;
     };
 
     validateData = (data: SWOTAnalysisValues): UIError[] => {

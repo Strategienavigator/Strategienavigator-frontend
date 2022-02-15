@@ -13,7 +13,7 @@ import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/Confir
 import {Route} from "react-router-dom";
 import {showErrorPage} from "../../../index";
 import {SimpleErrorMap, UIError} from "../../Error/ErrorBag";
-import produce, {castDraft} from "immer";
+import produce, {castDraft, castImmutable, Immutable} from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
 
 type ToolViewValidation = {

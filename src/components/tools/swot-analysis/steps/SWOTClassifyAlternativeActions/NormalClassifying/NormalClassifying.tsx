@@ -63,11 +63,10 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                                             type={"text"}
                                             placeholder={"Klassifikation..."}
                                             onChange={(e) => {
-                                                // TODO make one change listener and distinguish between classifications by target
                                                 const newName = e.target.value;
                                                 this.props.classificationController.classificationNameChanged(classification.droppableID, newName);
                                             }}
-                                            defaultValue={classification.name}
+                                            value={classification.name}
                                         />
                                     </InputGroup>
                                 </Accordion.Header>
@@ -144,9 +143,9 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                     )}
                 </div>
 
+
                 <SelectClassificationModal
                     open={this.state.openClassificationModal}
-                    withNone={this.state.withNone}
                     action={this.state.lastSelectedAction ?? undefined}
                     classifications={classifications}
                     onSelect={this.changeClassification}
@@ -157,20 +156,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
     }
 
     private changeClassification = (oldClassification: ClassificationValues | null, newClassification: ClassificationValues | null, action: ClassifiedAlternateAction) => {
-        if (oldClassification != null) {
-            oldClassification.actions = oldClassification.actions
-                .filter(a => action.indexName !== a.indexName)
-                .sort(SWOTClassifyAlternativeActions.compareClassifiedAlternateActions);
-        } else {
-            action.alreadyAdded = true;
-        }
-        if (newClassification != null) {
-            newClassification.actions = newClassification.actions
-                .filter(a => action.indexName !== a.indexName)
-                .sort(SWOTClassifyAlternativeActions.compareClassifiedAlternateActions);
-        } else {
-            action.alreadyAdded = false;
-        }
+        this.props.classificationController.updateActionClassification(oldClassification?.droppableID ?? null, newClassification?.droppableID ?? null, action.indexName);
     }
 
 

@@ -12,7 +12,7 @@ import {SWOTClassifyAlternativeActions} from "./SWOTClassifyAlternativeActions";
 export interface ClassificationController {
     addClassification: () => void
     removeClassification: (id: string) => void
-    updateActionClassification: (oldClassificationId: string | null, newClassificationId: string | null, actionId: string) => void
+    updateActionClassification: (oldClassificationId: string | null, newClassificationId: string | null, indexName: string) => void
     classificationNameChanged: (id: string, newName: string) => void
 }
 
@@ -69,39 +69,91 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
     }
 
     addClassification = () => {
+        const classifications = this.requireStepData().classifications;
+        let highestId = 0;
+        if (classifications.length > 0) {
+            highestId = parseInt(classifications[classifications.length - 1].droppableID.split("-")[1]);
+        }
+        const newDroppableID = "droppable-" + (highestId + 1);
 
+
+        this.props.saveController.onChanged(save => {
+            save.data["swot-classify-alternate-actions"]?.classifications.push({
+                name: "",
+                actions: [],
+                droppableID: newDroppableID
+            });
+        });
     }
 
     getClassification = (droppableID: string): ClassificationValues | undefined => {
         return this.requireStepData().classifications.find(classification => classification.droppableID === droppableID);
     }
 
-    removeClassification = (droppableID: string): boolean => {
-        let classification = this.getClassification(droppableID);
-        classification?.actions.forEach((value) => {
-            value.alreadyAdded = false;
+    removeClassification = (droppableID: string): void => {
+
+        this.props.saveController.onChanged(save => {
+            const classificationIndex = save.data["swot-classify-alternate-actions"]?.classifications.findIndex(c => c.droppableID === droppableID);
+            if (classificationIndex !== undefined && classificationIndex >= 0) {
+                const classification = save.data["swot-classify-alternate-actions"]?.classifications[classificationIndex];
+
+                const toRemove = classification?.actions.map((value) => value.indexName);
+
+                save.data["swot-classify-alternate-actions"]?.classifications.splice(classificationIndex, 1);
+
+                const actions = save.data["swot-classify-alternate-actions"]?.actions;
+                if (actions !== undefined && toRemove !== undefined && toRemove.length > 0) {
+                    actions.forEach(a => {
+                        if (toRemove.some(action => action === a.indexName)) {
+                            a.alreadyAdded = false;
+                        }
+                    })
+                }
+            }
         });
 
-        // TODO remove classifications
-
-        return classification !== undefined;
-    }
-
-    getAction = (draggableID: string): ClassifiedAlternateAction | undefined => {
-        return undefined;
     }
 
     onClassificationNameChange = (droppableID: string, newName: string) => {
-        let classification = this.getClassification(droppableID);
-        // make classification copy
-        if (classification) {
-            classification.name = newName;
-        }
+        this.props.saveController.onChanged(save => {
+            const classification = save.data["swot-classify-alternate-actions"]?.classifications.find(c => c.droppableID === droppableID);
+            if (classification !== undefined) {
+                classification.name = newName;
+            }
+        });
     }
 
 
-    updateActionClassification = () => {
+    updateActionClassification = (oldClassificationId: string | null, newClassificationId: string | null, indexName: string) => {
+        this.props.saveController.onChanged(save => {
+            const data = save.data["swot-classify-alternate-actions"];
+            if (data !== undefined) {
 
+                const action = data.actions.find(a => a.indexName === indexName)
+                if (action !== undefined) {
+
+                    const oldClassification = oldClassificationId !== null ? data.classifications.find(c => c.droppableID === oldClassificationId) : undefined;
+                    const newClassification = newClassificationId !== null ? data.classifications.find(c => c.droppableID === newClassificationId) : undefined;
+
+                    if (oldClassification !== undefined) {
+                        const aIndex = oldClassification.actions.findIndex(a => a.indexName === indexName);
+                        if (aIndex !== undefined && aIndex >= 0) {
+                            oldClassification.actions.splice(aIndex, 1);
+                            oldClassification.actions.sort(SWOTClassifyAlternativeActions.compareClassifiedAlternateActions);
+                        }
+                    }
+
+                    if (newClassification !== undefined) {
+                        newClassification.actions.push({...action, alreadyAdded: true});
+                        newClassification.actions.sort(SWOTClassifyAlternativeActions.compareClassifiedAlternateActions);
+
+                        action.alreadyAdded = true;
+                    } else {
+                        action.alreadyAdded = false;
+                    }
+                }
+            }
+        });
     }
 
     build(): JSX.Element {

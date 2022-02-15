@@ -32,16 +32,18 @@ interface SelectClassificationModalProps {
      * callback wenn das Model geschlossen werden soll
      */
     onClose: () => void
-    withNone: boolean
 }
 
 
 function SelectClassificationModal(props: SelectClassificationModalProps) {
 
-    const findClassification = (action: ClassifiedAlternateAction): ClassificationValues | null => {
+
+    const findClassification = (action: ClassifiedAlternateAction|undefined): ClassificationValues | null => {
+        if(action === undefined)
+            return null;
         for (const classification of props.classifications) {
             for (const classificationAction of classification.actions) {
-                if (classificationAction === action) {
+                if (classificationAction.indexName === action.indexName) {
                     return classification;
                 }
             }
@@ -49,9 +51,12 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
         return null;
     }
 
+
+    const foundClassification = findClassification(props.action);
+
     return (
         <Modal
-            show={props.open}
+            show={props.action !== undefined && props.open}
             backdrop={true}
             onHide={props.onClose}
             keyboard={true}
@@ -77,25 +82,18 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                             let option = e.target.selectedOptions[0];
 
                             const droppableID = option.value;
-                            const value = droppableID;
                             let classification = props.classifications.find(classification => classification.droppableID === droppableID);
 
                             if (props.action) {
-                                let foundClassification = findClassification(props.action);
                                 let oldClassification: ClassificationValues | null = null;
                                 let newClassification: ClassificationValues | null = null;
 
                                 if (foundClassification) {
-                                    if (value === "_none") {
-                                        oldClassification = foundClassification
-                                    } else {
-                                        oldClassification = foundClassification
-                                        // convert from undefined union type to null union type
-                                        newClassification = classification ?? null
-                                    }
-                                } else {
-                                    newClassification = classification ?? null
+                                    oldClassification = foundClassification
                                 }
+
+                                // classification must be undefined if _none is selected as destination classification
+                                newClassification = classification ?? null
                                 props.onSelect(oldClassification, newClassification, props.action)
                             }
 
@@ -104,26 +102,25 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                     }}
                     multiple={false}
                 >
-                    <option disabled={true} selected value={"none"}>--- Auswählen ---</option>
 
-                    {(props.withNone) && (
-                        <option value={"_none"}>Keine Klassifikation</option>
-                    )}
+                    <option selected={foundClassification === undefined} value={"_none"}>Keine Klassifikation
+                    </option>
 
-                    {Array.from(props.classifications.values()).map((classification) => {
+                    {props.classifications.filter(c => c.name.length > 0).map((classification) => {
                         let name = classification.name;
 
-                        if (name) {
-                            return (
-                                <option key={"option" + name} value={classification.droppableID}>{name}</option>
-                            );
-                        }
-                        return;
+                        return (
+                            <option selected={classification.droppableID === foundClassification?.droppableID}
+                                    key={"option" + name}
+                                    value={classification.droppableID}>{name}</option>
+                        );
                     })}
                 </FormSelect>
             </Modal.Body>
         </Modal>
     );
+
+
 }
 
 export {
