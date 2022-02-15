@@ -3,7 +3,7 @@ import {FormEvent} from "react";
 import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
-interface UtilResultValues {
+export interface UtilResultValues {
 
 }
 
@@ -43,4 +43,3 @@ class UtilResult extends Step<UtilResultValues, any> {
 export {
     UtilResult
 };
-export type {UtilResultValues};

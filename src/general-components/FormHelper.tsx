@@ -1,5 +1,6 @@
 import {FormEvent} from "react";
-import {CardComponentFields} from "./CardComponent/CardComponent";
+import {CardComponentField, CardComponentFields} from "./CardComponent/CardComponent";
+import {CustomDescriptionComponent} from "./CardComponent/CustomDescriptionComponent/CustomDescriptionComponent";
 
 
 /**
@@ -8,11 +9,11 @@ import {CardComponentFields} from "./CardComponent/CardComponent";
  * @param {RadioNodeList} element die RadioNodeList
  * @returns {Array<string>} Das Array
  */
-const getRadioNodeList = (element: RadioNodeList): Array<string> => {
-    let values = Array<string>();
+const getRadioNodeList = <D extends unknown> (element: RadioNodeList): Array<D> => {
+    let values = Array<D>();
     element.forEach((value) => {
         let input = value as HTMLInputElement;
-        values.push(input.value);
+        values.push(input.value as D);
     });
     return values;
 }
@@ -22,42 +23,47 @@ const getRadioNodeList = (element: RadioNodeList): Array<string> => {
  *
  * @param {React.FormEvent<HTMLFormElement>} form HTML-Formular
  * @param {string} name Der Name des input-feldes
- * @returns {CardComponentFields | {name: string, id: string, desc: string}[] | any[]} Array aus CardComponentField, sprich CardComponentFields
+ * @param customDesc
+ * @returns {CardComponentFields} Array aus CardComponentField, sprich CardComponentFields
  */
-const extractCardComponentField = (form: FormEvent<HTMLFormElement>, name: string) => {
+const extractCardComponentField = <D extends {} = any>(form: FormEvent<HTMLFormElement>, name: string, customDesc?: CustomDescriptionComponent<any, any, any>) : CardComponentFields<D> => {
     let target: HTMLFormElement = form.currentTarget;
     let elements = target.elements;
 
-    let names: RadioNodeList | Element | null = elements.namedItem(name + "[][name]");
-    let descs: RadioNodeList | Element | null = elements.namedItem(name + "[][desc]");
-    let ids: RadioNodeList | Element | null = elements.namedItem(name + "[][id]")
 
-    if (names !== null && descs !== null) {
-        if (names.constructor.name !== "RadioNodeList") {
-            if (names as HTMLInputElement !== null) {
-                return [{
-                    desc: (descs as HTMLInputElement).value,
-                    name: (names as HTMLInputElement).value,
-                    id: (ids as HTMLInputElement).value
-                }];
-            }
+    let indexes = new Array<number>();
+    let element = elements.namedItem(name + "[][index]");
+
+    if (element) {
+        if (element.constructor.name === "HTMLInputElement") {
+            indexes.push(Number((element as HTMLInputElement).value));
         } else {
-            let allNames = getRadioNodeList(names as RadioNodeList);
-            let allDescs = getRadioNodeList(descs as RadioNodeList);
-            let allIDs = getRadioNodeList(ids as RadioNodeList);
-
-            let cardFields: CardComponentFields = [];
-            for (let i = 0; i < allNames.length; i++) {
-                cardFields.push({
-                    desc: allDescs[i],
-                    name: allNames[i],
-                    id: allIDs[i]
-                });
-            }
-            return cardFields;
+            indexes = getRadioNodeList<number>(element as RadioNodeList);
         }
     }
-    return [];
+
+
+    let fields: CardComponentFields<D> = [];
+    for (const i of indexes) {
+        let fieldName = elements.namedItem(name + "[" + i + "][name]") as HTMLInputElement;
+        let fieldDesc = elements.namedItem(name + "[" + i + "][desc]") as HTMLInputElement;
+        let fieldID = elements.namedItem(name + "[" + i + "][id]") as HTMLInputElement;
+
+        let field = {
+            name: fieldName.value,
+            desc: fieldDesc.value,
+            id: fieldID.value
+        };
+
+        if (customDesc) {
+            let customField: D = customDesc.extractSingle(i, form);
+            field = Object.assign(field, customField);
+        }
+
+        fields.push(field as (D & CardComponentField));
+    }
+
+    return fields;
 }
 
 
@@ -110,5 +116,6 @@ const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardCo
 
 export {
     extractCardComponentField,
-    extractFromForm
+    extractFromForm,
+    getRadioNodeList
 }

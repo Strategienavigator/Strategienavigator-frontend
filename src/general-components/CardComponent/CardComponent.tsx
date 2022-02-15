@@ -7,16 +7,20 @@ import {Messages} from "../Messages/Messages";
 import {CounterInterface} from "../Counter/CounterInterface";
 
 import "./card-component.scss";
+import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/CustomDescriptionComponent";
 
 
-export interface CardProps {
+export interface CardProps<D = any> {
     name: string
     id: string | null
+    index: number
     disabled: boolean
     required: boolean
     onDelete: () => void
     designation?: string
     desc?: string
+    customDescValues?: D
+    customDesc?: ReactElement<CustomDescriptionComponentProps, any>
     placeholder?: CardComponentFieldPlaceholder
 }
 
@@ -72,6 +76,16 @@ class Card extends Component<CardProps, CardState> {
     }
 
     render = () => {
+        let customDesc;
+        if (this.props.customDesc) {
+            customDesc = React.cloneElement(this.props.customDesc, {
+                value: this.props.customDescValues && this.props.customDescValues[this.props.index - 1],
+                disabled: this.props.disabled,
+                name: this.props.name,
+                index: this.props.index
+            });
+        }
+
         return (
             <div>
                 <InputGroup>
@@ -84,7 +98,7 @@ class Card extends Component<CardProps, CardState> {
                         onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
                         onChange={(e) => this.nameChanged(e)}
                         onFocus={() => this.setState({showDesc: true})}
-                        name={this.props.name + "[][name]"}
+                        name={this.props.name + "[" + this.props.index + "][name]"}
                         spellCheck={false}
                         defaultValue={this.props.designation}
                         placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
@@ -106,15 +120,19 @@ class Card extends Component<CardProps, CardState> {
                             as="textarea"
                             spellCheck={false}
                             style={{maxHeight: 500}}
-                            name={this.props.name + "[][desc]"}
+                            name={this.props.name + "[" + this.props.index + "][desc]"}
                             defaultValue={this.props.desc}
                             placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}
                         />
+
+                        <div>
+                            {customDesc}
+                        </div>
                     </div>
                 </Collapse>
 
-                <input name={this.props.name + "[][id]"} type={"hidden"} style={{display: "none", visibility: "hidden"}}
-                       value={this.props.id ? this.props.id : undefined}/>
+                <input name={this.props.name + "[][index]"} value={this.props.index} type={"hidden"} />
+                <input name={this.props.name + "[" + this.props.index + "][id]"} type={"hidden"} value={this.props.id ? this.props.id : undefined}/>
             </div>
         );
     }
@@ -127,14 +145,14 @@ export type CardComponentField = {
     id: string | null
 };
 
-export type CardComponentFields = CardComponentField[];
+export type CardComponentFields<D = {}> = (D & CardComponentField)[];
 
 export interface CardComponentFieldPlaceholder {
     description?: string
     name?: string
 }
 
-export interface CardComponentProps {
+export interface CardComponentProps<D> {
     name: string
     disabled: boolean
     min: number
@@ -142,8 +160,9 @@ export interface CardComponentProps {
     hide?: boolean
     required?: boolean
     counter?: CounterInterface
-    values?: CardComponentFields
+    values?: CardComponentFields<D>
     placeholder?: CardComponentFieldPlaceholder
+    customDescription?: ReactElement<CustomDescriptionComponentProps, any>
 }
 
 export type CardsInterface = Map<number, {
@@ -156,9 +175,9 @@ interface CardComponentState {
     index: number
 }
 
-class CardComponent extends Component<CardComponentProps, CardComponentState> {
+class CardComponent<D = any> extends Component<CardComponentProps<D>, CardComponentState> {
 
-    constructor(props: CardComponentProps | Readonly<CardComponentProps>) {
+    constructor(props: CardComponentProps<D> | Readonly<CardComponentProps<D>>) {
         super(props);
 
         this.state = {
@@ -205,15 +224,19 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
                     index,
                     {
                         card: (
-                            <Card id={this.props.counter?.get(this.state.cards.size) || null}
-                                  disabled={this.props.disabled}
-                                  onDelete={() => this.removeCard(index)}
-                                  key={index}
-                                  required={required}
-                                  name={this.props.name}
-                                  designation={designation}
-                                  ref={ref}
-                                  desc={desc}
+                            <Card
+                                id={this.props.counter?.get(this.state.cards.size) || null}
+                                disabled={this.props.disabled}
+                                onDelete={() => this.removeCard(index)}
+                                key={index}
+                                index={index}
+                                customDesc={this.props.customDescription}
+                                customDescValues={this.props.values as unknown as D}
+                                required={required}
+                                name={this.props.name}
+                                designation={designation}
+                                ref={ref}
+                                desc={desc}
                             />
                         ),
                         ref: ref
@@ -272,9 +295,11 @@ class CardComponent extends Component<CardComponentProps, CardComponentState> {
     }
 
     render = () => {
+        let cards = this.getAllCards();
+
         return (
             <div className={this.props.hide ? "d-none" : ""}>
-                {this.getAllCards()}
+                {cards}
 
                 {((this.state.cards.size < this.props.max) && !this.props.disabled) && (
                     <BootstrapCard onClick={() => this.addCard()}

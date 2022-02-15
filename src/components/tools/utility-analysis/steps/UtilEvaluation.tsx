@@ -3,7 +3,7 @@ import {FormEvent} from "react";
 import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
-interface UtilEvaluationValues {
+export interface UtilEvaluationValues {
 
 }
 
@@ -44,4 +44,3 @@ class UtilEvaluation extends Step<UtilEvaluationValues, any> {
 export {
     UtilEvaluation
 };
-export type {UtilEvaluationValues};
