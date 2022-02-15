@@ -15,12 +15,12 @@ import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 import {ExportModal} from "../../ExportButton";
 import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
-import {SaveResource} from "../../../Datastructures";
 import {UIError} from "../../../Error/ErrorBag";
 import {Exporter} from "../../../Export/Exporter";
+import {Draft} from "immer";
 
 
-export interface StepDefinition<T> {
+export interface StepDefinition<T extends object> {
     id: string
     title: string
     dataHandler: StepDataHandler<T>
@@ -62,7 +62,7 @@ export interface SubStepDefinition<T> {
     customNextButton?: CustomNextButton
 }
 
-export interface StepDataHandler<T> {
+export interface StepDataHandler<T extends object> {
     /**
      * whether this step is selectable by the user
      * @param data
@@ -73,12 +73,12 @@ export interface StepDataHandler<T> {
      * change data in a way that isUnlocked returns true
      * @param data
      */
-    fillFromPreviousValues: (data: T) => T
+    fillFromPreviousValues: (data: Draft<T>) => void
     /**
      * Diese Methode soll die Daten so verändern, dass isUnlocked false returned
      * @param data
      */
-    deleteData: (data: T) => T
+    deleteData: (data: Draft<T>) => void
 
     /**
      * change data in a way that isUnlocked returns false
@@ -87,7 +87,7 @@ export interface StepDataHandler<T> {
     validateData: (data: T) => UIError[]
 }
 
-export interface StepComponentProps<D> extends ToolSaveProps<D> {
+export interface StepComponentProps<D extends object> extends ToolSaveProps<D> {
     steps: StepDefinition<D>[]
     tool: Tool<D>
 }
@@ -133,7 +133,7 @@ export interface StepComponentState {
     customNextButton?: CustomNextButton
 }
 
-class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentState> {
+class StepComponent<D extends object> extends Component<StepComponentProps<D>, StepComponentState> {
 
 
     /**
@@ -330,16 +330,15 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
     }
 
     private changeSaveMeta = (name: string, description: string) => {
-        const save = {...this.props.save};
-        if (name !== save.name) {
-            save.name = name;
-        }
+        this.props.saveController.onChanged(save => {
+            if (name !== save.name) {
+                save.name = name;
+            }
 
-        if (description !== save.description) {
-            save.description = description;
-        }
-
-        this.props.saveController.onChanged(save);
+            if (description !== save.description) {
+                save.description = description;
+            }
+        });
     }
 
     private hasSubSteps(stepIndex: number = this.state.currentStep): boolean {
@@ -399,39 +398,36 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
      * @private
      */
     private resetStepsUntil(index: number) {
-        if (index < this.props.steps.length) {
-            let newData = {...this.props.save.data} as D;
-            for (let i = this.props.steps.length; i >= index; i--) {
-                newData = this.props.steps[i]?.dataHandler.deleteData(newData) ?? newData;
-            }
-            newData = this.props.steps[index]?.dataHandler.fillFromPreviousValues(newData);
 
-            let save = {
-                ...this.props.save,
-                data: newData
-            } as SaveResource<D>
-            this.props.saveController.onChanged(save);
-        }
+        this.props.saveController.onChanged(save => {
+            if (index < this.props.steps.length) {
+                const newData = save.data;
+                for (let i = this.props.steps.length; i >= index; i--) {
+                    this.props.steps[i]?.dataHandler.deleteData(newData);
+                }
+                this.props.steps[index]?.dataHandler.fillFromPreviousValues(newData);
+
+            }
+        });
     }
 
     private resetAllSteps() {
         this.resetStepsUntil(0);
     }
 
-    public tryNextStep = async () => {
+    public tryNextStep = ():void => {
         const currentStep = this.getCurrentStep();
 
         if (this.hasNextSubStep()) {
 
-            this.setSubStep(this.state.currentSubStep + 1);
+            this.nextSubStep();
 
         }
         const errors = this.withData(currentStep.dataHandler.validateData);
 
         if (errors.length < 1) {
-            await this.nextStep();
+            this.nextStep();
         }
-
     }
 
     private nextSubStep = () => {
@@ -449,12 +445,12 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
     }
 
-    private nextStep = async () => {
+    private nextStep = () => {
         this.restoreFooter();
 
 
         const currentStep = this.getCurrentStep();
-        let isProgress: boolean = false;
+
         let newStepIndex = this.state.currentStep + 1;
 
         if (newStepIndex < this.props.steps.length) {
@@ -470,7 +466,6 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
 
             if (currentValid) {
                 if (this.unlockNextStep()) {
-                    isProgress = true;
                     this.changeStep(newStepIndex, () => {
                         if (this.isLastStep()) {
                             this.restoreFooter();
@@ -493,9 +488,9 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
                 const nextStep = this.props.steps[nextStepIndex];
 
                 if (!this.withData(nextStep.dataHandler.isUnlocked)) {
-                    const save = this.props.save;
-                    save.data = this.withData(nextStep.dataHandler.fillFromPreviousValues);
-                    this.props.saveController.onChanged(save);
+                    this.props.saveController.onChanged(save => {
+                        nextStep.dataHandler.fillFromPreviousValues(save.data);
+                    });
                     return true;
                 }
             }
@@ -641,7 +636,6 @@ class StepComponent<D> extends Component<StepComponentProps<D>, StepComponentSta
         if (step.matrix !== undefined) {
             let matrix = React.createElement(step.matrix, {
                 tool: this.props.tool,
-                stepComponent: this,
                 data: this.props.save.data
             });
             const getMatrixContainer = () => {

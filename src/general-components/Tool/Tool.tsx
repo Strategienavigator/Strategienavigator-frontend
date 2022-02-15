@@ -16,7 +16,7 @@ interface ToolState {
     isCreatingNewSave: boolean
 }
 
-abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
+abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>, ToolState> {
     // TOOL META DATA
     private readonly homePath;
     private readonly newPath;
@@ -154,7 +154,7 @@ abstract class Tool<D> extends Component<RouteComponentProps<{}>, ToolState> {
         }
     }
 
-    protected abstract getInitData():D;
+    protected abstract getInitData(): D;
 
     protected abstract renderShortDescription(): ReactNode;
 

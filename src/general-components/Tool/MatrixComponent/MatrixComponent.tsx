@@ -5,14 +5,13 @@ import {Tool} from "../Tool";
 import "./matrix-component.scss";
 
 
-export interface MatrixComponentProps<D> {
-    tool?: Tool<D>
-    stepComponent?: StepComponent<D>
-    data?: D
+export interface MatrixComponentProps<D extends object> {
+    tool: Tool<D>
+    data: D
 }
 
 // TODO rename
-class MatrixComponent<D,S> extends Component<MatrixComponentProps<D>, S> {
+class MatrixComponent<D extends Object, S> extends Component<MatrixComponentProps<D>, S> {
 
     protected getData = () => {
         return this.props.data;
@@ -20,10 +19,6 @@ class MatrixComponent<D,S> extends Component<MatrixComponentProps<D>, S> {
 
     protected getTool = () => {
         return this.props.tool;
-    }
-
-    protected getStepComponent = () => {
-        return this.props.stepComponent;
     }
 
 }

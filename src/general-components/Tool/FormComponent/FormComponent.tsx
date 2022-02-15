@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {PureComponent} from "react";
 import {Form} from "react-bootstrap";
 import {randomBytes} from "crypto";
 
@@ -8,9 +8,16 @@ export interface FormComponentProps {
     disabled: boolean
 }
 
-export abstract class FormComponent<P extends FormComponentProps, S> extends Component<P, S> {
+export abstract class FormComponent<P extends FormComponentProps, S> extends PureComponent<P, S> {
 
     private key: string = randomBytes(200).toString();
+
+
+    protected constructor(props: Readonly<P> | P);
+    protected constructor(props: P, context: any);
+    protected constructor(props: P | Readonly<P>, context?: any) {
+        super(props, context);
+    }
 
     public render = () => {
         return (

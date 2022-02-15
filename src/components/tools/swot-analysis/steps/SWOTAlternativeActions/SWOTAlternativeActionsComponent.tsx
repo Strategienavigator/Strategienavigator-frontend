@@ -208,14 +208,13 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
 
     private updateAlternative(index: number, fn: (action: AlternateAction) => AlternateAction) {
 
-        const save = this.props.save;
-        const actionsData = save.data["alternative-actions"];
+        this.props.saveController.onChanged(save => {
+            const actionsData = save.data["alternative-actions"];
 
-        if (actionsData !== undefined) {
-            actionsData.actions[index] = fn(actionsData.actions[index]);
-            save.data["alternative-actions"] = actionsData;
-            this.props.saveController.onChanged(save);
-        }
+            if (actionsData !== undefined) {
+                actionsData.actions[index] = fn(actionsData.actions[index]);
+            }
+        });
     }
 
     private alternativesChanged(cardComponents: CardComponentFields) {

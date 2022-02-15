@@ -20,8 +20,9 @@ interface ControlFooterItem {
 }
 
 export interface NextStepItem extends ControlFooterItem {
-    nextStep: ()=>{}
+    nextStep: () => void
 }
+
 
 export interface SaveStepsItem extends ControlFooterItem {
     saveSteps: string

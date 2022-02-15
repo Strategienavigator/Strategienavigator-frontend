@@ -34,6 +34,23 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         }
     }
 
+
+    shouldComponentUpdate(nextProps: Readonly<StepProp<SWOTAnalysisValues>>, nextState: Readonly<SWOTFactorsState>, nextContext: any): boolean {
+        let shouldUpdate: boolean | undefined = undefined;
+        if (super.shouldComponentUpdate !== undefined) {
+            shouldUpdate = super.shouldComponentUpdate(nextProps, nextState, nextContext);
+        }
+
+        if (!shouldUpdate) {
+            const oldSave = this.props.save;
+            const newSave = nextProps.save;
+            if (oldSave.data["swot-factors"] === newSave.data["swot-factors"]) {
+                shouldUpdate = false;
+            }
+        }
+        return shouldUpdate ?? true;
+    }
+
     collapseAll(collapse: boolean) {
         this.setState({
             collapseAll: collapse
@@ -41,33 +58,30 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
     }
 
     private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {
-        const save = this.props.save;
-        const data = save.data["swot-factors"];
-        if(data !== undefined){
-            switch (type) {
-                case "strengths":
-                    data.factors.strengths = values;
-                    break;
-                case "weaknesses":
-                    data.factors.weaknesses = values;
-                    break;
-                case "chances":
-                    data.factors.chances = values;
-                    break;
-                case "risks":
-                    data.factors.risks = values;
+        this.props.saveController.onChanged(save => {
+            const data = save.data["swot-factors"];
+            if (data !== undefined) {
+                switch (type) {
+                    case "strengths":
+                        data.factors.strengths = values;
+                        break;
+                    case "weaknesses":
+                        data.factors.weaknesses = values;
+                        break;
+                    case "chances":
+                        data.factors.chances = values;
+                        break;
+                    case "risks":
+                        data.factors.risks = values;
+                }
             }
-
-
-            save.data["swot-factors"] = data;
-            this.props.saveController.onChanged(save);
-        }
+        });
     }
 
-    private strengthsChanged = this.applyCardComponentChanges.bind(this,"strengths");
-    private weaknessesChanged = this.applyCardComponentChanges.bind(this,"weaknesses");
-    private chancesChanged = this.applyCardComponentChanges.bind(this,"strengths");
-    private risksChanged = this.applyCardComponentChanges.bind(this,"risks");
+    private strengthsChanged = this.applyCardComponentChanges.bind(this, "strengths");
+    private weaknessesChanged = this.applyCardComponentChanges.bind(this, "weaknesses");
+    private chancesChanged = this.applyCardComponentChanges.bind(this, "chances");
+    private risksChanged = this.applyCardComponentChanges.bind(this, "risks");
 
     build(): JSX.Element {
         const min = SWOTFactors.min;

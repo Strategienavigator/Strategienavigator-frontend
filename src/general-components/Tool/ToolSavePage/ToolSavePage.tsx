@@ -13,6 +13,8 @@ import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/Confir
 import {Route} from "react-router-dom";
 import {showErrorPage} from "../../../index";
 import {SimpleErrorMap, UIError} from "../../Error/ErrorBag";
+import produce, {castDraft} from "immer";
+import {WritableDraft} from "immer/dist/types/types-external";
 
 type ToolViewValidation = {
     isNotOwn?: boolean
@@ -23,7 +25,7 @@ type ToolViewValidation = {
 
 interface ToolSaveController<D> {
     save: () => Promise<boolean>
-    onChanged: (newData: SaveResource<D>) => void
+    onChanged: (changes: (save: WritableDraft<SaveResource<D>>) => void) => void
 }
 
 
@@ -69,18 +71,18 @@ interface ToolErrorController {
 
 }
 
-interface ToolSaveProps<D> {
+interface ToolSaveProps<D extends object> {
     saveController: ToolSaveController<D>
     save: SaveResource<D>
     isSaving: boolean
 }
 
-interface ToolSavePageProps<D> {
+interface ToolSavePageProps<D extends object> {
     tool: Tool<D>
     element: (saveProps: ToolSaveProps<D>) => JSX.Element
 }
 
-interface ToolSavePageState<D> {
+interface ToolSavePageState<D extends object> {
     save?: SaveResource<D>
     isSaving: boolean
     showConfirmToolRouteChangeModal: boolean
@@ -89,7 +91,7 @@ interface ToolSavePageState<D> {
 }
 
 
-class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
+class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
 
     private readonly saveController: ToolSaveController<D>;
 
@@ -103,6 +105,8 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
             save: this.save.bind(this),
             onChanged: this.updateSave.bind(this)
         }
+
+
     }
 
     componentDidMount() {
@@ -232,11 +236,18 @@ class ToolSavePage<D> extends Component<ToolSavePageProps<D> & RouteComponentPro
 
     }
 
-    private updateSave(save: SaveResource<D>, callback?: () => void) {
-        this.setState({
-            save: save
-        }, callback)
-
+    private updateSave(changes: ((save: WritableDraft<SaveResource<D>>) => void) | SaveResource<D>, callback?: () => void) {
+        if (typeof changes === "object") {
+            this.setState({
+                save: changes
+            }, callback);
+        } else {
+            if (this.state.save !== undefined) {
+                this.setState({
+                    save: produce(this.state.save, changes)
+                }, callback)
+            }
+        }
     }
 
     public onAPIError(error: Error): void {

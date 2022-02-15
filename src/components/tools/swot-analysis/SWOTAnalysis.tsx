@@ -60,7 +60,7 @@ class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
 
     protected getInitData(): SWOTAnalysisValues {
         let data: SWOTAnalysisValues = {};
-        data = this.getStep(0).dataHandler.fillFromPreviousValues(data);
+        this.getStep(0).dataHandler.fillFromPreviousValues(data);
         return data;
     }
 
