@@ -18,7 +18,6 @@ import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
 import {UIError} from "../../../Error/ErrorBag";
 import {Exporter} from "../../../Export/Exporter";
 import {Draft} from "immer";
-import {SaveResource} from "../../../Datastructures";
 
 
 export interface StepDefinition<T extends object> {
@@ -122,7 +121,7 @@ export interface StepComponentState {
     /**
      * maximal freigeschalteter Schritt
      */
-    // currentProgress: number
+    progress: number
 
     /**
      * if the current step has substeps which state is currently displayed
@@ -163,6 +162,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
 
         this.state = {
             currentStep: progress,
+            progress: progress,
             currentSubStep: StepComponent.getCurrentSubStepOfStep(this.props.steps, progress, this.props.save.data),
             showExportModal: false,
             showResetModal: false,
@@ -236,9 +236,9 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
                                             <div className={"stepTitle"}>{value.title}</div>
 
                                             {React.createElement(value.form, {
-                                                ...this.props, // TODO ...(this.props as ToolSaveProps<D>)
+                                                ...this.props, // TODO test if is better: ...(this.props as ToolSaveProps<D>)
                                                 id: value.id,
-                                                disabled: !this.withData(value.dataHandler.isUnlocked),
+                                                disabled: index < this.state.progress /*|| !this.withData(value.dataHandler.isUnlocked)*/,
                                                 stepController: this.stepController,
                                                 currentSubStep: this.state.currentSubStep,
                                             })}
@@ -604,14 +604,23 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
 
 
         if (step < this.props.steps.length) {
-            const hasSubsteps = this.hasSubSteps(step);
-            if (hasSubsteps) {
 
-                const newSubStep = StepComponent.getCurrentSubStepOfStep(this.props.steps, step, this.props.save.data);
-            }
+
             if (this.state.currentStep !== step) {
+                const hasSubSteps = this.hasSubSteps(step);
+                let newSubStep = 0;
+                if (hasSubSteps) {
+
+                    newSubStep = StepComponent.getCurrentSubStepOfStep(this.props.steps, step, this.props.save.data);
+                }
+                let newProgress = this.state.progress;
+                if (this.state.progress < step) {
+                    newProgress = step;
+                }
                 this.setState({
-                    currentStep: step
+                    currentStep: step,
+                    currentSubStep: newSubStep,
+                    progress: newProgress
                 }, callback);
             } else {
                 if (callback !== undefined)

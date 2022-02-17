@@ -10,11 +10,27 @@ import {MatrixComponentProps} from "../../../../../general-components/Tool/Matri
 import React from "react";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/ErrorBag";
+import {SwotFactorsValues} from "../SWOTFactors/SWOTFactorsComponent";
+import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 
 export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues>, StepDataHandler<SWOTAnalysisValues>, SubStepDefinition<SWOTAnalysisValues> {
 
     public static minAlternatives = 0;
     public static maxAlternatives = 2;
+
+    public static splitAlternateActionName(name: string) {
+        const ids = name.split("-");
+        const firstId = ids[0];
+        const secondId = ids[1];
+        return {firstId: firstId, secondId: secondId};
+    }
+
+
+    public static getActionIds(factors: SwotFactorsValues["factors"]): { firstIds: CardComponentFields, secondIds: CardComponentFields } {
+        const firstIds = factors.strengths.concat(factors.weaknesses);
+        const secondIds = factors.chances.concat(factors.risks);
+        return {firstIds, secondIds}
+    }
 
     form: React.FunctionComponent<StepProp<SWOTAnalysisValues>> | React.ComponentClass<StepProp<SWOTAnalysisValues>>;
     id: string;
@@ -52,17 +68,12 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
         let factors = previousValues?.factors;
 
         if (factors !== undefined) {
-            let strengths = factors.strengths;
-            let weaknesses = factors.weaknesses;
-            let chances = factors.chances;
-            let risks = factors.risks;
+            const {firstIds, secondIds} = SWOTAlternativeActions.getActionIds(factors);
 
-            for (const item1 of strengths.concat(weaknesses)) {
-                for (const item2 of chances.concat(risks)) {
+            for (const item1 of firstIds) {
+                for (const item2 of secondIds) {
                     analysisValues.actions.push({
                         name: item1.id + "-" + item2.id,
-                        first: item1,
-                        second: item2,
                         hasNone: false,
                         alternatives: []
                     });
@@ -93,8 +104,8 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
     getStepCount = (data: SWOTAnalysisValues): number => data["alternative-actions"]?.actions.length ?? 0;
 
 
-    isStepUnlocked = (subStep: number, data: SWOTAnalysisValues): boolean  => {
-        return subStep < 1 || this.validateStep(subStep-1, data).length === 0;
+    isStepUnlocked = (subStep: number, data: SWOTAnalysisValues): boolean => {
+        return subStep < 1 || this.validateStep(subStep - 1, data).length === 0;
     }
 
     validateStep = (subStep: number, data: SWOTAnalysisValues): UIError[] => {

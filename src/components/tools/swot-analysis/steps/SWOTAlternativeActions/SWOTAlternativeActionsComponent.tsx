@@ -2,7 +2,6 @@ import React, {FormEvent} from "react";
 import {Col, Form, ProgressBar, Row} from "react-bootstrap";
 import {
     CardComponent,
-    CardComponentField,
     CardComponentFields
 } from "../../../../../general-components/CardComponent/CardComponent";
 import {isDesktop} from "../../../../../general-components/Desktop";
@@ -13,14 +12,11 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
-import {compareWithoutFunctions} from "../../../../../general-components/ComponentUtils";
 
 
 export interface AlternateAction {
     name: string
     hasNone: boolean
-    first: CardComponentField
-    second: CardComponentField
     alternatives: CardComponentFields
 }
 
@@ -41,39 +37,33 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
     }
 
     shouldComponentUpdate(nextProps: Readonly<StepProp<SWOTAnalysisValues>>, nextState: Readonly<SWOTAlternativeActionsState>, nextContext: any): boolean {
-         let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
+        let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
 
-         if(!shouldUpdate){
-             shouldUpdate = this.props.save.data["alternative-actions"] !== nextProps.save.data["alternative-actions"];
-         }
-
-
+        if (!shouldUpdate) {
+            shouldUpdate = this.props.save.data["alternative-actions"] !== nextProps.save.data["alternative-actions"];
+        }
 
         return shouldUpdate;
     }
 
     changedSelected = (e: FormEvent<HTMLSelectElement>) => {
         let currentAction = this.getCurrentAction();
+        let index: number | undefined = 0;
         if (currentAction !== undefined) {
             let formIndex = e.currentTarget.value;
-            let index;
+
+            const {firstId, secondId} = SWOTAlternativeActions.splitAlternateActionName(currentAction.name)
 
             if (e.currentTarget.id === "first") {
-                index = this.findActionIndex(formIndex, currentAction.second.id as string);
+                index = this.findActionIndex(formIndex, secondId as string);
             } else if (e.currentTarget.id === "second") {
-                index = this.findActionIndex(currentAction.first.id as string, formIndex);
+                index = this.findActionIndex(firstId as string, formIndex);
             }
 
 
-            if (index !== undefined) {
-                this.setState({
-                    currentActionIndex: index
-                });
-            }
-        } else {
-            this.setState({
-                currentActionIndex: 0
-            });
+        }
+        if (index !== undefined) {
+            this.props.stepController.requestSubStep(index);
         }
 
     }
@@ -81,9 +71,10 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
     findActionIndex = (firstId: string, secondId: string) => {
         const actions = this.getActions();
         if (actions !== undefined) {
-            return actions.findIndex((action =>
-                    (action.first.id === firstId) && (action.second.id === secondId)
-            ));
+            return actions.findIndex(action => {
+                const ids = SWOTAlternativeActions.splitAlternateActionName(action.name);
+                return firstId === ids.firstId && secondId === ids.secondId;
+            });
         }
     }
 
@@ -105,12 +96,13 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
         const actions = this.getActions();
         let currentAction = this.getCurrentAction();
 
-        if (actions !== undefined && currentAction !== undefined) {
+        const factors = this.props.save.data["swot-factors"]?.factors;
 
-            let firstValue, secondValue;
+        if (actions !== undefined && currentAction !== undefined && factors !== undefined) {
 
-            firstValue = currentAction.first.id ?? "";
-            secondValue = currentAction.second.id ?? "";
+            const {firstIds, secondIds} = SWOTAlternativeActions.getActionIds(factors);
+
+            const {firstId, secondId} = SWOTAlternativeActions.splitAlternateActionName(currentAction.name);
 
             // PROGRESS
             let currentProgress = ((this.props.currentSubStep) / actions.length) * 100;
@@ -127,16 +119,16 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         <Col sm={isDesktop() ? 6 : 12}>
                             <Form.Select id={"first"}
                                          disabled={!this.props.disabled}
-                                         value={firstValue}
+                                         value={firstId}
                                          onChange={this.changedSelected}>
-                                {actions.map((value, index) => {
+                                {firstIds.map((value, index) => {
                                     return (
                                         <option
                                             key={"S" + index}
                                             disabled={!this.props.disabled}
-                                            value={value.first.id ?? ""}
+                                            value={value.id ?? ""}
                                         >
-                                            {value.first.id + " " + value.first.name}
+                                            {value.id + " " + value.name}
                                         </option>
                                     );
                                 })}
@@ -145,16 +137,16 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         <Col sm={isDesktop() ? 6 : 12}>
                             <Form.Select id={"second"}
                                          disabled={!this.props.disabled}
-                                         value={secondValue}
+                                         value={secondId}
                                          onChange={this.changedSelected}>
-                                {actions.map((value, index) => {
+                                {secondIds.map((value, index) => {
                                     return (
                                         <option
                                             key={"S" + index}
                                             disabled={!this.props.disabled}
-                                            value={value.second.id ?? ""}
+                                            value={value.id ?? ""}
                                         >
-                                            {value.second.id + " " + value.second.name}
+                                            {value.id + " " + value.name}
                                         </option>
                                     );
                                 })}
@@ -204,11 +196,11 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                     i++;
                 } else if (action.alternatives.length > 0) {
                     let invalidAlernative = false;
-                    for (const alernative of action.alternatives) {
-                        if (alernative.name.length < 1) {
+                    for (const alternative of action.alternatives) {
+                        if (alternative.name.length < 1) {
                             invalidAlernative = true;
                         }
-                        if (alernative.desc.length < 1) {
+                        if (alternative.desc.length < 1) {
                             invalidAlernative = true;
                         }
                     }
