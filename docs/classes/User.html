@@ -88,6 +88,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="User.html#created_at" class="tsd-kind-icon">created_<wbr>at</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="User.html#email" class="tsd-kind-icon">email</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="User.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="User.html#owned_saves" class="tsd-kind-icon">owned_<wbr>saves</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="User.html#shared_saves" class="tsd-kind-icon">shared_<wbr>saves</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="User.html#username" class="tsd-kind-icon">username</a></li>
 							</ul>
 						</section>
@@ -97,6 +99,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#getCreatedAt" class="tsd-kind-icon">get<wbr>Created<wbr>At</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#getEmail" class="tsd-kind-icon">get<wbr>Email</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#getID" class="tsd-kind-icon">getID</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#getOwnedSavesAmount" class="tsd-kind-icon">get<wbr>Owned<wbr>Saves<wbr>Amount</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#getSharedSavesAmount" class="tsd-kind-icon">get<wbr>Shared<wbr>Saves<wbr>Amount</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#getUsername" class="tsd-kind-icon">get<wbr>Username</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#isAnonymous" class="tsd-kind-icon">is<wbr>Anonymous</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="User.html#setAnonymous" class="tsd-kind-icon">set<wbr>Anonymous</a></li>
@@ -117,13 +121,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>User<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, username<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, email<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, anonymous<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, created_at<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="User.html" class="tsd-signature-type" data-tsd-kind="Class">User</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>User<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, username<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, email<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, anonymous<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, owned_saves<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span>, shared_saves<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span>, created_at<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="User.html" class="tsd-signature-type" data-tsd-kind="Class">User</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L10">src/general-components/User.tsx:10</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L13">src/general-components/User.tsx:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -139,6 +143,12 @@
 								</li>
 								<li>
 									<h5>anonymous: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+								<li>
+									<h5>owned_saves: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>shared_saves: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
 									<h5>created_at: <span class="tsd-signature-type">Date</span></h5>
@@ -157,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">anonymous<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L7">src/general-components/User.tsx:7</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L8">src/general-components/User.tsx:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -167,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">created_<wbr>at<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L8">src/general-components/User.tsx:8</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L11">src/general-components/User.tsx:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -177,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">email<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L6">src/general-components/User.tsx:6</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L7">src/general-components/User.tsx:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -187,7 +197,27 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L4">src/general-components/User.tsx:4</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L5">src/general-components/User.tsx:5</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="owned_saves" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> owned_<wbr>saves</h3>
+					<div class="tsd-signature tsd-kind-icon">owned_<wbr>saves<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L9">src/general-components/User.tsx:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="shared_saves" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> shared_<wbr>saves</h3>
+					<div class="tsd-signature tsd-kind-icon">shared_<wbr>saves<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L10">src/general-components/User.tsx:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -197,7 +227,7 @@
 					<div class="tsd-signature tsd-kind-icon">username<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L5">src/general-components/User.tsx:5</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L6">src/general-components/User.tsx:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -214,7 +244,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L62">src/general-components/User.tsx:62</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L67">src/general-components/User.tsx:67</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
@@ -231,7 +261,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L50">src/general-components/User.tsx:50</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L55">src/general-components/User.tsx:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -248,7 +278,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L34">src/general-components/User.tsx:34</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L39">src/general-components/User.tsx:39</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getOwnedSavesAmount" class="tsd-anchor"></a>
+					<h3>get<wbr>Owned<wbr>Saves<wbr>Amount</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Owned<wbr>Saves<wbr>Amount<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L75">src/general-components/User.tsx:75</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getSharedSavesAmount" class="tsd-anchor"></a>
+					<h3>get<wbr>Shared<wbr>Saves<wbr>Amount</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Shared<wbr>Saves<wbr>Amount<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L79">src/general-components/User.tsx:79</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -265,7 +329,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L42">src/general-components/User.tsx:42</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L47">src/general-components/User.tsx:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -282,7 +346,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L30">src/general-components/User.tsx:30</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L35">src/general-components/User.tsx:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -299,7 +363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L58">src/general-components/User.tsx:58</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L63">src/general-components/User.tsx:63</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -322,7 +386,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L66">src/general-components/User.tsx:66</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L71">src/general-components/User.tsx:71</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -345,7 +409,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L54">src/general-components/User.tsx:54</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L59">src/general-components/User.tsx:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -368,7 +432,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L38">src/general-components/User.tsx:38</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L43">src/general-components/User.tsx:43</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -391,7 +455,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L46">src/general-components/User.tsx:46</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L51">src/general-components/User.tsx:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -408,19 +472,19 @@
 					<a name="update" class="tsd-anchor"></a>
 					<h3>update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules.html#updateData" class="tsd-signature-type" data-tsd-kind="Type alias">updateData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules.html#UpdateData" class="tsd-signature-type" data-tsd-kind="Type alias">UpdateData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L23">src/general-components/User.tsx:23</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L28">src/general-components/User.tsx:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>data: <a href="../modules.html#updateData" class="tsd-signature-type" data-tsd-kind="Type alias">updateData</a></h5>
+									<h5>data: <a href="../modules.html#UpdateData" class="tsd-signature-type" data-tsd-kind="Type alias">UpdateData</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -437,7 +501,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/3e4ff06/src/general-components/User.tsx#L19">src/general-components/User.tsx:19</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/User.tsx#L24">src/general-components/User.tsx:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -483,6 +547,12 @@
 								<a href="User.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="User.html#owned_saves" class="tsd-kind-icon">owned_<wbr>saves</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="User.html#shared_saves" class="tsd-kind-icon">shared_<wbr>saves</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="User.html#username" class="tsd-kind-icon">username</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -493,6 +563,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="User.html#getID" class="tsd-kind-icon">getID</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="User.html#getOwnedSavesAmount" class="tsd-kind-icon">get<wbr>Owned<wbr>Saves<wbr>Amount</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="User.html#getSharedSavesAmount" class="tsd-kind-icon">get<wbr>Shared<wbr>Saves<wbr>Amount</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="User.html#getUsername" class="tsd-kind-icon">get<wbr>Username</a>
@@ -535,16 +611,19 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
