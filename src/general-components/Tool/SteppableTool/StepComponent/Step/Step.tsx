@@ -6,23 +6,39 @@ import {FormEvent} from "react";
 import {Messages} from "../../../../Messages/Messages";
 
 export interface SteppableProp extends FormComponentProps{
+    /**
+     * Das StepComponent
+     */
     stepComp?: StepComponent
 }
 
+/**
+ * Stellt einen einzelnen Schritt aus dem StepComponent dar.
+ * Erbt dazu aus FormComponent.
+ */
 export abstract class Step<V, S> extends FormComponent<V, SteppableProp,S>{
 
-    protected getStepComponent(){
-        return this.props.stepComp;
-    }
-
-    protected requireStepComponent(){
-        if(this.props.stepComp){
+    /**
+     * Gibt das StepComponent zurück.
+     * @returns {StepComponent} Das StepComponent
+     * @throws {Error} Fehler, falls das StepComponent nicht gesetzt wurde: "No Step Component Set"
+     * @protected
+     */
+    protected requireStepComponent() {
+        if(this.props.stepComp) {
             return this.props.stepComp as StepComponent;
-        }else{
+        } else {
             throw new Error("No Step Component Set");
         }
     }
 
+    /**
+     * Funktion wurde hier überschrieben, da der Formsubmit bei einem Step sich anders verhält als im FormComponent.
+     *
+     * @param {React.FormEvent<HTMLFormElement>} e Das HTML-Formular mit den Werten
+     * @returns {Promise<void>}
+     * @override
+     */
     protected onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         let newValues = this.extractValues(e);
         this.values = newValues;
