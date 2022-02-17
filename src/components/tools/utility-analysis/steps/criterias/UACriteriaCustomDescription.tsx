@@ -10,6 +10,9 @@ import {CardComponentField} from "../../../../../general-components/CardComponen
 import {FormEvent} from "react";
 
 
+/**
+ * Werte für die Custom Description
+ */
 export interface UACriteriaCustomDescriptionValues {
     headers: {
         header: string,
@@ -18,6 +21,9 @@ export interface UACriteriaCustomDescriptionValues {
 }
 
 export interface UACriteriaCustomDescriptionProps {
+    /**
+     * Der Header der in der benutzerdefinierten Beschreibung benötigt wird
+     */
     header: CompareHeader
 }
 
@@ -25,6 +31,11 @@ interface UACriteriaCustomDescriptionState {
     collapsed: boolean
 }
 
+/**
+ * Diese Klasse stellt eine benutzerdefinierte Beschreibung des zweiten Schritts der Nutzwertanalyse dar.
+ * Sie soll es ermöglichen, für jedes Kriterium den Header beschreiben zu können.
+ * So kann man bspw. für das + im Header +10% als Beschreibung eintragen. Dies soll für jeden Header möglich sein.
+ */
 class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaCustomDescriptionValues, UACriteriaCustomDescriptionProps, UACriteriaCustomDescriptionState> {
 
     constructor(props: (UACriteriaCustomDescriptionProps & CustomDescriptionComponentProps) | Readonly<UACriteriaCustomDescriptionProps & CustomDescriptionComponentProps>) {

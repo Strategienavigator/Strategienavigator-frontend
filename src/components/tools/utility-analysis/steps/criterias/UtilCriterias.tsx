@@ -12,6 +12,10 @@ export interface UtilCriteriasValues {
     criterias: CardComponentFields<UACriteriaCustomDescriptionValues>
 }
 
+
+/**
+ * Schritt der Nutzweranalyse in dem die Kriterien festgelegt werden
+ */
 class UtilCriterias extends Step<UtilCriteriasValues, any> {
     private readonly header: CompareSymbolHeader;
     private readonly customDesc: React.RefObject<UACriteriaCustomDescription>;
@@ -22,7 +26,6 @@ class UtilCriterias extends Step<UtilCriteriasValues, any> {
         this.header = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
         this.customDesc = React.createRef<UACriteriaCustomDescription>();
     }
-
 
     build(): JSX.Element {
         return (

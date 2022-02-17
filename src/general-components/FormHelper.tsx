@@ -19,11 +19,11 @@ const getRadioNodeList = <D extends unknown> (element: RadioNodeList): Array<D> 
 }
 
 /**
- * Extrahiert CardComponentFields aus einem HTMLFormElement.
+ * Extrahiert ein CardComponentField aus einem HTMLFormElement.
  *
  * @param {React.FormEvent<HTMLFormElement>} form HTML-Formular
  * @param {string} name Der Name des input-feldes
- * @param customDesc
+ * @param customDesc Die Instanz der Klasse der CustomDescription
  * @returns {CardComponentFields} Array aus CardComponentField, sprich CardComponentFields
  */
 const extractCardComponentField = <D extends {} = any>(form: FormEvent<HTMLFormElement>, name: string, customDesc?: CustomDescriptionComponent<any, any, any>) : CardComponentFields<D> => {
@@ -41,7 +41,6 @@ const extractCardComponentField = <D extends {} = any>(form: FormEvent<HTMLFormE
             indexes = getRadioNodeList<number>(element as RadioNodeList);
         }
     }
-
 
     let fields: CardComponentFields<D> = [];
     for (const i of indexes) {

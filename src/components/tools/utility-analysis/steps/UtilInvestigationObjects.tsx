@@ -9,6 +9,10 @@ export interface UtilInvestigationObjectsValues {
     objects: CardComponentFields
 }
 
+
+/**
+ * Schritt der Nutzwertanalyse in dem die zu untersuchenden Objekte festgelegt werden
+ */
 class UtilInvestigationObjects extends Step<UtilInvestigationObjectsValues, any> {
     build(): JSX.Element {
         let values = this.values as UtilInvestigationObjectsValues;

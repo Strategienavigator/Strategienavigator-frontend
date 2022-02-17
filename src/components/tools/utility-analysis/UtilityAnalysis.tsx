@@ -19,6 +19,11 @@ export interface UtilityAnalysisValues {
     "ua-result": UtilResultValues
 }
 
+
+/**
+ * Hauptklasse der Nutzwertanalyse
+ * Hier werden die einzelnen Schritte für die Analyse hinzugefügt
+ */
 class UtilityAnalysis extends SteppableTool {
 
     constructor(props: any) {

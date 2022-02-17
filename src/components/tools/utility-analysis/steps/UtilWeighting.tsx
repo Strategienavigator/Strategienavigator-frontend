@@ -16,6 +16,10 @@ export interface UtilWeightingValues {
     headers: string[]
 }
 
+
+/**
+ * Schritt der Nutzwertanalyse zum Gewichten der Kriterien
+ */
 class UtilWeighting extends Step<UtilWeightingValues, any> {
     private header = new CompareNumberHeader(0, 3);
     private adapter: MatchCardComponentFieldsAdapter | undefined;
