@@ -99,7 +99,7 @@ export interface StepController {
      * @param step null basierter index der Schritte
      * @returns ob der Schritt ausgewählt werden konnte
      */
-    requestStep: (step: number) => boolean
+    requestStep: (step: number) => void
 
     /**
      * setzt den aktuellen schritt auf die den angegebenen Schritt
@@ -155,37 +155,29 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
             requestStep: this.changeStep,
             requestSubStep: this.setSubStep
         };
-        let progress = -1;
-        this.props.steps.forEach((step) => {
-            if (step.dataHandler.isUnlocked(this.getData())) {
-                progress++;
-            }
-        });
+        const progress = StepComponent.getLastUnlockedStep(this.props.steps, this.props.save.data);
 
-        if (progress < -1) {
-            throw new Error("no substep is unlocked")
+        if (progress < 0) {
+            throw new Error("no step is unlocked")
         }
 
         this.state = {
             currentStep: progress,
-            currentSubStep: 0,
+            currentSubStep: StepComponent.getCurrentSubStepOfStep(this.props.steps, progress, this.props.save.data),
             showExportModal: false,
             showResetModal: false,
             hasCustomNextButton: false,
         }
     }
 
-    /**
-     * does update the currentSubStep if no valid value is currently selected
-     * @param props
-     * @param state
-     */
-    public static getDerivedStateFromProps(props: StepComponentProps<any>, state: StepComponentState) {
-        const toChange: Partial<StepComponentState> = {};
-        if (state.currentSubStep !== 0 && !props.steps[state.currentStep].subStep?.isStepUnlocked(state.currentSubStep, props.save.data)) {
-            toChange.currentSubStep = StepComponent.getCurrentSubStepOfStep(props.steps, state.currentStep, props.save);
-        }
-        return toChange;
+    private static getLastUnlockedStep<D extends object>(steps: StepDefinition<D>[], data: D) {
+        let progress = -1;
+        steps.forEach((step) => {
+            if (step.dataHandler.isUnlocked(data)) {
+                progress++;
+            }
+        });
+        return progress;
     }
 
     render = () => {
@@ -304,12 +296,12 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
     }
 
     private onResetCurrent = () => {
-        this.setState({showResetModal: false});
+        this.setState({showResetModal: false, currentSubStep: 0});
         this.resetStepsUntil(this.state.currentStep);
     }
 
     private onResetAll = () => {
-        this.setState({showResetModal: false});
+        this.setState({showResetModal: false, currentStep: 0, currentSubStep: 0});
         this.resetAllSteps();
     }
 
@@ -602,15 +594,30 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
         }
     }
 
-    private changeStep(step: number, callback: undefined | (() => void) = undefined) {
+    /**
+     * Ändert den aktuellen angezeigten Schritt, wenn dieser ein valider wert ist
+     * @param step
+     * @param callback wird ausgeführt wenn der state geändert wurde oder bereits diesen schritt war
+     * @private
+     */
+    private changeStep(step: number, callback: undefined | (() => void) = undefined): void {
 
-        if (this.withData(this.props.steps[step].dataHandler.isUnlocked)) {
-            this.setState({
-                currentStep: step
-            }, callback);
-            return true;
+
+        if (step < this.props.steps.length) {
+            const hasSubsteps = this.hasSubSteps(step);
+            if (hasSubsteps) {
+
+                const newSubStep = StepComponent.getCurrentSubStepOfStep(this.props.steps, step, this.props.save.data);
+            }
+            if (this.state.currentStep !== step) {
+                this.setState({
+                    currentStep: step
+                }, callback);
+            } else {
+                if (callback !== undefined)
+                    callback();
+            }
         }
-        return false;
 
 
         /* the state to get into this step should never exist
@@ -631,25 +638,25 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
      * @param save
      * @private the index of the sub step
      */
-    private static getCurrentSubStepOfStep(steps: Array<StepDefinition<any>>, step: number, save: SaveResource<any>) {
+    private static getCurrentSubStepOfStep<D extends object>(steps: Array<StepDefinition<D>>, step: number, data: D) {
         let subStepProgress = 0;
 
-        const subStep = steps[step].subStep;
-        if (subStep !== undefined) {
+        if (steps.length > step) {
+            const subStep = steps[step].subStep;
+            if (subStep !== undefined) {
 
-            subStepProgress = -1;
-
-            const count = subStep.getStepCount(save.data);
-            for (let i = 0; i < count; i++) {
-                if (subStep.isStepUnlocked(i, save.data)) {
-                    subStepProgress++;
+                const count = subStep.getStepCount(data);
+                for (let i = 0; i < count; i++) {
+                    if (subStep.isStepUnlocked(i, data)) {
+                        subStepProgress++;
+                    }
+                }
+                if (subStepProgress === count || subStepProgress === -1) {
+                    subStepProgress = 0;
                 }
             }
-            if (subStepProgress === count) {
-                subStepProgress = 0;
-            }
-
         }
+
         return subStepProgress;
     }
 
