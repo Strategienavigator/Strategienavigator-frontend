@@ -59,6 +59,12 @@ class PCResult extends Step<PCResultValues, {}> {
         );
     }
 
+
+    /**
+     * Erstellen der Rangliste der Kriterien basierend auf einem Punktesystem
+     *
+     *
+     */
     eval() {
         let criterias = this.getStepComponent()?.getFormValues<PCCriteriasValues>("pc-criterias");
         let comparisons = this.getStepComponent()?.getFormValues<PCPairComparisonValues>("pc-comparison");
@@ -140,6 +146,13 @@ class PCResult extends Step<PCResultValues, {}> {
         }
     }
 
+
+    /**
+     * Methode zum Generieren des Ergebnis-Strings
+     *
+     * @param {PointCriteria[]} result
+     * @returns {string}
+     */
     buildString(result: PointCriteria[]): string {
         let resultString = "";
         let i = 0;

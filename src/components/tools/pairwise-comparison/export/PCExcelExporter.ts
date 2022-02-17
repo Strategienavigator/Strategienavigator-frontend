@@ -162,6 +162,13 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
         return ws;
     }
 
+    /**
+     * Erstellt die Excel-Seite für den Ergebnisschritt
+     *
+     * @param {PCResultValues} result Die Values vom Result-Step des Paarweisen-Vergleiches
+     * @returns {WorkSheet} Die erstellte Excel-Seite
+     * @private
+     */
     private getResultSheet(result: PCResultValues) {
         let ws: WorkSheet = {};
 
