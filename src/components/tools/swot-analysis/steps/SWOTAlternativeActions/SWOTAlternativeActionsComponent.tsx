@@ -12,6 +12,7 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 
 
 export interface AlternateAction {
@@ -176,7 +177,7 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         }}
                     />
 
-                    {/*{this.getError("alternative-action")}*/}
+                    <UIErrorBanner id={"alternative-action"}/>
                 </div>
             );
         }

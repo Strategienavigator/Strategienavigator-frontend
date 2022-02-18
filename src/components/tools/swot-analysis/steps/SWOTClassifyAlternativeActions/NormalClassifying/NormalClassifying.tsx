@@ -1,12 +1,11 @@
-import React, {ChangeEvent, Component, MouseEvent} from "react";
+import React, {ChangeEvent, MouseEvent, PureComponent} from "react";
 import {
     ClassificationController,
     ClassificationValues,
     ClassifiedAlternateAction
 } from "../SWOTClassifyAlternativeActionsComponent";
-import {Accordion, Button, Card, Col, FormControl, FormControlProps, InputGroup, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExchangeAlt, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {Accordion, Button, FormControl, FormControlProps, InputGroup} from "react-bootstrap";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/";
 import {SelectClassificationModal} from "./SelectClassificationModal";
 import {SWOTClassifyAlternativeActions} from "../SWOTClassifyAlternativeActions";
@@ -14,6 +13,7 @@ import {SWOTClassifyAlternativeActions} from "../SWOTClassifyAlternativeActions"
 import "./normal-classifying.scss";
 import {ClassifyingCard} from "./ClassifyingCard/ClassifyingCard";
 import {ClassifyingCardList} from "./ClassifyingCardList/ClassifyingCardList";
+import FAE from "../../../../../../general-components/Icons/FAE";
 
 interface NormalClassifyingProps extends FormControlProps {
     classificationController: ClassificationController
@@ -26,7 +26,7 @@ interface NormalClassifyingState {
     lastSelectedAction?: string
 }
 
-class NormalClassifying extends Component<NormalClassifyingProps, NormalClassifyingState> {
+class NormalClassifying extends PureComponent<NormalClassifyingProps, NormalClassifyingState> {
 
     constructor(props: NormalClassifyingProps | Readonly<NormalClassifyingProps>) {
         super(props);
@@ -56,7 +56,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                                             name={classification.droppableID}
                                             onClick={this.onClassificationRemoveClick}
                                         >
-                                            <FontAwesomeIcon style={{verticalAlign: "middle"}} icon={faTrash}/>
+                                            <FAE style={{verticalAlign: "middle"}} icon={faTrash}/>
                                         </Button>
 
                                         <FormControl
@@ -83,7 +83,7 @@ class NormalClassifying extends Component<NormalClassifyingProps, NormalClassify
                 ) && (
                     <Button onClick={this.props.classificationController.addClassification}
                             className={"addClassification"}>
-                        <FontAwesomeIcon icon={faPlus} color={"white"}/>
+                        <FAE icon={faPlus} color={"white"}/>
                     </Button>
                 )}
 

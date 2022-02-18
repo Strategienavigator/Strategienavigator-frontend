@@ -9,20 +9,22 @@ interface UIErrorBannerProps {
      */
     id: string
     box: boolean
+    disabled: boolean
 }
 
 
 class UIErrorBanner extends PureComponent<UIErrorBannerProps, {}> {
 
     static defaultProps = {
-        box: false
+        box: false,
+        disabled: false
     }
 
     render() {
         return (
             <UIErrorContext.Consumer>
                 {errorContext => {
-                    if (this.props.id in errorContext.errors) {
+                    if ((!this.props.disabled) && this.props.id in errorContext.errors) {
                         const error = errorContext.errors[this.props.id];
                         if (this.props.box) {
                             return (
@@ -31,7 +33,12 @@ class UIErrorBanner extends PureComponent<UIErrorBannerProps, {}> {
                             )
                         } else {
                             return (
-                                <div>{error.message}</div>
+                                <div className={"feedbackContainer"}>
+
+                                    <div key={"feedback-" + error.id} className={"feedback DANGER"}>
+                                        {error.message}
+                                    </div>
+                                </div>
                             )
                         }
 

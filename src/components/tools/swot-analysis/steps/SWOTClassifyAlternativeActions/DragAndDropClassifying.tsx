@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 import {Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {SWOTClassifyAlternativeActionsComponent} from "./SWOTClassifyAlternativeActionsComponent";
 
@@ -85,7 +84,7 @@ class DragAndDropClassifying extends Component<DragAndDropClassifyingProps, any>
                                                         onClick={() => this.props.step3Instance.removeClassification(droppableID)}
                                                         variant={"link"}
                                                         className={"xButton"}>
-                                                        <FontAwesomeIcon icon={faTimes}/>
+                                                        <FAE icon={faTimes}/>
                                                     </Button>
                                                 )}
                                             </InputGroup>
@@ -130,7 +129,7 @@ class DragAndDropClassifying extends Component<DragAndDropClassifyingProps, any>
                                                                                     <Col
                                                                                         onClick={() => this.props.step3Instance.removeAction(droppableID, action.indexName)}
                                                                                         className={"icon"}>
-                                                                                        <FontAwesomeIcon
+                                                                                        <FAE
                                                                                             icon={faTimes}/>
                                                                                     </Col>
                                                                                 )}
@@ -159,7 +158,7 @@ class DragAndDropClassifying extends Component<DragAndDropClassifyingProps, any>
                     > this.props.step3Instance.getClassifications().size)
                 ) && (
                     <Button onClick={() => this.props.step3Instance.addClassification(lastDropID)} className={"addClassification"}>
-                        <FontAwesomeIcon icon={faPlus} color={"white"}/>
+                        <FAE icon={faPlus} color={"white"}/>
                     </Button>
                 )}
 

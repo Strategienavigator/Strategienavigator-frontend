@@ -9,9 +9,9 @@ import {Messages} from "../../../general-components/Messages/Messages";
 
 import "./login.scss";
 import {Link} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignInAlt, faUserSecret} from "@fortawesome/free-solid-svg-icons/";
 import {AnonymousModal} from "../../../general-components/ProtectedRoute";
+import FAE from "../../../general-components/Icons/FAE";
 
 
 export interface LoginState {
@@ -140,7 +140,7 @@ export class LoginComponent extends Component<any, LoginState> {
                             aria-hidden="true"
                         />
                     ) : (
-                        <FontAwesomeIcon icon={faSignInAlt}/>
+                        <FAE icon={faSignInAlt}/>
                     )}
                     {" "}Anmelden
                 </Button>
@@ -161,7 +161,7 @@ export class LoginComponent extends Component<any, LoginState> {
                             aria-hidden="true"
                         />
                     ) : (
-                        <FontAwesomeIcon icon={faUserSecret}/>
+                        <FAE icon={faUserSecret}/>
                     )}
                     {" "}Anonym Anmelden
                 </Button>

@@ -1,13 +1,13 @@
-import React, {Component, PureComponent} from "react";
+import React, {PureComponent} from "react";
 
 import './desktop-buttons.scss';
 import {Button} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCaretRight, faUndo} from "@fortawesome/free-solid-svg-icons";
 import {LoadingButton} from "../../../../LoadingButton/LoadingButton";
 import {CustomNextButton} from "../StepComponent";
 import {ExportButton} from "../../../ExportButton";
 import {Tool} from "../../../Tool";
+import FAE from "../../../../Icons/FAE";
 
 export interface DesktopButtonsState {
 
@@ -38,7 +38,7 @@ export class DesktopButtons extends PureComponent<DesktopButtonsProps, DesktopBu
                     className={"mt-2 mx-2"}
                     key={"customNextButton"}
                 >
-                    <FontAwesomeIcon icon={faCaretRight}/> {this.props.customNextButton?.text ?? "Weiter"}
+                    <FAE icon={faCaretRight}/> {this.props.customNextButton?.text ?? "Weiter"}
                 </Button>
 
                 <Button
@@ -48,7 +48,7 @@ export class DesktopButtons extends PureComponent<DesktopButtonsProps, DesktopBu
                     onClick={this.props.onReset}
                     key={"resetButton"}
                 >
-                    <FontAwesomeIcon
+                    <FAE
                         icon={faUndo}/> Zurücksetzen
                 </Button>
 

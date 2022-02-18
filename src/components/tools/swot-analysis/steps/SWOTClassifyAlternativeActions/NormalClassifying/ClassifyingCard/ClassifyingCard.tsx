@@ -1,8 +1,8 @@
 import React, {PureComponent} from "react";
 import {Button, Card, Col, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExchangeAlt} from "@fortawesome/free-solid-svg-icons";
 import {ClassifiedAlternateAction} from "../../SWOTClassifyAlternativeActionsComponent";
+import FAE from "../../../../../../../general-components/Icons/FAE";
 
 interface ClassifyingCardProps {
     action: ClassifiedAlternateAction
@@ -23,7 +23,7 @@ class ClassifyingCard extends PureComponent<ClassifyingCardProps, {}> {
                         <Button
                             size={"sm"}
                             onClick={this.onClick}>
-                            <FontAwesomeIcon rotation={90} icon={faExchangeAlt}/>
+                            <FAE rotation={90} icon={faExchangeAlt}/>
                         </Button>
                     </Col>
                 </Row>

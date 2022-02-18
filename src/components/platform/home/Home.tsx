@@ -1,12 +1,12 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Col, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowsAlt, faBorderAll, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 import "./home.scss";
 import "./home-desk.scss"
+import FAE from "../../../general-components/Icons/FAE";
 
 
 interface HomeState {
@@ -80,7 +80,7 @@ export class Home extends Component<any, HomeState> {
                                  className={classes.join(" ")} to={value.link}>
                                 <div className={"icon"}>
                                     <div>
-                                        <FontAwesomeIcon icon={value.icon}/>
+                                        <FAE icon={value.icon}/>
                                     </div>
                                 </div>
                                 <div className={"text"}>

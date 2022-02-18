@@ -1,12 +1,13 @@
 import React, {ChangeEvent, Component, PureComponent} from "react";
 import {Button, Card as BootstrapCard, Collapse, FormControl, InputGroup} from "react-bootstrap";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 import {isDesktop} from "../Desktop";
 import {CounterInterface} from "../Counter/CounterInterface";
 
 import "./card-component.scss";
 import {compareWithoutFunctions} from "../ComponentUtils";
+import FAE from "../Icons/FAE";
 
 
 export interface CardProps {
@@ -112,7 +113,7 @@ class Card extends Component<CardProps, CardState> {
                     {
                         ((!this.props.disabled) && this.props.onDelete !== undefined) ? (
                             <Button className={"noButton"} onClick={this.onDelete} variant={"link"}>
-                                <FontAwesomeIcon icon={faTimes}/>
+                                <FAE icon={faTimes}/>
                             </Button>
                         ) : undefined
                     }
@@ -229,7 +230,7 @@ class CardComponent extends PureComponent<CardComponentProps, {}> {
                     <BootstrapCard onClick={this.addCard}
                                    className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
                         <div className={"icon"}>
-                            <FontAwesomeIcon icon={faPlus}/>
+                            <FAE icon={faPlus}/>
                         </div>
                     </BootstrapCard>
                 )}

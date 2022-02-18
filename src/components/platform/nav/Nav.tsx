@@ -1,4 +1,4 @@
-import {ChangeEvent, Component, PureComponent} from "react";
+import {ChangeEvent, Component} from "react";
 import {Badge, Card, Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
@@ -11,7 +11,6 @@ import {
     faUser,
     faUserPlus
 } from "@fortawesome/free-solid-svg-icons/";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Session} from "../../../general-components/Session/Session";
 import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +20,7 @@ import {getSaves} from "../../../general-components/API/calls/Saves";
 import {SimpleSaveResource} from "../../../general-components/Datastructures";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {RouteComponentProps, withRouter} from "react-router";
+import FAE from "../../../general-components/Icons/FAE";
 
 
 interface NavState {
@@ -144,7 +144,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
             }} expanded={this.state.expanded} expand="lg">
                 <Container>
                     <Navbar.Brand onClick={this.navOnClick} as={NavLink} to={"/"} exact className={"nav-link"}>
-                        <FontAwesomeIcon icon={faHome}/>&nbsp;
+
+                        <FAE icon={faHome}/>&nbsp;
                         {process.env.REACT_APP_NAME}
                     </Navbar.Brand>
 
@@ -214,23 +215,23 @@ class Nav extends Component<RouteComponentProps, NavState> {
                             {(!Session.isLoggedIn()) && (
                                 <>
                                     <NavLink onClick={this.navOnClick} to={"/login"} className={"nav-link"}>
-                                        <FontAwesomeIcon icon={faSignInAlt}/>&nbsp;
+                                        <FAE icon={faSignInAlt}/>&nbsp;
                                         Anmelden
                                     </NavLink>
                                     <NavLink onClick={this.navOnClick} to={"/register"} className={"nav-link"}>
-                                        <FontAwesomeIcon icon={faUserPlus}/>&nbsp;
+                                        <FAE icon={faUserPlus}/>&nbsp;
                                         Registrieren
                                     </NavLink>
                                 </>
                             )}
                             {(Session.isLoggedIn()) && (
-                                <NavDropdown id={"profile-dropdown"} title={<><FontAwesomeIcon
+                                <NavDropdown id={"profile-dropdown"} title={<><FAE
                                     icon={faUser}/> &nbsp;{Session.currentUser?.getUsername()}</>}>
 
                                     {!Session.isAnonymous() && (
                                         <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/my-profile"}
                                                        role={"button"}>
-                                            <FontAwesomeIcon icon={faUser}/>&nbsp;
+                                            <FAE icon={faUser}/>&nbsp;
                                             Mein Profil
                                         </Dropdown.Item>
                                     )}
@@ -238,7 +239,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                     <Dropdown.Item as={"div"} className="p-0">
                                         <NavLink onClick={this.navOnClick} to={"/logout"} role={"button"}
                                                  className={"dropdown-item"}>
-                                            <FontAwesomeIcon icon={faSignOutAlt}/>&nbsp;
+                                            <FAE icon={faSignOutAlt}/>&nbsp;
                                             Abmelden
                                         </NavLink>
                                     </ Dropdown.Item>
@@ -250,21 +251,21 @@ class Nav extends Component<RouteComponentProps, NavState> {
                             <BootstrapNav>
                                 <NavDropdown id={"profile-dropdown"} title={"mehr"}>
                                     <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/settings"} role={"button"}>
-                                        <FontAwesomeIcon icon={faCog}/>&nbsp;
+                                        <FAE icon={faCog}/>&nbsp;
                                         Einstellungen
                                     </Dropdown.Item>
                                     <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/data-privacy"}
                                                    role={"button"}>
-                                        <FontAwesomeIcon icon={faShieldAlt}/>&nbsp;
+                                        <FAE icon={faShieldAlt}/>&nbsp;
                                         Datenschutz
                                     </Dropdown.Item>
                                     <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/legal-notice"}
                                                    role={"button"}>
-                                        <FontAwesomeIcon icon={faBalanceScale}/>&nbsp;
+                                        <FAE icon={faBalanceScale}/>&nbsp;
                                         Impressum
                                     </Dropdown.Item>
                                     <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/about-us"} role={"button"}>
-                                        <FontAwesomeIcon icon={faInfoCircle}/>&nbsp;
+                                        <FAE icon={faInfoCircle}/>&nbsp;
                                         Über uns
                                     </Dropdown.Item>
                                 </NavDropdown>

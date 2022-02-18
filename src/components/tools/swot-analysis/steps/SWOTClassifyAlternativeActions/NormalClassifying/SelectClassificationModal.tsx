@@ -1,10 +1,7 @@
-import {
-    ClassificationValues,
-    ClassifiedAlternateAction
-} from "../SWOTClassifyAlternativeActionsComponent";
+import {ClassificationValues} from "../SWOTClassifyAlternativeActionsComponent";
 import {Button, FormSelect, Modal} from "react-bootstrap";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import FAE from "../../../../../../general-components/Icons/FAE";
 
 
 interface SelectClassificationModalProps {
@@ -69,7 +66,7 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                         variant={"light"}
                         onClick={props.onClose}
                     >
-                        <FontAwesomeIcon icon={faTimes}/>
+                        <FAE icon={faTimes}/>
                     </Button>
                 </Modal.Title>
             </Modal.Header>

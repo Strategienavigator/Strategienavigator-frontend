@@ -1,10 +1,9 @@
 import {Button, FormSelect, Modal} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFileExport, faTimes} from "@fortawesome/free-solid-svg-icons";
-import {memo, useState} from "react";
+import {memo} from "react";
 import {Tool} from "./Tool";
 import {Exporter} from "../Export/Exporter";
-import {Messages} from "../Messages/Messages";
+import FAE from "../Icons/FAE";
 
 interface ExportModalProps {
     onClose: () => void
@@ -33,7 +32,7 @@ function ExportModalComponent(props: ExportModalProps) {
                             props.onClose();
                         }}
                     >
-                        <FontAwesomeIcon icon={faTimes}/>
+                        <FAE icon={faTimes}/>
                     </Button>
                 </Modal.Title>
             </Modal.Header>
@@ -79,7 +78,7 @@ function ExportButton(props: ExportButtonProps) {
                 className={"mt-2"}
                 onClick={props.onClick}
             >
-                <FontAwesomeIcon icon={faFileExport} /> Exportieren
+                <FAE icon={faFileExport} /> Exportieren
             </Button>
         </>
     );

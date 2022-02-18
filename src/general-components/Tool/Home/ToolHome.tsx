@@ -2,10 +2,8 @@ import React, {Component, ReactNode} from "react";
 import {Tool} from "../Tool";
 import {Badge, Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faInfoCircle, faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
-import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 import "./tool-home.scss";
 import {FooterContext} from "../../Contexts/FooterContextComponent";
@@ -15,6 +13,7 @@ import {SimpleSaveResource} from "../../Datastructures";
 import {Session} from "../../Session/Session";
 import {deleteSave, getSaves} from "../../API/calls/Saves";
 import {DeleteSaveModal} from "./DeleteSaveModal/DeleteSaveModal";
+import FAE from "../../Icons/FAE";
 
 
 export interface ToolHomeInfo {
@@ -127,7 +126,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         return (
             <div className={"toolHome"}>
                 <h4>
-                    <FontAwesomeIcon icon={this.props.tool.getToolIcon()}/> &nbsp; {title} &nbsp;
+                    <FAE icon={this.props.tool.getToolIcon()}/> &nbsp; {title} &nbsp;
 
                     {(this.props.tool.hasTutorial()) && (
                         <Badge
@@ -135,14 +134,14 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                             className={"description"}
                             onClick={this.onInfoClick}
                         >
-                            <FontAwesomeIcon icon={faInfoCircle}/>
+                            <FAE icon={faInfoCircle}/>
                         </Badge>
                     )}
                 </h4>
                 <div className={"button-container mb-0 mt-2"}>
                     {isDesktop() && (
                         <Button onClick={this.onNewSaveButtonClick} size={"sm"} variant={"dark"}>
-                            <FontAwesomeIcon icon={faPlusSquare}/> Neue Analyse
+                            <FAE icon={faPlusSquare}/> Neue Analyse
                         </Button>
                     )}
 
@@ -152,7 +151,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
                                 className={"btn btn-primary"}
                                 onClick={this.orderingChangedCallback}>
-                            <FontAwesomeIcon
+                            <FAE
                                 icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
                         </Button>
                     </span>

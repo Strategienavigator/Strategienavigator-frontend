@@ -1,12 +1,12 @@
 import React from "react";
 import {Card, Col, Form, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/faTimes";
 import {faCheck} from "@fortawesome/free-solid-svg-icons/faCheck";
 import {faEye} from "@fortawesome/free-solid-svg-icons/faEye";
 import {faEyeSlash} from "@fortawesome/free-solid-svg-icons/faEyeSlash";
 
 import "./password-field.scss";
+import FAE from "../Icons/FAE";
 
 
 const checkPassword = (password: string): PasswordFieldState => {
@@ -204,7 +204,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                     {(this.props.eye) && (
                         <div title={(!this.state.viewPassword) ? "Passwort anzeigen" : "Passwort verstecken"}
                              onClick={this.switchPasswordView} className={"passwordEye"}>
-                            <FontAwesomeIcon icon={(!this.state.viewPassword) ? faEye : faEyeSlash}/>
+                            <FAE icon={(!this.state.viewPassword) ? faEye : faEyeSlash}/>
                         </div>
                     )}
                 </Form.Floating>
@@ -212,49 +212,49 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                     <Card body>
                         {(!this.state.special) && (
                             <Row className={"text-danger"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-danger"} icon={faTimes}/></Col>
+                                <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
                                 <Col xs={10}>Min. ein Sonderzeichen {"$&§+,:;=?@#|'<>.^*()%!_-"}</Col>
                             </Row>
                         )}
                         {(!this.state.lowercase) && (
                             <Row className={"text-danger"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-danger"} icon={faTimes}/></Col>
+                                <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
                                 <Col xs={10}>Min. ein Kleinbuchstaben</Col>
                             </Row>
                         )}
                         {(!this.state.uppercase) && (
                             <Row className={"text-danger"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-danger"} icon={faTimes}/></Col>
+                                <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
                                 <Col xs={10}>Min. ein Großbuchstaben</Col>
                             </Row>
                         )}
                         {(!this.state.digits) && (
                             <Row className={"text-danger"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-danger"} icon={faTimes}/></Col>
+                                <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
                                 <Col xs={10}>Min. eine Zahl</Col>
                             </Row>
                         )}
                         {(!this.state.minLength) && (
                             <Row className={"text-danger"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-danger"} icon={faTimes}/></Col>
+                                <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
                                 <Col xs={10}>Ihr Passwort muss mindestens acht Zeichen haben !</Col>
                             </Row>
                         )}
                         {(!this.state.maxLength) && (
                             <Row className={"text-danger"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-danger"} icon={faTimes}/></Col>
+                                <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
                                 <Col xs={10}>Ihr Passwort darf maximal 120 Zeichen beinhalten !</Col>
                             </Row>
                         )}
                         {(this.state.invalidChar) && (
                             <Row className={"text-danger"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-danger"} icon={faTimes}/></Col>
+                                <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
                                 <Col xs={10}>Invalides Zeichen!</Col>
                             </Row>
                         )}
                         {(this.state.valid) && (
                             <Row className={"text-success"}>
-                                <Col xs={2}><FontAwesomeIcon className={"text-success"} icon={faCheck}/></Col>
+                                <Col xs={2}><FAE className={"text-success"} icon={faCheck}/></Col>
                                 <Col xs={10}>Ihr Passwort ist gültig !</Col>
                             </Row>
                         )}

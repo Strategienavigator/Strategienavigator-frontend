@@ -1,6 +1,5 @@
 import React, {Component, ReactNode} from "react";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faPlusSquare} from "@fortawesome/free-solid-svg-icons";
 import {NavLink} from "react-router-dom";
 import {RouteComponentProps, StaticContext, withRouter} from "react-router";
@@ -9,6 +8,7 @@ import {faCaretRight, faHome, faSave, faUndo} from "@fortawesome/free-solid-svg-
 import "./control-footer.scss";
 import {isDesktop} from "../Desktop";
 import {FooterContext} from "../Contexts/FooterContextComponent";
+import FAE from "../Icons/FAE";
 
 
 export interface ControlFooterProps {
@@ -112,7 +112,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             if ("home" in item) {
                 return (
                     <NavLink key={"home"} to={"/"} exact>
-                        <FontAwesomeIcon icon={faHome}/> Startseite
+                        <FAE icon={faHome}/> Startseite
                     </NavLink>
                 );
             }
@@ -120,7 +120,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                 return (
                     <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"} onClick={item.nextStep}
                             type={"button"}>
-                        <FontAwesomeIcon icon={faCaretRight}/> Weiter
+                        <FAE icon={faCaretRight}/> Weiter
                     </button>
                 );
             }
@@ -129,7 +129,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                     <button disabled={item.disabled} key={"saveSteps"} className={"btn-transparent"}
                             form={item.saveSteps} type={"submit"}>
                         {/*TODO change to non submit type*/}
-                        <FontAwesomeIcon icon={faSave}/> Speichern
+                        <FAE icon={faSave}/> Speichern
                     </button>
 
                 );
@@ -139,21 +139,21 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                     <button disabled={item.disabled} key={"reset"} onClick={() => item.reset()}
                             className={"btn-transparent"}
                             type={"button"}>
-                        <FontAwesomeIcon icon={faUndo}/> Zurücksetzen
+                        <FAE icon={faUndo}/> Zurücksetzen
                     </button>
                 );
             }
             if ("tool" in item) {
                 return (
                     <NavLink key={"tool"} to={item.tool?.link} exact>
-                        <FontAwesomeIcon icon={item.tool?.icon}/> {item.tool?.title}
+                        <FAE icon={item.tool?.icon}/> {item.tool?.title}
                     </NavLink>
                 );
             }
             if ("settings" in item) {
                 return (
                     <NavLink key={"settings"} to={"/settings"} exact>
-                        <FontAwesomeIcon icon={faCogs}/> Einstellungen
+                        <FAE icon={faCogs}/> Einstellungen
                     </NavLink>
                 );
             }
@@ -161,7 +161,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                 return (
                     <button disabled={item.disabled} key={"newTool"} type={"button"} className={"btn-transparent"}
                             onClick={() => item.newTool.callback()}>
-                        <FontAwesomeIcon icon={faPlusSquare}/> {item.newTool?.title}
+                        <FAE icon={faPlusSquare}/> {item.newTool?.title}
                     </button>
                 );
             }
@@ -170,7 +170,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                     <button disabled={item.disabled} key={"button"} className={"btn-transparent"}
                             onClick={() => item.button.callback()}
                             type={"button"}>
-                        <FontAwesomeIcon icon={item.button.icon}/> {item.button.text}
+                        <FAE icon={item.button.icon}/> {item.button.text}
                     </button>
                 );
             }

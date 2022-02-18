@@ -18,7 +18,7 @@ import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
 import {UIError} from "../../../Error/UIErrors/UIError";
 import {Exporter} from "../../../Export/Exporter";
 import {Draft} from "immer";
-import {IUIErrorContext, withUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
+import {IUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
 
 
 export interface StepDefinition<T extends object> {
@@ -298,12 +298,14 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private onResetCurrent = () => {
-        this.setState({showResetModal: false, currentSubStep: 0});
+        this.clearErrors();
+        this.setState({showResetModal: false, currentSubStep: 0, progress: this.state.currentStep});
         this.resetStepsUntil(this.state.currentStep);
     }
 
     private onResetAll = () => {
-        this.setState({showResetModal: false, currentStep: 0, currentSubStep: 0});
+        this.clearErrors();
+        this.setState({showResetModal: false, currentStep: 0, currentSubStep: 0, progress: 0});
         this.resetAllSteps();
     }
 
@@ -424,6 +426,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             if (validated) {
                 // force for performance reasons (no duplicate check of validation)
                 this.nextSubStep(true);
+                return;
             }
         }
 
