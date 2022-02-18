@@ -9,7 +9,7 @@ import {SWOTAnalysisMatrix} from "../../matrix/SWOTAnalysisMatrix";
 import {MatrixComponentProps} from "../../../../../general-components/Tool/MatrixComponent/MatrixComponent";
 import React from "react";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {UIError} from "../../../../../general-components/Error/ErrorBag";
+import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {SwotFactorsValues} from "../SWOTFactors/SWOTFactorsComponent";
 import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 

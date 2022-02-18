@@ -5,13 +5,13 @@ import {
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTFactorsComponent} from "./SWOTFactorsComponent";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
+import {CardComponentField, isCardComponentValid} from "../../../../../general-components/CardComponent/CardComponent";
 import {CounterInterface} from "../../../../../general-components/Counter/CounterInterface";
 import {UpperABCCounter} from "../../../../../general-components/Counter/UpperABCCounter";
 import {LowerABCCounter} from "../../../../../general-components/Counter/LowerABCCounter";
 import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
 import {RomanNumeralsCounter} from "../../../../../general-components/Counter/RomanNumeralsCounter";
-import {UIError} from "../../../../../general-components/Error/ErrorBag";
+import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 
 
 export class SWOTFactors implements StepDefinition<SWOTAnalysisValues>, StepDataHandler<SWOTAnalysisValues> {
@@ -86,7 +86,38 @@ export class SWOTFactors implements StepDefinition<SWOTAnalysisValues>, StepData
     }
 
     validateData(data: SWOTAnalysisValues): UIError[] {
-        return [];
+        const errors = Array<UIError>();
+        const errorText = (text: string) => `Bitte füllen Sie alle ${text} aus!`;
+
+        if (!isCardComponentValid(data["swot-factors"]?.factors.strengths)) {
+            errors.push({
+                id: "strengthsError",
+                message: errorText("Stärken"),
+                level: "error"
+            });
+        }
+        if (!isCardComponentValid(data["swot-factors"]?.factors.weaknesses)) {
+            errors.push({
+                id: "weaknessesError",
+                message: errorText("Schwächen"),
+                level: "error"
+            });
+        }
+        if (!isCardComponentValid(data["swot-factors"]?.factors.chances)) {
+            errors.push({
+                id: "chancesError",
+                message: errorText("Chancen"),
+                level: "error"
+            });
+        }
+        if (!isCardComponentValid(data["swot-factors"]?.factors.risks)) {
+            errors.push({
+                id: "risksError",
+                message: errorText("Risiken"),
+                level: "error"
+            });
+        }
+        return errors;
     }
 
 

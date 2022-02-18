@@ -15,9 +15,10 @@ import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 import {ExportModal} from "../../ExportButton";
 import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
-import {UIError} from "../../../Error/ErrorBag";
+import {UIError} from "../../../Error/UIErrors/UIError";
 import {Exporter} from "../../../Export/Exporter";
 import {Draft} from "immer";
+import {IUIErrorContext, withUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
 
 
 export interface StepDefinition<T extends object> {
@@ -133,7 +134,7 @@ export interface StepComponentState {
     customNextButton?: CustomNextButton
 }
 
-class StepComponent<D extends object> extends Component<StepComponentProps<D>, StepComponentState> {
+class StepComponent<D extends object> extends Component<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, StepComponentState> {
 
 
     /**
@@ -146,9 +147,9 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
     private readonly stepController: StepController;
 
 
-    constructor(props: Readonly<StepComponentProps<D>> | StepComponentProps<D>);
-    constructor(props: StepComponentProps<D>, context: any);
-    constructor(props: Readonly<StepComponentProps<D>> | StepComponentProps<D>, context?: any) {
+    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & { uiErrorContext: IUIErrorContext });
+    constructor(props: StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, context: any);
+    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, context?: any) {
         super(props, context);
         this.stepController = {
             requestStep: this.changeStep,
@@ -228,19 +229,20 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
                         </Col>
                         <Col className={"tabsContent"}>
                             <Tab.Content>
-                                {this.props.steps.map((value, index) => {
+                                {this.props.steps.map((step, index) => {
 
 
                                     return (
                                         <Tab.Pane key={"2" + (index)} eventKey={index}>
-                                            <div className={"stepTitle"}>{value.title}</div>
+                                            <div className={"stepTitle"}>{step.title}</div>
 
-                                            {React.createElement(value.form, {
+                                            {React.createElement(step.form, {
                                                 ...this.props, // TODO test if is better: ...(this.props as ToolSaveProps<D>)
-                                                id: value.id,
-                                                disabled: index < this.state.progress /*|| !this.withData(value.dataHandler.isUnlocked)*/,
+                                                id: step.id,
+                                                disabled: index < this.state.progress /*|| !this.withData(step.dataHandler.isUnlocked)*/,
                                                 stepController: this.stepController,
                                                 currentSubStep: this.state.currentSubStep,
+                                                validationFailed: index === this.state.progress && Object.keys(this.props.uiErrorContext.errors).length > 0
                                             })}
                                         </Tab.Pane>
                                     );
@@ -413,26 +415,31 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
     }
 
     public tryNextStep = (): void => {
-        const currentStep = this.getCurrentStep();
 
+        this.clearErrors();
         if (this.hasNextSubStep()) {
 
-            this.nextSubStep();
+            const validated = this.validateSubStep(this.state.currentStep, this.state.currentSubStep);
 
+            if (validated) {
+                // force for performance reasons (no duplicate check of validation)
+                this.nextSubStep(true);
+            }
         }
-        const errors = this.withData(currentStep.dataHandler.validateData);
 
-        if (errors.length < 1) {
+        const validated = this.validateStep(this.state.currentStep);
+
+        if (validated) {
             this.nextStep();
         }
     }
 
-    private nextSubStep = () => {
-        this.setSubStep(this.state.currentSubStep + 1)
+    private nextSubStep = (force: boolean = false) => {
+        this.setSubStep(this.state.currentSubStep + 1, force)
     }
 
-    private setSubStep = (step: number) => {
-        if (this.withData(this.getCurrentStep().subStep?.isStepUnlocked.bind(this, step))) {
+    private setSubStep = (step: number, force: boolean = false) => {
+        if (force || this.withData(this.getCurrentStep().subStep?.isStepUnlocked.bind(this, step))) {
             this.setState({
                 currentSubStep: step
             });
@@ -607,6 +614,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
 
 
             if (this.state.currentStep !== step) {
+
                 const hasSubSteps = this.hasSubSteps(step);
                 let newSubStep = 0;
                 if (hasSubSteps) {
@@ -713,6 +721,34 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D>, S
         return this.getCurrentStep().matrix !== undefined
     }
 
+
+    private validateStep = (step: number): boolean => {
+        const errors = this.withData(this.props.steps[step].dataHandler.validateData);
+        if (errors.length > 0) {
+            this.putErrors(errors);
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    private validateSubStep = (step: number, subStep: number): boolean => {
+        const errors = this.withData(this.props.steps[step].subStep?.validateStep.bind(this, subStep));
+        if (errors !== undefined && errors.length > 0) {
+            this.putErrors(errors);
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    private putErrors(errors: UIError[]) {
+        this.props.uiErrorContext.putErrors(errors);
+    }
+
+    private clearErrors() {
+        this.props.uiErrorContext.clearErrors();
+    }
 }
 
 export default StepComponent;

@@ -8,6 +8,7 @@ import {compareWithoutFunctions} from "../../../../ComponentUtils";
 interface StepProp<V extends object> extends FormComponentProps, ToolSaveProps<V> {
     stepController: StepController
     currentSubStep: number
+    validationFailed: boolean
 }
 
 abstract class Step<V extends object, S> extends FormComponent<StepProp<V>, S> {
@@ -20,8 +21,8 @@ abstract class Step<V extends object, S> extends FormComponent<StepProp<V>, S> {
     }
 }
 
-const shallowCompareStepProps = (oldProps: StepProp<any>, newProps: StepProp<any>): boolean => {
-    return compareWithoutFunctions(oldProps,newProps,["save"]);
+const shallowCompareStepProps = <T extends object>(oldProps: StepProp<T>, newProps: StepProp<T>, toIgnore: (keyof StepProp<T>)[] = []): boolean => {
+    return compareWithoutFunctions(oldProps, newProps, ["save", ...toIgnore.map(k => k.toString())]);
 }
 
 export type {

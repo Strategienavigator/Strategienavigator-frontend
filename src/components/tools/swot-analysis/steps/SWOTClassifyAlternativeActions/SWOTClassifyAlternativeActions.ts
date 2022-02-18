@@ -8,7 +8,7 @@ import {
     ClassifiedAlternateAction,
     SWOTClassifyAlternativeActionsComponent
 } from "./SWOTClassifyAlternativeActionsComponent";
-import {UIError} from "../../../../../general-components/Error/ErrorBag";
+import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 
 export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalysisValues>, StepDataHandler<SWOTAnalysisValues> {
 

@@ -29,7 +29,7 @@ import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
 import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
-import {ErrorPages} from "./general-components/Error/ErrorPages";
+import {ErrorPages} from "./general-components/Error/ErrorPages/ErrorPages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
 
 

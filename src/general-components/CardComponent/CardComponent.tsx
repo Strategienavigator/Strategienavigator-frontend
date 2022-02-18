@@ -35,6 +35,15 @@ export interface CardState {
     descChanged: boolean
 }
 
+export function isCardValid(cardComponentField: CardComponentField) {
+    return cardComponentField.name.length > 0 && cardComponentField.desc.length > 0;
+}
+
+export function isCardComponentValid(cardComponentFields?: CardComponentFields) {
+    return cardComponentFields?.every(isCardValid)!!;
+}
+
+
 class Card extends Component<CardProps, CardState> {
 
     constructor(props: CardProps | Readonly<CardProps>) {
@@ -78,7 +87,7 @@ class Card extends Component<CardProps, CardState> {
     }
 
     private closeIfChanged = () => {
-        if(this.state.descChanged){
+        if (this.state.descChanged) {
             this.setState({showDesc: false})
         }
     }

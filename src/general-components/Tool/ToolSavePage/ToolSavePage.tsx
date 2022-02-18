@@ -1,5 +1,5 @@
 import './tool-save-page.scss'
-import React, {Component} from "react";
+import React, {Component, ReactNode} from "react";
 import {SaveResource} from "../../Datastructures";
 import {Session} from "../../Session/Session";
 import {Loader} from "../../Loader/Loader";
@@ -11,10 +11,9 @@ import {Messages} from "../../Messages/Messages";
 import {Card} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
-import {showErrorPage} from "../../../index";
-import {SimpleErrorMap, UIError} from "../../Error/ErrorBag";
-import produce, {castDraft, castImmutable, Immutable} from "immer";
+import produce from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
+import {UIErrorContextComponent} from "../../Contexts/UIErrorContext/UIErrorContext";
 
 type ToolViewValidation = {
     isNotOwn?: boolean
@@ -26,49 +25,6 @@ type ToolViewValidation = {
 interface ToolSaveController<D> {
     save: () => Promise<boolean>
     onChanged: (changes: (save: WritableDraft<SaveResource<D>>) => void) => void
-}
-
-
-/**
- * Funktionen zum Verwalten von Errors.
- *
- * Ids können punkt separiert angegeben werden. Zum Beispiel "tool.name"
- * Beim Abrufen durch hasError und getErrors kann dann nur "tool" angegeben werden und alle Error die mit "tool." angelegt wurden, werden mit berücksichtigt
- */
-interface ToolErrorController {
-    /**
-     * Fügt einen Error hinzu
-     * @param id
-     * @param error
-     */
-    addError: (error: UIError) => void
-    /**
-     * Entfernt den Error mit genau dem fehler
-     * @param id
-     */
-    removeError: (id: string) => void
-    /**
-     * prüft, ob ein error mit exakt der Id vorliegt
-     * @param id
-     */
-    hasError: (id: string) => boolean
-    /**
-     * prüft, ob die id oder irgendwelche Tochter ids errors haben
-     * @param id
-     */
-    hasErrors: (id: string) => boolean
-
-    /**
-     * gibt genau den Error mit genau der Id zurück
-     * @param id
-     */
-    getError: (id: string) => UIError
-    /**
-     * gibt genau entweder den exakten Error oder alle tochter Errors zurück
-     * @param id
-     */
-    getErrors: (id: string) => SimpleErrorMap
-
 }
 
 interface ToolSaveProps<D extends object> {
@@ -150,7 +106,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
 
-    private getView() {
+    private getView(): ReactNode {
         if (this.state.save !== undefined) {
             return this.props.element({
                 save: this.state.save,
@@ -166,11 +122,41 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     render() {
         let ID = parseInt(this.props.match.params.id as string);
+
+        let view: ReactNode;
+
+        /*if (this.state.viewValidationError !== undefined) {
+            view = (
+                <Card body>
+                    {(this.state.viewValidationError.isNotOwn) && (
+                        <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
+                    )}
+                    {(this.state.viewValidationError.isOtherTool) && (
+                        <>Bei dieser Analyse handelt es sich nicht um
+                            eine <b>{this.props.tool.getToolName()}</b>!</>
+                    )}
+                    {(this.state.viewValidationError.isLocked) && (
+                        <>Dieser Speicherstand wird aktuell bearbeitet!</>
+                    )}
+                </Card>
+            );
+        } else {
+            view = (
+                <UIErrorContextComponent>
+                    {this.getView()}
+                </UIErrorContextComponent>
+            );
+        }*/
         return (
             <Route>
                 <Loader payload={[() => this.retrieveSave(ID)]} transparent
                         alignment={"center"} fullscreen animate={false}>
-                    {(this.state.viewValidationError === undefined) ? this.getView() : (
+
+                    {(this.state.viewValidationError === undefined) ? (
+                        <UIErrorContextComponent>
+                            {this.getView()}
+                        </UIErrorContextComponent>
+                    ) : (
                         <Card body>
                             {(this.state.viewValidationError.isNotOwn) && (
                                 <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
@@ -190,24 +176,28 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                 <Prompt message={this.denyRouteChange}/>
                 <ConfirmToolRouteChangeModal
                     show={this.state.showConfirmToolRouteChangeModal}
-                    onNo={() => {
-                        this.setState({
-                            showConfirmToolRouteChangeModal: false,
-                            lastLocation: undefined
-                        });
-                    }}
-                    onYes={() => {
-                        this.props.history.push(this.state.lastLocation?.pathname as string);
-                        if ((this.state.lastLocation?.pathname as string).startsWith(this.props.tool.getLink())) {
-                            this.setState({
-                                showConfirmToolRouteChangeModal: false
-                            });
-                        }
-                    }}
+                    onNo={this.hideRouteChangeModal}
+                    onYes={this.performRouteChange}
                 />
             </Route>
         );
     }
+
+    private hideRouteChangeModal = () => {
+        this.setState({
+            showConfirmToolRouteChangeModal: false,
+            lastLocation: undefined
+        });
+    };
+
+    private performRouteChange = () => {
+        this.props.history.push(this.state.lastLocation?.pathname as string);
+        if ((this.state.lastLocation?.pathname as string).startsWith(this.props.tool.getLink())) {
+            this.setState({
+                showConfirmToolRouteChangeModal: false
+            });
+        }
+    };
 
     denyRouteChange = (location: H.Location): boolean => {
         this.setState({
@@ -329,8 +319,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 export type{
     ToolSavePageProps,
     ToolSavePageState,
-    ToolSaveProps,
-    ToolErrorController
+    ToolSaveProps
 }
 
 export {

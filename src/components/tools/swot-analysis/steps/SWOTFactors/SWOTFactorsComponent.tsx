@@ -6,10 +6,21 @@ import {RomanNumeralsCounter} from "../../../../../general-components/Counter/Ro
 import {LowerABCCounter} from "../../../../../general-components/Counter/LowerABCCounter";
 import {UpperABCCounter} from "../../../../../general-components/Counter/UpperABCCounter";
 import {isDesktop} from "../../../../../general-components/Desktop";
-import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {
+    shallowCompareStepProps,
+    Step,
+    StepProp
+} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTFactors} from "./SWOTFactors";
 import {showErrorPage} from "../../../../../index";
+import {
+    IUIErrorContext,
+    UIErrorContext
+} from "../../../../../general-components/Contexts/UIErrorContext/UIErrorContext";
+import {FooterContext} from "../../../../../general-components/Contexts/FooterContextComponent";
+import {compareWithoutFunctions} from "../../../../../general-components/ComponentUtils";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 
 
 export interface SwotFactorsValues {
@@ -22,39 +33,28 @@ export interface SwotFactorsValues {
 }
 
 interface SWOTFactorsState {
-    collapseAll: boolean
+
 }
 
 export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsState> {
 
+
     constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
         super(props, context);
-        this.state = {
-            collapseAll: false
-        }
     }
 
 
-    shouldComponentUpdate(nextProps: Readonly<StepProp<SWOTAnalysisValues>>, nextState: Readonly<SWOTFactorsState>, nextContext: any): boolean {
-        let shouldUpdate: boolean | undefined = undefined;
-        if (super.shouldComponentUpdate !== undefined) {
-            shouldUpdate = super.shouldComponentUpdate(nextProps, nextState, nextContext);
-        }
-
+    shouldComponentUpdate(nextProps: Readonly<StepProp<SWOTAnalysisValues>>, nextState: Readonly<SWOTFactorsState>, nextContext: IUIErrorContext): boolean {
+        let shouldUpdate: boolean;
+        shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
         if (!shouldUpdate) {
             const oldSave = this.props.save;
             const newSave = nextProps.save;
-            if (oldSave.data["swot-factors"] === newSave.data["swot-factors"]) {
-                shouldUpdate = false;
+            if (oldSave.data["swot-factors"] !== newSave.data["swot-factors"]) {
+                shouldUpdate = true;
             }
         }
-        return shouldUpdate ?? true;
-    }
-
-    collapseAll(collapse: boolean) {
-        this.setState({
-            collapseAll: collapse
-        });
+        return shouldUpdate;
     }
 
     private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {
@@ -92,9 +92,9 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         if (values !== undefined) {
             return (
                 <div className={"swot-factors"}>
-                    <Accordion flush={true} activeKey={this.state.collapseAll ? activeKey : undefined}
+                    <Accordion flush={true} activeKey={this.props.validationFailed ? activeKey : undefined}
                                defaultActiveKey={isDesktop() ? "strengths" : undefined}>
-                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "strengths"}>
+                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "strengths"}>
                             <Accordion.Header>{SWOTFactors.strengthsCounter.get(1) + "-" + SWOTFactors.strengthsCounter.get(max)} -
                                 Stärken (Interne Faktoren)</Accordion.Header>
                             <Accordion.Body>
@@ -106,11 +106,11 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.strengthsChanged}/>
-                                {/*{this.getError("strengthsError")}*/}
+                                <UIErrorBanner id={"strengthsError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
 
-                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "weaknesses"}>
+                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "weaknesses"}>
                             <Accordion.Header>{SWOTFactors.weaknessesCounter.get(1) + "-" + SWOTFactors.weaknessesCounter.get(max)} -
                                 Schwächen (Interne Faktoren)</Accordion.Header>
                             <Accordion.Body>
@@ -122,10 +122,10 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.weaknessesChanged}/>
-                                {/*{this.getError("weaknessesError")}*/}
+                                <UIErrorBanner id={"weaknessesError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
-                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "chances"}>
+                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "chances"}>
                             <Accordion.Header>{SWOTFactors.chancesCounter.get(1) + "-" + SWOTFactors.chancesCounter.get(max)} -
                                 Chancen (Externe Faktoren)</Accordion.Header>
                             <Accordion.Body>
@@ -137,10 +137,10 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.chancesChanged}/>
-                                {/*{this.getError("chancesError")}*/}
+                                <UIErrorBanner id={"chancesError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
-                        <Accordion.Item eventKey={this.state.collapseAll ? activeKey : "risks"}>
+                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "risks"}>
                             <Accordion.Header>{SWOTFactors.risksCounter.get(1) + "-" + SWOTFactors.risksCounter.get(max)} -
                                 Risiken (Externe Faktoren)</Accordion.Header>
                             <Accordion.Body>
@@ -152,7 +152,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.risksChanged}/>
-                                {/*{this.getError("risksError")}*/}
+                                <UIErrorBanner id={"risksError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
@@ -165,9 +165,6 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         return <p>"ERROR"</p>;
 
 
-    }
-
-    changeControlFooter(): void {
     }
 
 }

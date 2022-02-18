@@ -2,20 +2,11 @@ import {Tool} from "../Tool";
 
 import "./steppable-tool.scss";
 import StepComponent, {StepComponentProps, StepDefinition} from "./StepComponent/StepComponent";
-import React, {
-    Attributes,
-    ClassAttributes,
-    Component,
-    ComponentProps,
-    ReactComponentElement,
-    ReactNode,
-    RefObject
-} from "react";
-import {RouteComponentProps, StaticContext} from "react-router";
+import React, {ClassAttributes} from "react";
+import {RouteComponentProps} from "react-router";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
-import {SaveResource} from "../../Datastructures";
-import {ToolSavePage, ToolSaveProps} from "../ToolSavePage/ToolSavePage";
-import {type} from "os";
+import {ToolSaveProps} from "../ToolSavePage/ToolSavePage";
+import {withUIErrorContext} from "../../Contexts/UIErrorContext/UIErrorContext";
 
 
 abstract class SteppableTool<D extends object> extends Tool<D> {
@@ -28,8 +19,8 @@ abstract class SteppableTool<D extends object> extends Tool<D> {
 
     protected constructor(props: RouteComponentProps, context: any, toolName: string, toolIcon: IconDefinition, toolID: number) {
         super(props, context, toolName, toolIcon, toolID);
-        this.typeStepComponent = class TypeStepComponent extends StepComponent<D> {
-        };
+        this.typeStepComponent = withUIErrorContext(class TypeStepComponent extends StepComponent<D> {
+        });
     }
 
     protected addStep<E extends object>(step: StepDefinition<E>) {
