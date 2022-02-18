@@ -186,6 +186,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                             saveName={this.props.save.name}
                                             saveDescription={this.props.save.description}
                                             saveMetaChanged={this.changeSaveMeta}/>;
+
+        const anyErrors = Object.keys(this.props.uiErrorContext.errors).length > 0;
         return (
             <>
                 <Tab.Container
@@ -237,12 +239,14 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                             <div className={"stepTitle"}>{step.title}</div>
 
                                             {React.createElement(step.form, {
-                                                ...this.props, // TODO test if is better: ...(this.props as ToolSaveProps<D>)
+                                                save: this.props.save,
+                                                saveController: this.props.saveController,
+                                                isSaving: this.props.isSaving,
                                                 id: step.id,
                                                 disabled: index < this.state.progress /*|| !this.withData(step.dataHandler.isUnlocked)*/,
                                                 stepController: this.stepController,
                                                 currentSubStep: this.state.currentSubStep,
-                                                validationFailed: index === this.state.progress && Object.keys(this.props.uiErrorContext.errors).length > 0
+                                                validationFailed: index === this.state.progress && anyErrors
                                             })}
                                         </Tab.Pane>
                                     );
