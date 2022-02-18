@@ -66,8 +66,8 @@ class PCResult extends Step<PCResultValues, {}> {
      *
      */
     eval() {
-        let criterias = this.getStepComponent()?.getFormValues<PCCriteriasValues>("pc-criterias");
-        let comparisons = this.getStepComponent()?.getFormValues<PCPairComparisonValues>("pc-comparison");
+        let criterias = this.requireStepComponent().getFormValues<PCCriteriasValues>("pc-criterias");
+        let comparisons = this.requireStepComponent().getFormValues<PCPairComparisonValues>("pc-comparison");
 
         if (comparisons && criterias && criterias.criterias && comparisons.comparisons) {
             let adapter = new MatchCardComponentFieldsAdapter(criterias.criterias);
