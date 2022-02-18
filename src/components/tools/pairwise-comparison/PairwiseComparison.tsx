@@ -3,19 +3,22 @@ import {SaveResource} from "../../../general-components/Datastructures";
 import {PCCriterias, PCCriteriasValues} from "./steps/PCCriterias";
 import {PCPairComparison, PCPairComparisonValues} from "./steps/PCPairComparison";
 
-import "./pairwise-comparison.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "../swot-analysis/export/SWOTExcelExporter";
 import {PCExcelExporter} from "./export/PCExcelExporter";
+import {PCResult, PCResultValues} from "./steps/PCResult";
 
+
+import "./pairwise-comparison.scss";
 
 /**
  * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich
  */
 export interface PairwiseComparisonValues {
     "pc-criterias": PCCriteriasValues,
-    "pc-comparison": PCPairComparisonValues
+    "pc-comparison": PCPairComparisonValues,
+    "pc-result": PCResultValues
 }
 
 /**
@@ -50,6 +53,11 @@ class PairwiseComparison extends SteppableTool {
             title: "2. Paarvergleich",
             id: "pc-comparison"
         });
+        this.addStep({
+            form: <PCResult/>,
+            title: "3. Ergebnis",
+            id: "pc-result"
+        });
     }
 
     protected renderToolHome() {
@@ -72,8 +80,9 @@ class PairwiseComparison extends SteppableTool {
      * @protected
      */
     protected renderView(save: SaveResource<PairwiseComparisonValues>) {
-        this.setValues("pc-criterias", save.data["pc-criterias"])
-        this.setValues("pc-comparison", save.data["pc-comparison"])
+        this.setValues("pc-criterias", save.data["pc-criterias"]);
+        this.setValues("pc-comparison", save.data["pc-comparison"]);
+        this.setValues("pc-result", save.data["pc-result"]);
 
         return this.getStepComponent();
     }
