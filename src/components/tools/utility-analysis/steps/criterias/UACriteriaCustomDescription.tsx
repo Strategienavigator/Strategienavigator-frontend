@@ -60,7 +60,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
                     }}
                     size={"sm"}
                 >
-                    Skalar <FontAwesomeIcon icon={this.state.collapsed ? faCaretUp : faCaretDown}/>
+                    Skala <FontAwesomeIcon icon={this.state.collapsed ? faCaretUp : faCaretDown}/>
                 </Button>
 
                 <Collapse in={this.state.collapsed}>

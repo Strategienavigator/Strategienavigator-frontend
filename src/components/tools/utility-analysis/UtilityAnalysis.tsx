@@ -48,7 +48,7 @@ class UtilityAnalysis extends SteppableTool {
         });
         this.addStep({
             id: "ua-weighting",
-            title: "3. Gewichtung",
+            title: "3. Gewichtung der Kriterien",
             form: <UtilWeighting/>
         });
         this.addStep({
