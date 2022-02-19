@@ -1,17 +1,14 @@
 import React, {Component, ComponentClass, FunctionComponent, ReactNode,} from "react";
 import {Accordion, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
-import {faCaretLeft, faCaretRight, faSave} from "@fortawesome/free-solid-svg-icons/";
 import {Tool} from "../../Tool";
 import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
 import {StepProp} from "./Step/Step";
 import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeader";
-import {FooterContext} from "../../../Contexts/FooterContextComponent";
-import {DesktopButtons} from "./DesktopButtons/DesktopButtons";
+import {StepComponentButtons} from "./StepComponentButtons/StepComponentButtons";
 import ResetStepsModal from "./ResetStepsModal/ResetStepsModal";
-import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 import {ExportModal} from "../../ExportButton";
 import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
@@ -130,18 +127,9 @@ export interface StepComponentState {
     currentSubStep: number
     showResetModal: boolean
     showExportModal: boolean
-    hasCustomNextButton: boolean
-    customNextButton?: CustomNextButton
 }
 
 class StepComponent<D extends object> extends Component<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, StepComponentState> {
-
-
-    /**
-     * Definiert auf welchen Context zugegriffen werden soll
-     */
-    static contextType = FooterContext;
-    context!: React.ContextType<typeof FooterContext>
 
 
     private readonly stepController: StepController;
@@ -167,7 +155,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             currentSubStep: StepComponent.getCurrentSubStepOfStep(this.props.steps, progress, this.props.save.data),
             showExportModal: false,
             showResetModal: false,
-            hasCustomNextButton: false,
         }
     }
 
@@ -182,6 +169,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     render = () => {
+        const customNextButton = this.getCustomNextButton();
         const header = <StepComponentHeader tool={this.props.tool}
                                             saveName={this.props.save.name}
                                             saveDescription={this.props.save.description}
@@ -212,18 +200,17 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                 })}
                             </Nav>
 
-                            {(isDesktop()) && (
-                                <DesktopButtons
-                                    tool={this.props.tool}
-                                    customNextButton={this.state.customNextButton}
-                                    nextDisabled={this.isLastStep() && !this.hasNextSubStep()}
-                                    isSaving={this.props.isSaving}
-                                    onNext={this.tryNextStep}
-                                    onReset={this.showResetModal}
-                                    onSave={this.save}
-                                    onExportClick={this.showExportModal}
-                                />
-                            )}
+
+                            <StepComponentButtons
+                                isMobile={!isDesktop()}
+                                customNextButton={customNextButton}
+                                nextDisabled={this.isLastStep() && !this.hasNextSubStep()}
+                                isSaving={this.props.isSaving}
+                                onNext={this.tryNextStep}
+                                onReset={this.showResetModal}
+                                onSave={this.save}
+                                onExportClick={this.showExportModal}
+                            />
 
                             {this.shouldMatrixRender() && (
                                 this.getMatrix()
@@ -311,18 +298,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         this.clearErrors();
         this.setState({showResetModal: false, currentStep: 0, currentSubStep: 0, progress: 0});
         this.resetAllSteps();
-    }
-
-    componentDidMount = async () => {
-        if ((this.props.steps !== undefined && this.props.steps.length > 1)) {
-            this.restoreFooter();
-        } else {
-            this.context.setItem(2, {home: true});
-        }
-    }
-
-    componentWillUnmount() {
-        this.context.clearItems();
     }
 
     private getCurrentStep = () => {
@@ -462,7 +437,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
      * Next step is unlocked if possible.
      */
     private nextStep = () => {
-        this.restoreFooter();
 
 
         const currentStep = this.getCurrentStep();
@@ -483,9 +457,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             if (currentValid) {
                 if (this.unlockNextStep()) {
                     this.changeStep(newStepIndex, () => {
-                        if (this.isLastStep()) {
-                            this.restoreFooter();
-                        }
                         this.save();
                     });
 
@@ -516,9 +487,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private save = async () => {
-        // TODO move buttons in render method
-        this.context.disableItem(3, true);
-
 
         const addErrorMessage = () => {
             Messages.add(
@@ -539,67 +507,14 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         } else {
             addErrorMessage();
         }
-        // TODO move buttons in render method
-        this.context.disableItem(3, false);
     }
 
-    private addCustomNextButton = (text: string, callback: () => any) => {
-        let button = {text: text, callback: callback, icon: faCaretRight};
-
-        this.setState({
-            hasCustomNextButton: true,
-            customNextButton: button
-        });
-
-        this.context.setItem(3, {button: button});
-    }
-
-    private addCustomPreviousButton = (text: string, callback: () => any) => {
-        this.context.setItem(1, {button: {text: text, callback: callback, icon: faCaretLeft}});
-    }
-
-    private restoreFooter = () => {
-        this.context.setItem(1, {
-            reset: () => {
-                this.setState({
-                    showResetModal: true
-                })
-            }
-        });
-
-
-        this.context.setItem(2, {
-            button: {
-                text: "Exportieren",
-                icon: faFileExport,
-                callback: () => {
-                    this.setState({
-                        showExportModal: true
-                    });
-                }
-            }
-        });
-
-        this.context.setItem(3, {
-            button: {
-                callback: async () => {
-                    await this.save();
-                },
-                text: "Speichern",
-                icon: faSave
-            }
-        });
-
-        this.context.setItem(4, {
-            nextStep: this.tryNextStep.bind(this)
-        });
-        this.context.disableItem(4, this.isLastStep());
-
-        this.setState({
-            hasCustomNextButton: false,
-            customNextButton: undefined
-        });
-    }
+    private getCustomNextButton = (step?: number) => {
+        let localStep = step;
+        if (localStep === undefined)
+            localStep = this.state.currentStep;
+        return this.props.steps[localStep].subStep?.customNextButton;
+    };
 
     private onStepSelect = (title: string | null) => {
         if (title !== null) {
@@ -628,6 +543,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
                     newSubStep = StepComponent.getCurrentSubStepOfStep(this.props.steps, step, this.props.save.data);
                 }
+
+
                 let newProgress = this.state.progress;
                 if (this.state.progress < step) {
                     newProgress = step;
