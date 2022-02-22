@@ -140,7 +140,7 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
             cell.c += 1;
 
             for (let e = 0; e < headers.length; e++) {
-                if (comparison.comparisons[i].header === headers[e]) {
+                if (comparison.comparisons[i].header === headers[e].header) {
                     ws[this.encodeCell(cell)] = {
                         v: "X", t: "s", s: Object.assign(
                             {

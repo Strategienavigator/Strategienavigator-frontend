@@ -42,7 +42,7 @@ export class Home extends Component<any, HomeState> {
                     name: "Nutzwertanalyse",
                     icon: faBorderAll,
                     link: "/utility-analysis",
-                    maintenance: true
+                    maintenance: false
                 },
                 {
                     name: "ABC Analyse",

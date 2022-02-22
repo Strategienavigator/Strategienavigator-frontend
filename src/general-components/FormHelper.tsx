@@ -1,19 +1,17 @@
-import React from "react";
-import {FormEvent, ReactNode} from "react";
-import {CardComponentFields} from "./CardComponent/CardComponent";
-
-
 /**
  * Wandelt eine RadioNodeList um in ein Array aus strings
  *
  * @param {RadioNodeList} element die RadioNodeList
  * @returns {Array<string>} Das Array
  */
-const getRadioNodeList = (element: RadioNodeList): Array<string> => {
-    let values = Array<string>();
+import React, {FormEvent, ReactNode} from "react";
+import {CardComponentFields} from "./CardComponent/CardComponent";
+
+const getRadioNodeList = <D extends unknown>(element: RadioNodeList): Array<D> => {
+    let values = Array<D>();
     element.forEach((value) => {
         let input = value as HTMLInputElement;
-        values.push(input.value);
+        values.push(input.value as D);
     });
     return values;
 }
@@ -26,60 +24,17 @@ const getRadioNodeList = (element: RadioNodeList): Array<string> => {
  * @param roots
  * @param func
  */
-function forEachChildrenRecursively(roots: ReactNode[], func: (node: ReactNode) => void){
-    React.Children.forEach(roots,(value => {
+function forEachChildrenRecursively(roots: ReactNode[], func: (node: ReactNode) => void) {
+    React.Children.forEach(roots, (value => {
 
-        if(React.isValidElement(value)){
-            if("children" in value.props){
+        if (React.isValidElement(value)) {
+            if ("children" in value.props) {
                 forEachChildrenRecursively(value.props.children, func);
             }
         }
 
 
     }));
-}
-
-/**
- * Extrahiert CardComponentFields aus einem HTMLFormElement.
- *
- * @param {React.FormEvent<HTMLFormElement>} form HTML-Formular
- * @param {string} name Der Name des input-feldes
- * @returns {CardComponentFields | {name: string, id: string, desc: string}[] | any[]} Array aus CardComponentField, sprich CardComponentFields
- */
-const extractCardComponentField = (form: FormEvent<HTMLFormElement>, name: string) => {
-    let target: HTMLFormElement = form.currentTarget;
-    let elements = target.elements;
-
-    let names: RadioNodeList | Element | null = elements.namedItem(name + "[][name]");
-    let descs: RadioNodeList | Element | null = elements.namedItem(name + "[][desc]");
-    let ids: RadioNodeList | Element | null = elements.namedItem(name + "[][id]")
-
-    if (names !== null && descs !== null) {
-        if (names.constructor.name !== "RadioNodeList") {
-            if (names as HTMLInputElement !== null) {
-                return [{
-                    desc: (descs as HTMLTextAreaElement).value,
-                    name: (names as HTMLInputElement).value,
-                    id: (ids as HTMLInputElement).value
-                }];
-            }
-        } else {
-            let allNames = getRadioNodeList(names as RadioNodeList);
-            let allDescs = getRadioNodeList(descs as RadioNodeList);
-            let allIDs = getRadioNodeList(ids as RadioNodeList);
-
-            let cardFields: CardComponentFields = [];
-            for (let i = 0; i < allNames.length; i++) {
-                cardFields.push({
-                    desc: allDescs[i],
-                    name: allNames[i],
-                    id: allIDs[i]
-                });
-            }
-            return cardFields;
-        }
-    }
-    return [];
 }
 
 
@@ -131,7 +86,6 @@ const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardCo
 }
 
 export {
-    extractCardComponentField,
     extractFromForm,
     forEachChildrenRecursively
 }

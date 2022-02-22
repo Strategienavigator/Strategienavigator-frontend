@@ -1,6 +1,6 @@
 import {Component} from "react";
 import {CompareAdapter} from "./Adapter/CompareAdapter";
-import {CompareHeader} from "./Header/CompareHeader";
+import {CompareHeaderAdapter} from "./Header/CompareHeaderAdapter";
 
 import "./compare-component.scss";
 
@@ -17,7 +17,7 @@ export interface CompareComponentProps {
     /**
      * Die CompareHeader instanz, welche genutzt wird, um die Überschriften zu rendern und anzugeben wie viele auswahlmöglichkeiten es pro Kombination gibt
      */
-    header: CompareHeader
+    header: CompareHeaderAdapter
     /**
      * Gibt an ob die Überschriften, welche durch den header beschrieben wird, angezeigt werden sollen
      */
@@ -37,7 +37,7 @@ export interface CompareComponentProps {
 
     /**
      * Wird aufgerufen, wenn sich irgendein wert der values ändert
-     * @param values ein neues array mit den aktuellen werten
+     * @param values {CompareValue[]} ein neues array mit den aktuellen werten
      */
     onChanged: (values: CompareValue[]) => void
 }
@@ -64,6 +64,7 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
 
     render = () => {
         let header = this.props.header;
+
 
         return (
             <div>
@@ -118,7 +119,7 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
         const fields = this.props.values.slice();
         fields[index] = {
             value: String(headerIndex),
-            header: this.props.header.getHeader(headerIndex)
+            header: this.props.header.getHeader(headerIndex).header
         };
         this.props.onChanged(fields);
     }
@@ -131,8 +132,8 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                     <div className={"comparisons"}>
                         {this.props.header.getHeaders().map((value) => {
                             return (
-                                <div key={"header-" + value} className={"comparison"}>
-                                    {value}
+                                <div key={"header-" + value.header} className={"comparison"}>
+                                    {value.header}
                                 </div>
                             );
                         })}

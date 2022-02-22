@@ -9,6 +9,7 @@ import {
 } from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
 import {PCPairComparison} from "./PCPairComparison";
+import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
 
 
 /**
@@ -16,7 +17,7 @@ import {PCPairComparison} from "./PCPairComparison";
  */
 export interface PCPairComparisonValues {
     comparisons: CompareValue[],
-    headers: string[]
+    headers: CompareHeader[]
 }
 
 /**
