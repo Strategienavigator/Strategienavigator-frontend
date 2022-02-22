@@ -103,6 +103,10 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         this.loadPage(0);
     }
 
+    componentWillUnmount() {
+        this.context.clearItems();
+    }
+
     getTutorialCanvas = () => {
         return (
             <Offcanvas placement={"start"} show={this.state.showTutorial}>
