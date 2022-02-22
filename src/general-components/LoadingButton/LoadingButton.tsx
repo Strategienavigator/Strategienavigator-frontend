@@ -24,7 +24,7 @@ export class LoadingButton extends Component<LoadingButtonProps, {}> {
     render() {
         return (
             <Button
-                {...(this.props as ButtonProps)}
+                {...(this.props)}
                 disabled={this.props.isSaving}
             >
 

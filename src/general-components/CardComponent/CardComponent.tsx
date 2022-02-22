@@ -73,8 +73,6 @@ class Card extends Component<CardProps, CardState> {
             descChanged: value.length > 0
         });
         this.props.onChange(this.props.value, value);
-
-
     }
 
     onDelete = () => {
@@ -188,6 +186,11 @@ class CardComponent extends PureComponent<CardComponentProps, {}> {
         let newValues = this.props.values.slice();
         if (newValues.length > Math.max(this.props.min, index)) {
             newValues.splice(index, 1);
+            for (let i = index; i < newValues.length; i++) {
+                const current = {...newValues[i]};
+                current.id = this.props.counter?.get(i+1)?.toString() ?? "";
+                newValues[i] = current;
+            }
             this.props.onChanged(newValues);
         }
     }
@@ -195,7 +198,7 @@ class CardComponent extends PureComponent<CardComponentProps, {}> {
     private addCard = () => {
         let newValues = this.props.values.slice();
         if (newValues.length < this.props.max) {
-            newValues.push({name: "", desc: "", id: this.props.counter?.get(this.props.values.length) ?? null})
+            newValues.push({name: "", desc: "", id: this.props.counter?.get(this.props.values.length + 1) ?? null})
             this.props.onChanged(newValues);
         }
     }
