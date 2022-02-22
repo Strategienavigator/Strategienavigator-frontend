@@ -1,4 +1,8 @@
-import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {
+    shallowCompareStepProps,
+    Step,
+    StepProp
+} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {CompareComponent, CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {
     MatchCardComponentFieldsAdapter
@@ -22,6 +26,18 @@ class PCPairComparisonComponent extends Step<PairwiseComparisonValues, {}> {
 
     public constructor(props: Readonly<StepProp<PairwiseComparisonValues>> | StepProp<PairwiseComparisonValues>, context: any) {
         super(props, context);
+    }
+
+
+    shouldComponentUpdate(nextProps: Readonly<StepProp<PairwiseComparisonValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
+        let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
+
+        if (!shouldUpdate) {
+            shouldUpdate =
+                this.props.save.data["pc-criterias"] !== nextProps.save.data["pc-criterias"] ||
+                this.props.save.data["pc-comparison"] !== nextProps.save.data["pc-comparison"];
+        }
+        return shouldUpdate;
     }
 
     /**

@@ -1,4 +1,8 @@
-import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {
+    shallowCompareStepProps,
+    Step,
+    StepProp
+} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
 import {Table} from "react-bootstrap";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
@@ -21,6 +25,16 @@ class PCResultComponent extends Step<PairwiseComparisonValues, {}> {
 
     public constructor(props: Readonly<StepProp<PairwiseComparisonValues>> | StepProp<PairwiseComparisonValues>, context: any) {
         super(props, context);
+    }
+
+
+    shouldComponentUpdate(nextProps: Readonly<StepProp<PairwiseComparisonValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
+        let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
+        if (!shouldUpdate) {
+            shouldUpdate = this.props.save.data["pc-result"] !== nextProps.save.data["pc-result"];
+        }
+
+        return shouldUpdate;
     }
 
     build(): JSX.Element {

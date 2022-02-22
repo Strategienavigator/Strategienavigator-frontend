@@ -4,13 +4,12 @@ import {PCPairComparisonValues} from "./steps/PCPairComparison/PCPairComparisonC
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {RouteComponentProps} from "react-router";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
-import {PCExcelExporter} from "./export/PCExcelExporter";
 import {PCResultValues} from "./steps/PCResult/PCResultComponent";
-
 import "./pairwise-comparison.scss";
 import {PCCriterias} from "./steps/PCCriterias/PCCriterias";
 import {PCPairComparison} from "./steps/PCPairComparison/PCPairComparison";
 import {PCResult} from "./steps/PCResult/PCResult";
+import {PCExcelExporter} from "./export/PCExcelExporter";
 
 /**
  * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich
