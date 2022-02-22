@@ -16,12 +16,17 @@ export interface SaveCardProps {
 
 export class SaveCard extends Component<SaveCardProps, {}> {
 
-
     render() {
         if(this.props.save !== undefined && this.props.toolLink !== undefined){
             // EARLY RETURN
+            let isDeleting = this.props.save.owner_deleting;
+
+            let classes = ["save"];
+            if (isDeleting)
+                classes.push("disabled");
+
             return (
-                <div key={this.props.save.id} className={"save"}>
+                <div key={this.props.save.id} className={classes.join(" ")}>
                     <Card as={Link} to={this.props.toolLink + "/" + this.props.save.id}
                           className={"mt-2 mb-2 save-card"}>
                         <Card.Body className={"save-body"}>
@@ -30,16 +35,19 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                 className={"save-desc text-muted mb-1"}>{this.props.save.description ? this.props.save.description : "Keine Beschreibung vorhanden"}</Card.Text>
                         </Card.Body>
                     </Card>
-                    {!!this.props.onTrash && (
+                    {(!!this.props.onTrash && !isDeleting) && (
                         <Button type={"button"} variant={"danger"} className={"deleteSave"} onClick={this.props.onTrash}>
                             <FAE icon={faTrash}/>
                         </Button>
                     )}
-
+                    {(isDeleting) && (
+                        <span className={"deleting"}>
+                            Inhaber löscht aktuell sein Konto!
+                        </span>
+                    )}
                 </div>
             );
         }
-
 
         return(
             <div className={"save"}>

@@ -36,7 +36,7 @@ export class Home extends Component<any, HomeState> {
                     name: "Paarweiser Vergleich",
                     icon: faSortAmountDownAlt,
                     link: "/pairwise-comparison",
-                    maintenance: true
+                    maintenance: false
                 },
                 {
                     name: "Nutzwertanalyse",

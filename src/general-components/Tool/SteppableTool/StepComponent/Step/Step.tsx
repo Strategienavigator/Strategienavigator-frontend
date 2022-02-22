@@ -21,6 +21,7 @@ abstract class Step<V extends object, S> extends FormComponent<StepProp<V>, S> {
     }
 }
 
+
 const shallowCompareStepProps = <T extends object>(oldProps: StepProp<T>, newProps: StepProp<T>, toIgnore: (keyof StepProp<T>)[] = []): boolean => {
     return compareWithoutFunctions(oldProps, newProps, ["save", ...toIgnore.map(k => k.toString())]);
 }

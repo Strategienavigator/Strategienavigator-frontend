@@ -1,0 +1,14 @@
+
+@import "~bootstrap/scss/bootstrap-utilities";
+
+.resultTable {
+  table-layout: auto;
+  small {
+    color: $gray-700;
+  }
+}
+
+.resultTable .fixed {
+  max-width: 100px;
+  width: 100px;
+}

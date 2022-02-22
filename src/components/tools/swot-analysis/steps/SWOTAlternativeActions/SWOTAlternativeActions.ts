@@ -39,7 +39,6 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
     dataHandler: StepDataHandler<SWOTAnalysisValues>;
     subStep: SubStepDefinition<SWOTAnalysisValues>;
     customNextButton: CustomNextButton;
-    hasCustomNextButton: boolean;
 
 
     constructor() {
@@ -51,7 +50,6 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
 
         // sub step
         this.subStep = this;
-        this.hasCustomNextButton = true;
         this.customNextButton = {text: "Nächster"};
     }
 

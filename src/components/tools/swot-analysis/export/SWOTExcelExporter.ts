@@ -12,9 +12,6 @@ import {CardComponentFields} from "../../../../general-components/CardComponent/
 
 class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
 
-    private encodeCell = XLSX.utils.encode_cell;
-    private encodeRange = XLSX.utils.encode_range;
-
     protected buildExcel(workbook: XLSX.WorkBook, data: SaveResource<SWOTAnalysisValues>): boolean {
         let factors = data.data["swot-factors"]!;
         let alternatives = data.data["alternative-actions"]!;
@@ -118,11 +115,7 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
 
         for (const classification of classifications.classifications) {
             ws[this.encodeCell(cell)] = {
-                v: "Klassifikation | " + classification.name, t: "s", s: this.getHeaderStyle() && {
-                    font: {
-                        sz: 13
-                    }
-                }
+                v: "Klassifikation | " + classification.name, t: "s", s: this.getHeaderStyle()
             };
             cell.r += 1;
 

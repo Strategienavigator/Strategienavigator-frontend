@@ -13,6 +13,7 @@ import {
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
+import {compareWithoutFunctions} from "../../../../../general-components/ComponentUtils";
 
 
 export interface AlternateAction {

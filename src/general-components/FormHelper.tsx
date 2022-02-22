@@ -3,6 +3,12 @@ import {FormEvent, ReactNode} from "react";
 import {CardComponentFields} from "./CardComponent/CardComponent";
 
 
+/**
+ * Wandelt eine RadioNodeList um in ein Array aus strings
+ *
+ * @param {RadioNodeList} element die RadioNodeList
+ * @returns {Array<string>} Das Array
+ */
 const getRadioNodeList = (element: RadioNodeList): Array<string> => {
     let values = Array<string>();
     element.forEach((value) => {
@@ -13,6 +19,13 @@ const getRadioNodeList = (element: RadioNodeList): Array<string> => {
 }
 
 
+/**
+ * Führt den callback für alle ReactNodes und ihre kinder aus.
+ *
+ *
+ * @param roots
+ * @param func
+ */
 function forEachChildrenRecursively(roots: ReactNode[], func: (node: ReactNode) => void){
     React.Children.forEach(roots,(value => {
 
@@ -26,6 +39,13 @@ function forEachChildrenRecursively(roots: ReactNode[], func: (node: ReactNode) 
     }));
 }
 
+/**
+ * Extrahiert CardComponentFields aus einem HTMLFormElement.
+ *
+ * @param {React.FormEvent<HTMLFormElement>} form HTML-Formular
+ * @param {string} name Der Name des input-feldes
+ * @returns {CardComponentFields | {name: string, id: string, desc: string}[] | any[]} Array aus CardComponentField, sprich CardComponentFields
+ */
 const extractCardComponentField = (form: FormEvent<HTMLFormElement>, name: string) => {
     let target: HTMLFormElement = form.currentTarget;
     let elements = target.elements;
@@ -62,7 +82,15 @@ const extractCardComponentField = (form: FormEvent<HTMLFormElement>, name: strin
     return [];
 }
 
-const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardComponentFields | Array<string> | string | boolean | null => {
+
+/**
+ * Methode zum Extrahieren von Werten aus verschiedenen HTMLFormElement
+ *
+ * @param {React.FormEvent<HTMLFormElement>} form
+ * @param {string} name
+ * @returns {CardComponentFields | Array<string> | string | boolean | null}
+ */
+const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardComponentFields | Array<string> | string | boolean | RadioNodeList | null => {
     let target: HTMLFormElement = form.currentTarget;
     let elements = target.elements;
     let element: RadioNodeList | Element | null = elements.namedItem(name);
@@ -73,7 +101,7 @@ const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardCo
 
      */
     if (element?.constructor.name === "RadioNodeList") {
-        return getRadioNodeList(element as RadioNodeList);
+        return element as RadioNodeList;
     }
 
     let input = element as HTMLInputElement;

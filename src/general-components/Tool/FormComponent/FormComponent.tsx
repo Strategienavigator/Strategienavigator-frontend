@@ -4,7 +4,13 @@ import {randomBytes} from "crypto";
 
 
 export interface FormComponentProps {
+    /**
+     * Die ID des Formulares. Muss einzigartig sein!
+     */
     id?: string
+    /**
+     * Bestimmt ob das Formular deaktiviert sein soll oder nicht
+     */
     disabled: boolean
 }
 
@@ -28,6 +34,7 @@ export abstract class FormComponent<P extends FormComponentProps, S> extends Com
             </Form>
         );
     }
+
 
 
     protected abstract build():JSX.Element;
