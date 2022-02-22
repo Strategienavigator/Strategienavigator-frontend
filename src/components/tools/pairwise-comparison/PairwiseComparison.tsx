@@ -1,15 +1,15 @@
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
-import {PCCriteriasValues} from "./steps/PCCriterias/PCCriteriasComponent";
-import {PCPairComparisonValues} from "./steps/PCPairComparison/PCPairComparisonComponent";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {RouteComponentProps} from "react-router";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
-import {PCResultValues} from "./steps/PCResult/PCResultComponent";
 import "./pairwise-comparison.scss";
+import {PCPairComparisonValues} from "./steps/PCPairComparison/PCPairComparisonComponent";
+import {PCResultValues} from "./steps/PCResult/PCResultComponent";
 import {PCCriterias} from "./steps/PCCriterias/PCCriterias";
 import {PCPairComparison} from "./steps/PCPairComparison/PCPairComparison";
 import {PCResult} from "./steps/PCResult/PCResult";
 import {PCExcelExporter} from "./export/PCExcelExporter";
+import {PCCriteriasValues} from "./steps/PCCriterias/PCCriteriasComponent";
 
 /**
  * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich

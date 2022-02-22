@@ -10,7 +10,7 @@ import {PairwiseComparisonValues} from "../../PairwiseComparison";
 /**
  * Die Werte des ersten Schrittes des Paarweisen-Vergleiches
  */
-export interface PCCriteriasValues {
+interface PCCriteriasValues {
     criterias: CardComponentFields
 }
 
@@ -71,4 +71,8 @@ export class PCCriteriasComponent extends Step<PairwiseComparisonValues, PCCrite
         });
     }
 
+}
+
+export type {
+    PCCriteriasValues
 }
