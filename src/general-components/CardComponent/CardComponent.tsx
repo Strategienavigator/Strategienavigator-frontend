@@ -188,7 +188,7 @@ class CardComponent extends PureComponent<CardComponentProps, {}> {
             newValues.splice(index, 1);
             for (let i = index; i < newValues.length; i++) {
                 const current = {...newValues[i]};
-                current.id = this.props.counter?.get(i+1)?.toString() ?? "";
+                current.id = this.props.counter?.get(i + 1)?.toString() ?? null;
                 newValues[i] = current;
             }
             this.props.onChanged(newValues);

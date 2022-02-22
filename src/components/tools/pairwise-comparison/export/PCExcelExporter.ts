@@ -2,10 +2,12 @@ import {ExcelExporter} from "../../../../general-components/Export/ExcelExporter
 import {PairwiseComparisonValues} from "../PairwiseComparison";
 import {SaveResource} from "../../../../general-components/Datastructures";
 import {Range, WorkBook, WorkSheet} from "xlsx-js-style";
-import {PCPairComparisonValues} from "../steps/PCPairComparison";
+import {PCPairComparisonValues} from "../steps/PCPairComparison/PCPairComparisonComponent";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
-import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
-import {PCResultValues} from "../steps/PCResult";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {PCResultValues} from "../steps/PCResult/PCResultComponent";
 
 
 /**
@@ -27,15 +29,16 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
         let comparison = data.data["pc-comparison"];
         let result = data.data["pc-result"];
 
-        const isFilled = (o: object): boolean => {
-            return o && Object.keys(o).length > 0;
+        const isFilled = <D extends object>(o?: D): o is D => {
+            return o !== undefined && Object.keys(o).length > 0;
         }
 
-        if (isFilled(criterias))
+        if (isFilled(criterias)) {
             this.addSheet("Kriterien", this.getCriteriaSheet(criterias.criterias));
+            if (isFilled(comparison))
+                this.addSheet("Vergleich", this.getComparisonSheet(criterias.criterias, comparison));
+        }
 
-        if (isFilled(comparison))
-            this.addSheet("Vergleich", this.getComparisonSheet(criterias.criterias, comparison));
 
         if (isFilled(result))
             this.addSheet("Ergebnis", this.getResultSheet(result));
