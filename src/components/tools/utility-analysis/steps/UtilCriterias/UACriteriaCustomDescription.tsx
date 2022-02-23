@@ -54,7 +54,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
 
                             return (
                                 <Row key={"row-" + index}>
-                                    <Col style={{textAlign: "center"}} xs={2}>{v}</Col>
+                                    <Col style={{textAlign: "center"}} xs={2}>{v.header}</Col>
                                     <Col>
                                         {/*TODO remove bind*/}
 
@@ -62,6 +62,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
                                             type={"text"}
                                             disabled={this.props.disabled}
                                             value={v.desc}
+                                            placeholder={v.header}
                                             onChange={this.descriptionChanged.bind(this, index)}
                                         />
                                     </Col>

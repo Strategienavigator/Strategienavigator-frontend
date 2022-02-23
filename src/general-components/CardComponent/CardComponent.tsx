@@ -47,7 +47,7 @@ export function isCardComponentValid(cardComponentFields?: CardComponentFields) 
 }
 
 
-class Card<D = any> extends Component<CardProps<D>, CardState> {
+class Card<D = never> extends Component<CardProps<D>, CardState> {
 
     constructor(props: CardProps | Readonly<CardProps>) {
         super(props);
@@ -78,7 +78,7 @@ class Card<D = any> extends Component<CardProps<D>, CardState> {
     }
 
     customDescChanged = (value: D) => {
-        this.props.onChange(this.props.index, this.props.name, this.props.desc, value);
+        this.props.onChange(this.props.index, this.props.value, this.props.desc, value);
     }
 
     onDelete = () => {
