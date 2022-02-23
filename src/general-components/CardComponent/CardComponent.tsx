@@ -8,7 +8,7 @@ import {compareWithoutFunctions} from "../ComponentUtils";
 import FAE from "../Icons/FAE";
 import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/CustomDescriptionComponent";
 
-export interface CardProps<D = any> {
+export interface CardProps<D = never> {
     id: string | null
     /**
      * name des input feldes
@@ -49,7 +49,7 @@ export function isCardComponentValid(cardComponentFields?: CardComponentFields) 
 
 class Card<D = never> extends Component<CardProps<D>, CardState> {
 
-    constructor(props: CardProps | Readonly<CardProps>) {
+    constructor(props: CardProps<D> | Readonly<CardProps<D>>) {
         super(props);
 
         this.state = {
@@ -59,7 +59,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
     }
 
 
-    shouldComponentUpdate(nextProps: Readonly<CardProps>, nextState: Readonly<CardState>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: Readonly<CardProps<D>>, nextState: Readonly<CardState>, nextContext: any): boolean {
         return !(compareWithoutFunctions(this.props, nextProps) && compareWithoutFunctions(this.state, nextState));
     }
 
@@ -146,8 +146,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                             style={{maxHeight: 500}}
                             name={this.props.name + "[" + this.props.index + "][desc]"}
                             value={this.props.desc}
-                            placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}
-                        />
+                            placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}/>
 
                         <div>
                             {customDesc}

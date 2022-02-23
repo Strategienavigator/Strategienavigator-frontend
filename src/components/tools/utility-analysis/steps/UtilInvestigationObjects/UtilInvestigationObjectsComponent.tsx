@@ -1,4 +1,8 @@
-import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {
+    shallowCompareStepProps,
+    Step,
+    StepProp
+} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilInvestigationObjects} from "./UtilInvestigationObjects";
@@ -17,6 +21,13 @@ class UtilInvestigationObjectsComponent extends Step<UtilityAnalysisValues, any>
 
     public constructor(props: Readonly<StepProp<UtilityAnalysisValues>> | StepProp<UtilityAnalysisValues>, context: any) {
         super(props, context);
+    }
+
+
+    shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<any>, nextContext: any): boolean {
+        return !shallowCompareStepProps(this.props, nextProps,
+            (oldData, newData) => oldData["ua-investigation-obj"] === newData["ua-investigation-obj"]
+        );
     }
 
     build(): JSX.Element {
@@ -39,7 +50,7 @@ class UtilInvestigationObjectsComponent extends Step<UtilityAnalysisValues, any>
 
     private valuesChanged = (fields: CardComponentFields) => {
         this.props.saveController.onChanged(save => {
-            if(save.data["ua-investigation-obj"] !== undefined){
+            if (save.data["ua-investigation-obj"] !== undefined) {
                 save.data["ua-investigation-obj"].objects = fields;
             }
         });

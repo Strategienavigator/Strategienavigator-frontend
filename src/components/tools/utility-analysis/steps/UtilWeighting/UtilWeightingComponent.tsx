@@ -1,4 +1,8 @@
-import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {
+    shallowCompareStepProps,
+    Step,
+    StepProp
+} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {CompareComponent, CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {
     MatchCardComponentFieldsAdapter
@@ -20,6 +24,15 @@ class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
 
     public constructor(props: Readonly<StepProp<UtilityAnalysisValues>> | StepProp<UtilityAnalysisValues>, context: any) {
         super(props, context);
+    }
+
+
+    shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
+        return !shallowCompareStepProps(this.props, nextProps,
+            (oldData, newData) =>
+                oldData["ua-weighting"] === newData["ua-weighting"] &&
+                oldData["ua-criterias"] === newData["ua-criterias"]
+        );
     }
 
     build(): JSX.Element {

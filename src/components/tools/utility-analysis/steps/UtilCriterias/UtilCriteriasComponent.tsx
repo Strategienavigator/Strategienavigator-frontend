@@ -1,6 +1,10 @@
 import {FormComponentProps} from "../../../../../general-components/Tool/FormComponent/FormComponent";
 import React from "react";
-import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
+import {
+    shallowCompareStepProps,
+    Step,
+    StepProp
+} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescription, UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
@@ -21,9 +25,18 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
         super(props);
     }
 
+
+    shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
+        let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
+        if (!shouldUpdate) {
+            shouldUpdate = this.props.save.data["ua-criterias"] !== nextProps.save.data["ua-criterias"];
+        }
+        return shouldUpdate;
+    }
+
     build(): JSX.Element {
         const criterias = this.props.save.data["ua-criterias"]?.criterias;
-        if(criterias !== undefined){
+        if (criterias !== undefined) {
             return (
                 <CardComponent<UACriteriaCustomDescriptionValues>
                     customDescription={UACriteriaCustomDescription}
@@ -42,7 +55,7 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
 
     valuesChanged = (values: CardComponentFields<UACriteriaCustomDescriptionValues>) => {
         this.props.saveController.onChanged(save => {
-            if(save.data["ua-criterias"] !== undefined){
+            if (save.data["ua-criterias"] !== undefined) {
                 save.data["ua-criterias"].criterias = values;
             }
         });
