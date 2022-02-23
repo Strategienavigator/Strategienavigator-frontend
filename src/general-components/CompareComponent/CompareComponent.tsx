@@ -34,7 +34,10 @@ export interface CompareComponentProps {
      * Gibt an ob die Werte veränderbar sind oder nicht
      */
     disabled: boolean
-
+    /**
+     * Name um zwischen CompareComponents besser unterscheiden zu können
+     */
+    name?: string
     /**
      * Wird aufgerufen, wenn sich irgendein wert der values ändert
      * @param values {CompareValue[]} ein neues array mit den aktuellen werten
@@ -61,29 +64,28 @@ interface CompareComponentState {
 
 class CompareComponent extends Component<CompareComponentProps, CompareComponentState> {
 
-
     render = () => {
         let header = this.props.header;
-
+        let name = this.props.name;
 
         return (
-            <div>
+            <div className={"fullComparison"}>
                 {this.renderHeader()}
 
                 {this.props.values.map((comparison, index) => {
                     const compMeta = this.props.fields.getEntry(index);
                     return (
-                        <div key={"field-" + index} className={"singleComparison"}>
-                            <div>
-                                <input type={"text"} disabled={true} readOnly={true} value={compMeta.first}/>
+                        <div key={"field-" + name + index} className={"singleComparison"}>
+                            <div className={"first"}>
+                                {compMeta.first}
                             </div>
                             <div className={"comparisons"}>
                                 {header.getHeaders().map((item, headerIndex) => {
                                     let checked = (comparison.value !== null) ? (parseInt(comparison.value) === headerIndex) : false;
-                                    let value = (comparison.value !== null) ? ((parseInt(comparison.value) === headerIndex) ? comparison.value : headerIndex) : headerIndex;
+                                    let value = (comparison.value !== null) ? ((parseInt(comparison.value) === headerIndex) ? comparison.value : headerIndex) : "";
 
                                     return (
-                                        <div key={"field-" + index + "-" + value} className={"comparison"}>
+                                        <div key={"field-" + name + index + "-" + headerIndex} className={"comparison"}>
                                             {/*TODO onChanged event abgreifen und am namen festmachen welches geändert werden muss*/}
                                             <input
                                                 defaultChecked={checked}
@@ -91,15 +93,15 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                                                 onChange={this.onRadioChange.bind(this, index, headerIndex)}
                                                 disabled={this.props.disabled}
                                                 type={"radio"}
-                                                name={"field-" + index}
+                                                name={"field-" + name + index}
                                             />
                                         </div>
                                     );
                                 })}
                             </div>
                             {compMeta.second && (
-                                <div>
-                                    <input type={"text"} disabled={true} readOnly={true} value={compMeta.second}/>
+                                <div className={"second"}>
+                                    {compMeta.second}
                                 </div>
                             )}
                         </div>
@@ -138,7 +140,7 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                             );
                         })}
                     </div>
-                    <div/>
+                    {(this.props.fields.getEntry(0).second !== undefined) && <div />}
                 </div>
             );
         }

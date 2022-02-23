@@ -15,7 +15,7 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
     public static min = 2;
     public static max = 10;
 
-    private static readonly header = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
+    public static readonly header = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
 
 
     dataHandler: StepDataHandler<UtilityAnalysisValues>;

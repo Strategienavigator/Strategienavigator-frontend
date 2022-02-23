@@ -9,6 +9,8 @@ import {
 } from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilWeighting} from "./UtilWeighting";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
+import React from "react";
 
 
 export interface UtilWeightingValues {
@@ -21,11 +23,9 @@ export interface UtilWeightingValues {
  */
 class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
 
-
     public constructor(props: Readonly<StepProp<UtilityAnalysisValues>> | StepProp<UtilityAnalysisValues>, context: any) {
         super(props, context);
     }
-
 
     shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
         return !shallowCompareStepProps(this.props, nextProps,
@@ -43,13 +43,18 @@ class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
             const adapter = new MatchCardComponentFieldsAdapter(criterias);
 
             return (
-                <CompareComponent
-                    disabled={this.props.disabled}
-                    values={values.comparisons}
-                    showHeader={true}
-                    fields={adapter}
-                    header={UtilWeighting.header}
-                    onChanged={this.valuesChanged}/>
+                <>
+                    <CompareComponent
+                        disabled={this.props.disabled}
+                        values={values.comparisons}
+                        showHeader={true}
+                        fields={adapter}
+                        header={UtilWeighting.header}
+                        onChanged={this.valuesChanged}
+                    />
+
+                    <UIErrorBanner id={"utility-analysis.empty"}/>
+                </>
             );
         }
         return <></>;
