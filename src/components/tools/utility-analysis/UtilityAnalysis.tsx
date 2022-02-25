@@ -14,6 +14,7 @@ import {UtilInvestigationObjects} from "./steps/UtilInvestigationObjects/UtilInv
 import {UtilWeighting} from "./steps/UtilWeighting/UtilWeighting";
 import {UtilEvaluation} from "./steps/UtilEvaluation/UtilEvaluation";
 import {UtilResult} from "./steps/UtilityResult/UtilResult";
+import {UtilityAnalysisExcelExporter} from "./export/UtilityAnalysisExcelExporter";
 
 
 export interface UtilityAnalysisValues {
@@ -38,6 +39,7 @@ class UtilityAnalysis extends SteppableTool<UtilityAnalysisValues> {
         this.setMaintenance(false);
 
         this.addExporter(new JSONExporter());
+        this.addExporter(new UtilityAnalysisExcelExporter());
 
         this.addStep(new UtilInvestigationObjects());
         this.addStep(new UtilCriterias());
