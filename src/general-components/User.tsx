@@ -22,7 +22,7 @@ class User {
     }
 
     static from(data: any): User {
-        return new User(data.id, data.username, data.email, data.anonym, data.owned_saves, data.shared_saves, data.created_at);
+        return new User(data.id, data.username, data.email, data.anonymous, data.owned_saves, data.shared_saves, data.created_at);
     }
 
     update = (data: UpdateData) => {

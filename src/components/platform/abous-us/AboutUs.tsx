@@ -8,7 +8,7 @@ export class AboutUs extends Component<any, any> {
     render() {
         return (<>
             <header className="head">
-                <h2>Über Uns</h2><br/>
+                <h2>Über Uns</h2>
 
             </header>
             <p>
@@ -62,6 +62,9 @@ export class AboutUs extends Component<any, any> {
                 Repository</a></p>
             <p><a href="https://trello.com/b/3LQKqFb4/projekt-strategietools" rel="noreferrer"
                   target="_blank">Kanbanboard</a></p>
+
+            <p>Version: <span className={"text-muted"}> {process.env.REACT_APP_VERSION}</span></p>
+
         </>);
     }
 

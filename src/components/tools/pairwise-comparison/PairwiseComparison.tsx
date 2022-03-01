@@ -1,58 +1,55 @@
 import {faSortAmountDownAlt} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {PCCriterias} from "./steps/PCCriterias";
-import {PCPairComparison} from "./steps/PCPairComparison";
-
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {RouteComponentProps} from "react-router";
+import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import "./pairwise-comparison.scss";
+import {PCPairComparisonValues} from "./steps/PCPairComparison/PCPairComparisonComponent";
+import {PCResultValues} from "./steps/PCResult/PCResultComponent";
+import {PCCriterias} from "./steps/PCCriterias/PCCriterias";
+import {PCPairComparison} from "./steps/PCPairComparison/PCPairComparison";
+import {PCResult} from "./steps/PCResult/PCResult";
+import {PCExcelExporter} from "./export/PCExcelExporter";
+import {PCCriteriasValues} from "./steps/PCCriterias/PCCriteriasComponent";
+
+/**
+ * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich
+ */
+export interface PairwiseComparisonValues {
+    "pc-criterias"?: PCCriteriasValues,
+    "pc-comparison"?: PCPairComparisonValues,
+    "pc-result"?: PCResultValues
+}
+
+class PairwiseComparison extends SteppableTool<PairwiseComparisonValues> {
 
 
-class PairwiseComparison extends Tool {
+    constructor(props: RouteComponentProps, context: any) {
+        super(props, context, "Paarweiser Vergleich", faSortAmountDownAlt, 3);
 
-    constructor(props: any) {
-        super(props);
+        this.setMaintenance(false);
 
-        this.setID(3);
-        this.setToolname("Paarweiser Vergleich");
-        this.setToolIcon(faSortAmountDownAlt);
-        // Maintenance Mode
-        this.setMaintenance(true);
+        this.addExporter(new JSONExporter());
+        this.addExporter(new PCExcelExporter());
 
-        this.addStep({
-            form: <PCCriterias/>,
-            title: "1. Kritierien festlegen",
-            id: "pc-criterias"
-        });
-        this.addStep({
-            form: <PCPairComparison/>,
-            title: "2. Paarvergleich",
-            id: "pc-comparison"
-        });
+        this.addStep(new PCCriterias());
+        this.addStep(new PCPairComparison());
+        this.addStep(new PCResult());
     }
 
-    protected renderToolHome() {
-        return null;
+    protected getInitData(): PairwiseComparisonValues {
+        const data: PairwiseComparisonValues = {};
+
+        this.getStep(0).dataHandler.fillFromPreviousValues(data);
+
+        return data;
     }
 
-    protected renderShortDescription() {
-        return (
-            <>
-                Es sollten Kriterien festgelegt werden, welche anschließend Paarweise verglichen und gewichtet
-                werden.
-            </>
-        );
+    protected renderShortDescription(): React.ReactNode {
+        return undefined;
     }
 
-    protected renderTutorial() {
-        return null;
-    }
-
-    protected renderNew() {
-        return this.getStepComponent();
-    }
-
-    protected renderView(tool: SaveResource) {
-        return this.getStepComponent();
+    protected renderTutorial(): React.ReactNode {
+        return undefined;
     }
 }
 

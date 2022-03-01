@@ -3,21 +3,54 @@ import {callAPI, CallInterface} from "../API/API";
 import {Token} from "./token/Token";
 import {AuthToken} from "./token/AuthToken";
 import {RefreshToken} from "./token/RefreshToken";
-import {DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
+import {AnonymousUserResource, DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
+import {createUser} from "../API/calls/User";
 
+export type UserCallback = (user:User | null) => void;
 
 class Session {
+
+
+    static userChangedCallbacks: UserCallback[] = [];
     static currentUser: User | null = null;
 
     private static token: AuthToken = new AuthToken();
     private static refreshToken: Token = new RefreshToken();
 
+
+    private static callUserChangedCallback(user:User|null){
+        for(let cb of this.userChangedCallbacks){
+            cb(user);
+        }
+    }
+
+    static addUserChangedCallback(cb:UserCallback){
+        if(!Session.userChangedCallbacks.some((uCb)=> uCb === cb)){
+            Session.userChangedCallbacks.push(cb);
+        }
+    }
+
+    static removeUserChangedCallback(cb:UserCallback){
+        let index = Session.userChangedCallbacks.indexOf(cb);
+        if(index >= 0){
+            Session.userChangedCallbacks.slice(index,1);
+        }
+    }
+
     static isLoggedIn = (): boolean => {
         return Session.currentUser !== null;
     }
 
+    static isAnonymous = (): boolean => {
+        if (Session.currentUser !== null) {
+            return Session.currentUser.isAnonymous();
+        }
+        return false;
+    }
+
     static setCurrent = (user: User | null) => {
         Session.currentUser = user;
+        Session.callUserChangedCallback(Session.currentUser);
     }
 
     static updateTokens = (token: string, refreshToken?: string) => {
@@ -28,7 +61,7 @@ class Session {
     }
 
     static logout = async () => {
-        let call = await callAPI("oauth/token/" + Session.token.breakDown()?.id, "DELETE", undefined, Session.token.getToken() as string);
+        let call = await callAPI("oauth/token/" + Session.token.breakDown()?.id, "DELETE", undefined, true);
 
         if (call && call.success) {
             Session.setCurrent(null);
@@ -49,8 +82,7 @@ class Session {
     static checkLogin = async (): Promise<null | User> => {
         let validToken = Session.token.getValidTokenBreakdown();
         if (validToken !== null) {
-            let token = Session.token.getToken() as string;
-            let call = await callAPI<DefaultResponse<UserResource>>("api/users/" + validToken.userId, "GET", undefined, token);
+            let call = await callAPI<DefaultResponse<UserResource>>("api/users/" + validToken.userId, "GET", undefined, true);
 
             if (call) {
                 if (call.success) {
@@ -107,13 +139,17 @@ class Session {
         return null;
     }
 
-    static register = async (email: string, username: string, password: string): Promise<CallInterface<object> | null> => {
-        let formData: FormData = new FormData();
-        formData.append('email', email);
-        formData.append('username', username);
-        formData.append('password', password);
+    static loginAnonymous = async (): Promise<null | AnonymousUserResource> => {
+        let call = await callAPI('api/users/anonymous', 'POST');
+        if (call && call.success) {
+            let data = call.callData;
+            return data as AnonymousUserResource;
+        }
+        return null;
+    }
 
-        return await callAPI('api/users', 'POST', formData);
+    static register = async (email: string, username: string, password: string): Promise<CallInterface<object> | null> => {
+        return await createUser(username, email, password);
     }
 
 }

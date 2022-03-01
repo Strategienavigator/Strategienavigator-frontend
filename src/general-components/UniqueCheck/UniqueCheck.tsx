@@ -1,19 +1,19 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as React from "react";
 import {Component} from "react";
 import {Form, FormControlProps} from "react-bootstrap";
 import {Omit, ReplaceProps} from "react-bootstrap/helpers";
-import {CallInterface} from "../API/API";
+import {APIArgs, CallInterface} from "../API/API";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import {Loader} from "../Loader/Loader";
 
 import "./unique-check.scss";
 import {AvailabilityCheckResource, DefaultResponse} from "../Datastructures";
+import FAE from "../Icons/FAE";
 
 
 export interface UniqueCheckProps {
-    callback?: ((input: string) => Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>)
+    callback?: ((input: string, apiArgs?: APIArgs) => Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>)
     failMessage?: string
     successMessage?: string
     suppressErrors: boolean
@@ -52,22 +52,33 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     isLoading: true
                 });
 
-                let call = await this.props.callback?.call(this.props.callback, value);
+                try {
+                    // wrap the errorCallback in a Promise, so it can get awaited
+                    let call = await new Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>((resolve, reject) => {
+                        if (this.props.callback === undefined) {
+                            reject(new Error("callback is undefined"));
+                        }else{
+                            this.props.callback(value, {errorCallback: reject}).then(resolve).catch(reject);
+                        }
+                    });
 
-                if (call?.success) {
-                    this.setState({
-                        success: call.callData.data.available,
-                        isLoading: false,
-                        error: false
-                    });
-                } else {
-                    this.setState({
-                        success: undefined,
-                        error: true,
-                        isLoading: false
-                    });
+
+                    if (call?.success) {
+                        this.setState({
+                            success: call.callData.data.available,
+                            isLoading: false,
+                            error: false
+                        });
+                        return;
+                    }
+                } catch (reason) {
+                    console.error(reason);
                 }
-
+                this.setState({
+                    success: undefined,
+                    error: true,
+                    isLoading: false
+                });
             }, 600);
         } else {
             this.setState({
@@ -75,7 +86,6 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                 error: false
             });
         }
-
     }
 
     /**
@@ -93,17 +103,17 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
         return (<>
             {(!this.state.isLoading && this.state.error) && (
                 <div className={"feedback DANGER"}>
-                    <FontAwesomeIcon icon={faTimes}/> Die Verfügbarkeit konnte nicht überprüft werden.
+                    <FAE icon={faTimes}/> Die Verfügbarkeit konnte nicht überprüft werden.
                 </div>
             )}
             {(!this.state.isLoading && this.state.success !== undefined && !this.state.success) && (
                 <div className={"feedback DANGER"}>
-                    <FontAwesomeIcon icon={faTimes}/> {this.props.failMessage}
+                    <FAE icon={faTimes}/> {this.props.failMessage}
                 </div>
             )}
             {(!this.state.isLoading && this.state.success !== undefined && this.state.success) && (
                 <div className={"feedback SUCCESS"}>
-                    <FontAwesomeIcon icon={faCheck}/> {this.props.successMessage}
+                    <FAE icon={faCheck}/> {this.props.successMessage}
                 </div>
             )}
         </>)

@@ -9,11 +9,16 @@ import {Messages} from "../../../general-components/Messages/Messages";
 
 import "./login.scss";
 import {Link} from "react-router-dom";
+import {faSignInAlt, faUserSecret} from "@fortawesome/free-solid-svg-icons/";
+import {AnonymousModal} from "../../../general-components/ProtectedRoute";
+import FAE from "../../../general-components/Icons/FAE";
 
 
 export interface LoginState {
     failed: boolean
     isLoggingIn: boolean
+    isLoggingInAnonymously: boolean
+    showAnonymousModal: boolean
     loaded?: boolean
 }
 
@@ -24,13 +29,13 @@ export class LoginComponent extends Component<any, LoginState> {
 
         this.state = {
             isLoggingIn: false,
+            isLoggingInAnonymously: false,
+            showAnonymousModal: false,
             failed: false
         };
     }
 
     login = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
         this.setState({
             isLoggingIn: true
         });
@@ -59,10 +64,33 @@ export class LoginComponent extends Component<any, LoginState> {
         }
     }
 
+    loginAnonymously = async () => {
+        this.setState({
+            isLoggingInAnonymously: true
+        });
+
+        let anonUser = await Session.loginAnonymous();
+        if (anonUser) {
+            let password = anonUser.password
+            let username = anonUser.username;
+
+            let user = await Session.login(username, password, true);
+            if (user) {
+                Messages.add("Sie wurden anonym angemeldet!", "SUCCESS", Messages.TIMER);
+                this.props.history.push("/my-profile");
+            }
+        }
+
+        this.setState({
+            isLoggingInAnonymously: false
+        });
+    }
+
     render() {
         return (
-            <Form className={"loginContainer"} onSubmit={(e) => {
-                this.login(e)
+            <Form className={"loginContainer"} onSubmit={async (e) => {
+                e.preventDefault();
+                await this.login(e);
             }}>
                 <h2>Anmelden</h2>
 
@@ -103,7 +131,7 @@ export class LoginComponent extends Component<any, LoginState> {
                 <hr/>
 
                 <Button disabled={this.state.isLoggingIn} type={"submit"} variant={"dark"}>
-                    {(this.state.isLoggingIn) && (
+                    {(this.state.isLoggingIn) ? (
                         <Spinner
                             as="span"
                             animation="border"
@@ -111,9 +139,43 @@ export class LoginComponent extends Component<any, LoginState> {
                             role="status"
                             aria-hidden="true"
                         />
+                    ) : (
+                        <FAE icon={faSignInAlt}/>
                     )}
                     {" "}Anmelden
                 </Button>
+
+                &nbsp;
+
+                <Button disabled={this.state.isLoggingInAnonymously} onClick={() => {
+                    this.setState({
+                        showAnonymousModal: true
+                    });
+                }} type={"button"} variant={"dark"}>
+                    {(this.state.isLoggingInAnonymously) ? (
+                        <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />
+                    ) : (
+                        <FAE icon={faUserSecret}/>
+                    )}
+                    {" "}Anonym Anmelden
+                </Button>
+
+                {(
+                    this.state.showAnonymousModal
+                ) && (
+                    <AnonymousModal onShowChange={(show: boolean) => {
+                        this.setState({
+                            showAnonymousModal: show
+                        });
+                    }} onAgreement={this.loginAnonymously} onDisagreement={async () => {
+                    }}/>
+                )}
             </Form>
         );
     }

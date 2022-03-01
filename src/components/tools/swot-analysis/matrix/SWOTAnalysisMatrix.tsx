@@ -6,10 +6,10 @@ import {SWOTAnalysisValues} from "../SWOTAnalysis";
 import { RomanNumeralsCounter } from "../../../../general-components/Counter/RomanNumeralsCounter";
 import { UpperABCCounter } from "../../../../general-components/Counter/UpperABCCounter";
 import { LowerABCCounter } from "../../../../general-components/Counter/LowerABCCounter";
-import {AlternateAction} from "../steps/SWOTAlternativeActions";
+import {AlternateAction} from "../steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
 
 
-class SWOTAnalysisMatrix extends MatrixComponent<any> {
+class SWOTAnalysisMatrix extends MatrixComponent<SWOTAnalysisValues, {}> {
 
     getAction(actions: any, first: string, second: any): AlternateAction | null {
         for (const action of actions) {

@@ -1,20 +1,18 @@
 import React, {Component, ReactNode} from "react";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faPlusSquare} from "@fortawesome/free-solid-svg-icons";
 import {NavLink} from "react-router-dom";
 import {RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {faCaretRight, faHome, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
 import "./control-footer.scss";
+import {isDesktop} from "../Desktop";
+import {FooterContext} from "../Contexts/FooterContextComponent";
+import FAE from "../Icons/FAE";
 
 
 export interface ControlFooterProps {
     places: number
-}
-
-export interface ControlFooterState {
-    items: Map<number, ControlFooterItemType>
 }
 
 interface ControlFooterItem {
@@ -22,8 +20,9 @@ interface ControlFooterItem {
 }
 
 export interface NextStepItem extends ControlFooterItem {
-    nextStep: string
+    nextStep: () => void
 }
+
 
 export interface SaveStepsItem extends ControlFooterItem {
     saveSteps: string
@@ -75,47 +74,16 @@ export type ControlFooterItemType =
     | HomeItem
     | ButtonItem;
 
-export const setControlFooterItem = (place: number, item: ControlFooterItemType) => {
-    ControlFooterComponent._instance?.setItem(place, item);
-}
+export class ControlFooterComponent extends Component<ControlFooterProps & RouteComponentProps, {}> {
 
-export const disableControlFooterItem = (place: number, disable: boolean) => {
-    ControlFooterComponent._instance?.disableItem(place, disable);
-}
-
-export const clearControlFooter = () => {
-    ControlFooterComponent._instance?.clear();
-}
-
-export class ControlFooterComponent extends Component<ControlFooterProps & RouteComponentProps, ControlFooterState> {
-    public static _instance: undefined | ControlFooterComponent = undefined;
-    private static oldItems: Map<number, ControlFooterItemType> | undefined;
-
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = FooterContext;
+    context!: React.ContextType<typeof FooterContext>
     constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
-
-        this.state = {
-            items: new Map<number, ControlFooterItemType>()
-        }
-
-        ControlFooterComponent._instance = this;
-    }
-
-    componentDidMount() {
-        let oldMap = this.state.items;
-
-        if (ControlFooterComponent.oldItems) {
-            oldMap = ControlFooterComponent.oldItems;
-        } else {
-            for (let i = 1; i <= this.props.places; i++) {
-                oldMap.set(i, null);
-            }
-            ControlFooterComponent.oldItems = oldMap;
-        }
-        this.setState({
-            items: oldMap
-        });
-    }
+     }
 
     render() {
         let places = Array<number>();
@@ -123,12 +91,15 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             places.push(i);
         }
 
+        let classes = ["controlFooter", "nav"];
+        if (!isDesktop()) classes.push("show");
+
         return (
-            <div className={"controlFooter nav"}>
+            <div className={classes.join(" ")}>
                 {places.map(value => {
                     return (
                         <div key={value} className={"item"}>
-                            {this.getItem(this.state.items.get(value))}
+                            {this.getItem(this.context.items.get(value))}
                         </div>
                     );
                 })}
@@ -136,62 +107,20 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
         );
     }
 
-    public setItem = (place: number, item: ControlFooterItemType) => {
-        this.setState(state => {
-            const items = state.items.set(place, item);
-
-            return {
-                items: items
-            }
-        });
-    }
-
-    public disableItem = (place: number, disabled: boolean) => {
-        if (this.state.items.has(place)) {
-            this.setState(state => {
-                const items = state.items;
-                const item = items.get(place);
-                if (item) {
-                    item.disabled = disabled;
-                }
-
-                return {
-                    items: items
-                }
-            });
-        }
-    }
-
-    public clear = () => {
-        this.setState({
-            items: new Map<number, ControlFooterItemType>()
-        });
-    }
-
-    /**
-     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
-     * This is considered pretty hacky, but using history.push from react-router, this could be considered a considerable solution
-     */
-    componentWillUnmount() {
-        this.setState = (() => {
-            return;
-        });
-    }
-
     private getItem = (item: ControlFooterItemType | undefined): null | ReactNode => {
         if (item !== undefined && item !== null) {
             if ("home" in item) {
                 return (
                     <NavLink key={"home"} to={"/"} exact>
-                        <FontAwesomeIcon icon={faHome}/> Startseite
+                        <FAE icon={faHome}/> Startseite
                     </NavLink>
                 );
             }
             if ("nextStep" in item) {
                 return (
-                    <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"} form={item.nextStep}
-                            type={"submit"}>
-                        <FontAwesomeIcon icon={faCaretRight}/> Weiter
+                    <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"} onClick={item.nextStep}
+                            type={"button"}>
+                        <FAE icon={faCaretRight}/> Weiter
                     </button>
                 );
             }
@@ -199,8 +128,10 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                 return (
                     <button disabled={item.disabled} key={"saveSteps"} className={"btn-transparent"}
                             form={item.saveSteps} type={"submit"}>
-                        <FontAwesomeIcon icon={faSave}/> Speichern
+                        {/*TODO change to non submit type*/}
+                        <FAE icon={faSave}/> Speichern
                     </button>
+
                 );
             }
             if ("reset" in item) {
@@ -208,21 +139,21 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                     <button disabled={item.disabled} key={"reset"} onClick={() => item.reset()}
                             className={"btn-transparent"}
                             type={"button"}>
-                        <FontAwesomeIcon icon={faUndo}/> Zurücksetzen
+                        <FAE icon={faUndo}/> Zurücksetzen
                     </button>
                 );
             }
             if ("tool" in item) {
                 return (
                     <NavLink key={"tool"} to={item.tool?.link} exact>
-                        <FontAwesomeIcon icon={item.tool?.icon}/> {item.tool?.title}
+                        <FAE icon={item.tool?.icon}/> {item.tool?.title}
                     </NavLink>
                 );
             }
             if ("settings" in item) {
                 return (
                     <NavLink key={"settings"} to={"/settings"} exact>
-                        <FontAwesomeIcon icon={faCogs}/> Einstellungen
+                        <FAE icon={faCogs}/> Einstellungen
                     </NavLink>
                 );
             }
@@ -230,7 +161,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                 return (
                     <button disabled={item.disabled} key={"newTool"} type={"button"} className={"btn-transparent"}
                             onClick={() => item.newTool.callback()}>
-                        <FontAwesomeIcon icon={faPlusSquare}/> {item.newTool?.title}
+                        <FAE icon={faPlusSquare}/> {item.newTool?.title}
                     </button>
                 );
             }
@@ -239,7 +170,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
                     <button disabled={item.disabled} key={"button"} className={"btn-transparent"}
                             onClick={() => item.button.callback()}
                             type={"button"}>
-                        <FontAwesomeIcon icon={item.button.icon}/> {item.button.text}
+                        <FAE icon={item.button.icon}/> {item.button.text}
                     </button>
                 );
             }

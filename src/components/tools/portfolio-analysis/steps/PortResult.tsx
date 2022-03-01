@@ -1,40 +1,13 @@
-import {FormComponent, ResetType} from "../../../../general-components/Tool/FormComponent/FormComponent";
-import {FormEvent} from "react";
+import {Step} from "../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 
 
 interface PortResultValues {
 
 }
 
-class PortResult extends FormComponent<PortResultValues, any> {
+class PortResult extends Step<PortResultValues, any> {
     build(): JSX.Element {
         return <div/>;
-    }
-
-    changeControlFooter(): void {
-    }
-
-    extractValues(e: FormEvent<HTMLFormElement>): PortResultValues {
-        return {};
-    }
-
-    onReset(type: ResetType): void {
-    }
-
-    rebuildValues = async (values: PortResultValues) => {
-
-    }
-
-    buildPreviousValues = async (): Promise<void> => {
-
-    }
-
-    submit = async (values: PortResultValues): Promise<void> => {
-
-    }
-
-    validate(values: PortResultValues): boolean {
-        return false;
     }
 
 }

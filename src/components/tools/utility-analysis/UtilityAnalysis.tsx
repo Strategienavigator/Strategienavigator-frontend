@@ -1,72 +1,67 @@
 import {faBorderAll} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {UtilInvestigationObjects} from "./steps/UtilInvestigationObjects";
-import {UtilWeighting} from "./steps/UtilWeighting";
-import {UtilCriterias} from "./steps/UtilCriterias";
-import {UtilEvaluation} from "./steps/UtilEvaluation";
-import {UtilResult} from "./steps/UtilResult";
 
 import "./utility-analysis.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {RouteComponentProps} from "react-router";
+import {UtilInvestigationObjectsValues} from "./steps/UtilInvestigationObjects/UtilInvestigationObjectsComponent";
+import {UtilWeightingValues} from "./steps/UtilWeighting/UtilWeightingComponent";
+import {UtilCriteriasValues} from "./steps/UtilCriterias/UtilCriteriasComponent";
+import {UtilEvaluationValues} from "./steps/UtilEvaluation/UtilEvaluationComponent";
+import {UtilResultValues} from "./steps/UtilityResult/UtilResultComponent";
+import {JSONExporter} from "../../../general-components/Export/JSONExporter";
+import {UtilCriterias} from "./steps/UtilCriterias/UtilCriterias";
+import {UtilInvestigationObjects} from "./steps/UtilInvestigationObjects/UtilInvestigationObjects";
+import {UtilWeighting} from "./steps/UtilWeighting/UtilWeighting";
+import {UtilEvaluation} from "./steps/UtilEvaluation/UtilEvaluation";
+import {UtilResult} from "./steps/UtilityResult/UtilResult";
 
 
-class UtilityAnalysis extends Tool {
+export interface UtilityAnalysisValues {
+    "ua-investigation-obj"?: UtilInvestigationObjectsValues,
+    "ua-criterias"?: UtilCriteriasValues,
+    "ua-weighting"?: UtilWeightingValues,
+    "ua-evaluation"?: UtilEvaluationValues,
+    "ua-result"?: UtilResultValues
+}
 
-    constructor(props: any) {
-        super(props);
 
-        this.setID(1);
-        this.setToolname("Nutzwertanalyse");
-        this.setToolIcon(faBorderAll);
-        // Maintenance Mode
-        this.setMaintenance(true);
+/**
+ * Hauptklasse der Nutzwertanalyse
+ * Hier werden die einzelnen Schritte für die Analyse hinzugefügt
+ */
+class UtilityAnalysis extends SteppableTool<UtilityAnalysisValues> {
 
-        this.addStep({
-            id: "utility-objects",
-            title: "1. Untersuchungsobjekte",
-            form: <UtilInvestigationObjects/>
-        });
-        this.addStep({
-            id: "utility-criterias",
-            title: "2. Kriterien",
-            form: <UtilCriterias/>
-        });
-        this.addStep({
-            id: "utility-weighting",
-            title: "3. Gewichtung",
-            form: <UtilWeighting/>
-        });
-        this.addStep({
-            id: "utility-evaluation",
-            title: "4. Bewertung > Objekt nach Kriterien",
-            form: <UtilEvaluation/>
-        });
-        this.addStep({
-            id: "utility-result",
-            title: "4. Bewertungsübersicht",
-            form: <UtilResult/>
-        });
+
+    constructor(props: RouteComponentProps, context: any) {
+        super(props, context, "Nutzwertanalyse", faBorderAll, 1);
+
+        this.setMaintenance(false);
+
+        this.addExporter(new JSONExporter());
+
+        this.addStep(new UtilInvestigationObjects());
+        this.addStep(new UtilCriterias());
+        this.addStep(new UtilWeighting());
+        this.addStep(new UtilEvaluation());
+        this.addStep(new UtilResult());
+
+
     }
 
-    protected renderToolHome() {
-        return null;
+    protected getInitData(): UtilityAnalysisValues {
+        let data: UtilityAnalysisValues = {};
+        this.getStep(0).dataHandler.fillFromPreviousValues(data);
+        return data;
     }
 
-    protected renderShortDescription() {
-        return null;
+    protected renderShortDescription(): React.ReactNode {
+        return undefined;
     }
 
-    protected renderTutorial() {
-        return null;
+    protected renderTutorial(): React.ReactNode {
+        return undefined;
     }
 
-    protected renderNew() {
-        return this.getStepComponent();
-    }
-
-    protected renderView(tool: SaveResource) {
-        return this.getStepComponent();
-    }
 }
 
 export {

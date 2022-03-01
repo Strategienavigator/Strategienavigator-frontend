@@ -1,5 +1,4 @@
 import {faArrowsAlt} from "@fortawesome/free-solid-svg-icons";
-import {Tool} from "../../../general-components/Tool/Tool";
 import {SaveResource} from "../../../general-components/Datastructures";
 import {PortCreateObjects} from "./steps/PortCreateObjects";
 import {PortCriterias} from "./steps/PortCriterias";
@@ -8,20 +7,20 @@ import {PortEvaluation} from "./steps/PortEvaluation";
 import {PortResult} from "./steps/PortResult";
 
 import "./portfolio-analysis.scss";
+import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
+import {RouteComponentProps} from "react-router";
 
 
-class PortfolioAnalysis extends Tool {
+class PortfolioAnalysis extends SteppableTool<any> {
 
-    constructor(props: any) {
-        super(props);
 
-        this.setID(5);
-        this.setToolname("Portfolio Analyse");
-        this.setToolIcon(faArrowsAlt);
-        // Maintenance Mode
+    constructor(props: RouteComponentProps, context: any) {
+        super(props, context, "Portfolio Analyse", faArrowsAlt, 5);
+
+
         this.setMaintenance(true);
 
-        this.addStep({
+        /*this.addStep({
             id: "portfolio-objects",
             title: "1. Objekte anlegen",
             form: <PortCreateObjects/>
@@ -45,7 +44,7 @@ class PortfolioAnalysis extends Tool {
             id: "portfolio-result",
             title: "5. Ergebnismatrix",
             form: <PortResult/>
-        });
+        });*/
     }
 
     protected renderToolHome() {
@@ -60,13 +59,9 @@ class PortfolioAnalysis extends Tool {
         return null;
     }
 
-    protected renderNew() {
-        return this.getStepComponent();
+    protected getInitData(): any {
     }
 
-    protected renderView(tool: SaveResource) {
-        return this.getStepComponent();
-    }
 }
 
 export {
