@@ -14,7 +14,9 @@ interface PCCriteriasValues {
     criterias: CardComponentFields
 }
 
-interface PCCriteriasState {}
+interface PCCriteriasState {
+
+}
 
 /**
  * Baut den ersten Schritt des Paarweisen-Vergleiches
