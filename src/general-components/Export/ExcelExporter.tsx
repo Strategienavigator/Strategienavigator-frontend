@@ -4,9 +4,9 @@ import XLSX, {BookType, CellObject, CellStyle, WorkBook, WorkSheet} from "xlsx-j
 
 
 abstract class ExcelExporter<D> extends Exporter<D> {
+    private workbook: WorkBook;
     protected encodeCell = XLSX.utils.encode_cell;
     protected encodeRange = XLSX.utils.encode_range;
-    private workbook: WorkBook;
 
     constructor() {
         super("Excel", "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -45,21 +45,13 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         XLSX.utils.book_append_sheet(this.workbook, worksheet, name);
     }
 
-    protected getHeaderStyle(): CellStyle {
-        return {
-            font: {
-                bold: true
-            }
-        };
-    }
-
     private buildStartPage(workbook: WorkBook, data: SaveResource<D>): void {
         let worksheet: WorkSheet = {};
         // set range of cells which contains data
         worksheet["!ref"] = "A1:B6";
 
         // set cell widths
-        worksheet["!cols"] = [
+        worksheet["!cols"] =  [
             {
                 wch: 21
             },
@@ -87,6 +79,14 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         worksheet["B6"] = {v: new Date(data.updated_at), t: "d", z: "dd.MM.yyyy hh:mm"} as CellObject;
 
         this.addSheet("Grundlagen", worksheet);
+    }
+
+    protected getHeaderStyle(): CellStyle {
+        return {
+            font: {
+                bold: true
+            }
+        };
     }
 
 }

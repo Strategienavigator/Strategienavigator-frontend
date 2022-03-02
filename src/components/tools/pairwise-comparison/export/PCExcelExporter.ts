@@ -4,10 +4,10 @@ import {SaveResource} from "../../../../general-components/Datastructures";
 import {Range, WorkBook, WorkSheet} from "xlsx-js-style";
 import {PCPairComparisonValues} from "../steps/PCPairComparison/PCPairComparisonComponent";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
-import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
-import {PCCriteriasValues} from "../steps/PCCriterias/PCCriteriasComponent";
-import {Evaluation} from "../../../../general-components/EvaluationComponent/Evaluation";
-import {EvaluationExcelWorkSheet} from "../../../../general-components/EvaluationComponent/EvaluationExcelWorkSheet";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {PCResultValues} from "../steps/PCResult/PCResultComponent";
 
 
 /**
@@ -35,13 +35,13 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
 
         if (isFilled(criterias)) {
             this.addSheet("Kriterien", this.getCriteriaSheet(criterias.criterias));
-            if (isFilled(comparison)) {
+            if (isFilled(comparison))
                 this.addSheet("Vergleich", this.getComparisonSheet(criterias.criterias, comparison));
-                if (isFilled(result)) {
-                    this.addSheet("Ergebnis", this.getResultSheet(criterias, comparison));
-                }
-            }
         }
+
+
+        if (isFilled(result))
+            this.addSheet("Ergebnis", this.getResultSheet(result));
 
         return true;
     }
@@ -117,7 +117,7 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
         let headers = comparison.headers;
         for (let header of headers) {
             ws[this.encodeCell(cell)] = {
-                v: header.header, t: "s", s: Object.assign(
+                v: header, t: "s", s: Object.assign(
                     {
                         alignment: {
                             horizontal: "center"
@@ -168,14 +168,71 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
     /**
      * Erstellt die Excel-Seite für den Ergebnisschritt
      *
-     * @param {PCCriteriasValues} criterias
-     * @param {PCPairComparisonValues} comparisons
+     * @param {PCResultValues} result Die Values vom Result-Step des Paarweisen-Vergleiches
      * @returns {WorkSheet} Die erstellte Excel-Seite
      * @private
      */
-    private getResultSheet(criterias: PCCriteriasValues, comparisons: PCPairComparisonValues) {
-        let evaluation = new Evaluation(criterias.criterias, comparisons);
-        return new EvaluationExcelWorkSheet(evaluation, "Kriterium").getExcelSheet();
+    private getResultSheet(result: PCResultValues) {
+        let ws: WorkSheet = {};
+
+        ws["A1"] = {
+            t: "s", v: "Ergebnis", s: this.getHeaderStyle()
+        }
+        ws["A2"] = {
+            t: "s", v: result.resultAsString
+        }
+
+        let cell = {r: 3, c: 0};
+        let criteriaLength = "Kriterium".length;
+
+        // header
+        ws[this.encodeCell(cell)] = {
+            t: "s", v: "Kriterium", s: this.getHeaderStyle()
+        }
+        cell.c += 1;
+        ws[this.encodeCell(cell)] = {
+            t: "s", v: "Punkte", s: this.getHeaderStyle()
+        }
+        cell.c += 1;
+        ws[this.encodeCell(cell)] = {
+            t: "s", v: "Rang", s: this.getHeaderStyle()
+        }
+
+        for (const element of result.result) {
+            cell.c = 0;
+            cell.r += 1;
+
+            ws[this.encodeCell(cell)] = {
+                t: "s", v: element.criteria.name
+            }
+            criteriaLength = this.updateWidth(criteriaLength, element.criteria.name.length);
+
+            cell.c += 1;
+            ws[this.encodeCell(cell)] = {
+                t: "n", v: element.points
+            }
+            cell.c += 1;
+            ws[this.encodeCell(cell)] = {
+                t: "n", v: element.rank
+            }
+        }
+
+        let range: Range = {s: {r: 0, c: 0}, e: cell}
+        ws["!ref"] = this.encodeRange(range);
+
+        ws["!cols"] = [
+            {
+                wch: criteriaLength + 1
+            },
+            {
+                wch: "Punkte".length + 1
+            },
+            {
+                wch: "Rang".length + 1
+            }
+        ];
+
+        return ws;
     }
 }
 
