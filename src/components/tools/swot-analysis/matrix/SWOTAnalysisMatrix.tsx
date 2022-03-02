@@ -33,7 +33,7 @@ class SWOTAnalysisMatrix extends MatrixComponent<SWOTAnalysisValues, {}> {
     }
 
     requestSubStep(index: number) {
-        console.log(index);
+
         this.props.stepController.requestSubStep(index);
     }
 
@@ -75,11 +75,7 @@ class SWOTAnalysisMatrix extends MatrixComponent<SWOTAnalysisValues, {}> {
                 headerRomanCapitals[i] = <div>{romanCounter.get(i)}</div>;
             }
 
-            let counter = 0;
             let columnSum = numberLength + headerRomanCapitalsLength;
-            let row = leftLettersLength + headerRomanCapitalsLength;
-            
-
             
             //Hier entstehen die Kombinationen zwischen Chancen und Stärken
             let bodyone = [];
