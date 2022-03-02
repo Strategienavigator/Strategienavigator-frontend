@@ -61,47 +61,37 @@ class Evaluation {
         }
         this.values.result = result;
 
+        // evaluate
         this.eval();
         this.sortResult();
         this.evalRank();
         this.values.resultAsString = this.toString();
     }
 
+    /**
+     * Baut eine instanz von Evaluation mit den mitgegeben CardComponentFields und CompareComponentValues
+     *
+     * @param {CardComponentFields} cardComponentFields Die CardComponentFields
+     * @param {CompareComponentValues} compareComponentValues Die CompareComponentValues
+     * @returns {Evaluation} Instanz der Evaluation
+     */
     public static from(cardComponentFields: CardComponentFields, compareComponentValues: CompareComponentValues): Evaluation {
         return new Evaluation(cardComponentFields, compareComponentValues);
     }
 
-    public eval() {
-        let adapter = new MatchCardComponentFieldsAdapter(this.fields);
-        let middle = this.determineMiddleOfHeader();
-
-        let i = 0;
-        for (const comparison of this.comparisons.comparisons) {
-            let field = adapter.getEntry(i);
-            let first = this.findField(field.first);
-            let second = this.findField(field.second as string);
-
-            if (comparison.value !== null && first !== null && second !== null) {
-                let value = parseInt(comparison.value);
-
-                if (value === middle) { // first = second
-                    first.points += 1;
-                    second.points += 1;
-                } else if (value > middle) { // second > first
-                    second.points += 2;
-                } else { // first > second
-                    first.points += 2;
-                }
-            }
-
-            i++;
-        }
-    }
-
+    /**
+     * Gibt die Werte zurück
+     *
+     * @returns {EvaluationValues}
+     */
     public getValues(): EvaluationValues {
         return this.values;
     }
 
+    /**
+     * Wandelt das Ergebnis in eine Stringausgabe um
+     * @returns {string}
+     */
     public toString(): string {
         let resultString = "";
         let i = 0;
@@ -128,6 +118,41 @@ class Evaluation {
         return resultString;
     }
 
+    /**
+     * Evaluiert die CardComponentFields und die CompareComponentFields und wertet diese Anhand eines Punktesystems aus
+     */
+    private eval() {
+        let adapter = new MatchCardComponentFieldsAdapter(this.fields);
+        let middle = this.determineMiddleOfHeader();
+
+        let i = 0;
+        for (const comparison of this.comparisons.comparisons) {
+            let field = adapter.getEntry(i);
+            let first = this.findField(field.first);
+            let second = this.findField(field.second as string);
+
+            if (comparison.value !== null && first !== null && second !== null) {
+                let value = parseInt(comparison.value);
+
+                if (value === middle) { // first = second
+                    first.points += 1;
+                    second.points += 1;
+                } else if (value > middle) { // second > first
+                    second.points += 2;
+                } else { // first > second
+                    first.points += 2;
+                }
+            }
+
+            i++;
+        }
+    }
+
+    /**
+     * Der Rang wird evaluiert und mit ermittelt
+     * Vorraussetzung hierfür: Das Result-Array sollte sortiert sein, damit der Rang besser ermitelt werden kann
+     * @private
+     */
     private evalRank() {
         // rank
         let rank = 1;

@@ -4,9 +4,12 @@ import {SaveResource} from "../Datastructures";
 import {Evaluation, EvaluationValues} from "./Evaluation";
 
 
+/**
+ * Wandelt die instanz der Evaluation in ein Excel-Worksheet um, sodass dies bei den Exporten leicht eingebunden werden kann.
+ */
 class EvaluationExcelWorkSheet extends ExcelExporter<any> {
     private values: EvaluationValues;
-    private customTableHeader?: string;
+    private readonly customTableHeader?: string;
 
     constructor(evaluation: Evaluation, customTableHeader?: string) {
         super();
@@ -14,6 +17,10 @@ class EvaluationExcelWorkSheet extends ExcelExporter<any> {
         this.customTableHeader = customTableHeader;
     }
 
+    /**
+     * Gibt das Worksheet zurück
+     * @returns {WorkSheet}
+     */
     public getExcelSheet(): WorkSheet {
         let ws: WorkSheet = {};
 

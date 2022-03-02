@@ -28,7 +28,7 @@ class PCResult implements StepDefinition<PairwiseComparisonValues>, StepDataHand
     }
 
     /**
-     * Erstellen der Rangliste der Kriterien basierend auf einem Punktesystem
+     * Baut eine Instanz von Evaluation auf und speichert die ermittelten Werte ins data-Array
      */
     fillFromPreviousValues(data: Draft<PairwiseComparisonValues>): void {
         let criterias = data["pc-criterias"]?.criterias;
