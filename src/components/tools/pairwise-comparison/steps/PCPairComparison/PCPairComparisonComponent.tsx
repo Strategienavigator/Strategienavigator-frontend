@@ -3,10 +3,12 @@ import {
     Step,
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {CompareComponent, CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {
-    MatchCardComponentFieldsAdapter
-} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+    CompareComponent,
+    CompareComponentValues,
+    CompareValue
+} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
 import {PCPairComparison} from "./PCPairComparison";
 import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
@@ -15,8 +17,7 @@ import {CompareHeader} from "../../../../../general-components/CompareComponent/
 /**
  * Die Werte des zweiten Schrittes des Paarweisen-Vergleiches
  */
-export interface PCPairComparisonValues {
-    comparisons: CompareValue[],
+export interface PCPairComparisonValues extends CompareComponentValues {
     headers: CompareHeader[]
 }
 
@@ -28,7 +29,6 @@ class PCPairComparisonComponent extends Step<PairwiseComparisonValues, {}> {
     public constructor(props: Readonly<StepProp<PairwiseComparisonValues>> | StepProp<PairwiseComparisonValues>, context: any) {
         super(props, context);
     }
-
 
     shouldComponentUpdate(nextProps: Readonly<StepProp<PairwiseComparisonValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
         let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
@@ -52,7 +52,6 @@ class PCPairComparisonComponent extends Step<PairwiseComparisonValues, {}> {
         const criteriaValues = this.props.save.data["pc-criterias"]?.criterias;
 
         if (comparisonValues !== undefined && criteriaValues !== undefined) {
-
             // TODO remove adapter
             const adapter = new MatchCardComponentFieldsAdapter(criteriaValues);
 

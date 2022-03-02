@@ -8,29 +8,23 @@ import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {CompareNumberHeader} from "../../../../../general-components/CompareComponent/Header/CompareNumberHeader";
-import {
-    MatchCardComponentFieldsAdapter
-} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
 
 
 class PCPairComparison implements StepDefinition<PairwiseComparisonValues>, StepDataHandler<PairwiseComparisonValues> {
-
     public static header = new CompareNumberHeader(0, 3);
-
 
     dataHandler: StepDataHandler<PairwiseComparisonValues>;
     form: React.FunctionComponent<StepProp<PairwiseComparisonValues>> | React.ComponentClass<StepProp<PairwiseComparisonValues>>;
     title: string;
     id: string;
 
-
     constructor() {
         this.title = "2. Paarvergleich";
         this.id = "pc-comparison";
         this.form = PCPairComparisonComponent;
         this.dataHandler = this;
-
     }
 
     deleteData(data: Draft<PairwiseComparisonValues>): void {
