@@ -4,12 +4,13 @@ import {RouteComponentProps} from "react-router";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import "./pairwise-comparison.scss";
 import {PCPairComparisonValues} from "./steps/PCPairComparison/PCPairComparisonComponent";
-import {PCResultValues} from "./steps/PCResult/PCResultComponent";
 import {PCCriterias} from "./steps/PCCriterias/PCCriterias";
 import {PCPairComparison} from "./steps/PCPairComparison/PCPairComparison";
 import {PCResult} from "./steps/PCResult/PCResult";
 import {PCExcelExporter} from "./export/PCExcelExporter";
 import {PCCriteriasValues} from "./steps/PCCriterias/PCCriteriasComponent";
+import {PCResultValues} from "./steps/PCResult/PCResultComponent";
+
 
 /**
  * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich

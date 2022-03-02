@@ -1,6 +1,6 @@
 import {Component} from "react";
 import {CompareAdapter} from "./Adapter/CompareAdapter";
-import {CompareHeaderAdapter} from "./Header/CompareHeaderAdapter";
+import {CompareHeader, CompareHeaderAdapter} from "./Header/CompareHeaderAdapter";
 
 import "./compare-component.scss";
 
@@ -12,6 +12,9 @@ type CompareValue = {
     value: null | string,
     header: null | string,
 };
+type CompareComponentValues = {
+    comparisons: CompareValue[]
+}
 
 export interface CompareComponentProps {
     /**
@@ -154,5 +157,6 @@ export {
 };
 
 export type{
-    CompareValue
+    CompareValue,
+    CompareComponentValues
 }
