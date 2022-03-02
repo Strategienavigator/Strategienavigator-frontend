@@ -4,7 +4,10 @@ import {
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
-import {CompareComponent, CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {
+    CompareComponent,
+    CompareComponentValues
+} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {UtilEvaluation} from "./UtilEvaluation";
 import {LinearCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
@@ -23,7 +26,7 @@ export interface UtilEvaluationValues {
         /**
          * Der Vergleich
          */
-        rating: CompareValue[]
+        rating: CompareComponentValues
     }[]
 }
 
@@ -85,9 +88,9 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, {}> {
      * Wird aufgerufen, wenn ein Benutzer einen Vergleich auswählt
      *
      * @param {number} index der Index vom Vergleich. Zu welchem Kriterium gehört der Vergleich?
-     * @param {CompareValue[]} values Values vom Vergleich
+     * @param {CompareComponentValues} values Values vom Vergleich
      */
-    valuesChanged(index: number, values: CompareValue[]) {
+    valuesChanged(index: number, values: CompareComponentValues) {
         this.props.saveController.onChanged((save) => {
             if (save.data["ua-evaluation"]) {
                 save.data["ua-evaluation"].evaluation[index].rating = values;

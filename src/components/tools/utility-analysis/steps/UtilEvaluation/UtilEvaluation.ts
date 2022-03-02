@@ -8,6 +8,10 @@ import {UIError} from "../../../../../general-components/Error/UIErrors/UIError"
 import {UtilEvaluationComponent} from "./UtilEvaluationComponent";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilCriterias} from "../UtilCriterias/UtilCriterias";
+import {
+    CompareComponentValues,
+    CompareValue
+} from "../../../../../general-components/CompareComponent/CompareComponent";
 
 class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
     public static header = UtilCriterias.header;
@@ -41,17 +45,21 @@ class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataH
                     objectsIndexes.push(o);
                 }
 
-                let rating;
+                let rating : CompareComponentValues;
                 if (evaluation) {
                     rating = evaluation.evaluation[c].rating;
                 } else {
-                    rating = [];
+                    rating = {
+                        comparisons: [],
+                        headers: []
+                    };
                     for (let o = 0; o < objects.objects.length; o++) {
-                        rating.push({
+                        rating.comparisons.push({
                             value: null,
                             header: null
                         });
                     }
+                    rating.headers = UtilEvaluation.header.getHeaders();
                 }
 
                 evaluations.push({
@@ -80,8 +88,8 @@ class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataH
             let i = 0;
             while(!errorFound && i < evaluation.evaluation.length) {
                 let e = 0;
-                while (!errorFound && e < evaluation.evaluation[i].rating.length) {
-                    let value = evaluation.evaluation[i].rating[e].value;
+                while (!errorFound && e < evaluation.evaluation[i].rating.comparisons.length) {
+                    let value = evaluation.evaluation[i].rating.comparisons[e].value;
                     if (value === null || value === "") {
                         errorFound = true;
                     }

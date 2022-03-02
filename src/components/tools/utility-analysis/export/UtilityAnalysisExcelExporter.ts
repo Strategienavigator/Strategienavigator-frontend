@@ -269,7 +269,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                 }
                 cell.c = 1;
                 for(let e = 0; e < headers.length; e++) {
-                    if(evaluation.evaluation[i].rating[j].header === headers[e].header) {
+                    if(evaluation.evaluation[i].rating.comparisons[j].header === headers[e].header) {
                         ws[this.encodeCell(cell)] = {
                             v: "X", t: "s", s: Object.assign(
                                 {

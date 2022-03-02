@@ -13,7 +13,8 @@ type CompareValue = {
     header: null | string,
 };
 type CompareComponentValues = {
-    comparisons: CompareValue[]
+    comparisons: CompareValue[],
+    headers: CompareHeader[]
 }
 
 export interface CompareComponentProps {
@@ -32,7 +33,7 @@ export interface CompareComponentProps {
     /**
      * Die Werte die angezeigt werden sollen
      */
-    values: CompareValue[]
+    values: CompareComponentValues
     /**
      * Gibt an ob die Werte veränderbar sind oder nicht
      */
@@ -43,9 +44,9 @@ export interface CompareComponentProps {
     name?: string
     /**
      * Wird aufgerufen, wenn sich irgendein wert der values ändert
-     * @param values {CompareValue[]} ein neues array mit den aktuellen werten
+     * @param values {CompareComponentValues} ein neues array mit den aktuellen werten
      */
-    onChanged: (values: CompareValue[]) => void
+    onChanged: (values: CompareComponentValues) => void
 }
 
 /**
@@ -75,7 +76,7 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
             <div className={"fullComparison"}>
                 {this.renderHeader()}
 
-                {this.props.values.map((comparison, index) => {
+                {this.props.values.comparisons.map((comparison, index) => {
                     const compMeta = this.props.fields.getEntry(index);
                     return (
                         <div key={"field-" + name + index} className={"singleComparison"}>
@@ -121,12 +122,15 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
      * @param {number} headerIndex der index vom ausgewählten Header
      */
     onRadioChange = (index: number, headerIndex: number) => {
-        const fields = this.props.values.slice();
+        const fields = this.props.values.comparisons.slice();
         fields[index] = {
             value: String(headerIndex),
             header: this.props.header.getHeader(headerIndex).header
         };
-        this.props.onChanged(fields);
+        this.props.onChanged({
+            comparisons: fields,
+            headers: this.props.header.getHeaders()
+        });
     }
 
     renderHeader = () => {
