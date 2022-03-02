@@ -1,20 +1,43 @@
 import {CardComponentField, CardComponentFields} from "../CardComponent/CardComponent";
 import {CompareComponentValues} from "../CompareComponent/CompareComponent";
 import {MatchCardComponentFieldsAdapter} from "../CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
-import {Range, WorkSheet} from "xlsx-js-style";
 
 
+/**
+ * Stellt ein einzelnes Result dar
+ */
 interface SingleResult {
-    field: CardComponentField
+    /**
+     * Das CardComponentField
+     */
+    criteria: CardComponentField,
+    /**
+     * Die Punkte des Felds
+     */
     points: number,
+    /**
+     * Der Rang des Felds
+     */
     rank: number
 }
 
+/**
+ * Sind die Values der Evaluation
+ */
 export interface EvaluationValues {
+    /**
+     * Speichert die Werte der Evaluation als Array dar. Enthält alle Felder mit deren Punkten und Rang
+     */
     result: SingleResult[]
+    /**
+     * Enthält das Ergebnis als Stringausgabe
+     */
     resultAsString: string
 }
 
+/**
+ * Kann benutzt werden, um ein
+ */
 class Evaluation {
     private values: EvaluationValues = {
         result: [],
@@ -31,7 +54,7 @@ class Evaluation {
         let result: SingleResult[] = [];
         for (const field of this.fields) {
             result.push({
-                field: field,
+                criteria: field,
                 points: 0,
                 rank: 0
             });
@@ -85,7 +108,7 @@ class Evaluation {
         let oldField = this.values.result[0];
 
         for (const field of this.values.result) {
-            let name = field.field.name;
+            let name = field.criteria.name;
 
             if (i <= 0) {
                 resultString += name;
@@ -121,7 +144,7 @@ class Evaluation {
 
     private findField = (field: string) => {
         for (const value of this.values.result) {
-            if (value.field.name === field) {
+            if (value.criteria.name === field) {
                 return value;
             }
         }

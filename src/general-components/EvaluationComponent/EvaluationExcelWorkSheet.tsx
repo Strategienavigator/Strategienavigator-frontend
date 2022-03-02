@@ -49,9 +49,9 @@ class EvaluationExcelWorkSheet extends ExcelExporter<any> {
             cell.r += 1;
 
             ws[this.encodeCell(cell)] = {
-                t: "s", v: element.field.name
+                t: "s", v: element.criteria.name
             }
-            criteriaLength = this.updateWidth(criteriaLength, element.field.name.length);
+            criteriaLength = this.updateWidth(criteriaLength, element.criteria.name.length);
 
             cell.c += 1;
             ws[this.encodeCell(cell)] = {

@@ -4,10 +4,19 @@ import {EvaluationValues} from "./Evaluation";
 
 
 export interface EvaluationComponentProps {
+    /**
+     * Die Werte der Evaluation
+     */
     values: EvaluationValues,
+    /**
+     * Kann angegeben werden, wenn "Feld" durch etwas anderes ersetzt werden soll
+     */
     customTableHeader?: string
 }
 
+/**
+ * Nutzt die Werte der Evaluation um eine Tabelle auszugeben welches die Ergebnisse anzeigt.
+ */
 class EvaluationComponent extends Component<EvaluationComponentProps, any> {
 
     render = () => {
@@ -32,8 +41,8 @@ class EvaluationComponent extends Component<EvaluationComponentProps, any> {
                         return (
                             <tr>
                                 <td>
-                                    {v.field.name}<br/>
-                                    <small>{v.field.desc}</small>
+                                    {v.criteria.name}<br/>
+                                    <small>{v.criteria.desc}</small>
                                 </td>
                                 <td className={"fixed"}>{v.points}</td>
                                 <td className={"fixed"}>{v.rank}</td>
