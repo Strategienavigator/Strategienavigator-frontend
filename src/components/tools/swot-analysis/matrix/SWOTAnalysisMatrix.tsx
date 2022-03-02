@@ -32,14 +32,18 @@ class SWOTAnalysisMatrix extends MatrixComponent<SWOTAnalysisValues, {}> {
         return "";
     }
 
+    requestSubStep(index: number) {
+        console.log(index);
+        this.props.stepController.requestSubStep(index);
+    }
+
     render() {    
         let data = this.getData() as SWOTAnalysisValues;
-        if (data) {        
-            let factors = data["swot-factors"].factors;
-            let actions = data["alternative-actions"].actions;
-            console.log(actions);
-            
-             
+        let factors = data["swot-factors"]?.factors;
+        let actions = data["alternative-actions"]?.actions;
+
+        if (data && factors && actions) {     
+
             //Hier entstehen die Punkte für die Chancen
             let headernumber = [];
             let numberLength = factors.chances.length;
@@ -70,26 +74,34 @@ class SWOTAnalysisMatrix extends MatrixComponent<SWOTAnalysisValues, {}> {
             for (let i = 1; i < headerRomanCapitalsLength + 1; i ++){
                 headerRomanCapitals[i] = <div>{romanCounter.get(i)}</div>;
             }
+
+            let counter = 0;
+            let columnSum = numberLength + headerRomanCapitalsLength;
+            let row = leftLettersLength + headerRomanCapitalsLength;
+            
+
             
             //Hier entstehen die Kombinationen zwischen Chancen und Stärken
             let bodyone = [];
             let j = 0;
             for (let e = 0; e < headerCapitalLength; e++) {
-                for  (let i = 0; i < numberLength; i++){
+                for (let i = 0; i < numberLength; i++){
+                    let index = e*columnSum + i;
                     let action = this.getAction(actions, upperCounter.get(e + 1) as string, i + 1);
-                    bodyone[j] = <div className={this.getClassName(action)}></div>;
+                    bodyone[j] = <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}></div>;
+                    
                     j++;
                 }
             }
             
             //Hier entstehen die Kombinationen zwischen Risiken und Stärken
             let bodytwo = [];
-            let bodytwoLength = headerRomanCapitalsLength * headerCapitalLength;
             j = 0;
             for (let e = 0; e < headerCapitalLength; e++) {
                 for (let i = 0; i < headerRomanCapitalsLength; i++){
+                    let index = e*columnSum + i + numberLength;
                     let action = this.getAction(actions, upperCounter.get(e + 1) as string, romanCounter.get(i + 1) as string);
-                    bodytwo[j] = <div className={this.getClassName(action)}></div>;
+                    bodytwo[j] = <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}></div>;
                     j++;
                 }
             }
@@ -99,20 +111,21 @@ class SWOTAnalysisMatrix extends MatrixComponent<SWOTAnalysisValues, {}> {
             j = 0;
             for (let e = 0; e < leftLettersLength; e++) {
                 for  (let i = 0; i < numberLength; i++){
+                    let index = e*columnSum + i + columnSum * headerCapitalLength;
                     let action = this.getAction(actions, lowerCounter.get(e + 1) as string, i + 1);
-                    bodythree[j] = <div className={this.getClassName(action)}></div>;
+                    bodythree[j] = <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}></div>;
                     j++;
                 }
             }
             
             //Hier entstehen die Kombinationen zwischen Risiken und Schwächen
             let bodyfour = [];
-            let bodyfourLength = headerRomanCapitalsLength * leftLettersLength;
             j = 0;
             for (let e = 0; e < leftLettersLength; e++) {
                 for (let i = 0; i < headerRomanCapitalsLength; i++){
+                    let index = e*columnSum + i + columnSum * headerCapitalLength  + numberLength;
                     let action = this.getAction(actions, lowerCounter.get(e + 1) as string, romanCounter.get(i + 1) as string);
-                    bodyfour[j] = <div className={this.getClassName(action)}></div>;
+                    bodyfour[j] = <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}></div>;
                     j++;
                 }
             }

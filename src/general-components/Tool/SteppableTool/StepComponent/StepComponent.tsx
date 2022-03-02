@@ -611,7 +611,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         if (step.matrix !== undefined) {
             let matrix = React.createElement(step.matrix, {
                 tool: this.props.tool,
-                data: this.props.save.data
+                data: this.props.save.data,
+                stepController: this.stepController
             });
             const getMatrixContainer = () => {
                 return (
