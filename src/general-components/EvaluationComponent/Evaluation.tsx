@@ -177,18 +177,7 @@ class Evaluation {
     }
 
     private determineMiddleOfHeader(): number {
-        let headers: string[] = [];
-        for (let i = 0; i < this.comparisons.comparisons.length; i++) {
-            let comparison = this.comparisons.comparisons[i];
-            let header = comparison.header;
-            if (header) {
-                headers.push(header);
-            }
-        }
-        let uniqueHeaders = headers.filter(function (item, pos, self) {
-            return self.indexOf(item) === pos;
-        })
-        return (uniqueHeaders.length - 1) / 2;
+        return (this.comparisons.headers.length - 1) / 2
     }
 
     private sortResult() {
