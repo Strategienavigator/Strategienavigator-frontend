@@ -38,15 +38,15 @@ export interface EvaluationValues {
 /**
  * Kann benutzt werden, um ein
  */
-class Evaluation {
+class Evaluation<D = any> {
     private values: EvaluationValues = {
         result: [],
         resultAsString: ""
     };
-    private readonly fields: CardComponentFields;
+    private readonly fields: CardComponentFields<D>;
     private readonly comparisons: CompareComponentValues;
 
-    constructor(cardComponentFields: CardComponentFields, compareComponentValues: CompareComponentValues) {
+    constructor(cardComponentFields: CardComponentFields<D>, compareComponentValues: CompareComponentValues) {
         this.fields = cardComponentFields;
         this.comparisons = compareComponentValues;
 
@@ -75,7 +75,7 @@ class Evaluation {
      * @param {CompareComponentValues} compareComponentValues Die CompareComponentValues
      * @returns {Evaluation} Instanz der Evaluation
      */
-    public static from(cardComponentFields: CardComponentFields, compareComponentValues: CompareComponentValues): Evaluation {
+    public static from<D>(cardComponentFields: CardComponentFields<D>, compareComponentValues: CompareComponentValues): Evaluation<D> {
         return new Evaluation(cardComponentFields, compareComponentValues);
     }
 

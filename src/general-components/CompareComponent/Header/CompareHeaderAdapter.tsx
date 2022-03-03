@@ -1,7 +1,7 @@
 
 
 
-export interface CompareHeader{
+export interface CompareHeader {
     header: string,
     desc?: string
 }
@@ -34,6 +34,24 @@ abstract class CompareHeaderAdapter {
             return this.getHeaders()[index];
         }
         throw new RangeError();
+    }
+
+    /**
+     * Gibt den Index zurück, sollte dieser mithilfe des Headers gefunden werden.
+     * Bei nicht auffinden wird -1 zurückgegeben!
+     *
+     * @param {string} header Der gesuchte Header
+     * @returns {number}
+     */
+    public getIndex(header: string): number {
+        let i = 0;
+        for (let item of this.getHeaders()) {
+            if (item.header === header) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
 }

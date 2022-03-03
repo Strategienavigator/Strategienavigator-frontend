@@ -10,6 +10,7 @@ import {MatchCardComponentFieldsAdapter} from "../../../../general-components/Co
 import {UtilEvaluationValues} from "../steps/UtilEvaluation/UtilEvaluationComponent";
 import {CompareSymbolHeader} from "../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 import {LinearCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
+import {UtilResultValues} from "../steps/UtilityResult/UtilResultComponent";
 
 
 /**
@@ -22,7 +23,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         let criterias = data.data["ua-criterias"];
         let weighting = data.data["ua-weighting"];
         let evaluation = data.data["ua-evaluation"];
-
+        let result = data.data["ua-result"];
 
         const isFilled = <D extends object>(o?: D): o is D => {
             return o !== undefined && Object.keys(o).length > 0;
@@ -37,6 +38,9 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                     this.addSheet("Gewichtung der Kriterien", this.getWeightingSheet(criterias.criterias, weighting));
                     if(isFilled(evaluation)) {
                         this.addSheet("Evaluation", this.getEvaluationSheet(criterias.criterias, investigationObjs.objects, evaluation));
+                        if(isFilled(result)) {
+                            this.addSheet("Ergebnis", this.getResultSheet(result));
+                        }
                     }
                 }
             }
@@ -234,6 +238,8 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         let symbolHeader = new CompareSymbolHeader(["--","-","0","+","++"]);
         let headers = symbolHeader.getHeaders();
 
+        let criteriaLength = 7;
+
         let adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
 
         for(let i = 0; i < evaluation.evaluation.length; i++) {
@@ -246,6 +252,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                     },
                     this.getHeaderStyle())
             }
+            criteriaLength = this.updateWidth(criteriaLength, criterias[i].name.length);
             cell.r += 1;
             cell.c = 1;
             for (let header of headers) {
@@ -267,6 +274,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                 ws[this.encodeCell(cell)] = {
                     v: adapter.getEntry(j).first, t: "s"
                 }
+                criteriaLength = this.updateWidth(criteriaLength, adapter.getEntry(j).first.length);
                 cell.c = 1;
                 for(let e = 0; e < headers.length; e++) {
                     if(evaluation.evaluation[i].rating.comparisons[j].header === headers[e].header) {
@@ -292,9 +300,58 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         let range: Range = {s: {r: 0, c: 0}, e: cell}
         ws["!ref"] = this.encodeRange(range);
 
+        ws["!cols"] = [
+            {
+                wch: criteriaLength
+            }
+        ];
         return ws;
     }
 
+    private getResultSheet(values: UtilResultValues) {
+        let ws: WorkSheet = {};
+        let cell = {r: 0, c: 0};
+
+        let objectLength = "Objekt".length;
+
+        ws[this.encodeCell(cell)] = {
+            t: "s", v: "Objekt", s: this.getHeaderStyle()
+        }
+        cell.c += 1;
+
+        ws[this.encodeCell(cell)] = {
+            t: "s", v: "Rang", s: this.getHeaderStyle()
+        }
+
+        for (const value of values.result) {
+            cell.c = 0;
+            cell.r += 1;
+
+            ws[this.encodeCell(cell)] = {
+                v: value.object.name, t: "s"
+            };
+            objectLength = this.updateWidth(objectLength, value.object.name.length);
+            cell.c += 1;
+
+            ws[this.encodeCell(cell)] = {
+                v: value.rank, t: "s"
+            };
+        }
+
+        let range: Range = {s: {r: 0, c: 0}, e: cell}
+        ws["!ref"] = this.encodeRange(range);
+
+        ws["!cols"] = [
+            {
+                wch: objectLength
+            },
+            {
+                wch: 5
+            }
+        ];
+
+        return ws;
+    }
 }
 
 export {
