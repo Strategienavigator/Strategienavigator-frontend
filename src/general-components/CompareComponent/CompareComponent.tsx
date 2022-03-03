@@ -12,7 +12,7 @@ type CompareValue = {
     value: null | string,
     header: null | string,
 };
-export type CompareComponentValues = {
+type CompareComponentValues = {
     comparisons: CompareValue[],
     headers: CompareHeader[]
 }
@@ -161,5 +161,6 @@ export {
 };
 
 export type{
-    CompareValue
+    CompareValue,
+    CompareComponentValues
 }
