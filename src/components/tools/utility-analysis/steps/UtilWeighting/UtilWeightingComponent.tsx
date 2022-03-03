@@ -3,7 +3,10 @@ import {
     Step,
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {CompareComponent, CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {
+    CompareComponent,
+    CompareComponentValues
+} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {
     MatchCardComponentFieldsAdapter
 } from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
@@ -13,9 +16,7 @@ import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UI
 import React from "react";
 
 
-export interface UtilWeightingValues {
-    comparisons: CompareValue[]
-}
+export interface UtilWeightingValues extends CompareComponentValues {}
 
 
 /**
@@ -46,7 +47,7 @@ class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
                 <>
                     <CompareComponent
                         disabled={this.props.disabled}
-                        values={values.comparisons}
+                        values={values}
                         showHeader={true}
                         fields={adapter}
                         header={UtilWeighting.header}
@@ -60,10 +61,10 @@ class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
         return <></>;
     }
 
-    private valuesChanged = (values: CompareValue[]) => {
+    private valuesChanged = (values: CompareComponentValues) => {
         this.props.saveController.onChanged(save => {
             if (save.data["ua-weighting"]) {
-                save.data["ua-weighting"].comparisons = values;
+                save.data["ua-weighting"] = values;
             }
         });
     };

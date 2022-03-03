@@ -50,7 +50,8 @@ class UtilWeighting implements StepDefinition<UtilityAnalysisValues>, StepDataHa
                 }
             }
             data["ua-weighting"] = {
-                comparisons: comparisons
+                comparisons: comparisons,
+                headers: UtilWeighting.header.getHeaders()
             }
         }
     }
