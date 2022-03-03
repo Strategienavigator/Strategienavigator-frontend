@@ -13,7 +13,7 @@ import {
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
-import {compareWithoutFunctions} from "../../../../../general-components/ComponentUtils";
+import {HoverWindow} from "../../../../../general-components/HoverWindow/HoverWindow";
 
 
 export interface AlternateAction {
@@ -106,6 +106,10 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
 
             const {firstId, secondId} = SWOTAlternativeActions.splitAlternateActionName(currentAction.name);
 
+            const firstIdDescription = firstIds.find(value => value.id === firstId)?.desc;
+
+            const secondIdDescription = secondIds.find(value => value.id === secondId)?.desc;
+
             // PROGRESS
             let currentProgress = ((this.props.currentSubStep) / actions.length) * 100;
             if (this.props.disabled) {
@@ -119,40 +123,49 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
 
                     <Row className={"mb-3 mt-3"}>
                         <Col sm={isDesktop() ? 6 : 12}>
-                            <Form.Select id={"first"}
-                                         disabled={!this.props.disabled}
-                                         value={firstId}
-                                         onChange={this.changedSelected}>
-                                {firstIds.map((value, index) => {
-                                    return (
-                                        <option
-                                            key={"S" + index}
-                                            disabled={!this.props.disabled}
-                                            value={value.id ?? ""}
-                                        >
-                                            {value.id + " " + value.name}
-                                        </option>
-                                    );
-                                })}
-                            </Form.Select>
+                            <HoverWindow description={firstIdDescription} placement={"bottom"}>
+                                <Form.Select id={"first"}
+                                             disabled={!this.props.disabled}
+                                             value={firstId}
+                                             onChange={this.changedSelected}>
+                                    {firstIds.map((value, index) => {
+                                        return (
+                                            <option
+                                                key={"S" + index}
+                                                disabled={!this.props.disabled}
+                                                value={value.id ?? ""}
+                                            >
+                                                {value.id + " " + value.name}
+                                            </option>
+                                        );
+                                    })}
+                                </Form.Select>
+                            </HoverWindow>
                         </Col>
                         <Col sm={isDesktop() ? 6 : 12}>
-                            <Form.Select id={"second"}
-                                         disabled={!this.props.disabled}
-                                         value={secondId}
-                                         onChange={this.changedSelected}>
-                                {secondIds.map((value, index) => {
-                                    return (
-                                        <option
-                                            key={"S" + index}
-                                            disabled={!this.props.disabled}
-                                            value={value.id ?? ""}
-                                        >
-                                            {value.id + " " + value.name}
-                                        </option>
-                                    );
-                                })}
-                            </Form.Select>
+
+                            <HoverWindow description={secondIdDescription} placement={"bottom"}>
+                                <Form.Select id={"second"}
+                                             disabled={!this.props.disabled}
+                                             value={secondId}
+                                             onChange={this.changedSelected}>
+                                    {secondIds.map((value, index) => {
+                                        return (
+
+                                            <option
+                                                key={"S" + index}
+                                                disabled={!this.props.disabled}
+                                                value={value.id ?? ""}
+                                            >
+                                                {value.id + " " + value.name}
+
+                                            </option>
+
+
+                                        );
+                                    })}
+                                </Form.Select>
+                            </HoverWindow>
                         </Col>
                     </Row>
 
@@ -180,7 +193,8 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
 
                     <UIErrorBanner id={"alternative-action"}/>
                 </div>
-            );
+            )
+                ;
         }
 
         return <p>ERROR</p>;
