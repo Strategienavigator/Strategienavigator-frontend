@@ -97,8 +97,10 @@ class UIErrorContextComponent extends Component<{}, UIErrorContextState> impleme
     }
 
     private updateErrors = (cb: (draft: WritableDraft<ErrorMap>) => ErrorMap | void) => {
-        this.setState({
-            uiErrorContext: this.buildContext(produce(this.state.uiErrorContext.errors, cb))
+        this.setState((oldState) => {
+            return {
+                uiErrorContext: this.buildContext(produce(oldState.uiErrorContext.errors, cb))
+            }
         });
     }
 
