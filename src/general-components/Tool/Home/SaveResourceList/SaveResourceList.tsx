@@ -10,7 +10,7 @@ import {SavesControlCallbacks, SavesPaginationSetting} from "../ToolHome";
 
 
 interface SaveResourceListProps {
-    tool: Tool
+    tool: Tool<any>
     /**
      * Alle Speicherstände und zugehörige Metadaten der Pagination
      */

@@ -1,8 +1,7 @@
 import React, {Component, FormEvent} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faPencilAlt, faSave, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
+import {faArrowLeft, faPencilAlt, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
@@ -17,6 +16,7 @@ import {Loader} from "../../../general-components/Loader/Loader";
 
 import "./my-profile.scss";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
+import FAE from "../../../general-components/Icons/FAE";
 
 
 export interface MyProfileState {
@@ -180,11 +180,11 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 await this.saveChanges(e)
             }} className={"profile"}>
                 <h4>
-                    <FontAwesomeIcon icon={faUser}/> &nbsp;{this.state.user.getUsername()}
+                    <FAE icon={faUser}/> &nbsp;{this.state.user.getUsername()}
                     {(this.state.edit) && (
                         <Button style={{float: "right"}} disabled={this.state.isSaving} size={"sm"} variant={"dark"}
                                 className={"editButton"} onClick={this.changeView}>
-                            <FontAwesomeIcon icon={faArrowLeft}/> &nbsp;Zurück
+                            <FAE icon={faArrowLeft}/> &nbsp;Zurück
                         </Button>
                     )}
                 </h4>
@@ -291,7 +291,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
                 {(!this.state.edit) && (
                     <Button size={"sm"} variant={"dark"} className={"editButton"} onClick={this.changeView}>
-                        <FontAwesomeIcon icon={faPencilAlt}/> &nbsp; Bearbeiten
+                        <FAE icon={faPencilAlt}/> &nbsp; Bearbeiten
                     </Button>
                 )}
                 {(this.state.edit) && (
@@ -306,7 +306,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                             <Button disabled={this.state.isSaving} size={"sm"} variant={"danger"}
                                     className={"deleteButton"}
                                     onClick={this.showDeleteModal}>
-                                <FontAwesomeIcon icon={faTrash}/> &nbsp; Benutzer löschen
+                                <FAE icon={faTrash}/> &nbsp; Benutzer löschen
                             </Button>
                         </div>
                     </>

@@ -1,10 +1,10 @@
-import {CompareHeader} from "./CompareHeader";
+import {CompareHeader, CompareHeaderAdapter} from "./CompareHeaderAdapter";
 
 
 /**
  * Stellt eine/n Überschrift/Header mittels
  */
-class CompareNumberHeader extends CompareHeader {
+class CompareNumberHeader extends CompareHeaderAdapter {
     private readonly length: number;
     private readonly start: number;
 
@@ -22,10 +22,10 @@ class CompareNumberHeader extends CompareHeader {
     /**
      * Erstellt ein Array welche alle Zahlen von start zu (start + length - 1) enthält
      */
-    getHeaders(): Array<string> {
-        let headers = [];
+    getHeaders(): Array<CompareHeader> {
+        let headers:Array<CompareHeader> = [];
         for (let i = this.start; i < (this.start + this.length); i++) {
-            headers.push(String(i));
+            headers.push({header: String(i), desc :undefined});
         }
         return headers;
     }

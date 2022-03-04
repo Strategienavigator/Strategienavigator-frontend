@@ -1,19 +1,18 @@
 import {Button, FormSelect, Modal} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFileExport, faTimes} from "@fortawesome/free-solid-svg-icons";
-import {useState} from "react";
+import {memo} from "react";
 import {Tool} from "./Tool";
 import {Exporter} from "../Export/Exporter";
-import {Messages} from "../Messages/Messages";
+import FAE from "../Icons/FAE";
 
 interface ExportModalProps {
     onClose: () => void
     onSelect: (exporter: Exporter<any>) => void
     show: boolean
-    tool: Tool
+    tool: Tool<any>
 }
 
-function ExportModal(props: ExportModalProps) {
+function ExportModalComponent(props: ExportModalProps) {
     return (
         <Modal
             show={props.show}
@@ -33,7 +32,7 @@ function ExportModal(props: ExportModalProps) {
                             props.onClose();
                         }}
                     >
-                        <FontAwesomeIcon icon={faTimes}/>
+                        <FAE icon={faTimes}/>
                     </Button>
                 </Modal.Title>
             </Modal.Header>
@@ -65,8 +64,9 @@ function ExportModal(props: ExportModalProps) {
     );
 }
 
+const ExportModal = memo(ExportModalComponent);
+
 interface ExportButtonProps {
-    tool: Tool
     onClick: () => void
 }
 
@@ -76,11 +76,9 @@ function ExportButton(props: ExportButtonProps) {
             <Button
                 variant={"dark"}
                 className={"mt-2"}
-                onClick={() => {
-                    props.onClick();
-                }}
+                onClick={props.onClick}
             >
-                <FontAwesomeIcon icon={faFileExport} /> Exportieren
+                <FAE icon={faFileExport} /> Exportieren
             </Button>
         </>
     );

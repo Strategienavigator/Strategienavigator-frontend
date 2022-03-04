@@ -1,5 +1,4 @@
 import {Component} from "react";
-import {SettingsCache} from "../API/SettingsCache";
 import {SettingsContextComponent} from "./SettingsContextComponent";
 import {FooterContextComponent} from "./FooterContextComponent";
 

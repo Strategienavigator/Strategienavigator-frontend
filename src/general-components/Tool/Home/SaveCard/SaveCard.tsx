@@ -3,9 +3,9 @@ import React, {Component} from "react";
 import './save-card.scss';
 import {Button, Card} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {SimpleSaveResource} from "../../../Datastructures";
+import FAE from "../../../Icons/FAE";
 
 
 export interface SaveCardProps {
@@ -37,7 +37,7 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                     </Card>
                     {(!!this.props.onTrash && !isDeleting) && (
                         <Button type={"button"} variant={"danger"} className={"deleteSave"} onClick={this.props.onTrash}>
-                            <FontAwesomeIcon icon={faTrash}/>
+                            <FAE icon={faTrash}/>
                         </Button>
                     )}
                     {(isDeleting) && (

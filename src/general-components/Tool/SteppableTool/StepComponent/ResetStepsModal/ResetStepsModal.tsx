@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, memo} from "react";
 
 import './reset-steps-modal.scss';
 import {Button, Modal} from "react-bootstrap";
@@ -11,7 +11,7 @@ export interface ResetStepsModalProps {
     onAllReset: () => void
 }
 
-export function ResetStepsModal(props: ResetStepsModalProps) {
+function ResetStepsModal(props: ResetStepsModalProps) {
 
         return (
             <Modal
@@ -27,26 +27,20 @@ export function ResetStepsModal(props: ResetStepsModalProps) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
-                        onClick={() => {
-                            props.onNo();
-                        }}
+                        onClick={props.onNo}
                         variant={"light"}
                     >
                         Nein!
                     </Button>
                     <Button
                         variant="dark"
-                        onClick={() => {
-                            props.onAllReset();
-                        }}
+                        onClick={props.onAllReset}
                     >
                         Ja, ALLE Schritte zurücksetzen!
                     </Button>
                     <Button
                         variant="dark"
-                        onClick={() => {
-                            props.onYes();
-                        }}
+                        onClick={props.onYes}
                     >
                         Ja, ab diesem Schritt neu beginnen!
                     </Button>
@@ -54,3 +48,5 @@ export function ResetStepsModal(props: ResetStepsModalProps) {
             </Modal>
         );
 }
+
+export default memo(ResetStepsModal)

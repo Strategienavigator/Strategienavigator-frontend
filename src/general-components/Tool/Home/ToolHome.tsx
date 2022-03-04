@@ -2,10 +2,8 @@ import React, {Component, ReactNode} from "react";
 import {Tool} from "../Tool";
 import {Badge, Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faInfoCircle, faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
-import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 import "./tool-home.scss";
 import {FooterContext} from "../../Contexts/FooterContextComponent";
@@ -15,6 +13,7 @@ import {SimpleSaveResource} from "../../Datastructures";
 import {Session} from "../../Session/Session";
 import {deleteSave, getSaves} from "../../API/calls/Saves";
 import {DeleteSaveModal} from "./DeleteSaveModal/DeleteSaveModal";
+import FAE from "../../Icons/FAE";
 
 
 export interface ToolHomeInfo {
@@ -23,7 +22,7 @@ export interface ToolHomeInfo {
 }
 
 export interface ToolHomeProps {
-    tool?: Tool
+    tool: Tool<any>
     info?: ToolHomeInfo
 }
 
@@ -72,15 +71,13 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
         this.paginationLoader = new PaginationLoader<SimpleSaveResource>(async (page, perPage) => {
             let userId = Session.currentUser?.getID() as number;
-            if (this.props.tool !== undefined) {
-                return await getSaves(userId, {
-                    toolID: this.props.tool.getID(),
-                    page: page,
-                    ...this.state.paginationSettings
-                });
-            } else {
-                return null;
-            }
+
+            return await getSaves(userId, {
+                toolID: this.props.tool.getID(),
+                page: page,
+                ...this.state.paginationSettings
+            });
+
 
         });
 
@@ -97,7 +94,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
     componentDidMount() {
         this.context.setItem(1, {
             newTool: {
-                callback: () => this.props.tool?.switchPage("new"),
+                callback: () => this.props.tool.switchPage("new"),
                 title: "Neue Analyse"
             }
         });
@@ -106,11 +103,15 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         this.loadPage(0);
     }
 
+    componentWillUnmount() {
+        this.context.clearItems();
+    }
+
     getTutorialCanvas = () => {
         return (
             <Offcanvas placement={"start"} show={this.state.showTutorial}>
                 <OffcanvasHeader closeButton onClick={() => this.setState({showTutorial: false})}>
-                    <Offcanvas.Title>{this.props.tool?.getToolName()}</Offcanvas.Title>
+                    <Offcanvas.Title>{this.props.tool.getToolName()}</Offcanvas.Title>
                 </OffcanvasHeader>
                 <OffcanvasBody>
                     {this.props.info?.tutorial}
@@ -119,38 +120,42 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         );
     }
 
+    onInfoClick = () => {
+        this.setState({showTutorial: true});
+    }
+
     render = () => {
-        let title = this.props.tool?.getToolName();
+        let title = this.props.tool.getToolName();
 
         return (
             <div className={"toolHome"}>
                 <h4>
-                    <FontAwesomeIcon icon={this.props.tool?.getToolIcon() as IconDefinition}/> &nbsp; {title} &nbsp;
+                    <FAE icon={this.props.tool.getToolIcon()}/> &nbsp; {title} &nbsp;
 
-                    {(this.props.tool?.hasTutorial()) && (
+                    {(this.props.tool.hasTutorial()) && (
                         <Badge
                             bg="dark"
                             className={"description"}
-                            onClick={() => this.setState({showTutorial: true})}
+                            onClick={this.onInfoClick}
                         >
-                            <FontAwesomeIcon icon={faInfoCircle}/>
+                            <FAE icon={faInfoCircle}/>
                         </Badge>
                     )}
                 </h4>
                 <div className={"button-container mb-0 mt-2"}>
                     {isDesktop() && (
-                        <Button onClick={() => this.props.tool?.switchPage("new")} size={"sm"} variant={"dark"}>
-                            <FontAwesomeIcon icon={faPlusSquare}/> Neue Analyse
+                        <Button onClick={this.onNewSaveButtonClick} size={"sm"} variant={"dark"}>
+                            <FAE icon={faPlusSquare}/> Neue Analyse
                         </Button>
                     )}
 
 
                     <span className={"sorting-button"}>
-                        <span >Nach Erstelldatum sortieren: </span>
+                        <span>Nach Erstelldatum sortieren: </span>
                         <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
                                 className={"btn btn-primary"}
                                 onClick={this.orderingChangedCallback}>
-                            <FontAwesomeIcon
+                            <FAE
                                 icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
                         </Button>
                     </span>
@@ -174,23 +179,31 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 <DeleteSaveModal
                     show={this.state.showDeleteModal}
                     save={this.state.deleteSave ?? null}
-                    onClose={() => {
-                        this.setState({
-                            showDeleteModal: false,
-                            deleteSave: undefined
-                        });
-                    }}
-                    onDelete={async (id) => {
-                        await deleteSave(id);
-                        this.setState({
-                            showDeleteModal: false,
-                            deleteSave: undefined
-                        }, () => {
-                            this.updatePages();
-                        });
-                    }}/>
+                    onClose={this.onCloseDeleteModal}
+                    onDelete={this.onDeleteModal}/>
             </div>
         );
+    }
+
+    private onCloseDeleteModal = () => {
+        this.setState({
+            showDeleteModal: false,
+            deleteSave: undefined
+        });
+    };
+
+    private onDeleteModal = async (id:number) => {
+        await deleteSave(id);
+        this.setState({
+            showDeleteModal: false,
+            deleteSave: undefined
+        }, () => {
+            this.updatePages();
+        });
+    }
+
+    private onNewSaveButtonClick = () => {
+        this.props.tool.switchPage("new")
     }
 
 

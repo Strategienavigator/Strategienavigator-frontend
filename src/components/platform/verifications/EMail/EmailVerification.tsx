@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import {RouteComponentProps} from "react-router";
 import {verifyEmail} from "../../../../general-components/API/calls/Email";
@@ -9,6 +8,7 @@ import {Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
 import "./email-verification.scss";
+import FAE from "../../../../general-components/Icons/FAE";
 
 
 export interface EmailVerificationState {
@@ -54,7 +54,7 @@ export class EmailVerification extends Component<RouteComponentProps<RouteMatche
                 ) : (
                     (this.state.success) ? (
                         <>
-                            <FontAwesomeIcon icon={faCheck}/>
+                            <FAE icon={faCheck}/>
                             <h4>Ihre E-Mail wurde erfolgreich verifiziert!</h4>
 
                             <Link to={"/login"}>
@@ -65,7 +65,7 @@ export class EmailVerification extends Component<RouteComponentProps<RouteMatche
                         </>
                     ) : (
                         <>
-                            <FontAwesomeIcon icon={faTimes}/>
+                            <FAE icon={faTimes}/>
                             <h4>Die Verifikation Ihrer E-Mail Adresse ist fehlgeschlagen!</h4>
                         </>
                     )

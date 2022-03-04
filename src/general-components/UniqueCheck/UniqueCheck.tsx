@@ -1,4 +1,3 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as React from "react";
 import {Component} from "react";
 import {Form, FormControlProps} from "react-bootstrap";
@@ -10,6 +9,7 @@ import {Loader} from "../Loader/Loader";
 
 import "./unique-check.scss";
 import {AvailabilityCheckResource, DefaultResponse} from "../Datastructures";
+import FAE from "../Icons/FAE";
 
 
 export interface UniqueCheckProps {
@@ -103,17 +103,17 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
         return (<>
             {(!this.state.isLoading && this.state.error) && (
                 <div className={"feedback DANGER"}>
-                    <FontAwesomeIcon icon={faTimes}/> Die Verfügbarkeit konnte nicht überprüft werden.
+                    <FAE icon={faTimes}/> Die Verfügbarkeit konnte nicht überprüft werden.
                 </div>
             )}
             {(!this.state.isLoading && this.state.success !== undefined && !this.state.success) && (
                 <div className={"feedback DANGER"}>
-                    <FontAwesomeIcon icon={faTimes}/> {this.props.failMessage}
+                    <FAE icon={faTimes}/> {this.props.failMessage}
                 </div>
             )}
             {(!this.state.isLoading && this.state.success !== undefined && this.state.success) && (
                 <div className={"feedback SUCCESS"}>
-                    <FontAwesomeIcon icon={faCheck}/> {this.props.successMessage}
+                    <FAE icon={faCheck}/> {this.props.successMessage}
                 </div>
             )}
         </>)

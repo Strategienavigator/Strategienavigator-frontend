@@ -7,9 +7,9 @@ import {Link} from "react-router-dom";
 import {NotFound} from "./not-found/NotFound";
 import {APINotReachable} from "./api-not-reachable/APINotReachable";
 import {Button} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome} from "@fortawesome/free-solid-svg-icons/";
 import {ErrorPage} from "./errorpage/ErrorPage";
+import FAE from "../../Icons/FAE";
 
 
 export type ErrorComponentTypes =
@@ -52,7 +52,7 @@ class ErrorPages extends Component<RouteComponentProps<{ code: string }>, any> {
                 <Link className="button" to="/">
                     <Button variant={"dark"}>
                         Startseite &nbsp;
-                        <FontAwesomeIcon icon={faHome}/>
+                        <FAE icon={faHome}/>
                     </Button>
                 </Link>
             </div>

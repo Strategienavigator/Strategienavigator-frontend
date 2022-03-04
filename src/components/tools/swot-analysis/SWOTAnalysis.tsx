@@ -1,53 +1,36 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {SWOTFactors, SwotFactorsValues} from "./steps/SWOTFactors";
-import {SWOTAlternativeActions, SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions";
+import {SwotFactorsValues} from "./steps/SWOTFactors/SWOTFactorsComponent";
+import {SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
 import {
-    SWOTClassifyAlternativeActions,
     SWOTClassifyAlternativeActionsValues
-} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
+} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
 
 import "./swot-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
-import {SWOTAnalysisMatrix} from "./matrix/SWOTAnalysisMatrix";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {SWOTExcelExporter} from "./export/SWOTExcelExporter";
+import {RouteComponentProps} from "react-router";
+import {SWOTFactors} from "./steps/SWOTFactors/SWOTFactors";
+import {SWOTAlternativeActions} from "./steps/SWOTAlternativeActions/SWOTAlternativeActions";
+import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
 
 
 interface SWOTAnalysisValues {
-    "swot-factors": SwotFactorsValues,
-    "alternative-actions": SWOTAlternativeActionsValues,
-    "swot-classify-alternate-actions": SWOTClassifyAlternativeActionsValues
+    "swot-factors"?: SwotFactorsValues,
+    "alternative-actions"?: SWOTAlternativeActionsValues,
+    "swot-classify-alternate-actions"?: SWOTClassifyAlternativeActionsValues
 }
+class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
 
-class SWOTAnalysis extends SteppableTool {
-
-    constructor(props: any) {
-        super(props);
-
-        this.setID(2);
-        this.setToolname("SWOT Analyse");
-        this.setToolIcon(faThLarge);
-        // this.setMatrix(<SWOTAnalysisMatrix steps={[2]} />);
+    constructor(props: RouteComponentProps<{ id: string }>, context: any) {
+        super(props, context, "SWOT Analyse", faThLarge, 2);
 
         this.addExporter(new JSONExporter());
         this.addExporter(new SWOTExcelExporter());
 
-        this.addStep<SwotFactorsValues>({
-            id: "swot-factors",
-            title: "1. Faktoren festlegen",
-            form: <SWOTFactors/>
-        });
-        this.addStep<SWOTAlternativeActionsValues>({
-            id: "alternative-actions",
-            title: "2. Handlungsalternativen festlegen",
-            form: <SWOTAlternativeActions/>
-        });
-        this.addStep<SWOTClassifyAlternativeActionsValues>({
-            id: "swot-classify-alternate-actions",
-            title: "3. Handlungsalternativen klassifizieren",
-            form: <SWOTClassifyAlternativeActions/>
-        });
+        this.addStep(new SWOTFactors());
+        this.addStep(new SWOTAlternativeActions())
+        this.addStep(new SWOTClassifyAlternativeActions());
     }
 
     protected renderShortDescription() {
@@ -72,13 +55,12 @@ class SWOTAnalysis extends SteppableTool {
         );
     }
 
-    protected renderView(save: SaveResource<SWOTAnalysisValues>) {
-        this.setValues("swot-factors", save.data["swot-factors"]);
-        this.setValues("alternative-actions", save.data["alternative-actions"]);
-        this.setValues("swot-classify-alternate-actions", save.data["swot-classify-alternate-actions"]);
-
-        return this.getStepComponent();
+    protected getInitData(): SWOTAnalysisValues {
+        let data: SWOTAnalysisValues = {};
+        this.getStep(0).dataHandler.fillFromPreviousValues(data);
+        return data;
     }
+
 }
 
 export {
