@@ -21,22 +21,25 @@ export class LoadingButton extends Component<LoadingButtonProps, {}> {
         defaultIcon: faSave
     }
 
+
     render() {
+        const {isSaving, savingChild, defaultChild, showIcons, defaultIcon, ...props} = this.props;
+
         return (
             <Button
-                {...(this.props as ButtonProps)}
-                disabled={this.props.isSaving}
+                {...props}
+                disabled={isSaving}
             >
 
-                {!this.props.isSaving ? (
-                    <>{this.props.showIcons && (<FontAwesomeIcon icon={this.props.defaultIcon}/>)} {this.props.defaultChild}</>
+                {!isSaving ? (
+                    <>{showIcons && (<FontAwesomeIcon icon={defaultIcon}/>)} {defaultChild}</>
                 ) : (
 
-                    this.props.showIcons ? (
-                            <Loader payload={[]} variant={this.props.variant === "dark" ? "dark" : "light"}
-                                    text={<span>&nbsp;{this.props.savingChild}</span>}
+                    showIcons ? (
+                            <Loader payload={[]} variant={props.variant === "dark" ? "dark" : "light"}
+                                    text={<span>&nbsp;{savingChild}</span>}
                                     transparent size={20} loaded={false}/>)
-                        : this.props.savingChild
+                        : savingChild
 
                 )}
             </Button>
