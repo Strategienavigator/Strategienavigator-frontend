@@ -7,13 +7,13 @@ import {CardComponentFields} from "../../CardComponent/CardComponent";
  */
 class MatchCardComponentFieldsAdapter extends CompareAdapter {
 
-    private cardComponentFields: CardComponentFields;
+    private cardComponentFields: CardComponentFields<any>;
 
     /**
      * Erstellt eine neue Adapter Instanz
      * @param cardComponentFields muss mindestens 2 Felder enthalten
      */
-    constructor(cardComponentFields: CardComponentFields) {
+    constructor(cardComponentFields: CardComponentFields<any>) {
         super();
         if (cardComponentFields.length < 2) {
             throw new Error("Cardcomponentfield muss mindestends Zwei Einträge enthalten!");

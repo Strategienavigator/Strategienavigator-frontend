@@ -1,63 +1,52 @@
 import {FormComponent, FormComponentProps} from "../../../FormComponent/FormComponent";
-import StepComponent from "../StepComponent";
+import {ToolSaveProps} from "../../../ToolSavePage/ToolSavePage";
 
 import './step.scss';
-import {FormEvent} from "react";
-import {Messages} from "../../../../Messages/Messages";
+import {StepController} from "../StepComponent";
+import {compareWithoutFunctions} from "../../../../ComponentUtils";
+import {is} from "immer/dist/utils/common";
 
-export interface SteppableProp extends FormComponentProps{
-    /**
-     * Das StepComponent
-     */
-    stepComp?: StepComponent
+interface StepProp<V extends object> extends FormComponentProps, ToolSaveProps<V> {
+    stepController: StepController
+    currentSubStep: number
+    validationFailed: boolean
 }
+
+abstract class Step<V extends object, S> extends FormComponent<StepProp<V>, S> {
+
+
+    protected constructor(props: Readonly<StepProp<V>> | StepProp<V>);
+    protected constructor(props: StepProp<V>, context: any);
+    protected constructor(props: Readonly<StepProp<V>> | StepProp<V>, context?: any) {
+        super(props, context);
+    }
+}
+
 
 /**
- * Stellt einen einzelnen Schritt aus dem StepComponent dar.
- * Erbt dazu aus FormComponent.
+ * prüft ob die alten und die neuen Props identisch sind. alle außer der save prop und funktionen werden verglichen.
+ * @param oldProps alten props
+ * @param newProps neuen props
+ * @param toIgnore welche props beim vergleich vernachlässigt werden sollen
+ * @param dataComparison ein callback um die Daten des speicherstandes zu vergleichen, wenn dieser true returned wird davon ausgegeangen, das die daten auch gleich sind
  */
-export abstract class Step<V, S> extends FormComponent<V, SteppableProp,S>{
+const shallowCompareStepProps = <T extends object>(oldProps: StepProp<T>, newProps: StepProp<T>, dataComparison?: (oldData: T, newData: T) => boolean, toIgnore: (keyof StepProp<T>)[] = []): boolean => {
+    let isSame = compareWithoutFunctions(oldProps, newProps, ["save", ...toIgnore.map(k => k.toString())]);
 
-    /**
-     * Gibt das StepComponent zurück.
-     * @returns {StepComponent} Das StepComponent
-     * @throws {Error} Fehler, falls das StepComponent nicht gesetzt wurde: "No Step Component Set"
-     * @protected
-     */
-    protected requireStepComponent() {
-        if(this.props.stepComp) {
-            return this.props.stepComp as StepComponent;
-        } else {
-            throw new Error("No Step Component Set");
-        }
+    if (isSame && dataComparison !== undefined) {
+        isSame = dataComparison(oldProps.save.data, newProps.save.data);
     }
 
-    /**
-     * Funktion wurde hier überschrieben, da der Formsubmit bei einem Step sich anders verhält als im FormComponent.
-     *
-     * @param {React.FormEvent<HTMLFormElement>} e Das HTML-Formular mit den Werten
-     * @returns {Promise<void>}
-     * @override
-     */
-    protected onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        let newValues = this.extractValues(e);
-        this.values = newValues;
+    return isSame;
+}
 
-        if (this.isSaving) {
-            this.isSaving = false;
-        } else {
-            // is nextstep
-            if (this.validate(newValues)) {
-                await this.submit(newValues);
-                this.props.stepComp?.nextStep();
-            } else {
-                Messages.add(
-                    "Bitte überprüfen Sie vorher Ihre Eingaben!",
-                    "DANGER",
-                    Messages.TIMER
-                );
-            }
-        }
-    }
+export type {
+    StepProp
 
 }
+
+export {
+    Step,
+    shallowCompareStepProps
+}
+

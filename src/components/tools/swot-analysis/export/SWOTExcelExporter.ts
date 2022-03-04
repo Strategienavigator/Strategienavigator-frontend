@@ -2,18 +2,20 @@ import {ExcelExporter} from "../../../../general-components/Export/ExcelExporter
 import {SWOTAnalysisValues} from "../SWOTAnalysis";
 import {SaveResource} from "../../../../general-components/Datastructures";
 import XLSX, {CellAddress, CellObject, Range, WorkSheet} from "xlsx-js-style";
-import {SwotFactorsValues} from "../steps/SWOTFactors";
-import {SWOTAlternativeActionsValues} from "../steps/SWOTAlternativeActions";
-import {SWOTClassifyAlternativeActionsValues} from "../steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
+import {SwotFactorsValues} from "../steps/SWOTFactors/SWOTFactorsComponent";
+import {SWOTAlternativeActionsValues} from "../steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
+import {
+    SWOTClassifyAlternativeActionsValues
+} from "../steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 
 
 class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
 
     protected buildExcel(workbook: XLSX.WorkBook, data: SaveResource<SWOTAnalysisValues>): boolean {
-        let factors = data.data["swot-factors"];
-        let alternatives = data.data["alternative-actions"];
-        let classifications = data.data["swot-classify-alternate-actions"];
+        let factors = data.data["swot-factors"]!;
+        let alternatives = data.data["alternative-actions"]!;
+        let classifications = data.data["swot-classify-alternate-actions"]!;
 
         const isFilled = (o: object): boolean => {
             return o && Object.keys(o).length > 0;
@@ -61,16 +63,21 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
                 ws["D" + i] = {v: "", t: "s"} as CellObject;
                 ws["E" + i] = {v: "", t: "s"} as CellObject;
             } else {
-                ws["B" + i] = {v: action.first ? action.first.name : "", t: "s"} as CellObject;
-                nameWidth1 = action.first ? this.updateWidth(nameWidth1, action.first?.name.length) : nameWidth1;
-                ws["C" + i] = {v: action.first ? action.first.desc : "", t: "s"} as CellObject;
-                descWidth1 = action.first ? this.updateWidth(descWidth1, action.first.desc.length) : descWidth1;
-                ws["D" + i] = {v: action.second ? action.second.name : "", t: "s"} as CellObject;
-                nameWidth2 = action.second ? this.updateWidth(nameWidth2, action.second.name.length) : nameWidth2;
-                ws["E" + i] = {v: action.second ? action.second.desc : "", t: "s"} as CellObject;
-                descWidth2 = action.second ? this.updateWidth(descWidth2, action.second.desc.length) : descWidth2;
-            }
+                if (action.alternatives.length > 0) {
+                    ws["B" + i] = {v: action.alternatives[0].name, t: "s"} as CellObject;
+                    nameWidth1 = this.updateWidth(nameWidth1, action.alternatives[0].name.length);
+                    ws["C" + i] = {v: action.alternatives[0].desc, t: "s"} as CellObject;
+                    descWidth1 = this.updateWidth(descWidth1, action.alternatives[0].desc.length);
 
+                }
+
+                if(action.alternatives.length > 1){
+                    ws["D" + i] = {v: action.alternatives[1].name, t: "s"} as CellObject;
+                    nameWidth2 = this.updateWidth(nameWidth2, action.alternatives[1].name.length);
+                    ws["E" + i] = {v: action.alternatives[1].desc, t: "s"} as CellObject;
+                    descWidth2 = this.updateWidth(descWidth2, action.alternatives[1].desc.length);
+                }
+            }
             i++;
         }
 

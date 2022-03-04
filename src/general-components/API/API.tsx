@@ -95,7 +95,7 @@ const callAPI = async <D extends object>(
             response: call
         };
     } catch (e) {
-        if (apiArgs !== undefined && apiArgs.errorCallback !== undefined) {
+        if (apiArgs?.errorCallback !== undefined) {
             apiArgs.errorCallback(e as Error);
         } else {
             showErrorPage(500);

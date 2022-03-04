@@ -6,7 +6,7 @@ import {useState} from "react";
 import {reload_app} from "../index";
 import {Loader} from "./Loader/Loader";
 import {faCheckCircle, faExclamationTriangle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import FAE from "./Icons/FAE";
 
 
 interface ProtectedRouteProps extends RouteProps {
@@ -32,7 +32,7 @@ export function AnonymousModal(props: {
             keyboard={true}
         >
             <Modal.Header>
-                <b><FontAwesomeIcon icon={faExclamationTriangle}/> Achtung!</b>
+                <b><FAE icon={faExclamationTriangle}/> Achtung!</b>
             </Modal.Header>
             <Modal.Body>
                 <b>Wollen Sie sich als anonymer Nutzer anmelden?</b><br/>
@@ -70,7 +70,7 @@ export function AnonymousModal(props: {
                 }}>
                     <Loader payload={[]} variant={"dark"} transparent size={15} text={<span>&nbsp;Annehmen</span>}
                             loaded={!agreementLoading}>
-                        <FontAwesomeIcon icon={faCheckCircle}/> Annehmen
+                        <FAE icon={faCheckCircle}/> Annehmen
                     </Loader>
                 </Button>
 
@@ -86,7 +86,7 @@ export function AnonymousModal(props: {
                 }}>
                     <Loader payload={[]} variant={"dark"} transparent size={15} text={<span>&nbsp;Ablehnen</span>}
                             loaded={!disagreementLoading}>
-                        <FontAwesomeIcon icon={faTimesCircle}/> Ablehnen
+                        <FAE icon={faTimesCircle}/> Ablehnen
                     </Loader>
                 </Button>
             </Modal.Footer>

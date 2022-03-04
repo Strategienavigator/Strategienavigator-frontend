@@ -76,8 +76,8 @@ const getSaves = async (userID: number, getSavesArguments: GetSavesArguments, ap
  * @param saveID Die ID des Saves
  * @param apiArgs API Argumente
  */
-const getSave = async (saveID: number, apiArgs?: APIArgs) => {
-    return await callAPI<DefaultResponse<SaveResource>>("api/saves/" + saveID, "GET", undefined, true, apiArgs);
+const getSave = async <D extends unknown>(saveID: number, apiArgs?: APIArgs) => {
+    return await callAPI<SaveResource<D>>("api/saves/" + saveID, "GET", undefined, true, apiArgs);
 }
 
 /**
@@ -90,6 +90,22 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
     return await callAPI("api/saves/" + saveID, "DELETE", undefined, true, apiArgs);
 }
 
+
+/**
+ * Updatet einen Save
+ *
+ * @param save Der zu aktualisierende Speicherstand
+ * @param apiArgs API Argumente
+ */
+const updateSave = async (save:SaveResource<any>, apiArgs?: APIArgs) => {
+    let data = new FormData();
+    data.append("data", JSON.stringify(save.data));
+    data.append("name", save.name as string);
+    data.append("description", save.description as string);
+    const saveID = save.id;
+
+    return await updateSaveData(saveID, data, apiArgs);
+}
 /**
  * Updatet einen Save
  *
@@ -97,7 +113,7 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
  * @param data Daten des Speicherstandes
  * @param apiArgs API Argumente
  */
-const updateSave = async (saveID: number, data: FormData, apiArgs?: APIArgs) => {
+const updateSaveData = async (saveID: number, data: FormData, apiArgs?: APIArgs) => {
     data.append("_method", "PUT");
 
     return await callAPI("api/saves/" + saveID, "POST", data, true, apiArgs);
@@ -121,14 +137,16 @@ const lockSave = async (saveID: number, lock: boolean, apiArgs?: APIArgs) => {
     return await callAPI("api/saves/" + saveID, "POST", data, true, apiArgs);
 }
 
+
+
 /**
  * Erstellt einen neuen Save
  *
  * @param data Daten des Save
  * @param apiArgs API Argumente
  */
-const createSave = async (data: FormData, apiArgs?: APIArgs) => {
-    return await callAPI("api/saves", "POST", data, true, apiArgs);
+const createSave = async <D extends unknown>(data: FormData, apiArgs?: APIArgs) => {
+    return await callAPI<SaveResource<D>>("api/saves", "POST", data, true, apiArgs);
 }
 
 export {
