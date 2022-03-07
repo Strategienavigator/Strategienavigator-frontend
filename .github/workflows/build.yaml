@@ -20,4 +20,4 @@ jobs:
         env:
           REACT_APP_CLIENT_ID: 1
           REACT_APP_CLIENT_SECRET: 44756d6d79536563726574
-        run: npm run build
+        run: CI=false npm run build
