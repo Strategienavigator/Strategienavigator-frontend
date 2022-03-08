@@ -14,20 +14,21 @@ import FAE from "../Icons/FAE";
 
 export interface UniqueCheckProps {
     callback?: ((input: string, apiArgs?: APIArgs) => Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>)
-    failMessage?: string
-    successMessage?: string
+    entityName: string
     suppressErrors: boolean
 }
 
 export interface UniqueCheckState {
     isLoading: boolean
     success?: boolean
+    reason?: "taken" | "blocked" | "invalid"
     error: boolean
 }
 
 export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProps> & UniqueCheckProps, UniqueCheckState> {
     static defaultProps = {
-        suppressErrors: false
+        suppressErrors: false,
+
     }
     private timeout: NodeJS.Timeout | undefined;
 
@@ -39,6 +40,98 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
             error: false
         };
     }
+
+
+    private getFailMessage() {
+        return "Die Verfügbarkeit konnte nicht überprüft werden.";
+    }
+
+    private getTakenMessage() {
+        return this.props.entityName + " ist nicht Verfügbar!";
+    }
+
+    private getAvailableMessage() {
+        return this.props.entityName + " ist Verfügbar!";
+    }
+
+    private getInvalidMessage() {
+        return this.props.entityName + " ist nicht korrekt!";
+    }
+
+    private getBlockedMessage() {
+        return this.props.entityName + " ist nicht erlaubt!";
+    }
+
+    private getMessage() {
+        if (this.state.success) {
+            return this.getAvailableMessage();
+        } else {
+            switch (this.state.reason) {
+                case "invalid":
+                    return this.getInvalidMessage();
+                case "taken":
+                    return this.getTakenMessage();
+                case "blocked":
+                    return this.getBlockedMessage();
+                default:
+                    return this.getTakenMessage();
+            }
+        }
+
+    }
+
+    /**
+     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
+     * This is considered pretty hacky
+     */
+    componentWillUnmount() {
+        this.setState = (() => {
+            return;
+        });
+    }
+
+
+    renderErrors = () => {
+        return (<>
+            {(!this.state.isLoading && this.state.error) && (
+                <div className={"feedback DANGER"}>
+                    <FAE icon={faTimes}/> {this.getFailMessage()}
+                </div>
+            )}
+            {(!this.state.isLoading && !this.state.error && this.state.success !== undefined) && (
+                <div className={"feedback " + (this.state.success ? "SUCCESS" : "DANGER")}>
+                    {!this.state.success && <FAE icon={faTimes}/>} {this.getMessage()}
+                </div>
+            )}
+        </>)
+    }
+
+    render = () => {
+        let {callback, entityName, suppressErrors, ...propsForInput} = this.props;
+
+        return (
+            <>
+                <Form.Control
+                    onChange={(e) => this.changed(e)}
+                    {...propsForInput}
+                />
+                <div className={"uniqueOutput feedbackContainer"}>
+                    {this.state.isLoading && (
+                        <div className={"feedback"}>
+                            <Loader payload={[]} size={30} alignment={"left"} text={"Lädt..."} transparent
+                                    loaded={false}/>
+                        </div>
+                    )}
+
+                    {
+                        !suppressErrors && this.renderErrors()
+                    }
+
+                </div>
+            </>
+        );
+    }
+
 
     changed = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (this.timeout) {
@@ -57,7 +150,7 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     let call = await new Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>((resolve, reject) => {
                         if (this.props.callback === undefined) {
                             reject(new Error("callback is undefined"));
-                        }else{
+                        } else {
                             this.props.callback(value, {errorCallback: reject}).then(resolve).catch(reject);
                         }
                     });
@@ -66,14 +159,17 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     if (call?.success) {
                         this.setState({
                             success: call.callData.data.available,
+                            reason: call.callData.data.reason,
                             isLoading: false,
                             error: false
                         });
                         return;
                     }
                 } catch (reason) {
-                    console.error(reason);
+                    console.dir(reason);
                 }
+
+
                 this.setState({
                     success: undefined,
                     error: true,
@@ -86,66 +182,6 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                 error: false
             });
         }
-    }
-
-    /**
-     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
-     * This is considered pretty hacky
-     */
-    componentWillUnmount() {
-        this.setState = (() => {
-            return;
-        });
-    }
-
-
-    renderErrors = () => {
-        return (<>
-            {(!this.state.isLoading && this.state.error) && (
-                <div className={"feedback DANGER"}>
-                    <FAE icon={faTimes}/> Die Verfügbarkeit konnte nicht überprüft werden.
-                </div>
-            )}
-            {(!this.state.isLoading && this.state.success !== undefined && !this.state.success) && (
-                <div className={"feedback DANGER"}>
-                    <FAE icon={faTimes}/> {this.props.failMessage}
-                </div>
-            )}
-            {(!this.state.isLoading && this.state.success !== undefined && this.state.success) && (
-                <div className={"feedback SUCCESS"}>
-                    <FAE icon={faCheck}/> {this.props.successMessage}
-                </div>
-            )}
-        </>)
-    }
-
-    render = () => {
-        let propsForInput = {...this.props};
-        delete propsForInput.failMessage;
-        delete propsForInput.successMessage;
-        delete propsForInput.callback;
-
-        return (
-            <>
-                <Form.Control
-                    onChange={(e) => this.changed(e)}
-                    {...propsForInput}
-                />
-                <div className={"uniqueOutput feedbackContainer"}>
-                    {this.state.isLoading && (
-                        <div className={"feedback"}>
-                            <Loader payload={[]} size={30} alignment={"left"} text={"Lädt..."} transparent
-                                    loaded={false}/>
-                        </div>
-                    )}
-
-                    {
-                        !this.props.suppressErrors && this.renderErrors()
-                    }
-
-                </div>
-            </>
-        );
     }
 
 }

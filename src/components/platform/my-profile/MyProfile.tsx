@@ -201,8 +201,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         defaultValue={this.state.user.getUsername()}
                         value={this.state.edit ? undefined : this.state.user.getUsername()}
                         callback={checkUsername}
-                        failMessage={"Username bereits vorhanden!"}
-                        successMessage={"Username verfügbar!"}
+                        entityName={"Username"}
                     />
                     <Form.Label>Benutzername</Form.Label>
                 </Form.Floating>
@@ -217,8 +216,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         defaultValue={this.state.user.getEmail()}
                         value={this.state.edit ? undefined : this.state.user.getEmail()}
                         callback={checkEmail}
-                        failMessage={"E-Mail bereits vorhanden!"}
-                        successMessage={"E-Mail verfügbar!"}
+                        entityName={"Email"}
                     />
                     <Form.Label>E-Mail-Adresse</Form.Label>
                 </Form.Floating>
