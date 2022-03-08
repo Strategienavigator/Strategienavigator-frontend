@@ -98,9 +98,15 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     <FAE icon={faTimes}/> {this.getFailMessage()}
                 </div>
             )}
-            {(!this.state.isLoading && !this.state.error && this.state.success !== undefined) && (
-                <div className={"feedback " + (this.state.success ? "SUCCESS" : "DANGER")}>
-                    {!this.state.success && <FAE icon={faTimes}/>} {this.getMessage()}
+            {(!this.state.isLoading && !this.state.error && this.state.success !== undefined && this.state.success) && (
+                <div className={"feedback SUCCESS"}>
+                    {this.getMessage()}
+                </div>
+            )}
+
+            {(!this.state.isLoading && !this.state.error && this.state.success !== undefined && !this.state.success) && (
+                <div className={"feedback DANGER"}>
+                    <FAE icon={faTimes}/> {this.getMessage()}
                 </div>
             )}
         </>)
