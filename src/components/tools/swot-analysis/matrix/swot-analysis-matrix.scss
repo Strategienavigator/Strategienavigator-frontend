@@ -1,7 +1,7 @@
 .flex-container{
   display: flex;
+  cursor: pointer;
 }
-
 
 //-----------------------------------------------------
 
@@ -40,6 +40,7 @@
   display: grid;
   grid-template-rows: repeat(auto-fit, 44px);
   grid-template-columns: repeat(auto-fit, 44px);
+  
 }
 
 .grid-head>div .grid-left>div {
@@ -70,5 +71,10 @@
 }
 .green{
   background-color: green;
+}
+
+.alle-container{
+  max-width: 300px;
+  
 }
 
