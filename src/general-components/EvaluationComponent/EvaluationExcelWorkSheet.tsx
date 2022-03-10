@@ -23,6 +23,7 @@ class EvaluationExcelWorkSheet extends ExcelExporter<any> {
      */
     public getExcelSheet(): WorkSheet {
         let ws: WorkSheet = {};
+        let sum = this.values.result.reduce((p, n) => p + n.points, 0);
 
         ws["A1"] = {
             t: "s", v: "Ergebnis", s: this.getHeaderStyle()
@@ -44,6 +45,10 @@ class EvaluationExcelWorkSheet extends ExcelExporter<any> {
         }
         cell.c += 1;
         ws[this.encodeCell(cell)] = {
+            t: "s", v: "Gewichtung", s: this.getHeaderStyle()
+        }
+        cell.c += 1;
+        ws[this.encodeCell(cell)] = {
             t: "s", v: "Punkte", s: this.getHeaderStyle()
         }
         cell.c += 1;
@@ -62,6 +67,10 @@ class EvaluationExcelWorkSheet extends ExcelExporter<any> {
 
             cell.c += 1;
             ws[this.encodeCell(cell)] = {
+                t: "n", v: (Math.round(((element.points / sum) * 100) * 100) / 100)
+            }
+            cell.c += 1;
+            ws[this.encodeCell(cell)] = {
                 t: "n", v: element.points
             }
             cell.c += 1;
@@ -76,6 +85,9 @@ class EvaluationExcelWorkSheet extends ExcelExporter<any> {
         ws["!cols"] = [
             {
                 wch: criteriaLength + 1
+            },
+            {
+                wch: "Gewichtung".length + 1
             },
             {
                 wch: "Punkte".length + 1

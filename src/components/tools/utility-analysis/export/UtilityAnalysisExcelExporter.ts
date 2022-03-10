@@ -317,6 +317,13 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         ws[this.encodeCell(cell)] = {
             t: "s", v: "Objekt", s: this.getHeaderStyle()
         }
+
+        cell.c += 1;
+
+        ws[this.encodeCell(cell)] = {
+            t: "s", v: "Punkte", s: this.getHeaderStyle()
+        }
+
         cell.c += 1;
 
         ws[this.encodeCell(cell)] = {
@@ -331,6 +338,13 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                 v: value.object.name, t: "s"
             };
             objectLength = this.updateWidth(objectLength, value.object.name.length);
+
+            cell.c += 1;
+
+            ws[this.encodeCell(cell)] = {
+                v: value.points, t: "s"
+            };
+
             cell.c += 1;
 
             ws[this.encodeCell(cell)] = {
@@ -346,7 +360,10 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                 wch: objectLength
             },
             {
-                wch: 5
+                wch: "Punkte".length + 1
+            },
+            {
+                wch: "Rang".length + 1
             }
         ];
 

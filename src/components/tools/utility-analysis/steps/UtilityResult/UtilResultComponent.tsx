@@ -45,6 +45,7 @@ class UtilResultComponent extends Step<UtilityAnalysisValues, any> {
                     <thead>
                     <tr>
                         <th className={"fixed"}>Objekt</th>
+                        <th className={"fixed"}>Punkte</th>
                         <th className={"fixed"}>Rang</th>
                     </tr>
                     </thead>
@@ -56,6 +57,7 @@ class UtilResultComponent extends Step<UtilityAnalysisValues, any> {
                                     {v.object.name}<br/>
                                     <small>{v.object.desc}</small>
                                 </td>
+                                <td>{v.points}</td>
                                 <td className={"fixed"}>{v.rank}</td>
                             </tr>
                         );

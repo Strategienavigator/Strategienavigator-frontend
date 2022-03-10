@@ -20,6 +20,8 @@ export interface EvaluationComponentProps {
 class EvaluationComponent extends Component<EvaluationComponentProps, any> {
 
     render = () => {
+        let sum = this.props.values.result.reduce((p, n) => p + n.points, 0);
+
         return (
             <div>
                 <div style={{marginBottom: "1.5rem"}}>
@@ -32,6 +34,7 @@ class EvaluationComponent extends Component<EvaluationComponentProps, any> {
                     <thead>
                     <tr>
                         <th>{this.props.customTableHeader ? this.props.customTableHeader : "Feld"}</th>
+                        <th className={"fixed"}>Gewichtung</th>
                         <th className={"fixed"}>Punkte</th>
                         <th className={"fixed"}>Rang</th>
                     </tr>
@@ -44,6 +47,7 @@ class EvaluationComponent extends Component<EvaluationComponentProps, any> {
                                     {v.criteria.name}<br/>
                                     <small>{v.criteria.desc}</small>
                                 </td>
+                                <td>{(Math.round(((v.points / sum) * 100) * 100) / 100)} %</td>
                                 <td className={"fixed"}>{v.points}</td>
                                 <td className={"fixed"}>{v.rank}</td>
                             </tr>

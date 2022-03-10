@@ -48,6 +48,7 @@ class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
                     <CompareComponent
                         disabled={this.props.disabled}
                         values={values}
+                        name={"weighting"}
                         showHeader={true}
                         fields={adapter}
                         header={UtilWeighting.header}

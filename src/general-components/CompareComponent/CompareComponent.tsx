@@ -86,18 +86,18 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                             <div className={"comparisons"}>
                                 {header.getHeaders().map((item, headerIndex) => {
                                     let checked = (comparison.value !== null) ? (parseInt(comparison.value) === headerIndex) : false;
-                                    let value = (comparison.value !== null) ? ((parseInt(comparison.value) === headerIndex) ? comparison.value : headerIndex) : "";
+                                    let value = (comparison.value !== null) ? comparison.value : undefined;
 
                                     return (
-                                        <div key={"field-" + name + index + "-" + headerIndex} className={"comparison"}>
+                                        <div key={"field-" + name  + "-" + index + "-" + headerIndex} className={"comparison"}>
                                             {/*TODO onChanged event abgreifen und am namen festmachen welches geändert werden muss*/}
                                             <input
-                                                defaultChecked={checked}
+                                                checked={checked}
                                                 value={value}
                                                 onChange={this.onRadioChange.bind(this, index, headerIndex)}
                                                 disabled={this.props.disabled}
                                                 type={"radio"}
-                                                name={"field-" + name + index}
+                                                name={"field-" + name + "-" + index}
                                             />
                                         </div>
                                     );
