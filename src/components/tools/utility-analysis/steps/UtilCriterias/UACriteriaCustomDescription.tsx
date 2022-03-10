@@ -7,6 +7,7 @@ import {faCaretDown, faCaretUp} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../../../../../general-components/Icons/FAE";
 import {ChangeEvent} from "react";
 import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
+import {isDesktop} from "../../../../../general-components/Desktop";
 
 
 /**
@@ -49,7 +50,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
                 </Button>
 
                 <Collapse in={this.state.collapsed}>
-                    <div>
+                    <div className={"scale " + ((isDesktop() ? "desktop" : "mobile"))}>
                         {values.headers.map((v, index) => {
 
                             return (
@@ -62,6 +63,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
                                             type={"text"}
                                             disabled={this.props.disabled}
                                             value={v.desc}
+                                            size={"sm"}
                                             placeholder={v.header}
                                             onChange={this.descriptionChanged.bind(this, index)}
                                         />

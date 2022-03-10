@@ -5,3 +5,26 @@
 .criteria {
   font-weight: 700;
 }
+
+
+#ua-criterias {
+  .scale.desktop.collapse:not(.show) {
+    display: none !important;
+  }
+
+  .scale.desktop {
+    display: flex;
+    gap: 5px;
+
+    .row {
+      max-width: 100%;
+      height: auto;
+      flex-wrap: nowrap;
+      flex-direction: column;
+      > div {
+        flex: 50% 0 0;
+        width: 100%;
+      }
+    }
+  }
+}
