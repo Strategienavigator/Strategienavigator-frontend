@@ -15,7 +15,7 @@ import {CardComponentFields} from "../../../../../general-components/CardCompone
 
 export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues>, StepDataHandler<SWOTAnalysisValues>, SubStepDefinition<SWOTAnalysisValues> {
 
-    public static minAlternatives = 0;
+    public static minAlternatives = 1;
     public static maxAlternatives = 2;
 
     public static splitAlternateActionName(name: string) {

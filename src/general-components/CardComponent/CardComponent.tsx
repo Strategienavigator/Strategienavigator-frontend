@@ -193,7 +193,6 @@ export interface CardComponentProps<D> {
 
 class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> {
 
-
     private cardUpdatedListener = (index: number, name: string, desc: string, extra?: D) => {
         let newValues = this.props.values.slice();
         newValues[index] = {
@@ -211,7 +210,6 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
             newValues.splice(index, 1);
 
             this.reIdFrom(newValues, index);
-
             this.props.onChanged(newValues);
         }
     }
@@ -242,10 +240,15 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
         }
     }
 
-
     getAllCards = () => {
-
         let required = (this.props.required !== undefined) ? this.props.required : true;
+
+        // check and add minimum
+        if (this.props.values.length < this.props.min) {
+            for (let i = 0; i < this.props.min - this.props.values.length; i++) {
+                this.addCard();
+            }
+        }
 
         return this.props.values.map((value, index) => {
             return (
@@ -262,8 +265,6 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
                       customDesc={this.props.customDescription}/>
             );
         });
-
-
     }
 
     render = () => {

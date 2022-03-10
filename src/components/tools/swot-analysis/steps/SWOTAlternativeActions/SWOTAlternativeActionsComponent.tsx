@@ -13,7 +13,6 @@ import {
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
-import {compareWithoutFunctions} from "../../../../../general-components/ComponentUtils";
 
 
 export interface AlternateAction {
@@ -156,15 +155,6 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         </Col>
                     </Row>
 
-                    <Form.Check
-                        id={"no-alternative"}
-                        className={"mb-3"}
-                        disabled={this.props.disabled}
-                        type={"checkbox"}
-                        label={"Keine Handlungsalternative"}
-                        checked={currentAction.hasNone}
-                        onChange={this.hasNoAlternativeChanged.bind(this)}
-                    />
                     <CardComponent
                         name={currentAction.name}
                         disabled={this.props.disabled}
@@ -176,6 +166,15 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         placeholder={{
                             name: "Strategische Handlungsoption"
                         }}
+                    />
+                    <Form.Check
+                        id={"no-alternative"}
+                        className={"mt-3"}
+                        disabled={this.props.disabled}
+                        type={"checkbox"}
+                        label={"Keine Handlungsalternative"}
+                        checked={currentAction.hasNone}
+                        onChange={this.hasNoAlternativeChanged.bind(this)}
                     />
 
                     <UIErrorBanner id={"alternative-action"}/>
