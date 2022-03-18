@@ -40,6 +40,7 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
             return (
                 <CardComponent<UACriteriaCustomDescriptionValues>
                     customDescription={UACriteriaCustomDescription}
+                    customDescValuesFactory={UtilCriterias.getDefaultExtra}
                     values={criterias}
                     name={"util-criterias"}
                     disabled={this.props.disabled}

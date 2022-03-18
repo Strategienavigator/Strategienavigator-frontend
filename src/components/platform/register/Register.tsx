@@ -1,4 +1,4 @@
-import React, {Component, FormEvent} from "react";
+import React, {Component, FormEvent, PureComponent} from "react";
 import {Button, Form} from "react-bootstrap";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {extractFromForm} from "../../../general-components/FormHelper";
@@ -16,7 +16,7 @@ interface RegisterState {
     loaded?: boolean
 }
 
-export class Register extends Component<any, RegisterState> {
+export class Register extends PureComponent<{}, RegisterState> {
 
     constructor(props: any) {
         super(props);
@@ -67,8 +67,7 @@ export class Register extends Component<any, RegisterState> {
                         placeholder="name@example.com"
                         required={true}
                         callback={checkEmail}
-                        failMessage={"E-Mail bereits vorhanden!"}
-                        successMessage={"E-Mail verfügbar!"}
+                        entityName={"E-Mail"}
                     />
                     <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
                 </Form.Floating>
@@ -83,8 +82,7 @@ export class Register extends Component<any, RegisterState> {
                         placeholder="name@example.com"
                         required={true}
                         callback={checkUsername}
-                        failMessage={"Username bereits vorhanden!"}
-                        successMessage={"Username verfügbar!"}
+                        entityName={"Username"}
                     />
                     <Form.Label htmlFor={"username"}>Benutzername</Form.Label>
                 </Form.Floating>

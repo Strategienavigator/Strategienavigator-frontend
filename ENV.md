@@ -1,9 +1,13 @@
 ## Erklärung zum Befüllen der .env-Datei.
 
-Die aktuelle **.env** Datei ist [hier](./.env.example) zu finden.
+Die env variablen sind auf mehrere Dateien aufgeteilt. Die **.env .env.production** und **.env.development** sind.
+
+Dort sollten also keine lokal spezifischen werte eingetragen werden wie **REACT_APP_API, REACT_APP_CLIENT_ID** oder **REACT_APP_CLIENT_SECRET**.
+
+Die Werte müssen in **.env.development.local** eingetragen werden. Vorlagen für die **.env\*.local** sind vorhanden.
 
 Diese Datei dient allgemein betrachtet zum Vordefinieren **globaler Variablen**, welche dann im gesamten Code frei
-genutzt werden können. Falls Sie Änderungen an Ihrer **.env-Datei** vornehmen, werden diese erst bei Neustart des
+genutzt werden können. Falls Sie Änderungen an einer Ihrer **.env-Datei** vornehmen, werden diese erst bei Neustart des
 Servers realisiert. Sämtliche Änderungen die Sie an der lokalen **.env-Datei** vornehmen haben keine Auswirkungen auf
 andere Mitentwickelnde oder das Gesamtprojekt. Daher müssen Sie sich im Bezug auf vorgenommene Änderungen keine Sorgen
 machen. :wink:

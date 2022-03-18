@@ -16,6 +16,8 @@ import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UI
 import {HoverWindow} from "../../../../../general-components/HoverWindow/HoverWindow";
 
 
+
+
 export interface AlternateAction {
     name: string
     hasNone: boolean
@@ -169,15 +171,6 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         </Col>
                     </Row>
 
-                    <Form.Check
-                        id={"no-alternative"}
-                        className={"mb-3"}
-                        disabled={this.props.disabled}
-                        type={"checkbox"}
-                        label={"Keine Handlungsalternative"}
-                        checked={currentAction.hasNone}
-                        onChange={this.hasNoAlternativeChanged.bind(this)}
-                    />
                     <CardComponent
                         name={currentAction.name}
                         disabled={this.props.disabled}
@@ -189,6 +182,15 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         placeholder={{
                             name: "Strategische Handlungsoption"
                         }}
+                    />
+                    <Form.Check
+                        id={"no-alternative"}
+                        className={"mt-3"}
+                        disabled={this.props.disabled}
+                        type={"checkbox"}
+                        label={"Keine Handlungsalternative"}
+                        checked={currentAction.hasNone}
+                        onChange={this.hasNoAlternativeChanged.bind(this)}
                     />
 
                     <UIErrorBanner id={"alternative-action"}/>

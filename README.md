@@ -55,18 +55,18 @@ npm install
 
 Dieser Schritt kann je nach System und Internetverbindung mehr Zeit in Anspruch nehmen.<br /><br />
 
-Um nun das Projekt zu konfigurieren, muss die **.env** Datei erstellt und eingerichtet werden. Hierzu kopieren wir die
-mitgelieferte **.env.example** Datei.
+Um nun das Projekt zu konfigurieren, muss die **.env.development.local** Datei erstellt und eingerichtet werden. Hierzu kopieren wir die
+mitgelieferte **.env.development.local.example** Datei.
 
 ```shell
-copy .env.example .env   // Windows
+copy .env.development.local.example .env.development.local   // Windows
 ```
 
 ```shell
-cp .env.example .env     // Linux
+cp .env.development.local.example .env.development.local     // Linux
 ```
 
-Wenn die **.env** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie
+Wenn die **.env.development.local** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie
 die vorhandenen Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.<br /><br />
 
 Nun ist die Installation abgeschlossen und der Entwicklungsserver kann gestartet werden. Hierzu ist folgender Befehl

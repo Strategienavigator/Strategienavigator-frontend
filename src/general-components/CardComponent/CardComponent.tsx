@@ -99,7 +99,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
 
     render = () => {
         let customDesc;
-        if (this.props.customDesc && this.props.customDescValues) {
+        if (this.props.customDesc && this.props.customDescValues !== undefined) {
             customDesc = React.createElement(this.props.customDesc, {
                 value: this.props.customDescValues,
                 disabled: this.props.disabled,
@@ -188,11 +188,19 @@ export interface CardComponentProps<D> {
     required?: boolean
     counter?: CounterInterface
     placeholder?: CardComponentFieldPlaceholder
+    /**
+     * React component, welcher unter den normalen Eingabefeldern des CardComponents angezeigt wird
+     */
     customDescription?: FunctionComponent<CustomDescriptionComponentProps<D>> | ComponentClass<CustomDescriptionComponentProps<D>>
+    /**
+     * sollte den standard Wert für das extra Feld im CardComponentField zurück geben
+     *
+     * Wenn die Methode nicht übergeben wird, dann wird der extra Wert auf undefined gesetzt.
+     */
+    customDescValuesFactory?: () => D
 }
 
 class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> {
-
 
     private cardUpdatedListener = (index: number, name: string, desc: string, extra?: D) => {
         let newValues = this.props.values.slice();
@@ -211,7 +219,6 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
             newValues.splice(index, 1);
 
             this.reIdFrom(newValues, index);
-
             this.props.onChanged(newValues);
         }
     }
@@ -233,19 +240,30 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
     private addCard = () => {
         let newValues = this.props.values.slice();
         if (newValues.length < this.props.max) {
+            let extraValue = undefined;
+            if(this.props.customDescValuesFactory !== undefined){
+                extraValue = this.props.customDescValuesFactory();
+            }
+
             newValues.push({
                 name: "",
                 desc: "",
-                id: this.props.counter?.get(this.props.values.length + 1) ?? null
+                id: this.props.counter?.get(this.props.values.length + 1) ?? null,
+                extra: extraValue
             });
             this.props.onChanged(newValues);
         }
     }
 
-
     getAllCards = () => {
-
         let required = (this.props.required !== undefined) ? this.props.required : true;
+
+        // check and add minimum
+        if (this.props.values.length < this.props.min) {
+            for (let i = 0; i < this.props.min - this.props.values.length; i++) {
+                this.addCard();
+            }
+        }
 
         return this.props.values.map((value, index) => {
             return (
@@ -262,8 +280,6 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
                       customDesc={this.props.customDescription}/>
             );
         });
-
-
     }
 
     render = () => {

@@ -1,11 +1,55 @@
 import {Component} from "react";
 
+import {Link} from "react-router-dom"
+
 import "./about-us.scss";
 
 
 export class AboutUs extends Component<any, any> {
 
+    private static developers = [{
+        link: "https://github.com/Geist5000",
+        displayName: "Claas Wittig"
+    }, {
+        link: "https://github.com/Gomanius",
+        displayName: "Goman Müstak"
+    }, {
+        link: "https://github.com/Marce200700",
+        displayName: "Marcel Bankert"
+    }, {
+        link: "https://github.com/ma1160",
+        displayName: "Marco Janssen"
+    }, {
+        link: "https://github.com/nic-schi",
+        displayName: "Nichlas Schipper"
+    }, {
+        link: "https://github.com/ricom",
+        displayName: "Omar Kanoune"
+    }, {
+        link: "https://github.com/ricom",
+        displayName: "Rico Meiner"
+    }];
+
+
+    constructor(props: any);
+    constructor(props: any, context: any);
+    constructor(props: any, context?: any) {
+        super(props, context);
+
+        AboutUs.developers.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    }
+
     render() {
+
+        const developerList = [];
+
+        for (const developer of AboutUs.developers) {
+            developerList.push(
+                <li><a href={developer.link} rel="noreferrer" target="_blank">{developer.displayName}</a></li>
+            );
+        }
+
+
         return (<>
             <header className="head">
                 <h2>Über Uns</h2>
@@ -27,7 +71,7 @@ export class AboutUs extends Component<any, any> {
             <p>
                 <h3>Historie</h3>
                 Der CRM-Navigator wurde 2007 als Open-Source-Software von Prof. Gündling initiert und 2008/09 um
-                Strategietools erweitert.
+                Strategietools erweitert. Rico Meiner verantwortet die technische und organisatorische Umsetzung.
             </p>
             <p>
                 <h3>Motivation</h3>
@@ -40,19 +84,28 @@ export class AboutUs extends Component<any, any> {
             <h3>Entwicklerteam</h3>
 
             <ul>
-                <li><a href="https://github.com/Geist5000" rel="noreferrer" target="_blank">Claas Wittig</a></li>
-                <li><a href="https://github.com/Marce200700" rel="noreferrer" target="_blank">Marcel Bankert</a></li>
-                <li><a href="https://github.com/ma1160" rel="noreferrer" target="_blank">Marco Janssen</a></li>
-                <li><a href="https://github.com/nic-schi" rel="noreferrer" target="_blank">Nichlas Schipper</a></li>
-                <li><a href="https://github.com/ricom" rel="noreferrer" target="_blank">Rico Meiner</a></li>
+                {developerList}
             </ul>
 
             <h3>Projektverantworliche Professoren</h3>
+            <p>
+                Gesamtverantwortlich ist Prof. Gündling. Dieser hat auch die Verantwortung für die folgenden Tools:
+            </p>
             <ul>
-                <li>Prof. Gündling</li>
+                <li><Link to={"/swot-analysis"}>SWOT-Analyse</Link></li>
+                <li><Link to={"/pairwise-comparison"}>Paarweiser Vergleich</Link></li>
+                <li><Link to={"/utility-analysis"}>Nutzwertanalyse</Link></li>
+                <li><Link to={"/portfolio-analysis"}>Portfolioanalyse</Link></li>
+            </ul>
+            <p>
+                Kolleginnen und Kollegen sind herzlich eingeladen weitere Tools unter deren eigener Verantwortung zu
+                integrieren.
+            </p>
+
+            {/*<ul>
                 <li>Prof. Dr. Prehm</li>
                 <li>Prof. Dr. Szeliga</li>
-            </ul>
+            </ul>*/}
 
 
             <h3>Links</h3>

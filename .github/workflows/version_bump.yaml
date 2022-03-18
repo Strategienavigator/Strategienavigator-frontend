@@ -1,0 +1,35 @@
+name: bump version
+on:
+  workflow_dispatch:
+    inputs:
+      bumpType:
+        description: "Welcher version"
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Automated Version Bump'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix: 'v'
+          bump-policy: 'ignore'
+          minor-wording: 'ab846c0e3717a3e7d14af45cab70b44a' # md5 hash of the word 'minro'
+          major-wording: 'f1425da40a9f2d21ab702a1c7feae026' # md5 hash of the word 'major'
+          default: ${{github.events.inputs.bumpType}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
