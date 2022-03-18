@@ -141,7 +141,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         super(props, context);
         this.stepController = {
             requestStep: this.changeStep,
-            requestSubStep: this.setSubStep
+            requestSubStep: this.requestSubStep
         };
         const progress = StepComponent.getLastUnlockedStep(this.props.steps, this.props.save.data);
 
@@ -430,6 +430,15 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         }
         return false;
 
+    }
+
+    private requestSubStep = (step: number) => {
+        if (this.state.currentStep !== this.state.progress){
+            
+            let result = this.setSubStep(step);
+            return result;
+        }
+        return false;
     }
 
     /**
