@@ -313,9 +313,16 @@ export type SharedSaveUserResource = {
 
 export type AvailabilityCheckResource = {
     /**
-     * Boolean ob das eingegebene noch verfügbar ist
+     * ob das eingegebene noch verfügbar ist
      */
-    available: boolean
+    available: boolean,
+
+    /**
+     * Grund für Verfügbarkeitsstatus
+     *
+     * string ist leer, wenn verfügbar
+     */
+    reason: "taken"|"blocked"|"invalid",
 }
 export type UserSettingResource = {
     /**

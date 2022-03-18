@@ -4,7 +4,6 @@ import {Form, FormControlProps} from "react-bootstrap";
 import {Omit, ReplaceProps} from "react-bootstrap/helpers";
 import {APIArgs, CallInterface} from "../API/API";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
-import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import {Loader} from "../Loader/Loader";
 
 import "./unique-check.scss";
@@ -13,21 +12,47 @@ import FAE from "../Icons/FAE";
 
 
 export interface UniqueCheckProps {
+    /**
+     * Methode die ein Network Request schicken sollte, welcher mit Informationen über die Verfügbarkeit der Ressource antworten sollte.
+     */
     callback?: ((input: string, apiArgs?: APIArgs) => Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>)
-    failMessage?: string
-    successMessage?: string
+    /**
+     * Name der Ressource die dem User angezeigt wird
+     *
+     * Sollte die Einzahl sein
+     */
+    entityName: string
+    /**
+     * Ob Fehler angezeigt werden sollen
+     */
     suppressErrors: boolean
 }
 
 export interface UniqueCheckState {
+    /**
+     * Ob der Netzwerk Request gerade lädt
+     */
     isLoading: boolean
+    /**
+     * Ob der Netzwerk Request erfolgreich war
+     *
+     * wenn noch kein Request abgeschickt wurde oder wenn fehler aufgetreten ist das Feld undefined
+     */
     success?: boolean
+    /**
+     * Grund wieso die Resource nicht mehr verfügbar ist
+     */
+    reason?: "taken" | "blocked" | "invalid"
+    /**
+     * Ob beim letzten Request ein Fehler aufgetreten ist
+     */
     error: boolean
 }
 
 export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProps> & UniqueCheckProps, UniqueCheckState> {
     static defaultProps = {
-        suppressErrors: false
+        suppressErrors: false,
+
     }
     private timeout: NodeJS.Timeout | undefined;
 
@@ -40,6 +65,137 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
         };
     }
 
+
+    /**
+     * Gibt einen Text zurück das ein fehler aufgetreten ist
+     * @private
+     */
+    private getFailMessage() {
+        return "Die Verfügbarkeit konnte nicht überprüft werden.";
+    }
+
+    /**
+     * Gibt einen Text zurück das die untersuchte Resource nicht verfügbar ist
+     * @private
+     */
+    private getTakenMessage() {
+        return this.props.entityName + " ist nicht Verfügbar!";
+    }
+
+    /**
+     * Gibt einen Text zurück das die untersuchte Resource verfügbar ist.
+     * @private
+     */
+    private getAvailableMessage() {
+        return this.props.entityName + " ist Verfügbar!";
+    }
+
+    /**
+     * Gibt einen Text zurück das die untersuchte Resource kein richtiges format aufweist
+     * @private
+     */
+    private getInvalidMessage() {
+        return this.props.entityName + " ist nicht korrekt!";
+    }
+
+    /**
+     * Gibt ein Text zurück das die untersuchte Resource vom Server nicht erlaubt wird.
+     * @private
+     */
+    private getBlockedMessage() {
+        return this.props.entityName + " ist nicht erlaubt!";
+    }
+
+    /**
+     * Gibt den Text zurück, welcher das letzte Ergebniss der Verfügbarkeitsprüfung beschreibt.
+     * @private
+     */
+    private getMessage() {
+        if (this.state.success) {
+            return this.getAvailableMessage();
+        } else {
+            switch (this.state.reason) {
+                case "invalid":
+                    return this.getInvalidMessage();
+                case "taken":
+                    return this.getTakenMessage();
+                case "blocked":
+                    return this.getBlockedMessage();
+                default:
+                    return this.getTakenMessage();
+            }
+        }
+
+    }
+
+    /**
+     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
+     * This is considered pretty hacky
+     */
+    componentWillUnmount() {
+        this.setState = (() => {
+            return;
+        });
+    }
+
+
+    /**
+     * Gibt ein Element zurück, welches anzeigt, ob es Fehler gibt oder ob die Anfrage erfolgreich war
+     */
+    renderErrors = () => {
+        return (<>
+            {(!this.state.isLoading && this.state.error) && (
+                <div className={"feedback DANGER"}>
+                    <FAE icon={faTimes}/> {this.getFailMessage()}
+                </div>
+            )}
+            {(!this.state.isLoading && !this.state.error && this.state.success !== undefined && this.state.success) && (
+                <div className={"feedback SUCCESS"}>
+                    {this.getMessage()}
+                </div>
+            )}
+
+            {(!this.state.isLoading && !this.state.error && this.state.success !== undefined && !this.state.success) && (
+                <div className={"feedback DANGER"}>
+                    <FAE icon={faTimes}/> {this.getMessage()}
+                </div>
+            )}
+        </>)
+    }
+
+    render = () => {
+        let {callback, entityName, suppressErrors, ...propsForInput} = this.props;
+
+        return (
+            <>
+                <Form.Control
+                    onChange={(e) => this.changed(e)}
+                    {...propsForInput}
+                />
+                <div className={"uniqueOutput feedbackContainer"}>
+                    {this.state.isLoading && (
+                        <div className={"feedback"}>
+                            <Loader payload={[]} size={30} alignment={"left"} text={"Lädt..."} transparent
+                                    loaded={false}/>
+                        </div>
+                    )}
+
+                    {
+                        !suppressErrors && this.renderErrors()
+                    }
+
+                </div>
+            </>
+        );
+    }
+
+
+    /**
+     * Funktion welche ausgeführt wird, wenn sich der Wert des Input-Tags ändert.
+     *
+     * Nach kurzer Zeit ohne eingaben, wird ein Request an das Backend geschickt, in dem
+     * @param e
+     */
     changed = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (this.timeout) {
             clearTimeout(this.timeout);
@@ -57,7 +213,7 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     let call = await new Promise<CallInterface<DefaultResponse<AvailabilityCheckResource>> | null>((resolve, reject) => {
                         if (this.props.callback === undefined) {
                             reject(new Error("callback is undefined"));
-                        }else{
+                        } else {
                             this.props.callback(value, {errorCallback: reject}).then(resolve).catch(reject);
                         }
                     });
@@ -66,14 +222,19 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     if (call?.success) {
                         this.setState({
                             success: call.callData.data.available,
+                            reason: call.callData.data.reason,
                             isLoading: false,
                             error: false
                         });
                         return;
                     }
                 } catch (reason) {
-                    console.error(reason);
+                    if(process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'development'){
+                        console.error(reason);
+                    }
                 }
+
+
                 this.setState({
                     success: undefined,
                     error: true,
@@ -86,66 +247,6 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                 error: false
             });
         }
-    }
-
-    /**
-     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
-     * This is considered pretty hacky
-     */
-    componentWillUnmount() {
-        this.setState = (() => {
-            return;
-        });
-    }
-
-
-    renderErrors = () => {
-        return (<>
-            {(!this.state.isLoading && this.state.error) && (
-                <div className={"feedback DANGER"}>
-                    <FAE icon={faTimes}/> Die Verfügbarkeit konnte nicht überprüft werden.
-                </div>
-            )}
-            {(!this.state.isLoading && this.state.success !== undefined && !this.state.success) && (
-                <div className={"feedback DANGER"}>
-                    <FAE icon={faTimes}/> {this.props.failMessage}
-                </div>
-            )}
-            {(!this.state.isLoading && this.state.success !== undefined && this.state.success) && (
-                <div className={"feedback SUCCESS"}>
-                    <FAE icon={faCheck}/> {this.props.successMessage}
-                </div>
-            )}
-        </>)
-    }
-
-    render = () => {
-        let propsForInput = {...this.props};
-        delete propsForInput.failMessage;
-        delete propsForInput.successMessage;
-        delete propsForInput.callback;
-
-        return (
-            <>
-                <Form.Control
-                    onChange={(e) => this.changed(e)}
-                    {...propsForInput}
-                />
-                <div className={"uniqueOutput feedbackContainer"}>
-                    {this.state.isLoading && (
-                        <div className={"feedback"}>
-                            <Loader payload={[]} size={30} alignment={"left"} text={"Lädt..."} transparent
-                                    loaded={false}/>
-                        </div>
-                    )}
-
-                    {
-                        !this.props.suppressErrors && this.renderErrors()
-                    }
-
-                </div>
-            </>
-        );
     }
 
 }
