@@ -17,6 +17,13 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
 
     private static readonly header = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
 
+    /**
+     * gibt den standard Wert für das extra Feld im CardComponentField zurück
+     */
+    public static getDefaultExtra(): UACriteriaCustomDescriptionValues {
+        return {headers: UtilCriterias.header.getHeaders()};
+    }
+
 
     dataHandler: StepDataHandler<UtilityAnalysisValues>;
     form: React.FunctionComponent<StepProp<UtilityAnalysisValues>> | React.ComponentClass<StepProp<UtilityAnalysisValues>>;
@@ -42,7 +49,7 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
                 id: null,
                 name: "",
                 desc: "",
-                extra: {headers: UtilCriterias.header.getHeaders()}
+                extra: UtilCriterias.getDefaultExtra()
             });
         }
         data["ua-criterias"] = {criterias: criterias};
