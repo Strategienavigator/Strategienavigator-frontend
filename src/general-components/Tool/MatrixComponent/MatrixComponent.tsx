@@ -1,5 +1,5 @@
 import {Component} from "react";
-import StepComponent from "../SteppableTool/StepComponent/StepComponent";
+import StepComponent, { StepController } from "../SteppableTool/StepComponent/StepComponent";
 import {Tool} from "../Tool";
 
 import "./matrix-component.scss";
@@ -7,7 +7,8 @@ import "./matrix-component.scss";
 
 export interface MatrixComponentProps<D extends object> {
     tool: Tool<D>
-    data: D
+    data: D,
+    stepController: StepController
 }
 
 // TODO rename

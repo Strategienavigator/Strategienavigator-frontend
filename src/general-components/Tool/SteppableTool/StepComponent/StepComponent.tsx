@@ -141,7 +141,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         super(props, context);
         this.stepController = {
             requestStep: this.changeStep,
-            requestSubStep: this.setSubStep
+            requestSubStep: this.requestSubStep
         };
         const progress = StepComponent.getLastUnlockedStep(this.props.steps, this.props.save.data);
 
@@ -432,6 +432,15 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     }
 
+    private requestSubStep = (step: number) => {
+        if (this.state.currentStep !== this.state.progress){
+            
+            let result = this.setSubStep(step);
+            return result;
+        }
+        return false;
+    }
+
     /**
      * changes the currently visible step to the next one. Does only change if the next step is unlocked or it is unlockable.
      *
@@ -611,7 +620,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         if (step.matrix !== undefined) {
             let matrix = React.createElement(step.matrix, {
                 tool: this.props.tool,
-                data: this.props.save.data
+                data: this.props.save.data,
+                stepController: this.stepController
             });
             const getMatrixContainer = () => {
                 return (
