@@ -5,7 +5,11 @@ import {
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTFactorsComponent} from "./SWOTFactorsComponent";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {CardComponentField, isCardComponentValid} from "../../../../../general-components/CardComponent/CardComponent";
+import {
+    CardComponentField,
+    isCardComponentFilled,
+    isCardComponentTooLong,
+} from "../../../../../general-components/CardComponent/CardComponent";
 import {CounterInterface} from "../../../../../general-components/Counter/CounterInterface";
 import {UpperABCCounter} from "../../../../../general-components/Counter/UpperABCCounter";
 import {LowerABCCounter} from "../../../../../general-components/Counter/LowerABCCounter";
@@ -35,12 +39,6 @@ export class SWOTFactors implements StepDefinition<SWOTAnalysisValues>, StepData
         this.form = SWOTFactorsComponent;
         this.dataHandler = this;
     }
-
-    isUnlocked(data: SWOTAnalysisValues): boolean {
-        return true;
-    }
-
-    fillFromPreviousValues = (data: SWOTAnalysisValues): SWOTAnalysisValues => this.deleteData(data);
 
     private static requireData(data: SWOTAnalysisValues) {
         let d = data["swot-factors"];
@@ -74,6 +72,12 @@ export class SWOTFactors implements StepDefinition<SWOTAnalysisValues>, StepData
         }
     }
 
+    isUnlocked(data: SWOTAnalysisValues): boolean {
+        return true;
+    }
+
+    fillFromPreviousValues = (data: SWOTAnalysisValues): SWOTAnalysisValues => this.deleteData(data);
+
     deleteData(data: SWOTAnalysisValues): SWOTAnalysisValues {
         let d = SWOTFactors.requireData(data);
         d.factors.risks = SWOTFactors.getDefaultArray(SWOTFactors.risksCounter);
@@ -89,34 +93,48 @@ export class SWOTFactors implements StepDefinition<SWOTAnalysisValues>, StepData
         const errors = Array<UIError>();
         const errorText = (text: string) => `Bitte füllen Sie alle ${text} aus!`;
 
-        if (!isCardComponentValid(data["swot-factors"]?.factors.strengths)) {
+        if (!isCardComponentFilled(data["swot-factors"]?.factors.strengths)) {
             errors.push({
-                id: "strengthsError",
+                id: "swot-analysis.strengthsError",
                 message: errorText("Stärken"),
                 level: "error"
             });
         }
-        if (!isCardComponentValid(data["swot-factors"]?.factors.weaknesses)) {
+        if (!isCardComponentFilled(data["swot-factors"]?.factors.weaknesses)) {
             errors.push({
-                id: "weaknessesError",
+                id: "swot-analysis.weaknessesError",
                 message: errorText("Schwächen"),
                 level: "error"
             });
         }
-        if (!isCardComponentValid(data["swot-factors"]?.factors.chances)) {
+        if (!isCardComponentFilled(data["swot-factors"]?.factors.chances)) {
             errors.push({
-                id: "chancesError",
+                id: "swot-analysis.chancesError",
                 message: errorText("Chancen"),
                 level: "error"
             });
         }
-        if (!isCardComponentValid(data["swot-factors"]?.factors.risks)) {
+        if (!isCardComponentFilled(data["swot-factors"]?.factors.risks)) {
             errors.push({
-                id: "risksError",
+                id: "swot-analysis.risksError",
                 message: errorText("Risiken"),
                 level: "error"
             });
         }
+
+        if (
+            isCardComponentTooLong(data["swot-factors"]?.factors.strengths) ||
+            isCardComponentTooLong(data["swot-factors"]?.factors.weaknesses) ||
+            isCardComponentTooLong(data["swot-factors"]?.factors.chances) ||
+            isCardComponentTooLong(data["swot-factors"]?.factors.risks)
+        ) {
+            errors.push({
+                id: "swot-analysis.too-long",
+                message: "Der Text in einigen Feldern ist zu lang!",
+                level: "error"
+            });
+        }
+
         return errors;
     }
 

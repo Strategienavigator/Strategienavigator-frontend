@@ -98,9 +98,7 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
         return errors;
     };
 
-
     getStepCount = (data: SWOTAnalysisValues): number => data["alternative-actions"]?.actions.length ?? 0;
-
 
     isStepUnlocked = (subStep: number, data: SWOTAnalysisValues): boolean => {
         return subStep < 1 || this.validateStep(subStep - 1, data).length === 0;

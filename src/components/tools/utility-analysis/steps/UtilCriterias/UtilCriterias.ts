@@ -8,7 +8,10 @@ import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {UtilCriteriasComponent} from "./UtilCriteriasComponent";
 import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
-import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
+import {
+    CardComponentFields,
+    isCardComponentFilled, isCardComponentTooLong
+} from "../../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
 
 class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
@@ -55,14 +58,28 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
         data["ua-criterias"] = {criterias: criterias};
     }
 
-
     isUnlocked(data: UtilityAnalysisValues): boolean {
         return data["ua-criterias"] !== undefined && Object.keys(data["ua-criterias"]).length > 0;
     }
 
-
     validateData(data: UtilityAnalysisValues): UIError[] {
-        return [];
+        const erros: UIError[] = [];
+        if (!isCardComponentFilled(data["ua-criterias"]?.criterias)) {
+            erros.push({
+                id: "criterias.empty",
+                level: "error",
+                message: "Die Kriterien dürfen nicht leer sein!"
+            });
+        }
+        if (isCardComponentTooLong(data["ua-criterias"]?.criterias)) {
+            erros.push({
+                id: "criterias.too-long",
+                level: "error",
+                message: "Der Text in einigen Feldern ist zu lang!"
+            });
+        }
+
+        return erros;
     }
 
 

@@ -9,6 +9,7 @@ import {CardComponent, CardComponentFields} from "../../../../../general-compone
 import {UACriteriaCustomDescription, UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilCriterias} from "./UtilCriterias";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 
 
 export interface UtilCriteriasValues {
@@ -38,15 +39,20 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
         const criterias = this.props.save.data["ua-criterias"]?.criterias;
         if (criterias !== undefined) {
             return (
-                <CardComponent<UACriteriaCustomDescriptionValues>
-                    customDescription={UACriteriaCustomDescription}
-                    customDescValuesFactory={UtilCriterias.getDefaultExtra}
-                    values={criterias}
-                    name={"util-criterias"}
-                    disabled={this.props.disabled}
-                    min={UtilCriterias.min}
-                    max={UtilCriterias.max}
-                    onChanged={this.valuesChanged}/>
+                <>
+                    <CardComponent<UACriteriaCustomDescriptionValues>
+                        customDescription={UACriteriaCustomDescription}
+                        customDescValuesFactory={UtilCriterias.getDefaultExtra}
+                        values={criterias}
+                        name={"util-criterias"}
+                        disabled={this.props.disabled}
+                        min={UtilCriterias.min}
+                        max={UtilCriterias.max}
+                        onChanged={this.valuesChanged}
+                    />
+                    <UIErrorBanner id={"criterias.too-long"} />
+                    <UIErrorBanner id={"criterias.empty"} />
+            </>
             );
         }
 

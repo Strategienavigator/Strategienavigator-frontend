@@ -5,6 +5,8 @@ import {
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
+import React from "react";
 
 
 /**
@@ -49,13 +51,19 @@ export class PCCriteriasComponent extends Step<PairwiseComparisonValues, PCCrite
         let values = this.props.save.data["pc-criterias"];
         if (values !== undefined) {
             return (
-                <CardComponent
-                    name={"criterias"}
-                    disabled={this.props.disabled}
-                    values={values.criterias}
-                    min={2}
-                    max={10}
-                    onChanged={this.cardComponentChanged}/>
+                <>
+                    <CardComponent
+                        name={"criterias"}
+                        disabled={this.props.disabled}
+                        values={values.criterias}
+                        min={2}
+                        max={10}
+                        onChanged={this.cardComponentChanged}
+                    />
+                    <UIErrorBanner id={"pairwise-comparison.criterias"}/>
+                    <UIErrorBanner id={"pairwise-comparison.criterias-too-long"}/>
+                    <UIErrorBanner id={"pairwise-comparison.criterias-empty"}/>
+                </>
             );
         }
 

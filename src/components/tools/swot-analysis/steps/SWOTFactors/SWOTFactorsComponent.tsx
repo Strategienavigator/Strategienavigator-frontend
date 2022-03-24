@@ -106,7 +106,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.strengthsChanged}/>
-                                <UIErrorBanner id={"strengthsError"}/>
+                                <UIErrorBanner id={"swot-analysis.strengthsError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
 
@@ -122,7 +122,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.weaknessesChanged}/>
-                                <UIErrorBanner id={"weaknessesError"}/>
+                                <UIErrorBanner id={"swot-analysis.weaknessesError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "chances"}>
@@ -137,7 +137,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.chancesChanged}/>
-                                <UIErrorBanner id={"chancesError"}/>
+                                <UIErrorBanner id={"swot-analysis.chancesError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "risks"}>
@@ -152,11 +152,12 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.risksChanged}/>
-                                <UIErrorBanner id={"risksError"}/>
+                                <UIErrorBanner id={"swot-analysis.risksError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
 
+                    <UIErrorBanner id={"swot-analysis.too-long"}/>
                 </div>
             );
         }

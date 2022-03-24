@@ -9,8 +9,9 @@ import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {
     CardComponentFields,
-    isCardComponentValid
+    isCardComponentFilled, isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
+
 
 class UtilInvestigationObjects implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
     public static min = 2;
@@ -46,16 +47,23 @@ class UtilInvestigationObjects implements StepDefinition<UtilityAnalysisValues>,
         return true;
     }
 
-
     validateData(data: UtilityAnalysisValues): UIError[] {
         const erros: UIError[] = [];
-        if (!isCardComponentValid(data["ua-investigation-obj"]?.objects)) {
+        if (!isCardComponentFilled(data["ua-investigation-obj"]?.objects)) {
             erros.push({
-                id: "investigation-objects",
+                id: "investigation-objects.empty",
                 level: "error",
-                message: "Überprüfe die Untersuchungsobjekte"
+                message: "Die Objekte dürfen nicht leer sein!"
             });
         }
+        if (isCardComponentTooLong(data["ua-investigation-obj"]?.objects)) {
+            erros.push({
+                id: "investigation-objects.too-long",
+                level: "error",
+                message: "Der Text in einigen Feldern ist zu lang!"
+            });
+        }
+
         return erros;
     }
 
