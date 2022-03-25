@@ -61,7 +61,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
                                         <FormControl
                                             type={"text"}
                                             disabled={this.props.disabled}
-                                            value={v.desc}
+                                            value={v.desc?? ""}
                                             placeholder={v.header}
                                             onChange={this.descriptionChanged.bind(this, index)}
                                         />
