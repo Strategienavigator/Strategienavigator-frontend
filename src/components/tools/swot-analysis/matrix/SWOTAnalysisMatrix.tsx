@@ -1,4 +1,4 @@
-import { MatrixComponent } from "../../../../general-components/Tool/MatrixComponent/MatrixComponent";
+import { ExtraWindowComponent } from "../../../../general-components/Tool/ExtraWindowComponent/ExtraWindowComponent";
 import "./swot-analysis-matrix.scss";
 import {SWOTAnalysisValues} from "../SWOTAnalysis";
 import { RomanNumeralsCounter } from "../../../../general-components/Counter/RomanNumeralsCounter";
@@ -8,7 +8,7 @@ import {AlternateAction} from "../steps/SWOTAlternativeActions/SWOTAlternativeAc
 import {isDesktop} from "../../../../general-components/Desktop";
 
 
-class SWOTAnalysisMatrix extends MatrixComponent<SWOTAnalysisValues, {}> {
+class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
 
     getAction(actions: any, first: string, second: any): AlternateAction | null {
         for (const action of actions) {
