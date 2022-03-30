@@ -50,6 +50,11 @@ interface ToolSavePageState<D extends object> {
 class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
 
     private readonly saveController: ToolSaveController<D>;
+    /**
+     * Speichert ob der Speicherstand seit dem letzten Speichern verändert wurde
+     * @private
+     */
+    private saveDirty:boolean = false;
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
@@ -81,9 +86,12 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
 
     private onBeforeUnload = (e: BeforeUnloadEvent) => {
-        e.preventDefault();
-        e.returnValue = "";
-        return "";
+        if(this.shouldPreventRouteChange()){
+            e.preventDefault();
+            e.returnValue = "";
+            return "";
+        }
+        return undefined;
     }
 
     private onUnload = async () => {
@@ -200,11 +208,23 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     };
 
     denyRouteChange = (location: H.Location): boolean => {
+        // Dont show if save is unchanged
+        if(!this.shouldPreventRouteChange())
+            return true;
+
+
         this.setState({
             showConfirmToolRouteChangeModal: true,
             lastLocation: location
         });
         return (location.pathname === this.state.lastLocation?.pathname);
+    }
+
+    /**
+     * Gibt zurück, ob ein Dialog angezeigt werden soll, der um Bestätigung bittet, ob die Seite verlassen werden soll
+     */
+    private shouldPreventRouteChange = ():boolean => {
+        return this.saveDirty;
     }
 
     private save = async () => {
@@ -218,8 +238,10 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             this.setState({
                 isSaving: false
             });
-
-            return (call !== null && call.success);
+            const success = call !== null && call.success;
+            if(success)
+                this.saveDirty = false;
+            return success;
         } else {
             return false;
         }
@@ -237,7 +259,9 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                     save: produce(this.state.save, changes)
                 }, callback)
             }
+            this.saveDirty = true;
         }
+
     }
 
     public onAPIError(error: Error): void {
