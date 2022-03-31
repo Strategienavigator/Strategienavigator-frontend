@@ -7,22 +7,21 @@ import {StepProp} from "../../../../../general-components/Tool/SteppableTool/Ste
 import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {UtilCriteriasComponent} from "./UtilCriteriasComponent";
-import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
+import {CompareStarHeader} from "../../../../../general-components/CompareComponent/Header/StarHeader/CompareStarHeader";
+
 
 class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
     public static min = 2;
     public static max = 10;
 
-    public static readonly header = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
-
+    public static readonly header = new CompareStarHeader(1, 5);
 
     dataHandler: StepDataHandler<UtilityAnalysisValues>;
     form: React.FunctionComponent<StepProp<UtilityAnalysisValues>> | React.ComponentClass<StepProp<UtilityAnalysisValues>>;
     id: string;
     title: string;
-
 
     constructor() {
         this.id = "ua-criterias";

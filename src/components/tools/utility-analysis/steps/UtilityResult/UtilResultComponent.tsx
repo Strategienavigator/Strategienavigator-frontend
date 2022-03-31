@@ -6,6 +6,7 @@ import {
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
 import {Table} from "react-bootstrap";
+import {EvaluationComponent} from "../../../../../general-components/EvaluationComponent/EvaluationComponent";
 
 
 export interface UtilResultValues {

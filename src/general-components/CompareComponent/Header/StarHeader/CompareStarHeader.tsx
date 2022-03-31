@@ -1,20 +1,19 @@
-import {CompareHeader, CompareHeaderAdapter} from "./CompareHeaderAdapter";
+import {CompareHeader, CompareHeaderAdapter} from "../CompareHeaderAdapter";
 
+import "./star-header.scss";
 
-/**
- * Stellt eine/n Überschrift/Header mittels
- */
-class CompareNumberHeader extends CompareHeaderAdapter {
+class CompareStarHeader extends CompareHeaderAdapter {
     private readonly length: number;
     private readonly start: number;
 
     /**
-     * Erstellt eine neue Instanz des CompareHeaders
+     * Erstellt eine neue Instanz des CompareStarHeader
+     *
      * @param start Start Nummer
      * @param length länge des CompareHeaders
      */
     constructor(start: number, length: number) {
-        super("NumberHeader");
+        super("StarHeader");
         this.length = length;
         this.start = start;
     }
@@ -25,7 +24,7 @@ class CompareNumberHeader extends CompareHeaderAdapter {
     getHeaders(): Array<CompareHeader> {
         let headers:Array<CompareHeader> = [];
         for (let i = this.start; i < (this.start + this.length); i++) {
-            headers.push({header: String(i), desc :undefined});
+            headers.push({header: "★ ".repeat(i), desc :undefined});
         }
         return headers;
     }
@@ -33,5 +32,5 @@ class CompareNumberHeader extends CompareHeaderAdapter {
 }
 
 export {
-    CompareNumberHeader
+    CompareStarHeader
 }

@@ -136,7 +136,7 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
     renderHeader = () => {
         if ((this.props.showHeader !== undefined && this.props.showHeader) || (this.props.showHeader === undefined)) {
             return (
-                <div className={"singleComparison header"}>
+                <div className={"singleComparison header " + this.props.header.getClassName()}>
                     <div/>
                     <div className={"comparisons"}>
                         {this.props.header.getHeaders().map((value) => {

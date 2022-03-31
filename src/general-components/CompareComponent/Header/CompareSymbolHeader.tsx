@@ -14,7 +14,7 @@ class CompareSymbolHeader extends CompareHeaderAdapter {
     constructor(symbols: string[])
     constructor(symbols: CompareHeader[])
     constructor(symbols: CompareHeader[] | string[]) {
-        super();
+        super("SymbolHeader");
         this.symbols = symbols.map<CompareHeader>(s => {
             if ("string" === typeof s) {
                 return {header: s};

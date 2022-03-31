@@ -12,6 +12,20 @@ export interface CompareHeader {
  * Implementierende Klassen müssen nur die getHeaders Methode überschreiben
  */
 abstract class CompareHeaderAdapter {
+    private readonly className: String = "normalHeader";
+
+    protected constructor(className: String) {
+        this.className = className;
+    }
+
+    /**
+     * Gibt die Klassenbezeichnung des Headers zurück
+     *
+     * @returns {String} Die CSS-Klassenbezeichnung
+     */
+    public getClassName(): String {
+        return this.className;
+    }
 
     /**
      * Gibt die Anzahl der Überschriften zurück
