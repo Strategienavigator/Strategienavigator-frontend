@@ -7,23 +7,22 @@ import {PCPairComparisonComponent} from "./PCPairComparisonComponent";
 import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
-import {CompareNumberHeader} from "../../../../../general-components/CompareComponent/Header/CompareNumberHeader";
 import {
     MatchCardComponentFieldsAdapter
 } from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 
 
 class PCPairComparison implements StepDefinition<PairwiseComparisonValues>, StepDataHandler<PairwiseComparisonValues> {
 
-    public static header = new CompareNumberHeader(0, 3);
-
+    // public static header = new CompareNumberHeader(0, 3);
+    public static header = new CompareSymbolHeader([">", "=", "<"]);
 
     dataHandler: StepDataHandler<PairwiseComparisonValues>;
     form: React.FunctionComponent<StepProp<PairwiseComparisonValues>> | React.ComponentClass<StepProp<PairwiseComparisonValues>>;
     title: string;
     id: string;
-
 
     constructor() {
         this.title = "2. Paarvergleich";
