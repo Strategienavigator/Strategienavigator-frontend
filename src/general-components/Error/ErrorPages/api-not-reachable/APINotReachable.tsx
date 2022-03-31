@@ -12,6 +12,8 @@ export class APINotReachable extends Component<any, any> {
 
                 <p>Statische Inhalte können Sie weiterhin abrufen. Wir entschuldigen uns für die
                     Unannehmlichkeiten.</p>
+
+
             </div>
         );
     }

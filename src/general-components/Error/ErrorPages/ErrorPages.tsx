@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 import {NotFound} from "./not-found/NotFound";
 import {APINotReachable} from "./api-not-reachable/APINotReachable";
 import {Button} from "react-bootstrap";
-import {faHome} from "@fortawesome/free-solid-svg-icons/";
+import {faHome, faRedo} from "@fortawesome/free-solid-svg-icons/";
 import {ErrorPage} from "./errorpage/ErrorPage";
 import FAE from "../../Icons/FAE";
 
@@ -40,6 +40,7 @@ class ErrorPages extends Component<RouteComponentProps<{ code: string }>, any> {
 
     render() {
         let component = this.getErrorComponent();
+        // console.log(this.props.history.goBack());
 
         return (
             <div className={"errorpage"}>
@@ -49,8 +50,15 @@ class ErrorPages extends Component<RouteComponentProps<{ code: string }>, any> {
                     {component}
                 </div>
 
-                <Link className="button" to="/">
-                    <Button variant={"dark"}>
+                {(this.code === 500) && (
+                    <Button className="button" style={{marginRight: "0.75rem"}} onClick={this.props.history.goBack} variant={"dark"}>
+                        Erneut versuchen &nbsp;
+                        <FAE icon={faRedo}/>
+                    </Button>
+                )}
+
+                <Link to="/">
+                    <Button className="button" variant={"dark"}>
                         Startseite &nbsp;
                         <FAE icon={faHome}/>
                     </Button>
