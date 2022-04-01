@@ -37,7 +37,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -60,6 +61,8 @@
   "devDependencies": {
     "@types/file-saver": "^2.0.4",
     "@types/xlsx": "^0.0.36",
+    "cypress": "^9.5.3",
+    "eslint-plugin-cypress": "^2.12.1",
     "typedoc": "^0.21.9",
     "typedoc-plugin-merge-modules": "^3.0.1"
   }
