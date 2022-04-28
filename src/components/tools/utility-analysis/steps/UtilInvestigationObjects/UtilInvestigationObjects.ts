@@ -7,10 +7,8 @@ import {UtilInvestigationObjectsComponent} from "./UtilInvestigationObjectsCompo
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {
-    CardComponentFields,
-    isCardComponentValid
-} from "../../../../../general-components/CardComponent/CardComponent";
+import {CardComponentFields, isCardComponentValid} from "../../../../../general-components/CardComponent/CardComponent";
+
 
 class UtilInvestigationObjects implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
     public static min = 2;
@@ -51,7 +49,7 @@ class UtilInvestigationObjects implements StepDefinition<UtilityAnalysisValues>,
         const erros: UIError[] = [];
         if (!isCardComponentValid(data["ua-investigation-obj"]?.objects)) {
             erros.push({
-                id: "investigation-objects",
+                id: "investigation-objects.empty",
                 level: "error",
                 message: "Überprüfe die Untersuchungsobjekte"
             });

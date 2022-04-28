@@ -7,16 +7,15 @@ import {
     CompareComponent,
     CompareComponentValues
 } from "../../../../../general-components/CompareComponent/CompareComponent";
-import {
-    MatchCardComponentFieldsAdapter
-} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilWeighting} from "./UtilWeighting";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import React from "react";
 
 
-export interface UtilWeightingValues extends CompareComponentValues {}
+export interface UtilWeightingValues extends CompareComponentValues {
+}
 
 
 /**

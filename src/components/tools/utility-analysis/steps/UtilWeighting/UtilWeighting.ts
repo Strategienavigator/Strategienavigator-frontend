@@ -10,6 +10,7 @@ import {CompareNumberHeader} from "../../../../../general-components/CompareComp
 import {UtilWeightingComponent} from "./UtilWeightingComponent";
 import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 
+
 class UtilWeighting implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
     public static header = new CompareNumberHeader(0, 3);
 
@@ -44,8 +45,8 @@ class UtilWeighting implements StepDefinition<UtilityAnalysisValues>, StepDataHa
                     comparisons.push(dataItem);
                 } else {
                     comparisons.push({
-                       value: null,
-                       header: null
+                        value: null,
+                        header: null
                     });
                 }
             }

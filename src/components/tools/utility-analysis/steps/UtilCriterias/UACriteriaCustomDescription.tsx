@@ -3,7 +3,6 @@ import {CustomDescriptionComponent} from "../../../../../general-components/Card
 import {ChangeEvent} from "react";
 import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
 import {isDesktop} from "../../../../../general-components/Desktop";
-import {UtilCriterias} from "./UtilCriterias";
 
 
 /**
@@ -14,7 +13,8 @@ export interface UACriteriaCustomDescriptionValues {
     activeIndices: number[]
 }
 
-interface UACriteriaCustomDescriptionState {}
+interface UACriteriaCustomDescriptionState {
+}
 
 /**
  * Diese Klasse stellt eine benutzerdefinierte Beschreibung des zweiten Schritts der Nutzwertanalyse dar.
@@ -38,7 +38,8 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
                             <div className={"scale " + ((isDesktop() ? "desktop" : "mobile"))}>
                                 <InputGroup>
                                     <InputGroup.Text id={"desc"}>Anzahl Skala-Elemente</InputGroup.Text>
-                                    <Form.Select disabled={this.props.disabled} onChange={this.presetChanged} aria-describedby={"desc"} defaultValue="5">
+                                    <Form.Select disabled={this.props.disabled} onChange={this.presetChanged}
+                                                 aria-describedby={"desc"} defaultValue="5">
                                         <option value="2">
                                             2
                                         </option>
@@ -100,7 +101,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
         if (value !== 1 && value !== this.props.value.headers.length) {
             if (selected) {
                 newActiveIndices.push(value);
-            } else  {
+            } else {
                 newActiveIndices = newActiveIndices.filter((item) => {
                     return item !== value;
                 });
@@ -120,7 +121,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
 
         if (selected === "2") { // Only 1 and headers.length
             newActiveIndices = [1, values.headers.length];
-        } else if(selected === "3") { // 1 and headers.length & mid
+        } else if (selected === "3") { // 1 and headers.length & mid
             let middle = Math.ceil(values.headers.length / 2);
             newActiveIndices = [1, middle, values.headers.length];
         } else { // All

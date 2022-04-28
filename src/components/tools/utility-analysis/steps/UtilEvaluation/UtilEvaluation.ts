@@ -8,10 +8,8 @@ import {UIError} from "../../../../../general-components/Error/UIErrors/UIError"
 import {UtilEvaluationComponent} from "./UtilEvaluationComponent";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilCriterias} from "../UtilCriterias/UtilCriterias";
-import {
-    CompareComponentValues,
-    CompareValue
-} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {CompareComponentValues} from "../../../../../general-components/CompareComponent/CompareComponent";
+
 
 class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
     public static header = UtilCriterias.header;
@@ -45,7 +43,7 @@ class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataH
                     objectsIndexes.push(o);
                 }
 
-                let rating : CompareComponentValues;
+                let rating: CompareComponentValues;
                 if (evaluation) {
                     rating = evaluation.evaluation[c].rating;
                 } else {
@@ -86,7 +84,7 @@ class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataH
         if (evaluation) {
             let errorFound = false;
             let i = 0;
-            while(!errorFound && i < evaluation.evaluation.length) {
+            while (!errorFound && i < evaluation.evaluation.length) {
                 let e = 0;
                 while (!errorFound && e < evaluation.evaluation[i].rating.comparisons.length) {
                     let value = evaluation.evaluation[i].rating.comparisons[e].value;
