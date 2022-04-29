@@ -39,6 +39,10 @@ export interface CompareComponentProps {
      */
     disabled: boolean
     /**
+     * Gibt an welche Comparisons deaktiviert sein sollen.
+     */
+    disabledComparisons?: number[]
+    /**
      * Name um zwischen CompareComponents besser unterscheiden zu können
      */
     name?: string
@@ -88,14 +92,20 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                                     let checked = (comparison.value !== null) ? (parseInt(comparison.value) === headerIndex) : false;
                                     let value = (comparison.value !== null) ? comparison.value : undefined;
 
+                                    let disabledExtraDescription = false;
+                                    if (this.props.disabledComparisons) {
+                                        disabledExtraDescription = !this.props.disabledComparisons.includes(headerIndex + 1);
+                                    }
+
                                     return (
-                                        <div key={"field-" + name  + "-" + index + "-" + headerIndex} className={"comparison"}>
+                                        <div key={"field-" + name + "-" + index + "-" + headerIndex}
+                                             className={"comparison"}>
                                             {/*TODO onChanged event abgreifen und am namen festmachen welches geändert werden muss*/}
                                             <input
                                                 checked={checked}
                                                 value={value}
                                                 onChange={this.onRadioChange.bind(this, index, headerIndex)}
-                                                disabled={this.props.disabled}
+                                                disabled={this.props.disabled || disabledExtraDescription}
                                                 type={"radio"}
                                                 name={"field-" + name + "-" + index}
                                             />
@@ -139,15 +149,19 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                 <div className={"singleComparison header " + this.props.header.getClassName()}>
                     <div/>
                     <div className={"comparisons"}>
-                        {this.props.header.getHeaders().map((value) => {
+                        {this.props.header.getHeaders().map((value, headerIndex) => {
                             return (
-                                <div key={"header-" + value.header} className={"comparison"}>
+                                <div
+                                    key={"header-" + value.header}
+                                    aria-disabled={!this.props.disabledComparisons?.includes(headerIndex + 1)}
+                                    className={"comparison"}
+                                >
                                     {value.header}
                                 </div>
                             );
                         })}
                     </div>
-                    {(this.props.fields.getEntry(0).second !== undefined) && <div />}
+                    {(this.props.fields.getEntry(0).second !== undefined) && <div/>}
                 </div>
             );
         }

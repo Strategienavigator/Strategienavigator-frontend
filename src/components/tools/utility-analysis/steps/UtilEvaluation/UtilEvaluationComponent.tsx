@@ -11,6 +11,10 @@ import {
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {UtilEvaluation} from "./UtilEvaluation";
 import {LinearCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
+import {Button} from "react-bootstrap";
+import {CreateDescriptionModal} from "./CreateDescriptionModal";
+import FAE from "../../../../../general-components/Icons/FAE";
+import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 
 export interface UtilEvaluationValues {
@@ -30,20 +34,28 @@ export interface UtilEvaluationValues {
     }[]
 }
 
-class UtilEvaluationComponent extends Step<UtilityAnalysisValues, {}> {
+interface UtilEvaluationComponentState {
+    showModal: number
+}
+
+class UtilEvaluationComponent extends Step<UtilityAnalysisValues, UtilEvaluationComponentState> {
 
     public constructor(props: any, context: any) {
         super(props, context);
+
+        this.state = {
+            showModal: -1
+        }
     }
 
-    shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<UtilEvaluationComponentState>, nextContext: any): boolean {
         return !shallowCompareStepProps(this.props, nextProps,
             (oldData, newData) => (
                 oldData["ua-evaluation"] === newData["ua-evaluation"] &&
                 oldData["ua-criterias"] === newData["ua-criterias"] &&
                 oldData["ua-investigation-obj"] === newData["ua-investigation-obj"]
             )
-        );
+        ) || this.state.showModal !== nextState.showModal;
     }
 
     build(): JSX.Element {
@@ -52,7 +64,7 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, {}> {
 
         const criterias = this.props.save.data["ua-criterias"]?.criterias;
 
-        if(values && investigationObjs && criterias) {
+        if (values && investigationObjs && criterias) {
             const adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
 
             return (
@@ -61,23 +73,54 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, {}> {
                         const rating = values.evaluation[criteriaIndex].rating;
 
                         return (
-                          <div className={"comparison criteriaToObject"} key={"criteria-" + criteriaIndex}>
-                              <span className={"criteria"}>{criteria.name}</span>
+                            <div className={"comparison criteriaToObject"} key={"criteria-" + criteriaIndex}>
+                                <div className={"criteria"}>
+                                    {criteria.name}
 
-                              <CompareComponent
-                                  header={UtilEvaluation.header}
-                                  fields={adapter}
-                                  values={rating}
-                                  disabled={this.props.disabled}
-                                  name={criteria.name}
-                                  onChanged={(values) => {
-                                      this.valuesChanged(criteriaIndex, values);
-                                  }}
-                              />
-                          </div>
+                                    {(criteria.extra !== undefined) && (
+                                        <>
+                                            &nbsp;
+                                            <Button
+                                                onClick={() => {
+                                                    this.setState({
+                                                        showModal: criteriaIndex
+                                                    });
+                                                }}
+                                                size={"sm"}
+                                            >
+                                                Skala <FAE icon={faInfoCircle}/>
+                                            </Button>
+                                        </>
+                                    )}
+                                </div>
+
+                                {(criteria.extra !== undefined) && (
+                                    <CreateDescriptionModal
+                                        show={criteriaIndex === this.state.showModal}
+                                        values={criteria.extra}
+                                        onClose={() => {
+                                            this.setState({
+                                                showModal: -1
+                                            });
+                                        }}
+                                    />
+                                )}
+
+                                <CompareComponent
+                                    header={UtilEvaluation.header}
+                                    fields={adapter}
+                                    values={rating}
+                                    disabled={this.props.disabled}
+                                    disabledComparisons={criteria.extra?.activeIndices}
+                                    name={criteria.name}
+                                    onChanged={(values) => {
+                                        this.valuesChanged(criteriaIndex, values);
+                                    }}
+                                />
+                            </div>
                         );
                     })}
-                    <UIErrorBanner id={"ua-evaluation.empty"} />
+                    <UIErrorBanner id={"ua-evaluation.empty"}/>
                 </>
             );
         }

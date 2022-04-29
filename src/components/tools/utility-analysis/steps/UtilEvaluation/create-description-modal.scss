@@ -1,0 +1,19 @@
+
+.scaleModal .test {
+  position: relative;
+}
+
+.scaleModal table td.header {
+  text-align: right;
+  width: 20%;
+  min-width: 150px;
+}
+
+.scaleModal .closeButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 41.5px;
+  border-radius: 0;
+  width: auto;
+}

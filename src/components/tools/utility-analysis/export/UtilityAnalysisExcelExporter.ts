@@ -29,16 +29,16 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
             return o !== undefined && Object.keys(o).length > 0;
         }
 
-        if(isFilled(investigationObjs)) {
+        if (isFilled(investigationObjs)) {
             this.addSheet("Untersuchungsobjekte", this.getInvestigationObjectSheet(investigationObjs.objects));
 
-            if(isFilled(criterias)) {
+            if (isFilled(criterias)) {
                 this.addSheet("Kriterien", this.getCriteriaSheet(criterias.criterias));
-                if(isFilled(weighting)) {
+                if (isFilled(weighting)) {
                     this.addSheet("Gewichtung der Kriterien", this.getWeightingSheet(criterias.criterias, weighting));
-                    if(isFilled(evaluation)) {
+                    if (isFilled(evaluation)) {
                         this.addSheet("Evaluation", this.getEvaluationSheet(criterias.criterias, investigationObjs.objects, evaluation));
-                        if(isFilled(result)) {
+                        if (isFilled(result)) {
                             this.addSheet("Ergebnis", this.getResultSheet(result));
                         }
                     }
@@ -73,7 +73,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         };
         cell.c = 0;
 
-        for(let obj of investigationObjs) {
+        for (let obj of investigationObjs) {
             cell.r += 1;
             cell.c = 0;
 
@@ -128,7 +128,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         cell.c = 0;
 
         // TODO Beschreibung der Skala einbauen
-        for(let obj of criterias) {
+        for (let obj of criterias) {
             cell.r += 1;
             cell.c = 0;
 
@@ -171,7 +171,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
 
         // Header
         cell.c = 1;
-        let numberHeader = new CompareNumberHeader(0,3);
+        let numberHeader = new CompareNumberHeader(0, 3);
         let headers = numberHeader.getHeaders();
 
         for (let header of headers) {
@@ -199,7 +199,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
             cell.c += 1;
 
             for (let j = 0; j < headers.length; j++) {
-                if(j.toString() === weighting.comparisons[i].header) {
+                if (j.toString() === weighting.comparisons[i].header) {
                     ws[this.encodeCell(cell)] = {
                         v: "X", t: "s", s: Object.assign(
                             {
@@ -235,14 +235,14 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         let ws: WorkSheet = {};
         let cell = {r: 0, c: 0};
 
-        let symbolHeader = new CompareSymbolHeader(["--","-","0","+","++"]);
+        let symbolHeader = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
         let headers = symbolHeader.getHeaders();
 
         let criteriaLength = 7;
 
         let adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
 
-        for(let i = 0; i < evaluation.evaluation.length; i++) {
+        for (let i = 0; i < evaluation.evaluation.length; i++) {
             ws[this.encodeCell(cell)] = {
                 v: criterias[i].name, t: "s", s: Object.assign(
                     {
@@ -276,8 +276,8 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                 }
                 criteriaLength = this.updateWidth(criteriaLength, adapter.getEntry(j).first.length);
                 cell.c = 1;
-                for(let e = 0; e < headers.length; e++) {
-                    if(evaluation.evaluation[i].rating.comparisons[j].header === headers[e].header) {
+                for (let e = 0; e < headers.length; e++) {
+                    if (evaluation.evaluation[i].rating.comparisons[j].header === headers[e].header) {
                         ws[this.encodeCell(cell)] = {
                             v: "X", t: "s", s: Object.assign(
                                 {

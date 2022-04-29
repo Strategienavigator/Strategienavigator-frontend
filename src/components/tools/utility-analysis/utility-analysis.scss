@@ -6,25 +6,34 @@
   font-weight: 700;
 }
 
-
 #ua-criterias {
+  .accordion-button {
+    padding: 0.75rem;
+  }
+
   .scale.desktop.collapse:not(.show) {
     display: none !important;
   }
 
-  .scale.desktop {
+  .scale .headers {
+    margin-top: 0.5rem;
     display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
     gap: 5px;
 
-    .row {
-      max-width: 100%;
-      height: auto;
-      flex-wrap: nowrap;
-      flex-direction: column;
-      > div {
-        flex: 50% 0 0;
-        width: 100%;
-      }
+    > * {
+      flex: 100% 0 0;
+    }
+
+    .header {
+      text-align: right;
+    }
+
+    .checkbox {
+      max-width: 20px;
+      text-align: center;
+      padding: 0;
     }
   }
 }

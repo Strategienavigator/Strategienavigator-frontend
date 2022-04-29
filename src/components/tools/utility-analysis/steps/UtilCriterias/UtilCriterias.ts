@@ -7,7 +7,7 @@ import {StepProp} from "../../../../../general-components/Tool/SteppableTool/Ste
 import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {UtilCriteriasComponent} from "./UtilCriteriasComponent";
-import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
+import {CardComponentFields, isCardComponentValid} from "../../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
 import {CompareStarHeader} from "../../../../../general-components/CompareComponent/Header/StarHeader/CompareStarHeader";
 
@@ -41,22 +41,30 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
                 id: null,
                 name: "",
                 desc: "",
-                extra: {headers: UtilCriterias.header.getHeaders()}
+                extra: {
+                    headers: UtilCriterias.header.getHeaders(),
+                    activeIndices: Array(UtilCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
+                }
             });
         }
         data["ua-criterias"] = {criterias: criterias};
     }
 
-
     isUnlocked(data: UtilityAnalysisValues): boolean {
         return data["ua-criterias"] !== undefined && Object.keys(data["ua-criterias"]).length > 0;
     }
 
-
     validateData(data: UtilityAnalysisValues): UIError[] {
-        return [];
+        const errors: UIError[] = [];
+        if (!isCardComponentValid(data["ua-criterias"]?.criterias)) {
+            errors.push({
+                id: "criterias.empty",
+                level: "error",
+                message: "Bitte füllen Sie alle Kriterien aus."
+            });
+        }
+        return errors;
     }
-
 
 }
 
