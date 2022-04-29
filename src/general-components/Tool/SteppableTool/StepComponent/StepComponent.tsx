@@ -11,11 +11,12 @@ import {StepComponentButtons} from "./StepComponentButtons/StepComponentButtons"
 import ResetStepsModal from "./ResetStepsModal/ResetStepsModal";
 import {ExportModal} from "../../ExportButton";
 import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
-import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
+import {ExtraWindowProps} from "../../ExtraWindowComponent/ExtraWindowComponent";
 import {UIError} from "../../../Error/UIErrors/UIError";
 import {Exporter} from "../../../Export/Exporter";
 import {Draft} from "immer";
 import {IUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
+import {SteppableTool} from "../SteppableTool";
 
 
 export interface StepDefinition<T extends object> {
@@ -23,8 +24,13 @@ export interface StepDefinition<T extends object> {
     title: string
     dataHandler: StepDataHandler<T>
     form: FunctionComponent<StepProp<T>> | ComponentClass<StepProp<T>>
-    matrix?: FunctionComponent<MatrixComponentProps<T>> | ComponentClass<MatrixComponentProps<T>>
+    extraWindow?: ExtraWindowDefinition<T>
     subStep?: SubStepDefinition<T>
+}
+
+export interface ExtraWindowDefinition<T extends object> {
+    extraWindowComponent: FunctionComponent<ExtraWindowProps<T>> | ComponentClass<ExtraWindowProps<T>>
+    displayName: string
 }
 
 
@@ -87,7 +93,7 @@ export interface StepDataHandler<T extends object> {
 
 export interface StepComponentProps<D extends object> extends ToolSaveProps<D> {
     steps: StepDefinition<D>[]
-    tool: Tool<D>
+    tool: SteppableTool<D>
 }
 
 export interface StepController {
@@ -212,8 +218,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                 onExportClick={this.showExportModal}
                             />
 
-                            {this.shouldMatrixRender() && (
-                                this.getMatrix()
+                            {this.shouldExtraWindowRender() && (
+                                this.getExtraWindow()
                             )}
                         </Col>
                         <Col className={"tabsContent"}>
@@ -372,7 +378,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
 
-
     /**
      * Resetet alle steps, von hinten bis zu dem angegebenen index
      *
@@ -433,8 +438,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private requestSubStep = (step: number) => {
-        if (this.state.currentStep !== this.state.progress){
-            
+        if (this.state.currentStep !== this.state.progress) {
+
             let result = this.setSubStep(step);
             return result;
         }
@@ -612,38 +617,38 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     /**
-     * does return the matrix if the current sub step has one
+     * does return the extra window if the current sub step has one
      * @private
      */
-    private getMatrix(): undefined | ReactNode {
+    private getExtraWindow(): undefined | ReactNode {
         let step = this.getCurrentStep();
-        if (step.matrix !== undefined) {
-            let matrix = React.createElement(step.matrix, {
+        if (step.extraWindow !== undefined) {
+            let extraWindow = React.createElement(step.extraWindow.extraWindowComponent, {
                 tool: this.props.tool,
                 data: this.props.save.data,
                 stepController: this.stepController
             });
-            const getMatrixContainer = () => {
+            const getExtraWindowContainer = () => {
                 return (
-                    <div className={"matrixContainer"}>
-                        <div className={"matrix"}>
-                            {matrix}
+                    <div className={"extraWindowContainer"}>
+                        <div className={"extraWindow"}>
+                            {extraWindow}
                         </div>
                     </div>
                 );
             }
 
             if (isDesktop()) {
-                return getMatrixContainer();
+                return getExtraWindowContainer();
             } else {
                 return (
-                    <Accordion className={"matrixAccordion"}>
-                        <Accordion.Item eventKey={"matrix"}>
+                    <Accordion className={"extraWindowAccordion"}>
+                        <Accordion.Item eventKey={"extraWindow"}>
                             <Accordion.Header>
-                                Matrix
+                                {step.extraWindow.displayName}
                             </Accordion.Header>
                             <Accordion.Body>
-                                {getMatrixContainer()}
+                                {getExtraWindowContainer()}
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
@@ -652,8 +657,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         }
     }
 
-    private shouldMatrixRender(): boolean {
-        return this.getCurrentStep().matrix !== undefined
+    private shouldExtraWindowRender(): boolean {
+        return this.getCurrentStep().extraWindow !== undefined
     }
 
 

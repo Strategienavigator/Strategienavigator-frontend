@@ -1,12 +1,11 @@
 import {
-    CustomNextButton,
+    CustomNextButton, ExtraWindowDefinition,
     StepDataHandler,
     StepDefinition, SubStepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {AlternateAction, SWOTAlternativeActionsComponent} from "./SWOTAlternativeActionsComponent";
 import {SWOTAnalysisMatrix} from "../../matrix/SWOTAnalysisMatrix";
-import {MatrixComponentProps} from "../../../../../general-components/Tool/MatrixComponent/MatrixComponent";
 import React from "react";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
@@ -35,7 +34,7 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
     form: React.FunctionComponent<StepProp<SWOTAnalysisValues>> | React.ComponentClass<StepProp<SWOTAnalysisValues>>;
     id: string;
     title: string;
-    matrix: React.FunctionComponent<MatrixComponentProps<SWOTAnalysisValues>> | React.ComponentClass<MatrixComponentProps<SWOTAnalysisValues>>;
+    extraWindow: ExtraWindowDefinition<SWOTAnalysisValues>;
     dataHandler: StepDataHandler<SWOTAnalysisValues>;
     subStep: SubStepDefinition<SWOTAnalysisValues>;
     customNextButton: CustomNextButton;
@@ -45,7 +44,10 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
         this.id = "alternative-actions";
         this.title = "2. Handlungsalternativen festlegen";
         this.form = SWOTAlternativeActionsComponent;
-        this.matrix = SWOTAnalysisMatrix;
+        this.extraWindow = {
+            displayName: "Matrix",
+            extraWindowComponent: SWOTAnalysisMatrix
+        };
         this.dataHandler = this;
 
         // sub step
