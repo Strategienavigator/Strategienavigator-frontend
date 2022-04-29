@@ -8,6 +8,7 @@ import {compareWithoutFunctions} from "../ComponentUtils";
 import FAE from "../Icons/FAE";
 import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/CustomDescriptionComponent";
 
+
 export interface CardProps<D = never> {
     id: string | null
     /**
@@ -36,28 +37,36 @@ export interface CardProps<D = never> {
 export interface CardState {
     showDesc: boolean
     descChanged: boolean
+    nameTooLong: boolean
+    descTooLong: boolean
 }
 
-export function isCardValid(cardComponentField: CardComponentField) {
-    return cardComponentField.name.length > 0 && cardComponentField.desc.length > 0;
+export function isCardComponentFilled(cardComponentFields?: CardComponentFields<object>) {
+    return cardComponentFields?.every((cardComponentField: CardComponentField<object>) => {
+        return cardComponentField.name.length > 0 && cardComponentField.desc.length > 0;
+    });
 }
 
-export function isCardComponentValid(cardComponentFields?: CardComponentFields) {
-    return cardComponentFields?.every(isCardValid)!!;
+export function isCardComponentTooLong(cardComponentFields?: CardComponentFields<object>) {
+    return !cardComponentFields?.every((cardComponentField: CardComponentField<object>) => {
+        return !(cardComponentField.name.length > Card.MAX_NAME_LENGTH || cardComponentField.desc.length > Card.MAX_DESC_LENGTH);
+    });
 }
-
 
 class Card<D = never> extends Component<CardProps<D>, CardState> {
+    public static MAX_NAME_LENGTH = 120;
+    public static MAX_DESC_LENGTH = 300;
 
     constructor(props: CardProps<D> | Readonly<CardProps<D>>) {
         super(props);
 
         this.state = {
             showDesc: isDesktop(),
-            descChanged: false
+            descChanged: false,
+            nameTooLong: false,
+            descTooLong: false
         };
     }
-
 
     shouldComponentUpdate(nextProps: Readonly<CardProps<D>>, nextState: Readonly<CardState>, nextContext: any): boolean {
         return !(compareWithoutFunctions(this.props, nextProps) && compareWithoutFunctions(this.state, nextState));
@@ -65,15 +74,48 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
 
     nameChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         e.preventDefault();
+        if(e.currentTarget.value.length > Card.MAX_NAME_LENGTH) {
+            this.setState({
+                nameTooLong: true
+            });
+        } else {
+            this.setState({
+                nameTooLong: false
+            });
+        }
+
         this.props.onChange(this.props.index, e.currentTarget.value, this.props.desc, this.props.customDescValues);
+    }
+
+    componentDidMount() {
+        if (this.props.value.length > Card.MAX_NAME_LENGTH) {
+            this.setState({
+                nameTooLong: true
+            });
+        }
+        if (this.props.desc.length > Card.MAX_DESC_LENGTH) {
+            this.setState({
+                descTooLong: true
+            });
+        }
     }
 
     descChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         let value = e.currentTarget.value;
-        this.setState({
-            descChanged: value.length > 0
-        });
+
+        if(e.currentTarget.value.length > Card.MAX_DESC_LENGTH) {
+            this.setState({
+                descChanged: value.length > 0,
+                descTooLong: true
+            });
+        } else {
+            this.setState({
+                descChanged: value.length > 0,
+                descTooLong: false
+            });
+        }
+
         this.props.onChange(this.props.index, this.props.value, value, this.props.customDescValues);
     }
 
@@ -84,16 +126,6 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
     onDelete = () => {
         if (this.props.onDelete !== undefined) {
             this.props.onDelete(this.props.index);
-        }
-    }
-
-    private showDescription = () => {
-        this.setState({showDesc: true})
-    }
-
-    private closeIfChanged = () => {
-        if (this.state.descChanged) {
-            this.setState({showDesc: false})
         }
     }
 
@@ -123,7 +155,8 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                         name={this.props.name + "[" + this.props.index + "][name]"}
                         spellCheck={false}
                         value={this.props.value}
-                        placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}/>
+                        placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}
+                    />
                     {
                         ((!this.props.disabled) && this.props.onDelete !== undefined) ? (
                             <Button className={"noButton"} onClick={this.onDelete} variant={"link"}>
@@ -147,18 +180,40 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                             name={this.props.name + "[" + this.props.index + "][desc]"}
                             value={this.props.desc}
                             placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}/>
-
                         <div>
                             {customDesc}
                         </div>
                     </div>
                 </Collapse>
 
+                <div className={"feedbackContainer"}>
+                    {(this.state.nameTooLong) && (
+                        <div className={"feedback DANGER"}>
+                            Der Name darf maximal {Card.MAX_NAME_LENGTH} Zeichen lang sein!
+                        </div>
+                    )}
+                    {(this.state.descTooLong) && (
+                        <div className={"feedback DANGER"}>
+                            Die Beschreibung darf maximal {Card.MAX_DESC_LENGTH} Zeichen lang sein!
+                        </div>
+                    )}
+                </div>
+
                 <input name={this.props.name + "[][index]"} value={this.props.index} type={"hidden"}/>
                 <input name={this.props.name + "[" + this.props.index + "][id]"} type={"hidden"}
                        value={this.props.id ? this.props.id : undefined}/>
             </div>
         );
+    }
+
+    private showDescription = () => {
+        this.setState({showDesc: true})
+    }
+
+    private closeIfChanged = () => {
+        if (this.state.descChanged) {
+            this.setState({showDesc: false})
+        }
     }
 
 }
@@ -202,6 +257,52 @@ export interface CardComponentProps<D> {
 
 class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> {
 
+    getAllCards = () => {
+        let required = (this.props.required !== undefined) ? this.props.required : true;
+
+        // check and add minimum
+        if (this.props.values.length < this.props.min) {
+            for (let i = 0; i < this.props.min - this.props.values.length; i++) {
+                this.addCard();
+            }
+        }
+
+        return this.props.values.map((value, index) => {
+            return (
+                <Card<D> id={value.id}
+                         name={this.props.name}
+                         value={value.name}
+                         desc={value.desc}
+                         disabled={this.props.disabled}
+                         required={required}
+                         index={index}
+                         onDelete={this.removeCard.bind(this, index)}
+                         onChange={this.cardUpdatedListener}
+                         customDescValues={value.extra}
+                         customDesc={this.props.customDescription}/>
+            );
+        });
+    }
+
+    render = () => {
+        let cards = this.getAllCards();
+
+        return (
+            <div className={this.props.hide ? "d-none" : ""}>
+                {cards}
+
+                {((this.props.values.length < this.props.max) && !this.props.disabled) && (
+                    <BootstrapCard onClick={this.addCard}
+                                   className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
+                        <div className={"icon"}>
+                            <FAE icon={faPlus}/>
+                        </div>
+                    </BootstrapCard>
+                )}
+            </div>
+        );
+    }
+
     private cardUpdatedListener = (index: number, name: string, desc: string, extra?: D) => {
         let newValues = this.props.values.slice();
         newValues[index] = {
@@ -241,7 +342,7 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
         let newValues = this.props.values.slice();
         if (newValues.length < this.props.max) {
             let extraValue = undefined;
-            if(this.props.customDescValuesFactory !== undefined){
+            if (this.props.customDescValuesFactory !== undefined) {
                 extraValue = this.props.customDescValuesFactory();
             }
 
@@ -253,52 +354,6 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
             });
             this.props.onChanged(newValues);
         }
-    }
-
-    getAllCards = () => {
-        let required = (this.props.required !== undefined) ? this.props.required : true;
-
-        // check and add minimum
-        if (this.props.values.length < this.props.min) {
-            for (let i = 0; i < this.props.min - this.props.values.length; i++) {
-                this.addCard();
-            }
-        }
-
-        return this.props.values.map((value, index) => {
-            return (
-                <Card<D> id={value.id}
-                      name={this.props.name}
-                      value={value.name}
-                      desc={value.desc}
-                      disabled={this.props.disabled}
-                      required={required}
-                      index={index}
-                      onDelete={this.removeCard.bind(this, index)}
-                      onChange={this.cardUpdatedListener}
-                      customDescValues={value.extra}
-                      customDesc={this.props.customDescription}/>
-            );
-        });
-    }
-
-    render = () => {
-        let cards = this.getAllCards();
-
-        return (
-            <div className={this.props.hide ? "d-none" : ""}>
-                {cards}
-
-                {((this.props.values.length < this.props.max) && !this.props.disabled) && (
-                    <BootstrapCard onClick={this.addCard}
-                                   className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
-                        <div className={"icon"}>
-                            <FAE icon={faPlus}/>
-                        </div>
-                    </BootstrapCard>
-                )}
-            </div>
-        );
     }
 
 }
