@@ -26,7 +26,6 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
         super(props);
     }
 
-
     shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
         let shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
         if (!shouldUpdate) {
@@ -42,7 +41,6 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
                 <>
                     <CardComponent<UACriteriaCustomDescriptionValues>
                         customDescription={UACriteriaCustomDescription}
-                        customDescValuesFactory={UtilCriterias.getDefaultExtra}
                         values={criterias}
                         name={"util-criterias"}
                         disabled={this.props.disabled}

@@ -218,14 +218,14 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
 
 }
 
-export type CardComponentField<D = never> = {
+export type CardComponentField<D = any> = {
     name: string
     desc: string
     id: string | null
     extra?: D
 };
 
-export type CardComponentFields<D = never> = CardComponentField<D>[];
+export type CardComponentFields<D = any> = CardComponentField<D>[];
 
 export interface CardComponentFieldPlaceholder {
     description?: string

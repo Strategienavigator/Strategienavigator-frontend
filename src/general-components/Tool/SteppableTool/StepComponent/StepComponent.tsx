@@ -182,6 +182,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                             saveMetaChanged={this.changeSaveMeta}/>;
 
         const anyErrors = Object.keys(this.props.uiErrorContext.errors).length > 0;
+
         return (
             <>
                 <Tab.Container
@@ -502,7 +503,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private save = async () => {
-
         const addErrorMessage = () => {
             Messages.add(
                 "Speichern fehlgeschlagen! Bitte versuchen Sie es später erneut.",
@@ -510,7 +510,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                 Messages.TIMER
             );
         }
-
 
         let saveCall = await this.props.saveController.save();
         if (saveCall) {
@@ -545,20 +544,14 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
      * @private
      */
     private changeStep(step: number, callback: undefined | (() => void) = undefined): void {
-
-
         if (step < this.props.steps.length) {
-
-
             if (this.state.currentStep !== step) {
-
                 const hasSubSteps = this.hasSubSteps(step);
                 let newSubStep = 0;
                 if (hasSubSteps) {
 
                     newSubStep = StepComponent.getCurrentSubStepOfStep(this.props.steps, step, this.props.save.data);
                 }
-
 
                 let newProgress = this.state.progress;
                 if (this.state.progress < step) {
@@ -666,6 +659,11 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         const errors = this.withData(this.props.steps[step].dataHandler.validateData);
         if (errors.length > 0) {
             this.putErrors(errors);
+            Messages.add(
+                "Überprüfen Sie Ihre Eingaben!",
+                "DANGER",
+                Messages.TIMER
+            );
             return false;
         } else {
             return true;

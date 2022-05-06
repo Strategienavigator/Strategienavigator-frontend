@@ -1,7 +1,7 @@
 
 
 
-export interface CompareHeader{
+export interface CompareHeader {
     header: string,
     desc?: string
 }
@@ -12,6 +12,20 @@ export interface CompareHeader{
  * Implementierende Klassen müssen nur die getHeaders Methode überschreiben
  */
 abstract class CompareHeaderAdapter {
+    private readonly className: String = "normalHeader";
+
+    protected constructor(className: String) {
+        this.className = className;
+    }
+
+    /**
+     * Gibt die Klassenbezeichnung des Headers zurück
+     *
+     * @returns {String} Die CSS-Klassenbezeichnung
+     */
+    public getClassName(): String {
+        return this.className;
+    }
 
     /**
      * Gibt die Anzahl der Überschriften zurück
@@ -34,6 +48,24 @@ abstract class CompareHeaderAdapter {
             return this.getHeaders()[index];
         }
         throw new RangeError();
+    }
+
+    /**
+     * Gibt den Index zurück, sollte dieser mithilfe des Headers gefunden werden.
+     * Bei nicht auffinden wird -1 zurückgegeben!
+     *
+     * @param {string} header Der gesuchte Header
+     * @returns {number}
+     */
+    public getIndex(header: string): number {
+        let i = 0;
+        for (let item of this.getHeaders()) {
+            if (item.header === header) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
 }

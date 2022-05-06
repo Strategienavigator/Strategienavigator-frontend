@@ -19,7 +19,6 @@ class PCCriterias implements StepDefinition<PairwiseComparisonValues>, StepDataH
     dataHandler: StepDataHandler<PairwiseComparisonValues>;
     form: React.FunctionComponent<StepProp<PairwiseComparisonValues>> | React.ComponentClass<StepProp<PairwiseComparisonValues>>;
 
-
     constructor() {
         this.id = "pc-criterias";
         this.title = "1. Kritierien festlegen";
@@ -61,6 +60,7 @@ class PCCriterias implements StepDefinition<PairwiseComparisonValues>, StepDataH
     validateData(data: PairwiseComparisonValues): UIError[] {
         const errors = new Array<UIError>();
         const criterias = data["pc-criterias"]?.criterias;
+
         if (criterias === undefined) {
             errors.push({
                 message: "Daten fehlen",

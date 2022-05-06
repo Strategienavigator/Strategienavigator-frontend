@@ -13,26 +13,19 @@ import {
     isCardComponentFilled, isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
+import {CompareStarHeader} from "../../../../../general-components/CompareComponent/Header/StarHeader/CompareStarHeader";
+
 
 class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
     public static min = 2;
     public static max = 10;
 
-    private static readonly header = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
-
-    /**
-     * gibt den standard Wert für das extra Feld im CardComponentField zurück
-     */
-    public static getDefaultExtra(): UACriteriaCustomDescriptionValues {
-        return {headers: UtilCriterias.header.getHeaders()};
-    }
-
+    public static readonly header = new CompareStarHeader(1, 5);
 
     dataHandler: StepDataHandler<UtilityAnalysisValues>;
     form: React.FunctionComponent<StepProp<UtilityAnalysisValues>> | React.ComponentClass<StepProp<UtilityAnalysisValues>>;
     id: string;
     title: string;
-
 
     constructor() {
         this.id = "ua-criterias";
@@ -52,7 +45,10 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
                 id: null,
                 name: "",
                 desc: "",
-                extra: UtilCriterias.getDefaultExtra()
+                extra: {
+                    headers: UtilCriterias.header.getHeaders(),
+                    activeIndices: Array(UtilCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
+                }
             });
         }
         data["ua-criterias"] = {criterias: criterias};
@@ -81,7 +77,6 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
 
         return erros;
     }
-
 
 }
 

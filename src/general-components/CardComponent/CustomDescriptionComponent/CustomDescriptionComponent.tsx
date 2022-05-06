@@ -13,7 +13,6 @@ export interface CustomDescriptionComponentProps<D> {
      * Der Name des Input-Feldes
      */
     name: string
-
     /**
      * callback wenn sich die value ändern soll
      * @param value {D} neue instanz von type D

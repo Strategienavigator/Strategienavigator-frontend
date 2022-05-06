@@ -3,16 +3,18 @@ import {
     Step,
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {CompareComponent, CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {
-    MatchCardComponentFieldsAdapter
-} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+    CompareComponent,
+    CompareComponentValues
+} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilWeighting} from "./UtilWeighting";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
+import React from "react";
 
 
-export interface UtilWeightingValues {
-    comparisons: CompareValue[]
+export interface UtilWeightingValues extends CompareComponentValues {
 }
 
 
@@ -21,11 +23,9 @@ export interface UtilWeightingValues {
  */
 class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
 
-
     public constructor(props: Readonly<StepProp<UtilityAnalysisValues>> | StepProp<UtilityAnalysisValues>, context: any) {
         super(props, context);
     }
-
 
     shouldComponentUpdate(nextProps: Readonly<StepProp<UtilityAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
         return !shallowCompareStepProps(this.props, nextProps,
@@ -43,22 +43,28 @@ class UtilWeightingComponent extends Step<UtilityAnalysisValues, {}> {
             const adapter = new MatchCardComponentFieldsAdapter(criterias);
 
             return (
-                <CompareComponent
-                    disabled={this.props.disabled}
-                    values={values.comparisons}
-                    showHeader={true}
-                    fields={adapter}
-                    header={UtilWeighting.header}
-                    onChanged={this.valuesChanged}/>
+                <>
+                    <CompareComponent
+                        disabled={this.props.disabled}
+                        values={values}
+                        name={"weighting"}
+                        showHeader={true}
+                        fields={adapter}
+                        header={UtilWeighting.header}
+                        onChanged={this.valuesChanged}
+                    />
+
+                    <UIErrorBanner id={"utility-analysis.empty"}/>
+                </>
             );
         }
         return <></>;
     }
 
-    private valuesChanged = (values: CompareValue[]) => {
+    private valuesChanged = (values: CompareComponentValues) => {
         this.props.saveController.onChanged(save => {
             if (save.data["ua-weighting"]) {
-                save.data["ua-weighting"].comparisons = values;
+                save.data["ua-weighting"] = values;
             }
         });
     };
