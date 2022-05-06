@@ -35,7 +35,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
     private chancesChanged = this.applyCardComponentChanges.bind(this, "chances");
     private risksChanged = this.applyCardComponentChanges.bind(this, "risks");
 
-    constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
+    public constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
         super(props, context);
     }
 

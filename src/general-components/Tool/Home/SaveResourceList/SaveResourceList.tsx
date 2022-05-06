@@ -30,13 +30,11 @@ interface SaveResourceListState {
 
 class SaveResourceList extends Component<SaveResourceListProps, SaveResourceListState> {
 
-
-    constructor(props: Readonly<SaveResourceListProps> | SaveResourceListProps);
-    constructor(props: SaveResourceListProps, context: any);
-    constructor(props: SaveResourceListProps | Readonly<SaveResourceListProps>, context?: any) {
+    public constructor(props: Readonly<SaveResourceListProps> | SaveResourceListProps);
+    public constructor(props: SaveResourceListProps, context: any);
+    public constructor(props: SaveResourceListProps | Readonly<SaveResourceListProps>, context?: any) {
         super(props, context);
     }
-
 
     render() {
         return (

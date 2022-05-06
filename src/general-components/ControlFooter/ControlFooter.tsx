@@ -82,7 +82,7 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
     static contextType = FooterContext;
     context!: React.ContextType<typeof FooterContext>
 
-    constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
+    public constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
     }
 

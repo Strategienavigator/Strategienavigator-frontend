@@ -23,7 +23,7 @@ export interface UtilResultValues {
 
 class UtilResultComponent extends Step<UtilityAnalysisValues, any> {
 
-    constructor(props: StepProp<UtilityAnalysisValues>) {
+    public constructor(props: StepProp<UtilityAnalysisValues>) {
         super(props);
     }
 
