@@ -88,30 +88,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     render() {
         let ID = parseInt(this.props.match.params.id as string);
 
-        let view: ReactNode;
-
-        /*if (this.state.viewValidationError !== undefined) {
-            view = (
-                <Card body>
-                    {(this.state.viewValidationError.isNotOwn) && (
-                        <>Sie haben keine Berechtigung diesen Speicherstand anzusehen!</>
-                    )}
-                    {(this.state.viewValidationError.isOtherTool) && (
-                        <>Bei dieser Analyse handelt es sich nicht um
-                            eine <b>{this.props.tool.getToolName()}</b>!</>
-                    )}
-                    {(this.state.viewValidationError.isLocked) && (
-                        <>Dieser Speicherstand wird aktuell bearbeitet!</>
-                    )}
-                </Card>
-            );
-        } else {
-            view = (
-                <UIErrorContextComponent>
-                    {this.getView()}
-                </UIErrorContextComponent>
-            );
-        }*/
         return (
             <Route>
                 <Loader payload={[() => this.retrieveSave(ID)]} transparent
