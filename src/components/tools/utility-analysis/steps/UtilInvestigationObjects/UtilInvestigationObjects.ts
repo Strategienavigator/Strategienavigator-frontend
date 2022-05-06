@@ -9,7 +9,8 @@ import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {
     CardComponentFields,
-    isCardComponentFilled, isCardComponentTooLong
+    isCardComponentFilled,
+    isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
 
 

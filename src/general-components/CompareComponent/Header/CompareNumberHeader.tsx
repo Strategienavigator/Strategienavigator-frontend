@@ -23,9 +23,9 @@ class CompareNumberHeader extends CompareHeaderAdapter {
      * Erstellt ein Array welche alle Zahlen von start zu (start + length - 1) enthält
      */
     getHeaders(): Array<CompareHeader> {
-        let headers:Array<CompareHeader> = [];
+        let headers: Array<CompareHeader> = [];
         for (let i = this.start; i < (this.start + this.length); i++) {
-            headers.push({header: String(i), desc :undefined});
+            headers.push({header: String(i), desc: undefined});
         }
         return headers;
     }

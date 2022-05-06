@@ -74,7 +74,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
 
     nameChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         e.preventDefault();
-        if(e.currentTarget.value.length > Card.MAX_NAME_LENGTH) {
+        if (e.currentTarget.value.length > Card.MAX_NAME_LENGTH) {
             this.setState({
                 nameTooLong: true
             });
@@ -104,7 +104,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
         e.preventDefault();
         let value = e.currentTarget.value;
 
-        if(e.currentTarget.value.length > Card.MAX_DESC_LENGTH) {
+        if (e.currentTarget.value.length > Card.MAX_DESC_LENGTH) {
             this.setState({
                 descChanged: value.length > 0,
                 descTooLong: true

@@ -38,26 +38,20 @@ export class PaginationLoader<D extends object> {
      * @private
      */
     private _pageCount: number = -1;
+
+    public get pageCount(): number {
+        return this._pageCount;
+    }
+
+    private set pageCount(value: number) {
+        this._pageCount = value;
+    }
+
     /**
      * Anzahl an Einträgen die insgesamt verfügbar sind
      * @private
      */
     private _totalResults: number = -1;
-
-    /**
-     * Anzahl der Einträge die pro Seite angezeigt werden.
-     * @private
-     */
-    private _perPage: number = -1;
-
-
-    get perPage(): number {
-        return this._perPage;
-    }
-
-    set perPage(value: number) {
-        this._perPage = value;
-    }
 
     get totalResults(): number {
         return this._totalResults;
@@ -67,12 +61,18 @@ export class PaginationLoader<D extends object> {
         this._totalResults = value;
     }
 
-    public get pageCount(): number {
-        return this._pageCount;
+    /**
+     * Anzahl der Einträge die pro Seite angezeigt werden.
+     * @private
+     */
+    private _perPage: number = -1;
+
+    get perPage(): number {
+        return this._perPage;
     }
 
-    private set pageCount(value: number) {
-        this._pageCount = value;
+    set perPage(value: number) {
+        this._perPage = value;
     }
 
     /**
@@ -112,7 +112,7 @@ export class PaginationLoader<D extends object> {
         return allData
     }
 
-    public getAllLoaded():PaginationPages<D> {
+    public getAllLoaded(): PaginationPages<D> {
         return {
             pages: this.data.slice(),
             perPage: this.perPage,
@@ -145,15 +145,15 @@ export class PaginationLoader<D extends object> {
         }
     }
 
+    public clearCache() {
+        this.data = [];
+    }
+
     private setPageData(page: number, data: PaginationPage<D>) {
         this.data[page] = data;
     }
 
     private getPageData(page: number) {
         return this.data[page];
-    }
-
-    public clearCache() {
-        this.data = [];
     }
 }

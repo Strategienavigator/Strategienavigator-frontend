@@ -28,7 +28,7 @@ class CurrentSave<D> {
     }
 
     public setName(name: string) {
-        if(this.save !== undefined)
+        if (this.save !== undefined)
             this.requireSave().name = name;
     }
 
@@ -37,7 +37,7 @@ class CurrentSave<D> {
     }
 
     public setDesc(desc: string) {
-        if(this.isset())
+        if (this.isset())
             this.requireSave().description = desc;
     }
 
@@ -49,8 +49,8 @@ class CurrentSave<D> {
         return this.save !== undefined;
     }
 
-    public requireSave(){
-        if(this.save !== undefined)
+    public requireSave() {
+        if (this.save !== undefined)
             return this.save;
         else
             throw new Error("Save not set");

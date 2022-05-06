@@ -31,6 +31,45 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
         await this.pageChosenCallback(this.state.page);
     }
 
+    render(): ReactNode {
+        this.checkPage();
+
+        let page = this.getCurrentPage();
+        return (
+            <>
+                <div className={"mb-3"}>
+                    {this.renderFooter(true)}
+                </div>
+
+                <div>
+                    {((page ? page.data.length : 1) <= 0) && (
+                        <Card>
+                            <Card.Body>Sie haben aktuell keine Speicherstände.</Card.Body>
+                        </Card>
+                    )}
+
+                    {page?.data.map(save => {
+                        return (
+                            <SaveCard save={save} toolLink={this.props.tool!.getLink()} onTrash={() => {
+                                this.props.savesControlCallbacks.deleteSave(save);
+                            }}/>
+                        );
+                    })
+                    ?? // alternative if page is undefined
+                    Array.from(new Array(15).keys()).map(value => {
+                        return (
+                            <SaveCard/>
+                        );
+                    })}
+
+                </div>
+                <div className={"mt-2"}>
+                    {this.renderFooter(false)}
+                </div>
+            </>
+        );
+    }
+
     /**
      * Rendert die Zahlen und welche Speicherstände aktuell angezeigt werden
      * @param top Ob dieser Footer auf der oberen Seite der Seite angezeigt werden soll
@@ -92,45 +131,6 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
                 }
             }
         }
-    }
-
-    render(): ReactNode {
-        this.checkPage();
-
-        let page = this.getCurrentPage();
-        return (
-            <>
-                <div className={"mb-3"}>
-                    {this.renderFooter(true)}
-                </div>
-
-                <div>
-                    {((page ? page.data.length : 1) <= 0) && (
-                        <Card>
-                            <Card.Body>Sie haben aktuell keine Speicherstände.</Card.Body>
-                        </Card>
-                    )}
-
-                    {page?.data.map(save => {
-                            return (
-                                <SaveCard save={save} toolLink={this.props.tool!.getLink()} onTrash={() => {
-                                    this.props.savesControlCallbacks.deleteSave(save);
-                                }}/>
-                            );
-                        })
-                        ?? // alternative if page is undefined
-                        Array.from(new Array(15).keys()).map(value => {
-                            return (
-                                <SaveCard/>
-                            );
-                        })}
-
-                </div>
-                <div className={"mt-2"}>
-                    {this.renderFooter(false)}
-                </div>
-            </>
-        );
     }
 
     private pageChosenCallback = async (nextPage: number, forced?: boolean) => {

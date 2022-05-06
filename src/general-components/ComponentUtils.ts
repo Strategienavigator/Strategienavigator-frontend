@@ -6,7 +6,7 @@
  */
 function compareWithoutFunctions<T extends Object>(oldData: T, newData: T, exclude: string[] = []) {
     let k: keyof T;
-    if(oldData === newData){
+    if (oldData === newData) {
         return true;
     }
     for (k in oldData) {

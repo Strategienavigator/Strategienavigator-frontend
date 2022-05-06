@@ -3,8 +3,8 @@ import {
     Step,
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {CompareComponent} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {
+    CompareComponent,
     CompareComponentValues
 } from "../../../../../general-components/CompareComponent/CompareComponent";
 import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
@@ -15,7 +15,8 @@ import {PCPairComparison} from "./PCPairComparison";
 /**
  * Die Werte des zweiten Schrittes des Paarweisen-Vergleiches
  */
-export interface PCPairComparisonValues extends CompareComponentValues {}
+export interface PCPairComparisonValues extends CompareComponentValues {
+}
 
 /**
  * Stellt den zweiten Schritt des Paarweisen-Vergleichs dar

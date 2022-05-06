@@ -15,6 +15,7 @@ import produce from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
 import {UIErrorContextComponent} from "../../Contexts/UIErrorContext/UIErrorContext";
 
+
 type ToolViewValidation = {
     isNotOwn?: boolean
     isOtherTool?: boolean
@@ -54,7 +55,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
      * Speichert ob der Speicherstand seit dem letzten Speichern verändert wurde
      * @private
      */
-    private saveDirty:boolean = false;
+    private saveDirty: boolean = false;
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
@@ -83,50 +84,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             this.unlock();
         }
     }
-
-
-    private onBeforeUnload = (e: BeforeUnloadEvent) => {
-        if(this.shouldPreventRouteChange()){
-            e.preventDefault();
-            e.returnValue = "";
-            return "";
-        }
-        return undefined;
-    }
-
-    private onUnload = async () => {
-        if (this.state.save !== undefined) {
-            // TODO use callAPI method
-            let data = new FormData();
-            data.append("_method", "PUT");
-            data.append("lock", "0");
-
-            let headers = new Headers();
-            headers.append("Authorization", "Bearer " + Session.getToken());
-
-            await fetch(process.env.REACT_APP_API + "api/saves/" + this.state.save.id, {
-                method: "POST",
-                body: data,
-                headers: headers,
-                keepalive: true
-            });
-        }
-    }
-
-
-    private getView(): ReactNode {
-        if (this.state.save !== undefined) {
-            return this.props.element({
-                save: this.state.save,
-                saveController: this.saveController,
-                isSaving: this.state.isSaving
-            });
-        } else {
-            // showErrorPage(404);
-            return "loading";
-        }
-    }
-
 
     render() {
         let ID = parseInt(this.props.match.params.id as string);
@@ -191,6 +148,73 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         );
     }
 
+    denyRouteChange = (location: H.Location): boolean => {
+        // Dont show if save is unchanged
+        if (!this.shouldPreventRouteChange())
+            return true;
+
+
+        this.setState({
+            showConfirmToolRouteChangeModal: true,
+            lastLocation: location
+        });
+        return (location.pathname === this.state.lastLocation?.pathname);
+    }
+
+    public onAPIError(error: Error): void {
+        // TODO
+        Messages.add(error.name, "DANGER", Messages.TIMER);
+    }
+
+    public lock = async () => {
+        return await this.lockSave(true);
+    }
+
+    public unlock = async () => {
+        return await this.lockSave(false);
+    }
+
+    private onBeforeUnload = (e: BeforeUnloadEvent) => {
+        if (this.shouldPreventRouteChange()) {
+            e.preventDefault();
+            e.returnValue = "";
+            return "";
+        }
+        return undefined;
+    }
+
+    private onUnload = async () => {
+        if (this.state.save !== undefined) {
+            // TODO use callAPI method
+            let data = new FormData();
+            data.append("_method", "PUT");
+            data.append("lock", "0");
+
+            let headers = new Headers();
+            headers.append("Authorization", "Bearer " + Session.getToken());
+
+            await fetch(process.env.REACT_APP_API + "api/saves/" + this.state.save.id, {
+                method: "POST",
+                body: data,
+                headers: headers,
+                keepalive: true
+            });
+        }
+    }
+
+    private getView(): ReactNode {
+        if (this.state.save !== undefined) {
+            return this.props.element({
+                save: this.state.save,
+                saveController: this.saveController,
+                isSaving: this.state.isSaving
+            });
+        } else {
+            // showErrorPage(404);
+            return "loading";
+        }
+    }
+
     private hideRouteChangeModal = () => {
         this.setState({
             showConfirmToolRouteChangeModal: false,
@@ -207,23 +231,10 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         }
     };
 
-    denyRouteChange = (location: H.Location): boolean => {
-        // Dont show if save is unchanged
-        if(!this.shouldPreventRouteChange())
-            return true;
-
-
-        this.setState({
-            showConfirmToolRouteChangeModal: true,
-            lastLocation: location
-        });
-        return (location.pathname === this.state.lastLocation?.pathname);
-    }
-
     /**
      * Gibt zurück, ob ein Dialog angezeigt werden soll, der um Bestätigung bittet, ob die Seite verlassen werden soll
      */
-    private shouldPreventRouteChange = ():boolean => {
+    private shouldPreventRouteChange = (): boolean => {
         return this.saveDirty;
     }
 
@@ -239,7 +250,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                 isSaving: false
             });
             const success = call !== null && call.success;
-            if(success)
+            if (success)
                 this.saveDirty = false;
             return success;
         } else {
@@ -262,11 +273,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             this.saveDirty = true;
         }
 
-    }
-
-    public onAPIError(error: Error): void {
-        // TODO
-        Messages.add(error.name, "DANGER", Messages.TIMER);
     }
 
     private hasCurrentSave(): boolean {
@@ -327,15 +333,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                 viewValidationError: validation
             });
         }
-    }
-
-
-    public lock = async () => {
-        return await this.lockSave(true);
-    }
-
-    public unlock = async () => {
-        return await this.lockSave(false);
     }
 }
 

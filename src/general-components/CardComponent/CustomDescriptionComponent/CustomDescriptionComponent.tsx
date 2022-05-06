@@ -1,5 +1,6 @@
 import {Component} from "react";
 
+
 export interface CustomDescriptionComponentProps<D> {
     /**
      * Gibt an ob die Beschreibung deaktiviert sein soll oder nicht
@@ -17,7 +18,7 @@ export interface CustomDescriptionComponentProps<D> {
      * callback wenn sich die value ändern soll
      * @param value {D} neue instanz von type D
      */
-    onChanged: (value:D) => void
+    onChanged: (value: D) => void
 }
 
 /**

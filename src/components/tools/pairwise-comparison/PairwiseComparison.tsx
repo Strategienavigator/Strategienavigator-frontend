@@ -11,6 +11,7 @@ import {PCResult} from "./steps/PCResult/PCResult";
 import {PCExcelExporter} from "./export/PCExcelExporter";
 import {PCCriteriasValues} from "./steps/PCCriterias/PCCriteriasComponent";
 
+
 /**
  * Enthält die Werte des Paarweisen-Vergleichs. Umfasst Kriterien und Vergleich
  */

@@ -1,10 +1,4 @@
 import {faArrowsAlt} from "@fortawesome/free-solid-svg-icons";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {PortCreateObjects} from "./steps/PortCreateObjects";
-import {PortCriterias} from "./steps/PortCriterias";
-import {PortWeighting} from "./steps/PortWeighting";
-import {PortEvaluation} from "./steps/PortEvaluation";
-import {PortResult} from "./steps/PortResult";
 
 import "./portfolio-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";

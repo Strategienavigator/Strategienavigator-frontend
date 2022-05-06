@@ -1,6 +1,3 @@
-
-
-
 export interface CompareHeader {
     header: string,
     desc?: string
@@ -37,7 +34,7 @@ abstract class CompareHeaderAdapter {
     /**
      * Gibt ein Array zurück mit allen Überschriften, welche angezeigt werden
      */
-    public abstract getHeaders():Array<CompareHeader>;
+    public abstract getHeaders(): Array<CompareHeader>;
 
     /**
      * Gibt eine Überschrift zurück, welche an dem übergebenen index steht

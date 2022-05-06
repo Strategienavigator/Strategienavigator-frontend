@@ -1,5 +1,6 @@
 import {SettingResource} from "../Datastructures";
 
+
 export interface UserSetting extends SettingResource {
     /**
      * Current Value of the setting, if exists is false, this has the default value of the setting
@@ -15,20 +16,20 @@ export interface UserSetting extends SettingResource {
  * Klasse um alle Einstellungen zu verwalten.
  *
  * Um Einstellungen hinzuzufügen muss eine neue Instanz erstellt werden.
- * 
+ *
  * Die Klasse wird verwendet um doppelte Einträge auszuschließen und das abrufen einzelner Einstellungen effizienter und einfacher zu machen
  */
-export class SettingsList{
+export class SettingsList {
     /**
      * Alle Einstellungen, die id wird als key verwendet
      * @private
      */
-    private readonly idDict:Array<UserSetting>;
+    private readonly idDict: Array<UserSetting>;
     /**
      * Alle Einstellungen, der Name der Einstellung wird als key verwendet
      * @private
      */
-    private readonly nameDict:{[id: string]:UserSetting};
+    private readonly nameDict: { [id: string]: UserSetting };
 
 
     constructor() {
@@ -50,6 +51,34 @@ export class SettingsList{
     }
 
     /**
+     * Gibt die Einstellung zurück welche die übergebene id besitzt
+     * @param settingId
+     */
+    public getSetting(settingId: number) {
+        return this.idDict[settingId];
+    }
+
+    /**
+     * Gibt die Einstellung zurück welche den übergeben Namen besitzt
+     */
+    public getSettingByName(settingName: string) {
+        return this.nameDict[settingName];
+    }
+
+    /**
+     * Gibt alle Einstellungen als Array zurück
+     */
+    public toArray() {
+        let newArray = new Array<UserSetting>();
+        for (let u of this.idDict) {
+            if (u) {
+                newArray.push(u);
+            }
+        }
+        return newArray;
+    }
+
+    /**
      * FÜgt eine Einstellung in das Array hinzu
      * @param setting
      * @private
@@ -61,33 +90,5 @@ export class SettingsList{
         } else {
             throw new Error("Use set setting to replace a setting");
         }
-    }
-
-    /**
-     * Gibt die Einstellung zurück welche die übergebene id besitzt
-     * @param settingId
-     */
-    public getSetting(settingId: number){
-        return this.idDict[settingId];
-    }
-
-    /**
-     * Gibt die Einstellung zurück welche den übergeben Namen besitzt
-     */
-    public getSettingByName(settingName: string){
-        return this.nameDict[settingName];
-    }
-
-    /**
-     * Gibt alle Einstellungen als Array zurück
-     */
-    public toArray(){
-        let newArray = new Array<UserSetting>();
-        for(let u of this.idDict){
-            if(u){
-                newArray.push(u);
-            }
-        }
-        return newArray;
     }
 }

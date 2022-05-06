@@ -1,5 +1,5 @@
-import React, {Component, ComponentClass, ReactNode, RefObject} from "react";
-import {matchPath, RouteComponentProps, StaticContext, withRouter} from "react-router";
+import React, {Component, ReactNode, RefObject} from "react";
+import {RouteComponentProps, withRouter} from "react-router";
 import {Route, Switch} from "react-router-dom";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {ToolHome, ToolHomeInfo} from "./Home/ToolHome";
@@ -7,9 +7,9 @@ import {Card} from "react-bootstrap";
 import {CreateToolModal} from "./CreateToolModal/CreateToolModal";
 import "./tool.scss";
 import {Exporter} from "../Export/Exporter";
-import {SaveResource} from "../Datastructures";
 import {createSave} from "../API/calls/Saves";
 import {ToolSavePage, ToolSaveProps} from "./ToolSavePage/ToolSavePage";
+
 
 interface ToolState {
     showInputModal: boolean
@@ -132,32 +132,9 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
         this.toolID = toolID;
     }
 
-    private createNewSave = async (name: string, description: string) => {
-        this.setState({
-            isCreatingNewSave: true
-        });
-
-        let data = new FormData();
-
-        data.set("name", name);
-        data.set("description", description);
-        data.set("tool_id", this.getID().toString());
-        data.set("data", JSON.stringify(this.getInitData()));
-
-        let saved = await createSave(data);
-        if (saved) {
-
-            this.setState({
-                isCreatingNewSave: false
-            });
-            this.props.history.push(this.getLink() + "/" + saved.callData.id);
-        }
-    }
-
     protected abstract getInitData(): D;
 
     protected abstract renderShortDescription(): ReactNode;
-
 
     protected abstract buildSaveBuilder(saveProps: ToolSaveProps<D>): JSX.Element
 
@@ -183,6 +160,28 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
             this.exporters.push(exporter);
         } else {
             throw new Error("Already added Export with this name");
+        }
+    }
+
+    private createNewSave = async (name: string, description: string) => {
+        this.setState({
+            isCreatingNewSave: true
+        });
+
+        let data = new FormData();
+
+        data.set("name", name);
+        data.set("description", description);
+        data.set("tool_id", this.getID().toString());
+        data.set("data", JSON.stringify(this.getInitData()));
+
+        let saved = await createSave(data);
+        if (saved) {
+
+            this.setState({
+                isCreatingNewSave: false
+            });
+            this.props.history.push(this.getLink() + "/" + saved.callData.id);
         }
     }
 

@@ -10,6 +10,7 @@ import FAE from "../../../../Icons/FAE";
 import {ButtonItem, NextStepItem} from "../../../../ControlFooter/ControlFooter";
 import {FooterContext} from "../../../../Contexts/FooterContextComponent";
 
+
 export interface DesktopButtonsState {
 
 }
@@ -55,44 +56,6 @@ export class StepComponentButtons extends PureComponent<DesktopButtonsProps, Des
             this.setFooterButtons(); // TODO only update changed props
         }
     }
-
-    private setFooterButtons = () => {
-        this.context.setItem(1, {
-            reset: this.props.onReset
-        });
-
-
-        this.context.setItem(2, {
-            button: {
-                text: "Exportieren",
-                icon: faFileExport,
-                callback: this.props.onExportClick
-            }
-        });
-
-        this.context.setItem(3, {
-            button: {
-                callback: this.props.onSave,
-                text: "Speichern",
-                icon: faSave
-            },
-            disabled: this.props.isSaving
-        });
-
-        let nextButton: NextStepItem | ButtonItem = {
-            nextStep: this.props.onNext,
-            disabled: this.props.nextDisabled
-        };
-        if (this.props.customNextButton !== undefined) {
-            nextButton = {
-                button: {text: this.props.customNextButton.text, icon: faCaretRight, callback: this.props.onNext},
-                disabled: this.props.nextDisabled,
-            }
-        }
-
-        this.context.setItem(4, nextButton);
-    }
-
 
     render() {
         if (!this.props.isMobile) {
@@ -141,5 +104,42 @@ export class StepComponentButtons extends PureComponent<DesktopButtonsProps, Des
         }
 
         return null;
+    }
+
+    private setFooterButtons = () => {
+        this.context.setItem(1, {
+            reset: this.props.onReset
+        });
+
+
+        this.context.setItem(2, {
+            button: {
+                text: "Exportieren",
+                icon: faFileExport,
+                callback: this.props.onExportClick
+            }
+        });
+
+        this.context.setItem(3, {
+            button: {
+                callback: this.props.onSave,
+                text: "Speichern",
+                icon: faSave
+            },
+            disabled: this.props.isSaving
+        });
+
+        let nextButton: NextStepItem | ButtonItem = {
+            nextStep: this.props.onNext,
+            disabled: this.props.nextDisabled
+        };
+        if (this.props.customNextButton !== undefined) {
+            nextButton = {
+                button: {text: this.props.customNextButton.text, icon: faCaretRight, callback: this.props.onNext},
+                disabled: this.props.nextDisabled,
+            }
+        }
+
+        this.context.setItem(4, nextButton);
     }
 }

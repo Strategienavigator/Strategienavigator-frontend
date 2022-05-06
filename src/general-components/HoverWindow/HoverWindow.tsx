@@ -5,6 +5,7 @@ import {OverlayTriggerRenderProps, OverlayTriggerType} from "react-bootstrap/Ove
 import {OverlayInjectedProps} from "react-bootstrap/Overlay";
 import {Placement} from "react-bootstrap/types";
 
+
 interface HoverWindowCustomPopupProps {
     title?: string,
     description?: string

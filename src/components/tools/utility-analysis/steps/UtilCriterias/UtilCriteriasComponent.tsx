@@ -48,9 +48,9 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
                         max={UtilCriterias.max}
                         onChanged={this.valuesChanged}
                     />
-                    <UIErrorBanner id={"criterias.too-long"} />
-                    <UIErrorBanner id={"criterias.empty"} />
-            </>
+                    <UIErrorBanner id={"criterias.too-long"}/>
+                    <UIErrorBanner id={"criterias.empty"}/>
+                </>
             );
         }
 

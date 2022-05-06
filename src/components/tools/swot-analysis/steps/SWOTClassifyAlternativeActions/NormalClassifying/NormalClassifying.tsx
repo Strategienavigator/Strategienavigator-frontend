@@ -15,6 +15,7 @@ import {ClassifyingCard} from "./ClassifyingCard/ClassifyingCard";
 import {ClassifyingCardList} from "./ClassifyingCardList/ClassifyingCardList";
 import FAE from "../../../../../../general-components/Icons/FAE";
 
+
 interface NormalClassifyingProps extends FormControlProps {
     classificationController: ClassificationController
     classifications: ClassificationValues[]

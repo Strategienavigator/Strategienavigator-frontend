@@ -7,10 +7,10 @@ import {StepProp} from "../../../../../general-components/Tool/SteppableTool/Ste
 import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {UtilCriteriasComponent} from "./UtilCriteriasComponent";
-import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 import {
     CardComponentFields,
-    isCardComponentFilled, isCardComponentTooLong
+    isCardComponentFilled,
+    isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
 import {CompareStarHeader} from "../../../../../general-components/CompareComponent/Header/StarHeader/CompareStarHeader";

@@ -10,18 +10,6 @@ import {SettingsList, UserSetting} from "../Settings/SettingsList";
 export class SettingsCache {
 
 
-    private _userId: number;
-    /**
-     * last time settings did get updated
-     * @private
-     */
-    private _lastLoad: Date;
-    /**
-     * all settings with the current value
-     * @private
-     */
-    private _userSettings: SettingsList;
-
     private settingsLoader: PaginationLoader<SettingResource>;
     private userSettingsLoader: PaginationLoader<UserSettingResource>;
 
@@ -37,6 +25,72 @@ export class SettingsCache {
             return Settings.getUserSettings(userId, page)
         })
 
+    }
+
+    private _userId: number;
+
+    get userId(): number {
+        return this._userId;
+    }
+
+    private set userId(value: number) {
+        this._userId = value;
+    }
+
+    /**
+     * last time settings did get updated
+     * @private
+     */
+    private _lastLoad: Date;
+
+    get lastLoad(): Date {
+        return this._lastLoad;
+    }
+
+    private set lastLoad(value: Date) {
+        this._lastLoad = value;
+    }
+
+    /**
+     * all settings with the current value
+     * @private
+     */
+    private _userSettings: SettingsList;
+
+    /**
+     * Alle Einstellungen als SettingsList instanz
+     */
+    get userSettings(): SettingsList {
+        return this._userSettings;
+    }
+
+    private set userSettings(value: SettingsList) {
+        this._userSettings = value;
+    }
+
+    /**
+     * Lädt alle Einstellungen inklusive die Einstellungen selbst aus dem Backend neu
+     */
+    public async updateData() {
+        this._userSettings = SettingsList.FromArray(await this.loadData());
+        this._lastLoad = new Date();
+    }
+
+    /**
+     * Lädt ausschließlich die von den Usern geänderte Einstellungen aus dem Backend neu
+     */
+    public async updateUserData() {
+        this._userSettings = SettingsList.FromArray(await this.loadData(true));
+        this._lastLoad = new Date();
+    }
+
+    /**
+     * Gibt an ob die Daten veraltet sind und neu geladen werden sollten
+     */
+    public shouldUpdate() {
+        let today = new Date();
+        let diff = today.getTime() - this.lastLoad.getTime()
+        return diff > 300000// 1000*60*5 5min
     }
 
     /**
@@ -57,59 +111,5 @@ export class SettingsCache {
 
             return {...s, value: v, exists: !!userS} as UserSetting;
         })
-    }
-
-    /**
-     * Lädt alle Einstellungen inklusive die Einstellungen selbst aus dem Backend neu
-     */
-    public async updateData() {
-        this._userSettings = SettingsList.FromArray(await this.loadData());
-        this._lastLoad = new Date();
-    }
-
-    /**
-     * Lädt ausschließlich die von den Usern geänderte Einstellungen aus dem Backend neu
-     */
-    public async updateUserData() {
-        this._userSettings = SettingsList.FromArray(await this.loadData(true));
-        this._lastLoad = new Date();
-    }
-
-
-    get lastLoad(): Date {
-        return this._lastLoad;
-    }
-
-    private set lastLoad(value: Date) {
-        this._lastLoad = value;
-    }
-
-
-    get userId(): number {
-        return this._userId;
-    }
-
-    private set userId(value: number) {
-        this._userId = value;
-    }
-
-    /**
-     * Alle Einstellungen als SettingsList instanz
-     */
-    get userSettings(): SettingsList {
-        return this._userSettings;
-    }
-
-    private set userSettings(value: SettingsList) {
-        this._userSettings = value;
-    }
-
-    /**
-     * Gibt an ob die Daten veraltet sind und neu geladen werden sollten
-     */
-    public shouldUpdate() {
-        let today = new Date();
-        let diff = today.getTime() - this.lastLoad.getTime()
-        return diff > 300000// 1000*60*5 5min
     }
 }

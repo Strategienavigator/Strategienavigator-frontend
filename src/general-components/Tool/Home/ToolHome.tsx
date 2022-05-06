@@ -192,7 +192,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         });
     };
 
-    private onDeleteModal = async (id:number) => {
+    private onDeleteModal = async (id: number) => {
         await deleteSave(id);
         this.setState({
             showDeleteModal: false,

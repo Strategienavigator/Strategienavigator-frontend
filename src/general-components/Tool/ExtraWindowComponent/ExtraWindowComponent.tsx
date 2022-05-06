@@ -1,5 +1,5 @@
 import {Component} from "react";
-import { StepController } from "../SteppableTool/StepComponent/StepComponent";
+import {StepController} from "../SteppableTool/StepComponent/StepComponent";
 import "./extra-window-component.scss";
 import {SteppableTool} from "../SteppableTool/SteppableTool";
 

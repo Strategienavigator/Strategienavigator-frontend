@@ -45,8 +45,8 @@ class UtilInvestigationObjectsComponent extends Step<UtilityAnalysisValues, any>
                         max={UtilInvestigationObjects.max}
                         onChanged={this.valuesChanged}
                     />
-                    <UIErrorBanner id={"investigation-objects.too-long"} />
-                    <UIErrorBanner id={"investigation-objects.empty"} />
+                    <UIErrorBanner id={"investigation-objects.too-long"}/>
+                    <UIErrorBanner id={"investigation-objects.empty"}/>
                 </>
             );
         }

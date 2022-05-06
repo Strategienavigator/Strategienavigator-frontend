@@ -7,6 +7,7 @@
 import React, {FormEvent, ReactNode} from "react";
 import {CardComponentFields} from "./CardComponent/CardComponent";
 
+
 const getRadioNodeList = <D extends unknown>(element: RadioNodeList): Array<D> => {
     let values = Array<D>();
     element.forEach((value) => {

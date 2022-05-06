@@ -164,7 +164,8 @@ class PaginationFooter extends Component<PaginationFooterProps, {}> {
                     </PageItem>)
             } else {
                 return (
-                    <PageItem key={i} className={"non-select"} active={isActive} disabled={!isActive && this.props.disabled}
+                    <PageItem key={i} className={"non-select"} active={isActive}
+                              disabled={!isActive && this.props.disabled}
                               onClick={this.itemClicked.bind(this, i)}>
                         {i}
                     </PageItem>);

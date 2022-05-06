@@ -1,4 +1,4 @@
-import React, {Component, FormEvent, PureComponent} from "react";
+import React, {FormEvent, PureComponent} from "react";
 import {Button, Form} from "react-bootstrap";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {extractFromForm} from "../../../general-components/FormHelper";

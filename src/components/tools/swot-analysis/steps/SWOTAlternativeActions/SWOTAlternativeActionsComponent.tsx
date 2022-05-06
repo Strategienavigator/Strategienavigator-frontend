@@ -1,9 +1,6 @@
 import React, {FormEvent} from "react";
 import {Col, Form, ProgressBar, Row} from "react-bootstrap";
-import {
-    CardComponent,
-    CardComponentFields
-} from "../../../../../general-components/CardComponent/CardComponent";
+import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {isDesktop} from "../../../../../general-components/Desktop";
 import {
     shallowCompareStepProps,
@@ -14,8 +11,6 @@ import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {HoverWindow} from "../../../../../general-components/HoverWindow/HoverWindow";
-
-
 
 
 export interface AlternateAction {
@@ -80,18 +75,6 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                 return firstId === ids.firstId && secondId === ids.secondId;
             });
         }
-    }
-
-    private getActions() {
-        return this.props.save.data["alternative-actions"]?.actions;
-    }
-
-    private getCurrentAction() {
-        let actions = this.getActions();
-        if (actions !== undefined)
-            return actions[this.props.currentSubStep];
-        else
-            return undefined;
     }
 
     build(): JSX.Element {
@@ -230,6 +213,18 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
             return i;
         }
         return 0;
+    }
+
+    private getActions() {
+        return this.props.save.data["alternative-actions"]?.actions;
+    }
+
+    private getCurrentAction() {
+        let actions = this.getActions();
+        if (actions !== undefined)
+            return actions[this.props.currentSubStep];
+        else
+            return undefined;
     }
 
     private hasNoAlternativeChanged(e: React.ChangeEvent<HTMLInputElement>) {

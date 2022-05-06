@@ -81,9 +81,10 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
      */
     static contextType = FooterContext;
     context!: React.ContextType<typeof FooterContext>
+
     constructor(props: (ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>) | Readonly<ControlFooterProps & RouteComponentProps<{}, StaticContext, unknown>>) {
         super(props);
-     }
+    }
 
     render() {
         let places = Array<number>();
@@ -118,7 +119,8 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             }
             if ("nextStep" in item) {
                 return (
-                    <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"} onClick={item.nextStep}
+                    <button disabled={item.disabled} key={"nextStep"} className={"btn-transparent"}
+                            onClick={item.nextStep}
                             type={"button"}>
                         <FAE icon={faCaretRight}/> Weiter
                     </button>

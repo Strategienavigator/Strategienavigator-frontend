@@ -1,9 +1,10 @@
 import React, {PureComponent} from "react";
 import {Button, Card, Col, Row} from "react-bootstrap";
-import {faArrowsAlt, faExchangeAlt} from "@fortawesome/free-solid-svg-icons";
+import {faArrowsAlt} from "@fortawesome/free-solid-svg-icons";
 import {ClassifiedAlternateAction} from "../../SWOTClassifyAlternativeActionsComponent";
 import FAE from "../../../../../../../general-components/Icons/FAE";
 import {HoverWindow} from "../../../../../../../general-components/HoverWindow/HoverWindow";
+
 
 interface ClassifyingCardProps {
     action: ClassifiedAlternateAction

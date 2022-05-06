@@ -1,7 +1,4 @@
 import React, {Component} from "react";
-import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
-import {Button, Card, Col, FormControl, InputGroup, Row} from "react-bootstrap";
-import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {SWOTClassifyAlternativeActionsComponent} from "./SWOTClassifyAlternativeActionsComponent";
 
 

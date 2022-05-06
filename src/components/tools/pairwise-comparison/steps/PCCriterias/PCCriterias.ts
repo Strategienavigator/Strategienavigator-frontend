@@ -9,7 +9,8 @@ import {UIError} from "../../../../../general-components/Error/UIErrors/UIError"
 import {PCCriteriasComponent} from "./PCCriteriasComponent";
 import {
     CardComponentFields,
-    isCardComponentFilled, isCardComponentTooLong
+    isCardComponentFilled,
+    isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
 
 

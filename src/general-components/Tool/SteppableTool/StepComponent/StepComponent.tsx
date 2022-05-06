@@ -1,7 +1,6 @@
 import React, {Component, ComponentClass, FunctionComponent, ReactNode,} from "react";
 import {Accordion, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
-import {Tool} from "../../Tool";
 import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
@@ -174,6 +173,37 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         return progress;
     }
 
+    /**
+     * returns the first unfinished sub step of the given step. If every sub step is unlocked the first step is returned
+     *
+     *
+     * @param steps
+     * @param step
+     * @param save
+     * @private the index of the sub step
+     */
+    private static getCurrentSubStepOfStep<D extends object>(steps: Array<StepDefinition<D>>, step: number, data: D) {
+        let subStepProgress = 0;
+
+        if (steps.length > step) {
+            const subStep = steps[step].subStep;
+            if (subStep !== undefined) {
+
+                const count = subStep.getStepCount(data);
+                for (let i = 0; i < count; i++) {
+                    if (subStep.isStepUnlocked(i, data)) {
+                        subStepProgress++;
+                    }
+                }
+                if (subStepProgress === count || subStepProgress === -1) {
+                    subStepProgress = 0;
+                }
+            }
+        }
+
+        return subStepProgress;
+    }
+
     render = () => {
         const customNextButton = this.getCustomNextButton();
         const header = <StepComponentHeader tool={this.props.tool}
@@ -267,6 +297,27 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         );
     }
 
+    public tryNextStep = (): void => {
+
+        this.clearErrors();
+        if (this.hasNextSubStep()) {
+
+            const validated = this.validateSubStep(this.state.currentStep, this.state.currentSubStep);
+
+            if (validated) {
+                // force for performance reasons (no duplicate check of validation)
+                this.nextSubStep(true);
+                return;
+            }
+        }
+
+        const validated = this.validateStep(this.state.currentStep);
+
+        if (validated) {
+            this.nextStep();
+        }
+    }
+
     private showResetModal = () => {
         this.setState({showResetModal: true})
     }
@@ -351,14 +402,15 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     }
 
-
     /**
      * does call the given function with the current data objects as first argument. If function isn't defined undefined is returned
      * @param fn
      * @private
      */
     private withData<E>(fn: (data: D) => E): E
+
     private withData<E>(fn: ((data: D) => E) | undefined): E | undefined
+
     private withData<E>(fn: ((data: D) => E) | undefined): E | undefined {
         if (fn !== undefined) {
             return fn(this.props.save.data);
@@ -377,7 +429,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     private isLastStep = (): boolean => {
         return this.state.currentStep >= this.props.steps.length - 1;
     }
-
 
     /**
      * Resetet alle steps, von hinten bis zu dem angegebenen index
@@ -400,27 +451,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private resetAllSteps() {
         this.resetStepsUntil(0);
-    }
-
-    public tryNextStep = (): void => {
-
-        this.clearErrors();
-        if (this.hasNextSubStep()) {
-
-            const validated = this.validateSubStep(this.state.currentStep, this.state.currentSubStep);
-
-            if (validated) {
-                // force for performance reasons (no duplicate check of validation)
-                this.nextSubStep(true);
-                return;
-            }
-        }
-
-        const validated = this.validateStep(this.state.currentStep);
-
-        if (validated) {
-            this.nextStep();
-        }
     }
 
     private nextSubStep = (force: boolean = false) => {
@@ -576,37 +606,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                 currentProgress: step
             });
         }*/
-    }
-
-    /**
-     * returns the first unfinished sub step of the given step. If every sub step is unlocked the first step is returned
-     *
-     *
-     * @param steps
-     * @param step
-     * @param save
-     * @private the index of the sub step
-     */
-    private static getCurrentSubStepOfStep<D extends object>(steps: Array<StepDefinition<D>>, step: number, data: D) {
-        let subStepProgress = 0;
-
-        if (steps.length > step) {
-            const subStep = steps[step].subStep;
-            if (subStep !== undefined) {
-
-                const count = subStep.getStepCount(data);
-                for (let i = 0; i < count; i++) {
-                    if (subStep.isStepUnlocked(i, data)) {
-                        subStepProgress++;
-                    }
-                }
-                if (subStepProgress === count || subStepProgress === -1) {
-                    subStepProgress = 0;
-                }
-            }
-        }
-
-        return subStepProgress;
     }
 
     /**

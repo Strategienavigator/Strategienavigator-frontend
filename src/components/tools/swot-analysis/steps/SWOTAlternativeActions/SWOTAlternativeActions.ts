@@ -1,7 +1,9 @@
 import {
-    CustomNextButton, ExtraWindowDefinition,
+    CustomNextButton,
+    ExtraWindowDefinition,
     StepDataHandler,
-    StepDefinition, SubStepDefinition
+    StepDefinition,
+    SubStepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {AlternateAction, SWOTAlternativeActionsComponent} from "./SWOTAlternativeActionsComponent";
@@ -12,25 +14,11 @@ import {UIError} from "../../../../../general-components/Error/UIErrors/UIError"
 import {SwotFactorsValues} from "../SWOTFactors/SWOTFactorsComponent";
 import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 
+
 export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues>, StepDataHandler<SWOTAnalysisValues>, SubStepDefinition<SWOTAnalysisValues> {
 
     public static minAlternatives = 1;
     public static maxAlternatives = 2;
-
-    public static splitAlternateActionName(name: string) {
-        const ids = name.split("-");
-        const firstId = ids[0];
-        const secondId = ids[1];
-        return {firstId: firstId, secondId: secondId};
-    }
-
-
-    public static getActionIds(factors: SwotFactorsValues["factors"]): { firstIds: CardComponentFields, secondIds: CardComponentFields } {
-        const firstIds = factors.strengths.concat(factors.weaknesses);
-        const secondIds = factors.chances.concat(factors.risks);
-        return {firstIds, secondIds}
-    }
-
     form: React.FunctionComponent<StepProp<SWOTAnalysisValues>> | React.ComponentClass<StepProp<SWOTAnalysisValues>>;
     id: string;
     title: string;
@@ -38,7 +26,6 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
     dataHandler: StepDataHandler<SWOTAnalysisValues>;
     subStep: SubStepDefinition<SWOTAnalysisValues>;
     customNextButton: CustomNextButton;
-
 
     constructor() {
         this.id = "alternative-actions";
@@ -53,6 +40,48 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
         // sub step
         this.subStep = this;
         this.customNextButton = {text: "Nächster"};
+    }
+
+    public static splitAlternateActionName(name: string) {
+        const ids = name.split("-");
+        const firstId = ids[0];
+        const secondId = ids[1];
+        return {firstId: firstId, secondId: secondId};
+    }
+
+    public static getActionIds(factors: SwotFactorsValues["factors"]): { firstIds: CardComponentFields, secondIds: CardComponentFields } {
+        const firstIds = factors.strengths.concat(factors.weaknesses);
+        const secondIds = factors.chances.concat(factors.risks);
+        return {firstIds, secondIds}
+    }
+
+    private static validateAction(action: AlternateAction): UIError[] {
+        const errors = new Array<UIError>();
+
+        if (action.hasNone) {
+            return errors;
+        }
+
+        if (action.alternatives.length <= 0) {
+            errors.push({
+                id: "alternative-action",
+                message: "Bitte wählen Sie eine Handlungsalternative!",
+                level: "error"
+            });
+        }
+
+        let values = action.alternatives;
+        for (const result of values) {
+            if (result.name.length <= 0 || result.desc.length <= 0) {
+                errors.push({
+                    id: "alternative-action",
+                    message: "Überprüfen Sie Ihre getätigten Handlungsalternativen!",
+                    level: "error"
+                });
+            }
+        }
+
+        return errors;
     }
 
     isUnlocked = (data: SWOTAnalysisValues): boolean => (data["alternative-actions"]?.actions.length ?? 0) > 0;
@@ -116,36 +145,6 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
         }
         return errors;
     };
-
-
-    private static validateAction(action: AlternateAction): UIError[] {
-        const errors = new Array<UIError>();
-
-        if (action.hasNone) {
-            return errors;
-        }
-
-        if (action.alternatives.length <= 0) {
-            errors.push({
-                id: "alternative-action",
-                message: "Bitte wählen Sie eine Handlungsalternative!",
-                level: "error"
-            });
-        }
-
-        let values = action.alternatives;
-        for (const result of values) {
-            if (result.name.length <= 0 || result.desc.length <= 0) {
-                errors.push({
-                    id: "alternative-action",
-                    message: "Überprüfen Sie Ihre getätigten Handlungsalternativen!",
-                    level: "error"
-                });
-            }
-        }
-
-        return errors;
-    }
 
 
 }

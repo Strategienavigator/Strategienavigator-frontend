@@ -4,7 +4,7 @@ import {ToolSaveProps} from "../../../ToolSavePage/ToolSavePage";
 import './step.scss';
 import {StepController} from "../StepComponent";
 import {compareWithoutFunctions} from "../../../../ComponentUtils";
-import {is} from "immer/dist/utils/common";
+
 
 interface StepProp<V extends object> extends FormComponentProps, ToolSaveProps<V> {
     stepController: StepController

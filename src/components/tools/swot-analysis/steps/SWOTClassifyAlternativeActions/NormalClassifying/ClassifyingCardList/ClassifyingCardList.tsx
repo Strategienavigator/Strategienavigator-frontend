@@ -2,6 +2,7 @@ import React, {PureComponent} from "react";
 import {ClassifiedAlternateAction} from "../../SWOTClassifyAlternativeActionsComponent";
 import {ClassifyingCard} from "../ClassifyingCard/ClassifyingCard";
 
+
 interface ClassifyingCardListProps {
     actions: ClassifiedAlternateAction[]
     onOpenClassificationModalClick: (id: string) => void

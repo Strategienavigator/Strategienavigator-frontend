@@ -1,8 +1,8 @@
-import React from "react";
-import {Component} from "react";
+import React, {Component} from "react";
 import {ErrorMap, UIError} from "../../Error/UIErrors/UIError";
 import produce from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
+
 
 interface IUIErrorContext extends ErrorController {
     errors: ErrorMap
@@ -84,26 +84,6 @@ class UIErrorContextComponent extends Component<{}, UIErrorContextState> impleme
         }
     }
 
-
-    private buildContext = (errors: ErrorMap = {}): IUIErrorContext => {
-        return {
-            putErrors: this.putErrors,
-            removeError: this.removeError,
-            removeErrors: this.removeErrors,
-            clearErrors: this.clearErrors,
-            errors: errors,
-        }
-
-    }
-
-    private updateErrors = (cb: (draft: WritableDraft<ErrorMap>) => ErrorMap | void) => {
-        this.setState((oldState) => {
-            return {
-                uiErrorContext: this.buildContext(produce(oldState.uiErrorContext.errors, cb))
-            }
-        });
-    }
-
     render() {
         return (
             <UIErrorContext.Provider value={this.state.uiErrorContext}>
@@ -146,6 +126,25 @@ class UIErrorContextComponent extends Component<{}, UIErrorContextState> impleme
             return {};
         });
     };
+
+    private buildContext = (errors: ErrorMap = {}): IUIErrorContext => {
+        return {
+            putErrors: this.putErrors,
+            removeError: this.removeError,
+            removeErrors: this.removeErrors,
+            clearErrors: this.clearErrors,
+            errors: errors,
+        }
+
+    }
+
+    private updateErrors = (cb: (draft: WritableDraft<ErrorMap>) => ErrorMap | void) => {
+        this.setState((oldState) => {
+            return {
+                uiErrorContext: this.buildContext(produce(oldState.uiErrorContext.errors, cb))
+            }
+        });
+    }
 }
 
 export

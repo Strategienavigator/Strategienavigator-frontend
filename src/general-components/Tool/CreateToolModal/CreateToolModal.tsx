@@ -4,6 +4,7 @@ import {Button, Form, Modal} from "react-bootstrap";
 import {Loader} from "../../Loader/Loader";
 import {extractFromForm} from "../../FormHelper";
 
+
 interface CreateToolModalState {
     nameError?: {
         empty?: boolean
@@ -16,7 +17,7 @@ interface CreateToolModalState {
 interface CreateToolModalProps {
     onSaveCreated: (name: string, description: string) => void
     onCancel: () => void
-    isCreatingNewSave:boolean
+    isCreatingNewSave: boolean
 }
 
 export class CreateToolModal extends Component<CreateToolModalProps, CreateToolModalState> {

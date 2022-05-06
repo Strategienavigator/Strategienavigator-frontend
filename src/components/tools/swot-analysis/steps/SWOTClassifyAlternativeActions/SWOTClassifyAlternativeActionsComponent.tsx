@@ -44,6 +44,7 @@ export interface SWOTClassifyAlternativeActionsValues {
 class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {}> {
 
 
+    public static noneDroppableID = "classifications-draggables";
     private classificationController: ClassificationController;
 
     constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
@@ -56,16 +57,6 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
             classificationNameChanged: this.onClassificationNameChange
         }
 
-    }
-
-    public static noneDroppableID = "classifications-draggables";
-
-    private requireStepData = () => {
-        const data = this.props.save.data["swot-classify-alternate-actions"];
-        if (data === undefined) {
-            throw new Error("Data missing");
-        }
-        return data;
     }
 
     addClassification = () => {
@@ -122,7 +113,6 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
             }
         });
     }
-
 
     updateActionClassification = (oldClassificationId: string | null, newClassificationId: string | null, indexName: string) => {
         this.props.saveController.onChanged(save => {
@@ -190,6 +180,14 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
                 step3Instance={this}
             />
         );
+    }
+
+    private requireStepData = () => {
+        const data = this.props.save.data["swot-classify-alternate-actions"];
+        if (data === undefined) {
+            throw new Error("Data missing");
+        }
+        return data;
     }
 
 }

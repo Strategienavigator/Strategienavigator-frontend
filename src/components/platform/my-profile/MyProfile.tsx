@@ -298,7 +298,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                             <LoadingButton
                                 disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
                                 size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}
-                                isSaving={this.state.isSaving} savingChild={"Speichert"} defaultChild={"Änderungen speichern"}/>
+                                isSaving={this.state.isSaving} savingChild={"Speichert"}
+                                defaultChild={"Änderungen speichern"}/>
                         </div>
                         <div className={"buttonGroup"}>
                             <Button disabled={this.state.isSaving} size={"sm"} variant={"danger"}

@@ -9,7 +9,7 @@ class JSONExporter<D> extends Exporter<D> {
     }
 
     protected onExport(data: SaveResource<D>): BlobPart[] {
-        return [JSON.stringify(data.data,null,4)];
+        return [JSON.stringify(data.data, null, 4)];
     }
 }
 

@@ -97,16 +97,6 @@ export class Settings extends Component<{}, SettingsState> {
         return this.state.settings.find(value => value.setting_id === settingId);
     }
 
-    /**
-     * Setzt alle Änderungen der Users zurück
-     * @private
-     */
-    private reset() {
-        this.setState({
-            settings: []
-        });
-    }
-
     render() {
         let settings = this.context.settings.toArray().map(setting => {
             let f = Settings.typeDict[setting.type];
@@ -141,6 +131,16 @@ export class Settings extends Component<{}, SettingsState> {
                 </Loader>
             </>
         );
+    }
+
+    /**
+     * Setzt alle Änderungen der Users zurück
+     * @private
+     */
+    private reset() {
+        this.setState({
+            settings: []
+        });
     }
 
     /**

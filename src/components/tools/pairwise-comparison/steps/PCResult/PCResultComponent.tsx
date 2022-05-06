@@ -8,7 +8,8 @@ import {EvaluationComponent} from "../../../../../general-components/EvaluationC
 import {EvaluationValues} from "../../../../../general-components/EvaluationComponent/Evaluation";
 
 
-export interface PCResultValues extends EvaluationValues {}
+export interface PCResultValues extends EvaluationValues {
+}
 
 class PCResultComponent extends Step<PairwiseComparisonValues, {}> {
 
