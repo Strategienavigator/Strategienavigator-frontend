@@ -6,13 +6,25 @@
  */
 function compareWithoutFunctions<T extends Object>(oldData: T, newData: T, exclude: string[] = []) {
     let k: keyof T;
+
     if (oldData === newData) {
         return true;
     }
+
+    const excludeCheck = (k: string): boolean => {
+        return exclude.some((e) => {
+            return e === k;
+        });
+    }
+
     for (k in oldData) {
         const oldValue = oldData[k];
         const newValue = newData[k];
-        if (typeof oldValue !== "function" && !(exclude.some(e => e === k))) {
+
+        if (
+            typeof oldValue !== "function" &&
+            !excludeCheck(k)
+        ) {
             if (!Object.is(oldValue, newValue)) {
                 return false;
             }
