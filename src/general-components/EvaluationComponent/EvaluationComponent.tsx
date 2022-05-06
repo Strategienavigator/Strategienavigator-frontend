@@ -40,9 +40,9 @@ class EvaluationComponent extends Component<EvaluationComponentProps, any> {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.props.values.result && this.props.values.result.map((v) => {
+                    {this.props.values.result && this.props.values.result.map((v, index) => {
                         return (
-                            <tr>
+                            <tr key={"criteria-evaluation-" + v.criteria.id + "-" + index}>
                                 <td>
                                     {v.criteria.name}<br/>
                                     <small>{v.criteria.desc}</small>

@@ -35,7 +35,10 @@ function CreateDescriptionModal(props: CreateDescriptionModalProps) {
                             <tbody>
                             {props.values.headers.map((v, index) => {
                                 return (
-                                    <tr aria-disabled={true}>
+                                    <tr
+                                        key={"custom-description-modal-" + v.header + "-" + index}
+                                        aria-disabled={true}
+                                    >
                                         <td className={"header"}>{v.header}</td>
                                         <td className={"desc"}>{v.desc}</td>
                                     </tr>

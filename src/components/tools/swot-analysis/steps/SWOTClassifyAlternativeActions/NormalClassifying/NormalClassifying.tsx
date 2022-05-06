@@ -91,9 +91,14 @@ class NormalClassifying extends PureComponent<NormalClassifyingProps, NormalClas
                 <hr/>
 
                 <div className={"actionCards"}>
-                    {actions.filter(value => !value.alreadyAdded).map((action) => {
-
-                        return <ClassifyingCard action={action} onChangeClick={this.onOpenClassificationModalClick}/>;
+                    {actions.filter(value => !value.alreadyAdded).map((action, index) => {
+                        return (
+                            <ClassifyingCard
+                                key={"classifying-card-" + action.name + "-" + index}
+                                action={action}
+                                onChangeClick={this.onOpenClassificationModalClick}
+                            />
+                        );
                     })}
 
                     {(!actions.some((v) => !v.alreadyAdded)) && (

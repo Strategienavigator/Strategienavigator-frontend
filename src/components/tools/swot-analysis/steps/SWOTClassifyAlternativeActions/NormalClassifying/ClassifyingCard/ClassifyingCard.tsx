@@ -13,7 +13,6 @@ interface ClassifyingCardProps {
 
 class ClassifyingCard extends PureComponent<ClassifyingCardProps, {}> {
 
-
     render() {
         const action = this.props.action;
         return (

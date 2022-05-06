@@ -32,7 +32,6 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
     }
 
     requestSubStep(index: number) {
-
         this.props.stepController.requestSubStep(index);
     }
 
@@ -47,7 +46,11 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
             let headerNumber = [];
             let numberLength = factors.chances.length;
             for (let i = 0; i < numberLength; i++) {
-                headerNumber[i] = <div>{i + 1}</div>;
+                headerNumber[i] = (
+                    <div key={"swot-matrix-header-number-" + i}>
+                        {i + 1}
+                    </div>
+                );
             }
 
             //Hier entstehen die Punkte für die Stärken
@@ -55,7 +58,11 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
             let headerCapitalLength = factors.strengths.length;
             let upperCounter = new UpperABCCounter();
             for (let i = 1; i < headerCapitalLength + 1; i++) {
-                headerCapitals[i] = <div>{upperCounter.get(i)}</div>;
+                headerCapitals[i] = (
+                    <div key={"swot-matrix-header-capitals-" + (i - 1)}>
+                        {upperCounter.get(i)}
+                    </div>
+                );
             }
 
             //Hier entstehen die Punkte für die Schwächen
@@ -63,7 +70,11 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
             let leftLettersLength = factors.weaknesses.length;
             let lowerCounter = new LowerABCCounter();
             for (let i = 1; i < leftLettersLength + 1; i++) {
-                leftLetters[i] = <div>{lowerCounter.get(i)}</div>;
+                leftLetters[i] = (
+                    <div key={"swot-matrix-lower-letters-" + (i - 1)}>
+                        {lowerCounter.get(i)}
+                    </div>
+                );
             }
 
             //Hier entstehen die Punkte für die Risiken
@@ -71,7 +82,11 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
             let headerRomanCapitalsLength = factors.risks.length;
             let romanCounter = new RomanNumeralsCounter();
             for (let i = 1; i < headerRomanCapitalsLength + 1; i++) {
-                headerRomanCapitals[i] = <div>{romanCounter.get(i)}</div>;
+                headerRomanCapitals[i] = (
+                    <div key={"swot-matrix-roman-letters-" + (i - 1)}>
+                        {romanCounter.get(i)}
+                    </div>
+                );
             }
 
             let columnSum = numberLength + headerRomanCapitalsLength;
@@ -83,9 +98,13 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
                 for (let i = 0; i < numberLength; i++) {
                     let index = e * columnSum + i;
                     let action = this.getAction(actions, upperCounter.get(e + 1) as string, i + 1);
-                    bodyOne[j] =
-                        <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}/>;
-
+                    bodyOne[j] = (
+                        <div
+                            key={"swot-matrix-c-st-" + e + "-" + i}
+                            onClick={this.requestSubStep.bind(this, index)}
+                            className={this.getClassName(action)}
+                        />
+                    );
                     j++;
                 }
             }
@@ -97,8 +116,13 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
                 for (let i = 0; i < headerRomanCapitalsLength; i++) {
                     let index = e * columnSum + i + numberLength;
                     let action = this.getAction(actions, upperCounter.get(e + 1) as string, romanCounter.get(i + 1) as string);
-                    bodyTwo[j] =
-                        <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}/>;
+                    bodyTwo[j] = (
+                        <div
+                            key={"swot-matrix-r-st-" + e + "-" + i}
+                            onClick={this.requestSubStep.bind(this, index)}
+                            className={this.getClassName(action)}
+                        />
+                    );
                     j++;
                 }
             }
@@ -110,8 +134,13 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
                 for (let i = 0; i < numberLength; i++) {
                     let index = e * columnSum + i + columnSum * headerCapitalLength;
                     let action = this.getAction(actions, lowerCounter.get(e + 1) as string, i + 1);
-                    bodyThree[j] =
-                        <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}/>;
+                    bodyThree[j] = (
+                        <div
+                            key={"swot-matrix-c-sc-" + e + "-" + i}
+                            onClick={this.requestSubStep.bind(this, index)}
+                            className={this.getClassName(action)}
+                        />
+                    );
                     j++;
                 }
             }
@@ -123,8 +152,13 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
                 for (let i = 0; i < headerRomanCapitalsLength; i++) {
                     let index = e * columnSum + i + columnSum * headerCapitalLength + numberLength;
                     let action = this.getAction(actions, lowerCounter.get(e + 1) as string, romanCounter.get(i + 1) as string);
-                    bodyFour[j] =
-                        <div onClick={this.requestSubStep.bind(this, index)} className={this.getClassName(action)}/>;
+                    bodyFour[j] = (
+                        <div
+                            key={"swot-matrix-r-sc-" + e + "-" + i}
+                            onClick={this.requestSubStep.bind(this, index)}
+                            className={this.getClassName(action)}
+                        />
+                    );
                     j++;
                 }
             }

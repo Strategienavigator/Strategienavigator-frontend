@@ -50,9 +50,9 @@ class UtilResultComponent extends Step<UtilityAnalysisValues, any> {
                     </tr>
                     </thead>
                     <tbody>
-                    {data.result && data.result.map((v) => {
+                    {data.result && data.result.map((v, index) => {
                         return (
-                            <tr>
+                            <tr key={"utility-analysis-evaluation-" + v.object.id + "-" + index}>
                                 <td>
                                     {v.object.name}<br/>
                                     <small>{v.object.desc}</small>
