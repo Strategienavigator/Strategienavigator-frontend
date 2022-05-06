@@ -131,7 +131,7 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
 
             let flexContainerClasses = "flex-container";
 
-            if (isDesktop() == false) {
+            if (!isDesktop()) {
                 flexContainerClasses = flexContainerClasses + " flex-center";
             }
 
