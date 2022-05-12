@@ -151,6 +151,10 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
         });
     };
 
+    isEmpty(): boolean {
+        return false;
+    }
+
 }
 
 export {

@@ -49,23 +49,23 @@ class UtilInvestigationObjects implements StepDefinition<UtilityAnalysisValues>,
     }
 
     validateData(data: UtilityAnalysisValues): UIError[] {
-        const erros: UIError[] = [];
+        const errors: UIError[] = [];
         if (!isCardComponentFilled(data["ua-investigation-obj"]?.objects)) {
-            erros.push({
+            errors.push({
                 id: "investigation-objects.empty",
                 level: "error",
                 message: "Die Objekte dürfen nicht leer sein!"
             });
         }
         if (isCardComponentTooLong(data["ua-investigation-obj"]?.objects)) {
-            erros.push({
+            errors.push({
                 id: "investigation-objects.too-long",
                 level: "error",
                 message: "Der Text in einigen Feldern ist zu lang!"
             });
         }
 
-        return erros;
+        return errors;
     }
 
 }

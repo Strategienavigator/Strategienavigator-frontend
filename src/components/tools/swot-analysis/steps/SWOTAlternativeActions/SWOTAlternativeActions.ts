@@ -19,6 +19,7 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
 
     public static minAlternatives = 1;
     public static maxAlternatives = 2;
+
     form: React.FunctionComponent<StepProp<SWOTAnalysisValues>> | React.ComponentClass<StepProp<SWOTAnalysisValues>>;
     id: string;
     title: string;
