@@ -2,6 +2,7 @@ import {CompareAdapter} from "./CompareAdapter";
 import {SingleComparison} from "../CompareComponent";
 import {CardComponentFields} from "../../CardComponent/CardComponent";
 
+
 /**
  * Erstellt aus den übergebenen CardComponentFields kombinationen zum Vergleichen von allen Feldern miteinander.
  */
@@ -33,7 +34,7 @@ class MatchCardComponentFieldsAdapter extends CompareAdapter {
         // kriterien / (Fakultät von 2 * Fakultät von (kriterien - 2)
 
         let i = 0;
-        const maxMatchCount = this.cardComponentFields.length-1;
+        const maxMatchCount = this.cardComponentFields.length - 1;
         while (secondIndex > maxMatchCount - i) {
             secondIndex -= maxMatchCount - i;
             i++;

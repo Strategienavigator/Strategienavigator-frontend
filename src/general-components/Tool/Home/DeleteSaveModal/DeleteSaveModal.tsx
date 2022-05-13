@@ -1,4 +1,4 @@
-import {Button, Form, Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import React, {useState} from "react";
 import {SimpleSaveResource} from "../../../Datastructures";
 import {Loader} from "../../../Loader/Loader";
@@ -26,7 +26,7 @@ function DeleteSaveModal(props: DeleteSaveModalProps) {
             </Modal.Header>
             <Modal.Body>
                 Wollen Sie wirklich Ihre Analyse "{props.save?.name}" löschen?
-                <br />
+                <br/>
                 Dieser Vorgang kann <b>NICHT</b> rückgängig gemacht werden!
             </Modal.Body>
             <Modal.Footer>
@@ -35,7 +35,8 @@ function DeleteSaveModal(props: DeleteSaveModalProps) {
                     await props.onDelete(props.save?.id as number);
                     setLoadingDelete(false);
                 }} variant={"danger"}>
-                    <Loader payload={[]} transparent size={25} text={"Endgültig löschen"} variant={"dark"} loaded={!loadingDelete}>
+                    <Loader payload={[]} transparent size={25} text={"Endgültig löschen"} variant={"dark"}
+                            loaded={!loadingDelete}>
                         Endgültig löschen
                     </Loader>
                 </Button>

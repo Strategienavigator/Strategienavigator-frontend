@@ -35,8 +35,8 @@ interface SelectClassificationModalProps {
 function SelectClassificationModal(props: SelectClassificationModalProps) {
 
 
-    const findClassification = (action: string|undefined): ClassificationValues | null => {
-        if(action === undefined)
+    const findClassification = (action: string | undefined): ClassificationValues | null => {
+        if (action === undefined)
             return null;
         for (const classification of props.classifications) {
             for (const classificationAction of classification.actions) {

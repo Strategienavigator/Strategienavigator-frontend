@@ -1,6 +1,7 @@
 import {ControlFooterItemType} from "../ControlFooter/ControlFooter";
 import React, {Component} from "react";
 
+
 export interface IFooterContext {
     items: Map<number, ControlFooterItemType>,
     setItem: (place: number, item: ControlFooterItemType) => void,
@@ -67,12 +68,20 @@ export class FooterContextComponent extends Component<FooterContextProps, Footer
         });
     }
 
+    render() {
+        return (
+            <FooterContext.Provider value={this.state.footerContext}>
+                {this.props.children}
+            </FooterContext.Provider>
+        );
+    }
+
     private setItem = (place: number, item: ControlFooterItemType) => {
         this.setState(state => {
             const items = state.footerContext.items.set(place, item);
 
             return {
-                footerContext:this.buildContext(items)
+                footerContext: this.buildContext(items)
             }
         });
     }
@@ -87,7 +96,7 @@ export class FooterContextComponent extends Component<FooterContextProps, Footer
                 }
 
                 return {
-                    footerContext:this.buildContext(items)
+                    footerContext: this.buildContext(items)
                 }
             });
         }
@@ -111,13 +120,5 @@ export class FooterContextComponent extends Component<FooterContextProps, Footer
             clearItems: this.clear,
             removeItem: this.removeItem
         }
-    }
-
-    render() {
-        return (
-            <FooterContext.Provider value={this.state.footerContext}>
-                {this.props.children}
-            </FooterContext.Provider>
-        );
     }
 }

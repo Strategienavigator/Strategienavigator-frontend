@@ -1,5 +1,5 @@
 import {APIArgs, callAPI} from "../API";
-import {DefaultResponse, PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
+import {PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
 
 
 export interface GetSavesArguments {
@@ -62,7 +62,7 @@ const getSaves = async (userID: number, getSavesArguments: GetSavesArguments, ap
         searchParams = true;
     }
 
-    if (getSavesArguments.orderDesc !== undefined ) {
+    if (getSavesArguments.orderDesc !== undefined) {
         data.append("orderBy", getSavesArguments.orderDesc ? "DESC" : "ASC");
         searchParams = true;
     }
@@ -97,7 +97,7 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
  * @param save Der zu aktualisierende Speicherstand
  * @param apiArgs API Argumente
  */
-const updateSave = async (save:SaveResource<any>, apiArgs?: APIArgs) => {
+const updateSave = async (save: SaveResource<any>, apiArgs?: APIArgs) => {
     let data = new FormData();
     data.append("data", JSON.stringify(save.data));
     data.append("name", save.name as string);
@@ -136,7 +136,6 @@ const lockSave = async (saveID: number, lock: boolean, apiArgs?: APIArgs) => {
 
     return await callAPI("api/saves/" + saveID, "POST", data, true, apiArgs);
 }
-
 
 
 /**

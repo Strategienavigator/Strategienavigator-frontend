@@ -10,6 +10,7 @@ import {
 } from "./SWOTClassifyAlternativeActionsComponent";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 
+
 export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalysisValues>, StepDataHandler<SWOTAnalysisValues> {
 
     public static maxClassifications = 10;
@@ -28,6 +29,9 @@ export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalys
         this.dataHandler = this;
     }
 
+    public static compareClassifiedAlternateActions(action1: ClassifiedAlternateAction, action2: ClassifiedAlternateAction) {
+        return action1.indexName.localeCompare(action2.indexName);
+    }
 
     isUnlocked(data: SWOTAnalysisValues): boolean {
         return (data["swot-classify-alternate-actions"]?.actions.length ?? 0) > 0;
@@ -96,11 +100,6 @@ export class SWOTClassifyAlternativeActions implements StepDefinition<SWOTAnalys
 
 
         return errors;
-    }
-
-
-    public static compareClassifiedAlternateActions(action1: ClassifiedAlternateAction, action2: ClassifiedAlternateAction) {
-        return action1.indexName.localeCompare(action2.indexName);
     }
 
 

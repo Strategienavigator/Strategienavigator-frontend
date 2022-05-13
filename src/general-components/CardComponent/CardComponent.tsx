@@ -1,176 +1,33 @@
-import React, {ChangeEvent, Component, ComponentClass, FunctionComponent, PureComponent} from "react";
-import {Button, Card as BootstrapCard, Collapse, FormControl, InputGroup} from "react-bootstrap";
-import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons/";
-import {isDesktop} from "../Desktop";
+import React, {ComponentClass, FunctionComponent, PureComponent} from "react";
+import {Card as BootstrapCard} from "react-bootstrap";
+import {faPlus} from "@fortawesome/free-solid-svg-icons/";
 import {CounterInterface} from "../Counter/CounterInterface";
 import "./card-component.scss";
-import {compareWithoutFunctions} from "../ComponentUtils";
 import FAE from "../Icons/FAE";
 import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/CustomDescriptionComponent";
+import {Card} from "./Card";
 
-export interface CardProps<D = never> {
-    id: string | null
-    /**
-     * name des input feldes
-     */
-    name: string
-    /**
-     * Wert des Beschreibungsfeldes der Karte
-     */
-    desc: string
-    /**
-     * Wert des Hauptfeldes der Karte
-     */
-    value: string
-    index: number
-    disabled: boolean
-    required: boolean
-    onChange: (index: number, name: string, desc: string, customDescValues?: D) => void
-    onDelete?: (index: number) => void
-    customDescValues?: D
-    customDesc?: FunctionComponent<CustomDescriptionComponentProps<D>> | ComponentClass<CustomDescriptionComponentProps<D>>
-    placeholder?: CardComponentFieldPlaceholder
+
+export function isCardComponentFilled(cardComponentFields?: CardComponentFields<object>) {
+    return cardComponentFields?.every((cardComponentField: CardComponentField<object>) => {
+        return cardComponentField.name.length > 0 && cardComponentField.desc.length > 0;
+    });
 }
 
-
-export interface CardState {
-    showDesc: boolean
-    descChanged: boolean
+export function isCardComponentTooLong(cardComponentFields?: CardComponentFields<object>) {
+    return !cardComponentFields?.every((cardComponentField: CardComponentField<object>) => {
+        return !(cardComponentField.name.length > Card.MAX_NAME_LENGTH || cardComponentField.desc.length > Card.MAX_DESC_LENGTH);
+    });
 }
 
-export function isCardValid(cardComponentField: CardComponentField) {
-    return cardComponentField.name.length > 0 && cardComponentField.desc.length > 0;
-}
-
-export function isCardComponentValid(cardComponentFields?: CardComponentFields) {
-    return cardComponentFields?.every(isCardValid)!!;
-}
-
-
-class Card<D = never> extends Component<CardProps<D>, CardState> {
-
-    constructor(props: CardProps<D> | Readonly<CardProps<D>>) {
-        super(props);
-
-        this.state = {
-            showDesc: isDesktop(),
-            descChanged: false
-        };
-    }
-
-
-    shouldComponentUpdate(nextProps: Readonly<CardProps<D>>, nextState: Readonly<CardState>, nextContext: any): boolean {
-        return !(compareWithoutFunctions(this.props, nextProps) && compareWithoutFunctions(this.state, nextState));
-    }
-
-    nameChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        e.preventDefault();
-        this.props.onChange(this.props.index, e.currentTarget.value, this.props.desc, this.props.customDescValues);
-    }
-
-    descChanged = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        e.preventDefault();
-        let value = e.currentTarget.value;
-        this.setState({
-            descChanged: value.length > 0
-        });
-        this.props.onChange(this.props.index, this.props.value, value, this.props.customDescValues);
-    }
-
-    customDescChanged = (value: D) => {
-        this.props.onChange(this.props.index, this.props.value, this.props.desc, value);
-    }
-
-    onDelete = () => {
-        if (this.props.onDelete !== undefined) {
-            this.props.onDelete(this.props.index);
-        }
-    }
-
-    private showDescription = () => {
-        this.setState({showDesc: true})
-    }
-
-    private closeIfChanged = () => {
-        if (this.state.descChanged) {
-            this.setState({showDesc: false})
-        }
-    }
-
-    render = () => {
-        let customDesc;
-        if (this.props.customDesc && this.props.customDescValues !== undefined) {
-            customDesc = React.createElement(this.props.customDesc, {
-                value: this.props.customDescValues,
-                disabled: this.props.disabled,
-                name: this.props.name,
-                onChanged: this.customDescChanged
-            });
-        }
-
-        return (
-            <div>
-                <InputGroup>
-                    <div className={"id"} aria-disabled={this.props.disabled}>
-                        {this.props.id}
-                    </div>
-                    <FormControl
-                        required={this.props.required}
-                        disabled={this.props.disabled}
-                        onBlur={this.closeIfChanged}
-                        onChange={this.nameChanged}
-                        onFocus={this.showDescription}
-                        name={this.props.name + "[" + this.props.index + "][name]"}
-                        spellCheck={false}
-                        value={this.props.value}
-                        placeholder={(this.props.placeholder?.name !== undefined) ? this.props.placeholder?.name : "Bezeichnung"}/>
-                    {
-                        ((!this.props.disabled) && this.props.onDelete !== undefined) ? (
-                            <Button className={"noButton"} onClick={this.onDelete} variant={"link"}>
-                                <FAE icon={faTimes}/>
-                            </Button>
-                        ) : undefined
-                    }
-                </InputGroup>
-                {/*TODO put this logic into higher component*/}
-                <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
-                    <div>
-                        <FormControl
-                            required={this.props.required}
-                            disabled={this.props.disabled}
-                            onChange={this.descChanged}
-                            onFocus={() => this.setState({showDesc: true})}
-                            onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
-                            as="textarea"
-                            spellCheck={false}
-                            style={{maxHeight: 500}}
-                            name={this.props.name + "[" + this.props.index + "][desc]"}
-                            value={this.props.desc}
-                            placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}/>
-
-                        <div>
-                            {customDesc}
-                        </div>
-                    </div>
-                </Collapse>
-
-                <input name={this.props.name + "[][index]"} value={this.props.index} type={"hidden"}/>
-                <input name={this.props.name + "[" + this.props.index + "][id]"} type={"hidden"}
-                       value={this.props.id ? this.props.id : undefined}/>
-            </div>
-        );
-    }
-
-}
-
-export type CardComponentField<D = never> = {
+export type CardComponentField<D = any> = {
     name: string
     desc: string
     id: string | null
     extra?: D
 };
 
-export type CardComponentFields<D = never> = CardComponentField<D>[];
+export type CardComponentFields<D = any> = CardComponentField<D>[];
 
 export interface CardComponentFieldPlaceholder {
     description?: string
@@ -201,6 +58,53 @@ export interface CardComponentProps<D> {
 }
 
 class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> {
+
+    getAllCards = () => {
+        let required = (this.props.required !== undefined) ? this.props.required : true;
+
+        // check and add minimum
+        if (this.props.values.length < this.props.min) {
+            for (let i = 0; i < this.props.min - this.props.values.length; i++) {
+                this.addCard();
+            }
+        }
+
+        return this.props.values.map((value, index) => {
+            return (
+                <Card<D> id={value.id}
+                         key={value.id + "-" + index}
+                         name={this.props.name}
+                         value={value.name}
+                         desc={value.desc}
+                         disabled={this.props.disabled}
+                         required={required}
+                         index={index}
+                         onDelete={this.removeCard.bind(this, index)}
+                         onChange={this.cardUpdatedListener}
+                         customDescValues={value.extra}
+                         customDesc={this.props.customDescription}/>
+            );
+        });
+    }
+
+    render = () => {
+        let cards = this.getAllCards();
+
+        return (
+            <div className={this.props.hide ? "d-none" : ""}>
+                {cards}
+
+                {((this.props.values.length < this.props.max) && !this.props.disabled) && (
+                    <BootstrapCard onClick={this.addCard}
+                                   className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
+                        <div className={"icon"}>
+                            <FAE icon={faPlus}/>
+                        </div>
+                    </BootstrapCard>
+                )}
+            </div>
+        );
+    }
 
     private cardUpdatedListener = (index: number, name: string, desc: string, extra?: D) => {
         let newValues = this.props.values.slice();
@@ -241,7 +145,7 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
         let newValues = this.props.values.slice();
         if (newValues.length < this.props.max) {
             let extraValue = undefined;
-            if(this.props.customDescValuesFactory !== undefined){
+            if (this.props.customDescValuesFactory !== undefined) {
                 extraValue = this.props.customDescValuesFactory();
             }
 
@@ -253,52 +157,6 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
             });
             this.props.onChanged(newValues);
         }
-    }
-
-    getAllCards = () => {
-        let required = (this.props.required !== undefined) ? this.props.required : true;
-
-        // check and add minimum
-        if (this.props.values.length < this.props.min) {
-            for (let i = 0; i < this.props.min - this.props.values.length; i++) {
-                this.addCard();
-            }
-        }
-
-        return this.props.values.map((value, index) => {
-            return (
-                <Card<D> id={value.id}
-                      name={this.props.name}
-                      value={value.name}
-                      desc={value.desc}
-                      disabled={this.props.disabled}
-                      required={required}
-                      index={index}
-                      onDelete={this.removeCard.bind(this, index)}
-                      onChange={this.cardUpdatedListener}
-                      customDescValues={value.extra}
-                      customDesc={this.props.customDescription}/>
-            );
-        });
-    }
-
-    render = () => {
-        let cards = this.getAllCards();
-
-        return (
-            <div className={this.props.hide ? "d-none" : ""}>
-                {cards}
-
-                {((this.props.values.length < this.props.max) && !this.props.disabled) && (
-                    <BootstrapCard onClick={this.addCard}
-                                   className={"addCard" + ((this.props.disabled) ? " disabled" : "")} body>
-                        <div className={"icon"}>
-                            <FAE icon={faPlus}/>
-                        </div>
-                    </BootstrapCard>
-                )}
-            </div>
-        );
     }
 
 }

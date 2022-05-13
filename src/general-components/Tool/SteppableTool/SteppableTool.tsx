@@ -23,6 +23,10 @@ abstract class SteppableTool<D extends object> extends Tool<D> {
         });
     }
 
+    public getStep(index: number) {
+        return this.steps[index];
+    }
+
     protected addStep<E extends object>(step: StepDefinition<E>) {
         this.steps.push(step);
     }
@@ -42,11 +46,6 @@ abstract class SteppableTool<D extends object> extends Tool<D> {
         return React.createElement(this.typeStepComponent, typesProps, null);
 
     }
-
-    public getStep(index: number) {
-        return this.steps[index];
-    }
-
 
     protected buildSaveBuilder(saveProps: ToolSaveProps<D>): JSX.Element {
         return this.getStepComponent(saveProps);

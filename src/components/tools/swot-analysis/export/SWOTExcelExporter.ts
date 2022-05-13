@@ -4,9 +4,7 @@ import {SaveResource} from "../../../../general-components/Datastructures";
 import XLSX, {CellAddress, CellObject, Range, WorkSheet} from "xlsx-js-style";
 import {SwotFactorsValues} from "../steps/SWOTFactors/SWOTFactorsComponent";
 import {SWOTAlternativeActionsValues} from "../steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
-import {
-    SWOTClassifyAlternativeActionsValues
-} from "../steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
+import {SWOTClassifyAlternativeActionsValues} from "../steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 
 
@@ -71,7 +69,7 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
 
                 }
 
-                if(action.alternatives.length > 1){
+                if (action.alternatives.length > 1) {
                     ws["D" + i] = {v: action.alternatives[1].name, t: "s"} as CellObject;
                     nameWidth2 = this.updateWidth(nameWidth2, action.alternatives[1].name.length);
                     ws["E" + i] = {v: action.alternatives[1].desc, t: "s"} as CellObject;

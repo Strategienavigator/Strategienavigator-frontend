@@ -8,13 +8,16 @@
 
 .save.disabled {
   pointer-events: none;
+
   * {
     pointer-events: none;
   }
+
   .save-card {
     opacity: 0.80;
     background-color: #e1e1e1;
   }
+
   .deleting {
     opacity: 1;
     float: right;
@@ -61,7 +64,7 @@
 
 .dummy {
   display: inline-block;
-  color:#eeeeee;
+  color: #eeeeee;
   background-color: #eeeeee;
   border-radius: 5px;
 }

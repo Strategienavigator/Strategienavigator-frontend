@@ -322,7 +322,7 @@ export type AvailabilityCheckResource = {
      *
      * string ist leer, wenn verfügbar
      */
-    reason: "taken"|"blocked"|"invalid",
+    reason: "taken" | "blocked" | "invalid",
 }
 export type UserSettingResource = {
     /**

@@ -5,9 +5,9 @@ import {FooterContextComponent} from "./FooterContextComponent";
 
 export class GlobalContexts extends Component<any, any> {
 
-    constructor(props: Readonly<{}> | {});
-    constructor(props: {}, context: any);
-    constructor(props: Readonly<{}> | {}, context?: any) {
+    public constructor(props: Readonly<{}> | {});
+    public constructor(props: {}, context: any);
+    public constructor(props: Readonly<{}> | {}, context?: any) {
         super(props, context);
     }
 

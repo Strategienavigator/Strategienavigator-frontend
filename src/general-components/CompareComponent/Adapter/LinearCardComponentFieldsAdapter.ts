@@ -2,6 +2,7 @@ import {CompareAdapter} from "./CompareAdapter";
 import {SingleComparison} from "../CompareComponent";
 import {CardComponentFields} from "../../CardComponent/CardComponent";
 
+
 /**
  * Ein CompareAdapter, welcher alle CardComponentFields eine kombination zuweist, und die zweite Kombinationsvariante leer lässt
  */

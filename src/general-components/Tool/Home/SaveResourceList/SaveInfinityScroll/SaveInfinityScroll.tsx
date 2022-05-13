@@ -1,13 +1,11 @@
 import React, {Component} from "react";
 
 import './save-infinity-scroll.scss';
-import {SimpleSaveResource} from "../../../../Datastructures";
-import {deleteSave} from "../../../../API/calls/Saves";
-import {DeleteSaveModal} from "../../DeleteSaveModal/DeleteSaveModal";
 import {Card} from "react-bootstrap";
 import {SaveCard} from "../../SaveCard/SaveCard";
 import {Loader} from "../../../../Loader/Loader";
 import {SaveResourceListProps} from "../SaveResourceList";
+
 
 export interface SaveInfinityScrollState {
 
@@ -35,12 +33,30 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
         };
     }
 
+    /**
+     * Gibt zurück ob die nächsten Daten geladen werden sollen
+     *
+     * Analysiert den aktuellen Scroll Standpunkt. Der Zeitpunkt des Ladens, kann durch SaveInfinityScroll.loadingTriggerModifier manipuliert werden
+     * @param container
+     * @private
+     */
+    private static shouldLoad(container: HTMLDivElement) {
+
+        let overflowHeight = container.scrollHeight - container.offsetHeight;
+
+        let percentageOverflow = overflowHeight / container.scrollHeight;
+
+
+        let triggerPercent = Math.min(SaveInfinityScroll.loadingTriggerModifier * percentageOverflow, 0.98);
+        let scrollPercent = container.scrollTop / overflowHeight;
+
+        return triggerPercent < scrollPercent;
+    }
 
     componentDidMount() {
         // this.loadNewPage(this.state.page, true);
         document.getElementById('content')?.addEventListener('scroll', this.onScroll);
     }
-
 
     componentWillUnmount() {
         document.getElementById('content')?.removeEventListener('scroll', this.onScroll);
@@ -68,12 +84,12 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                             );
                         })
                     })}
-                    <Loader payload={[]} loaded={!(this.props.pageIsLoading || this.props.saves === undefined)} transparent={true}/>
+                    <Loader payload={[]} loaded={!(this.props.pageIsLoading || this.props.saves === undefined)}
+                            transparent={true}/>
                 </div>
             </>
         );
     }
-
 
     /**
      * Lädt eine neue Seite, wenn gerade noch keine lädt
@@ -93,7 +109,7 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
      * @private
      */
     private loadNewPageIfExists(forced?: boolean) {
-        if(this.props.saves !== undefined){
+        if (this.props.saves !== undefined) {
             // length -1 weil es keinen 0 index gibt aber dieser trotzdem in der Längenberechnung einbezogen wird
             if (this.props.saves.pageCount > this.props.saves.pages.length - 1) {
                 let nextPage = this.props.saves.pages.length;
@@ -115,25 +131,5 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                 this.loadNewPageIfExists();
             }
         }
-    }
-
-    /**
-     * Gibt zurück ob die nächsten Daten geladen werden sollen
-     *
-     * Analysiert den aktuellen Scroll Standpunkt. Der Zeitpunkt des Ladens, kann durch SaveInfinityScroll.loadingTriggerModifier manipuliert werden
-     * @param container
-     * @private
-     */
-    private static shouldLoad(container: HTMLDivElement) {
-
-        let overflowHeight = container.scrollHeight - container.offsetHeight;
-
-        let percentageOverflow = overflowHeight / container.scrollHeight;
-
-
-        let triggerPercent = Math.min(SaveInfinityScroll.loadingTriggerModifier * percentageOverflow, 0.98);
-        let scrollPercent = container.scrollTop / overflowHeight;
-
-        return triggerPercent < scrollPercent;
     }
 }

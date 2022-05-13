@@ -1,10 +1,6 @@
 import React from "react";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {Accordion} from "react-bootstrap";
-import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
-import {RomanNumeralsCounter} from "../../../../../general-components/Counter/RomanNumeralsCounter";
-import {LowerABCCounter} from "../../../../../general-components/Counter/LowerABCCounter";
-import {UpperABCCounter} from "../../../../../general-components/Counter/UpperABCCounter";
 import {isDesktop} from "../../../../../general-components/Desktop";
 import {
     shallowCompareStepProps,
@@ -14,12 +10,7 @@ import {
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTFactors} from "./SWOTFactors";
 import {showErrorPage} from "../../../../../index";
-import {
-    IUIErrorContext,
-    UIErrorContext
-} from "../../../../../general-components/Contexts/UIErrorContext/UIErrorContext";
-import {FooterContext} from "../../../../../general-components/Contexts/FooterContextComponent";
-import {compareWithoutFunctions} from "../../../../../general-components/ComponentUtils";
+import {IUIErrorContext} from "../../../../../general-components/Contexts/UIErrorContext/UIErrorContext";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 
 
@@ -39,10 +30,14 @@ interface SWOTFactorsState {
 export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsState> {
 
 
-    constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
+    private strengthsChanged = this.applyCardComponentChanges.bind(this, "strengths");
+    private weaknessesChanged = this.applyCardComponentChanges.bind(this, "weaknesses");
+    private chancesChanged = this.applyCardComponentChanges.bind(this, "chances");
+    private risksChanged = this.applyCardComponentChanges.bind(this, "risks");
+
+    public constructor(props: StepProp<SWOTAnalysisValues>, context: any) {
         super(props, context);
     }
-
 
     shouldComponentUpdate(nextProps: Readonly<StepProp<SWOTAnalysisValues>>, nextState: Readonly<SWOTFactorsState>, nextContext: IUIErrorContext): boolean {
         let shouldUpdate: boolean;
@@ -56,32 +51,6 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         }
         return shouldUpdate;
     }
-
-    private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {
-        this.props.saveController.onChanged(save => {
-            const data = save.data["swot-factors"];
-            if (data !== undefined) {
-                switch (type) {
-                    case "strengths":
-                        data.factors.strengths = values;
-                        break;
-                    case "weaknesses":
-                        data.factors.weaknesses = values;
-                        break;
-                    case "chances":
-                        data.factors.chances = values;
-                        break;
-                    case "risks":
-                        data.factors.risks = values;
-                }
-            }
-        });
-    }
-
-    private strengthsChanged = this.applyCardComponentChanges.bind(this, "strengths");
-    private weaknessesChanged = this.applyCardComponentChanges.bind(this, "weaknesses");
-    private chancesChanged = this.applyCardComponentChanges.bind(this, "chances");
-    private risksChanged = this.applyCardComponentChanges.bind(this, "risks");
 
     build(): JSX.Element {
         const min = SWOTFactors.min;
@@ -106,7 +75,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.strengthsChanged}/>
-                                <UIErrorBanner id={"strengthsError"}/>
+                                <UIErrorBanner id={"swot-analysis.strengthsError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
 
@@ -122,7 +91,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.weaknessesChanged}/>
-                                <UIErrorBanner id={"weaknessesError"}/>
+                                <UIErrorBanner id={"swot-analysis.weaknessesError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "chances"}>
@@ -137,7 +106,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.chancesChanged}/>
-                                <UIErrorBanner id={"chancesError"}/>
+                                <UIErrorBanner id={"swot-analysis.chancesError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "risks"}>
@@ -152,11 +121,12 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
                                                min={min}
                                                max={max}
                                                onChanged={this.risksChanged}/>
-                                <UIErrorBanner id={"risksError"}/>
+                                <UIErrorBanner id={"swot-analysis.risksError"}/>
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
 
+                    <UIErrorBanner id={"swot-analysis.too-long"}/>
                 </div>
             );
         }
@@ -165,6 +135,27 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         return <p>"ERROR"</p>;
 
 
+    }
+
+    private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {
+        this.props.saveController.onChanged(save => {
+            const data = save.data["swot-factors"];
+            if (data !== undefined) {
+                switch (type) {
+                    case "strengths":
+                        data.factors.strengths = values;
+                        break;
+                    case "weaknesses":
+                        data.factors.weaknesses = values;
+                        break;
+                    case "chances":
+                        data.factors.chances = values;
+                        break;
+                    case "risks":
+                        data.factors.risks = values;
+                }
+            }
+        });
     }
 
 }

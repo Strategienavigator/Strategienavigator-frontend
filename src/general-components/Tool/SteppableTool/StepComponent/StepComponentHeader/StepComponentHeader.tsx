@@ -1,11 +1,9 @@
-import {Component, PureComponent} from "react";
+import {PureComponent} from "react";
 import {Tool} from "../../../Tool";
 import {isDesktop} from "../../../../Desktop";
-import {Collapse} from "react-bootstrap";
-import {Form} from "react-bootstrap";
+import {Collapse, Form} from "react-bootstrap";
 
 import "./step-header.scss";
-import {ToolSaveProps} from "../../../ToolSavePage/ToolSavePage";
 
 
 export interface StepComponentHeaderProp {
@@ -60,6 +58,16 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
         );
     }
 
+    onChangeCurrentName = (e: { currentTarget: { value: string; }; }) => {
+        const name = e.currentTarget.value;
+        this.props.saveMetaChanged(name, this.props.saveDescription);
+    }
+
+    onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
+        const description = e.currentTarget.value;
+        this.props.saveMetaChanged(this.props.saveName, description);
+    }
+
     private showDescription = () => {
         this.setState({
             showStepHeaderDesc: true
@@ -70,15 +78,5 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
         this.setState({
             showStepHeaderDesc: isDesktop()
         });
-    }
-
-    onChangeCurrentName = (e: { currentTarget: { value: string; }; }) => {
-        const name = e.currentTarget.value;
-        this.props.saveMetaChanged(name, this.props.saveDescription);
-    }
-
-    onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
-        const description = e.currentTarget.value;
-        this.props.saveMetaChanged(this.props.saveName, description);
     }
 }

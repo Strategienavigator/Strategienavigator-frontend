@@ -17,7 +17,7 @@ export interface SaveCardProps {
 export class SaveCard extends Component<SaveCardProps, {}> {
 
     render() {
-        if(this.props.save !== undefined && this.props.toolLink !== undefined){
+        if (this.props.save !== undefined && this.props.toolLink !== undefined) {
             // EARLY RETURN
             let isDeleting = this.props.save.owner_deleting;
 
@@ -36,7 +36,8 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                         </Card.Body>
                     </Card>
                     {(!!this.props.onTrash && !isDeleting) && (
-                        <Button type={"button"} variant={"danger"} className={"deleteSave"} onClick={this.props.onTrash}>
+                        <Button type={"button"} variant={"danger"} className={"deleteSave"}
+                                onClick={this.props.onTrash}>
                             <FAE icon={faTrash}/>
                         </Button>
                     )}
@@ -49,13 +50,14 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             );
         }
 
-        return(
+        return (
             <div className={"save"}>
                 <Card className={"mt-2 mb-2 save-card-dummy"}>
                     <Card.Body className={"save-body"}>
                         <Card.Title className={"dummy"}>Dummy title which is long</Card.Title> <br/>
                         <Card.Text
-                            className={"save-desc mb-1 dummy"}>eine relativ lange beschreibung die nicht zu lang ist</Card.Text>
+                            className={"save-desc mb-1 dummy"}>eine relativ lange beschreibung die nicht zu lang
+                            ist</Card.Text>
                     </Card.Body>
                 </Card>
             </div>

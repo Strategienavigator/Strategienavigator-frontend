@@ -1,6 +1,7 @@
 import FileSaver from "file-saver";
 import {SaveResource} from "../Datastructures";
 
+
 abstract class Exporter<D> {
     private readonly name: string;
     private readonly fileExtension: string;
@@ -30,7 +31,7 @@ abstract class Exporter<D> {
 
     public export(save: SaveResource<D>): void {
         const blobPart = this.onExport(save);
-        const blob = new Blob(blobPart,{
+        const blob = new Blob(blobPart, {
             type: this.fileType
         });
         this.save(blob, save.name);

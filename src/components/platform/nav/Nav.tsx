@@ -46,13 +46,13 @@ class Nav extends Component<RouteComponentProps, NavState> {
 
 
     shouldComponentUpdate(nextProps: Readonly<RouteComponentProps>, nextState: Readonly<NavState>, nextContext: any): boolean {
-        if(nextState.expanded !== this.state.expanded)
+        if (nextState.expanded !== this.state.expanded)
             return true;
-        if(nextState.showSearchOutput !== this.state.showSearchOutput)
+        if (nextState.showSearchOutput !== this.state.showSearchOutput)
             return true;
-        if(nextState.searchLoading !== this.state.searchLoading)
+        if (nextState.searchLoading !== this.state.searchLoading)
             return true;
-        if(nextState.searchResult !== this.state.searchResult)
+        if (nextState.searchResult !== this.state.searchResult)
             return true;
         return false;
     }
@@ -81,7 +81,11 @@ class Nav extends Component<RouteComponentProps, NavState> {
                     searchResult: []
                 });
 
-                let searchCall = await getSaves(Session.currentUser?.getID() as number, {name:value, description:value, searchBoth: false});
+                let searchCall = await getSaves(Session.currentUser?.getID() as number, {
+                    name: value,
+                    description: value,
+                    searchBoth: false
+                });
 
                 if (searchCall && searchCall.success) {
                     let searchCallData = searchCall.callData;
@@ -132,9 +136,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return "Paarweiser Vergleich";
         }
     }
-    private navOnClick = () => {
-        this.setExpanded(false);
-    };
+
     render() {
 
 
@@ -250,7 +252,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
                         {(!isDesktop()) && (
                             <BootstrapNav>
                                 <NavDropdown id={"profile-dropdown"} title={"mehr"}>
-                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/settings"} role={"button"}>
+                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/settings"}
+                                                   role={"button"}>
                                         <FAE icon={faCog}/>&nbsp;
                                         Einstellungen
                                     </Dropdown.Item>
@@ -264,7 +267,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                         <FAE icon={faBalanceScale}/>&nbsp;
                                         Impressum
                                     </Dropdown.Item>
-                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/about-us"} role={"button"}>
+                                    <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/about-us"}
+                                                   role={"button"}>
                                         <FAE icon={faInfoCircle}/>&nbsp;
                                         Über uns
                                     </Dropdown.Item>
@@ -276,6 +280,10 @@ class Nav extends Component<RouteComponentProps, NavState> {
             </Navbar>
         );
     }
+
+    private navOnClick = () => {
+        this.setExpanded(false);
+    };
 
 }
 

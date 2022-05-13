@@ -6,7 +6,7 @@ let width: number = window.innerWidth;
 let reloadedMobile: boolean = false;
 let reloadedDesktop: boolean = false;
 
-window.addEventListener('resize', (e) => {
+window.addEventListener('resize', () => {
     width = window.innerWidth;
 
     if (width >= breakPoint) {

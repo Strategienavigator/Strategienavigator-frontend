@@ -1,8 +1,5 @@
 // HEADER
 .singleComparison.header {
-  //padding: 1rem 0;
-  //background-color: rgba(118, 118, 118, 0.3);
-  //border: 1px solid rgba(118, 118, 118, 0.3);
   font-weight: 700;
 }
 
@@ -12,47 +9,55 @@
 }
 
 .singleComparison > div {
-  flex: 30% 1 1;
+  flex: 30% 1 0;
 }
 
-.singleComparison > div:first-child {
+.singleComparison > div.first, .singleComparison > div.second {
+  word-break: break-word;
+  background-color: rgba(118, 118, 118, 0.3);
+  border: 1px solid rgba(118, 118, 118, 0.3);
+  padding: 0.1rem;
+}
+
+.singleComparison.header > div.first, .singleComparison.header > div.second {
+  background-color: unset;
+  border: unset;
+  word-break: normal;
+}
+
+.singleComparison > div.first {
   text-align: right;
-  padding-right: 1rem;
-
-  input {
-    text-align: right;
-  }
 }
 
-.singleComparison > div:last-child {
+.singleComparison > div.second {
   text-align: left;
-  padding-left: 1rem;
-
-  input {
-    text-align: left;
-  }
-}
-
-.singleComparison > div:last-child input, .singleComparison > div:first-child input {
-  width: 100%;
-  padding: 0.1rem 0.45rem;
 }
 
 .singleComparison .comparisons {
   flex: 40% 1 1;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  text-align: center;
+  white-space: break-spaces;
+
+  .comparison[aria-disabled="true"] {
+    color: transparentize(black, 0.7);
+  }
 
   .comparison {
     flex: auto 0 0;
     justify-content: center;
     text-align: center;
     padding: 0 0.6rem;
+    position: relative;
+    width: 20px;
 
     input[type='radio'] {
-      transform: scale(1.5);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.3);
     }
-
   }
 }
 

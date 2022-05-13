@@ -1,7 +1,6 @@
 import React, {Component, ComponentClass, FunctionComponent, ReactNode,} from "react";
 import {Accordion, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import {isDesktop} from "../../../Desktop";
-import {Tool} from "../../Tool";
 import "./step-component.scss";
 import "./step-component-desk.scss";
 import {Messages} from "../../../Messages/Messages";
@@ -11,11 +10,12 @@ import {StepComponentButtons} from "./StepComponentButtons/StepComponentButtons"
 import ResetStepsModal from "./ResetStepsModal/ResetStepsModal";
 import {ExportModal} from "../../ExportButton";
 import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
-import {MatrixComponentProps} from "../../MatrixComponent/MatrixComponent";
+import {ExtraWindowProps} from "../../ExtraWindowComponent/ExtraWindowComponent";
 import {UIError} from "../../../Error/UIErrors/UIError";
 import {Exporter} from "../../../Export/Exporter";
 import {Draft} from "immer";
 import {IUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
+import {SteppableTool} from "../SteppableTool";
 
 
 export interface StepDefinition<T extends object> {
@@ -23,8 +23,13 @@ export interface StepDefinition<T extends object> {
     title: string
     dataHandler: StepDataHandler<T>
     form: FunctionComponent<StepProp<T>> | ComponentClass<StepProp<T>>
-    matrix?: FunctionComponent<MatrixComponentProps<T>> | ComponentClass<MatrixComponentProps<T>>
+    extraWindow?: ExtraWindowDefinition<T>
     subStep?: SubStepDefinition<T>
+}
+
+export interface ExtraWindowDefinition<T extends object> {
+    extraWindowComponent: FunctionComponent<ExtraWindowProps<T>> | ComponentClass<ExtraWindowProps<T>>
+    displayName: string
 }
 
 
@@ -87,7 +92,7 @@ export interface StepDataHandler<T extends object> {
 
 export interface StepComponentProps<D extends object> extends ToolSaveProps<D> {
     steps: StepDefinition<D>[]
-    tool: Tool<D>
+    tool: SteppableTool<D>
 }
 
 export interface StepController {
@@ -168,6 +173,37 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         return progress;
     }
 
+    /**
+     * returns the first unfinished sub step of the given step. If every sub step is unlocked the first step is returned
+     *
+     *
+     * @param steps
+     * @param step
+     * @param save
+     * @private the index of the sub step
+     */
+    private static getCurrentSubStepOfStep<D extends object>(steps: Array<StepDefinition<D>>, step: number, data: D) {
+        let subStepProgress = 0;
+
+        if (steps.length > step) {
+            const subStep = steps[step].subStep;
+            if (subStep !== undefined) {
+
+                const count = subStep.getStepCount(data);
+                for (let i = 0; i < count; i++) {
+                    if (subStep.isStepUnlocked(i, data)) {
+                        subStepProgress++;
+                    }
+                }
+                if (subStepProgress === count || subStepProgress === -1) {
+                    subStepProgress = 0;
+                }
+            }
+        }
+
+        return subStepProgress;
+    }
+
     render = () => {
         const customNextButton = this.getCustomNextButton();
         const header = <StepComponentHeader tool={this.props.tool}
@@ -176,6 +212,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                             saveMetaChanged={this.changeSaveMeta}/>;
 
         const anyErrors = Object.keys(this.props.uiErrorContext.errors).length > 0;
+
         return (
             <>
                 <Tab.Container
@@ -212,8 +249,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                 onExportClick={this.showExportModal}
                             />
 
-                            {this.shouldMatrixRender() && (
-                                this.getMatrix()
+                            {this.shouldExtraWindowRender() && (
+                                this.getExtraWindow()
                             )}
                         </Col>
                         <Col className={"tabsContent"}>
@@ -258,6 +295,27 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                 />
             </>
         );
+    }
+
+    public tryNextStep = (): void => {
+
+        this.clearErrors();
+        if (this.hasNextSubStep()) {
+
+            const validated = this.validateSubStep(this.state.currentStep, this.state.currentSubStep);
+
+            if (validated) {
+                // force for performance reasons (no duplicate check of validation)
+                this.nextSubStep(true);
+                return;
+            }
+        }
+
+        const validated = this.validateStep(this.state.currentStep);
+
+        if (validated) {
+            this.nextStep();
+        }
     }
 
     private showResetModal = () => {
@@ -344,14 +402,15 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     }
 
-
     /**
      * does call the given function with the current data objects as first argument. If function isn't defined undefined is returned
      * @param fn
      * @private
      */
     private withData<E>(fn: (data: D) => E): E
+
     private withData<E>(fn: ((data: D) => E) | undefined): E | undefined
+
     private withData<E>(fn: ((data: D) => E) | undefined): E | undefined {
         if (fn !== undefined) {
             return fn(this.props.save.data);
@@ -370,8 +429,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     private isLastStep = (): boolean => {
         return this.state.currentStep >= this.props.steps.length - 1;
     }
-
-
 
     /**
      * Resetet alle steps, von hinten bis zu dem angegebenen index
@@ -396,27 +453,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         this.resetStepsUntil(0);
     }
 
-    public tryNextStep = (): void => {
-
-        this.clearErrors();
-        if (this.hasNextSubStep()) {
-
-            const validated = this.validateSubStep(this.state.currentStep, this.state.currentSubStep);
-
-            if (validated) {
-                // force for performance reasons (no duplicate check of validation)
-                this.nextSubStep(true);
-                return;
-            }
-        }
-
-        const validated = this.validateStep(this.state.currentStep);
-
-        if (validated) {
-            this.nextStep();
-        }
-    }
-
     private nextSubStep = (force: boolean = false) => {
         this.setSubStep(this.state.currentSubStep + 1, force)
     }
@@ -433,8 +469,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private requestSubStep = (step: number) => {
-        if (this.state.currentStep !== this.state.progress){
-            
+        if (this.state.currentStep !== this.state.progress) {
+
             let result = this.setSubStep(step);
             return result;
         }
@@ -497,7 +533,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private save = async () => {
-
         const addErrorMessage = () => {
             Messages.add(
                 "Speichern fehlgeschlagen! Bitte versuchen Sie es später erneut.",
@@ -505,7 +540,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                 Messages.TIMER
             );
         }
-
 
         let saveCall = await this.props.saveController.save();
         if (saveCall) {
@@ -540,20 +574,14 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
      * @private
      */
     private changeStep(step: number, callback: undefined | (() => void) = undefined): void {
-
-
         if (step < this.props.steps.length) {
-
-
             if (this.state.currentStep !== step) {
-
                 const hasSubSteps = this.hasSubSteps(step);
                 let newSubStep = 0;
                 if (hasSubSteps) {
 
                     newSubStep = StepComponent.getCurrentSubStepOfStep(this.props.steps, step, this.props.save.data);
                 }
-
 
                 let newProgress = this.state.progress;
                 if (this.state.progress < step) {
@@ -581,69 +609,38 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     /**
-     * returns the first unfinished sub step of the given step. If every sub step is unlocked the first step is returned
-     *
-     *
-     * @param steps
-     * @param step
-     * @param save
-     * @private the index of the sub step
-     */
-    private static getCurrentSubStepOfStep<D extends object>(steps: Array<StepDefinition<D>>, step: number, data: D) {
-        let subStepProgress = 0;
-
-        if (steps.length > step) {
-            const subStep = steps[step].subStep;
-            if (subStep !== undefined) {
-
-                const count = subStep.getStepCount(data);
-                for (let i = 0; i < count; i++) {
-                    if (subStep.isStepUnlocked(i, data)) {
-                        subStepProgress++;
-                    }
-                }
-                if (subStepProgress === count || subStepProgress === -1) {
-                    subStepProgress = 0;
-                }
-            }
-        }
-
-        return subStepProgress;
-    }
-
-    /**
-     * does return the matrix if the current sub step has one
+     * does return the extra window if the current sub step has one
      * @private
      */
-    private getMatrix(): undefined | ReactNode {
+    private getExtraWindow(): undefined | ReactNode {
         let step = this.getCurrentStep();
-        if (step.matrix !== undefined) {
-            let matrix = React.createElement(step.matrix, {
+        if (step.extraWindow !== undefined) {
+            let extraWindow = React.createElement(step.extraWindow.extraWindowComponent, {
                 tool: this.props.tool,
                 data: this.props.save.data,
                 stepController: this.stepController
             });
-            const getMatrixContainer = () => {
+            const getExtraWindowContainer = () => {
                 return (
-                    <div className={"matrixContainer"}>
-                        <div className={"matrix"}>
-                            {matrix}
+                    <div className={"extraWindowContainer"}>
+                        <div className={"extraWindow"}>
+                            {extraWindow}
                         </div>
                     </div>
                 );
             }
 
             if (isDesktop()) {
-                return getMatrixContainer();
+                return getExtraWindowContainer();
             } else {
                 return (
-                    <Accordion className={"matrixAccordion"}>
-                        <Accordion.Item eventKey={"matrix"}>
+                    <Accordion className={"extraWindowAccordion"}>
+                        <Accordion.Item eventKey={"extraWindow"}>
                             <Accordion.Header>
-                                Matrix
+                                {step.extraWindow.displayName}
                             </Accordion.Header>
                             <Accordion.Body>
-                                {getMatrixContainer()}
+                                {getExtraWindowContainer()}
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
@@ -652,8 +649,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         }
     }
 
-    private shouldMatrixRender(): boolean {
-        return this.getCurrentStep().matrix !== undefined
+    private shouldExtraWindowRender(): boolean {
+        return this.getCurrentStep().extraWindow !== undefined
     }
 
 
@@ -661,6 +658,11 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         const errors = this.withData(this.props.steps[step].dataHandler.validateData);
         if (errors.length > 0) {
             this.putErrors(errors);
+            Messages.add(
+                "Überprüfen Sie Ihre Eingaben!",
+                "DANGER",
+                Messages.TIMER
+            );
             return false;
         } else {
             return true;

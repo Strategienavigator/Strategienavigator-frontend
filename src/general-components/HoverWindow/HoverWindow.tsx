@@ -5,6 +5,7 @@ import {OverlayTriggerRenderProps, OverlayTriggerType} from "react-bootstrap/Ove
 import {OverlayInjectedProps} from "react-bootstrap/Overlay";
 import {Placement} from "react-bootstrap/types";
 
+
 interface HoverWindowCustomPopupProps {
     title?: string,
     description?: string
@@ -40,12 +41,11 @@ class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
 
 
     static defaultProps = {
-        trigger: "hover",
+        trigger: ["hover", "focus"],
         disabled: false
     }
 
     render() {
-
         const {customPopUp, children, trigger, onToggle, placement, ...customProps} = this.props;
 
         // early exit
@@ -70,6 +70,7 @@ class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
                     </Popover.Body>) : undefined}
             </Popover>
         );
+
         return (
             <OverlayTrigger trigger={this.props.trigger} overlay={popupFunction ?? popover}
                             onToggle={this.props.onToggle} placement={placement}>

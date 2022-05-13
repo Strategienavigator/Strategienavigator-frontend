@@ -5,6 +5,7 @@ import {Tool} from "./Tool";
 import {Exporter} from "../Export/Exporter";
 import FAE from "../Icons/FAE";
 
+
 interface ExportModalProps {
     onClose: () => void
     onSelect: (exporter: Exporter<any>) => void
@@ -78,7 +79,7 @@ function ExportButton(props: ExportButtonProps) {
                 className={"mt-2"}
                 onClick={props.onClick}
             >
-                <FAE icon={faFileExport} /> Exportieren
+                <FAE icon={faFileExport}/> Exportieren
             </Button>
         </>
     );

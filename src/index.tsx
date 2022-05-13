@@ -86,7 +86,7 @@ const getRouterSwitch = () => {
 const getAppFooter = () => {
     return (
         <>
-            <Footer />
+            <Footer/>
             <ControlFooter places={4}/>
         </>
     );

@@ -4,6 +4,7 @@ import {User} from "../User";
 import {Session} from "../Session/Session";
 import {SettingsCache} from "../API/SettingsCache";
 
+
 export interface ISettingsContext {
     /**
      * sorgt daf�r, dass alle Einstellungen aus Backend neu geladen werden
@@ -56,23 +57,6 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
     }
 
     /**
-     * �ndert den State
-     * @param isLoading ob das die Einstellungen gerade aus dem Backend abgerufen werden
-     * @private
-     */
-    private setLoading(isLoading: boolean) {
-
-        this.setState({
-            settingsContext: {
-                settings: this.state.settingsContext.settings,
-                causeUpdate: this.updateSettings,
-                isLoading: isLoading
-            }
-        });
-
-    }
-
-    /**
      * Listener der aufgerufen wird, wenn sich der aktuell angemeldete Nutzer �ndert
      * @param user Der aktuelle Nutzer, null wenn kein Nutzer angemeldet ist
      */
@@ -99,7 +83,6 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
         Session.addUserChangedCallback(this.userChanged);
     }
 
-
     /**
      * Entfernt den UserChanged Listener
      */
@@ -124,6 +107,23 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
                 }
             });
         }
+    }
+
+    /**
+     * �ndert den State
+     * @param isLoading ob das die Einstellungen gerade aus dem Backend abgerufen werden
+     * @private
+     */
+    private setLoading(isLoading: boolean) {
+
+        this.setState({
+            settingsContext: {
+                settings: this.state.settingsContext.settings,
+                causeUpdate: this.updateSettings,
+                isLoading: isLoading
+            }
+        });
+
     }
 
 }

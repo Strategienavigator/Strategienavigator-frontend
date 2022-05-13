@@ -1,9 +1,10 @@
-.flex-container{
+.flex-container {
   display: flex;
   flex-wrap: wrap;
   cursor: pointer;
 }
-.flex-center{
+
+.flex-center {
   justify-content: center;
 }
 
@@ -16,7 +17,7 @@
   grid-template-areas: "head head" "nav  main";
 }
 
-.page>.grid-head {
+.page > .grid-head {
   grid-area: head;
   grid-column: 2;
 }
@@ -25,7 +26,7 @@
   grid-area: nav;
 }
 
-.page>.grid-container {
+.page > .grid-container {
   grid-area: main;
 }
 
@@ -44,15 +45,15 @@
   display: grid;
   grid-template-rows: repeat(auto-fit, 36px);
   grid-template-columns: repeat(auto-fit, 36px);
-  
+
 }
 
-.grid-head>div .grid-left>div {
+.grid-head > div .grid-left > div {
   flex-shrink: 0;
 }
 
-.grid-head>div,
-.grid-left>div {
+.grid-head > div,
+.grid-left > div {
   text-align: center;
   margin: 3px;
   height: 30px;
@@ -60,24 +61,26 @@
   text-align: center;
 }
 
-.grid-container>div {
+.grid-container > div {
   display: inline-block;
-  
+
   border: 1px solid black;
   border-radius: 5px;
-  margin-left:2px;
+  margin-left: 2px;
   margin-top: 0px;
   height: 30px;
   width: 30px;
 }
-.red{
+
+.red {
   background-color: red;
 }
-.green{
+
+.green {
   background-color: green;
 }
 
-.alle-container{
-  
+.alle-container {
+
 }
 

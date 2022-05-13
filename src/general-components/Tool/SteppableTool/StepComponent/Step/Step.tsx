@@ -4,7 +4,7 @@ import {ToolSaveProps} from "../../../ToolSavePage/ToolSavePage";
 import './step.scss';
 import {StepController} from "../StepComponent";
 import {compareWithoutFunctions} from "../../../../ComponentUtils";
-import {is} from "immer/dist/utils/common";
+
 
 interface StepProp<V extends object> extends FormComponentProps, ToolSaveProps<V> {
     stepController: StepController
@@ -13,8 +13,6 @@ interface StepProp<V extends object> extends FormComponentProps, ToolSaveProps<V
 }
 
 abstract class Step<V extends object, S> extends FormComponent<StepProp<V>, S> {
-
-
     protected constructor(props: Readonly<StepProp<V>> | StepProp<V>);
     protected constructor(props: StepProp<V>, context: any);
     protected constructor(props: Readonly<StepProp<V>> | StepProp<V>, context?: any) {

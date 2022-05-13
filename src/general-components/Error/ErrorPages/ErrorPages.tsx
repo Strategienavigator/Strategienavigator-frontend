@@ -51,7 +51,8 @@ class ErrorPages extends Component<RouteComponentProps<{ code: string }>, any> {
                 </div>
 
                 {(this.code === 500) && (
-                    <Button className="button" style={{marginRight: "0.75rem"}} onClick={this.props.history.goBack} variant={"dark"}>
+                    <Button className="button" style={{marginRight: "0.75rem"}} onClick={this.props.history.goBack}
+                            variant={"dark"}>
                         Erneut versuchen &nbsp;
                         <FAE icon={faRedo}/>
                     </Button>

@@ -6,6 +6,7 @@ import {
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilInvestigationObjects} from "./UtilInvestigationObjects";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 
 
 export interface UtilInvestigationObjectsValues {
@@ -35,13 +36,18 @@ class UtilInvestigationObjectsComponent extends Step<UtilityAnalysisValues, any>
 
         if (values !== undefined) {
             return (
-                <CardComponent
-                    values={values.objects}
-                    name={"investigation-objects"}
-                    disabled={this.props.disabled}
-                    min={UtilInvestigationObjects.min}
-                    max={UtilInvestigationObjects.max}
-                    onChanged={this.valuesChanged}/>
+                <>
+                    <CardComponent
+                        values={values.objects}
+                        name={"investigation-objects"}
+                        disabled={this.props.disabled}
+                        min={UtilInvestigationObjects.min}
+                        max={UtilInvestigationObjects.max}
+                        onChanged={this.valuesChanged}
+                    />
+                    <UIErrorBanner id={"investigation-objects.too-long"}/>
+                    <UIErrorBanner id={"investigation-objects.empty"}/>
+                </>
             );
         }
 

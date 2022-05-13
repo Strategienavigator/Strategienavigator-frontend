@@ -3,21 +3,19 @@ import {
     Step,
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {CompareComponent, CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {
-    MatchCardComponentFieldsAdapter
-} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+    CompareComponent,
+    CompareComponentValues
+} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
 import {PCPairComparison} from "./PCPairComparison";
-import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
 
 
 /**
  * Die Werte des zweiten Schrittes des Paarweisen-Vergleiches
  */
-export interface PCPairComparisonValues {
-    comparisons: CompareValue[],
-    headers: CompareHeader[]
+export interface PCPairComparisonValues extends CompareComponentValues {
 }
 
 /**
@@ -58,7 +56,7 @@ class PCPairComparisonComponent extends Step<PairwiseComparisonValues, {}> {
 
             return (
                 <CompareComponent
-                    values={comparisonValues.comparisons}
+                    values={comparisonValues}
                     showHeader={true}
                     disabled={this.props.disabled}
                     fields={adapter}
@@ -71,10 +69,10 @@ class PCPairComparisonComponent extends Step<PairwiseComparisonValues, {}> {
         return <p>ERROR</p>;
     }
 
-    private comparisonsChanged = (values: CompareValue[]) => {
+    private comparisonsChanged = (values: CompareComponentValues) => {
         this.props.saveController.onChanged(save => {
             if (save.data["pc-comparison"] !== undefined) {
-                save.data["pc-comparison"].comparisons = values;
+                save.data["pc-comparison"] = values;
             }
         });
     }

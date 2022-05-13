@@ -1,0 +1,13 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+.accordion[aria-disabled="true"] {
+  .accordion-button {
+    background-color: darken($form-select-disabled-bg, 1%);
+  }
+
+  .accordion-body {
+    background-color: $form-select-disabled-bg;
+  }
+}
+
+

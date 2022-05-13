@@ -7,7 +7,11 @@ import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {PCCriteriasComponent} from "./PCCriteriasComponent";
-import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
+import {
+    CardComponentFields,
+    isCardComponentFilled,
+    isCardComponentTooLong
+} from "../../../../../general-components/CardComponent/CardComponent";
 
 
 class PCCriterias implements StepDefinition<PairwiseComparisonValues>, StepDataHandler<PairwiseComparisonValues> {
@@ -15,7 +19,6 @@ class PCCriterias implements StepDefinition<PairwiseComparisonValues>, StepDataH
     title: string;
     dataHandler: StepDataHandler<PairwiseComparisonValues>;
     form: React.FunctionComponent<StepProp<PairwiseComparisonValues>> | React.ComponentClass<StepProp<PairwiseComparisonValues>>;
-
 
     constructor() {
         this.id = "pc-criterias";
@@ -56,9 +59,9 @@ class PCCriterias implements StepDefinition<PairwiseComparisonValues>, StepDataH
      * @returns {UIError[]}
      */
     validateData(data: PairwiseComparisonValues): UIError[] {
-
         const errors = new Array<UIError>();
         const criterias = data["pc-criterias"]?.criterias;
+
         if (criterias === undefined) {
             errors.push({
                 message: "Daten fehlen",
@@ -72,6 +75,21 @@ class PCCriterias implements StepDefinition<PairwiseComparisonValues>, StepDataH
                     level: "error",
                     id: "pairwise-comparison.criterias"
                 });
+            } else {
+                if (!isCardComponentFilled(criterias)) {
+                    errors.push({
+                        message: "Kriterien dürfen nicht leer sein!",
+                        level: "error",
+                        id: "pairwise-comparison.criterias-empty"
+                    });
+                }
+                if (isCardComponentTooLong(criterias)) {
+                    errors.push({
+                        message: "Der Text in einigen Feldern ist zu lang!",
+                        level: "error",
+                        id: "pairwise-comparison.criterias-too-long"
+                    });
+                }
             }
         }
 

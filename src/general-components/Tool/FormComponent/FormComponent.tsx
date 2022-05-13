@@ -36,7 +36,6 @@ export abstract class FormComponent<P extends FormComponentProps, S> extends Com
     }
 
 
-
-    protected abstract build():JSX.Element;
+    protected abstract build(): JSX.Element;
 
 }
