@@ -26,3 +26,7 @@ yarn-error.log*
 
 *.bat
 *.cmd
+
+/cypress/logs
+/cypress/videos
+/cypress/screenshots
