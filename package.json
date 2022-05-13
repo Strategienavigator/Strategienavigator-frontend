@@ -61,7 +61,8 @@
   "devDependencies": {
     "@types/file-saver": "^2.0.4",
     "@types/xlsx": "^0.0.36",
-    "cypress": "^9.5.3",
+    "cypress": "^9.6.1",
+    "cypress-failed-log": "^2.9.5",
     "eslint-plugin-cypress": "^2.12.1",
     "typedoc": "^0.21.9",
     "typedoc-plugin-merge-modules": "^3.0.1"
