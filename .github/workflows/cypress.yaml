@@ -81,6 +81,7 @@ jobs:
           REACT_APP_CLIENT_ID: 2
           REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
           REACT_APP_API: 'http://localhost:8000/'
+          CYPRESS_VIDEO: false
       - name: added videos as artifact
         uses: actions/upload-artifact@v2
         if: always()
