@@ -68,14 +68,14 @@ jobs:
         run: |
           nohup php -S localhost:8000 server.php > phpd.log 2>&1 &
           echo "PHP_BACKEND_SERVER_PID=$!" >> $GITHUB_ENV
+      - name: install serve
+        run: npm install -g serve
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           working-directory: frontend
-          start: |
-            npm install -g serve
-            serve -s build
+          start: serve -s build
           build: npm run build
           wait-on: 'http://localhost:3000'
         env:
