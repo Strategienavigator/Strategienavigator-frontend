@@ -20,6 +20,14 @@ class PortObjects implements StepDefinition<PortfolioAnalysisValues>, StepDataHa
     public static min = 2;
     public static max = 8;
 
+
+    public static getDefaultExtraValues(){
+        return {
+            quantity: "",
+            quality: ""
+        };
+    }
+
     dataHandler: StepDataHandler<PortfolioAnalysisValues>;
     form: FunctionComponent<StepProp<PortfolioAnalysisValues>> | ComponentClass<StepProp<PortfolioAnalysisValues>>;
     id: string;
@@ -43,10 +51,7 @@ class PortObjects implements StepDefinition<PortfolioAnalysisValues>, StepDataHa
                 id: null,
                 desc: "",
                 name: "",
-                extra: {
-                    quantity: "",
-                    quality: ""
-                }
+                extra: PortObjects.getDefaultExtraValues()
             });
         }
         data["port-objects"] = {objects: portObjects};

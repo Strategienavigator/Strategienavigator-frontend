@@ -35,6 +35,7 @@ class PortObjectsComponent extends Step<PortfolioAnalysisValues, any> {
                     <CardComponent<PortObjectsCustomDescriptionValues>
                         name={"port-objects"}
                         customDescription={PortObjectsCustomDescription}
+                        customDescValuesFactory={PortObjects.getDefaultExtraValues}
                         values={values.objects}
                         disabled={this.props.disabled}
                         min={PortObjects.min}
