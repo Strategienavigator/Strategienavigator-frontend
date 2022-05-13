@@ -47,6 +47,7 @@ class UtilCriteriasComponent extends Step<UtilityAnalysisValues, {}> {
                         min={UtilCriterias.min}
                         max={UtilCriterias.max}
                         onChanged={this.valuesChanged}
+                        customDescValuesFactory={UtilCriterias.getDefaultExtraData}
                     />
                     <UIErrorBanner id={"criterias.too-long"}/>
                     <UIErrorBanner id={"criterias.empty"}/>
