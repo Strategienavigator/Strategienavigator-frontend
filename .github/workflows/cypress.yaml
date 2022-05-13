@@ -1,0 +1,90 @@
+
+
+
+
+name: tests
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+
+env:
+  DB_PASSWORD: 'super_secret_password'
+
+
+jobs:
+  cypress-run:
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_DATABASE: toolbox
+          MYSQL_ROOT_PASSWORD: '${{env.DB_PASSWORD}}'
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'ricom/toolbox-backend'
+          path: 'backend'
+      - uses: actions/checkout@v3
+        with:
+          repository: 'ricom/toolbox-frontend'
+          path: 'frontend'
+      - name: Composer (php-actions)
+        uses: php-actions/composer@v6
+        with:
+          version: 2
+          working_dir: 'backend'
+      - name: setup backend
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+        working-directory: backend
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --seed
+          php artisan passport:install > passport_keys.log
+          key=$(tail -n 1 passport_keys.log | perl -lne 'print $1 if /^.*: (.*)$/')
+          echo "CLIENT_SECRET=$key" >> $GITHUB_ENV
+      - name: remove dev dependencies
+        uses: php-actions/composer@v6
+        with:
+          dev: 'no'
+          version: 2
+          args: '--optimize-autoloader'
+          working_dir: 'backend'
+      - name: cache laravel application
+        working-directory: backend
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+      - name: start backend server
+        working-directory: backend
+        run: |
+          nohup php -S localhost:8000 server.php > phpd.log 2>&1 &
+          echo "PHP_BACKEND_SERVER_PID=$!" >> $GITHUB_ENV
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: frontend
+          start: npm start
+          build: npm run build
+        env:
+          REACT_APP_CLIENT_ID: 2
+          REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
+          REACT_APP_API: 'http://localhost:8000/'
+
+      - name: stop backend server
+        working-directory: backend
+        run: |
+          kill -3 $PHP_BACKEND_SERVER_PID
