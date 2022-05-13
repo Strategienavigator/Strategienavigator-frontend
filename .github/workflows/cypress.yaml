@@ -87,4 +87,10 @@ jobs:
         if: always()
         with:
           name: cypress-videos
-          path: frontend/cypress/videos
+          path: frontend/cypress/screenshots
+      - name: added logs as artifact
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: frontend/cypress/logs
