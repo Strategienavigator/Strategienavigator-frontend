@@ -79,12 +79,8 @@ jobs:
           working-directory: frontend
           start: npm start
           build: npm run build
+          wait-on: 'http://localhost:3000'
         env:
           REACT_APP_CLIENT_ID: 2
           REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
           REACT_APP_API: 'http://localhost:8000/'
-
-      - name: stop backend server
-        working-directory: backend
-        run: |
-          kill -3 $PHP_BACKEND_SERVER_PID
