@@ -19,7 +19,16 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-    on('task', {
-        failed: require('cypress-failed-log/src/failed')(),
-    })
+
+    const options = {
+        outputRoot: 'cypress/',
+        outputTarget: {
+            'logs/txt|txt': 'txt',
+            'logs/json|json': 'json',
+        },
+        printLogsToFile: 'always'
+
+    };
+
+    require('cypress-terminal-report/src/installLogsPrinter')(on, options);
 }

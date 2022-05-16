@@ -25,14 +25,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: clone backend
+        uses: actions/checkout@v3
         with:
           repository: 'ricom/toolbox-backend'
           path: 'backend'
-      - uses: actions/checkout@v3
+      - name: clone frontend
+        uses: actions/checkout@v3
         with:
           path: 'frontend'
-      - name: Composer (php-actions)
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - name: Setup Composer and PHP
         uses: php-actions/composer@v6
         with:
           version: 2
@@ -40,6 +47,10 @@ jobs:
       - name: setup backend
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          APP_ENV: local
+          APP_URL: http://localhost:8000
+          APP_DEBUG: false
+          FRONTEND_URL: http://localhost:3000
         working-directory: backend
         run: |
           cp .env.example .env
@@ -48,24 +59,31 @@ jobs:
           php artisan passport:install > passport_keys.log
           key=$(tail -n 1 passport_keys.log | perl -lne 'print $1 if /^.*: (.*)$/')
           echo "CLIENT_SECRET=$key" >> $GITHUB_ENV
-      - name: remove dev dependencies
+      - name: remove dev dependencies with composer
         uses: php-actions/composer@v6
         with:
           dev: 'no'
           version: 2
           args: '--optimize-autoloader'
           working_dir: 'backend'
-      - name: cache laravel application
+
+      - name: cache larvel config
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          APP_ENV: production
+          APP_URL: http://localhost:8000
+          APP_DEBUG: false
+          FRONTEND_URL: http://localhost:3000
         working-directory: backend
         run: |
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
-
       - name: start backend server
         working-directory: backend
+        id: backendStart
         run: |
-          nohup php -S localhost:8000 server.php > phpd.log 2>&1 &
+          nohup php artisan serve > phpd.log 2>&1 &
           echo "PHP_BACKEND_SERVER_PID=$!" >> $GITHUB_ENV
       - name: install serve
         run: npm install -g serve
@@ -76,21 +94,25 @@ jobs:
           working-directory: frontend
           start: serve -s build
           build: npm run build
-          wait-on: 'http://localhost:3000'
+          wait-on: 'http://localhost:3000, http://localhost:8000'
         env:
           REACT_APP_CLIENT_ID: 2
           REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
           REACT_APP_API: 'http://localhost:8000/'
           CYPRESS_VIDEO: false
-      - name: added videos as artifact
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: cypress-videos
-          path: frontend/cypress/screenshots
       - name: added logs as artifact
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: cypress-videos
-          path: frontend/cypress/logs
+          name: logs
+          path: |
+            backend/phpd.log
+            backend/storage/logs/
+            backend/passport_keys.log
+            frontend/cypress/screenshots
+            frontend/cypress/logs
+      - name: stop backend server
+        if: always() && steps.backendStart.outcome == 'success'
+        working-directory: backend
+        run: |
+          kill -3 $PHP_BACKEND_SERVER_PID
