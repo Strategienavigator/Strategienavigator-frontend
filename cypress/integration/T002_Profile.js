@@ -1,21 +1,10 @@
-describe('Profile check and changing', () => {
-    it('trys to login to reach /my-profile',() =>{
-        cy.visit('/login')
-        cy.get('input[id="email"]')
-        .type('Max@test.test')
-
-        cy.get('input[id="password"]')
-        .type('password')
-
-        cy.get('button[type="submit"]')
-        .click()
-        cy.log('Probably already logged in?')
-        cy.url().should("include", "my-profile")
-
+describe('Profile check', () => {
+    beforeEach(() =>{
+        cy.log('Needs to login first')
+        cy.loginViaVisual("max@test.test","password")
+        cy.log("Logged in, ready for test")
     })
-    it('trys to check profile', () =>{
-        cy.visit('/my-profile')
-        cy.log('He was already logged in!')
+    it('trys to validate data being displayed on profile', () =>{
 
         cy.get("input[id='username']")
         .should('have.value', 'test_user')
@@ -23,6 +12,7 @@ describe('Profile check and changing', () => {
         .should('have.value', "max@test.test")
     })
     it('trys to change profilename INVALID', () =>{
+
         cy.contains("Bearbeiten")
         .click()
 
@@ -43,6 +33,8 @@ describe('Profile check and changing', () => {
 
     })
     it('trys to change emailadress INVALID', () =>{
+        cy.contains("Bearbeiten")
+        .click()
 
         cy.get("input[id='email']")
         .clear()
@@ -63,6 +55,9 @@ describe('Profile check and changing', () => {
     })
     it('trys to change emailadress INVALID 2', () =>{
 
+        cy.contains("Bearbeiten")
+        .click()
+
         cy.get("input[id='email']")
         .clear()
         .type("max@test.test")
@@ -80,6 +75,9 @@ describe('Profile check and changing', () => {
 
     })
     it('trys to change profilename', () =>{
+
+        cy.contains("Bearbeiten")
+        .click()
 
         cy.get("input[id='username']")
         .clear()
@@ -111,7 +109,10 @@ describe('Profile check and changing', () => {
         .should('have.value', 'test_user')
     })
     it('trys to change emailadress', () =>{
-
+        
+        cy.contains("Bearbeiten")
+        .click()
+        
         cy.get("input[id='email']")
         .clear()
         .type("max1@test.test")

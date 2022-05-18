@@ -1,5 +1,6 @@
-describe('Login is being checked', () => {
-    it('trys to get to login', () => {
+describe('Checking Login', () => {
+
+    it('trys to reach "/login"', () => {
 
         cy.visit('/');
         cy.contains("Anmelden").click()
@@ -17,7 +18,7 @@ describe('Login is being checked', () => {
         cy.contains("Anmelden").click()
         cy.url().should("include", "login")   
     })
-    it('trys to use invalid data',() =>{
+    it('trys using INVALID data for login',() =>{
         cy.visit('/login')
 
         cy.get('input[id="email"]')
@@ -61,24 +62,19 @@ describe('Login is being checked', () => {
         cy.get('div[class="feedback"]').should('be.visible')
         cy.url().should("include", "login")
     })
-    it('trys to use valid data',() =>{
-        cy.visit('/login')
-
-        cy.get('input[id="email"]')
-        .type('Max@test.test')
-
-        cy.get('input[id="password"]')
-        .type('password')
-
-        cy.get('button[type="submit"]')
-        .click()
-
-        cy.url().should("include", "my-profile")
+    it('trys using valid data with max@test.test:password VISUAL',() =>{
+      
+        cy.loginViaVisual("max@test.test","password")
     })
     it('trys to logout',() =>{
-        cy.contains('test_user')
-        .click()
+        cy.log('Needs to login first')
+            cy.loginViaVisual("max@test.test","password")
+        cy.log("Logged in, ready for test")
 
+        cy.visit("/")
+        cy.get('a[id="profile-dropdown"]')
+        
+        .click()
         cy.contains('Abmelden')
         .click()
         cy.url().should("include", "logout")
