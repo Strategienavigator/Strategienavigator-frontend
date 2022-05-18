@@ -30,7 +30,7 @@ module.exports = (on, config) => {
         printLogsToFile: 'always'
 
     };
-    // starts the SMTP server at localhost:MAIL_PORT from .env
+    // starts the SMTP server at localhost:7777
     const port = 7777;
     const mailServer = ms.init(port)
      console.log('mail server at port %d', port)

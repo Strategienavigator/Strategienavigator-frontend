@@ -31,8 +31,10 @@ Cypress.Commands.add('loginViaApi', (email, password, remember=false) => {
 Cypress.Commands.add('loginViaVisual',(email,password)=>{
     cy.visit("/login")
             cy.get('input[id="email"]')
+            .clear()
             .type(email)
             cy.get('input[id="password"]')
+            .clear()
             .type(password)
             cy.get('button[type="submit"]')
             .click()

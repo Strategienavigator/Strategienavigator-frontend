@@ -33,7 +33,6 @@ describe('register on the Website', () => {
         // include name and email
         name: 'Tim_Tester',
         email: 'Tim@test.test',
-        password: 'Password123*',
         })
     })
 })
