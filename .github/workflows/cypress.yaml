@@ -50,7 +50,8 @@ jobs:
           APP_ENV: local
           APP_URL: http://localhost:8000
           APP_DEBUG: false
-          FRONTEND_URL: http://localhost:3000
+          FRONTEND_URL: http://localhost:8000
+          EMAIL_FILTER_DISABLED: true
         working-directory: backend
         run: |
           cp .env.example .env
@@ -74,6 +75,7 @@ jobs:
           APP_URL: http://localhost:8000
           APP_DEBUG: false
           FRONTEND_URL: http://localhost:3000
+          EMAIL_FILTER_DISABLED: true
         working-directory: backend
         run: |
           php artisan config:cache
@@ -85,21 +87,43 @@ jobs:
         run: |
           nohup php artisan serve > phpd.log 2>&1 &
           echo "PHP_BACKEND_SERVER_PID=$!" >> $GITHUB_ENV
+
+      # Frontend
       - name: install serve
         run: npm install -g serve
+      - name: Setup Python
+        uses: actions/setup-python@v3
 
-      - name: Cypress run
+      - name: Cypress install
         uses: cypress-io/github-action@v2
         with:
+          runTests: false
           working-directory: frontend
-          start: serve -s build
-          build: npm run build
-          wait-on: 'http://localhost:3000, http://localhost:8000'
+      - name: build frontend and install frontend
+        working-directory: frontend
         env:
           REACT_APP_CLIENT_ID: 2
           REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
           REACT_APP_API: 'http://localhost:8000/'
-          CYPRESS_VIDEO: false
+        run: |
+          npm run build
+          cd build
+          zip -r build *
+          cd ../../backend/
+          python frontend_patcher.py -s ../frontend/build/build.zip -t .
+
+       - name: Cypress run tests
+         uses: cypress-io/github-action@v2
+         with:
+           install: false
+           working-directory: frontend
+           build: npm run build
+           wait-on: 'http://localhost:8000'
+         env:
+           REACT_APP_CLIENT_ID: 2
+           REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
+           REACT_APP_API: 'http://localhost:8000/'
+           CYPRESS_VIDEO: false
       - name: added logs as artifact
         uses: actions/upload-artifact@v2
         if: always()
