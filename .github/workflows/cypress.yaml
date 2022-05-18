@@ -23,7 +23,6 @@ jobs:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     runs-on: ubuntu-latest
-
     steps:
       - name: clone backend
         uses: actions/checkout@v3
@@ -111,14 +110,14 @@ jobs:
           cd ../../backend/
           python frontend_patcher.py -s ../frontend/build/build.zip -t .
 
-       - name: Cypress run tests
-         uses: cypress-io/github-action@v2
-         with:
-           install: false
-           working-directory: frontend
-           wait-on: 'http://localhost:8000'
-         env:
-           CYPRESS_VIDEO: false
+      - name: Cypress run tests
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          working-directory: frontend
+          wait-on: 'http://localhost:8000'
+        env:
+          CYPRESS_VIDEO: false
       - name: added logs as artifact
         uses: actions/upload-artifact@v2
         if: always()
