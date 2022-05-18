@@ -118,6 +118,7 @@ jobs:
           wait-on: 'http://localhost:8000'
         env:
           CYPRESS_VIDEO: false
+          CYPRESS_BASE_URL: 'http://localhost:8000'
       - name: added logs as artifact
         uses: actions/upload-artifact@v2
         if: always()
