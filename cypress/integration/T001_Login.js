@@ -78,6 +78,8 @@ describe('Checking Login', () => {
         cy.contains('Abmelden')
         .click()
         cy.url().should("include", "logout")
+
+        cy.get(".fade.message.alert-success").should("be.visible");
     })
 
 })
