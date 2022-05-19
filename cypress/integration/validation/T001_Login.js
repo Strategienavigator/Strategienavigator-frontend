@@ -1,23 +1,5 @@
 describe('Checking Login', () => {
 
-    it('trys to reach "/login"', () => {
-
-        cy.visit('/');
-        cy.contains("Anmelden").click()
-        cy.url().should("include", "login") 
-
-        cy.visit('/data-privacy');
-        cy.contains("Anmelden").click()
-        cy.url().should("include", "login")
-
-        cy.visit('/about-us');
-        cy.contains("Anmelden").click()
-        cy.url().should("include", "login")
-        
-        cy.visit('/legal-notice');
-        cy.contains("Anmelden").click()
-        cy.url().should("include", "login")   
-    })
     it('trys using INVALID data for login',() =>{
         cy.visit('/login')
 
@@ -62,15 +44,15 @@ describe('Checking Login', () => {
         cy.get('div[class="feedback"]').should('be.visible')
         cy.url().should("include", "login")
     })
-    it('trys using valid data with max@test.test:password VISUAL',() =>{
-      
+    it.only('trys using valid data with max@test.test:password VISUAL',() =>{
+
+        cy.intercept("POST",/.*oauth\/token.*/).as('oauth')
         cy.loginViaVisual("max@test.test","password")
+        cy.wait("@oauth")
+       // cy.url().should("include", "my-profile")
     })
     it('trys to logout',() =>{
-        cy.log('Needs to login first')
-            cy.loginViaVisual("max@test.test","password")
-        cy.log("Logged in, ready for test")
-
+        cy.loginViaVisual("max@test.test","password")
         cy.visit("/")
         cy.get('a[id="profile-dropdown"]')
         

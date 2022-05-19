@@ -29,6 +29,8 @@ Cypress.Commands.add('loginViaApi', (email, password, remember=false) => {
 });
 
 Cypress.Commands.add('loginViaVisual',(email,password)=>{
+    
+    cy.log('Logs in visual as ' + email)
     cy.visit("/login")
             cy.get('input[id="email"]')
             .clear()
@@ -38,5 +40,16 @@ Cypress.Commands.add('loginViaVisual',(email,password)=>{
             .type(password)
             cy.get('button[type="submit"]')
             .click()
-            cy.url().should("include", "my-profile")
+    cy.log("Logged in "+ email)
+
+}) 
+//site = name of the site example: login
+//clickOn = element that contains a text example: "Login" for a Button with Login on it
+Cypress.Commands.add("visitSite",(site ,clickOn)=>{
+    cy.log("visit site " + site)
+    if(site[0] == "/"){
+        site.slice(1);
+    }
+    cy.contains(clickOn).click()
+    cy.url().should("include", site)
 })
