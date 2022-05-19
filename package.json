@@ -27,7 +27,6 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "smtp-tester": "^1.2.0",
     "string-similarity": "^4.0.4",
     "typescript": "^4.3.5",
     "web-vitals": "^1.1.2",
@@ -63,8 +62,10 @@
     "@types/file-saver": "^2.0.4",
     "@types/xlsx": "^0.0.36",
     "cypress": "^9.6.1",
+    "cypress-local-config": "^0.0.2",
     "cypress-terminal-report": "^3.5.2",
     "eslint-plugin-cypress": "^2.12.1",
+    "smtp-tester": "^1.2.0",
     "typedoc": "^0.21.9",
     "typedoc-plugin-merge-modules": "^3.0.1"
   }

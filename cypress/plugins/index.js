@@ -41,5 +41,7 @@ module.exports = (on, config) => {
     console.log(addr, id, email)
     })
     require('cypress-terminal-report/src/installLogsPrinter')(on, options);
+
+    return require('cypress-local-config')(config);
 }
 

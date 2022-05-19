@@ -24,8 +24,20 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('loginViaApi', (email, password, remember=false) => {
+Cypress.Commands.add('loginViaApi', (email, password, remember = false) => {
 
+    let data = {
+        grant_type: 'password',
+        client_id: Cypress.env("APP_CLIENT_ID"),
+        client_secret: Cypress.env("APP_CLIENT_SECRET"),
+        username: email,
+        password: password,
+        scope: ''
+    };
+
+    cy.request("POST",Cypress.env("BACKEND_URL") + "oauth/token", data).then((resp)=>{
+        window.sessionStorage.setItem("token", resp.body.access_token);
+    });
 });
 
 Cypress.Commands.add('loginViaVisual',(email,password)=>{

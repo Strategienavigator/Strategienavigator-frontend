@@ -1,6 +1,8 @@
 {
   "baseUrl": "http://localhost:3000",
   "experimentalSessionAndOrigin": true,
-  "video": false
+  "video": false,
+  "viewportHeight": 1080,
+  "viewportWidth": 1920
 }
 

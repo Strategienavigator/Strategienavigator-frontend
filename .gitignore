@@ -32,3 +32,6 @@ yarn-error.log*
 /cypress/screenshots
 
 .secrets
+
+
+*.local.json
