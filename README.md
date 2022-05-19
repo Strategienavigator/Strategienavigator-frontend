@@ -81,6 +81,9 @@ Der Server ist nun unter [http://localhost:3000:link:](http://localhost:3000) er
 
 Sämtliche Editierungen werden beim Abspeichern automatisch aktualisiert.
 
+## Cypress
+Für die Nutzung von Cypress zur Erstellung und Testen von Szenarien können sie [folgende Dokumentantion](./TESTING.md) verwenden.
+
 ## Guidelines für Beteiligte
 
 - Alles was keine Dokumentation oder Kommentare sind, muss in der englischen Sprache angefertigt werden.
