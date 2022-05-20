@@ -1,9 +1,9 @@
-import { copySync } from "typedoc/dist/lib/utils";
-
-describe('Register on website', () => {
-    it('trys to send a email"', () => {
-        cy.visit('/register');
-
+describe('register on the Website', () => {
+    beforeEach(() =>{
+        cy.task("queryDb",`DELETE FROM toolbox.users WHERE username="Tim_Tester";`);
+    })
+    it('trys to send a email',() =>{
+        cy.visit("/register");
         cy.get('#email').type('Tim@jade-hs.de')
         cy.intercept('GET', /.*api\/checkEmail.*/).as('checkEmail')
         cy.wait("@checkEmail")

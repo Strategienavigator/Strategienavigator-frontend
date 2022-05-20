@@ -20,6 +20,7 @@
     "bootstrap": "^5.1.0",
     "file-saver": "^2.0.5",
     "immer": "^9.0.12",
+    "mysql": "^2.18.1",
     "node-sass": "^6.0.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
