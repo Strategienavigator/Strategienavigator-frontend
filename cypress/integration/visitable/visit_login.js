@@ -1,6 +1,4 @@
-import { createYield } from "typescript"
-
-describe('Visiting', () => {
+describe('Visiting /Login', () => {
     beforeEach(() =>{
         cy.visit("/")
     })

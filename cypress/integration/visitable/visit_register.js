@@ -1,4 +1,4 @@
-describe('visitng register', () => {
+describe('Visiting register', () => {
     beforeEach(() =>{
         cy.visit("/")
     })

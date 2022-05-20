@@ -1,7 +1,7 @@
 import { copySync } from "typedoc/dist/lib/utils";
 
-describe('register on the Website', () => {
-    it.only('trys to send a email"', () => {
+describe('Register on website', () => {
+    it('trys to send a email"', () => {
         cy.visit('/register');
 
         cy.get('#email').type('Tim@jade-hs.de')

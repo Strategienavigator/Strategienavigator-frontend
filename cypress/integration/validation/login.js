@@ -1,5 +1,4 @@
 describe('Checking Login', () => {
-
     it('trys using INVALID data for login',() =>{
         cy.visit('/login')
 
@@ -31,9 +30,9 @@ describe('Checking Login', () => {
         cy.wait("@token")
 
         cy.get('@token')
-        .its("response.body")
+        .its("response")
         .should("include",{
-            error:"invalid_grant"
+            statusCode: 400
         })
 
         cy.get('div[class="feedback"]')
@@ -52,9 +51,9 @@ describe('Checking Login', () => {
         .click()
         cy.wait("@token")
         cy.get('@token')
-        .its("response.body")
+        .its("response")
         .should("include",{
-            error: "invalid_request"
+            statusCode: 400
         })
 
         cy.get('div[class="feedback"]')
