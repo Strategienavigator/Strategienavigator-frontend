@@ -21,26 +21,33 @@ module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 
-    const options = {
-        outputRoot: 'cypress/',
-        outputTarget: {
-            'logs/txt|txt': 'txt',
-            'logs/json|json': 'json',
-        },
-        printLogsToFile: 'always'
 
-    };
-    // starts the SMTP server at localhost:7777
-    const port = 7777;
-    const mailServer = ms.init(port)
-     console.log('mail server at port %d', port)
 
-    // process all emails
-    mailServer.bind((addr, id, email) => {
-    console.log('--- email ---')
-    console.log(addr, id, email)
-    })
-    require('cypress-terminal-report/src/installLogsPrinter')(on, options);
+
+    if (config.testingType === 'component') {
+        require('@cypress/react/plugins/react-scripts')(on, config)
+    }else{
+        // starts the SMTP server at localhost:7777
+        const port = 7777;
+        const mailServer = ms.init(port)
+        console.log('mail server at port %d', port)
+
+        // process all emails
+        mailServer.bind((addr, id, email) => {
+            console.log('--- email ---')
+            console.log(addr, id, email)
+        })
+
+        const options = {
+            outputRoot: 'cypress/',
+            outputTarget: {
+                'logs/txt|txt': 'txt',
+                'logs/json|json': 'json',
+            },
+            printLogsToFile: 'always'
+        };
+        require('cypress-terminal-report/src/installLogsPrinter')(on, options);
+    }
 
     return require('cypress-local-config')(config);
 }

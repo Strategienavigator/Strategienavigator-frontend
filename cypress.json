@@ -3,6 +3,15 @@
   "experimentalSessionAndOrigin": true,
   "video": false,
   "viewportHeight": 1080,
-  "viewportWidth": 1920
+  "viewportWidth": 1920,
+  "component": {
+    "componentFolder": "src",
+    "testFiles": "**/*spec.tsx"
+  },
+  "env": {
+    "cypress-react-selector": {
+      "root": "#root"
+    }
+  }
 }
 

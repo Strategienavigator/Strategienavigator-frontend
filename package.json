@@ -59,6 +59,8 @@
     ]
   },
   "devDependencies": {
+    "@cypress/react": "^5.12.5",
+    "@cypress/webpack-dev-server": "^1.8.4",
     "@types/file-saver": "^2.0.4",
     "@types/xlsx": "^0.0.36",
     "cypress": "^9.6.1",
@@ -67,6 +69,7 @@
     "eslint-plugin-cypress": "^2.12.1",
     "smtp-tester": "^1.2.0",
     "typedoc": "^0.21.9",
-    "typedoc-plugin-merge-modules": "^3.0.1"
+    "typedoc-plugin-merge-modules": "^3.0.1",
+    "webpack-dev-server": "^4.9.0"
   }
 }
