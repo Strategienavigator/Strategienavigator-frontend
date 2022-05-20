@@ -27,9 +27,11 @@ describe('Profile check', () => {
         cy.contains("Änderungen speichern")
         .click()
 
-        cy.get('div [class="feedback text-success"]').should('not.be.visible')
+        cy.get('div [class="feedback text-success"]')
+        .should('not.be.visible')
         cy.reload();
-        cy.get("input[id='username']").should("test_user")
+        cy.get("input[id='username']")
+        .should("test_user")
 
     })
     it('trys to change emailadress INVALID', () =>{
@@ -46,10 +48,12 @@ describe('Profile check', () => {
 
         cy.contains("Änderungen speichern")
         .click()
-        cy.get('div [class="feedback text-success"]').should('not.be.visible')
+        cy.get('div [class="feedback text-success"]')
+        .should('not.be.visible')
 
         cy.reload();
-        cy.get("input[id='email']").should("max@test.test")
+        cy.get("input[id='email']")
+        .should("max@test.test")
 
 
     })
@@ -68,10 +72,12 @@ describe('Profile check', () => {
 
         cy.contains("Änderungen speichern")
         .click()
-        cy.get('div [class="feedback text-success"]').should('not.be.visible')
+        cy.get('div [class="feedback text-success"]')
+        .should('not.be.visible')
 
         cy.reload();
-        cy.get("input[id='email']").should("max@test.test")
+        cy.get("input[id='email']")
+        .should("max@test.test")
 
     })
     it('trys to change profilename', () =>{

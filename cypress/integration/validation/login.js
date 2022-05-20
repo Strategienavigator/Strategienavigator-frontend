@@ -13,10 +13,10 @@ describe('Checking Login', () => {
 
         cy.get('button[type="submit"]')
         .click()
-
         cy.url().should("include", "login")
 
         //--
+        cy.visit('/login')
         cy.get('input[id="email"]')
         .clear()
         .type('Max@test.test')
@@ -24,11 +24,21 @@ describe('Checking Login', () => {
         cy.get('input[id="password"]')
         .clear()
         .type('passwort')
-
+        
+        cy.intercept("POST",/.*oauth\/token.*/).as('token')
         cy.get('button[type="submit"]')
         .click()
+        cy.wait("@token")
 
-        cy.get('div[class="feedback"]').should('not.be.visible')
+        cy.get('@token')
+        .its("response.body")
+        .should("include",{
+            error:"invalid_grant"
+        })
+
+        cy.get('div[class="feedback"]')
+        .should('be.visible')
+
         cy.url().should("include", "login")
         //--
 
@@ -40,28 +50,38 @@ describe('Checking Login', () => {
 
         cy.get('button[type="submit"]')
         .click()
+        cy.wait("@token")
+        cy.get('@token')
+        .its("response.body")
+        .should("include",{
+            error: "invalid_request"
+        })
 
-        cy.get('div[class="feedback"]').should('be.visible')
-        cy.url().should("include", "login")
+        cy.get('div[class="feedback"]')
+        .should('be.visible')
+        cy.url()
+        .should("include", "login")
     })
-    it.only('trys using valid data with max@test.test:password VISUAL',() =>{
+    it('trys using valid data with max@test.test:password VISUAL',() =>{
 
-        cy.intercept("POST",/.*oauth\/token.*/).as('oauth')
         cy.loginViaVisual("max@test.test","password")
-        cy.wait("@oauth")
-       // cy.url().should("include", "my-profile")
+        cy.url()
+        .should("include", "my-profile")
     })
     it('trys to logout',() =>{
         cy.loginViaVisual("max@test.test","password")
+
         cy.visit("/")
         cy.get('a[id="profile-dropdown"]')
-        
+        .contains("test_user")
         .click()
         cy.contains('Abmelden')
         .click()
-        cy.url().should("include", "logout")
+        cy.url()
+        .should("include", "logout")
 
-        cy.get(".fade.message.alert-success").should("be.visible");
+        cy.get(".fade.message.alert-success")
+        .should("be.visible");
     })
 
 })
