@@ -62,7 +62,7 @@ Cypress.Commands.add('loginViaVisual',(email,password)=>{
 //clickOn = element that contains a text example: "Login" for a Button with Login on it
 Cypress.Commands.add("visitSite",(site ,clickOn)=>{
     cy.log("visit site " + site)
-    if(site[0] == "/"){
+    if(site[0] === "/"){
         site.slice(1);
     }
     cy.contains(clickOn).click()

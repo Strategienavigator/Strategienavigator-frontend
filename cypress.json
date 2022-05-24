@@ -9,9 +9,6 @@
     "testFiles": "**/*spec.tsx"
   },
   "env": {
-    "cypress-react-selector": {
-      "root": "#root"
-    },
     "db": {
       "host": "127.0.0.1",
       "user": "root",
