@@ -119,6 +119,10 @@ jobs:
         env:
           CYPRESS_VIDEO: false
           CYPRESS_BASE_URL: 'http://localhost:8000'
+          CYPRESS_DB_HOST: 'localhost'
+          CYPRESS_DB_USER: 'root'
+          CYPRESS_DB_PASSWORD: '${{env.DB_PASSWORD}}'
+          CYPRESS_DB_PORT: ${{ job.services.mysql.ports[3306] }}
       - name: added logs as artifact
         uses: actions/upload-artifact@v2
         if: always()
