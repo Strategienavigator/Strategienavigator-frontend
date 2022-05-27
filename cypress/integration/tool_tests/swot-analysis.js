@@ -48,7 +48,7 @@ describe('SWOT Analyisis', () => {
           })
         cy.log("new SWOT created and saved for anonymous")
     })
-    it.only('trys to create a new SWOT as max@test.test', () =>{
+    it('trys to create a new SWOT as max@test.test', () =>{
       cy.visit("/")  
       cy.loginViaApi("max@test.test", "password")
       cy.visit("/swot-analysis")
@@ -75,7 +75,74 @@ describe('SWOT Analyisis', () => {
           statusCode: 201
         })
       cy.log("new SWOT created and saved for max@test.test")
-      
-    })
+        
+      /*
+      //-- TODO
+      //Texte werden vorbereitet
+      let testText = {"strenghts": [
+        {"a":[{
+            "title": "Motivierte Mitarbeiter mit viel Know How",
+            "desc":"Motivierte Mitarbeiter"
+        }]},
+        {"b":[{
+          "title": "Erfolgreiche Marketingkampagnen",
+           "desc":"Marketingkampagnen"
+        }]},
+        {"c":[{
+          "title": "Moderne Produktionsmaschinen",
+           "desc":"Produktionsmaschinen"
+        }]},
+        {"d":[
+          {"title": "Gut gelegener Standort",
+           "desc":"Gut gelegener Standort"
+        }]}
+      ]};
+     
+      var weakness = [
+        a[title= "Hohe Personalkosten", desc="Personalkosten " ],
+        b[title= "Produkte wenig nachhaltig", desc="nachhaltig" ],
+        c[title= "Hohe Fluktuationsrate", desc="Fluktuationsrate" ],
+        d[title= "Geringe finanzielle Möglichkeiten ", desc="Möglichkeiten" ]
+      ]
+      var chancen = [
+        a[title= "Produkt ist im Trend", desc="Trend" ],
+        b[title= "Produkt wird auch in anderen Ländern beliebter", desc="anderen Ländern beliebter" ],
+        c[title= "Neue Technologien", desc="Technologien" ],
+        d[title= "Demographische Veränderung", desc="Veränderung" ]
+      ]
+      var threats = [
+        a[title= "Kunden achten stark auf Nachhaltigkeit", desc="Nachhaltigkeit" ],
+        b[title= "Neue Konkurrenz aus dem Ausland", desc="dem Ausland" ],
+        c[title= "Sinkendes Preisniveau", desc="Preisniveau" ],
+        d[title= "Neue Gesetze", desc="Gesetze" ]
+      ]
+      */
 
+
+       //--
+      //Fügen jeweils 2 einträge bei den SWOT hinzu
+      cy.get('div[class="addCard card"]')
+        .each(($add) =>{
+          if($add.is(":visible")){
+            cy.wrap($add)
+            .click()
+            .click()
+          }
+      cy.get('input[name= /.*strenght.*/')
+      .each(($input) => {
+        switch($input.attr[0].name){
+
+            case /.*[0].*/: 
+              cy.wrap(input)
+              .type(testText["strenghts"["a"["title"]]])
+              break;
+              case /.*[1].*/: 
+              cy.wrap(input)
+              .type(testText["strenghts"["a"["desc"]]])
+          }
+       })
+    })
+  })
 })
+
+
