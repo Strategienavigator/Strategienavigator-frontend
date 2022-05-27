@@ -30,8 +30,11 @@ yarn-error.log*
 /cypress/logs
 /cypress/videos
 /cypress/screenshots
+/cypress/downloads/
+
 
 .secrets
 
 
 *.local.json
+

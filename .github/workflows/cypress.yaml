@@ -139,3 +139,14 @@ jobs:
         working-directory: backend
         run: |
           kill -3 $PHP_BACKEND_SERVER_PID
+  cypress-ct-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone frontend
+        uses: actions/checkout@v3
+      - name: Cypress run component tests
+        uses: cypress-io/github-action@v2
+        with:
+          command: npx cypress run-ct
+        env:
+          CYPRESS_VIDEO: false
