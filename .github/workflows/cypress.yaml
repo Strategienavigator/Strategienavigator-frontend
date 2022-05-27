@@ -123,19 +123,6 @@ jobs:
           CYPRESS_DB_USER: 'root'
           CYPRESS_DB_PASSWORD: '${{env.DB_PASSWORD}}'
           CYPRESS_DB_PORT: ${{ job.services.mysql.ports[3306] }}
-      - name: Cypress run component tests
-        uses: cypress-io/github-action@v2
-        with:
-          install: false
-          working-directory: frontend
-          command: npx cypress run-ct
-        env:
-          CYPRESS_VIDEO: false
-          CYPRESS_BASE_URL: 'http://localhost:8000'
-          CYPRESS_DB_HOST: 'localhost'
-          CYPRESS_DB_USER: 'root'
-          CYPRESS_DB_PASSWORD: '${{env.DB_PASSWORD}}'
-          CYPRESS_DB_PORT: ${{ job.services.mysql.ports[3306] }}
       - name: added logs as artifact
         uses: actions/upload-artifact@v2
         if: always()
@@ -152,3 +139,14 @@ jobs:
         working-directory: backend
         run: |
           kill -3 $PHP_BACKEND_SERVER_PID
+  cypress-ct-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone frontend
+        uses: actions/checkout@v3
+      - name: Cypress run component tests
+        uses: cypress-io/github-action@v2
+        with:
+          command: npx cypress run-ct
+        env:
+          CYPRESS_VIDEO: false
