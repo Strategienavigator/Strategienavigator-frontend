@@ -31,6 +31,7 @@ import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/Portfolio
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import {ErrorPages} from "./general-components/Error/ErrorPages/ErrorPages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
+import {enablePatches} from "immer";
 
 
 /**
@@ -180,7 +181,7 @@ const buildApp = async () => {
 }
 
 buildApp().then(() => {
-    // do absolutely nothing
+    enablePatches();
 });
 
 // If you want to start measuring performance in your app, pass a function
