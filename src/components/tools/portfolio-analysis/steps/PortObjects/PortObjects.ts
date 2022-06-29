@@ -19,15 +19,6 @@ import {PortObjectsCustomDescription, PortObjectsCustomDescriptionValues} from "
 class PortObjects implements StepDefinition<PortfolioAnalysisValues>, StepDataHandler<PortfolioAnalysisValues> {
     public static min = 2;
     public static max = 8;
-
-
-    public static getDefaultExtraValues(){
-        return {
-            quantity: "",
-            quality: ""
-        };
-    }
-
     dataHandler: StepDataHandler<PortfolioAnalysisValues>;
     form: FunctionComponent<StepProp<PortfolioAnalysisValues>> | ComponentClass<StepProp<PortfolioAnalysisValues>>;
     id: string;
@@ -38,6 +29,13 @@ class PortObjects implements StepDefinition<PortfolioAnalysisValues>, StepDataHa
         this.form = PortObjectsComponent;
         this.id = "port-objects";
         this.title = "1. Untersuchungsobjekte anlegen";
+    }
+
+    public static getDefaultExtraValues() {
+        return {
+            quantity: "",
+            quality: ""
+        };
     }
 
     deleteData(data: Draft<PortfolioAnalysisValues>): void {

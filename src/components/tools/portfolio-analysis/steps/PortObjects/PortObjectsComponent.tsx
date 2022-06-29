@@ -43,9 +43,9 @@ class PortObjectsComponent extends Step<PortfolioAnalysisValues, any> {
                         onChanged={this.valuesChanged}
                     />
 
-                    <UIErrorBanner id={"port-objects.empty"} />
-                    <UIErrorBanner id={"port-objects.too-long"} />
-                    <UIErrorBanner id={"port-objects.q&q"} />
+                    <UIErrorBanner id={"port-objects.empty"}/>
+                    <UIErrorBanner id={"port-objects.too-long"}/>
+                    <UIErrorBanner id={"port-objects.q&q"}/>
                 </>
             );
         }

@@ -2,6 +2,7 @@ import {CustomDescriptionComponent} from "../../../../../general-components/Card
 import {FormControl} from "react-bootstrap";
 import React, {ChangeEvent} from "react";
 
+
 export interface PortObjectsCustomDescriptionValues {
     quality: string,
     quantity: string
@@ -11,6 +12,13 @@ class PortObjectsCustomDescription extends CustomDescriptionComponent<PortObject
 
     public static QUALITY_MAX_LENGTH: number = 120;
     public static QUANTITY_MAX_LENGTH: number = 120;
+
+    public static isEmpty(values?: PortObjectsCustomDescriptionValues): boolean {
+        if (values !== undefined && values.quantity !== undefined && values.quality !== undefined) {
+            return values.quality.length <= 0 || values.quantity.length <= 0;
+        }
+        return true;
+    }
 
     render() {
         return (
@@ -54,13 +62,6 @@ class PortObjectsCustomDescription extends CustomDescriptionComponent<PortObject
             quality: this.props.value.quality,
             quantity: e.target.value
         });
-    }
-
-    public static isEmpty(values?: PortObjectsCustomDescriptionValues): boolean {
-        if (values !== undefined && values.quantity !== undefined && values.quality !== undefined) {
-            return values.quality.length <= 0 || values.quantity.length <= 0;
-        }
-        return true;
     }
 
 }

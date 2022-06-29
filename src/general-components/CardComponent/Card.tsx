@@ -1,6 +1,6 @@
 import React, {ChangeEvent, Component, ComponentClass, FunctionComponent} from "react";
 import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/CustomDescriptionComponent";
-import {CardComponentFieldPlaceholder} from "./CardComponent";
+import {CardComponentField, CardComponentFieldPlaceholder} from "./CardComponent";
 import {isDesktop} from "../Desktop";
 import {compareWithoutFunctions} from "../ComponentUtils";
 import {Button, Collapse, FormControl, InputGroup} from "react-bootstrap";
@@ -53,6 +53,15 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
             descChanged: false,
             nameTooLong: false,
             descTooLong: false
+        };
+    }
+
+    public static empty(): CardComponentField {
+        return {
+          id: "",
+          desc: "",
+          name: "",
+          extra: undefined
         };
     }
 

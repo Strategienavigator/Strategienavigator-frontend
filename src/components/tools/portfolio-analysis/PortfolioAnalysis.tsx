@@ -51,9 +51,12 @@ class PortfolioAnalysis extends SteppableTool<PortfolioAnalysisValues> {
         return (
             <div>
                 Als Portfolioanalyse wird eine Untersuchungsmethode bezeichnet,
-                mit der unterschiedliche Produkte und Dienstleistungen sowie das gesamte Angebot eines Unternehmens bewertet werden können.
-                Auf diese Weise gewinnt die Geschäftsführung einen Überblick über das Portfolio und kann das Potenzial und die Erfolgsaussichten
-                einzelner Produkte und Dienstleistungen abschätzen. Somit ist die Portfolioanalyse ein wichtiges Hilfsmittel, um
+                mit der unterschiedliche Produkte und Dienstleistungen sowie das gesamte Angebot eines Unternehmens
+                bewertet werden können.
+                Auf diese Weise gewinnt die Geschäftsführung einen Überblick über das Portfolio und kann das Potenzial
+                und die Erfolgsaussichten
+                einzelner Produkte und Dienstleistungen abschätzen. Somit ist die Portfolioanalyse ein wichtiges
+                Hilfsmittel, um
                 strategische Entscheidungen in Hinblick auf das Angebotsportfolio zu treffen.
             </div>
         );
