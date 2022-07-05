@@ -7,13 +7,7 @@ import {PortfolioAnalysisValues} from "../../PortfolioAnalysis";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
-import {PortEvaluationComponent, PortEvaluationValues} from "./PortEvaluationComponent";
-import {WritableDraft} from "immer/dist/internal";
-import {
-    CompareComponentValues,
-    CompareValue
-} from "../../../../../general-components/CompareComponent/CompareComponent";
-import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
+import {PortEvaluationComponent} from "./PortEvaluationComponent";
 import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 
 
@@ -45,10 +39,10 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
             let evaluations: any[] = [];
 
             let compareValues = objects.objects.map(() => {
-               return {
-                 value: null,
-                 header: null
-               };
+                return {
+                    value: null,
+                    header: null
+                };
             });
 
             for (let i = 0; i < allCriterias.length; i++) {
@@ -75,10 +69,10 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
         let errors: UIError[] = [];
         let evaluation = data["port-evaluation"];
 
-        if(evaluation !== undefined) {
+        if (evaluation !== undefined) {
             let errorFound = false;
             let i = 0;
-            while(!errorFound && i < evaluation.evaluation.length) {
+            while (!errorFound && i < evaluation.evaluation.length) {
                 let e = 0;
                 while (!errorFound && e < evaluation.evaluation[i].rating.comparisons.length) {
                     let value = evaluation.evaluation[i].rating.comparisons[e].value;
@@ -89,7 +83,7 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
                 }
                 i++;
             }
-            if(errorFound) {
+            if (errorFound) {
                 errors.push(
                     {
                         id: "port-evaluation.empty",

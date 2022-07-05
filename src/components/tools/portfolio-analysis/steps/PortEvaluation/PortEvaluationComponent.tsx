@@ -39,11 +39,11 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
     build(): JSX.Element {
         this.index = -1;
         return (
-          <>
-              {(isDesktop()) ? this.desktop() : this.mobile()}
+            <>
+                {(isDesktop()) ? this.desktop() : this.mobile()}
 
-              <UIErrorBanner id={"port-evaluation.empty"} />
-          </>
+                <UIErrorBanner id={"port-evaluation.empty"}/>
+            </>
         );
     }
 
