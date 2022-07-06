@@ -1,7 +1,18 @@
 describe('Checking Profile', () => {
     beforeEach(() =>{
-        //cy.loginViaApi("max@test.test","password")
-        cy.loginViaVisual("max@test.test","password")
+        cy.loginViaApi("max@test.test","password")
+
+        cy.intercept("GET",/.*settings.*/).as('get')
+        cy.visit("/my-profile")
+        cy.wait("@get")
+
+        cy.get('@get')
+        .its("response")
+        .should("include",{
+            statusCode: 200
+        })
+
+       
     })
     it('trys to validate data being displayed on profile', () =>{
 
@@ -10,7 +21,7 @@ describe('Checking Profile', () => {
         cy.get("input[id='email']")
         .should('have.value', "max@test.test")
     })
-    it('trys to change profilename INVALID', () =>{
+    it('should NOT be able to change profilename (wrong password)', () =>{
 
         cy.contains("Bearbeiten")
         .click()
@@ -50,7 +61,7 @@ describe('Checking Profile', () => {
         .click()
 
     })
-    it('trys to change emailadress INVALID', () =>{
+    it('should NOT be able to change emailadress (wrong password/email' , () =>{
         cy.contains("Bearbeiten")
         .click()
 
@@ -90,7 +101,7 @@ describe('Checking Profile', () => {
 
 
     })
-    it('trys to change emailadress INVALID 2', () =>{
+    it('should NOT be able to change emailadress (wrong password)', () =>{
 
         cy.contains("Bearbeiten")
         .click()
@@ -101,7 +112,7 @@ describe('Checking Profile', () => {
 
         cy.get("input[id='current_password']")
         .clear()
-        .type("passwort")
+        .type("passwort")//invalid
 
         cy.intercept("POST", /.*api\/users.*/).as("user")
         cy.contains("Änderungen speichern")
@@ -138,7 +149,7 @@ describe('Checking Profile', () => {
 
         cy.get("input[id='username']")
         .clear()
-        .type("TEST_USER1")
+        .type("TEST_USERXXXX1")
 
         cy.get("input[id='current_password']")
         .type("password")
@@ -153,7 +164,7 @@ describe('Checking Profile', () => {
           })
 
         cy.get("input[id='username']")
-        .should('have.value', 'TEST_USER1')
+        .should('have.value', 'TEST_USERXXXX1')
 
         //Rückgängig machen
         cy.get("input[id='username']")
