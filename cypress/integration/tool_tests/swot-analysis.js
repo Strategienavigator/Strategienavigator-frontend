@@ -4,7 +4,7 @@ describe('SWOT Analyisis', () => {
           cy.visitSite("/swot-analysis","SWOT Analyse")
 
           cy.intercept('POST', /.*api\/users.*/).as('anonym')
-          
+
           cy.contains("Annehmen")
           .click()
           cy.wait("@anonym")
@@ -15,7 +15,7 @@ describe('SWOT Analyisis', () => {
             {
               statusCode: 201
             })
-          
+
           cy.wait("@token")
           cy.get("@token")
           .its("response.body")
@@ -24,7 +24,7 @@ describe('SWOT Analyisis', () => {
               token_type: "Bearer"
             })
           cy.intercept('GET', /.*api\/settings.*/).as('buildup')
-                    
+
           cy.url().should("include", "swot-analysis")
           cy.wait("@buildup")
 
@@ -55,7 +55,7 @@ describe('SWOT Analyisis', () => {
         })
 
       it('trys to create a new SWOT as max@test.test', () =>{
-        cy.visit("/")  
+        cy.visit("/")
         cy.loginViaApi("max@test.test", "password")
         cy.visit("/swot-analysis")
         cy.url().should("include","swot-analysis")
@@ -63,14 +63,14 @@ describe('SWOT Analyisis', () => {
         cy.contains("Neue Analyse")
         .click()
         cy.url().should("include", "swot-analysis/new")
-        
+
         cy.get("input[id='name']")
         .clear()
         .type("TEST-SWOT VON MAX")
         cy.get("textarea[id='description']")
         .clear()
         .type("TEST-SWOT ist ein Testscenario von einem API eingeloggten benutzer")
-        
+
         cy.intercept('POST', /.*api\/saves.*/).as('save')
         cy.get('button[type="submit"]')
         .click()
@@ -86,13 +86,13 @@ describe('SWOT Analyisis', () => {
 
       })
 
-      it.only('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
-        cy.visit("/")  
+      it('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
+        cy.visit("/")
         cy.loginViaApi("max@test.test", "password")
         cy.visit("/swot-analysis")
         cy.url()
           .should("include","swot-analysis")
-        
+
         cy.contains("TEST-SWOT VON MAX")
           .click()
 
@@ -104,7 +104,7 @@ describe('SWOT Analyisis', () => {
         {
           statusCode: 200
         })
-        
+
         cy.url()
           .should("include", "swot-analysis")
         cy.log("Save loaded")
@@ -114,7 +114,7 @@ describe('SWOT Analyisis', () => {
         //Es werden erst alle Accordions zusammengeklappt!
         cy.get("button[class='accordion-button']")
           .click()
-        
+
         //Gehe schritt für Schritt die Accordions durch und fügen Inputfelder hinzu bis wir 4 erreicht haben
         //Dann werden diese mit hilfe von FillFactors mit Testdaten aufgefüllt
         cy.get("button[class='accordion-button collapsed']")
@@ -124,21 +124,21 @@ describe('SWOT Analyisis', () => {
             if ($press.is(":visible"))
             {
               cy.wrap($press)
-              .click()   
+              .click()
             }
 
             cy.wait(200)
 
 
             cy.get("input")
-              .each(($countInput) => 
+              .each(($countInput) =>
               {
                 if ($countInput.is(":visible"))
                 {
                   counter++
                 }
               })
-            
+
             cy.get('div[class="addCard card"]')
               .each(($add) =>
               {
@@ -151,16 +151,16 @@ describe('SWOT Analyisis', () => {
                       cy.wrap($add)
                       .click()
                       counter++
-                      
+
                     }
                   }
                 }
               })
-              
-            FillFactors();    
-            
+
+            FillFactors();
+
           })
-      
+
           cy.log("Additional Cards added and filled")
 
           cy.intercept('POST', /.*api\/saves.*/).as('save')
@@ -179,16 +179,16 @@ describe('SWOT Analyisis', () => {
 function FillFactors()
 {
   function GetFillFunction (key, swot)
-  { 
+  {
    return ($input) => {
       if($input.is(":visible"))
         {
           var regex = /([a-zA-Z]+)\[([0-9]+)]\[([a-zA-Z]+)]/;
           var sampleText = $input.attr("name");
-          
+
 
           if(sampleText != null && sampleText.length > 0)
-          {            
+          {
             let result = sampleText.match(regex);
 
             cy.wrap($input)
@@ -198,7 +198,7 @@ function FillFactors()
             CheckFactor(key,$input,swot,result);
           }
 
-        } 
+        }
       }
   }
   //fixtures tootestdata swot werden hier genutzt
@@ -206,7 +206,7 @@ function FillFactors()
   {
   this.testdata = testdata;
   var swot = this.testdata.swot
-  cy.get("input") 
+  cy.get("input")
     .each(GetFillFunction("title", swot))
 
   cy.get("textArea")
@@ -218,13 +218,13 @@ function FillFactors()
   {
     switch(key)
       {
-        case "title": 
+        case "title":
           switch(result[1])
           {
             case "strengths":
               switch(result[2])
                 {
-                case "0":cy.wrap($input).should('have.value', swot["strengths"][0]["title"])     
+                case "0":cy.wrap($input).should('have.value', swot["strengths"][0]["title"])
                       break;
                 case "1":cy.wrap($input).should('have.value', swot["strengths"][1]["title"])
                       break;
@@ -235,7 +235,7 @@ function FillFactors()
                 }
             break;
 
-            case "weaknesses": 
+            case "weaknesses":
               switch(result[2])
                 {
                 case "0":cy.wrap($input).should('have.value', swot["weaknesses"][0]["title"])
@@ -248,8 +248,8 @@ function FillFactors()
                       break;
                 }
               break;
-            
-            case "chances": 
+
+            case "chances":
               switch(result[2])
                 {
                 case "0":cy.wrap($input).should('have.value', swot["chances"][0]["title"])
@@ -263,7 +263,7 @@ function FillFactors()
                 }
               break;
 
-            case "risks": 
+            case "risks":
               switch(result[2])
                 {
                 case "0":cy.wrap($input).should('have.value', swot["risks"][0]["title"])
@@ -276,13 +276,13 @@ function FillFactors()
                       break;
                 }
               break;
-          } 
+          }
         break;
 
-        case "desc" : 
+        case "desc" :
           switch(result[1])
           {
-            case "strengths": 
+            case "strengths":
               switch(result[2])
                 {
                 case "0":cy.wrap($input).should('have.value', swot["strengths"][0]["desc"])
@@ -296,7 +296,7 @@ function FillFactors()
                 }
             break;
 
-            case "weaknesses": 
+            case "weaknesses":
               switch(result[2])
                 {
                 case "0":cy.wrap($input).should('have.value', swot["weaknesses"][0]["desc"])
@@ -309,8 +309,8 @@ function FillFactors()
                       break;
                 }
               break;
-            
-            case "chances": 
+
+            case "chances":
               switch(result[2])
                 {
                 case "0":cy.wrap($input).should('have.value', swot["chances"][0]["desc"])
@@ -323,8 +323,8 @@ function FillFactors()
                       break;
                 }
               break;
-              
-            case "risks": 
+
+            case "risks":
               switch(result[2])
                 {
                 case "0":cy.wrap($input).should('have.value', swot["risks"][0]["desc"])
@@ -337,13 +337,13 @@ function FillFactors()
                       break;
                 }
               break;
-          } 
+          }
         break;
-         
+
       }
-   
+
   }
 }
-     
-   
+
+
 
