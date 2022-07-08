@@ -11,14 +11,16 @@ describe('SWOT Analyisis', () => {
           cy.intercept('POST', /.*oauth\/token.*/).as('token')
           cy.get("@anonym")
           .its("response")
-          .should('include',{
+          .should('include',
+            {
               statusCode: 201
             })
           
           cy.wait("@token")
           cy.get("@token")
           .its("response.body")
-          .should('include',{
+          .should('include',
+            {
               token_type: "Bearer"
             })
           cy.intercept('GET', /.*api\/settings.*/).as('buildup')
@@ -43,7 +45,8 @@ describe('SWOT Analyisis', () => {
           cy.wait("@save")
           cy.get("@save")
           .its("response")
-          .should('include',{
+          .should('include',
+            {
               statusCode: 201
             })
           cy.log("new SWOT created and saved for anonymous")
@@ -51,102 +54,126 @@ describe('SWOT Analyisis', () => {
           cy.task("queryDb",`DELETE FROM toolbox.saves WHERE name="TEST-SWOT";`);
         })
 
-        it('trys to create a new SWOT as max@test.test and fill in Factors', () =>{
-          cy.visit("/")  
-          cy.loginViaApi("max@test.test", "password")
-          cy.visit("/swot-analysis")
-          cy.url().should("include","swot-analysis")
+      it('trys to create a new SWOT as max@test.test', () =>{
+        cy.visit("/")  
+        cy.loginViaApi("max@test.test", "password")
+        cy.visit("/swot-analysis")
+        cy.url().should("include","swot-analysis")
 
-          cy.contains("Neue Analyse")
-          .click()
-          cy.url().should("include", "swot-analysis/new")
-          
-          cy.get("input[id='name']")
-          .clear()
-          .type("TEST-SWOT VON MAX")
-          cy.get("textarea[id='description']")
-          .clear()
-          .type("TEST-SWOT ist ein Testscenario von einem API eingeloggten benutzer")
-          
-          cy.intercept('POST', /.*api\/saves.*/).as('save')
-          cy.get('button[type="submit"]')
-          .click()
-          cy.wait("@save")
-          cy.get("@save")
-          .its("response")
-          .should('include',{
-              statusCode: 201
-            })
-
-          cy.log("new SWOT created and saved for max@test.test")
-
-        })
-
-        it('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
-          cy.visit("/")  
-          cy.loginViaApi("max@test.test", "password")
-          cy.visit("/swot-analysis")
-          cy.url().should("include","swot-analysis")
-          
-          cy.contains("TEST-SWOT VON MAX")
-            .click()
-
-          cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
-          cy.wait("@loadSave")
-          cy.get("@loadSave")
-          .its("response")
-          .should('include',{
-              statusCode: 200
+        cy.contains("Neue Analyse")
+        .click()
+        cy.url().should("include", "swot-analysis/new")
+        
+        cy.get("input[id='name']")
+        .clear()
+        .type("TEST-SWOT VON MAX")
+        cy.get("textarea[id='description']")
+        .clear()
+        .type("TEST-SWOT ist ein Testscenario von einem API eingeloggten benutzer")
+        
+        cy.intercept('POST', /.*api\/saves.*/).as('save')
+        cy.get('button[type="submit"]')
+        .click()
+        cy.wait("@save")
+        cy.get("@save")
+        .its("response")
+        .should('include',
+          {
+            statusCode: 201
           })
-          
-          cy.url().should("include", "swot-analysis")
-          cy.log("Save loaded")
 
-          //
-          //Karten werden hinzugefügt und mit Testdaten gefüllt
-          //Es werden erst alle Accordions zusammengeklappt!
-          cy.get("button[class='accordion-button']")
+        cy.log("new SWOT created and saved for max@test.test")
+
+      })
+
+      it.only('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
+        cy.visit("/")  
+        cy.loginViaApi("max@test.test", "password")
+        cy.visit("/swot-analysis")
+        cy.url()
+          .should("include","swot-analysis")
+        
+        cy.contains("TEST-SWOT VON MAX")
           .click()
-          
-          //Gehe schritt für Schritt die Accordions durch und fügen Inputfelder hinzu bis wir 4 erreicht haben
-          //Dann werden diese mit hilfe von FillFactors mit Testdaten aufgefüllt
-          cy.get("button[class='accordion-button collapsed']")
+
+        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
+        cy.wait("@loadSave")
+        cy.get("@loadSave")
+        .its("response")
+        .should('include',
+        {
+          statusCode: 200
+        })
+        
+        cy.url()
+          .should("include", "swot-analysis")
+        cy.log("Save loaded")
+
+        //
+        //Karten werden hinzugefügt und mit Testdaten gefüllt
+        //Es werden erst alle Accordions zusammengeklappt!
+        cy.get("button[class='accordion-button']")
+          .click()
+        
+        //Gehe schritt für Schritt die Accordions durch und fügen Inputfelder hinzu bis wir 4 erreicht haben
+        //Dann werden diese mit hilfe von FillFactors mit Testdaten aufgefüllt
+        cy.get("button[class='accordion-button collapsed']")
           .each(($press) =>
           {
+            var counter = -2; //Input des SWOT-Namens und Beshreibung werden nicht gezählt
             if ($press.is(":visible"))
             {
               cy.wrap($press)
-              .click()
+              .click()   
             }
+
             cy.wait(200)
+
+
+            cy.get("input")
+              .each(($countInput) => 
+              {
+                if ($countInput.is(":visible"))
+                {
+                  counter++
+                }
+              })
             
             cy.get('div[class="addCard card"]')
-            .each(($add) =>
-            {
-              if ($add.is(":visible"))
+              .each(($add) =>
               {
-                cy.wrap($add)
-                .click()
-                .click()
-                //Fügt daten hinzu
-                FillFactors();         
-              }
-            
-            })
-           })
-          
-            cy.log("Additional Cards added and filled")
-
-            cy.intercept('POST', /.*api\/saves.*/).as('save')
-            cy.contains("Speichern")
-              .click();
-            cy.get("@save")
-            .its("response")
-            .should('include',{
-                statusCode: 200
+                if ($add.is(":visible"))
+                {
+                  if(counter < 4)
+                  {
+                    for (let i = 2; i < 4; i++)
+                    {
+                      cy.wrap($add)
+                      .click()
+                      counter++
+                      
+                    }
+                  }
+                }
               })
+              
+            FillFactors();    
+            
+          })
+      
+          cy.log("Additional Cards added and filled")
 
+          cy.intercept('POST', /.*api\/saves.*/).as('save')
+          cy.contains("Speichern")
+            .click();
+          cy.get("@save")
+          .its("response")
+          .should('include',
+          {
+            statusCode: 200
+          })
       })
+
 })
 
 function FillFactors()
@@ -161,9 +188,7 @@ function FillFactors()
           
 
           if(sampleText != null && sampleText.length > 0)
-          {
-            //catergory = 0-strengths, 1-weaknesses, 2-chances, 3-risks
-            
+          {            
             let result = sampleText.match(regex);
 
             cy.wrap($input)
@@ -171,7 +196,6 @@ function FillFactors()
             .type(swot[result[1]][result[2]][key]);
 
             CheckFactor(key,$input,swot,result);
-
           }
 
         } 
@@ -189,9 +213,9 @@ function FillFactors()
     .each(GetFillFunction("desc", swot))
   })
 
+  //Hier wird nur übeprüft ob die richtigen Daten im richtigen Feld landen.
   function CheckFactor(key, $input, swot, result,)
   {
-   
     switch(key)
       {
         case "title": 
