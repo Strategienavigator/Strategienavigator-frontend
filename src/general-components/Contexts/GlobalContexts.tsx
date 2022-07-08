@@ -1,6 +1,7 @@
 import {Component} from "react";
 import {SettingsContextComponent} from "./SettingsContextComponent";
 import {FooterContextComponent} from "./FooterContextComponent";
+import {UserContextComponent} from "./UserContextComponent";
 
 
 export class GlobalContexts extends Component<any, any> {
@@ -13,11 +14,15 @@ export class GlobalContexts extends Component<any, any> {
 
     render() {
         return (
-            <SettingsContextComponent>
-                <FooterContextComponent>
-                    {this.props.children}
-                </FooterContextComponent>
-            </SettingsContextComponent>
+            <UserContextComponent>
+                <SettingsContextComponent>
+                    <FooterContextComponent>
+
+                        {this.props.children}
+
+                    </FooterContextComponent>
+                </SettingsContextComponent>
+            </UserContextComponent>
         );
     }
 }
