@@ -76,6 +76,7 @@ jobs:
           FRONTEND_URL: http://localhost:3000
           EMAIL_FILTER_DISABLED: true
           MAIL_FROM_ADDRESS: strategienavigator@jade-hs.de
+          MAIL_PORT: 7777
         working-directory: backend
         run: |
           php artisan config:cache
