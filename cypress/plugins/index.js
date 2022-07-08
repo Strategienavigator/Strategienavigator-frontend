@@ -48,7 +48,7 @@ module.exports = (on, config) => {
         require('cypress-terminal-report/src/installLogsPrinter')(on, options);
 
 
-        const mysql = require("mysql");
+        const mysql = require("mysql2");
 
         function queryTestDb(query, config) {
             // creates a new mysql connection using credentials from cypress.json env's
