@@ -17,7 +17,6 @@ import {Loader} from "../../../general-components/Loader/Loader";
 import "./my-profile.scss";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import FAE from "../../../general-components/Icons/FAE";
-import {SettingsContext} from "../../../general-components/Contexts/SettingsContextComponent";
 import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
 
 
