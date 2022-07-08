@@ -88,6 +88,9 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
     }
 
     render = () => {
+        if(this.props.hide){
+            return null;
+        }
         let cards = this.getAllCards();
 
         return (
