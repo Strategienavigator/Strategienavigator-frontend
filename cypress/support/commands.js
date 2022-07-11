@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+const { createLogicalNot } = require("typescript");
+
 Cypress.Commands.add('loginViaApi', (email, password, remember = false) => {
 
     let data = {
@@ -40,23 +42,30 @@ Cypress.Commands.add('loginViaApi', (email, password, remember = false) => {
     });
 });
 
-Cypress.Commands.add('loginViaVisual',(email,password)=>{
+//Index ist welche Logindata von der testLoginData.json
+Cypress.Commands.add('loginViaVisual',(index)=>{
     
-    cy.log('Logs in visual as ' + email)
+    cy.fixture("testLoginData").then(function (LoginData)
+     {
+    this.LoginData = LoginData;
+    var login = this.LoginData[index];
+    cy.log(login["username"])
+    cy.log('Logs in visual as ' + login)
 
     cy.visit("/login")
     cy.get('input[id="email"]')
     .clear()
-    .type(email)
+    .type(login["username"])
     cy.get('input[id="password"]')
     .clear()
-    .type(password)
+    .type(login["password"])
     cy.intercept("GET",/.*users.*/).as('user')
     cy.get('button[type="submit"]')
     .click()
 
-    cy.log("Logged in "+ email)
+    cy.log("Logged in "+ login["username"])
     cy.wait("@user")
+     })
 }) 
 //site = name of the site example: login
 //clickOn = element that contains a text example: "Login" for a Button with Login on it

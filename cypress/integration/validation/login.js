@@ -63,12 +63,14 @@ describe('Checking Login', () => {
     })
     it('trys using valid data with max@test.test:password VISUAL',() =>{
 
-        cy.loginViaVisual("max@test.test","password")
+        cy.loginViaVisual("0")
         cy.url()
         .should("include", "my-profile")
+
     })
     it('trys to logout',() =>{
-        cy.loginViaVisual("max@test.test","password")
+        //0 = max.test@test
+        cy.loginViaVisual("0")
 
         cy.visit("/")
         cy.get('a[id="profile-dropdown"]')
