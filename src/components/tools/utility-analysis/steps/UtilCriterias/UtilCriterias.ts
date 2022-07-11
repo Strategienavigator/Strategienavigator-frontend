@@ -45,13 +45,17 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
                 id: null,
                 name: "",
                 desc: "",
-                extra: {
-                    headers: UtilCriterias.header.getHeaders(),
-                    activeIndices: Array(UtilCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
-                }
+                extra: UtilCriterias.getDefaultExtraData()
             });
         }
         data["ua-criterias"] = {criterias: criterias};
+    }
+
+    static getDefaultExtraData(){
+        return {
+            headers: UtilCriterias.header.getHeaders(),
+            activeIndices: Array(UtilCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
+        };
     }
 
     isUnlocked(data: UtilityAnalysisValues): boolean {

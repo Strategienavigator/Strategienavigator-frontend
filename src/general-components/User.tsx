@@ -21,9 +21,16 @@ class User {
         this.created_at = created_at;
     }
 
-    static from(data: any): User {
+    static from(data: any|User): User {
+        if(data instanceof User){
+            return new User(data.getID(), data.getUsername(), data.getEmail(), data.isAnonymous(), data.getOwnedSaves(), data.getSharedSaves(), data.getCreatedAt());
+        }
+
         return new User(data.id, data.username, data.email, data.anonymous, data.owned_saves, data.shared_saves, data.created_at);
     }
+
+
+
 
     update = (data: UpdateData) => {
         if (data.username !== undefined)
@@ -70,6 +77,15 @@ class User {
 
     setCreatedAt(value: Date) {
         this.created_at = value;
+    }
+
+
+    getOwnedSaves(): number[] {
+        return this.owned_saves;
+    }
+
+    getSharedSaves(): number[] {
+        return this.shared_saves;
     }
 
     getOwnedSavesAmount(): number {
