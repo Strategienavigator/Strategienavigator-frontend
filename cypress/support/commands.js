@@ -48,6 +48,7 @@ Cypress.Commands.add('loginViaVisual',(index = -1)=>{
     cy.fixture("testLoginData").then(function (LoginData)
      {
     this.LoginData = LoginData;
+
     var login
     if (index == -1)
     {
@@ -55,6 +56,7 @@ Cypress.Commands.add('loginViaVisual',(index = -1)=>{
     }else{
         login = this.LoginData[index];
     }
+
     cy.log(login["username"])
     cy.log('Logs in visual as ' + login)
 

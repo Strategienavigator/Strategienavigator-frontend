@@ -216,132 +216,18 @@ function FillFactors()
   //Hier wird nur übeprüft ob die richtigen Daten im richtigen Feld landen.
   function CheckFactor(key, $input, swot, result,)
   {
-    switch(key)
-      {
-        case "title":
-          switch(result[1])
-          {
-            case "strengths":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["strengths"][0]["title"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["strengths"][1]["title"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["strengths"][2]["title"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["strengths"][3]["title"])
-                      break;
-                }
-            break;
+    if(key == "title")
+    {
 
-            case "weaknesses":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["weaknesses"][0]["title"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["weaknesses"][1]["title"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["weaknesses"][2]["title"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["weaknesses"][3]["title"])
-                      break;
-                }
-              break;
+    cy.wrap($input).should('have.value', swot[result[1]][result[2]]["title"])
 
-            case "chances":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["chances"][0]["title"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["chances"][1]["title"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["chances"][2]["title"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["chances"][3]["title"])
-                      break;
-                }
-              break;
+    }else if (key == "desc")
+    {
 
-            case "risks":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["risks"][0]["title"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["risks"][1]["title"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["risks"][2]["title"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["risks"][3]["title"])
-                      break;
-                }
-              break;
-          }
-        break;
-
-        case "desc" :
-          switch(result[1])
-          {
-            case "strengths":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["strengths"][0]["desc"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["strengths"][1]["desc"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["strengths"][2]["desc"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["strengths"][3]["desc"])
-                      break;
-                }
-            break;
-
-            case "weaknesses":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["weaknesses"][0]["desc"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["weaknesses"][1]["desc"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["weaknesses"][2]["desc"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["weaknesses"][3]["desc"])
-                      break;
-                }
-              break;
-
-            case "chances":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["chances"][0]["desc"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["chances"][1]["desc"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["chances"][2]["desc"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["chances"][3]["desc"])
-                      break;
-                }
-              break;
-
-            case "risks":
-              switch(result[2])
-                {
-                case "0":cy.wrap($input).should('have.value', swot["risks"][0]["desc"])
-                      break;
-                case "1":cy.wrap($input).should('have.value', swot["risks"][1]["desc"])
-                      break;
-                case "2":cy.wrap($input).should('have.value', swot["risks"][2]["desc"])
-                      break;
-                case "3":cy.wrap($input).should('have.value', swot["risks"][3]["desc"])
-                      break;
-                }
-              break;
-          }
-        break;
-
-      }
-
+      cy.wrap($input).should('have.value', swot[result[1]][result[2]]["desc"])
+      
+    }
+    
   }
 }
 

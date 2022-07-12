@@ -69,7 +69,6 @@ describe('Checking Login', () => {
 
     })
     it('trys to logout',() =>{
-        //0 = max.test@test
         cy.loginViaVisual()
 
         cy.visit("/")
