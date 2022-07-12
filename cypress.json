@@ -15,7 +15,11 @@
     "DB_PORT": 3306,
     "BACKEND_URL": "http://localhost/toolbox-backend/public/",
     "APP_CLIENT_ID": 2,
-    "APP_CLIENT_SECRET": "125Xqr8xw7Xs0YeGPA7OPUINiKNOqq9HtyVZGCBS"
+    "APP_CLIENT_SECRET": "125Xqr8xw7Xs0YeGPA7OPUINiKNOqq9HtyVZGCBS",
+    "TEST_LOGIN": {
+      "username": "max@test.test",
+      "password": "password"
+    }
   }
 }
 

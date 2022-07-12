@@ -43,12 +43,18 @@ Cypress.Commands.add('loginViaApi', (email, password, remember = false) => {
 });
 
 //Index ist welche Logindata von der testLoginData.json
-Cypress.Commands.add('loginViaVisual',(index)=>{
+Cypress.Commands.add('loginViaVisual',(index = -1)=>{
     
     cy.fixture("testLoginData").then(function (LoginData)
      {
     this.LoginData = LoginData;
-    var login = this.LoginData[index];
+    var login
+    if (index == -1)
+    {
+        login = Cypress.env("TEST_LOGIN")
+    }else{
+        login = this.LoginData[index];
+    }
     cy.log(login["username"])
     cy.log('Logs in visual as ' + login)
 
