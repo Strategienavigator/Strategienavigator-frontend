@@ -34,7 +34,14 @@ function InvitationLinkModal(props: InvitationLinkProps) {
             className={"second-modal"}
             backdropClassName={"second-modal-backdrop"}
             centered
-            onHide={props.onClose}
+            onHide={() => {
+                setNoDate(false);
+                setDateGreaterThanToday(false);
+                setExpiryDate(defaultExpiryDate);
+                setPermission(defaultPermission);
+
+                props.onClose();
+            }}
             keyboard={true}
         >
             <Modal.Header>
