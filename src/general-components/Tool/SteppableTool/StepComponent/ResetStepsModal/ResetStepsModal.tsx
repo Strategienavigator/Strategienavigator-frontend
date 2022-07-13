@@ -2,7 +2,7 @@ import {memo} from "react";
 
 import './reset-steps-modal.scss';
 import {Button, Modal} from "react-bootstrap";
-import { ModalCloseable } from "../../../../Modal/ModalCloseable";
+import {ModalCloseable} from "../../../../Modal/ModalCloseable";
 
 
 export interface ResetStepsModalProps {

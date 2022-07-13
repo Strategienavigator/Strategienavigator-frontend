@@ -4,15 +4,14 @@ import "./save-invitation-modal.scss";
 import {faCopy, faSearch} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../Icons/FAE";
 import {Component} from "react";
-import {
-    InvitationLinkModal
-} from "./InvitationLinkModal/InvitationLinkModal";
+import {InvitationLinkModal} from "./InvitationLinkModal/InvitationLinkModal";
 import {ModalCloseable} from "../Modal/ModalCloseable";
 import {InvitationLinkResource, SimpleSaveResource} from "../Datastructures";
-import { Loader } from "../Loader/Loader";
+import {Loader} from "../Loader/Loader";
 import {createInvitationLink, deleteInvitationLink, showInvitationLinks} from "../API/calls/Invitations";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/";
 import {Messages} from "../Messages/Messages";
+
 
 export interface SaveInvitationProps {
     show: boolean
@@ -82,38 +81,38 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                     size={"sm"}
                                 >
                                     <tbody>
-                                        {this.state.links.map((link, index) => {
-                                            return (
-                                                <tr key={link.token + "-" + index}>
-                                                    <td>/invitation/{link.token}</td>
-                                                    <td
-                                                        onClick={async () => {
-                                                            let location = window.location.origin;
-                                                            await navigator.clipboard.writeText(location + "/invitation/" + link.token);
-                                                            Messages.add("Link kopiert!", "SUCCESS", Messages.TIMER);
-                                                        }}
-                                                    >
-                                                        <FAE
-                                                            style={{cursor: "pointer"}}
-                                                            icon={faCopy}
-                                                        />
-                                                    </td>
-                                                    <td
-                                                        onClick={() => {
-                                                            this.setState({
-                                                               deleteInvitationLink: link.token
-                                                            });
-                                                        }}
-                                                    >
-                                                        <FAE
-                                                            style={{cursor: "pointer"}}
-                                                            className={"text-danger"}
-                                                            icon={faTrash}
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
+                                    {this.state.links.map((link, index) => {
+                                        return (
+                                            <tr key={link.token + "-" + index}>
+                                                <td>/invitation/{link.token}</td>
+                                                <td
+                                                    onClick={async () => {
+                                                        let location = window.location.origin;
+                                                        await navigator.clipboard.writeText(location + "/invitation/" + link.token);
+                                                        Messages.add("Link kopiert!", "SUCCESS", Messages.TIMER);
+                                                    }}
+                                                >
+                                                    <FAE
+                                                        style={{cursor: "pointer"}}
+                                                        icon={faCopy}
+                                                    />
+                                                </td>
+                                                <td
+                                                    onClick={() => {
+                                                        this.setState({
+                                                            deleteInvitationLink: link.token
+                                                        });
+                                                    }}
+                                                >
+                                                    <FAE
+                                                        style={{cursor: "pointer"}}
+                                                        className={"text-danger"}
+                                                        icon={faTrash}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                     </tbody>
                                 </Table>
                             </Loader>
@@ -185,7 +184,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                     show={this.state.deleteInvitationLink !== null}
                     onHide={() => {
                         this.setState({
-                           deleteInvitationLink: null
+                            deleteInvitationLink: null
                         });
                     }}
                 >
@@ -193,7 +192,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                         <h5>Sind Sie Sicher?</h5>
                     </Modal.Header>
                     <Modal.Body>
-                        Der Einladungslink wird endgültig gelöscht.<br />
+                        Der Einladungslink wird endgültig gelöscht.<br/>
                         Dieser Vorgang kann <b>NICHT</b> rückgängig gemacht werden!
                     </Modal.Body>
                     <Modal.Footer>
@@ -229,6 +228,11 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         );
     }
 
+    addUser = async () => {
+        let searchText = this.state.searchText;
+        console.log(searchText);
+    }
+
     private loadInviteLinks = async (save: SimpleSaveResource) => {
         let links = await showInvitationLinks(save.id);
         if (links?.success) {
@@ -250,11 +254,6 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         this.setState({
             showInvitationLinkModal: false
         });
-    }
-
-    addUser = async() => {
-        let searchText = this.state.searchText;
-        console.log(searchText);
     }
 
 }

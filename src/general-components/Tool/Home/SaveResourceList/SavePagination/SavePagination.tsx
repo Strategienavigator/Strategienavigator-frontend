@@ -51,7 +51,7 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
                     {page?.data.map(save => {
                         return (
                             <SaveCard
-                                key={save.tool_id + " " +  save.id}
+                                key={save.tool_id + " " + save.id}
                                 save={save}
                                 toolLink={this.props.tool!.getLink()}
                                 onTrash={() => {

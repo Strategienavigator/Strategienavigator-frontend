@@ -4,7 +4,7 @@ import {UACriteriaCustomDescriptionValues} from "../UtilCriterias/UACriteriaCust
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../../../../../general-components/Icons/FAE";
 import "./create-description-modal.scss";
-import { ModalCloseable } from "../../../../../general-components/Modal/ModalCloseable";
+import {ModalCloseable} from "../../../../../general-components/Modal/ModalCloseable";
 
 
 interface CreateDescriptionModalProps {

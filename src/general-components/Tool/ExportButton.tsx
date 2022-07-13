@@ -4,7 +4,7 @@ import {memo} from "react";
 import {Tool} from "./Tool";
 import {Exporter} from "../Export/Exporter";
 import FAE from "../Icons/FAE";
-import { ModalCloseable } from "../Modal/ModalCloseable";
+import {ModalCloseable} from "../Modal/ModalCloseable";
 
 
 interface ExportModalProps {

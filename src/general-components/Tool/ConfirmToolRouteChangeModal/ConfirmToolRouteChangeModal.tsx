@@ -1,5 +1,5 @@
 import {Button, Fade, Modal} from "react-bootstrap";
-import { ModalCloseable } from "../../Modal/ModalCloseable";
+import {ModalCloseable} from "../../Modal/ModalCloseable";
 
 
 interface ConfirmToolRouteChangeModalProps {

@@ -126,7 +126,7 @@ const renderApp = () => {
         document.getElementById('root')
     );
     ReactDOM.render(
-         <React.StrictMode>
+        <React.StrictMode>
             <Messages
                 xAlignment={"CENTER"}
                 yAlignment={"BOTTOM"}

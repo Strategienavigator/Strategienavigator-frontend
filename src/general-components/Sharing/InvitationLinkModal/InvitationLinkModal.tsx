@@ -3,6 +3,7 @@ import {Button, FloatingLabel, Form, FormControl, FormGroup, FormSelect, Modal} 
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {useState} from "react";
 
+
 export type InvitationPermission = "0" | "1";
 export type InvitationExpiryDate = "infinite" | "week" | "month" | "own" | Date;
 
@@ -44,9 +45,9 @@ function InvitationLinkModal(props: InvitationLinkProps) {
                     <FormGroup className="mb-3">
                         <FloatingLabel label={"Berechtigung"}>
                             <FormSelect required={true} size={"sm"} defaultValue={defaultPermission} id={"permission"}
-                                onChange={(e) => {
-                                    setPermission(e.target.value as InvitationPermission);
-                                }}
+                                        onChange={(e) => {
+                                            setPermission(e.target.value as InvitationPermission);
+                                        }}
                             >
                                 <option value={"0"}>Nur Lesen</option>
                                 <option value={"1"}>Lesen und Schreiben</option>
@@ -70,35 +71,35 @@ function InvitationLinkModal(props: InvitationLinkProps) {
 
                         {(expiryDate === "own") && (
                             <>
-                            <FloatingLabel label={"Eigenes Datum"}>
-                                <FormControl
-                                    type={"date"}
-                                    size={"sm"}
-                                    defaultValue={ownDate?.toLocaleDateString("en-CA")}
-                                    onChange={(e) => {
-                                        let value = e.currentTarget.value;
+                                <FloatingLabel label={"Eigenes Datum"}>
+                                    <FormControl
+                                        type={"date"}
+                                        size={"sm"}
+                                        defaultValue={ownDate?.toLocaleDateString("en-CA")}
+                                        onChange={(e) => {
+                                            let value = e.currentTarget.value;
 
-                                        if (value === "" || value === null || value === undefined) {
-                                            setOwnDate(null);
-                                        } else {
-                                            setOwnDate(new Date(value));
-                                        }
-                                    }}
-                                />
-                            </FloatingLabel>
+                                            if (value === "" || value === null || value === undefined) {
+                                                setOwnDate(null);
+                                            } else {
+                                                setOwnDate(new Date(value));
+                                            }
+                                        }}
+                                    />
+                                </FloatingLabel>
 
-                            <div className={"feedbackContainer sm"}>
-                                {(noDate) && (
-                                    <div className={"feedback DANGER"}>
-                                        Bitten geben Sie ein Datum an!
-                                    </div>
-                                )}
-                                {(dateGreaterThanToday) && (
-                                    <div className={"feedback DANGER"}>
-                                        Bitte geben Sie mindestens den {minDate.toLocaleDateString("de-DE")} an!
-                                    </div>
-                                )}
-                            </div>
+                                <div className={"feedbackContainer sm"}>
+                                    {(noDate) && (
+                                        <div className={"feedback DANGER"}>
+                                            Bitten geben Sie ein Datum an!
+                                        </div>
+                                    )}
+                                    {(dateGreaterThanToday) && (
+                                        <div className={"feedback DANGER"}>
+                                            Bitte geben Sie mindestens den {minDate.toLocaleDateString("de-DE")} an!
+                                        </div>
+                                    )}
+                                </div>
                             </>
                         )}
                     </FormGroup>

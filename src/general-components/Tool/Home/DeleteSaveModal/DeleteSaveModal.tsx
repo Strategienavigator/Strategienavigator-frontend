@@ -2,7 +2,7 @@ import {Button, Modal} from "react-bootstrap";
 import React, {useState} from "react";
 import {SimpleSaveResource} from "../../../Datastructures";
 import {Loader} from "../../../Loader/Loader";
-import { ModalCloseable } from "../../../Modal/ModalCloseable";
+import {ModalCloseable} from "../../../Modal/ModalCloseable";
 
 
 interface DeleteSaveModalProps {
