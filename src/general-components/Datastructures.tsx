@@ -128,6 +128,10 @@ export type InvitationLinkResource = {
      */
     save_id: number
     /**
+     * Der Token des Einladungslinks
+     */
+    token: string
+    /**
      * Das Datum wann die Einladung erfolgte
      */
     created_at: Date

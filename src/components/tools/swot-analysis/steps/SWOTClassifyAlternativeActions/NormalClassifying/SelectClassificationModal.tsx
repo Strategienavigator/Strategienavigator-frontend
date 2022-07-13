@@ -2,6 +2,7 @@ import {ClassificationValues} from "../SWOTClassifyAlternativeActionsComponent";
 import {Button, FormSelect, Modal} from "react-bootstrap";
 import {faTimes} from "@fortawesome/free-solid-svg-icons/";
 import FAE from "../../../../../../general-components/Icons/FAE";
+import {ModalCloseable} from "../../../../../../general-components/Modal/ModalCloseable";
 
 
 interface SelectClassificationModalProps {
@@ -52,7 +53,7 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
     const foundClassification = findClassification(props.action);
 
     return (
-        <Modal
+        <ModalCloseable
             show={props.action !== undefined && props.open}
             backdrop={true}
             onHide={props.onClose}
@@ -114,7 +115,7 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
                     })}
                 </FormSelect>
             </Modal.Body>
-        </Modal>
+        </ModalCloseable>
     );
 
 

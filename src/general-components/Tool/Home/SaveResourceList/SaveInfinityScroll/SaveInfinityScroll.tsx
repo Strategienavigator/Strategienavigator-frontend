@@ -80,7 +80,11 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                                 <SaveCard key={save.id} save={save} toolLink={this.props.tool.getLink()}
                                           onTrash={() => {
                                               this.props.savesControlCallbacks.deleteSave(save);
-                                          }}/>
+                                          }}
+                                          onInvite={(save) => {
+                                              this.props.savesControlCallbacks.openInviteModal(save);
+                                          }}
+                                />
                             );
                         })
                     })}

@@ -7,6 +7,7 @@ import {reload_app} from "../index";
 import {Loader} from "./Loader/Loader";
 import {faCheckCircle, faExclamationTriangle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import FAE from "./Icons/FAE";
+import {ModalCloseable} from "./Modal/ModalCloseable";
 
 
 interface ProtectedRouteProps extends RouteProps {
@@ -25,9 +26,19 @@ export function AnonymousModal(props: {
     let [disagreementLoading, setDisagreementLoading] = useState(false);
 
     return (
-        <Modal
+        <ModalCloseable
             show={showModal}
             backdrop="static"
+            onHide={async () => {
+                setDisagreementLoading(true);
+                await props.onDisagreement();
+                setShowModal(false);
+                setDisagreementLoading(false);
+
+                if (props.onShowChange) {
+                    props.onShowChange(false);
+                }
+            }}
             centered
             keyboard={true}
         >
@@ -90,7 +101,7 @@ export function AnonymousModal(props: {
                     </Loader>
                 </Button>
             </Modal.Footer>
-        </Modal>
+        </ModalCloseable>
     );
 }
 

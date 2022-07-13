@@ -9,7 +9,7 @@ import {DefaultResponse, InvitationLinkResource, PaginationResource} from "../..
  * @param apiArgs API Argumente
  */
 const showInvitationLinks = async (saveID: number, apiArgs?: APIArgs) => {
-    return await callAPI<PaginationResource<InvitationLinkResource>>("api/saves/" + saveID + "/invitation-link", "GET", undefined, true, apiArgs);
+    return await callAPI<PaginationResource<InvitationLinkResource>>("api/saves/" + saveID + "/invitation-links", "GET", undefined, true, apiArgs);
 }
 
 /**
@@ -25,6 +25,7 @@ const showInvitationLink = async (invitationToken: string, apiArgs?: APIArgs) =>
 export interface CreateInviteInterface {
     permission: number
     expiry_date: Date
+    save_id: number
 }
 
 /**
@@ -36,7 +37,8 @@ export interface CreateInviteInterface {
 const createInvitationLink = async (data: CreateInviteInterface, apiArgs?: APIArgs) => {
     let apiData = new FormData();
     apiData.append("permission", String(data.permission))
-    apiData.append("expiry_date", String(data.expiry_date));
+    apiData.append("expiry_date", data.expiry_date.toLocaleDateString())
+    apiData.append("save_id", String(data.save_id));
 
     return await callAPI("api/invitation-link", "POST", apiData, true, apiArgs);
 }
@@ -66,10 +68,22 @@ const acceptInvitationLink = async (invitationToken: string | null, apiArgs?: AP
     return await callAPI("api/invitation-link/" + invitationToken + "/accept", "PUT", undefined, true, apiArgs);
 }
 
+/**
+ * Lehnt die Invitation ab und löscht diese aus der Datenbank
+ *
+ * @param {string | null} invitationToken
+ * @param {APIArgs} apiArgs
+ * @returns {Promise<CallInterface<object> | null>}
+ */
+const deleteInvitationLink = async (invitationToken: string | null, apiArgs?: APIArgs) => {
+    return await callAPI("api/invitation-link/" + invitationToken, "DELETE", undefined, true, apiArgs);
+}
+
 export {
     showInvitationLinks,
     showInvitationLink,
     createInvitationLink,
     updateInvitationLink,
-    acceptInvitationLink
+    acceptInvitationLink,
+    deleteInvitationLink
 }

@@ -17,6 +17,7 @@ import {Loader} from "../../../general-components/Loader/Loader";
 import "./my-profile.scss";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import FAE from "../../../general-components/Icons/FAE";
+import { ModalCloseable } from "../../../general-components/Modal/ModalCloseable";
 
 
 export interface MyProfileState {
@@ -43,7 +44,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             user: Session.currentUser as User,
             edit: false,
             delete: false,
-            showDeleteModal: true,
+            showDeleteModal: false,
             passwordFieldTouched: false,
             isSaving: false,
             userLoaded: false
@@ -311,32 +312,30 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     </>
                 )}
 
-                {(this.state.delete) && (
-                    <Modal
-                        show={this.state.showDeleteModal}
-                        backdrop="static"
-                        keyboard={true}
-                    >
-                        <Modal.Header>
-                            <Modal.Title>Wollen Sie Ihr Profil wirklich löschen?</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
-                            Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses
-                            Zeitraumes wird
-                            Ihr Account unwiderruflich gelöscht!
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant={"light"} onClick={this.hideDeleteModal}>
-                                Abbrechen
-                            </Button>
-                            <Button variant="dark" onClick={this.delete}>
-                                Ja, Account löschen!
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-
+                <ModalCloseable
+                    show={this.state.showDeleteModal}
+                    backdrop="static"
+                    onHide={this.hideDeleteModal}
+                    keyboard={true}
+                >
+                    <Modal.Header>
+                        <Modal.Title>Wollen Sie Ihr Profil wirklich löschen?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
+                        Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses
+                        Zeitraumes wird
+                        Ihr Account unwiderruflich gelöscht!
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant={"light"} onClick={this.hideDeleteModal}>
+                            Abbrechen
+                        </Button>
+                        <Button variant="dark" onClick={this.delete}>
+                            Ja, Account löschen!
+                        </Button>
+                    </Modal.Footer>
+                </ModalCloseable>
             </Form>
         );
     }

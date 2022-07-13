@@ -4,6 +4,7 @@ import {UACriteriaCustomDescriptionValues} from "../UtilCriterias/UACriteriaCust
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../../../../../general-components/Icons/FAE";
 import "./create-description-modal.scss";
+import { ModalCloseable } from "../../../../../general-components/Modal/ModalCloseable";
 
 
 interface CreateDescriptionModalProps {
@@ -15,7 +16,7 @@ interface CreateDescriptionModalProps {
 function CreateDescriptionModal(props: CreateDescriptionModalProps) {
     return (
         <>
-            <Modal
+            <ModalCloseable
                 show={props.show}
                 centered
                 size={"lg"}
@@ -55,7 +56,7 @@ function CreateDescriptionModal(props: CreateDescriptionModalProps) {
                         </Button>
                     </div>
                 </Modal.Body>
-            </Modal>
+            </ModalCloseable>
         </>
     );
 }

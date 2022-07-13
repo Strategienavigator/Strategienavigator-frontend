@@ -77,15 +77,7 @@ const callAPI = async <D extends object>(
 
         // CALL THE API
         let call = await fetch(callURL, requestInit);
-        let body = await call.text();
-
-        // check if body json, else put raw response
-        let callData;
-        try {
-            callData = JSON.parse(body);
-        } catch (e) {
-            callData = body;
-        }
+        let callData = await call.json();
 
         // BUILD RESPONSE
         return {

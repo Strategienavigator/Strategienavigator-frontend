@@ -1,9 +1,10 @@
 import {Button, FormSelect, Modal} from "react-bootstrap";
-import {faFileExport, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faFileExport} from "@fortawesome/free-solid-svg-icons";
 import {memo} from "react";
 import {Tool} from "./Tool";
 import {Exporter} from "../Export/Exporter";
 import FAE from "../Icons/FAE";
+import { ModalCloseable } from "../Modal/ModalCloseable";
 
 
 interface ExportModalProps {
@@ -15,7 +16,7 @@ interface ExportModalProps {
 
 function ExportModalComponent(props: ExportModalProps) {
     return (
-        <Modal
+        <ModalCloseable
             show={props.show}
             backdrop={true}
             onHide={() => {
@@ -26,15 +27,6 @@ function ExportModalComponent(props: ExportModalProps) {
             <Modal.Header>
                 <Modal.Title>
                     Exportieren
-                    <Button
-                        type={"button"}
-                        variant={"light"}
-                        onClick={() => {
-                            props.onClose();
-                        }}
-                    >
-                        <FAE icon={faTimes}/>
-                    </Button>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -61,7 +53,7 @@ function ExportModalComponent(props: ExportModalProps) {
                     })}
                 </FormSelect>
             </Modal.Body>
-        </Modal>
+        </ModalCloseable>
     );
 }
 

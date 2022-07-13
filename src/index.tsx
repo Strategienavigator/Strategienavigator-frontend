@@ -31,6 +31,7 @@ import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/Portfolio
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import {ErrorPages} from "./general-components/Error/ErrorPages/ErrorPages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
+import {InvitationDecision} from "./components/platform/sharing/InvitationDecision";
 
 
 /**
@@ -52,6 +53,8 @@ const getRouterSwitch = () => {
             <Route loggedIn={false} path={"/register"} exact component={Register}/>
             <Route loggedIn={true} path={"/settings"} exact component={Settings}/>
             <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact component={MyProfile}/>
+
+            <Route loggedIn={true} path={"/invitation/:token"} component={InvitationDecision}/>
 
             <Route path={"/verify-email/:token"} component={EmailVerification}/>
             <Route path={"/reset-password/:token"} component={PasswordReset}/>
@@ -97,12 +100,6 @@ const getAppContent = () => {
         <>
             <GlobalContexts key={"global-contexts"}>
                 <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
-                    <Messages
-                        xAlignment={"CENTER"}
-                        yAlignment={"BOTTOM"}
-                        style={{marginBottom: 65}}
-                    />
-
                     <Router ref={routerRef}>
 
                         <Nav/>
@@ -115,8 +112,6 @@ const getAppContent = () => {
 
                         {getAppFooter()}
                     </Router>
-
-
                 </Loader>
             </GlobalContexts>
         </>
@@ -129,6 +124,16 @@ const renderApp = () => {
             {getAppContent()}
         </React.StrictMode>,
         document.getElementById('root')
+    );
+    ReactDOM.render(
+         <React.StrictMode>
+            <Messages
+                xAlignment={"CENTER"}
+                yAlignment={"BOTTOM"}
+                style={{marginBottom: 65}}
+            />
+        </React.StrictMode>,
+        document.getElementById("messages")
     );
 }
 

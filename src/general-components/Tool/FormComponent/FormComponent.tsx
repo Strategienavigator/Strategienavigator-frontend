@@ -15,9 +15,7 @@ export interface FormComponentProps {
 }
 
 export abstract class FormComponent<P extends FormComponentProps, S> extends Component<P, S> {
-
     private key: string = randomBytes(200).toString();
-
 
     protected constructor(props: Readonly<P> | P);
     protected constructor(props: P, context: any);

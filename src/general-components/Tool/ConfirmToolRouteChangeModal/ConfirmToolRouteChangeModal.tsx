@@ -1,4 +1,5 @@
 import {Button, Fade, Modal} from "react-bootstrap";
+import { ModalCloseable } from "../../Modal/ModalCloseable";
 
 
 interface ConfirmToolRouteChangeModalProps {
@@ -10,7 +11,7 @@ interface ConfirmToolRouteChangeModalProps {
 
 function ConfirmToolRouteChangeModal(props: ConfirmToolRouteChangeModalProps) {
     return (
-        <Modal
+        <ModalCloseable
             show={props.show}
             backdrop="static"
             animate={Fade}
@@ -34,7 +35,7 @@ function ConfirmToolRouteChangeModal(props: ConfirmToolRouteChangeModalProps) {
                     Nein
                 </Button>
             </Modal.Footer>
-        </Modal>
+        </ModalCloseable>
     );
 }
 

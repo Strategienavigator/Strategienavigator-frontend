@@ -6,12 +6,14 @@ import {Link} from "react-router-dom";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {SimpleSaveResource} from "../../../Datastructures";
 import FAE from "../../../Icons/FAE";
+import {faUserPlus} from "@fortawesome/free-solid-svg-icons/";
 
 
 export interface SaveCardProps {
     save?: SimpleSaveResource
     toolLink?: string
     onTrash?: () => void
+    onInvite?: (save: SimpleSaveResource) => void
 }
 
 export class SaveCard extends Component<SaveCardProps, {}> {
@@ -35,6 +37,16 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                 className={"save-desc text-muted mb-1"}>{this.props.save.description ? this.props.save.description : "Keine Beschreibung vorhanden"}</Card.Text>
                         </Card.Body>
                     </Card>
+
+                    <Button type={"button"} variant={"primary"} className={"inviteSave"}
+                            onClick={() => {
+                                if (this.props.onInvite !== undefined && this.props.save !== undefined) {
+                                    this.props.onInvite(this.props.save);
+                                }
+                            }}>
+                        <FAE icon={faUserPlus}/>
+                    </Button>
+
                     {(!!this.props.onTrash && !isDeleting) && (
                         <Button type={"button"} variant={"danger"} className={"deleteSave"}
                                 onClick={this.props.onTrash}>

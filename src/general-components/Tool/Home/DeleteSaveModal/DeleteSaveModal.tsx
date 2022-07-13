@@ -2,6 +2,7 @@ import {Button, Modal} from "react-bootstrap";
 import React, {useState} from "react";
 import {SimpleSaveResource} from "../../../Datastructures";
 import {Loader} from "../../../Loader/Loader";
+import { ModalCloseable } from "../../../Modal/ModalCloseable";
 
 
 interface DeleteSaveModalProps {
@@ -15,8 +16,9 @@ function DeleteSaveModal(props: DeleteSaveModalProps) {
     let [loadingDelete, setLoadingDelete] = useState(false);
 
     return (
-        <Modal
+        <ModalCloseable
             show={props.show}
+            onHide={props.onClose}
             backdrop="static"
             centered
             keyboard={true}
@@ -44,7 +46,7 @@ function DeleteSaveModal(props: DeleteSaveModalProps) {
                     Abbrechen
                 </Button>
             </Modal.Footer>
-        </Modal>
+        </ModalCloseable>
     );
 }
 

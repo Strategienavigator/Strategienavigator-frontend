@@ -55,12 +55,21 @@
   user-select: none;
 }
 
-.save .deleteSave {
-  position: absolute;
-  top: 15px;
-  right: 10px;
-  padding: 0.25rem 0.75rem;
+.save {
+  .deleteSave, .inviteSave {
+    position: absolute;
+    top: 15px;
+    padding: 0.25rem 0.75rem;
+  }
+  .deleteSave {
+    right: 10px;
+  }
+  .inviteSave {
+    position: absolute;
+    right: 55px;
+  }
 }
+
 
 .dummy {
   display: inline-block;
