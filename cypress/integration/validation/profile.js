@@ -1,6 +1,8 @@
+const { debug } = require("console")
+
 describe('Checking Profile', () => {
     beforeEach(() =>{
-        cy.loginViaApi("max@test.test","password")
+        cy.loginViaApi("max@test.test", "password")
 
         cy.intercept("GET",/.*settings.*/).as('get')
         cy.visit("/my-profile")
@@ -44,13 +46,22 @@ describe('Checking Profile', () => {
             statusCode: 401
           })
 
-        cy.get('div [class="feedback text-success"]')
-        .should('not.be.visible')
+          
+        cy.intercept("GET",/.*settings.*/).as('get')
         cy.reload();
+        cy.wait("@get")
+        cy.get('@get')
+        .its("response")
+        .should("include",{
+            statusCode: 200
+        })
+        
         cy.get("input[id='username']")
-        .should("test_user")
+        .should('have.value',"test_user")
 
         //REVERT BACK to original
+        cy.contains("Bearbeiten")
+        .click()
         cy.get("input[id='username']")
         .clear()
         .type("test_user")
@@ -80,7 +91,7 @@ describe('Checking Profile', () => {
         cy.wait("@user")
         .its("response")
         .should('include',{
-            statusCode: 401
+            statusCode: 200
           })
 
         cy.get('div [class="feedback text-success"]')
@@ -88,9 +99,11 @@ describe('Checking Profile', () => {
 
         cy.reload();
         cy.get("input[id='email']")
-        .should("max@test.test")
+        .should('have.value',"max@test.test")
 
         //REVERT BACK to original
+        cy.contains("Bearbeiten")
+        .click()
         cy.get("input[id='email']")
         .clear()
         .type("max@test.test")
@@ -121,7 +134,7 @@ describe('Checking Profile', () => {
         cy.wait("@user")
         .its("response")
         .should('include',{
-            statusCode: 401
+            statusCode: 200
           })
 
         cy.get('div [class="feedback text-success"]')
