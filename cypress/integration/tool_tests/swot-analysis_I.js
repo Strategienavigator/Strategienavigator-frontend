@@ -1,4 +1,4 @@
-describe('SWOT Analyisis', () => {
+describe('SWOT Analyisis Part I', () => {
       it('trys to create a new SWOT as anonymous',() =>{
           cy.visit('/')
           cy.visitSite("/swot-analysis","SWOT Analyse")
@@ -83,12 +83,12 @@ describe('SWOT Analyisis', () => {
           })
 
         cy.log("new SWOT created and saved for max@test.test")
-        cy.task("queryDb",'DELETE FROM toolbox.Saves WHERE name = "TEST-SWOT VON MAX" AND owner_id = 1;')
 
       })
 
       it('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
         CreateSave()
+        
         cy.visit("/")
         cy.loginViaApi("max@test.test", "password")
         cy.visit("/swot-analysis")
