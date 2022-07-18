@@ -34,10 +34,12 @@ describe('SWOT Analyisis Part II', () => {
             {
                 FillActionStep(i)
             
-            
-            cy.log("Step: " + i)
-            cy.contains("Nächster")
-            .click()
+                cy.log("Step: " + i)
+                if(i < 63)
+                    {
+                    cy.contains("Nächster")
+                    .click()
+                    }
             }
             CheckColor()        
     })
