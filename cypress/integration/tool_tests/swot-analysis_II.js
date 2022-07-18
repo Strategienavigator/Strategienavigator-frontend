@@ -29,7 +29,7 @@ describe('SWOT Analyisis Part II', () => {
         cy.contains("Weiter")
             .click()
         
-            for (let i = 1; i < 64; i++) 
+            for (let i = 0; i < 64; i++) 
             {
                 FillActionStep(i)
             
@@ -37,7 +37,8 @@ describe('SWOT Analyisis Part II', () => {
             cy.log("Step: " + i)
             cy.contains("Nächster")
             .click()
-            }          
+            }
+            CheckColor()        
     })
 })
 function FillActionStep(index)
@@ -70,7 +71,25 @@ function FillActionStep(index)
         cy.get("[type=checkbox]")
             .check()
     }
+    
 }
+
+function CheckColor()
+{
+    //Checkt die Farbe des Divs
+    cy.get('div[class="green"]')
+        .each(($divG) =>
+        {
+            cy.wrap($divG).should('have.css', 'background-color', 'rgb(0, 128, 0)')
+        })
+        cy.get('div[class="red"]')
+        .each(($divG) =>
+        {
+            cy.wrap($divG).should('have.css', 'background-color', 'rgb(255, 0, 0)')
+        })
+
+}
+
 function CreateSave()
 {
   cy.task("queryDb",
