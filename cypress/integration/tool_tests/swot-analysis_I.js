@@ -8,7 +8,7 @@ describe('SWOT Analyisis Part I', () => {
           cy.contains("Annehmen")
           .click()
           cy.wait("@anonym")
-          cy.intercept('POST', /.*oauth\/token.*/).as('token')
+        
           cy.get("@anonym")
           .its("response")
           .should('include',
@@ -16,13 +16,6 @@ describe('SWOT Analyisis Part I', () => {
               statusCode: 201
             })
 
-          cy.wait("@token")
-          cy.get("@token")
-          .its("response.body")
-          .should('include',
-            {
-              token_type: "Bearer"
-            })
           cy.intercept('GET', /.*api\/settings.*/).as('buildup')
 
           cy.url().should("include", "swot-analysis")
@@ -50,7 +43,7 @@ describe('SWOT Analyisis Part I', () => {
               statusCode: 201
             })
           cy.log("new SWOT created and saved for anonymous")
-          cy.log("Removing DB entry for testingpurposes")
+          cy.log("Removing DB entry for testing purposes")
           cy.task("queryDb",`DELETE FROM toolbox.saves WHERE name="TEST-SWOT";`);
         })
 
@@ -95,10 +88,11 @@ describe('SWOT Analyisis Part I', () => {
         cy.url()
           .should("include","swot-analysis")
 
+        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
         cy.contains("TEST-SWOT VON MAX")
           .click()
 
-        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
+        
         cy.wait("@loadSave")
         cy.get("@loadSave")
         .its("response")
