@@ -10,10 +10,11 @@ describe('SWOT Analyisis Part II', () => {
         cy.loginViaApi("max@test.test", "password")
         cy.visit("/swot-analysis")
 
+        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
         cy.contains("TEST-SWOT VON MAX")
         .click()
 
-        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
+       
         cy.wait("@loadSave")
         cy.get("@loadSave")
         .its("response")
