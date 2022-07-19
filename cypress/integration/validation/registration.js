@@ -17,8 +17,9 @@ describe('register on the Website', () => {
         .should("be.visible")
 
         //--
-        cy.get('#username').type('Tim_Tester')
         cy.intercept('GET', /.*api\/checkUsername.*/).as('checkUser')
+        cy.get('#username').type('Tim_Tester')
+       
         cy.wait("@checkUser")
         
         cy.get('@checkUser')

@@ -9,7 +9,7 @@ Module: "smtp-tester"
 Beschreibung: 
 Wird benötigt damit Cypress einen smtp-server für seine Testumgebung erstellt.
 ```shell
-npm i smtp-tester
+npm install
 ```
 
 ## Start von Cypress

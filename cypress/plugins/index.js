@@ -11,6 +11,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+const { faBabyCarriage } = require('@fortawesome/free-solid-svg-icons');
 const ms = require('smtp-tester');
 /**
  * @type {Cypress.PluginConfig}
@@ -49,7 +50,8 @@ module.exports = (on, config) => {
 
 
         const mysql = require("mysql2");
-
+        const bcrypt = require('bcrypt');
+      
         function queryTestDb(query, config) {
             // creates a new mysql connection using credentials from cypress.json env's
             const connection = mysql.createConnection({
@@ -76,7 +78,15 @@ module.exports = (on, config) => {
         on("task", {
             queryDb: query => {
                 return queryTestDb(query, config);
-            }
+            }  
+        });
+        on("task", {
+            bcrypt: password => {
+                const saltRounds = 10;
+                var myPlaintextPassword = password;
+                var passwordHashed = bcrypt.hashSync(myPlaintextPassword,saltRounds)
+                return passwordHashed;
+            }  
         });
     }
 

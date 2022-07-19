@@ -49,7 +49,7 @@ describe('SWOT Analyisis Part I', () => {
 
       it('trys to create a new SWOT as max@test.test', () =>{
         cy.visit("/")
-        cy.loginViaApi("max@test.test", "password")
+        cy.loginViaApi()
         cy.visit("/swot-analysis")
         cy.url().should("include","swot-analysis")
 
@@ -83,7 +83,7 @@ describe('SWOT Analyisis Part I', () => {
         cy.CreateSave("swot-1","TEST-SWOT VON MAX",2)
         
         cy.visit("/")
-        cy.loginViaApi("max@test.test", "password")
+        cy.loginViaApi()
         cy.visit("/swot-analysis")
         cy.url()
           .should("include","swot-analysis")

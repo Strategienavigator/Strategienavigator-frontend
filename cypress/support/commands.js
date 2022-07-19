@@ -26,14 +26,14 @@
 
 const { createLogicalNot } = require("typescript");
 
-Cypress.Commands.add('loginViaApi', (email, password, remember = false) => {
+Cypress.Commands.add('loginViaApi', () => {
 
     let data = {
         grant_type: 'password',
         client_id: Cypress.env("APP_CLIENT_ID"),
         client_secret: Cypress.env("APP_CLIENT_SECRET"),
-        username: email,
-        password: password,
+        username: Cypress.env("TEST_LOGIN_USERNAME"),
+        password: Cypress.env("TEST_LOGIN_PASSWORD"),
         scope: ''
     };
 
@@ -54,7 +54,7 @@ Cypress.Commands.add('loginViaVisual',(index = -1)=>{
     if (index == -1)
     {
         username = Cypress.env("TEST_LOGIN_USERNAME")
-        password =Cypress.env("TEST_LOGIN_PASSWORD")
+        password = Cypress.env("TEST_LOGIN_PASSWORD")
     }else{
         username = this.LoginData[index]["username"]
         password =  this.LoginData[index]["password"]
@@ -96,12 +96,10 @@ Cypress.Commands.add("visitSite",(site ,clickOn)=>{
 //owner_id int: optional: standard is 0 for max@test.test
 Cypress.Commands.add('CreateSave',(saveSlot,name,tool_id,owner_id = 1)=>{
     
-    cy.fixture("saveDummyData.json").then(function (SaveData)
+    cy.fixture("saveData/"+saveSlot).then(function (SaveData)
      {
         this.SaveData = SaveData
-        var saveObject = this.SaveData[saveSlot]
-        var save = JSON.stringify(saveObject)
-        cy.log(save)
+        var save = JSON.stringify(SaveData)
         cy.task("queryDb",
         `INSERT INTO toolbox.saves
         (data, name, tool_id, owner_id, description)

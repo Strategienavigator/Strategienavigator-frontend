@@ -2,12 +2,18 @@ const { debug } = require("console")
 
 describe('Checking Profile', () => {
     beforeEach(() =>{
+        var email = Cypress.env("TEST_LOGIN_USERNAME")
+        var password = Cypress.env("TEST_LOGIN_PASSWORD")
+        cy.task("bcrypt", password).then(function (hashword)
+        {
+        this.hashword = hashword
         cy.task("queryDb",
         `UPDATE toolbox.users
-        SET username = "test_user", email = "max@test.test", password = "$2y$10$UJinKiSroTM2MsFmLBu2puwOJynkzmTj9ZgLnsOHfa3HIK43/QKxW"
-        WHERE id = 1`)
+        SET username = "test_user", email = "`+email+`", password = "`+hashword+`"
+        WHERE id = 1;`)
+        })
 
-        cy.loginViaApi("max@test.test", "password")
+        cy.loginViaApi()
 
         cy.intercept("GET",/.*settings.*/).as('get')
         cy.visit("/my-profile")

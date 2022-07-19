@@ -7,7 +7,7 @@ describe('SWOT Analyisis Part II', () => {
     })
     it('trys to load save and create action steps',() =>{
         cy.visit("/")
-        cy.loginViaApi("max@test.test", "password")
+        cy.loginViaApi()
         cy.visit("/swot-analysis")
 
         cy.intercept('GET', /.*api\/saves.*/).as('loadSave')

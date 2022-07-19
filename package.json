@@ -63,6 +63,7 @@
     "@cypress/webpack-dev-server": "^1.8.4",
     "@types/file-saver": "^2.0.4",
     "@types/xlsx": "^0.0.36",
+    "bcrypt": "^5.0.1",
     "cypress": "^9.6.1",
     "cypress-local-config": "^0.0.2",
     "cypress-terminal-report": "^3.5.2",
