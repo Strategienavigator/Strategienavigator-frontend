@@ -80,7 +80,7 @@ describe('SWOT Analyisis Part I', () => {
       })
 
       it('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
-        CreateSave()
+        cy.CreateSave("swot-1","TEST-SWOT VON MAX",2)
         
         cy.visit("/")
         cy.loginViaApi("max@test.test", "password")
@@ -162,18 +162,7 @@ describe('SWOT Analyisis Part I', () => {
           //
           cy.contains("Speichern")
           .click();
-          
-          //TODO: This POST gives back a NULL is that supposed to be so?
-          //cy.intercept('POST', /.*api\/saves.*/).as('overWrite')
-          /*
-          cy.get("@overWrite")
-          .its("response")
-          .should('include',
-          {
-            statusCode: null
-          })
-          */
-          
+ 
       })
 
 })
@@ -232,19 +221,6 @@ function FillFactors()
     
   }
 }
-function CreateSave()
-{
-  cy.task("queryDb",
-  `INSERT INTO toolbox.saves
-    (data, name, tool_id, owner_id, description)
-    VALUES
-    ('{"swot-factors":{"factors":{"chances":[{"desc":"","name":"","id":"1"},{"desc":"","name":"","id":"2"}],"strengths":[{"desc":"","name":"","id":"A"},{"desc":"","name":"","id":"B"}],"weaknesses":[{"desc":"","name":"","id":"a"},{"desc":"","name":"","id":"b"}],"risks":[{"desc":"","name":"","id":"I"},{"desc":"","name":"","id":"II"}]}}}',
-     "TEST-SWOT VON MAX",
-      2,
-      1,
-      "TEST-SWOT ist ein Testscenario von einem API eingeloggten benutzer");`);
-}
-
 
 
 

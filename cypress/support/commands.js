@@ -49,29 +49,32 @@ Cypress.Commands.add('loginViaVisual',(index = -1)=>{
      {
     this.LoginData = LoginData;
 
-    var login
+    var username
+    var password
     if (index == -1)
     {
-        login = Cypress.env("TEST_LOGIN")
+        username = Cypress.env("TEST_LOGIN_USERNAME")
+        password =Cypress.env("TEST_LOGIN_PASSWORD")
     }else{
-        login = this.LoginData[index];
+        username = this.LoginData[index]["username"]
+        password =  this.LoginData[index]["password"]
     }
 
-    cy.log(login["username"])
-    cy.log('Logs in visual as ' + login)
+    cy.log(username)
+    cy.log('Logs in visual as ' + username)
 
     cy.visit("/login")
     cy.get('input[id="email"]')
     .clear()
-    .type(login["username"])
+    .type(username)
     cy.get('input[id="password"]')
     .clear()
-    .type(login["password"])
+    .type(password)
     cy.intercept("GET",/.*users.*/).as('user')
     cy.get('button[type="submit"]')
     .click()
 
-    cy.log("Logged in "+ login["username"])
+    cy.log("Logged in as "+ username)
     cy.wait("@user")
      })
 }) 
@@ -84,4 +87,29 @@ Cypress.Commands.add("visitSite",(site ,clickOn)=>{
     }
     cy.contains(clickOn).click()
     cy.url().should("include", site)
+})
+
+//Parameter
+//saveSlot string: Expample: "swot-1" for a first step save for SWOT, which slot has what save look into saveDummyData.json in fixtures
+//name string: name for the save
+//tool_id int : Which tool, 2 for SWOT-Analysis
+//owner_id int: optional: standard is 0 for max@test.test
+Cypress.Commands.add('CreateSave',(saveSlot,name,tool_id,owner_id = 1)=>{
+    
+    cy.fixture("saveDummyData.json").then(function (SaveData)
+     {
+        this.SaveData = SaveData
+        var saveObject = this.SaveData[saveSlot]
+        var save = JSON.stringify(saveObject)
+        cy.log(save)
+        cy.task("queryDb",
+        `INSERT INTO toolbox.saves
+        (data, name, tool_id, owner_id, description)
+        VALUES
+        ('`+save+`',
+        "`+name+`",
+        `+tool_id+`,
+        `+owner_id+`,
+        "TEST_SAVE");`);
+     })
 })

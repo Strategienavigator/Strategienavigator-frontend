@@ -4,8 +4,8 @@ describe('register on the Website', () => {
     })
     it('trys to send a email',() =>{
         cy.visit("/register");
-        cy.get('#email').type('Tim@jade-hs.de')
         cy.intercept('GET', /.*api\/checkEmail.*/).as('checkEmail')
+        cy.get('#email').type('Tim@jade-hs.de')
         cy.wait("@checkEmail")
 
         cy.get('@checkEmail')

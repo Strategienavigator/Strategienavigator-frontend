@@ -2,6 +2,11 @@ const { debug } = require("console")
 
 describe('Checking Profile', () => {
     beforeEach(() =>{
+        cy.task("queryDb",
+        `UPDATE toolbox.users
+        SET username = "test_user", email = "max@test.test", password = "$2y$10$UJinKiSroTM2MsFmLBu2puwOJynkzmTj9ZgLnsOHfa3HIK43/QKxW"
+        WHERE id = 1`)
+
         cy.loginViaApi("max@test.test", "password")
 
         cy.intercept("GET",/.*settings.*/).as('get')
@@ -59,18 +64,6 @@ describe('Checking Profile', () => {
         cy.get("input[id='username']")
         .should('have.value',"test_user")
 
-        //REVERT BACK to original
-        cy.contains("Bearbeiten")
-        .click()
-        cy.get("input[id='username']")
-        .clear()
-        .type("test_user")
-        cy.get("input[id='current_password']")
-        .clear()
-        .type("password")
-        cy.contains("Änderungen speichern")
-        .click()
-
     })
     // TODO email is ignored from backend. So no 401 response is expected
     it.skip('should NOT be able to change emailadress (wrong password/email' , () =>{
@@ -100,18 +93,6 @@ describe('Checking Profile', () => {
         cy.reload();
         cy.get("input[id='email']")
         .should('have.value',"max@test.test")
-
-        //REVERT BACK to original
-        cy.contains("Bearbeiten")
-        .click()
-        cy.get("input[id='email']")
-        .clear()
-        .type("max@test.test")
-        cy.get("input[id='current_password']")
-        .clear()
-        .type("password")
-        cy.contains("Änderungen speichern")
-        .click()
 
 
     })
@@ -143,18 +124,6 @@ describe('Checking Profile', () => {
         cy.reload();
         cy.get("input[id='email']")
         .should("max@test.test")
-
-
-        //REVERT BACK to original
-        cy.get("input[id='email']")
-        .clear()
-        .type("max@test.test")
-        cy.get("input[id='current_password']")
-        .clear()
-        .type("password")
-        cy.contains("Änderungen speichern")
-        .click()
-
     })
     it('trys to change profilename', () =>{
 
@@ -180,20 +149,6 @@ describe('Checking Profile', () => {
         cy.get("input[id='username']")
         .should('have.value', 'TEST_USERXXXX1')
 
-        //Rückgängig machen
-        cy.get("input[id='username']")
-        .clear()
-        .type("test_user")
-
-        cy.get("input[id='current_password']")
-        .clear()
-        .type("password")
-
-        cy.contains("Änderungen speichern")
-        .click()
-
-        cy.get("input[id='username']")
-        .should('have.value', 'test_user')
     })
     it('trys to change emailadress', () =>{
 
@@ -219,21 +174,6 @@ describe('Checking Profile', () => {
 
         cy.get("input[id='email']")
         .should('have.value', 'max1@test.test')
-
-        //Rückgängig machen
-        cy.get("input[id='email']")
-        .clear()
-        .type("max@test.test")
-
-        cy.get("input[id='current_password']")
-        .clear()
-        .type("password")
-
-        cy.contains("Änderungen speichern")
-        .click()
-
-        cy.get("input[id='email']")
-        .should('have.value', 'max@test.test')
     })
 
 

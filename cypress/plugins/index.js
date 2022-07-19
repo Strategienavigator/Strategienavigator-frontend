@@ -27,7 +27,7 @@ module.exports = (on, config) => {
         require('@cypress/react/plugins/react-scripts')(on, config)
     } else {
         // starts the SMTP server at localhost:7777
-        const port = 7777;
+        const port = config.env["SMTP_PORT"];
         const mailServer = ms.init(port)
         console.log('mail server at port %d', port)
 
