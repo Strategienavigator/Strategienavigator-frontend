@@ -110,16 +110,12 @@ class UtilResult implements StepDefinition<UtilityAnalysisValues>, StepDataHandl
                 percentages: percentages,
                 result: result
             };
-
-            console.log(data["ua-result"]);
         }
     }
-
 
     isUnlocked(data: UtilityAnalysisValues): boolean {
         return (data["ua-result"] !== undefined && Object.keys(data["ua-result"]).length > 0);
     }
-
 
     validateData(data: UtilityAnalysisValues): UIError[] {
         return [];

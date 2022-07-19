@@ -1,0 +1,15 @@
+
+.grid-overlay.BCG {
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+
+  > div {
+    font-size: 9pt;
+    color: #939393;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 2px;
+  }
+}
