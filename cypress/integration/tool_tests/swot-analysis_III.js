@@ -42,8 +42,7 @@ describe('SWOT Analyisis Part I', () => {
         .clear()
         .type("Klassifikation 2")
         
-        var count = 0;
-        
+   
         //collapse accordion to hide accordion
         cy.get("button[class='accordion-button']")
         .each(($button) =>
@@ -57,36 +56,23 @@ describe('SWOT Analyisis Part I', () => {
         
         for (let i = 0; i < 32; i++) 
         {
-            cy.get("form[id='swot-classify-alternate-actions']")
-            .children('.actionCards')// actionCards
-                .children()// actionCard card
-                    .children()// card-body
-                        .children()//row
-                            .children()//col
-                                .children('.btn.btn-primary.btn-sm')
-            .first().then(($button) =>
-            {          
-                    count++  
-                    cy.wrap($button)
-                    .click()
+            cy.get("form[id='swot-classify-alternate-actions']>.actionCards")
+            .find("button[class='btn btn-primary btn-sm']")
+            .first().click()   
+            
+            let select
 
-                    cy.get('select').each(($select) =>
-                    {
-                        if ($select.is(":visible"))
-                        {
-                            if (count % 2)
-                            {
-                                cy.wrap($select)
-                                .select('droppable-1')
-                            }else
-                            {
-                                cy.wrap($select)
-                                .select('droppable-2')                           
-                            }
-                                                       
-                        }
-                    })
-            })      
+            if (i % 2)
+            {
+                
+                select = 'droppable-1'
+
+            }else
+            {
+                select = 'droppable-2'
+            }
+            cy.get('.modal-body select').select(select)
+    
         }
         cy.contains("Speichern")
         .click();   
