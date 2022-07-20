@@ -1,5 +1,3 @@
-const { wait } = require("@testing-library/react");
-
 describe('SWOT Analyisis Part II', () => {
     beforeEach(() =>{
         cy.task("queryDb",`DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
@@ -23,11 +21,11 @@ describe('SWOT Analyisis Part II', () => {
         })
 
         cy.url()
-            .should("include", "swot-analysis")
+        .should("include", "swot-analysis")
         cy.log("Save loaded")
 
         cy.contains("Weiter")
-            .click()
+        .click()
         
             for (let i = 0; i < 64; i++) 
             {
@@ -40,7 +38,12 @@ describe('SWOT Analyisis Part II', () => {
                     .click()
                     }
             }
-            CheckColor()        
+            CheckColor() 
+              
+        cy.contains("Nächster")
+        .click()  
+        cy.contains("Speichern")
+        .click();   
     })
 })
 function FillActionStep(index)
