@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       bumpType:
-        description: "Welcher version"
+        description: "Welche version"
         required: true
         default: 'patch'
         type: choice
@@ -11,6 +11,14 @@ on:
           - patch
           - minor
           - major
+      branch:
+        description: "Auf welchem Branch die Version erhöht werden soll"
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - main
 
 
 
@@ -19,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{github.events.inputs.branch}}
       - name: 'Automated Version Bump'
         id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
