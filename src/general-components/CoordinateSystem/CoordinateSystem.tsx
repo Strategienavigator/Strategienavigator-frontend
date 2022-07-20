@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, ReactElement} from "react";
 
 import "./coordinate-system.scss";
 import {ValueRenderer} from "./ValueRenderer/ValueRenderer";
@@ -6,7 +6,7 @@ import {NumberValueRenderer} from "./ValueRenderer/NumberValueRenderer";
 import {Property} from "csstype";
 import {CustomGrid} from "./Grid/CustomGrid";
 import {Point} from "./Point";
-import {OverlayTrigger, Tooltip} from "react-bootstrap";
+import {Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
 
 
 export interface NumberRange {
@@ -37,6 +37,8 @@ export interface CoordinateSystemProps {
     maxWidth?: number,
     axisThickness?: number,
     gridDisplay?: boolean | CoordinateSystemGrid | CustomGrid,
+    tooltipContentRenderer?: (point: Point) => ReactElement,
+    legend?: boolean,
     axis: {
         y: AxisInterface
         x: AxisInterface
@@ -53,9 +55,9 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
     static standardThickness = 1;
     static standardAccuracy = 3;
 
-    static standardPointSize = 3;
-    static minPointSize = 1;
-    static maxPointSize = 8;
+    static standardPointSize = 4;
+    static minPointSize = 3;
+    static maxPointSize = 12;
 
     render() {
         let maxWidth = (this.props.maxWidth) ? this.props.maxWidth : CoordinateSystem.maxWidth;
@@ -134,17 +136,17 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                                             trigger={["hover", "focus"]}
                                             placement="top"
                                             overlay={(
-                                                <Tooltip
-                                                    style={{textAlign: "left"}}
-                                                >
-                                                    <strong>{point.header}</strong><br/>
-
-                                                    Marktattraktivität: {point.y} <br/>
-                                                    Marktanteil: {point.x}
+                                                <Tooltip>
+                                                    {(this.props.tooltipContentRenderer) ? this.props.tooltipContentRenderer(point) : ""}
                                                 </Tooltip>
                                             )}
                                         >
-                                            <div className={"circle"}/>
+                                            <div
+                                                className={"circle"}
+                                                style={{
+                                                    backgroundColor: point.color
+                                                }}
+                                            />
                                         </OverlayTrigger>
                                     </div>
                                 );
@@ -197,6 +199,27 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                 <div/>
                 <div className={"axis-name x"}>
                     {this.props.axis.x.name}
+                </div>
+                <div/>
+                <div className={"legend"}>
+                    {(this.props.legend) && (
+                        <Row className={"points"}>
+                            {this.props.points.map((point, index) => {
+                                return (
+                                    <Col key={"legend-point-" + point.header + "-" + index}>
+                                        <div
+                                            className={"point"}
+                                            style={{
+                                                borderLeftColor: point.color
+                                            }}
+                                        >
+                                            {point.header}
+                                        </div>
+                                    </Col>
+                                );
+                            })}
+                        </Row>
+                    )}
                 </div>
             </div>
         );

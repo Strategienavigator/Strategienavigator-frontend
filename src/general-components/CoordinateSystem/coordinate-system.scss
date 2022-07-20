@@ -1,10 +1,12 @@
 $namePadding: 1.4rem;
+$circleColor: #c51111;
+$opacity: 0.75;
 
 .coordinate-system-wrapper {
   width: 100%;
   margin: auto;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr auto auto;
   grid-template-columns: auto 1fr;
 
   .axis-name {
@@ -25,6 +27,25 @@ $namePadding: 1.4rem;
     padding-left: $namePadding;
     writing-mode: vertical-lr;
     transform: rotate(180deg);
+  }
+
+  .legend .points {
+    padding: 0.75rem 0 0.75rem 0;
+    gap: 5px 0;
+
+    > div {
+      display: flex;
+      justify-content: flex-start;
+
+      > div.point {
+        border-left: 10px solid;
+        text-align: left;
+        padding-left: 0.5rem;
+        border-left-color: $circleColor;
+        opacity: $opacity;
+        font-size: 9pt;
+      }
+    }
   }
 }
 
@@ -70,8 +91,10 @@ $namePadding: 1.4rem;
         height: 100%;
         position: absolute;
         transform: translate(-50%, -50%);
+        opacity: $opacity;
         border-radius: 50%;
-        background-color: #c51111;
+        background-color: $circleColor;
+        border: 1px solid rgba(0, 0, 0, 0.3);
       }
     }
   }
@@ -118,6 +141,7 @@ $namePadding: 1.4rem;
 
       .values {
         flex-direction: column-reverse;
+        padding-right: 0.2rem;
       }
     }
 
@@ -133,6 +157,7 @@ $namePadding: 1.4rem;
 
       .values {
         flex-direction: row;
+        padding-top: 0.2rem;
       }
     }
   }

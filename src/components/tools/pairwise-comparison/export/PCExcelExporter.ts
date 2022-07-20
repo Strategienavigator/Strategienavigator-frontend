@@ -6,8 +6,8 @@ import {PCPairComparisonValues} from "../steps/PCPairComparison/PCPairComparison
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PCCriteriasValues} from "../steps/PCCriterias/PCCriteriasComponent";
-import {Evaluation} from "../../../../general-components/EvaluationComponent/Evaluation";
-import {EvaluationExcelWorkSheet} from "../../../../general-components/EvaluationComponent/EvaluationExcelWorkSheet";
+import {WeightingEvaluation} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
+import {WeightingEvaluationExcelWorkSheet} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationExcelWorkSheet";
 
 
 /**
@@ -174,8 +174,8 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
      * @private
      */
     private getResultSheet(criterias: PCCriteriasValues, comparisons: PCPairComparisonValues) {
-        let evaluation = new Evaluation(criterias.criterias, comparisons);
-        return new EvaluationExcelWorkSheet(evaluation, "Kriterium").getExcelSheet();
+        let evaluation = new WeightingEvaluation(criterias.criterias, comparisons);
+        return new WeightingEvaluationExcelWorkSheet(evaluation, "Kriterium").getExcelSheet();
     }
 }
 

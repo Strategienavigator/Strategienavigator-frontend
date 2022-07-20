@@ -8,8 +8,27 @@
     color: #939393;
     text-transform: uppercase;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 1rem;
     letter-spacing: 2px;
+  }
+
+  > div.qm {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  > div.stars {
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+
+  > div.pd {
+    justify-content: flex-start;
+    align-items: flex-end;
+  }
+
+  > div.cc {
+    justify-content: flex-end;
+    align-items: flex-end;
   }
 }

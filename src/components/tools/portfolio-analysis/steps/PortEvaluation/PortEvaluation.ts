@@ -113,7 +113,7 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
                         i++;
                     }
                 }
-                if(errorFound) {
+                if (errorFound) {
                     errors.push({
                         id: "port-evaluation.empty",
                         message: "Es müssen alle Kriterien bewertet werden!",

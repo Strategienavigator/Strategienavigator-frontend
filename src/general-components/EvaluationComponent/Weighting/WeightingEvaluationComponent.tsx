@@ -1,6 +1,6 @@
 import {Component} from "react";
 import {Table} from "react-bootstrap";
-import {EvaluationValues} from "./Evaluation";
+import {EvaluationValues, SingleResult} from "./WeightingEvaluation";
 
 
 export interface EvaluationComponentProps {
@@ -17,10 +17,25 @@ export interface EvaluationComponentProps {
 /**
  * Nutzt die Werte der Evaluation um eine Tabelle auszugeben welches die Ergebnisse anzeigt.
  */
-class EvaluationComponent extends Component<EvaluationComponentProps, any> {
+class WeightingEvaluationComponent extends Component<EvaluationComponentProps, any> {
 
     render = () => {
         let sum = this.props.values.result.reduce((p, n) => p + n.points, 0);
+        let result = this.props.values.result;
+
+        let target: SingleResult[] = [];
+        let sortedResult = Object.assign(target, result);
+        if (sortedResult) {
+            sortedResult = sortedResult.sort((a, b) => {
+                if (a.points > b.points) {
+                    return -1;
+                }
+                if (a.points < b.points) {
+                    return 1;
+                }
+                return 0;
+            })
+        }
 
         return (
             <div>
@@ -40,7 +55,7 @@ class EvaluationComponent extends Component<EvaluationComponentProps, any> {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.props.values.result && this.props.values.result.map((v, index) => {
+                    {sortedResult && sortedResult.map((v, index) => {
                         return (
                             <tr key={"criteria-evaluation-" + v.criteria.id + "-" + index}>
                                 <td>
@@ -62,5 +77,5 @@ class EvaluationComponent extends Component<EvaluationComponentProps, any> {
 }
 
 export {
-    EvaluationComponent
+    WeightingEvaluationComponent
 }

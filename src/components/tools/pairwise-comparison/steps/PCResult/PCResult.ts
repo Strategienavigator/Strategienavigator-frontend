@@ -7,7 +7,7 @@ import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {PCResultComponent} from "./PCResultComponent";
-import {Evaluation} from "../../../../../general-components/EvaluationComponent/Evaluation";
+import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 
 class PCResult implements StepDefinition<PairwiseComparisonValues>, StepDataHandler<PairwiseComparisonValues> {
@@ -35,7 +35,7 @@ class PCResult implements StepDefinition<PairwiseComparisonValues>, StepDataHand
         let comparisons = data["pc-comparison"];
 
         if (criterias && comparisons) {
-            let evaluation: Evaluation = Evaluation.from(criterias, comparisons);
+            let evaluation: WeightingEvaluation = WeightingEvaluation.from(criterias, comparisons);
 
             // finish up data
             data["pc-result"] = evaluation.getValues();

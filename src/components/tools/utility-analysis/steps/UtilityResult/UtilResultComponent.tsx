@@ -5,7 +5,7 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
-import {Table} from "react-bootstrap";
+import {ResultEvaluationComponent} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluationComponent";
 
 
 export interface UtilResultValues {
@@ -40,30 +40,7 @@ class UtilResultComponent extends Step<UtilityAnalysisValues, any> {
 
         if (data) {
             return (
-                <Table bordered={false} borderless={false} hover={true} variant={"light"}
-                       striped={true}>
-                    <thead>
-                    <tr>
-                        <th className={"fixed"}>Objekt</th>
-                        <th className={"fixed"}>Punkte</th>
-                        <th className={"fixed"}>Rang</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {data.result && data.result.map((v, index) => {
-                        return (
-                            <tr key={"utility-analysis-evaluation-" + v.object.id + "-" + index}>
-                                <td>
-                                    {v.object.name}<br/>
-                                    <small>{v.object.desc}</small>
-                                </td>
-                                <td>{v.points}</td>
-                                <td className={"fixed"}>{v.rank}</td>
-                            </tr>
-                        );
-                    })}
-                    </tbody>
-                </Table>
+                <ResultEvaluationComponent values={data}/>
             );
         }
         return <div>ERROR</div>;
