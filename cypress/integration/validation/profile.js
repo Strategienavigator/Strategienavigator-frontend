@@ -6,11 +6,11 @@ describe('Checking Profile', () => {
         var password = Cypress.env("TEST_LOGIN_PASSWORD")
         cy.task("bcrypt", password).then(function (hashword)
         {
-        this.hashword = hashword
-        cy.task("queryDb",
-        `UPDATE toolbox.users
-        SET username = "test_user", email = "`+email+`", password = "`+hashword+`"
-        WHERE id = 1;`)
+            this.hashword = hashword
+            cy.task("queryDb",
+            `UPDATE toolbox.users
+            SET username = "test_user", email = "`+email+`", password = "`+hashword+`"
+            WHERE id = 1;`)
         })
 
         cy.loginViaApi()

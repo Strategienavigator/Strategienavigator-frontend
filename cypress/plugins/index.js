@@ -11,7 +11,6 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const { faBabyCarriage } = require('@fortawesome/free-solid-svg-icons');
 const ms = require('smtp-tester');
 /**
  * @type {Cypress.PluginConfig}

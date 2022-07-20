@@ -26,14 +26,14 @@
 
 const { createLogicalNot } = require("typescript");
 
-Cypress.Commands.add('loginViaApi', () => {
+Cypress.Commands.add('loginViaApi', (username = Cypress.env("TEST_LOGIN_USERNAME"), password = Cypress.env("TEST_LOGIN_PASSWORD")) => {
 
     let data = {
         grant_type: 'password',
         client_id: Cypress.env("APP_CLIENT_ID"),
         client_secret: Cypress.env("APP_CLIENT_SECRET"),
-        username: Cypress.env("TEST_LOGIN_USERNAME"),
-        password: Cypress.env("TEST_LOGIN_PASSWORD"),
+        username: username,
+        password: password,
         scope: ''
     };
 
@@ -80,7 +80,7 @@ Cypress.Commands.add('loginViaVisual',(index = -1)=>{
 }) 
 //site = name of the site example: login
 //clickOn = element that contains a text example: "Login" for a Button with Login on it
-Cypress.Commands.add("visitSite",(site ,clickOn)=>{
+Cypress.Commands.add("visitSite",(site, clickOn)=>{
     cy.log("visit site " + site)
     if(site[0] === "/"){
         site.slice(1);
@@ -94,7 +94,7 @@ Cypress.Commands.add("visitSite",(site ,clickOn)=>{
 //name string: name for the save
 //tool_id int : Which tool, 2 for SWOT-Analysis
 //owner_id int: optional: standard is 0 for max@test.test
-Cypress.Commands.add('CreateSave',(saveSlot,name,tool_id,owner_id = 1)=>{
+Cypress.Commands.add('CreateSave',(saveSlot, name, tool_id, owner_id = 1)=>{
     
     cy.fixture("saveData/"+saveSlot).then(function (SaveData)
      {
