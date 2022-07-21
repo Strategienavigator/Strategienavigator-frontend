@@ -1,9 +1,7 @@
-abstract class ValueRenderer {
 
-    public abstract render(value: number): JSX.Element;
-
-}
-
-export {
-    ValueRenderer
+/**
+ * Dient zum Rendern der Achsenwerte
+ */
+export interface ValueRenderer {
+    render(value: number): JSX.Element;
 }

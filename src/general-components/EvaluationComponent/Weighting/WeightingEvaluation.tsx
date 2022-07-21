@@ -66,7 +66,8 @@ class WeightingEvaluation<D = any> {
 
         // evaluate
         this.eval();
-        this.sortResult();
+
+        this.sortedResult = WeightingEvaluation.sort(this.sortedResult);
         this.evalRank();
         this.values.resultAsString = this.toString();
     }
@@ -119,6 +120,25 @@ class WeightingEvaluation<D = any> {
             i++;
         }
         return resultString;
+    }
+
+    /**
+     * Sortiert ein Array
+     *
+     * @param {any[]} unsorted
+     * @returns {any[]}
+     */
+    public static sort(unsorted: any[]) {
+        let sorted = unsorted.sort((a, b) => {
+            if (a.points > b.points) {
+                return -1;
+            }
+            if (a.points < b.points) {
+                return 1;
+            }
+            return 0;
+        });
+        return sorted;
     }
 
     /**
@@ -182,19 +202,6 @@ class WeightingEvaluation<D = any> {
     private determineMiddleOfHeader(): number {
         return (this.comparisons.headers.length - 1) / 2
     }
-
-    private sortResult() {
-        this.sortedResult = this.sortedResult.sort((a, b) => {
-            if (a.points > b.points) {
-                return -1;
-            }
-            if (a.points < b.points) {
-                return 1;
-            }
-            return 0;
-        })
-    }
-
 }
 
 export {

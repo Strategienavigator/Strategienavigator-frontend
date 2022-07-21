@@ -9,65 +9,168 @@ import {Point} from "./Point";
 import {Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
 
 
+/**
+ * Wird benutzt beim Festlegen der Achsenverhältnisse
+ */
 export interface NumberRange {
+    /**
+     * Wertstart der Range
+     */
     start: number,
+    /**
+     * Wertende der Range
+     */
     end: number
 }
 
+/**
+ * Angabe der Achsenwerte
+ */
 interface AxisInterface {
+    /**
+     * Maximalwert der Achse
+     */
     maxValue: number,
+    /**
+     * Name der Achse
+     */
     name?: string,
+    /**
+     * Kann angegeben werden um die Datenwerte der Achse verschiedenst zu rendern
+     */
     valueRenderer?: ValueRenderer,
+    /**
+     * Gibt an wieviel datenwerte an den Achsen geschrieben werden sollen. Die Werte werden mit Hilfe der maxValue automatisch aufgeteilt.
+     * Ist Standardmäßig 3
+     */
     valueAccuracy?: number
 }
 
+/**
+ * Grid des Koordinatensystems.
+ * Das Grid richtet sich automatisch nach den valueAccuracys der Achsen.
+ */
 export interface CoordinateSystemGrid {
+    /**
+     * Dicke der Grid-Border
+     */
     thickness?: number,
+    /**
+     * CSS-Border-Style
+     */
     style?: Property.BorderStyle,
+    /**
+     * CSS-Border-Color
+     */
     color?: Property.BorderColor
 }
 
+/**
+ * Enthält die Achsenverhältnisse. Wird mittels Numberrange ausgerechnet.
+ */
 interface axisValues {
+    /**
+     * Anzahl des gesamtverhältnisses
+     */
     total: number,
+    /**
+     * Prozentzahl des Startwertes
+     */
     startShare: number,
+    /**
+     * Prozentzahl des Endwertes
+     */
     endShare: number
 }
 
+/**
+ * Props des Koordinatensystems
+ */
 export interface CoordinateSystemProps {
+    /**
+     * Maximalbreite des Koordinatensystems (Quadratisch)
+     */
     maxWidth?: number,
+    /**
+     * Die Dicke der Achsen (1-n)
+     */
     axisThickness?: number,
+    /**
+     * Das Grid welches im Koordinatensystems gezeichnet wird.
+     * Wird true angegeben, wird ein Standardgrid benutzt.
+     * Es kann auch ein CustomGrid angegeben werden (bsp. BCG-Grid)
+     * Das Grid kann auch mittels CoordinateSystemGrid angepasst werden.
+     */
     gridDisplay?: boolean | CoordinateSystemGrid | CustomGrid,
+    /**
+     * Rendert den Inhalt des Tooltips.
+     * Der Tooltip wird über einem spezifischen Punkt angezeigt.
+     *
+     * @param {Point} point Der Punkt der im Tooltip angezeigt wird
+     * @returns {React.ReactElement} Der Inhalt
+     */
     tooltipContentRenderer?: (point: Point) => ReactElement,
+    /**
+     * Gibt an ob eine Legende gerendert werden soll.
+     * Die Legende wird automatisch mit Hilfe der angegeben Punkte gerendert.
+     */
     legend?: boolean,
+    /**
+     * Information zu den Achsen
+     */
     axis: {
         y: AxisInterface
         x: AxisInterface
     },
+    /**
+     * Die Punkte welche im Koordinatensystem gerendert werden sollen
+     */
     points: Point[],
+    /**
+     * Achsenverhältnisse der X-Achse.
+     * (-10, 10) würde für ein Verhältnis von 50% zu 50% sorgen. So wäre die Y-Achse in der Mitte
+     */
     widthRange: NumberRange,
+    /**
+     * Achsenverhältnisse der Y-Achse.
+     */
     heightRange: NumberRange,
 }
 
-
+/**
+ * Dient zum darstellen eines Koordinatensystem
+ */
 class CoordinateSystem extends Component<CoordinateSystemProps, any> {
+    // Standardwerte
     static standardValueRenderer = new NumberValueRenderer(0);
     static maxWidth = 700;
     static standardThickness = 1;
     static standardAccuracy = 3;
 
+    // Standardwerte der Größen
     static standardPointSize = 4;
     static minPointSize = 3;
     static maxPointSize = 12;
 
+    /**
+     * Gibt einen String zurück welcher die Grid-Items enthält.
+     *
+     * @param {number} amount Anzahl der FRs
+     * @returns {string} z.B. "1fr 1fr 1fr 1fr"
+     */
+    private getGridString = (amount: number): string => {
+        return Array(amount).fill("1fr", 0, amount).join(" ");
+    }
+
     render() {
-        let maxWidth = (this.props.maxWidth) ? this.props.maxWidth : CoordinateSystem.maxWidth;
-        let axisThickness = (this.props.axisThickness) ? this.props.axisThickness : CoordinateSystem.standardThickness;
+        let maxWidth = (this.props.maxWidth) ?? CoordinateSystem.maxWidth;
+        let axisThickness = (this.props.axisThickness) ?? CoordinateSystem.standardThickness;
 
         let yAxisShares = this.getAxisShares(this.props.heightRange);
         let xAxisShares = this.getAxisShares(this.props.widthRange);
 
-        let xAxisValueRenderer = (this.props.axis.x.valueRenderer) ? this.props.axis.x.valueRenderer : CoordinateSystem.standardValueRenderer;
-        let yAxisValueRenderer = (this.props.axis.y.valueRenderer) ? this.props.axis.y.valueRenderer : CoordinateSystem.standardValueRenderer;
+        let xAxisValueRenderer = (this.props.axis.x.valueRenderer) ?? CoordinateSystem.standardValueRenderer;
+        let yAxisValueRenderer = (this.props.axis.y.valueRenderer) ?? CoordinateSystem.standardValueRenderer;
 
         let xAxisValues = this.getAxisValues(this.props.widthRange, this.props.axis.x)
         let yAxisValues = this.getAxisValues(this.props.heightRange, this.props.axis.y);
@@ -75,10 +178,6 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
         let xAxisAccuracy = this.getAxisAccuracy(this.props.axis.x);
         let yAxisAccuracy = this.getAxisAccuracy(this.props.axis.y);
         let gridItems = this.getGridItems(xAxisAccuracy * yAxisAccuracy);
-
-        const getGridString = (amount: number): string => {
-            return Array(amount).fill("1fr", 0, amount).join(" ");
-        }
 
         return (
             <div className={"coordinate-system-wrapper"} style={{maxWidth: maxWidth}}>
@@ -91,8 +190,8 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                             <div
                                 className={"grid-overlay"}
                                 style={{
-                                    gridTemplateRows: getGridString(yAxisAccuracy),
-                                    gridTemplateColumns: getGridString(xAxisAccuracy),
+                                    gridTemplateRows: this.getGridString(yAxisAccuracy),
+                                    gridTemplateColumns: this.getGridString(xAxisAccuracy),
                                 }}
                             >
                                 {gridItems}
@@ -135,11 +234,11 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                                         <OverlayTrigger
                                             trigger={["hover", "focus"]}
                                             placement="top"
-                                            overlay={(
+                                            overlay={(this.props.tooltipContentRenderer) ? (
                                                 <Tooltip>
-                                                    {(this.props.tooltipContentRenderer) ? this.props.tooltipContentRenderer(point) : ""}
+                                                    {this.props.tooltipContentRenderer(point)}
                                                 </Tooltip>
-                                            )}
+                                            ) : <></>}
                                         >
                                             <div
                                                 className={"circle"}

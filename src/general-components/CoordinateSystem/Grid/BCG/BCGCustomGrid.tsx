@@ -4,6 +4,9 @@ import "./bcg-grid.scss";
 import {ReactElement} from "react";
 
 
+/**
+ * Stellt das BCG-Grid dar
+ */
 class BCGCustomGrid extends CustomGrid {
 
     constructor() {

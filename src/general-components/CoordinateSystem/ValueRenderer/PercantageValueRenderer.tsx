@@ -1,11 +1,16 @@
 import {ValueRenderer} from "./ValueRenderer";
 
 
-class PercantageValueRenderer extends ValueRenderer {
+/**
+ * Rendert die Achsenwerte als Prozentzahl
+ */
+class PercantageValueRenderer implements ValueRenderer {
     private readonly decimalPoints: number = 0;
 
+    /**
+     * @param {number} decimalPoints Dezimalstellen (fix)
+     */
     constructor(decimalPoints: number) {
-        super();
         this.decimalPoints = decimalPoints;
     }
 

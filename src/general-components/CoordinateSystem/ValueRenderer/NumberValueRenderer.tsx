@@ -1,11 +1,16 @@
 import {ValueRenderer} from "./ValueRenderer";
 
 
-class NumberValueRenderer extends ValueRenderer {
+/**
+ * Rendert die Achsenwerte als Zahlen
+ */
+class NumberValueRenderer implements ValueRenderer {
     private readonly decimalPoints: number = 0;
 
+    /**
+     * @param {number} decimalPoints Dezimalstellen (fix)
+     */
     constructor(decimalPoints: number) {
-        super();
         this.decimalPoints = decimalPoints;
     }
 

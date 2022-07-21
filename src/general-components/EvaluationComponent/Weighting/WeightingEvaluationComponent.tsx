@@ -1,6 +1,6 @@
 import {Component} from "react";
 import {Table} from "react-bootstrap";
-import {EvaluationValues, SingleResult} from "./WeightingEvaluation";
+import {EvaluationValues, SingleResult, WeightingEvaluation} from "./WeightingEvaluation";
 
 
 export interface EvaluationComponentProps {
@@ -26,15 +26,7 @@ class WeightingEvaluationComponent extends Component<EvaluationComponentProps, a
         let target: SingleResult[] = [];
         let sortedResult = Object.assign(target, result);
         if (sortedResult) {
-            sortedResult = sortedResult.sort((a, b) => {
-                if (a.points > b.points) {
-                    return -1;
-                }
-                if (a.points < b.points) {
-                    return 1;
-                }
-                return 0;
-            })
+            sortedResult = WeightingEvaluation.sort(sortedResult);
         }
 
         return (
