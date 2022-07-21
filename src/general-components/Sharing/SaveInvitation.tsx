@@ -11,6 +11,8 @@ import {Loader} from "../Loader/Loader";
 import {createInvitationLink, deleteInvitationLink, showInvitationLinks} from "../API/calls/Invitations";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/";
 import {Messages} from "../Messages/Messages";
+import {SingleInviteModal} from "./SingleInviteModal/SingleInviteModal";
+import {createContribution} from "../API/calls/Contribution";
 
 
 export interface SaveInvitationProps {
@@ -20,18 +22,25 @@ export interface SaveInvitationProps {
 }
 
 export interface SaveInvitationState {
+    searchItems: any[],
+    isSearching: boolean,
     searchText: string | null,
-    showInvitationLinkModal: boolean
-    links: InvitationLinkResource[]
+    showSingleInviteModal: string,
+    showInvitationLinkModal: boolean,
+    links: InvitationLinkResource[],
     deleteInvitationLink: string | null
 }
 
 class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState> {
+    private timeout: NodeJS.Timeout | undefined;
 
     constructor(props: SaveInvitationProps | Readonly<SaveInvitationProps>) {
         super(props);
 
         this.state = {
+            searchItems: [],
+            isSearching: false,
+            showSingleInviteModal: "",
             searchText: null,
             showInvitationLinkModal: false,
             links: [],
@@ -130,23 +139,63 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                         <div className={"direct"}>
                             <h5>Benutzer direkt einladen</h5>
 
-                            <InputGroup>
+                            <InputGroup className={"mb-2"}>
                                 <FormControl
                                     size={"sm"}
                                     name={"username-search"}
                                     placeholder={"Benutzername/E-Mail..."}
-                                    onChange={(e) => {
-                                        this.setState({
-                                            searchText: e.target.value
-                                        });
+                                    onChange={async (e) => {
+                                        let value = e.target.value;
+
+                                        if (value === "") {
+                                            this.setState({
+                                                searchItems: [],
+                                                isSearching: false
+                                            });
+                                        } else {
+                                            if (this.timeout) {
+                                                clearTimeout(this.timeout);
+                                            }
+
+                                            this.timeout = setTimeout(async () => {
+                                                this.setState({
+                                                    searchText: value,
+                                                    isSearching: true
+                                                }, () => {
+                                                    this.searchUser();
+                                                });
+                                            }, 400);
+                                        }
                                     }}
                                 />
                                 <Button
-                                    onClick={this.addUser}
+                                    onClick={this.searchUser}
                                 >
                                     <FAE icon={faSearch}/>
                                 </Button>
                             </InputGroup>
+
+                            <Loader payload={[]} loaded={!this.state.isSearching} transparent size={50}>
+                                <Table size={"sm"} hover={true}>
+                                    <tbody>
+                                    {(this.state.searchItems.map((user, index) => {
+                                        return (
+                                            <tr
+                                                key={user + "-" + index}
+                                                onClick={() => {
+                                                    this.setState({
+                                                        showSingleInviteModal: user
+                                                    });
+                                                }}
+                                                style={{cursor: "pointer"}}
+                                            >
+                                                <td>{user}</td>
+                                            </tr>
+                                        );
+                                    }))}
+                                    </tbody>
+                                </Table>
+                            </Loader>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
@@ -157,6 +206,20 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                         </Button>
                     </Modal.Footer>
                 </ModalCloseable>
+
+                <SingleInviteModal
+                    show={this.state.showSingleInviteModal !== ""}
+                    onClose={() => {
+                        this.setState({
+                            showSingleInviteModal: ""
+                        });
+                    }}
+                    username={this.state.showSingleInviteModal}
+                    onInvite={(async (permission) => {
+                        let user = 2;
+                        // TODO: Invite erstellen
+                    })}
+                />
 
                 <InvitationLinkModal
                     show={this.state.showInvitationLinkModal}
@@ -228,9 +291,21 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         );
     }
 
-    addUser = async () => {
+    searchUser = async () => {
+        this.setState({
+            isSearching: true
+        });
+
         let searchText = this.state.searchText;
         console.log(searchText);
+
+        // TODO: backend einbauen
+        setTimeout(() => {
+            this.setState({
+                searchItems: ["peter.fox", "test_user", "nichlas.schipper", "marco_janssen"],
+                isSearching: false
+            });
+        }, 1000);
     }
 
     private loadInviteLinks = async (save: SimpleSaveResource) => {

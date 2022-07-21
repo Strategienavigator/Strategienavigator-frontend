@@ -77,7 +77,10 @@ const callAPI = async <D extends object>(
 
         // CALL THE API
         let call = await fetch(callURL, requestInit);
-        let callData = await call.json();
+        let callData = null;
+        try {
+            callData = await call.json();
+        } catch (ex) {}
 
         // BUILD RESPONSE
         return {

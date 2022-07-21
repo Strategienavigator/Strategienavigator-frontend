@@ -24,7 +24,7 @@ const showInvitationLink = async (invitationToken: string, apiArgs?: APIArgs) =>
 
 export interface CreateInviteInterface {
     permission: number
-    expiry_date: Date
+    expiry_date: Date | null
     save_id: number
 }
 
@@ -36,8 +36,12 @@ export interface CreateInviteInterface {
  */
 const createInvitationLink = async (data: CreateInviteInterface, apiArgs?: APIArgs) => {
     let apiData = new FormData();
-    apiData.append("permission", String(data.permission))
-    apiData.append("expiry_date", data.expiry_date.toLocaleDateString())
+    apiData.append("permission", String(data.permission));
+
+    if (data.expiry_date !== null) {
+        apiData.append("expiry_date", data.expiry_date.toLocaleDateString());
+    }
+
     apiData.append("save_id", String(data.save_id));
 
     return await callAPI("api/invitation-link", "POST", apiData, true, apiArgs);

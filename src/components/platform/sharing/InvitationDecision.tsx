@@ -3,11 +3,8 @@ import {RouteComponentProps, StaticContext} from "react-router";
 
 
 import "./invitation-decision.scss";
-import {createContribution} from "../../../general-components/API/calls/Contribution";
 import {
     acceptInvitationLink,
-    createInvitationLink,
-    deleteInvitationLink,
     showInvitationLink
 } from "../../../general-components/API/calls/Invitations";
 import {getSave} from "../../../general-components/API/calls/Saves";
@@ -15,14 +12,10 @@ import {SaveResource} from "../../../general-components/Datastructures";
 import {CallInterface} from "../../../general-components/API/API";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
-import FAE from "../../../general-components/Icons/FAE";
-import {faCheckCircle} from "@fortawesome/free-solid-svg-icons";
+import {Messages} from "../../../general-components/Messages/Messages";
 
-
-type DecisionType = true | false | null;
 
 export interface InvitationDecisionState {
-    decision: DecisionType,
     save: SaveResource | null,
     isSaving: boolean
 }
@@ -33,27 +26,12 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
         super(props);
 
         this.state = {
-            decision: null,
             save: null,
             isSaving: false
         };
     }
 
-    createLink = async () => {
-        console.log(await createContribution(45, 2, {
-            permission: 2
-        }));
-        console.log(await createInvitationLink({
-            permission: 2,
-            expiry_date: new Date("2023-01-01"),
-            save_id: 45
-        }));
-    }
-
     getSave = async () => {
-        //await this.createLink();
-
-        // TODO: Aktuell wird nur mit ID nicht mit Token abgefragt
         let invitation = await showInvitationLink(this.props.match.params.token);
 
         if (!invitation?.success) {
@@ -64,11 +42,8 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
 
             if (save && save.success) {
                 this.setState({
-                    decision: null,
                     save: save.callData
                 });
-            } else {
-                this.props.history.push("/");
             }
         }
     }
@@ -82,58 +57,61 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
                 <div className={"invitation-decision"}>
                     <h2>Einladung von {this.state.save?.owner}!</h2>
 
-                    {(this.state.decision === null) ? (
-                        this.defaultRender()
-                    ) : this.state.decision && (
-                        this.acceptedRender()
-                    )}
+                    <p>
+                        Sie haben eine Einladung zu dem
+                        Speicherstand <b>{this.state.save?.name}</b> von <b>{this.state.save?.owner}</b> erhalten.<br/>
+                        Möchten Sie diese annehmen?
+                    </p>
+
+                    <LoadingButton
+                        showIcons={false}
+                        className={"accept"}
+                        savingChild={"Annehmen"}
+                        isSaving={this.state.isSaving}
+                        defaultChild={"Annehmen"}
+                        onClick={() => this.acceptInvitation()}
+                    />
                 </div>
             </Loader>
         );
     }
 
-    invitationDecision = async (decision: boolean) => {
-        this.setState({
-            decision: null,
-            isSaving: true,
-            save: this.state.save
-        });
-
+    acceptInvitation = async () => {
         let token = this.props.match.params.token;
-        (decision) ? await acceptInvitationLink(token) : await deleteInvitationLink(token);
+        let response = await acceptInvitationLink(token);
 
-        this.setState({
-            decision: decision,
-            save: this.state.save,
-            isSaving: false
-        });
-    }
+        if (response?.success) {
+            Messages.add("Einladung angenommen!", "SUCCESS", 5000);
 
-    defaultRender() {
-        return (
-            <>
-                <p>
-                    Sie haben eine Einladung zu dem
-                    Speicherstand <b>{this.state.save?.name}</b> von <b>{this.state.save?.owner}</b> erhalten.<br/>
-                    Möchten Sie diese annehmen?
-                </p>
+            // TODO: backend integrieren maybe
+            let loc = "";
+            switch (this.state.save?.tool_id) {
+                case 1:
+                    loc += "/utility-analysis/";
+                    break;
+                case 2:
+                    loc += "/swot-analysis/";
+                    break;
+                case 3:
+                    loc += "/pairwise-comparison/";
+                    break;
+                case 4:
+                    loc += "/portfolio-analysis/";
+                    break;
+                case 5:
+                    loc += "/abc-analysis/";
+                    break;
+                default:
+                    loc = "/";
+                    break;
+            }
 
-                <LoadingButton
-                    showIcons={false}
-                    className={"accept"}
-                    savingChild={"Annehmen"}
-                    isSaving={this.state.isSaving}
-                    defaultChild={"Annehmen"}
-                    onClick={() => this.invitationDecision(true)}
-                />
-            </>
-        );
-    }
+            if (loc !== "/") {
+                loc += this.state.save?.id;
+            }
 
-    acceptedRender() {
-        return (
-            <p><FAE className={"text-success"} icon={faCheckCircle}/> Sie haben die Einladung angenommen.</p>
-        )
+            this.props.history.push(loc);
+        }
     }
 
 }

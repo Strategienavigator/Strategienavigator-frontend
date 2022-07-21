@@ -10,7 +10,7 @@ export type InvitationExpiryDate = "infinite" | "week" | "month" | "own" | Date;
 export interface InvitationLinkProps {
     show: boolean
     onClose: () => void
-    onCreation: (permission: InvitationPermission, expiry_date: Date) => void
+    onCreation: (permission: InvitationPermission, expiry_date: Date | null) => void
 }
 
 function InvitationLinkModal(props: InvitationLinkProps) {
@@ -45,7 +45,7 @@ function InvitationLinkModal(props: InvitationLinkProps) {
             keyboard={true}
         >
             <Modal.Header>
-                <h4>Einladungslink erstellen</h4>
+                <h5>Einladungslink erstellen</h5>
             </Modal.Header>
             <Modal.Body>
                 <Form>
@@ -130,11 +130,10 @@ function InvitationLinkModal(props: InvitationLinkProps) {
                             }
 
                             if (!error) {
-                                let date: Date = new Date();
+                                let date: Date | null = new Date();
 
                                 if (expiryDate === "infinite") {
-                                    date = new Date();
-                                    date.setFullYear(date.getFullYear() + 20);
+                                    date = null;
                                 } else if (expiryDate === "own" && ownDate !== null) {
                                     date = ownDate;
                                 } else if (expiryDate === "month") {
