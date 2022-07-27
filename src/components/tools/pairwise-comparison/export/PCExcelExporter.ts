@@ -8,6 +8,7 @@ import {MatchCardComponentFieldsAdapter} from "../../../../general-components/Co
 import {PCCriteriasValues} from "../steps/PCCriterias/PCCriteriasComponent";
 import {WeightingEvaluation} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 import {WeightingEvaluationExcelWorkSheet} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationExcelWorkSheet";
+import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
 
 
 /**
@@ -29,75 +30,18 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
         let comparison = data.data["pc-comparison"];
         let result = data.data["pc-result"];
 
-        const isFilled = <D extends object>(o?: D): o is D => {
-            return o !== undefined && Object.keys(o).length > 0;
-        }
+        if (this.isFilled(criterias)) {
+            this.addSheet("Kriterien", new CardComponentExcelWorkSheet(criterias.criterias, "Kriterien").getExcelSheet());
 
-        if (isFilled(criterias)) {
-            this.addSheet("Kriterien", this.getCriteriaSheet(criterias.criterias));
-            if (isFilled(comparison)) {
+            if (this.isFilled(comparison)) {
                 this.addSheet("Vergleich", this.getComparisonSheet(criterias.criterias, comparison));
-                if (isFilled(result)) {
-                    this.addSheet("Ergebnis", this.getResultSheet(criterias, comparison));
-                }
+
+                if (this.isFilled(result))
+                    this.addSheet("Ergebnis", PCExcelExporter.getResultSheet(criterias, comparison));
             }
         }
 
         return true;
-    }
-
-    /**
-     * Erstellt die Excel-Seite für die Kriterien
-     *
-     * @param {CardComponentFields} criterias Die Kriterien vom Paarweisen-Vergleich
-     * @returns {WorkSheet} Die erstellte Excel-Seite
-     * @private
-     */
-    private getCriteriaSheet(criterias: CardComponentFields) {
-        let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
-
-        let criteriaLength = 9;
-        let descLength = 12;
-
-        // Header
-        ws[this.encodeCell(cell)] = {
-            v: "Kriterium", t: "s", s: this.getHeaderStyle()
-        };
-        cell.c = 1;
-        ws[this.encodeCell(cell)] = {
-            v: "Beschreibung", t: "s", s: this.getHeaderStyle()
-        };
-        cell.c = 0;
-
-        for (let criteria of criterias) {
-            cell.r += 1;
-            cell.c = 0;
-
-            ws[this.encodeCell(cell)] = {
-                v: criteria.name, t: "s"
-            }
-            criteriaLength = this.updateWidth(criteriaLength, criteria.name.length);
-            cell.c = 1;
-            ws[this.encodeCell(cell)] = {
-                v: criteria.desc, t: "s"
-            }
-            descLength = this.updateWidth(descLength, criteria.desc.length);
-        }
-
-        let range: Range = {s: {r: 0, c: 0}, e: cell}
-        ws["!ref"] = this.encodeRange(range);
-
-        ws["!cols"] = [
-            {
-                wch: criteriaLength
-            },
-            {
-                wch: descLength
-            }
-        ];
-
-        return ws;
     }
 
     /**
@@ -173,7 +117,7 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
      * @returns {WorkSheet} Die erstellte Excel-Seite
      * @private
      */
-    private getResultSheet(criterias: PCCriteriasValues, comparisons: PCPairComparisonValues) {
+    private static getResultSheet(criterias: PCCriteriasValues, comparisons: PCPairComparisonValues) {
         let evaluation = new WeightingEvaluation(criterias.criterias, comparisons);
         return new WeightingEvaluationExcelWorkSheet(evaluation, "Kriterium").getExcelSheet();
     }

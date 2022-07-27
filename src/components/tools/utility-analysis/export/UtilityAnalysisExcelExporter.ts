@@ -8,15 +8,36 @@ import {UtilWeightingValues} from "../steps/UtilWeighting/UtilWeightingComponent
 import {CompareNumberHeader} from "../../../../general-components/CompareComponent/Header/CompareNumberHeader";
 import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {UtilEvaluationValues} from "../steps/UtilEvaluation/UtilEvaluationComponent";
-import {CompareSymbolHeader} from "../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 import {LinearCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
 import {UtilResultValues} from "../steps/UtilityResult/UtilResultComponent";
+import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
+import {UtilEvaluation} from "../steps/UtilEvaluation/UtilEvaluation";
+import {CompareComponentExcelWorkSheet} from "../../../../general-components/CompareComponent/CompareComponentExcelWorkSheet";
 
 
 /**
  * Excel-Exporter für die Nutzwertanalyse
  */
 class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> {
+
+    /**
+     *
+     * @param {CardComponentFields<UACriteriaCustomDescriptionValues>} criterias Kriterien der Nutzwertanalyse
+     * @param {CardComponentFields} investigationObjs Untersuchungsobjekte der Nutzwertanalyse
+     * @param {UtilEvaluationValues} evaluation Evaluationsdaten aus dem 4. Schritt der Nutzwertanalyse
+     * @return {WorkSheet} Die erstellte Excel-Seite
+     * @private
+     */
+    private static getEvaluationSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, investigationObjs: CardComponentFields, evaluation: UtilEvaluationValues) {
+        let adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
+
+        return new CompareComponentExcelWorkSheet(adapter, evaluation.evaluation[0].rating, UtilEvaluation.header).basedOnCardComponent({
+            fields: criterias,
+            comparisons: evaluation.evaluation.map((value) => {
+                return value.rating;
+            })
+        });
+    }
 
     protected buildExcel(workbook: XLSX.WorkBook, data: SaveResource<UtilityAnalysisValues>): boolean {
         let investigationObjs = data.data["ua-investigation-obj"];
@@ -25,20 +46,22 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         let evaluation = data.data["ua-evaluation"];
         let result = data.data["ua-result"];
 
-        const isFilled = <D extends object>(o?: D): o is D => {
-            return o !== undefined && Object.keys(o).length > 0;
-        }
+        if (this.isFilled(investigationObjs)) {
+            this.addSheet("Untersuchungsobjekte", new CardComponentExcelWorkSheet(investigationObjs?.objects, "Untersuchungsobjekt").getExcelSheet());
 
-        if (isFilled(investigationObjs)) {
-            this.addSheet("Untersuchungsobjekte", this.getInvestigationObjectSheet(investigationObjs.objects));
+            if (this.isFilled(criterias)) {
+                this.addSheet("Kriterien", new CardComponentExcelWorkSheet(criterias?.criterias, "Kriterium", (extra) => {
+                    // TODO: Skalabeschreibung einbauen
+                    return [];
+                }).getExcelSheet());
 
-            if (isFilled(criterias)) {
-                this.addSheet("Kriterien", this.getCriteriaSheet(criterias.criterias));
-                if (isFilled(weighting)) {
+                if (this.isFilled(weighting)) {
                     this.addSheet("Gewichtung der Kriterien", this.getWeightingSheet(criterias.criterias, weighting));
-                    if (isFilled(evaluation)) {
-                        this.addSheet("Evaluation", this.getEvaluationSheet(criterias.criterias, investigationObjs.objects, evaluation));
-                        if (isFilled(result)) {
+
+                    if (this.isFilled(evaluation)) {
+                        this.addSheet("Evaluation", UtilityAnalysisExcelExporter.getEvaluationSheet(criterias.criterias, investigationObjs.objects, evaluation));
+
+                        if (this.isFilled(result)) {
                             this.addSheet("Ergebnis", this.getResultSheet(result));
                         }
                     }
@@ -47,114 +70,6 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         }
 
         return false;
-    }
-
-    /**
-     * Erstellt die Excel-Seite für die Untersuchungsobjekte
-     *
-     * @param {CardComponentFields} investigationObjs Die Untersuchungsobjekte der Nutzwertanalyse
-     * @returns {WorkSheet} Die erstellte Excel-Seite
-     * @private
-     */
-    private getInvestigationObjectSheet(investigationObjs: CardComponentFields) {
-        let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
-
-        let objLength = 9;
-        let descLength = 12;
-
-        // Header
-        ws[this.encodeCell(cell)] = {
-            v: "Untersuchungsobjekt", t: "s", s: this.getHeaderStyle()
-        };
-        cell.c = 1;
-        ws[this.encodeCell(cell)] = {
-            v: "Beschreibung", t: "s", s: this.getHeaderStyle()
-        };
-        cell.c = 0;
-
-        for (let obj of investigationObjs) {
-            cell.r += 1;
-            cell.c = 0;
-
-            ws[this.encodeCell(cell)] = {
-                v: obj.name, t: "s"
-            }
-            objLength = this.updateWidth(objLength, obj.name.length);
-            cell.c = 1;
-            ws[this.encodeCell(cell)] = {
-                v: obj.desc, t: "s"
-            }
-            descLength = this.updateWidth(descLength, obj.desc.length);
-        }
-
-        let range: Range = {s: {r: 0, c: 0}, e: cell}
-        ws["!ref"] = this.encodeRange(range);
-
-        ws["!cols"] = [
-            {
-                wch: objLength
-            },
-            {
-                wch: descLength
-            }
-        ];
-        return ws;
-    }
-
-
-    /**
-     * Erstellt die Excel-Seite für die Kriterien
-     *
-     * @param {CardComponentFields<UACriteriaCustomDescriptionValues>} criterias Die Kriterien der Nutzwertanalyse
-     * @returns {WorkSheet} Die erstellte Excel-Seite
-     * @private
-     */
-    private getCriteriaSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>) {
-        let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
-
-        let criteriaLength = 9;
-        let descLength = 12;
-
-        // Header
-        ws[this.encodeCell(cell)] = {
-            v: "Kriterium", t: "s", s: this.getHeaderStyle()
-        };
-        cell.c = 1;
-        ws[this.encodeCell(cell)] = {
-            v: "Beschreibung", t: "s", s: this.getHeaderStyle()
-        };
-        cell.c = 0;
-
-        // TODO Beschreibung der Skala einbauen
-        for (let obj of criterias) {
-            cell.r += 1;
-            cell.c = 0;
-
-            ws[this.encodeCell(cell)] = {
-                v: obj.name, t: "s"
-            }
-            criteriaLength = this.updateWidth(criteriaLength, obj.name.length);
-            cell.c = 1;
-            ws[this.encodeCell(cell)] = {
-                v: obj.desc, t: "s"
-            }
-            descLength = this.updateWidth(descLength, obj.desc.length);
-        }
-
-        let range: Range = {s: {r: 0, c: 0}, e: cell}
-        ws["!ref"] = this.encodeRange(range);
-
-        ws["!cols"] = [
-            {
-                wch: criteriaLength
-            },
-            {
-                wch: descLength
-            }
-        ];
-        return ws;
     }
 
     /**
@@ -220,91 +135,6 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         let range: Range = {s: {r: 0, c: 0}, e: cell}
         ws["!ref"] = this.encodeRange(range);
 
-        return ws;
-    }
-
-    /**
-     *
-     * @param {CardComponentFields<UACriteriaCustomDescriptionValues>} criterias Kriterien der Nutzwertanalyse
-     * @param {CardComponentFields} investigationObjs Untersuchungsobjekte der Nutzwertanalyse
-     * @param {UtilEvaluationValues} evaluation Evaluationsdaten aus dem 4. Schritt der Nutzwertanalyse
-     * @return {WorkSheet} Die erstellte Excel-Seite
-     * @private
-     */
-    private getEvaluationSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, investigationObjs: CardComponentFields, evaluation: UtilEvaluationValues) {
-        let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
-
-        let symbolHeader = new CompareSymbolHeader(["--", "-", "0", "+", "++"]);
-        let headers = symbolHeader.getHeaders();
-
-        let criteriaLength = 7;
-
-        let adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
-
-        for (let i = 0; i < evaluation.evaluation.length; i++) {
-            ws[this.encodeCell(cell)] = {
-                v: criterias[i].name, t: "s", s: Object.assign(
-                    {
-                        alignment: {
-                            horizontal: "center"
-                        }
-                    },
-                    this.getHeaderStyle())
-            }
-            criteriaLength = this.updateWidth(criteriaLength, criterias[i].name.length);
-            cell.r += 1;
-            cell.c = 1;
-            for (let header of headers) {
-                ws[this.encodeCell(cell)] = {
-                    v: header.header, t: "s", s: Object.assign(
-                        {
-                            alignment: {
-                                horizontal: "center"
-                            }
-                        },
-                        this.getHeaderStyle())
-                }
-                cell.c += 1;
-            }
-            cell.r += 1;
-            cell.c = 0;
-
-            for (let j = 0; j < adapter.getLength(); j++) {
-                ws[this.encodeCell(cell)] = {
-                    v: adapter.getEntry(j).first, t: "s"
-                }
-                criteriaLength = this.updateWidth(criteriaLength, adapter.getEntry(j).first.length);
-                cell.c = 1;
-                for (let e = 0; e < headers.length; e++) {
-                    if (evaluation.evaluation[i].rating.comparisons[j].header === headers[e].header) {
-                        ws[this.encodeCell(cell)] = {
-                            v: "X", t: "s", s: Object.assign(
-                                {
-                                    alignment: {
-                                        horizontal: "center"
-                                    }
-                                },
-                                this.getHeaderStyle())
-                        }
-                    }
-                    cell.c += 1;
-                }
-                cell.r += 1;
-                cell.c = 0;
-            }
-            cell.r += 1;
-        }
-
-        cell.c = headers.length;
-        let range: Range = {s: {r: 0, c: 0}, e: cell}
-        ws["!ref"] = this.encodeRange(range);
-
-        ws["!cols"] = [
-            {
-                wch: criteriaLength
-            }
-        ];
         return ws;
     }
 

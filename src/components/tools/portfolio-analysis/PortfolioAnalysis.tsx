@@ -14,6 +14,7 @@ import {PortWeightingValues} from "./steps/PortWeighting/PortWeightingComponent"
 import {PortWeighting} from "./steps/PortWeighting/PortWeighting";
 import {PortResult} from "./steps/PortResult/PortResult";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
+import {PortfolioExcelExporter} from "./export/PortfolioExcelExporter";
 
 
 interface PortfolioAnalysisValues {
@@ -31,6 +32,7 @@ class PortfolioAnalysis extends SteppableTool<PortfolioAnalysisValues> {
 
         this.setMaintenance(false);
         this.addExporter(new JSONExporter());
+        this.addExporter(new PortfolioExcelExporter());
 
         this.addStep(new PortObjects());
         this.addStep(new PortCriterias());
