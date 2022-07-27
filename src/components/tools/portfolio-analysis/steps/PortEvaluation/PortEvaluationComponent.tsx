@@ -17,10 +17,8 @@ import {Accordion} from "react-bootstrap";
 
 
 interface PortEvaluationValues {
-    evaluation: {
-        criteriaIndex: number,
-        rating: CompareComponentValues
-    }[]
+    "attractivity": CompareComponentValues[]
+    "comp-standing": CompareComponentValues[]
 }
 
 class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
@@ -48,7 +46,7 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
     }
 
     getCompareComponents(type: "attractivity" | "comp-standing"): JSX.Element[] {
-        let allValues = this.props.save.data["port-evaluation"]?.evaluation;
+        let allValues = this.props.save.data["port-evaluation"];
         let allCriterias = this.props.save.data["port-criterias"];
         let objects = this.props.save.data["port-objects"];
         let criterias: CardComponentFields;
@@ -62,24 +60,27 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
 
             let adapter = new LinearCardComponentFieldsAdapter(objects.objects);
 
-            return criterias.map((item) => {
+            return criterias.map((item, index) => {
                 if (allValues) {
-                    this.index++;
-                    let localIndex = this.index; // Muss gemacht werden, weil sonst this.index als referenz genommen wird. Hier muss aber ein eigener int vorhanden sein
-                    let values = allValues[this.index].rating;
+                    let values;
+                    if (type === "attractivity") {
+                        values = allValues.attractivity[index];
+                    } else {
+                        values = allValues["comp-standing"][index];
+                    }
 
                     return (
-                        <div className={"evaluation"}>
+                        <div key={"evaluation-" + index + "-" + type} className={"evaluation"}>
                             <h6>{item.name}</h6>
 
                             <CompareComponent
-                                name={type + "-" + localIndex}
+                                name={type + "-" + index}
                                 header={PortEvaluation.header}
                                 fields={adapter}
                                 values={values}
                                 disabled={this.props.disabled}
                                 onChanged={(values) => {
-                                    this.valuesChanged(values, localIndex);
+                                    this.valuesChanged(values, index, type);
                                 }}
                             />
                         </div>
@@ -120,10 +121,14 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
         );
     }
 
-    valuesChanged = (values: CompareComponentValues, index: number) => {
+    valuesChanged = (values: CompareComponentValues, index: number, type: "attractivity" | "comp-standing") => {
         this.props.saveController.onChanged((save) => {
             if (save.data["port-evaluation"] !== undefined) {
-                save.data["port-evaluation"].evaluation[index].rating = values;
+                if (type === "attractivity") {
+                    save.data["port-evaluation"].attractivity[index] = values;
+                } else {
+                    save.data["port-evaluation"]["comp-standing"][index] = values;
+                }
             }
         });
     }

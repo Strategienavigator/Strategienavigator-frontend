@@ -1,17 +1,17 @@
 import {Range, WorkBook, WorkSheet} from "xlsx-js-style";
-import {ExcelExporter} from "../Export/ExcelExporter";
-import {SaveResource} from "../Datastructures";
-import {Evaluation, EvaluationValues} from "./Evaluation";
+import {ExcelExporter} from "../../Export/ExcelExporter";
+import {SaveResource} from "../../Datastructures";
+import {EvaluationValues, WeightingEvaluation} from "./WeightingEvaluation";
 
 
 /**
  * Wandelt die instanz der Evaluation in ein Excel-Worksheet um, sodass dies bei den Exporten leicht eingebunden werden kann.
  */
-class EvaluationExcelWorkSheet extends ExcelExporter<any> {
+class WeightingEvaluationExcelWorkSheet extends ExcelExporter<any> {
     private values: EvaluationValues;
     private readonly customTableHeader?: string;
 
-    constructor(evaluation: Evaluation, customTableHeader?: string) {
+    constructor(evaluation: WeightingEvaluation, customTableHeader?: string) {
         super();
         this.values = evaluation.getValues();
         this.customTableHeader = customTableHeader;
@@ -107,5 +107,5 @@ class EvaluationExcelWorkSheet extends ExcelExporter<any> {
 }
 
 export {
-    EvaluationExcelWorkSheet
+    WeightingEvaluationExcelWorkSheet
 }

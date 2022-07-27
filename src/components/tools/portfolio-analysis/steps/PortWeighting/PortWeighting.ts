@@ -9,11 +9,11 @@ import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {PortWeightingComponent} from "./PortWeightingComponent";
 import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
-import {CompareNumberHeader} from "../../../../../general-components/CompareComponent/Header/CompareNumberHeader";
+import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 
 
 export class PortWeighting implements StepDefinition<PortfolioAnalysisValues>, StepDataHandler<PortfolioAnalysisValues> {
-    public static header = new CompareNumberHeader(0, 3);
+    public static header = new CompareSymbolHeader([">", "=", "<"]);
 
     dataHandler: StepDataHandler<PortfolioAnalysisValues>;
     form: FunctionComponent<StepProp<PortfolioAnalysisValues>> | ComponentClass<StepProp<PortfolioAnalysisValues>>;

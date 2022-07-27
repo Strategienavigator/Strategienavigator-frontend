@@ -1,6 +1,6 @@
-import {CardComponentField, CardComponentFields} from "../CardComponent/CardComponent";
-import {CompareComponentValues} from "../CompareComponent/CompareComponent";
-import {MatchCardComponentFieldsAdapter} from "../CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {CardComponentField, CardComponentFields} from "../../CardComponent/CardComponent";
+import {CompareComponentValues} from "../../CompareComponent/CompareComponent";
+import {MatchCardComponentFieldsAdapter} from "../../CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 
 
 /**
@@ -38,13 +38,15 @@ export interface EvaluationValues {
 /**
  * Kann benutzt werden, um ein
  */
-class Evaluation<D = any> {
+class WeightingEvaluation<D = any> {
     private values: EvaluationValues = {
         result: [],
         resultAsString: ""
     };
     private readonly fields: CardComponentFields<D>;
     private readonly comparisons: CompareComponentValues;
+
+    private sortedResult: SingleResult[];
 
     constructor(cardComponentFields: CardComponentFields<D>, compareComponentValues: CompareComponentValues) {
         this.fields = cardComponentFields;
@@ -60,10 +62,12 @@ class Evaluation<D = any> {
             });
         }
         this.values.result = result;
+        this.sortedResult = Object.assign([], result);
 
         // evaluate
         this.eval();
-        this.sortResult();
+
+        this.sortedResult = WeightingEvaluation.sort(this.sortedResult);
         this.evalRank();
         this.values.resultAsString = this.toString();
     }
@@ -73,10 +77,10 @@ class Evaluation<D = any> {
      *
      * @param {CardComponentFields} cardComponentFields Die CardComponentFields
      * @param {CompareComponentValues} compareComponentValues Die CompareComponentValues
-     * @returns {Evaluation} Instanz der Evaluation
+     * @returns {WeightingEvaluation} Instanz der Evaluation
      */
-    public static from<D>(cardComponentFields: CardComponentFields<D>, compareComponentValues: CompareComponentValues): Evaluation<D> {
-        return new Evaluation(cardComponentFields, compareComponentValues);
+    public static from<D>(cardComponentFields: CardComponentFields<D>, compareComponentValues: CompareComponentValues): WeightingEvaluation<D> {
+        return new WeightingEvaluation(cardComponentFields, compareComponentValues);
     }
 
     /**
@@ -95,9 +99,9 @@ class Evaluation<D = any> {
     public toString(): string {
         let resultString = "";
         let i = 0;
-        let oldField = this.values.result[0];
+        let oldField = this.sortedResult[0];
 
-        for (const field of this.values.result) {
+        for (const field of this.sortedResult) {
             let name = field.criteria.name;
 
             if (i <= 0) {
@@ -116,6 +120,25 @@ class Evaluation<D = any> {
             i++;
         }
         return resultString;
+    }
+
+    /**
+     * Sortiert ein Array
+     *
+     * @param {any[]} unsorted
+     * @returns {any[]}
+     */
+    public static sort(unsorted: any[]) {
+        let sorted = unsorted.sort((a, b) => {
+            if (a.points > b.points) {
+                return -1;
+            }
+            if (a.points < b.points) {
+                return 1;
+            }
+            return 0;
+        });
+        return sorted;
     }
 
     /**
@@ -179,23 +202,10 @@ class Evaluation<D = any> {
     private determineMiddleOfHeader(): number {
         return (this.comparisons.headers.length - 1) / 2
     }
-
-    private sortResult() {
-        this.values.result = this.values.result.sort((a, b) => {
-            if (a.points > b.points) {
-                return -1;
-            }
-            if (a.points < b.points) {
-                return 1;
-            }
-            return 0;
-        })
-    }
-
 }
 
 export {
-    Evaluation
+    WeightingEvaluation
 };
 export type {SingleResult};
 
