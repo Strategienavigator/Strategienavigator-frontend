@@ -1,0 +1,80 @@
+{
+    "swot":{
+        "strengths":
+        {
+                "0":{
+                    "title": "Motivierte Mitarbeiter mit viel Know How",
+                    "desc":"Motivierte Mitarbeiter"
+                    },
+                "1": {
+                    "title": "Erfolgreiche Marketingkampagnen",
+                    "desc":"Marketingkampagnen"
+                    },
+                "2":{
+                    "title": "Moderne Produktionsmaschinen",
+                    "desc":"Produktionsmaschinen"
+                },
+                "3":{
+                    "title": "Gut gelegener Standort",
+                    "desc":"Gut gelegener Standort"
+                }
+        },
+        "weaknesses":
+        {
+                "0":{
+                    "title": "Hohe Personalkosten",
+                    "desc":"Personalkosten " 
+                    },
+                "1": {
+                    "title": "Produkte wenig nachhaltig",
+                    "desc":"nachhaltig" 
+                    },
+                "2":{
+                    "title": "Hohe Fluktuationsrate",
+                    "desc":"Fluktuationsrate"
+                },
+                "3":{
+                    "title": "Geringe finanzielle Möglichkeiten ",
+                    "desc":"Möglichkeiten"
+                }
+        },
+        "chances":
+        {
+                "0":{
+                    "title": "Produkt ist im Trend",
+                    "desc":"Trend"
+                    },
+                "1": {
+                    "title": "Produkt wird auch in anderen Ländern beliebter",
+                    "desc":"anderen Ländern beliebter" 
+                    },
+                "2":{
+                    "title": "Neue Technologien",
+                    "desc":"Technologien"
+                },
+                "3":{
+                    "title": "Demographische Veränderung",
+                    "desc":"Veränderung"
+                }
+        },
+        "risks":
+        {
+                "0":{
+                    "title": "Kunden achten stark auf Nachhaltigkeit",
+                    "desc":"Nachhaltigkeit" 
+                    },
+                "1": {
+                    "title": "Neue Konkurrenz aus dem Ausland",
+                    "desc":"dem Ausland"
+                    },
+                "2":{
+                    "title": "Sinkendes Preisniveau",
+                    "desc":"Preisniveau"
+                },
+                "3":{
+                    "title": "Neue Gesetze",
+                    "desc":"Gesetze"  
+            }
+        } 
+    }      
+}

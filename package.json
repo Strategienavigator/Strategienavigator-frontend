@@ -37,7 +37,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -58,9 +59,19 @@
     ]
   },
   "devDependencies": {
+    "@cypress/react": "^5.12.5",
+    "@cypress/webpack-dev-server": "^1.8.4",
     "@types/file-saver": "^2.0.4",
     "@types/xlsx": "^0.0.36",
+    "bcrypt": "^5.0.1",
+    "cypress": "^9.6.1",
+    "cypress-local-config": "^0.0.2",
+    "cypress-terminal-report": "^3.5.2",
+    "eslint-plugin-cypress": "^2.12.1",
+    "mysql2": "^2.3.3",
+    "smtp-tester": "^1.2.0",
     "typedoc": "^0.21.9",
-    "typedoc-plugin-merge-modules": "^3.0.1"
+    "typedoc-plugin-merge-modules": "^3.0.1",
+    "webpack-dev-server": "3.11.1"
   }
 }

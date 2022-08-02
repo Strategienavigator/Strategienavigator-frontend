@@ -7,10 +7,25 @@ import FAE from "../Icons/FAE";
 
 
 export interface LoadingButtonProps extends ButtonProps {
+    /**
+     * Whether the loading animation should be played
+     */
     isSaving: boolean
+    /**
+     * What is inside the button while saving
+     */
     savingChild: ReactNode
+    /**
+     * What is inside the button
+     */
     defaultChild: ReactNode
+    /**
+     * Whether to show the icons in front of the specified childs
+     */
     showIcons: boolean
+    /**
+     * Icon which is schon while not saving
+     */
     defaultIcon: IconDefinition
 }
 
