@@ -118,7 +118,6 @@ class PortfolioExcelExporter extends ExcelExporter<PortfolioAnalysisValues> {
     }
 
 
-
 }
 
 export {

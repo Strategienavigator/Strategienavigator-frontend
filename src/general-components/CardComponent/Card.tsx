@@ -58,10 +58,10 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
 
     public static empty(): CardComponentField {
         return {
-          id: "",
-          desc: "",
-          name: "",
-          extra: undefined
+            id: "",
+            desc: "",
+            name: "",
+            extra: undefined
         };
     }
 

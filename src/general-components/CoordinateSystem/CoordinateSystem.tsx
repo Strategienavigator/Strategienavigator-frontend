@@ -152,16 +152,6 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
     static minPointSize = 3;
     static maxPointSize = 12;
 
-    /**
-     * Gibt einen String zurück welcher die Grid-Items enthält.
-     *
-     * @param {number} amount Anzahl der FRs
-     * @returns {string} z.B. "1fr 1fr 1fr 1fr"
-     */
-    private getGridString = (amount: number): string => {
-        return Array(amount).fill("1fr", 0, amount).join(" ");
-    }
-
     render() {
         let maxWidth = (this.props.maxWidth) ?? CoordinateSystem.maxWidth;
         let axisThickness = (this.props.axisThickness) ?? CoordinateSystem.standardThickness;
@@ -322,6 +312,16 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                 </div>
             </div>
         );
+    }
+
+    /**
+     * Gibt einen String zurück welcher die Grid-Items enthält.
+     *
+     * @param {number} amount Anzahl der FRs
+     * @returns {string} z.B. "1fr 1fr 1fr 1fr"
+     */
+    private getGridString = (amount: number): string => {
+        return Array(amount).fill("1fr", 0, amount).join(" ");
     }
 
     private getGridItems = (amount: number) => {

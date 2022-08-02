@@ -41,6 +41,28 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         });
     }
 
+    /**
+     * Erstellt die Excel-Seite für die Gewichtung der Kriterien
+     *
+     * @param {CardComponentFields<UACriteriaCustomDescriptionValues>} criterias Kriterien der Nutzwertanalyse
+     * @param {UtilWeightingValues} weighting Gewichtung der Kriterien
+     * @returns {WorkSheet} Die erstellte Excel-Seite
+     * @private
+     */
+    private static getWeightingSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, weighting: UtilWeightingValues) {
+        let adapter = new MatchCardComponentFieldsAdapter(criterias);
+        let ws = new CompareComponentExcelWorkSheet(adapter, weighting, UtilWeighting.header).getExcelSheet();
+        let lastRow = ExcelExporter.getLastRow(ws) + 2;
+        let evaluation = new WeightingEvaluation(criterias, weighting);
+
+        let returnWS = Object.assign(ws, new WeightingEvaluationExcelWorkSheet(evaluation, undefined, {
+            c: 0,
+            r: lastRow
+        }).getExcelSheet());
+        returnWS["!ref"] = XLSX.utils.encode_range({s: {r: 0, c: 0}, e: {r: 100, c: 100}});
+        return returnWS;
+    }
+
     protected buildExcel(workbook: XLSX.WorkBook, data: SaveResource<UtilityAnalysisValues>): boolean {
         let investigationObjs = data.data["ua-investigation-obj"];
         let criterias = data.data["ua-criterias"];
@@ -72,25 +94,6 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
         }
 
         return false;
-    }
-
-    /**
-     * Erstellt die Excel-Seite für die Gewichtung der Kriterien
-     *
-     * @param {CardComponentFields<UACriteriaCustomDescriptionValues>} criterias Kriterien der Nutzwertanalyse
-     * @param {UtilWeightingValues} weighting Gewichtung der Kriterien
-     * @returns {WorkSheet} Die erstellte Excel-Seite
-     * @private
-     */
-    private static getWeightingSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, weighting: UtilWeightingValues) {
-        let adapter = new MatchCardComponentFieldsAdapter(criterias);
-        let ws = new CompareComponentExcelWorkSheet(adapter, weighting, UtilWeighting.header).getExcelSheet();
-        let lastRow = ExcelExporter.getLastRow(ws) + 2;
-        let evaluation = new WeightingEvaluation(criterias, weighting);
-
-        let returnWS = Object.assign(ws, new WeightingEvaluationExcelWorkSheet(evaluation, undefined, {c: 0, r: lastRow}).getExcelSheet());
-        returnWS["!ref"] = XLSX.utils.encode_range({s: {r: 0, c: 0}, e: {r: 100, c: 100}});
-        return returnWS;
     }
 
     private getResultSheet(values: UtilResultValues) {

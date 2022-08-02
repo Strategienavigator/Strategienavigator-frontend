@@ -75,7 +75,7 @@ class PortResultComponent extends Step<PortfolioAnalysisValues, {}> {
                         }}
                     />
 
-                    <br />
+                    <br/>
 
                     <PointComponent
                         points={this.props.save.data["port-result"].points}

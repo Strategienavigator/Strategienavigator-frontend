@@ -13,6 +13,28 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         this.workbook = XLSX.utils.book_new();
     }
 
+    public static getLastRow(ws: WorkSheet): number {
+        let sorted = Object.keys(ws).filter((value) => {
+            return value.length < 4;
+        }).sort((v1, v2) => {
+            let row1 = this.decodeRow(v1);
+            let row2 = this.decodeRow(v2);
+
+            if (row1 > row2) {
+                return 1;
+            } else if (row1 < row2) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        return this.decodeRow(sorted[sorted.length - 1]);
+    }
+
+    private static decodeRow(row: string): number {
+        return parseInt(row.substr(1, row.length));
+    }
+
     protected isFilled = <D extends object>(o?: D): o is D => {
         return o !== undefined && Object.keys(o).length > 0;
     }
@@ -91,28 +113,6 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         worksheet["B6"] = {v: new Date(data.updated_at), t: "d", z: "dd.MM.yyyy hh:mm"} as CellObject;
 
         this.addSheet("Grundlagen", worksheet);
-    }
-
-    private static decodeRow(row: string): number {
-        return parseInt(row.substr(1, row.length));
-    }
-
-    public static getLastRow(ws: WorkSheet): number {
-        let sorted = Object.keys(ws).filter((value) => {
-            return value.length < 4;
-        }).sort((v1, v2) => {
-            let row1 = this.decodeRow(v1);
-            let row2 = this.decodeRow(v2);
-
-            if (row1 > row2) {
-                return 1;
-            } else if (row1 < row2) {
-                return -1;
-            } else{
-                return 0;
-            }
-        });
-        return this.decodeRow(sorted[sorted.length-1]);
     }
 
 }

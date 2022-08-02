@@ -1,4 +1,3 @@
-
 /**
  * Dient zum Rendern der Achsenwerte
  */

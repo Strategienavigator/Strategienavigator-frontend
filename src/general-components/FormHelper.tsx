@@ -7,6 +7,7 @@
 import React, {FormEvent, ReactNode} from "react";
 import {CardComponentFields} from "./CardComponent/CardComponent";
 
+
 /**
  * Führt den callback für alle ReactNodes und ihre kinder aus.
  *

@@ -12,7 +12,7 @@ class PointExcelSheet extends ExcelExporter<any> {
     constructor(points: Point[], customHeader?: string, starterCell?: CellAddress) {
         super();
         this.points = points;
-        
+
         if (customHeader)
             this.customHeader = customHeader;
         if (starterCell)

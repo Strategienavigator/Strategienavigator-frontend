@@ -84,6 +84,25 @@ class WeightingEvaluation<D = any> {
     }
 
     /**
+     * Sortiert ein Array
+     *
+     * @param {any[]} unsorted
+     * @returns {any[]}
+     */
+    public static sort(unsorted: any[]) {
+        let sorted = unsorted.sort((a, b) => {
+            if (a.points > b.points) {
+                return -1;
+            }
+            if (a.points < b.points) {
+                return 1;
+            }
+            return 0;
+        });
+        return sorted;
+    }
+
+    /**
      * Gibt die Werte zurück
      *
      * @returns {EvaluationValues}
@@ -120,25 +139,6 @@ class WeightingEvaluation<D = any> {
             i++;
         }
         return resultString;
-    }
-
-    /**
-     * Sortiert ein Array
-     *
-     * @param {any[]} unsorted
-     * @returns {any[]}
-     */
-    public static sort(unsorted: any[]) {
-        let sorted = unsorted.sort((a, b) => {
-            if (a.points > b.points) {
-                return -1;
-            }
-            if (a.points < b.points) {
-                return 1;
-            }
-            return 0;
-        });
-        return sorted;
     }
 
     /**

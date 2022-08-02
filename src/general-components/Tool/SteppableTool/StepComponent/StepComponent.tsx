@@ -193,12 +193,12 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                 for (let i = 0; i < count; i++) {
                     if (subStep.isStepUnlocked(i, data)) {
                         subStepProgress++;
-                    }else{
+                    } else {
                         break;
                     }
                 }
                 subStepProgress--;
-                if (subStepProgress === count-1 || subStepProgress === -1) {
+                if (subStepProgress === count - 1 || subStepProgress === -1) {
                     subStepProgress = 0;
                 }
             }

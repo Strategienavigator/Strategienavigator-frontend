@@ -13,7 +13,7 @@ export interface PointComponentProps {
     displayColor?: boolean
 }
 
-class PointComponent extends Component<PointComponentProps, any>{
+class PointComponent extends Component<PointComponentProps, any> {
 
     render() {
         return (
@@ -22,26 +22,26 @@ class PointComponent extends Component<PointComponentProps, any>{
                 striped={true}
             >
                 <thead>
-                    <tr>
-                        <th>{(this.props.customHeader) ?? "Punkt"}</th>
-                        <th>{(this.props.axisHeader && this.props.axisHeader.x) ?? "X-Wert"}</th>
-                        <th>{(this.props.axisHeader && this.props.axisHeader.y) ?? "Y-Wert"}</th>
-                    </tr>
+                <tr>
+                    <th>{(this.props.customHeader) ?? "Punkt"}</th>
+                    <th>{(this.props.axisHeader && this.props.axisHeader.x) ?? "X-Wert"}</th>
+                    <th>{(this.props.axisHeader && this.props.axisHeader.y) ?? "Y-Wert"}</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {this.props.points.map((point, index) => {
-                        let style: CSSProperties = {borderLeft: "4px solid black"};
-                        return (
-                            <tr
-                                key={"point-" + index + "-" + point.x + "-" + point.y}
-                                style={Object.assign(style, (this.props.displayColor) ? {borderLeftColor: point.color} : {})}
-                            >
-                                <td>{point.header}</td>
-                                <td>{point.x.toFixed(2)}</td>
-                                <td>{point.y.toFixed(2)}</td>
-                            </tr>
-                        );
-                    })}
+                {this.props.points.map((point, index) => {
+                    let style: CSSProperties = {borderLeft: "4px solid black"};
+                    return (
+                        <tr
+                            key={"point-" + index + "-" + point.x + "-" + point.y}
+                            style={Object.assign(style, (this.props.displayColor) ? {borderLeftColor: point.color} : {})}
+                        >
+                            <td>{point.header}</td>
+                            <td>{point.x.toFixed(2)}</td>
+                            <td>{point.y.toFixed(2)}</td>
+                        </tr>
+                    );
+                })}
                 </tbody>
             </Table>
         );

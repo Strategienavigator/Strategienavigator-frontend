@@ -34,6 +34,13 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
         this.dataHandler = this;
     }
 
+    static getDefaultExtraData() {
+        return {
+            headers: UtilCriterias.header.getHeaders(),
+            activeIndices: Array(UtilCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
+        };
+    }
+
     deleteData(data: Draft<UtilityAnalysisValues>): void {
         data["ua-criterias"] = undefined;
     }
@@ -49,13 +56,6 @@ class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHa
             });
         }
         data["ua-criterias"] = {criterias: criterias};
-    }
-
-    static getDefaultExtraData(){
-        return {
-            headers: UtilCriterias.header.getHeaders(),
-            activeIndices: Array(UtilCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
-        };
     }
 
     isUnlocked(data: UtilityAnalysisValues): boolean {

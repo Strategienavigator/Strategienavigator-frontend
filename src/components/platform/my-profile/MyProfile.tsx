@@ -32,14 +32,14 @@ export interface MyProfileState {
 
 export class MyProfileComponent extends Component<any, MyProfileState> {
 
-    private password: string | null = null;
-    private passwordConfirm: string | null = null;
-
     /**
      * Definiert auf welchen Context zugegriffen werden soll
      */
     static contextType = UserContext;
     context!: React.ContextType<typeof UserContext>
+    private password: string | null = null;
+    private passwordConfirm: string | null = null;
+
     constructor(props: any) {
         super(props);
 

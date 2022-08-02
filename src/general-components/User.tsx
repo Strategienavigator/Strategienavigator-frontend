@@ -21,15 +21,13 @@ class User {
         this.created_at = created_at;
     }
 
-    static from(data: any|User): User {
-        if(data instanceof User){
+    static from(data: any | User): User {
+        if (data instanceof User) {
             return new User(data.getID(), data.getUsername(), data.getEmail(), data.isAnonymous(), data.getOwnedSaves(), data.getSharedSaves(), data.getCreatedAt());
         }
 
         return new User(data.id, data.username, data.email, data.anonymous, data.owned_saves, data.shared_saves, data.created_at);
     }
-
-
 
 
     update = (data: UpdateData) => {

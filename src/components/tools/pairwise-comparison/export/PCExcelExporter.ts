@@ -17,6 +17,19 @@ import {CardComponentExcelWorkSheet} from "../../../../general-components/CardCo
 class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
 
     /**
+     * Erstellt die Excel-Seite für den Ergebnisschritt
+     *
+     * @param {PCCriteriasValues} criterias
+     * @param {PCPairComparisonValues} comparisons
+     * @returns {WorkSheet} Die erstellte Excel-Seite
+     * @private
+     */
+    private static getResultSheet(criterias: PCCriteriasValues, comparisons: PCPairComparisonValues) {
+        let evaluation = new WeightingEvaluation(criterias.criterias, comparisons);
+        return new WeightingEvaluationExcelWorkSheet(evaluation, "Kriterium").getExcelSheet();
+    }
+
+    /**
      * Baut die Excel-Datei
      * Fügt insgesamt Zwei Seiten hinzu
      *
@@ -107,19 +120,6 @@ class PCExcelExporter extends ExcelExporter<PairwiseComparisonValues> {
         ws["!ref"] = this.encodeRange(range);
 
         return ws;
-    }
-
-    /**
-     * Erstellt die Excel-Seite für den Ergebnisschritt
-     *
-     * @param {PCCriteriasValues} criterias
-     * @param {PCPairComparisonValues} comparisons
-     * @returns {WorkSheet} Die erstellte Excel-Seite
-     * @private
-     */
-    private static getResultSheet(criterias: PCCriteriasValues, comparisons: PCPairComparisonValues) {
-        let evaluation = new WeightingEvaluation(criterias.criterias, comparisons);
-        return new WeightingEvaluationExcelWorkSheet(evaluation, "Kriterium").getExcelSheet();
     }
 }
 
