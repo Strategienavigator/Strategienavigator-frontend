@@ -1,4 +1,4 @@
-import {Range, WorkBook, WorkSheet} from "xlsx-js-style";
+import {CellAddress, Range, WorkBook, WorkSheet} from "xlsx-js-style";
 import {ExcelExporter} from "../../Export/ExcelExporter";
 import {SaveResource} from "../../Datastructures";
 import {EvaluationValues, WeightingEvaluation} from "./WeightingEvaluation";
@@ -10,11 +10,16 @@ import {EvaluationValues, WeightingEvaluation} from "./WeightingEvaluation";
 class WeightingEvaluationExcelWorkSheet extends ExcelExporter<any> {
     private values: EvaluationValues;
     private readonly customTableHeader?: string;
+    private readonly starterCell: CellAddress = {r: 0, c: 0};
 
-    constructor(evaluation: WeightingEvaluation, customTableHeader?: string) {
+    constructor(evaluation: WeightingEvaluation, customTableHeader?: string, starterCell?: CellAddress) {
         super();
         this.values = evaluation.getValues();
         this.customTableHeader = customTableHeader;
+
+        if (starterCell) {
+            this.starterCell = starterCell;
+        }
     }
 
     /**
@@ -24,15 +29,16 @@ class WeightingEvaluationExcelWorkSheet extends ExcelExporter<any> {
     public getExcelSheet(): WorkSheet {
         let ws: WorkSheet = {};
         let sum = this.values.result.reduce((p, n) => p + n.points, 0);
+        let cell = this.starterCell;
 
-        ws["A1"] = {
+        ws[this.encodeCell(cell)] = {
             t: "s", v: "Ergebnis", s: this.getHeaderStyle()
         }
-        ws["A2"] = {
+        cell.r += 1;
+        ws[this.encodeCell(cell)] = {
             t: "s", v: this.values.resultAsString
         }
-
-        let cell = {r: 3, c: 0};
+        cell.r += 2;
 
         let criteriaLength = "Feld".length;
         if (this.customTableHeader) {
@@ -45,7 +51,7 @@ class WeightingEvaluationExcelWorkSheet extends ExcelExporter<any> {
         }
         cell.c += 1;
         ws[this.encodeCell(cell)] = {
-            t: "s", v: "Gewichtung", s: this.getHeaderStyle()
+            t: "", v: "Gewichtungsverteilung", s: this.getHeaderStyle()
         }
         cell.c += 1;
         ws[this.encodeCell(cell)] = {
@@ -87,13 +93,13 @@ class WeightingEvaluationExcelWorkSheet extends ExcelExporter<any> {
                 wch: criteriaLength + 1
             },
             {
-                wch: "Gewichtung".length + 1
+                wch: "Gewichtungsverteilung".length
             },
             {
-                wch: "Punkte".length + 1
+                wch: "Punkte".length
             },
             {
-                wch: "Rang".length + 1
+                wch: "Rang".length
             }
         ];
 

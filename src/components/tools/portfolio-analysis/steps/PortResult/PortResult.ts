@@ -8,7 +8,7 @@ import {StepProp} from "../../../../../general-components/Tool/SteppableTool/Ste
 import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {PortResultComponent} from "./PortResultComponent";
-import {Point, PointColors} from "../../../../../general-components/CoordinateSystem/Point";
+import {Point, PointColors} from "../../../../../general-components/CoordinateSystem/Point/Point";
 import {ResultEvaluation} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluation";
 import {PortEvaluation} from "../PortEvaluation/PortEvaluation";
 

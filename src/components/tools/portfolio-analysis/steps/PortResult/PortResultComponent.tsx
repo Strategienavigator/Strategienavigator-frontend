@@ -6,11 +6,9 @@ import {
 import {PortfolioAnalysisValues} from "../../PortfolioAnalysis";
 import {CoordinateSystem} from "../../../../../general-components/CoordinateSystem/CoordinateSystem";
 import {NumberValueRenderer} from "../../../../../general-components/CoordinateSystem/ValueRenderer/NumberValueRenderer";
-import {BCGCustomGrid} from "../../../../../general-components/CoordinateSystem/Grid/BCG/BCGCustomGrid";
-import {Point} from "../../../../../general-components/CoordinateSystem/Point";
+import {Point} from "../../../../../general-components/CoordinateSystem/Point/Point";
 import {ResultEvaluationValue} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluation";
-import {ResultEvaluationComponent} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluationComponent";
-import {Accordion} from "react-bootstrap";
+import {PointComponent} from "../../../../../general-components/CoordinateSystem/Point/PointComponent";
 
 
 interface PortResultValues {
@@ -55,7 +53,7 @@ class PortResultComponent extends Step<PortfolioAnalysisValues, {}> {
                             }
                         }}
                         points={this.props.save.data["port-result"].points}
-                        gridDisplay={new BCGCustomGrid()}
+                        gridDisplay={true}
                         widthRange={{
                             start: 0,
                             end: 10
@@ -70,33 +68,23 @@ class PortResultComponent extends Step<PortfolioAnalysisValues, {}> {
                                 <>
                                     <strong>{point.header}</strong><br/>
 
-                                    Marktattraktivität: {point.y.toFixed(2)} <br/>
-                                    Wettbewerbsposition: {point.x.toFixed(2)}
+                                    Wettbewerbsposition: {point.x.toFixed(2)} <br/>
+                                    Marktattraktivität: {point.y.toFixed(2)}
                                 </>
                             );
                         }}
                     />
 
-                    <Accordion alwaysOpen className={"tables"}>
-                        <Accordion.Item eventKey={"attractivity"}>
-                            <Accordion.Header>
-                                Marktattraktivität
-                            </Accordion.Header>
-                            <Accordion.Body>
-                                <ResultEvaluationComponent
-                                    values={this.props.save.data["port-result"].results.attractivity}/>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        <Accordion.Item eventKey={"standing"}>
-                            <Accordion.Header>
-                                Wettbewerbsposition
-                            </Accordion.Header>
-                            <Accordion.Body>
-                                <ResultEvaluationComponent
-                                    values={this.props.save.data["port-result"].results["comp-standing"]}/>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
+                    <br />
+
+                    <PointComponent
+                        points={this.props.save.data["port-result"].points}
+                        customHeader={"Objekt"} displayColor={true}
+                        axisHeader={{
+                            y: "Marktattraktivität",
+                            x: "Wettbewerbsposition"
+                        }}
+                    />
                 </>
             );
         }

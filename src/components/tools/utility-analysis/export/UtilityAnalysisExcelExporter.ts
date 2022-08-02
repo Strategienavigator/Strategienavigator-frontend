@@ -5,7 +5,6 @@ import {SaveResource} from "../../../../general-components/Datastructures";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "../steps/UtilCriterias/UACriteriaCustomDescription";
 import {UtilWeightingValues} from "../steps/UtilWeighting/UtilWeightingComponent";
-import {CompareNumberHeader} from "../../../../general-components/CompareComponent/Header/CompareNumberHeader";
 import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {UtilEvaluationValues} from "../steps/UtilEvaluation/UtilEvaluationComponent";
 import {LinearCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
@@ -13,6 +12,9 @@ import {UtilResultValues} from "../steps/UtilityResult/UtilResultComponent";
 import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
 import {UtilEvaluation} from "../steps/UtilEvaluation/UtilEvaluation";
 import {CompareComponentExcelWorkSheet} from "../../../../general-components/CompareComponent/CompareComponentExcelWorkSheet";
+import {UtilWeighting} from "../steps/UtilWeighting/UtilWeighting";
+import {WeightingEvaluationExcelWorkSheet} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationExcelWorkSheet";
+import {WeightingEvaluation} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 
 /**
@@ -56,7 +58,7 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                 }).getExcelSheet());
 
                 if (this.isFilled(weighting)) {
-                    this.addSheet("Gewichtung der Kriterien", this.getWeightingSheet(criterias.criterias, weighting));
+                    this.addSheet("Gewichtung der Kriterien", UtilityAnalysisExcelExporter.getWeightingSheet(criterias.criterias, weighting));
 
                     if (this.isFilled(evaluation)) {
                         this.addSheet("Evaluation", UtilityAnalysisExcelExporter.getEvaluationSheet(criterias.criterias, investigationObjs.objects, evaluation));
@@ -80,62 +82,15 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
      * @returns {WorkSheet} Die erstellte Excel-Seite
      * @private
      */
-    private getWeightingSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, weighting: UtilWeightingValues) {
-        let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
-
-        // Header
-        cell.c = 1;
-        let numberHeader = new CompareNumberHeader(0, 3);
-        let headers = numberHeader.getHeaders();
-
-        for (let header of headers) {
-            ws[this.encodeCell(cell)] = {
-                v: header.header, t: "s", s: Object.assign(
-                    {
-                        alignment: {
-                            horizontal: "center"
-                        }
-                    },
-                    this.getHeaderStyle())
-            }
-            cell.c += 1;
-        }
-
+    private static getWeightingSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, weighting: UtilWeightingValues) {
         let adapter = new MatchCardComponentFieldsAdapter(criterias);
-        for (let i = 0; i < adapter.getLength(); i++) {
-            let field = adapter.getEntry(i);
-            cell.c = 0;
-            cell.r += 1;
+        let ws = new CompareComponentExcelWorkSheet(adapter, weighting, UtilWeighting.header).getExcelSheet();
+        let lastRow = ExcelExporter.getLastRow(ws) + 2;
+        let evaluation = new WeightingEvaluation(criterias, weighting);
 
-            ws[this.encodeCell(cell)] = {
-                v: field.first, t: "s"
-            }
-            cell.c += 1;
-
-            for (let j = 0; j < headers.length; j++) {
-                if (j.toString() === weighting.comparisons[i].header) {
-                    ws[this.encodeCell(cell)] = {
-                        v: "X", t: "s", s: Object.assign(
-                            {
-                                alignment: {
-                                    horizontal: "center"
-                                }
-                            },
-                            this.getHeaderStyle())
-                    }
-                }
-                cell.c += 1;
-            }
-            ws[this.encodeCell(cell)] = {
-                v: field.second, t: "s"
-            }
-        }
-
-        let range: Range = {s: {r: 0, c: 0}, e: cell}
-        ws["!ref"] = this.encodeRange(range);
-
-        return ws;
+        let returnWS = Object.assign(ws, new WeightingEvaluationExcelWorkSheet(evaluation, undefined, {c: 0, r: lastRow}).getExcelSheet());
+        returnWS["!ref"] = XLSX.utils.encode_range({s: {r: 0, c: 0}, e: {r: 100, c: 100}});
+        return returnWS;
     }
 
     private getResultSheet(values: UtilResultValues) {

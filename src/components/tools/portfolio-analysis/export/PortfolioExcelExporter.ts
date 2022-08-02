@@ -8,6 +8,7 @@ import {MatchCardComponentFieldsAdapter} from "../../../../general-components/Co
 import {PortWeighting} from "../steps/PortWeighting/PortWeighting";
 import {LinearCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
 import {PortEvaluation} from "../steps/PortEvaluation/PortEvaluation";
+import {PointExcelSheet} from "../../../../general-components/CoordinateSystem/Point/PointExcelSheet";
 
 
 class PortfolioExcelExporter extends ExcelExporter<PortfolioAnalysisValues> {
@@ -17,6 +18,7 @@ class PortfolioExcelExporter extends ExcelExporter<PortfolioAnalysisValues> {
         let criterias = data.data["port-criterias"];
         let weighting = data.data["port-weighting"];
         let evaluation = data.data["port-evaluation"];
+        let result = data.data["port-result"];
 
         // 1. Objekte
         if (this.isFilled(objects)) {
@@ -106,8 +108,16 @@ class PortfolioExcelExporter extends ExcelExporter<PortfolioAnalysisValues> {
             })));
         }
 
+        // 5. Ergebnis
+        if (this.isFilled(result)) {
+            let ws = new PointExcelSheet(result?.points, "Objekt").getExcelSheet();
+            this.addSheet("Ergebnis", ws);
+        }
+
         return true;
     }
+
+
 
 }
 

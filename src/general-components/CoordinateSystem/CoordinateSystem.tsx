@@ -5,7 +5,7 @@ import {ValueRenderer} from "./ValueRenderer/ValueRenderer";
 import {NumberValueRenderer} from "./ValueRenderer/NumberValueRenderer";
 import {Property} from "csstype";
 import {CustomGrid} from "./Grid/CustomGrid";
-import {Point} from "./Point";
+import {Point} from "./Point/Point";
 import {Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
 
 
