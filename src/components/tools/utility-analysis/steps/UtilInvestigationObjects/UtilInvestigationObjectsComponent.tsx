@@ -19,7 +19,6 @@ export interface UtilInvestigationObjectsValues {
  */
 class UtilInvestigationObjectsComponent extends Step<UtilityAnalysisValues, any> {
 
-
     public constructor(props: Readonly<StepProp<UtilityAnalysisValues>> | StepProp<UtilityAnalysisValues>, context: any) {
         super(props, context);
     }

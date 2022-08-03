@@ -31,11 +31,9 @@ interface NavState {
 }
 
 class Nav extends Component<RouteComponentProps, NavState> {
-    private timeout: NodeJS.Timeout | undefined;
-
-
     static contextType = UserContext;
     context!: React.ContextType<typeof UserContext>
+    private timeout: NodeJS.Timeout | undefined;
 
     constructor(props: any) {
         super(props);
@@ -126,7 +124,9 @@ class Nav extends Component<RouteComponentProps, NavState> {
         } else if (toolID === 2) {
             return "/swot-analysis/" + saveID;
         } else if (toolID === 3) {
-            return "/paarwise-comparison/" + saveID;
+            return "/pairwise-comparison/" + saveID;
+        } else if (toolID === 4) {
+            return "/portfolio-analysis/" + saveID;
         }
         return "/";
     }
@@ -138,12 +138,12 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return "SWOT Analyse";
         } else if (toolID === 3) {
             return "Paarweiser Vergleich";
+        } else if (toolID === 4) {
+            return "Portfolio Analyse";
         }
     }
 
     render() {
-
-
         return (
             <Navbar onToggle={(e) => {
                 this.setExpanded(!this.state.expanded)

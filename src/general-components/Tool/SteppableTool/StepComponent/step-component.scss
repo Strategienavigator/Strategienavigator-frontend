@@ -19,6 +19,10 @@ $tabColor: #6e6e6e;
   flex: 1 1 100%;
 }
 
+.stepContainer .tabsContent {
+  padding-bottom: 2rem;
+}
+
 .stepTabs > .nav-item {
   flex: 1 1 auto;
   text-align: center;

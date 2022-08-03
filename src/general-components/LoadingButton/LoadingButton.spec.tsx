@@ -3,6 +3,7 @@ import {LoadingButton} from "./LoadingButton";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../index.scss';
 
+
 describe('LoadingButton', () => {
     Cypress.config("viewportHeight", 500)
     Cypress.config("viewportWidth", 500)

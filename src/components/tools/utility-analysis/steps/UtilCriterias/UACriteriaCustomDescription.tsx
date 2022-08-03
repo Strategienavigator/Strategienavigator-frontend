@@ -93,6 +93,10 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
         );
     }
 
+    isEmpty(): boolean {
+        return false;
+    }
+
     private toggledSelection = (e: ChangeEvent<HTMLInputElement>) => {
         let selected = e.target.checked;
         let value = Number(e.target.value);

@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, ReactNode} from "react";
 
 
 export interface CustomDescriptionComponentProps<D> {
@@ -26,6 +26,9 @@ export interface CustomDescriptionComponentProps<D> {
  * So lassen sich sonstige Beschreibungsmöglichkeiten modular einbinden.
  */
 abstract class CustomDescriptionComponent<V, S> extends Component<CustomDescriptionComponentProps<V>, S> {
+
+    public abstract render(): ReactNode;
+
 }
 
 
