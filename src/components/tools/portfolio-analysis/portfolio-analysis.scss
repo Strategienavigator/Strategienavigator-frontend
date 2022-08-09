@@ -1,0 +1,22 @@
+
+#port-criterias h5, #port-weighting h5, #port-evaluation h5 {
+  margin: 1rem 0 1rem 0;
+  font-size: 13pt;
+  font-weight: 600;
+}
+
+#port-evaluation {
+  .evaluation {
+    margin-bottom: 1rem;
+  }
+
+  h6.compare-header {
+    margin: 1rem 0 1rem 0;
+    font-size: 13pt;
+    font-weight: 600;
+  }
+}
+
+#port-result .tables {
+  margin-top: 1rem;
+}

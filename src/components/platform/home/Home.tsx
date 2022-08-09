@@ -45,15 +45,15 @@ export class Home extends Component<any, HomeState> {
                     maintenance: false
                 },
                 {
-                    name: "ABC Analyse",
-                    icon: faChartPie,
-                    link: "/abc-analysis",
-                    maintenance: true
-                },
-                {
                     name: "Portfolio Analyse",
                     icon: faArrowsAlt,
                     link: "/portfolio-analysis",
+                    maintenance: false
+                },
+                {
+                    name: "ABC Analyse",
+                    icon: faChartPie,
+                    link: "/abc-analysis",
                     maintenance: true
                 }
             ]

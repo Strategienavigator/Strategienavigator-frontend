@@ -231,6 +231,7 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
         const value = e.target.checked;
         this.updateAlternative(this.props.currentSubStep, action => {
             action.hasNone = value;
+            action.alternatives = [];
             return action;
         });
     }
@@ -248,7 +249,7 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
 
     private alternativesChanged = (cardComponents: CardComponentFields) => {
         this.updateAlternative(this.props.currentSubStep, action => {
-            action.alternatives = cardComponents;
+            action.alternatives = action.hasNone ? [] : cardComponents;
             return action;
         });
     };

@@ -9,14 +9,14 @@ import {Card} from "./Card";
 
 
 export function isCardComponentFilled(cardComponentFields?: CardComponentFields<object>) {
-    return cardComponentFields?.every((cardComponentField: CardComponentField<object>) => {
-        return cardComponentField.name.length > 0 && cardComponentField.desc.length > 0;
+    return cardComponentFields?.every((field: CardComponentField<object>) => {
+        return field.name.length > 0 && field.desc.length > 0;
     });
 }
 
 export function isCardComponentTooLong(cardComponentFields?: CardComponentFields<object>) {
-    return !cardComponentFields?.every((cardComponentField: CardComponentField<object>) => {
-        return !(cardComponentField.name.length > Card.MAX_NAME_LENGTH || cardComponentField.desc.length > Card.MAX_DESC_LENGTH);
+    return !cardComponentFields?.every((field: CardComponentField<object>) => {
+        return !(field.name.length > Card.MAX_NAME_LENGTH || field.desc.length > Card.MAX_DESC_LENGTH);
     });
 }
 
@@ -88,6 +88,9 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
     }
 
     render = () => {
+        if (this.props.hide) {
+            return null;
+        }
         let cards = this.getAllCards();
 
         return (

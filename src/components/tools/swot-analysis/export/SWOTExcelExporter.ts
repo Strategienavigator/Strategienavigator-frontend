@@ -15,17 +15,13 @@ class SWOTExcelExporter extends ExcelExporter<SWOTAnalysisValues> {
         let alternatives = data.data["alternative-actions"]!;
         let classifications = data.data["swot-classify-alternate-actions"]!;
 
-        const isFilled = (o: object): boolean => {
-            return o && Object.keys(o).length > 0;
-        }
-
-        if (isFilled(factors))
+        if (this.isFilled(factors))
             this.addSheet("Faktoren", this.getFactorsWorksheet(factors));
 
-        if (isFilled(alternatives))
+        if (this.isFilled(alternatives))
             this.addSheet("Handlungsalternativen", this.getAlternativesWorksheet(alternatives));
 
-        if (isFilled(classifications))
+        if (this.isFilled(classifications))
             this.addSheet("Klassifikationen", this.getClassificationsWorksheet(classifications));
 
         return true;

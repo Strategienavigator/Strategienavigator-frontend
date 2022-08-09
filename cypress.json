@@ -1,0 +1,25 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "experimentalSessionAndOrigin": true,
+  "video": false,
+  "viewportHeight": 1080,
+  "viewportWidth": 1920,
+  "defaultCommandTimeout" : 10000,
+  "component": {
+    "componentFolder": "src",
+    "testFiles": "**/*spec.tsx"
+  },
+  "env": {
+    "DB_HOST": "127.0.0.1",
+    "DB_USER": "root",
+    "DB_PASSWORD": "",
+    "DB_PORT": 3306,
+    "SMTP_PORT": 7777,
+    "BACKEND_URL": "http://localhost/toolbox-backend/public/",
+    "APP_CLIENT_ID": 2,
+    "APP_CLIENT_SECRET": "ytr2ITFQRMCvez8CVFnK9oEzy5QvZb7vAz49eYaO",
+    "TEST_LOGIN_USERNAME": "max@test.test",
+    "TEST_LOGIN_PASSWORD": "password"
+    }
+}
+

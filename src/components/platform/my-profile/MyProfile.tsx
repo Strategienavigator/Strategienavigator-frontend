@@ -18,10 +18,10 @@ import "./my-profile.scss";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import FAE from "../../../general-components/Icons/FAE";
 import {ModalCloseable} from "../../../general-components/Modal/ModalCloseable";
+import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
 
 
 export interface MyProfileState {
-    user: User
     edit: boolean
     delete: boolean
     showDeleteModal: boolean
@@ -29,11 +29,15 @@ export interface MyProfileState {
     passwordNotMatching?: boolean
     isSaving: boolean
     isSaved?: boolean
-    userLoaded: boolean
 }
 
 export class MyProfileComponent extends Component<any, MyProfileState> {
 
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = UserContext;
+    context!: React.ContextType<typeof UserContext>
     private password: string | null = null;
     private passwordConfirm: string | null = null;
 
@@ -41,13 +45,11 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         super(props);
 
         this.state = {
-            user: Session.currentUser as User,
             edit: false,
             delete: false,
             showDeleteModal: false,
             passwordFieldTouched: false,
             isSaving: false,
-            userLoaded: false
         }
     }
 
@@ -103,8 +105,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         let current_password: string = extractFromForm(e, "current_password") as string;
         let new_password: string = extractFromForm(e, "new_password") as string;
 
-        let new_username = username !== this.state.user.getUsername() ? username : undefined
-        let new_email = email !== this.state.user.getEmail() ? email : undefined
+        let new_username = username !== this.context.user?.getUsername() ? username : undefined
+        let new_email = email !== this.context.user?.getEmail() ? email : undefined
 
         let needs_update = new_email !== undefined || new_username !== undefined || new_password.length > 0;
 
@@ -128,11 +130,18 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             });
 
             if (call && call.success) {
-                Session.currentUser?.update(data);
-                reload_app();
+                let currentUser = Session.currentUser;
+
+                let newUser = User.from(currentUser);
+
+                newUser.update(data);
+                Session.setCurrent(newUser);
+                // reload_app();
                 this.setState({
                     isSaved: true
-                })
+                });
+            } else {
+                Messages.add("Beim Speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
             }
         } else {
             // fake load so the user thinks something is happening
@@ -170,7 +179,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
     }
 
     render() {
-        if (!this.state.userLoaded) {
+        if (!this.context.isLoggedIn) {
             return (
                 <Loader payload={[]} loaded={false} transparent fullscreen/>
             );
@@ -181,7 +190,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 await this.saveChanges(e)
             }} className={"profile"}>
                 <h4>
-                    <FAE icon={faUser}/> &nbsp;{this.state.user.getUsername()}
+                    <FAE icon={faUser}/> &nbsp;{this.context.user?.getUsername()}
                     {(this.state.edit) && (
                         <Button style={{float: "right"}} disabled={this.state.isSaving} size={"sm"} variant={"dark"}
                                 className={"editButton"} onClick={this.changeView}>
@@ -199,8 +208,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         type={"text"}
                         readOnly={!this.state.edit}
                         suppressErrors={!this.state.edit}
-                        defaultValue={this.state.user.getUsername()}
-                        value={this.state.edit ? undefined : this.state.user.getUsername()}
+                        defaultValue={this.context.user?.getUsername()}
+                        value={this.state.edit ? undefined : this.context.user?.getUsername()}
                         callback={checkUsername}
                         entityName={"Username"}
                     />
@@ -214,8 +223,8 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         type={"text"}
                         readOnly={!this.state.edit}
                         suppressErrors={!this.state.edit}
-                        defaultValue={this.state.user.getEmail()}
-                        value={this.state.edit ? undefined : this.state.user.getEmail()}
+                        defaultValue={this.context.user?.getEmail()}
+                        value={this.state.edit ? undefined : this.context.user?.getEmail()}
                         callback={checkEmail}
                         entityName={"Email"}
                     />
@@ -270,11 +279,11 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                         <Row>
                             <Col>
                                 Eigene Analysen <br/>
-                                {this.state.user.getOwnedSavesAmount()}
+                                {this.context.user?.getOwnedSavesAmount()}
                             </Col>
                             <Col>
                                 Geteilte Analysen <br/>
-                                {this.state.user.getSharedSavesAmount()}
+                                {this.context.user?.getSharedSavesAmount()}
                             </Col>
                         </Row>
                         <hr/>
@@ -338,16 +347,6 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 </ModalCloseable>
             </Form>
         );
-    }
-
-    componentDidMount = async () => {
-        let user = await Session.checkLogin();
-        if (user) {
-            this.setState({
-                userLoaded: true,
-                user: user
-            });
-        }
     }
 
 }

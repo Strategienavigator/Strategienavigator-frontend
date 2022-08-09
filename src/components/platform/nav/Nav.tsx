@@ -1,4 +1,4 @@
-import {ChangeEvent, Component} from "react";
+import React, {ChangeEvent, Component} from "react";
 import {Badge, Card, Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
@@ -11,7 +11,6 @@ import {
     faUser,
     faUserPlus
 } from "@fortawesome/free-solid-svg-icons/";
-import {Session} from "../../../general-components/Session/Session";
 import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
@@ -21,6 +20,7 @@ import {SimpleSaveResource} from "../../../general-components/Datastructures";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {RouteComponentProps, withRouter} from "react-router";
 import FAE from "../../../general-components/Icons/FAE";
+import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
 
 
 interface NavState {
@@ -31,6 +31,8 @@ interface NavState {
 }
 
 class Nav extends Component<RouteComponentProps, NavState> {
+    static contextType = UserContext;
+    context!: React.ContextType<typeof UserContext>
     private timeout: NodeJS.Timeout | undefined;
 
     constructor(props: any) {
@@ -81,7 +83,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                     searchResult: []
                 });
 
-                let searchCall = await getSaves(Session.currentUser?.getID() as number, {
+                let searchCall = await getSaves(this.context.user?.getID() as number, {
                     name: value,
                     description: value,
                     searchBoth: false
@@ -122,7 +124,9 @@ class Nav extends Component<RouteComponentProps, NavState> {
         } else if (toolID === 2) {
             return "/swot-analysis/" + saveID;
         } else if (toolID === 3) {
-            return "/paarwise-comparison/" + saveID;
+            return "/pairwise-comparison/" + saveID;
+        } else if (toolID === 4) {
+            return "/portfolio-analysis/" + saveID;
         }
         return "/";
     }
@@ -134,12 +138,12 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return "SWOT Analyse";
         } else if (toolID === 3) {
             return "Paarweiser Vergleich";
+        } else if (toolID === 4) {
+            return "Portfolio Analyse";
         }
     }
 
     render() {
-
-
         return (
             <Navbar onToggle={(e) => {
                 this.setExpanded(!this.state.expanded)
@@ -155,7 +159,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
 
                     <Navbar.Collapse>
                         <BootstrapNav className="m-auto">
-                            {(Session.isLoggedIn()) && (
+                            {(this.context.isLoggedIn) && (
                                 <div className={"searchContainer"}>
                                     <FormControl
                                         type={"search"}
@@ -214,7 +218,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                             )}
                         </BootstrapNav>
                         <BootstrapNav>
-                            {(!Session.isLoggedIn()) && (
+                            {(!this.context.isLoggedIn) && (
                                 <>
                                     <NavLink onClick={this.navOnClick} to={"/login"} className={"nav-link"}>
                                         <FAE icon={faSignInAlt}/>&nbsp;
@@ -226,11 +230,11 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                     </NavLink>
                                 </>
                             )}
-                            {(Session.isLoggedIn()) && (
+                            {(this.context.isLoggedIn) && (
                                 <NavDropdown id={"profile-dropdown"} title={<><FAE
-                                    icon={faUser}/> &nbsp;{Session.currentUser?.getUsername()}</>}>
+                                    icon={faUser}/> &nbsp;{this.context.user?.getUsername()}</>}>
 
-                                    {!Session.isAnonymous() && (
+                                    {!this.context.user?.isAnonymous() && (
                                         <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/my-profile"}
                                                        role={"button"}>
                                             <FAE icon={faUser}/>&nbsp;

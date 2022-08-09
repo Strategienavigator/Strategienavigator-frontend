@@ -4,8 +4,8 @@ import {
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
-import {EvaluationComponent} from "../../../../../general-components/EvaluationComponent/EvaluationComponent";
-import {EvaluationValues} from "../../../../../general-components/EvaluationComponent/Evaluation";
+import {WeightingEvaluationComponent} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationComponent";
+import {EvaluationValues} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 
 export interface PCResultValues extends EvaluationValues {
@@ -31,7 +31,7 @@ class PCResultComponent extends Step<PairwiseComparisonValues, {}> {
 
         if (values !== undefined) {
             return (
-                <EvaluationComponent customTableHeader={"Kriterium"} values={values}/>
+                <WeightingEvaluationComponent customTableHeader={"Kriterium"} values={values}/>
             );
         }
 
