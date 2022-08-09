@@ -140,7 +140,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
         return (
             <div>
                 <InputGroup>
-                    <div className={"id"} aria-disabled={this.props.disabled}>
+                    <div className={(this.props.disabled) ? "id disabled" : "id"}>
                         {this.props.id}
                     </div>
                     <FormControl

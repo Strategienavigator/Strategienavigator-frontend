@@ -103,7 +103,7 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
 
             return (
                 <div className={"alternative-actions"}>
-                    <ProgressBar striped label={currentProgress.toFixed(0) + " %"} now={currentProgress}
+                    <ProgressBar striped animated label={currentProgress.toFixed(0) + " %"} now={currentProgress}
                                  className={"progressBar"}/>
 
                     <Row className={"mb-3 mt-3"}>

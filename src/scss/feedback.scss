@@ -1,8 +1,7 @@
-@import "variables/variables";
-@import "~bootstrap/scss/bootstrap-utilities";
+@import "/src/themes.scss";
 
 $feedbackAlpha: -0.8;
-$feedbackColorDarken: 10%;
+$feedbackColorDarken: 5%;
 
 .feedbackContainer:empty {
   margin: 0 !important;
@@ -13,21 +12,37 @@ $feedbackColorDarken: 10%;
 
   .feedback {
     padding: 0.5rem 1rem;
-    border-left: 5px solid $color;
-    background-color: adjust-color($color, $alpha: $feedbackAlpha);
-    color: $color;
+    border-left: 5px solid;
+
+    svg {
+      vertical-align: middle;
+    }
+
+    @include theme() {
+      color: get("color");
+      border-left-color: get("color");
+      background-color: get("color");
+    }
   }
 
   .feedback.DANGER {
-    color: darken($danger, $feedbackColorDarken) !important;
+    color: $danger !important;
     border-left-color: $danger !important;
     background-color: adjust-color($danger, $alpha: $feedbackAlpha);
+
+    > svg {
+      color: $danger !important;
+    }
   }
 
   .feedback.SUCCESS {
-    color: darken($success, $feedbackColorDarken) !important;
+    color: $success !important;
     border-left-color: $success !important;
     background-color: adjust-color($success, $alpha: $feedbackAlpha);
+
+    > svg {
+      color: $success !important;
+    }
   }
 
 }

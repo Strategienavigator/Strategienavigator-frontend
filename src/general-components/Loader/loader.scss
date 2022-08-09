@@ -1,4 +1,4 @@
-@import "src/scss/variables/variables";
+@import "src/themes";
 
 .loader {
   display: flex;
@@ -44,24 +44,36 @@
 
 // DARK
 .loader.dark {
-  background-color: darken($color, 6%);
   color: #b6b6b6;
+
+  @include theme() {
+    background-color: get("style-color");
+  }
 }
 
 .loader.dark .spinner {
   border-color: #b6b6b6;
-  border-right-color: darken($color, 6%);
+
+  @include theme() {
+    border-right-color: get("style-color");
+  }
 }
 
 // LIGHT
 .loader.light {
   background-color: #d3d3d3;
-  color: $color;
+
+  @include theme() {
+    color: get("style-color");
+  }
 }
 
 .loader.light .spinner {
-  border-color: $color;
   border-right-color: #d3d3d3;
+
+  @include theme() {
+    border-color: get("style-color");
+  }
 }
 
 // TRANSPARENT

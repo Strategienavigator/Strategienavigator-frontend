@@ -51,10 +51,10 @@ export class AboutUs extends Component<any, any> {
 
 
         return (<>
-            <header className="head">
-                <h2>Über Uns</h2>
+            <h2>Über Uns</h2>
 
-            </header>
+            <hr />
+
             <p>
                 <h3>Beschreibung</h3>
                 Der Strategienavigator bietet als Open-Source-Software eine Reihe von bekannten Planungs- und

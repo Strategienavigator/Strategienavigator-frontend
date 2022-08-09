@@ -1,18 +1,13 @@
-@import "src/scss/variables/variables";
+@import "src/themes";
 
 footer.show {
   display: block !important;
 }
 
 footer {
-  background-color: #fff;
   display: none !important;
 
-  a {
-    color: $color !important;
-  }
-
-  a:hover {
-    color: inherit !important;
+  @include theme() {
+    background-color: get("footer-bg-color");
   }
 }

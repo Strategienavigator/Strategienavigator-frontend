@@ -1,6 +1,4 @@
-@import "/src/scss/variables/variables";
-
-$tabColor: #6e6e6e;
+@import "/src/themes";
 
 .stepTabContainer * {
   word-break: break-all;
@@ -8,11 +6,14 @@ $tabColor: #6e6e6e;
 
 .stepTabContainer {
   top: -0.75rem;
-  background-color: $bgColor;
   position: sticky;
   position: -webkit-sticky;
   z-index: 100;
-  align-self: flex-start
+  align-self: flex-start;
+
+  @include theme() {
+    background-color: get("bg-color");
+  }
 }
 
 .stepContainer > .stepTabContainer, .stepContainer > .tabsContent {
@@ -26,27 +27,37 @@ $tabColor: #6e6e6e;
 .stepTabs > .nav-item {
   flex: 1 1 auto;
   text-align: center;
-  background-color: darken($tabColor, 15%); //#888484 darken(#e6e6e6, 5%)
-  color: white; //white
   margin: 1px;
   border: none;
   cursor: pointer;
+
+  @include theme() {
+    color: get("step-tab-color");
+    background-color: get("step-tab-bg");
+  }
 }
 
 .stepTabs > .nav-item.disabled {
-  background-color: darken($tabColor, 15%); //$tabColor or darken($tabColor, 15%)
-  opacity: 0.5;
-  color: black;
+  opacity: 0.42;
+
+  @include theme() {
+    color: get("step-tab-color");
+    background-color: get("step-tab-bg");
+  }
 }
 
 .stepTabs > .nav-item:hover {
-  background-color: darken($tabColor, 20%) !important;
-  color: white;
+  @include theme() {
+    color: get("step-tab-hover-color") !important;
+    background-color: get("step-tab-hover-bg") !important;
+  }
 }
 
 .stepTabs > .nav-item.active {
-  background-color: $color !important; //
-  color: white !important;
+  @include theme() {
+    color: get("step-tab-active-color") !important;
+    background-color: get("step-tab-active-bg") !important;
+  }
 }
 
 .stepTitle {
