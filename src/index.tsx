@@ -31,7 +31,8 @@ import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/Portfolio
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import {ErrorPages} from "./general-components/Error/ErrorPages/ErrorPages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
-import {InvitationDecision} from "./components/platform/sharing/InvitationDecision";
+import {InvitationDecision} from "./components/platform/sharing/Invitation/InvitationDecision";
+import {ContributionDecision} from "./components/platform/sharing/Contribution/ContributionDecision";
 
 
 /**
@@ -54,6 +55,7 @@ const getRouterSwitch = () => {
             <Route loggedIn={true} path={"/settings"} exact component={Settings}/>
             <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact component={MyProfile}/>
 
+            <Route loggedIn={true} path={"/invite/:sharedSaveID"} component={ContributionDecision}/>
             <Route loggedIn={true} path={"/invitation/:token"} component={InvitationDecision}/>
 
             <Route path={"/verify-email/:token"} component={EmailVerification}/>

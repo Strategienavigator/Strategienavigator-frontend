@@ -1,12 +1,13 @@
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {Button, FloatingLabel, Form, FormGroup, FormSelect, Modal} from "react-bootstrap";
 import {useState} from "react";
+import {UserSearchResultResource} from "../../Datastructures";
 
 interface SingleInviteModalProps {
     show: boolean
     onClose: () => void
-    username: string
-    onInvite: (permission: SingleInvitePermission) => void
+    user: UserSearchResultResource | null
+    onInvite: (user: UserSearchResultResource | null, permission: SingleInvitePermission) => void
 }
 
 type SingleInvitePermission = "0" | "1" | "2";
@@ -27,7 +28,7 @@ function SingleInviteModal(props: SingleInviteModalProps) {
           keyboard={true}
       >
           <Modal.Header>
-              <h5><strong>{props.username}</strong> einladen.</h5>
+              <h5><strong>{props.user?.username}</strong> einladen.</h5>
           </Modal.Header>
           <Modal.Body>
               <Form>
@@ -49,7 +50,7 @@ function SingleInviteModal(props: SingleInviteModalProps) {
                       size={"sm"}
                       variant={"primary"}
                       onClick={() => {
-                          props.onInvite(permission);
+                          props.onInvite(props.user, permission);
                           props.onClose();
                       }}
                   >Einladen</Button>

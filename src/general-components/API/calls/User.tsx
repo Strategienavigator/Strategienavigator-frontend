@@ -1,4 +1,5 @@
 import {APIArgs, callAPI} from "../API";
+import {UserSearchResultResource} from "../../Datastructures";
 
 
 export type UpdateData = {
@@ -17,7 +18,6 @@ export type UpdateData = {
  */
 const createUser = async (username: string, email: string, password: string, anonymousID?: number, apiArgs?: APIArgs) => {
     let formData = new FormData();
-
 
     formData.append("email", email);
     formData.append("username", username);
@@ -58,8 +58,22 @@ const deleteUser = async (userID: number, apiArgs?: APIArgs) => {
     return await callAPI("api/users/" + userID, "DELETE", undefined, true, apiArgs);
 }
 
+
+/**
+ * Sucht einen User basierend auf dem angegebenen Searchstring
+ *
+ * @param {string} searchString Der Suchstring
+ * @param {APIArgs} apiArgs
+ * @returns {Promise<CallInterface<object> | null>}
+ */
+const searchUser = async (searchString: string, apiArgs?: APIArgs) => {
+    let data = new URLSearchParams("name=" + searchString);
+    return await callAPI<{ data: UserSearchResultResource[] }>("api/users/search", "GET", data, true, apiArgs);
+}
+
 export {
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    searchUser
 }

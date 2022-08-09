@@ -6,13 +6,15 @@ import FAE from "../Icons/FAE";
 import {Component} from "react";
 import {InvitationLinkModal} from "./InvitationLinkModal/InvitationLinkModal";
 import {ModalCloseable} from "../Modal/ModalCloseable";
-import {InvitationLinkResource, SimpleSaveResource} from "../Datastructures";
+import {InvitationLinkResource, SimpleSaveResource, UserSearchResultResource} from "../Datastructures";
 import {Loader} from "../Loader/Loader";
 import {createInvitationLink, deleteInvitationLink, showInvitationLinks} from "../API/calls/Invitations";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/";
 import {Messages} from "../Messages/Messages";
 import {SingleInviteModal} from "./SingleInviteModal/SingleInviteModal";
+import { searchUser } from "../API/calls/User";
 import {createContribution} from "../API/calls/Contribution";
+import {CreateContextOptions} from "vm";
 
 
 export interface SaveInvitationProps {
@@ -22,13 +24,14 @@ export interface SaveInvitationProps {
 }
 
 export interface SaveInvitationState {
-    searchItems: any[],
+    searchItems: UserSearchResultResource[],
     isSearching: boolean,
     searchText: string | null,
-    showSingleInviteModal: string,
+    showSingleInviteModal: UserSearchResultResource | null,
     showInvitationLinkModal: boolean,
     links: InvitationLinkResource[],
-    deleteInvitationLink: string | null
+    deleteInvitationLink: string | null,
+    inviteSuccess?: boolean
 }
 
 class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState> {
@@ -40,11 +43,12 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         this.state = {
             searchItems: [],
             isSearching: false,
-            showSingleInviteModal: "",
+            showSingleInviteModal: null,
             searchText: null,
             showInvitationLinkModal: false,
             links: [],
-            deleteInvitationLink: null
+            deleteInvitationLink: null,
+            inviteSuccess: undefined
         }
     }
 
@@ -162,14 +166,14 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                                     searchText: value,
                                                     isSearching: true
                                                 }, () => {
-                                                    this.searchUser();
+                                                    this.searchForUser();
                                                 });
                                             }, 400);
                                         }
                                     }}
                                 />
                                 <Button
-                                    onClick={this.searchUser}
+                                    onClick={this.searchForUser}
                                 >
                                     <FAE icon={faSearch}/>
                                 </Button>
@@ -178,7 +182,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                             <Loader payload={[]} loaded={!this.state.isSearching} transparent size={50}>
                                 <Table size={"sm"} hover={true}>
                                     <tbody>
-                                    {(this.state.searchItems.map((user, index) => {
+                                    {(this.state.searchItems?.map((user, index) => {
                                         return (
                                             <tr
                                                 key={user + "-" + index}
@@ -189,13 +193,27 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                                 }}
                                                 style={{cursor: "pointer"}}
                                             >
-                                                <td>{user}</td>
+                                                <td>{user.username}</td>
                                             </tr>
                                         );
                                     }))}
                                     </tbody>
                                 </Table>
                             </Loader>
+
+                            <div className={"feedbackContainer"}>
+                                {(this.state.inviteSuccess !== undefined) && (
+                                    this.state.inviteSuccess ? (
+                                        <div className={"feedback SUCCESS"}>
+                                            Einladung verschickt!
+                                        </div>
+                                    ) : (
+                                        <div className={"feedback DANGER"}>
+                                            Einladung fehlgeschlagen!
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
@@ -208,16 +226,31 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                 </ModalCloseable>
 
                 <SingleInviteModal
-                    show={this.state.showSingleInviteModal !== ""}
+                    show={this.state.showSingleInviteModal !== null}
                     onClose={() => {
                         this.setState({
-                            showSingleInviteModal: ""
+                            showSingleInviteModal: null
                         });
                     }}
-                    username={this.state.showSingleInviteModal}
-                    onInvite={(async (permission) => {
-                        let user = 2;
-                        // TODO: Invite erstellen
+                    user={this.state.showSingleInviteModal}
+                    onInvite={(async (user, permission) => {
+                        if (user && this.props.save) {
+                            this.setState({
+                                isSearching: true,
+                                inviteSuccess: undefined
+                            });
+
+                            let data = {
+                              permission: parseInt(permission)
+                            };
+                            let call = await createContribution(this.props.save.id, parseInt(user.id), data);
+
+                            this.setState({
+                                isSearching: false,
+                                searchItems: [],
+                                inviteSuccess: call?.success
+                            });
+                        }
                     })}
                 />
 
@@ -291,21 +324,21 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         );
     }
 
-    searchUser = async () => {
-        this.setState({
-            isSearching: true
-        });
-
+    searchForUser = async () => {
         let searchText = this.state.searchText;
-        console.log(searchText);
-
-        // TODO: backend einbauen
-        setTimeout(() => {
+        if (searchText) {
             this.setState({
-                searchItems: ["peter.fox", "test_user", "nichlas.schipper", "marco_janssen"],
+                isSearching: true
+            });
+
+            let call = await searchUser(searchText);
+            let data = call?.callData.data ?? [];
+
+            this.setState({
+                searchItems: data,
                 isSearching: false
             });
-        }, 1000);
+        }
     }
 
     private loadInviteLinks = async (save: SimpleSaveResource) => {

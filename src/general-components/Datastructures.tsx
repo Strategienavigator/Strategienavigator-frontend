@@ -343,6 +343,17 @@ export type UserSettingResource = {
     value: string
 }
 
+export type UserSearchResultResource = {
+    /**
+     * Die User-ID
+     */
+    id: string,
+    /**
+     * Der Username
+     */
+    username: string
+}
+
 export type SettingResource = {
     /**
      * ID der Einstellung

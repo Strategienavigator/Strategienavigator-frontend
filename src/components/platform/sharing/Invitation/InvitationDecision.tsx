@@ -3,16 +3,13 @@ import {RouteComponentProps, StaticContext} from "react-router";
 
 
 import "./invitation-decision.scss";
-import {
-    acceptInvitationLink,
-    showInvitationLink
-} from "../../../general-components/API/calls/Invitations";
-import {getSave} from "../../../general-components/API/calls/Saves";
-import {SaveResource} from "../../../general-components/Datastructures";
-import {CallInterface} from "../../../general-components/API/API";
-import {Loader} from "../../../general-components/Loader/Loader";
-import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
-import {Messages} from "../../../general-components/Messages/Messages";
+import {acceptInvitationLink, showInvitationLink} from "../../../../general-components/API/calls/Invitations";
+import {getSave} from "../../../../general-components/API/calls/Saves";
+import {SaveResource} from "../../../../general-components/Datastructures";
+import {CallInterface} from "../../../../general-components/API/API";
+import {Loader} from "../../../../general-components/Loader/Loader";
+import {LoadingButton} from "../../../../general-components/LoadingButton/LoadingButton";
+import {Messages} from "../../../../general-components/Messages/Messages";
 
 
 export interface InvitationDecisionState {
