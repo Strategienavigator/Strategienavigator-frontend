@@ -111,3 +111,36 @@ Cypress.Commands.add('CreateSave',(saveSlot, name, tool_id, owner_id = 1)=>{
         "TEST_SAVE");`);
      })
 })
+//Parameter
+//tool: string = Which tool to load a save from
+//Options: "swot"
+Cypress.Commands.add('LoginAndLoad',(tool) =>{
+
+    if (tool == "swot")
+    {
+        cy.visit("/")
+        cy.loginViaApi()
+        cy.visit("/swot-analysis")
+        cy.url()
+        .should("include","swot-analysis")
+
+        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
+        cy.contains("TEST-SWOT VON MAX")
+        .click()
+
+        
+        cy.wait("@loadSave")
+        cy.get("@loadSave")
+        .its("response")
+        .should('include',
+        {
+        statusCode: 200
+        })
+
+        cy.url()
+        .should("include", "swot-analysis")
+       
+    }
+    cy.log(tool+" - Save loaded")
+
+})

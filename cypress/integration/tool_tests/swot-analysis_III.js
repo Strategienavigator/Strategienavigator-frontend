@@ -1,33 +1,13 @@
 const { wait } = require("@testing-library/react");
 
-describe('SWOT Analyisis Part I', () => {
+describe('SWOT Analyisis Part III', () => {
     beforeEach(() =>{
         cy.task("queryDb",`DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
         cy.CreateSave("swot-2","TEST-SWOT VON MAX",2)
     })
     it('trys to classify the steps',() =>{
-        cy.visit("/")
-        cy.loginViaApi()
-        cy.visit("/swot-analysis")
+        cy.LoginAndLoad("swot")
 
-        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
-        cy.contains("TEST-SWOT VON MAX")
-        .click()
-
-        cy.wait("@loadSave")
-        cy.get("@loadSave")
-        .its("response")
-        .should('include',
-        {
-            statusCode: 200
-        })
-
-        cy.url()
-        .should("include", "swot-analysis")
-        cy.log("Save loaded")
-        
-    
-        
         cy.get("button[class='addClassification btn btn-primary']")
         .click()
         cy.wait(100)
@@ -43,7 +23,7 @@ describe('SWOT Analyisis Part I', () => {
         .type("Klassifikation 2")
         
    
-        //collapse accordion to hide accordion
+        //collapse accordion to hide 
         cy.get("button[class='accordion-button']")
         .each(($button) =>
         {  
@@ -54,8 +34,8 @@ describe('SWOT Analyisis Part I', () => {
             }
         })
         
-        for (let i = 0; i < 32; i++) 
-        {
+        for (let i = 0; i < 84; i++) 
+        {         
             cy.get("form[id='swot-classify-alternate-actions']>.actionCards")
             .find("button[class='btn btn-primary btn-sm']")
             .first().click()   
@@ -78,4 +58,14 @@ describe('SWOT Analyisis Part I', () => {
         .click();   
        
     })
+    it('trys to check the distribution of the steps',() =>{
+        cy.LoginAndLoad("SWOT")
+
+    })
 })
+function CheckDistributionOfCards()
+{
+    cy.get("div[class='swot-classify-alternate-actions'")
+    .find("button[value='Klassifikation 1']")
+    .click()
+}

@@ -4,41 +4,23 @@ describe('SWOT Analyisis Part II', () => {
         cy.CreateSave("swot-1","TEST-SWOT VON MAX",2)
     })
     it('trys to load save and create action steps',() =>{
-        cy.visit("/")
-        cy.loginViaApi()
-        cy.visit("/swot-analysis")
 
-        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
-        cy.contains("TEST-SWOT VON MAX")
-        .click()
-
-        cy.wait("@loadSave")
-        cy.get("@loadSave")
-        .its("response")
-        .should('include',
-        {
-            statusCode: 200
-        })
-
-        cy.url()
-        .should("include", "swot-analysis")
-        cy.log("Save loaded")
-
-        cy.contains("Weiter")
-        .click()
+       cy.LoginAndLoad("swot")
         
-            for (let i = 0; i < 64; i++) 
-            {
-                FillActionStep(i)
-            
-                cy.log("Step: " + i)
-                if(i < 63)
-                    {
-                    cy.contains("Nächster")
-                    .click()
-                    }
-            }
-            CheckColor() 
+       cy.contains("Weiter")
+        .click()  
+        for (let i = 0; i < 64; i++) 
+        {
+            FillActionStep(i)
+        
+            cy.log("Step: " + i)
+            if(i < 63)
+                {
+                cy.contains("Nächster")
+                .click()
+                }
+        }
+        CheckColor() 
               
         cy.contains("Nächster")
         .click()  
@@ -48,7 +30,11 @@ describe('SWOT Analyisis Part II', () => {
 })
 function FillActionStep(index)
 {
-    if(index % 2)
+    cy.get("div[class='alternative-actions']")
+    .find("div[class='addCard card']")
+    .click()
+
+    if(index % 3)
     {
         cy.get('input[placeholder="Bezeichnung"]')
         .each(($name) =>
@@ -57,19 +43,16 @@ function FillActionStep(index)
             {
                 cy.wrap($name)
                 .type("GERADEREARERRERERER") 
-
-               
-                cy.get('textarea[placeholder="Beschreibung"]')
-                .each(($desc) =>{
-                    if($desc.is(":visible"))
-                    {
-                        cy.wrap($desc)
-                        .type("Bescheeieriibib")
-                    }
-                })
-
             }
-         })        
+         }) 
+         cy.get('textarea[placeholder="Beschreibung"]')
+         .each(($desc) =>{
+             if($desc.is(":visible"))
+             {
+                 cy.wrap($desc)
+                 .type("Bescheeieriibib")
+             }
+         })       
     }else
     {
         cy.get("[type=checkbox]")

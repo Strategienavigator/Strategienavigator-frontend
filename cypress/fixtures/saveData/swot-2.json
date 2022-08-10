@@ -106,34 +106,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"For gold and glory!",
+                  "desc":"God watches over us!"
+               },
+               {
+                  "id":null,
+                  "name":"Fill them with regret!",
+                  "desc":"Shine in the light!"
                }
             ]
          },
          {
             "name":"A-3",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"A-4",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Let them taste our blades!",
+                  "desc":"Awake, warriors!"
+               },
+               {
+                  "id":null,
+                  "name":"To glory!",
+                  "desc":"Death comes tomorrow!"
                }
             ]
          },
          {
-            "name":"A-I",
+            "name":"A-4",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"A-I",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Throwing rocks at a mountain.",
+                  "desc":"Hungry mouths have sharp teeth."
+               },
+               {
+                  "id":null,
+                  "name":"To miss a kiss is to miss some bliss.",
+                  "desc":"Cleaning with mud."
+               }
             ]
          },
          {
@@ -142,8 +161,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Questions travel far.",
+                  "desc":"Hands of an angel."
+               },
+               {
+                  "id":null,
+                  "name":"Lost to the fires.",
+                  "desc":"Cooking with poison."
                }
             ]
          },
@@ -160,34 +184,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Half-sunk and fully rigged.",
+                  "desc":"Sleeping on a cloud."
+               },
+               {
+                  "id":null,
+                  "name":"Saving it for yesterday.",
+                  "desc":"Drinking the sea when youre thirsty."
                }
             ]
          },
          {
             "name":"B-1",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"B-2",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"A copy does not equal the original.",
+                  "desc":"Pleasure outweighs pain."
+               },
+               {
+                  "id":null,
+                  "name":"A knife is only as sharp as its wielder.",
+                  "desc":"Hate of an angel."
                }
             ]
          },
          {
-            "name":"B-3",
+            "name":"B-2",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"B-3",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Like hearing colors.",
+                  "desc":"Giving details of details."
+               },
+               {
+                  "id":null,
+                  "name":"Thats trusting a rumor.",
+                  "desc":"Starting a fire in a rainstorm."
+               }
             ]
          },
          {
@@ -196,8 +239,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"A light in the night is a night without fright.",
+                  "desc":"Bargain of the devil."
+               },
+               {
+                  "id":null,
+                  "name":"A grim grin.",
+                  "desc":"Having the mind of a slug."
                }
             ]
          },
@@ -214,34 +262,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Were all just standing in line.",
+                  "desc":"Imagination is a powerful ally."
+               },
+               {
+                  "id":null,
+                  "name":"Like receiving your own gift.",
+                  "desc":"Half gone and the others going."
                }
             ]
          },
          {
             "name":"B-III",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"B-IV",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Memories are worth more than photos.",
+                  "desc":"The smallest toy can bring hours of joy."
+               },
+               {
+                  "id":null,
+                  "name":"Like a cure for breathing.",
+                  "desc":"A hot meal in the cold is worth fivefold."
                }
             ]
          },
          {
-            "name":"C-1",
+            "name":"B-IV",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"C-1",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Thats six feet in a yard.",
+                  "desc":"The reaction matters more than the action."
+               },
+               {
+                  "id":null,
+                  "name":"Like white clouds in a storm.",
+                  "desc":"Like learning from an echo."
+               }
             ]
          },
          {
@@ -250,8 +317,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Fighting a lion with a steak.",
+                  "desc":"Turning sand into diamonds."
+               },
+               {
+                  "id":null,
+                  "name":"Like a fight in the night.",
+                  "desc":"Every bite is just a single taste."
                }
             ]
          },
@@ -268,34 +340,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Making bread out of sand.",
+                  "desc":"A single instrument can play a ten thousand songs."
+               },
+               {
+                  "id":null,
+                  "name":"Like the sun at midnight.",
+                  "desc":"Silence lets you hear more."
                }
             ]
          },
          {
             "name":"C-I",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"C-II",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Waiting for the dead to return.",
+                  "desc":"Like screaming in space."
+               },
+               {
+                  "id":null,
+                  "name":"Shed a tear to see more clear.",
+                  "desc":"A mask does not hide everything."
                }
             ]
          },
          {
-            "name":"C-III",
+            "name":"C-II",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"C-III",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Using a hamster to power a plane.",
+                  "desc":"A hot meal in the cold is worth fivefold."
+               },
+               {
+                  "id":null,
+                  "name":"A fools test.",
+                  "desc":"Shed a tear to see more clear."
+               }
             ]
          },
          {
@@ -304,8 +395,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Like cooking with ice.",
+                  "desc":"Eyes of the devil."
+               },
+               {
+                  "id":null,
+                  "name":"A hug can be warmer than a fire.",
+                  "desc":"A fools test."
                }
             ]
          },
@@ -322,34 +418,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Working for oblivion.",
+                  "desc":"Hungry mouths have sharp teeth."
+               },
+               {
+                  "id":null,
+                  "name":"Singing like a fish.",
+                  "desc":"Saving it for yesterday."
                }
             ]
          },
          {
             "name":"D-3",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"D-4",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Using chairs as tables.",
+                  "desc":"Using lightning to power a light bulb."
+               },
+               {
+                  "id":null,
+                  "name":"A home filled with light is a home of delight.",
+                  "desc":"Method behind my dreams."
                }
             ]
          },
          {
-            "name":"D-I",
+            "name":"D-4",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"D-I",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Float like a brick.",
+                  "desc":"Chasing birds."
+               },
+               {
+                  "id":null,
+                  "name":"Putting feathers on a fish.",
+                  "desc":"The great taste of nothing."
+               }
             ]
          },
          {
@@ -358,8 +473,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Dont stall after a fall.",
+                  "desc":"Putting feathers on a fish."
+               },
+               {
+                  "id":null,
+                  "name":"It has the logic of dreams.",
+                  "desc":"Like painting with rainbows."
                }
             ]
          },
@@ -376,34 +496,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Love in my heart and love in my mind.",
+                  "desc":"Like ants in a flood."
+               },
+               {
+                  "id":null,
+                  "name":"Like a cure for breathing.",
+                  "desc":"Pleasure outweighs pain."
                }
             ]
          },
          {
             "name":"a-1",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"a-2",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Escaping prison with a feather.",
+                  "desc":"Moving to the void."
+               },
+               {
+                  "id":null,
+                  "name":"Walking like a baby.",
+                  "desc":"True love, true heart"
                }
             ]
          },
          {
-            "name":"a-3",
+            "name":"a-2",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"a-3",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Float like a brick.",
+                  "desc":"Thats trusting a rumor."
+               },
+               {
+                  "id":null,
+                  "name":"Writing a speech with a stick.",
+                  "desc":"Live or not, life continues"
+               }
             ]
          },
          {
@@ -412,8 +551,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Making a lemon sweet.",
+                  "desc":"A crown does not make a king."
+               },
+               {
+                  "id":null,
+                  "name":"Let design shine.",
+                  "desc":"Cooking with poison."
                }
             ]
          },
@@ -430,34 +574,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Doubts and fears are between your ears.",
+                  "desc":"A single hole can men disaster."
+               },
+               {
+                  "id":null,
+                  "name":"A copy does not equal the original.",
+                  "desc":"Half-sunk and fully rigged."
                }
             ]
          },
          {
             "name":"a-III",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"a-IV",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Mixing fire and water.",
+                  "desc":"You can stop a clock, but time will tick on"
+               },
+               {
+                  "id":null,
+                  "name":"An excuse is of no use.",
+                  "desc":"Theres more in a mine than precious metals."
                }
             ]
          },
          {
-            "name":"b-1",
+            "name":"a-IV",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"b-1",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Like a new camp.",
+                  "desc":"A false alarm does mean harm."
+               },
+               {
+                  "id":null,
+                  "name":"Living like a bear in winter.",
+                  "desc":"Dont stall after a fall."
+               }
             ]
          },
          {
@@ -466,8 +629,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Dying like a dino.",
+                  "desc":"A cracked road leads to injury."
+               },
+               {
+                  "id":null,
+                  "name":"It has the logic of dreams.",
+                  "desc":"Having the mind of a slug."
                }
             ]
          },
@@ -484,34 +652,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"An impossible flower.",
+                  "desc":"Every journey starts with a single step."
+               },
+               {
+                  "id":null,
+                  "name":"Making doors out of windows.",
+                  "desc":"Half-sunk and fully rigged."
                }
             ]
          },
          {
             "name":"b-I",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"b-II",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Answers make good questions.",
+                  "desc":"Like a new camp."
+               },
+               {
+                  "id":null,
+                  "name":"Turning water into fire.",
+                  "desc":"Like racing a snail."
                }
             ]
          },
          {
-            "name":"b-III",
+            "name":"b-II",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"b-III",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Nothing is as snug as a loving hug.",
+                  "desc":"Like a cure for breathing."
+               },
+               {
+                  "id":null,
+                  "name":"Solving a maze by burning it.",
+                  "desc":"Living in limbo."
+               }
             ]
          },
          {
@@ -520,7 +707,12 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
+                  "name":"Just a bump on my head.",
+                  "desc":"As the hour foretold."
+               },
+               {
+                  "id":null,
+                  "name":"Glue doesnt stick to everything.",
                   "desc":"Bescheeieriibib"
                }
             ]
@@ -538,34 +730,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Like ants in a flood.",
+                  "desc":"Working for oblivion."
+               },
+               {
+                  "id":null,
+                  "name":"Imagination is a powerful ally.",
+                  "desc":"Half-sunk and fully rigged."
                }
             ]
          },
          {
             "name":"c-3",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"c-4",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"A false alarm does mean harm.",
+                  "desc":"The great taste of nothing."
+               },
+               {
+                  "id":null,
+                  "name":"Prancing like a foal.",
+                  "desc":"Singing like a fish."
                }
             ]
          },
          {
-            "name":"c-I",
+            "name":"c-4",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"c-I",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"Riding piggy back.",
+                  "desc":"Bargain of the devil."
+               },
+               {
+                  "id":null,
+                  "name":"The great taste of nothing.",
+                  "desc":"Pleasure outweighs pain."
+               }
             ]
          },
          {
@@ -574,8 +785,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"An impossible flower.",
+                  "desc":"Dont stall after a fall."
+               },
+               {
+                  "id":null,
+                  "name":"Its the face of a place.",
+                  "desc":"Your eyes cant see."
                }
             ]
          },
@@ -592,34 +808,53 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Silence lets you hear more.",
+                  "desc":"A mess of a guess."
+               },
+               {
+                  "id":null,
+                  "name":"Speaking different languages.",
+                  "desc":"Turning a dream into a nightmare."
                }
             ]
          },
          {
             "name":"d-1",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"d-2",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Crown of frowns.",
+                  "desc":"A mess of a guess."
+               },
+               {
+                  "id":null,
+                  "name":"Just curves and swerves.",
+                  "desc":"A cracked road leads to injury."
                }
             ]
          },
          {
-            "name":"d-3",
+            "name":"d-2",
             "hasNone":true,
             "alternatives":[
                
+            ]
+         },
+         {
+            "name":"d-3",
+            "hasNone":false,
+            "alternatives":[
+               {
+                  "id":null,
+                  "name":"pirits guide us, spirits watch over us",
+                  "desc":"e rule, we conquer"
+               },
+               {
+                  "id":null,
+                  "name":"Beyond the skies we rise.",
+                  "desc":"All for the people."
+               }
             ]
          },
          {
@@ -628,8 +863,13 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"ork, love, play",
+                  "desc":"We will persevere."
+               },
+               {
+                  "id":null,
+                  "name":"ver the same, ever the different",
+                  "desc":"I will be free."
                }
             ]
          },
@@ -646,27 +886,37 @@
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"aith carries us, faith protects us",
+                  "desc":"Many hearts beating as one."
+               },
+               {
+                  "id":null,
+                  "name":"Risen from the ashes.",
+                  "desc":"Approach with care."
                }
             ]
          },
          {
             "name":"d-III",
-            "hasNone":true,
-            "alternatives":[
-               
-            ]
-         },
-         {
-            "name":"d-IV",
             "hasNone":false,
             "alternatives":[
                {
                   "id":null,
-                  "name":"GERADEREARERRERERER",
-                  "desc":"Bescheeieriibib"
+                  "name":"Ball of fire.",
+                  "desc":"From the sea."
+               },
+               {
+                  "id":null,
+                  "name":"Honor without dishonor.",
+                  "desc":"Conquest through vigilance."
                }
+            ]
+         },
+         {
+            "name":"d-IV",
+            "hasNone":true,
+            "alternatives":[
+               
             ]
          }
       ]
@@ -680,19 +930,63 @@
             "name":"A-2",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Out of darkness we bring light.",
+               "desc":"By land and sea."
             }
          },
          {
-            "indexName":"A-4-0",
-            "index":0,
+            "indexName":"A-2-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"A-4",
+            "name":"A-2",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"lory, pride, honor",
+               "desc":"Actions bring results."
+            }
+         },
+         {
+            "indexName":"A-3-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"A-3",
+            "action":{
+               "id":null,
+               "name":"Truth prevails.",
+               "desc":"We are always free."
+            }
+         },
+         {
+            "indexName":"A-3-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"A-3",
+            "action":{
+               "id":null,
+               "name":"Truth sets us free.",
+               "desc":"Bound by nothing."
+            }
+         },
+         {
+            "indexName":"A-I-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"A-I",
+            "action":{
+               "id":null,
+               "name":"pen hearts, open doors",
+               "desc":"he first, the true"
+            }
+         },
+         {
+            "indexName":"A-I-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"A-I",
+            "action":{
+               "id":null,
+               "name":"onor, duty, valor",
+               "desc":"We see all."
             }
          },
          {
@@ -702,8 +996,19 @@
             "name":"A-II",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"ound by chains, but now we are free",
+               "desc":"ver the same, ever the different"
+            }
+         },
+         {
+            "indexName":"A-II-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"A-II",
+            "action":{
+               "id":null,
+               "name":"Glory, pride, honor.",
+               "desc":"f the sea, the land and the sky"
             }
          },
          {
@@ -713,19 +1018,63 @@
             "name":"A-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"ne struggle, one people, one destiny",
+               "desc":"Serve and obey."
             }
          },
          {
-            "indexName":"B-2-0",
-            "index":0,
+            "indexName":"A-IV-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"B-2",
+            "name":"A-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"e rule, we conquer",
+               "desc":"Inextinguishable light."
+            }
+         },
+         {
+            "indexName":"B-1-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"B-1",
+            "action":{
+               "id":null,
+               "name":"For king and country we ride.",
+               "desc":"Defend and conquer."
+            }
+         },
+         {
+            "indexName":"B-1-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"B-1",
+            "action":{
+               "id":null,
+               "name":"ream, hope, aspire",
+               "desc":"Eternal prime."
+            }
+         },
+         {
+            "indexName":"B-3-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"B-3",
+            "action":{
+               "id":null,
+               "name":"Faith grants us strength.",
+               "desc":"Eternal and just."
+            }
+         },
+         {
+            "indexName":"B-3-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"B-3",
+            "action":{
+               "id":null,
+               "name":"pirits guide us, spirits watch over us",
+               "desc":"eace, equality, unity"
             }
          },
          {
@@ -735,8 +1084,19 @@
             "name":"B-4",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Weave trust with trust.",
+               "desc":"Freedom restored."
+            }
+         },
+         {
+            "indexName":"B-4-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"B-4",
+            "action":{
+               "id":null,
+               "name":"Beacon of the North.",
+               "desc":"One with nature"
             }
          },
          {
@@ -746,19 +1106,63 @@
             "name":"B-II",
             "action":{
                "id":null,
+               "name":"word or pen, we conquer all",
+               "desc":"Above all we stand."
+            }
+         },
+         {
+            "indexName":"B-II-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"B-II",
+            "action":{
+               "id":null,
+               "name":"From the waves we rose.",
+               "desc":"Endure and overcome."
+            }
+         },
+         {
+            "indexName":"B-III-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"B-III",
+            "action":{
+               "id":null,
                "name":"GERADEREARERRERERER",
                "desc":"Bescheeieriibib"
             }
          },
          {
-            "indexName":"B-IV-0",
-            "index":0,
+            "indexName":"B-III-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"B-IV",
+            "name":"B-III",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"God brings freedom.",
+               "desc":"any skills, many virtues"
+            }
+         },
+         {
+            "indexName":"C-1-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"C-1",
+            "action":{
+               "id":null,
+               "name":"Out of darkness we bring light.",
+               "desc":"word or pen, we conquer all"
+            }
+         },
+         {
+            "indexName":"C-1-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"C-1",
+            "action":{
+               "id":null,
+               "name":"Freedom and justice.",
+               "desc":"old in peace, steel in war"
             }
          },
          {
@@ -768,8 +1172,19 @@
             "name":"C-2",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Weave trust with trust.",
+               "desc":"lory, pride, honor"
+            }
+         },
+         {
+            "indexName":"C-2-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"C-2",
+            "action":{
+               "id":null,
+               "name":"or the people, by the people",
+               "desc":"Perseverance conquers all."
             }
          },
          {
@@ -779,19 +1194,63 @@
             "name":"C-4",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"By sword and shield.",
+               "desc":"Heavens light in the darkness."
             }
          },
          {
-            "indexName":"C-II-0",
-            "index":0,
+            "indexName":"C-4-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"C-II",
+            "name":"C-4",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"ound by chains, but now we are free",
+               "desc":"Freedom and justice."
+            }
+         },
+         {
+            "indexName":"C-I-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"C-I",
+            "action":{
+               "id":null,
+               "name":"Land we desire.",
+               "desc":"Eternal beauty of the East."
+            }
+         },
+         {
+            "indexName":"C-I-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"C-I",
+            "action":{
+               "id":null,
+               "name":"In ancestral footsteps we tread.",
+               "desc":"od, king, country"
+            }
+         },
+         {
+            "indexName":"C-III-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"C-III",
+            "action":{
+               "id":null,
+               "name":"From the sea.",
+               "desc":"Serve and protect."
+            }
+         },
+         {
+            "indexName":"C-III-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"C-III",
+            "action":{
+               "id":null,
+               "name":"trong, free, proud",
+               "desc":"Trust and loyalty."
             }
          },
          {
@@ -801,8 +1260,19 @@
             "name":"C-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"By sword and shield.",
+               "desc":"rotect, serve, progress"
+            }
+         },
+         {
+            "indexName":"C-IV-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"C-IV",
+            "action":{
+               "id":null,
+               "name":"Forwards and onwards.",
+               "desc":"Be just and vigilant."
             }
          },
          {
@@ -812,19 +1282,63 @@
             "name":"D-2",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
+               "name":"ope, homeland, honor",
+               "desc":"Conquest through vigilance."
+            }
+         },
+         {
+            "indexName":"D-2-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"D-2",
+            "action":{
+               "id":null,
+               "name":"From the grounds to the skies.",
+               "desc":"Ever the best."
+            }
+         },
+         {
+            "indexName":"D-3-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"D-3",
+            "action":{
+               "id":null,
+               "name":"od, life, death",
+               "desc":"Be just and vigilant."
+            }
+         },
+         {
+            "indexName":"D-3-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"D-3",
+            "action":{
+               "id":null,
+               "name":"nited we stand, united we conquer",
                "desc":"Bescheeieriibib"
             }
          },
          {
-            "indexName":"D-4-0",
+            "indexName":"D-I-0",
             "index":0,
             "alreadyAdded":false,
-            "name":"D-4",
+            "name":"D-I",
             "action":{
                "id":null,
                "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "desc":"With wisdom we conquer."
+            }
+         },
+         {
+            "indexName":"D-I-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"D-I",
+            "action":{
+               "id":null,
+               "name":"Following in the footsteps of our ancestors.",
+               "desc":"Forwards and onwards."
             }
          },
          {
@@ -834,8 +1348,19 @@
             "name":"D-II",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Truth prevails.",
+               "desc":"May all be as one."
+            }
+         },
+         {
+            "indexName":"D-II-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"D-II",
+            "action":{
+               "id":null,
+               "name":"Let there be eternal light.",
+               "desc":"ever forget, never forgive"
             }
          },
          {
@@ -845,18 +1370,62 @@
             "name":"D-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"aster, better, stronger",
+               "desc":"People of the land."
             }
          },
          {
-            "indexName":"a-2-0",
-            "index":0,
+            "indexName":"D-IV-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"a-2",
+            "name":"D-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
+               "name":"Out of darkness we bring light.",
+               "desc":"o fight or work, we are ready"
+            }
+         },
+         {
+            "indexName":"a-1-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"a-1",
+            "action":{
+               "id":null,
+               "name":"od is the king, the king is god",
+               "desc":"ound by chains, but now we are free"
+            }
+         },
+         {
+            "indexName":"a-1-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"a-1",
+            "action":{
+               "id":null,
+               "name":"Wealth of the land.",
+               "desc":"Unity in diversity."
+            }
+         },
+         {
+            "indexName":"a-3-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"a-3",
+            "action":{
+               "id":null,
+               "name":"True and sure.",
+               "desc":"Beacon of the North."
+            }
+         },
+         {
+            "indexName":"a-3-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"a-3",
+            "action":{
+               "id":null,
+               "name":"ever forget, never forgive",
                "desc":"Bescheeieriibib"
             }
          },
@@ -867,8 +1436,19 @@
             "name":"a-4",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Perseverance conquers all.",
+               "desc":"nited we stand, united we conquer"
+            }
+         },
+         {
+            "indexName":"a-4-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"a-4",
+            "action":{
+               "id":null,
+               "name":"Eternal shepherds.",
+               "desc":"trong deeds, gentle words"
             }
          },
          {
@@ -878,19 +1458,63 @@
             "name":"a-II",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"ive great, die better",
+               "desc":"ove, friendship and brotherhood"
             }
          },
          {
-            "indexName":"a-IV-0",
-            "index":0,
+            "indexName":"a-II-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"a-IV",
+            "name":"a-II",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"ead by our history, leading our future",
+               "desc":"trength, skill, virtue"
+            }
+         },
+         {
+            "indexName":"a-III-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"a-III",
+            "action":{
+               "id":null,
+               "name":"Weave trust with trust.",
+               "desc":"Love of the South."
+            }
+         },
+         {
+            "indexName":"a-III-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"a-III",
+            "action":{
+               "id":null,
+               "name":"Never forget.",
+               "desc":"ver the same, ever the different"
+            }
+         },
+         {
+            "indexName":"b-1-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"b-1",
+            "action":{
+               "id":null,
+               "name":"ignity, pride, honor",
+               "desc":"God is with the people."
+            }
+         },
+         {
+            "indexName":"b-1-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"b-1",
+            "action":{
+               "id":null,
+               "name":"ne god, one goal",
+               "desc":"ustice, honesty, integrity"
             }
          },
          {
@@ -900,8 +1524,19 @@
             "name":"b-2",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"trength, skill, virtue",
+               "desc":"Beacon of the North."
+            }
+         },
+         {
+            "indexName":"b-2-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"b-2",
+            "action":{
+               "id":null,
+               "name":"ever forget, never forgive",
+               "desc":"od, king, country"
             }
          },
          {
@@ -911,19 +1546,63 @@
             "name":"b-4",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Through struggle we persevered.",
+               "desc":"lways progress, always move forward"
             }
          },
          {
-            "indexName":"b-II-0",
-            "index":0,
+            "indexName":"b-4-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"b-II",
+            "name":"b-4",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"For king and country we ride.",
+               "desc":"Forwards in unity."
+            }
+         },
+         {
+            "indexName":"b-I-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"b-I",
+            "action":{
+               "id":null,
+               "name":"By the sword.",
+               "desc":"Progress through unity."
+            }
+         },
+         {
+            "indexName":"b-I-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"b-I",
+            "action":{
+               "id":null,
+               "name":"Be the best.",
+               "desc":"Moving mountains."
+            }
+         },
+         {
+            "indexName":"b-III-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"b-III",
+            "action":{
+               "id":null,
+               "name":"The show goes on.",
+               "desc":"We provide excellence."
+            }
+         },
+         {
+            "indexName":"b-III-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"b-III",
+            "action":{
+               "id":null,
+               "name":"Nows the time.",
+               "desc":"Long endurance."
             }
          },
          {
@@ -933,8 +1612,19 @@
             "name":"b-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Beauty of simplicity.",
+               "desc":"Experience is key."
+            }
+         },
+         {
+            "indexName":"b-IV-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"b-IV",
+            "action":{
+               "id":null,
+               "name":"With style.",
+               "desc":"Bite sized business."
             }
          },
          {
@@ -944,19 +1634,63 @@
             "name":"c-2",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"A slice of heaven.",
+               "desc":"Standards of excellence."
             }
          },
          {
-            "indexName":"c-4-0",
-            "index":0,
+            "indexName":"c-2-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"c-4",
+            "name":"c-2",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"See you next time.",
+               "desc":"Pure delight."
+            }
+         },
+         {
+            "indexName":"c-3-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"c-3",
+            "action":{
+               "id":null,
+               "name":"ive today, dream of tomorrow",
+               "desc":"All as one."
+            }
+         },
+         {
+            "indexName":"c-3-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"c-3",
+            "action":{
+               "id":null,
+               "name":"The skys the limit.",
+               "desc":"Mark of excellence."
+            }
+         },
+         {
+            "indexName":"c-I-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"c-I",
+            "action":{
+               "id":null,
+               "name":"Hold the power.",
+               "desc":"Recipe for success."
+            }
+         },
+         {
+            "indexName":"c-I-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"c-I",
+            "action":{
+               "id":null,
+               "name":"The time is now.",
+               "desc":"Always in front."
             }
          },
          {
@@ -966,8 +1700,19 @@
             "name":"c-II",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Unleash the power.",
+               "desc":"Welcome back."
+            }
+         },
+         {
+            "indexName":"c-II-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"c-II",
+            "action":{
+               "id":null,
+               "name":"With love.",
+               "desc":"Endless possibilities."
             }
          },
          {
@@ -977,19 +1722,63 @@
             "name":"c-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Thinking ahead.",
+               "desc":"Welcome."
             }
          },
          {
-            "indexName":"d-2-0",
-            "index":0,
+            "indexName":"c-IV-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"d-2",
+            "name":"c-IV",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Quality first.",
+               "desc":"Comfort in our hands."
+            }
+         },
+         {
+            "indexName":"d-1-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"d-1",
+            "action":{
+               "id":null,
+               "name":"For the good times.",
+               "desc":"Hand in hand."
+            }
+         },
+         {
+            "indexName":"d-1-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"d-1",
+            "action":{
+               "id":null,
+               "name":"Love of life.",
+               "desc":"Imagine this."
+            }
+         },
+         {
+            "indexName":"d-3-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"d-3",
+            "action":{
+               "id":null,
+               "name":"Art of perfection.",
+               "desc":"Bringing solutions."
+            }
+         },
+         {
+            "indexName":"d-3-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"d-3",
+            "action":{
+               "id":null,
+               "name":"Standards of excellence.",
+               "desc":"Moments of bliss."
             }
          },
          {
@@ -999,8 +1788,19 @@
             "name":"d-4",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Think positive.",
+               "desc":"Pushing the limits."
+            }
+         },
+         {
+            "indexName":"d-4-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"d-4",
+            "action":{
+               "id":null,
+               "name":"Doing the impossible.",
+               "desc":"A solid foundation."
             }
          },
          {
@@ -1010,19 +1810,41 @@
             "name":"d-II",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Art of perfection.",
+               "desc":"Think positive."
             }
          },
          {
-            "indexName":"d-IV-0",
-            "index":0,
+            "indexName":"d-II-1",
+            "index":1,
             "alreadyAdded":false,
-            "name":"d-IV",
+            "name":"d-II",
             "action":{
                "id":null,
-               "name":"GERADEREARERRERERER",
-               "desc":"Bescheeieriibib"
+               "name":"Beyond comfort.",
+               "desc":"Nothing beats the best."
+            }
+         },
+         {
+            "indexName":"d-III-0",
+            "index":0,
+            "alreadyAdded":false,
+            "name":"d-III",
+            "action":{
+               "id":null,
+               "name":"Change a life.",
+               "desc":"Be better."
+            }
+         },
+         {
+            "indexName":"d-III-1",
+            "index":1,
+            "alreadyAdded":false,
+            "name":"d-III",
+            "action":{
+               "id":null,
+               "name":"Road to success.",
+               "desc":"Long endurance."
             }
          }
       ],
