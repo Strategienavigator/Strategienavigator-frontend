@@ -1,6 +1,13 @@
 import {SettingsList} from "../Settings/SettingsList";
 import {Session, UserCallback} from "../Session/Session";
 
+
+/**
+ * Wechselt das Website-Theme in den Darkmode und zurück wenn der Benutzer abgemeldet/angemeldet wird
+ *
+ * @param {User | null} user Das Benutzerobjekt
+ * @constructor
+ */
 const DarkModeUserChanged: UserCallback = (user) => {
     if (user === null) {
         // Darkmode
@@ -21,7 +28,13 @@ const DarkModeUserChanged: UserCallback = (user) => {
 }
 Session.addUserChangedCallback(DarkModeUserChanged);
 
-
+/**
+ * Wechselt das Website-Theme in den Darkmode und zurück
+ *
+ * @param {SettingsList} oldSettings Die alten Websiteeinstellungen
+ * @param {SettingsList} newSettings Die neuen Websiteeinstellungen
+ * @constructor
+ */
 export const DarkModeChanger = (oldSettings: SettingsList, newSettings: SettingsList) => {
     let setting = newSettings.getSettingByName("Dark Mode");
 
