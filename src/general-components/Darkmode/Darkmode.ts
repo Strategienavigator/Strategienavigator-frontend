@@ -1,5 +1,25 @@
 import {SettingsList} from "../Settings/SettingsList";
-import {Session} from "../Session/Session";
+import {Session, UserCallback} from "../Session/Session";
+
+const DarkModeUserChanged: UserCallback = (user) => {
+    if (user === null) {
+        // Darkmode
+        localStorage.removeItem("darkmode");
+
+        let settings = SettingsList.FromArray([{
+            name: "Dark Mode",
+            value: "false",
+            id: 1,
+            type: "",
+            extras: "",
+            description: "",
+            exists: true,
+            default: "false"
+        }]);
+        DarkModeChanger(settings, settings);
+    }
+}
+Session.addUserChangedCallback(DarkModeUserChanged);
 
 
 export const DarkModeChanger = (oldSettings: SettingsList, newSettings: SettingsList) => {

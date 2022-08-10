@@ -5,8 +5,6 @@ import {AuthToken} from "./token/AuthToken";
 import {RefreshToken} from "./token/RefreshToken";
 import {AnonymousUserResource, DefaultResponse, TokenCreatedResource, UserResource} from "../Datastructures";
 import {createUser} from "../API/calls/User";
-import {DarkModeChanger} from "../Darkmode/Darkmode";
-import {SettingsList} from "../Settings/SettingsList";
 
 
 export type UserCallback = (user: User | null) => void;
@@ -71,21 +69,6 @@ class Session {
     static removeTokens = () => {
         Session.token.delete();
         Session.refreshToken.delete();
-
-        // Darkmode
-        localStorage.removeItem("darkmode");
-
-        let settings = SettingsList.FromArray([{
-            name: "Dark Mode",
-            value: "false",
-            id: 1,
-            type: "",
-            extras: "",
-            description: "",
-            exists: true,
-            default: "false"
-        }]);
-        DarkModeChanger(settings, settings);
     }
 
     static checkLogin = async (): Promise<null | User> => {
