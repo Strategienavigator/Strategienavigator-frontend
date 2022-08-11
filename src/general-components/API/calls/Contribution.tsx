@@ -1,5 +1,5 @@
 import {APIArgs, callAPI} from "../API";
-import {DefaultResponse, PaginationResource, SharedSaveResource} from "../../Datastructures";
+import {DefaultResponse, SharedSaveResource} from "../../Datastructures";
 
 
 /**
@@ -9,7 +9,7 @@ import {DefaultResponse, PaginationResource, SharedSaveResource} from "../../Dat
  * @param apiArgs API Argumente
  */
 const getContributors = async (saveID: number, apiArgs?: APIArgs) => {
-    return await callAPI<PaginationResource<SharedSaveResource>>("api/saves/" + saveID + "/contributors", "GET", undefined, true, apiArgs)
+    return await callAPI<{data: SharedSaveResource[]}>("api/saves/" + saveID + "/contributors", "GET", undefined, true, apiArgs)
 }
 
 /**
@@ -19,7 +19,7 @@ const getContributors = async (saveID: number, apiArgs?: APIArgs) => {
  * @param apiArgs API Argumente
  */
 const showContributions = async (userID: number, apiArgs?: APIArgs) => {
-    return await callAPI<PaginationResource<SharedSaveResource>>("api/users/" + userID + "/contributions", "GET", undefined, true, apiArgs);
+    return await callAPI<{data: SharedSaveResource[]}>("api/users/" + userID + "/contributions", "GET", undefined, true, apiArgs);
 }
 
 /**

@@ -4,7 +4,7 @@ import {Session} from "../../../../general-components/Session/Session";
 import {
     acceptContribution,
     declineContribution,
-    showContribution
+    showContributions
 } from "../../../../general-components/API/calls/Contribution";
 import {showErrorPage} from "../../../../index";
 import {Loader} from "../../../../general-components/Loader/Loader";
@@ -14,6 +14,9 @@ import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons/";
 
 
 import "./contribution-decision.scss";
+import {CollaboratorsComponent} from "../../../../general-components/CollaboratorsComponent/CollaboratorsComponent";
+import {Messages} from "../../../../general-components/Messages/Messages";
+import {getSaveURL} from "../../../../general-components/Save";
 
 
 interface ContributionDecisionState {
@@ -42,34 +45,62 @@ export class ContributionDecision extends Component<RouteComponentProps<{ shared
     }
 
     checkParam = async () => {
-        let saveID = this.props.match.params.sharedSaveID;
-        let call = await showContribution(parseInt(saveID));
+        let saveID = parseInt(this.props.match.params.sharedSaveID);
+        let userID = Session.currentUser?.getID() as number;
+        let call = await showContributions(userID);
 
         if (
-            call?.success &&
-            call.callData.data.user === Session.currentUser?.getID() &&
-            !call.callData.data.declined &&
-            !call.callData.data.revoked &&
-            !call.callData.data.accepted
+            call && call.success
         ) {
-            this.setState({
-                sharedSave: call.callData.data
-            });
-            await this.checkForAccept();
-        } else {
-            showErrorPage(403);
+            let i = 0;
+            let data = call.callData.data;
+            let foundSave = undefined;
+            while (i < data.length && foundSave === undefined) {
+                let save = data[i];
+                if (
+                    save.user.id === userID &&
+                    save.id === saveID &&
+                    !save.accepted &&
+                    !save.declined &&
+                    !save.revoked
+                ) {
+                    foundSave = data[i];
+                }
+                i++;
+            }
+
+            if (foundSave) {
+                this.setState({
+                    sharedSave: foundSave
+                });
+                await this.checkForAccept();
+                return;
+            }
         }
+        showErrorPage(403);
     }
 
     render() {
         return (
             <Loader transparent payload={[this.checkParam]}>
                 <div className={"contribution-decision"}>
-                    <h2>Einladung annehmen</h2>
+                    <h2>Einladung zu <b>{this.state.sharedSave?.save.name}</b></h2>
 
                     {(!this.state.accepted && !this.state.declined) && (
                         <>
-                            <p>Sie wurden Eingeladen, an einem Speicherstand mitzuwirken.</p>
+                            <p>
+                                Sie wurden Eingeladen an dem
+                                Speicherstand <b>{this.state.sharedSave?.save.name}</b> von <b>{this.state.sharedSave?.save.owner.username}</b> mitzuwirken.<br/>
+                            </p>
+
+                            <p>
+                                Sie werden folgende Berechtigung erhalten: <br/>
+                                <b>{CollaboratorsComponent.permissionSwitch(this.state.sharedSave?.permission as number)}</b>
+                            </p>
+
+                            <p>
+                                Möchten Sie diese Einladung annehmen?
+                            </p>
 
                             <LoadingButton
                                 onClick={() => this.acceptInvitation()}
@@ -139,10 +170,15 @@ export class ContributionDecision extends Component<RouteComponentProps<{ shared
         let saveID = this.props.match.params.sharedSaveID;
         let call = await acceptContribution(parseInt(saveID));
 
-        this.setState({
-            isAccepting: false,
-            accepted: call?.success
-        });
+        if (call && call.success) {
+            Messages.add("Einladung angenommen!", "SUCCESS", 5000);
+            this.props.history.push(getSaveURL(this.state.sharedSave?.save.id as number, this.state.sharedSave?.save.tool.id as number));
+        } else {
+            this.setState({
+                isAccepting: false,
+                accepted: call?.success
+            });
+        }
     }
 
     private declineInvitation = async () => {

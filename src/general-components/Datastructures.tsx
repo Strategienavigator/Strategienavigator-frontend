@@ -2,60 +2,19 @@
  * Repräsentiert einen Speicherstand.
  * Der Typparameter steht für die Daten, da diese von Tool zu Tool unterschiedlich sind
  */
-export type SaveResource<D = object> = {
+export interface SaveResource<D = object> extends SimpleSaveResource {
     /**
-     * Die ID des Speicherstands
+     * Data des Speicherstands
      */
-    id: number
+    data: D,
     /**
-     * Der Benutzername vom Besitzer
+     * Alle Kollaborateure
      */
-    owner: string
+    contributors: SimplestUserResource[],
     /**
-     * Die ID vom Besitzer
+     * Alle eingeladenen Benutzer
      */
-    owner_id: number
-    /**
-     * Die ID des dazugehörigen Tools
-     */
-    tool_id: number
-    /**
-     * Die Daten des Speicherstands.
-     * Sind vom Typ D (Generic/Typparameter)
-     */
-    data: D
-    /**
-     * Der Name des Speicherstands
-     */
-    name: string
-    /**
-     * Die Beschreibung des Speicherstands
-     */
-    description: string
-    /**
-     * Die ID des Benutzers der aktuell den Speicherstand bearbeitet. Sollte keiner diesen bearbeiten steht hier null
-     */
-    locked_by: number | null
-    /**
-     * Der Zeitstempel wann der Speicherstand erstellt wurde
-     */
-    created_at: string
-    /**
-     * Der Zeitstempel wann der Speicherstand das letzte mal abgespeichert wurde
-     */
-    updated_at: string
-    /**
-     * Der Zeitstempel wann der Speicherstand das letzte mal bearbeitet wurde
-     */
-    last_locked: string | null
-    /**
-     * Ein Array aus Benutzer-IDs. Stellen die Benutzer dar, welche am Speicherstand mitarbeiten
-     */
-    contributors: Array<number>
-    /**
-     * Ein Array aus Benutzer-IDs. Stellen die Benutzer dar, welche eingeladen wurden am Speicherstand mitzuarbeiten
-     */
-    invited: Array<number>
+    invited: SimplestUserResource[]
 }
 
 /**
@@ -79,15 +38,9 @@ export type SimpleSaveResource = {
      */
     last_locked: Date
     /**
-     * Die ID vom Besitzer
-     */
-    owner_id: number
-
-    /**
      * name des Eigentümers
      */
-    owner: string
-
+    owner: SimplestUserResource
     /**
      * ob das Konto des Eigentümers gerade gelöscht wird
      */
@@ -101,19 +54,19 @@ export type SimpleSaveResource = {
      */
     description: string
     /**
-     * Ein Array aus Benutzer-IDs. Stellen die Benutzer dar, welche am Speicherstand mitarbeiten
+     * Wann erstellt?
      */
-    contributors: Array<number>
+    created_at: string,
+    /**
+     * Zuletzt bearbeitet
+     */
+    updated_at: string
 }
 
 /**
  * Eine Einladung zu einem Speicherstand
  */
 export type InvitationLinkResource = {
-    /**
-     * Die ID der Einladung
-     */
-    id: number
     /**
      * Das Datum wann die Einladung ausläuft
      */
@@ -126,7 +79,7 @@ export type InvitationLinkResource = {
     /**
      * Die ID des Speicherstands, zu dem der Benutzer eingeladen wurde
      */
-    save_id: number
+    save: SimplerSaveResource
     /**
      * Der Token des Einladungslinks
      */
@@ -135,6 +88,25 @@ export type InvitationLinkResource = {
      * Das Datum wann die Einladung erfolgte
      */
     created_at: Date
+}
+
+export type SimplerSaveResource = {
+    /**
+     * Die ID des Saves
+     */
+    id: number,
+    /**
+     * Die Bezeichnung des Saves
+     */
+    name: string,
+    /**
+     * Der Inhaber des Saves
+     */
+    owner: SimplestUserResource,
+    /**
+     * Das Tool des Saves
+     */
+    tool: ToolResource
 }
 
 /**
@@ -151,6 +123,19 @@ export type PasswordResetResource = {
     expiry_date: Date
 }
 
+/**
+ * Datenressource eines Benutzers im simpelsten Zustand
+ */
+export type SimplestUserResource = {
+    /**
+     * Die ID des Benutzers
+     */
+    id: number,
+    /**
+     * Der Benutzername des Benutzers
+     */
+    username: string
+}
 
 /**
  * Sollte eine Abfrage stattfinden, wo eine Pagination eingebunden ist, wird diese hier dargestellt.
@@ -221,11 +206,11 @@ export type UserResource = {
     /**
      * Array mit der IDs der von diesem Benutzer erstellten Speicherstände
      */
-    owned_saves: Array<number>
+    owned_saves: Array<SimplerSaveResource>
     /**
      * Array mit IDs der mit diesem Benutzer geteilten Speicherstände
      */
-    shared_saves: Array<number>
+    shared_saves: Array<SharedSaveUserResource>
     /**
      * Array mit Einladungen an diesen Benutzer
      */
@@ -281,11 +266,11 @@ export type SharedSaveResource = {
     /**
      * ID des eingeladenen Benutzers
      */
-    user: number
+    user: SimplestUserResource
     /**
      * ID des geteilten Speicherstandes
      */
-    save: number
+    save: SimplerSaveResource
     /**
      * Die Berechtigung die der eingeladene Benutzer erhält
      */
@@ -343,16 +328,7 @@ export type UserSettingResource = {
     value: string
 }
 
-export type UserSearchResultResource = {
-    /**
-     * Die User-ID
-     */
-    id: string,
-    /**
-     * Der Username
-     */
-    username: string
-}
+export type UserSearchResultResource = SimplestUserResource;
 
 export type SettingResource = {
     /**

@@ -1,20 +1,27 @@
 import {Badge, Button, FormControl, InputGroup, Modal, Table} from "react-bootstrap";
 
 import "./save-invitation-modal.scss";
-import {faCopy, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faCopy, faSearch, faUsers} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../Icons/FAE";
 import {Component} from "react";
 import {InvitationLinkModal} from "./InvitationLinkModal/InvitationLinkModal";
 import {ModalCloseable} from "../Modal/ModalCloseable";
-import {InvitationLinkResource, SimpleSaveResource, UserSearchResultResource} from "../Datastructures";
+import {
+    InvitationLinkResource, SharedSaveResource,
+    SimpleSaveResource,
+    SimplestUserResource,
+    UserSearchResultResource
+} from "../Datastructures";
 import {Loader} from "../Loader/Loader";
 import {createInvitationLink, deleteInvitationLink, showInvitationLinks} from "../API/calls/Invitations";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/";
 import {Messages} from "../Messages/Messages";
 import {SingleInviteModal} from "./SingleInviteModal/SingleInviteModal";
 import { searchUser } from "../API/calls/User";
-import {createContribution} from "../API/calls/Contribution";
+import {createContribution, getContributors} from "../API/calls/Contribution";
 import {CreateContextOptions} from "vm";
+import {CollaboratorsModal} from "./CollaboratorsModal/CollaboratorsModal";
+import {LoadingButton} from "../LoadingButton/LoadingButton";
 
 
 export interface SaveInvitationProps {
@@ -31,7 +38,10 @@ export interface SaveInvitationState {
     showInvitationLinkModal: boolean,
     links: InvitationLinkResource[],
     deleteInvitationLink: string | null,
-    inviteSuccess?: boolean
+    inviteSuccess?: boolean,
+    showCollaboratorsModal: boolean,
+    contributorsLoading: boolean,
+    contributors: SharedSaveResource[]
 }
 
 class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState> {
@@ -48,7 +58,10 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
             showInvitationLinkModal: false,
             links: [],
             deleteInvitationLink: null,
-            inviteSuccess: undefined
+            inviteSuccess: undefined,
+            showCollaboratorsModal: false,
+            contributors: [],
+            contributorsLoading: false
         }
     }
 
@@ -214,6 +227,30 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                     ))
                                 }
                             </div>
+
+                            <LoadingButton
+                                size={"sm"}
+                                onClick={async () => {
+                                    if (this.props.save) {
+                                        this.setState({contributorsLoading: true});
+
+                                        let call = await getContributors(this.props.save.id);
+
+                                        if (call && call?.success) {
+                                            this.setState({
+                                                showCollaboratorsModal: true,
+                                                contributorsLoading: false,
+                                                contributors: call.callData.data
+                                            });
+                                        }
+                                    }
+
+                                }}
+                                defaultChild={"Kollaborateure anzeigen"}
+                                isSaving={this.state.contributorsLoading}
+                                savingChild={"Kollaborateure anzeigen"}
+                                defaultIcon={faUsers}
+                            />
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
@@ -224,6 +261,17 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                         </Button>
                     </Modal.Footer>
                 </ModalCloseable>
+
+                <CollaboratorsModal
+                    show={this.state.showCollaboratorsModal}
+                    contributors={this.state.contributors}
+                    onClose={() => {
+                        this.setState({
+                            showCollaboratorsModal: false,
+                            contributors: []
+                        });
+                    }}
+                />
 
                 <SingleInviteModal
                     show={this.state.showSingleInviteModal !== null}
@@ -243,7 +291,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                             let data = {
                               permission: parseInt(permission)
                             };
-                            let call = await createContribution(this.props.save.id, parseInt(user.id), data);
+                            let call = await createContribution(this.props.save.id, user.id, data);
 
                             this.setState({
                                 isSearching: false,

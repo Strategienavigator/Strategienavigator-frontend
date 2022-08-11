@@ -4,16 +4,16 @@ import {RouteComponentProps, StaticContext} from "react-router";
 
 import "./invitation-decision.scss";
 import {acceptInvitationLink, showInvitationLink} from "../../../../general-components/API/calls/Invitations";
-import {getSave} from "../../../../general-components/API/calls/Saves";
-import {SaveResource} from "../../../../general-components/Datastructures";
-import {CallInterface} from "../../../../general-components/API/API";
+import {InvitationLinkResource} from "../../../../general-components/Datastructures";
 import {Loader} from "../../../../general-components/Loader/Loader";
 import {LoadingButton} from "../../../../general-components/LoadingButton/LoadingButton";
 import {Messages} from "../../../../general-components/Messages/Messages";
+import {CollaboratorsComponent} from "../../../../general-components/CollaboratorsComponent/CollaboratorsComponent";
+import {getSaveURL} from "../../../../general-components/Save";
 
 
 export interface InvitationDecisionState {
-    save: SaveResource | null,
+    link: InvitationLinkResource | null,
     isSaving: boolean
 }
 
@@ -23,7 +23,7 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
         super(props);
 
         this.state = {
-            save: null,
+            link: null,
             isSaving: false
         };
     }
@@ -34,14 +34,9 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
         if (!invitation?.success) {
             this.props.history.push("/");
         } else {
-            let saveID = invitation.callData.data.save_id;
-            let save: CallInterface<SaveResource<any>> | null = await getSave(saveID);
-
-            if (save && save.success) {
-                this.setState({
-                    save: save.callData
-                });
-            }
+            this.setState({
+                link: invitation.callData.data
+            });
         }
     }
 
@@ -52,12 +47,20 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
                 transparent={true}
             >
                 <div className={"invitation-decision"}>
-                    <h2>Einladung von {this.state.save?.owner}!</h2>
+                    <h2>Einladung zu <b>{this.state.link?.save.name}</b>!</h2>
 
                     <p>
                         Sie haben eine Einladung zu dem
-                        Speicherstand <b>{this.state.save?.name}</b> von <b>{this.state.save?.owner}</b> erhalten.<br/>
-                        Möchten Sie diese annehmen?
+                        Speicherstand <b>{this.state.link?.save.name}</b> von <b>{this.state.link?.save.owner.username}</b> erhalten.<br/>
+                    </p>
+
+                    <p>
+                        Sie werden folgende Berechtigung erhalten: <br/>
+                        <b>{CollaboratorsComponent.permissionSwitch(this.state.link?.permission as number)}</b>
+                    </p>
+
+                    <p>
+                        Möchten Sie diese Einladung annehmen?
                     </p>
 
                     <LoadingButton
@@ -79,35 +82,7 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
 
         if (response?.success) {
             Messages.add("Einladung angenommen!", "SUCCESS", 5000);
-
-            // TODO: backend integrieren maybe
-            let loc = "";
-            switch (this.state.save?.tool_id) {
-                case 1:
-                    loc += "/utility-analysis/";
-                    break;
-                case 2:
-                    loc += "/swot-analysis/";
-                    break;
-                case 3:
-                    loc += "/pairwise-comparison/";
-                    break;
-                case 4:
-                    loc += "/portfolio-analysis/";
-                    break;
-                case 5:
-                    loc += "/abc-analysis/";
-                    break;
-                default:
-                    loc = "/";
-                    break;
-            }
-
-            if (loc !== "/") {
-                loc += this.state.save?.id;
-            }
-
-            this.props.history.push(loc);
+            this.props.history.push(getSaveURL(this.state.link?.save.id as number, this.state.link?.save.tool.id as number));
         }
     }
 
