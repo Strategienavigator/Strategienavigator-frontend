@@ -38,7 +38,8 @@ describe('SWOT Analyisis Part III', () => {
         {         
             cy.get("form[id='swot-classify-alternate-actions']>.actionCards")
             .find("button[class='btn btn-primary btn-sm']")
-            .first().click()   
+            .first()
+            .click()   
             
             let select
 
@@ -56,16 +57,20 @@ describe('SWOT Analyisis Part III', () => {
         }
         cy.contains("Speichern")
         .click();   
-       
-    })
-    it('trys to check the distribution of the steps',() =>{
-        cy.LoginAndLoad("SWOT")
-
+        CheckDistributionOfCards()
     })
 })
 function CheckDistributionOfCards()
 {
-    cy.get("div[class='swot-classify-alternate-actions'")
-    .find("button[value='Klassifikation 1']")
-    .click()
+    cy.get("button[class='accordion-button collapsed']")
+    .each(($list) => {
+        
+        cy.wrap($list)
+        .click()
+        cy.get("div[class='actionCard'")
+        .find("div[class='actionCard card'")
+        .each(($card) =>{ 
+        })
+
+    })
 }

@@ -41,16 +41,15 @@ function FillActionStep(index)
         {
             if($name.is(":visible"))
             {
-                cy.wrap($name)
-                .type("GERADEREARERRERERER") 
+                UseTestData($name)
+                
             }
          }) 
          cy.get('textarea[placeholder="Beschreibung"]')
          .each(($desc) =>{
              if($desc.is(":visible"))
              {
-                 cy.wrap($desc)
-                 .type("Bescheeieriibib")
+                UseTestData($desc)
              }
          })       
     }else
@@ -76,3 +75,17 @@ function CheckColor()
         })
 
 }
+function UseTestData(dataTyp)
+{ 
+    cy.fixture("tooltestdata").then(function (testdata)
+    {
+        this.testdata = testdata;
+
+        let data = this.testdata.data
+        let index = Math.floor(Math.random()*data.length)
+        
+        cy.wrap(dataTyp)
+        .type(data[index]["name"]) 
+     })
+     
+ }

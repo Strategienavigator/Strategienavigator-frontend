@@ -81,29 +81,7 @@ describe('SWOT Analyisis Part I', () => {
 
       it('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
         cy.CreateSave("swot-1","TEST-SWOT VON MAX",2)
-        
-        cy.visit("/")
-        cy.loginViaApi()
-        cy.visit("/swot-analysis")
-        cy.url()
-          .should("include","swot-analysis")
-
-        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
-        cy.contains("TEST-SWOT VON MAX")
-          .click()
-
-        
-        cy.wait("@loadSave")
-        cy.get("@loadSave")
-        .its("response")
-        .should('include',
-        {
-          statusCode: 200
-        })
-
-        cy.url()
-          .should("include", "swot-analysis")
-        cy.log("Save loaded")
+        cy.LoginAndLoad("swot")
 
         //
         //Karten werden hinzugefügt und mit Testdaten gefüllt
