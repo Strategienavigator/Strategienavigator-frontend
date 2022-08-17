@@ -40,16 +40,16 @@ class PortResultComponent extends Step<PortfolioAnalysisValues, {}> {
                         axisThickness={1}
                         axis={{
                             y: {
-                                maxValue: 6,
+                                maxValue: "auto",
+                                valueAccuracy: "auto",
                                 name: "Marktattraktivität",
-                                valueRenderer: new NumberValueRenderer(0),
-                                valueAccuracy: 6
+                                valueRenderer: new NumberValueRenderer(0)
                             },
                             x: {
-                                maxValue: 6,
+                                maxValue: "auto",
+                                valueAccuracy: "auto",
                                 name: "Wettbewerbsposition",
-                                valueRenderer: new NumberValueRenderer(0),
-                                valueAccuracy: 6
+                                valueRenderer: new NumberValueRenderer(0)
                             }
                         }}
                         points={this.props.save.data["port-result"].points}

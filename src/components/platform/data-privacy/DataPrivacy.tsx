@@ -11,7 +11,7 @@ export class DataPrivacy extends Component<any, any> {
             <>
                 <h1>Datenschutz</h1>
 
-                <hr />
+                <hr/>
 
                 <p>Wir informieren Sie nachfolgend gemäß den gesetzlichen Vorgaben des Datenschutzrechts (insb. gemäß
                     BDSG n.F. und

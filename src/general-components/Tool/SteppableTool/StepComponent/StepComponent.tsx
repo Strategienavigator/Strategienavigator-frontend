@@ -214,6 +214,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     render = () => {
         const customNextButton = this.getCustomNextButton();
         const header = <StepComponentHeader tool={this.props.tool}
+                                            associatedSave={this.props.save}
                                             saveName={this.props.save.name}
                                             saveDescription={this.props.save.description}
                                             saveMetaChanged={this.changeSaveMeta}/>;

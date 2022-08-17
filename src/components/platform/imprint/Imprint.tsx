@@ -9,7 +9,7 @@ export class Imprint extends Component<any, any> {
         return (<>
                 <h1>Impressum</h1>
 
-                <hr />
+                <hr/>
 
                 <p> Dies ist ein Projekt der Jade Hochschule Wilhelmshaven/Oldenburg/Elsfleth.<br/>
                     Für weitere Information siehe <a href={"https://www.jade-hs.de/impressum"} rel={"noreferrer"}

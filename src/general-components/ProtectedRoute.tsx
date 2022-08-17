@@ -79,7 +79,7 @@ export function AnonymousModal(props: {
                         props.onShowChange(false);
                     }
                 }}>
-                    <Loader payload={[]} variant={"dark"} transparent size={15} text={<span>&nbsp;Annehmen</span>}
+                    <Loader payload={[]} variant={"auto"} transparent size={15} text={<span>&nbsp;Annehmen</span>}
                             loaded={!agreementLoading}>
                         <FAE icon={faCheckCircle}/> Annehmen
                     </Loader>
@@ -95,7 +95,7 @@ export function AnonymousModal(props: {
                         props.onShowChange(false);
                     }
                 }}>
-                    <Loader payload={[]} variant={"dark"} transparent size={15} text={<span>&nbsp;Ablehnen</span>}
+                    <Loader payload={[]} variant={"auto"} transparent size={15} text={<span>&nbsp;Ablehnen</span>}
                             loaded={!disagreementLoading}>
                         <FAE icon={faTimesCircle}/> Ablehnen
                     </Loader>

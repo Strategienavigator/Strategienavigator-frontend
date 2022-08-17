@@ -131,7 +131,8 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
 
                                 <Table
                                     className={"invitation-links-table"}
-                                    hover={true}
+                                    hover
+                                    variant={"light"}
                                     size={"sm"}
                                 >
                                     <tbody>
@@ -234,7 +235,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                             </InputGroup>
 
                             <Loader payload={[]} loaded={!this.state.isSearching} transparent size={50}>
-                                <Table size={"sm"} hover={true}>
+                                <Table size={"sm"} hover variant={"light"}>
                                     <tbody>
                                     {(this.state.searchItems?.map((user, index) => {
                                         return (
@@ -296,6 +297,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
+                            size={"sm"}
                             onClick={this.props.onClose}
                         >
                             Abbrechen

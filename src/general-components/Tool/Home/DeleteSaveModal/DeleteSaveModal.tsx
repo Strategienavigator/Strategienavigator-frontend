@@ -37,7 +37,7 @@ function DeleteSaveModal(props: DeleteSaveModalProps) {
                     await props.onDelete(props.save?.id as number);
                     setLoadingDelete(false);
                 }} variant={"danger"}>
-                    <Loader payload={[]} transparent size={25} text={"Endgültig löschen"} variant={"dark"}
+                    <Loader payload={[]} transparent size={25} text={"Endgültig löschen"} variant={"auto"}
                             loaded={!loadingDelete}>
                         Endgültig löschen
                     </Loader>

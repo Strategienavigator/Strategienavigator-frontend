@@ -12,106 +12,108 @@ $link-hover-intensity-adjust: 8%;
 *
  */
 $themes: (
-    light: (
-            "style-color": #22007C,
-            "bg-color": #e6e6e6,
-            "text-color": #151515,
-            // links
-            "link-color": #151515,
-            "link-hover-color": lighten(#151515, $link-hover-intensity-adjust * 2),
-            "link-active-color": lighten(#151515, $link-hover-intensity-adjust * 2),
-            // homepage
-            "home-page-item-bg-color": rgb(248, 249, 250),
-            "home-page-item-hover-bg-color": darken(rgb(248, 249, 250), $hover-intensity-adjust),
-            "home-page-item-maintenance-bg-color": rgba(248, 249, 250, 0.3),
-            "home-page-item-shadow-color": black,
-            // inputs
-            "input-bg-color": #e0e0e0,
-            "input-border-color": #bebebe,
-            "input-text-color": #0e0e0e,
-            "input-placeholder-color": rgba(14, 14, 14, 0.6),
-            // nav
-            "nav-bg-color": #f8f9faff,
-            // footer
-            "footer-bg-color": #F3F3F3,
-            // controlfooter
-            "control-footer-bg-color": #FFFFFF,
-            // stepcomponent tabs
-            "step-tab-bg": #484848,
-            "step-tab-color": #fff,
-            "step-tab-active-bg": #22007C,
-            "step-tab-active-color": #fff,
-            "step-tab-hover-bg": #343434,
-            "step-tab-hover-color": #fff,
-            // tables
-            "table-bg-color": #f8f9faff,
-            // card
-            "card-bg-color": #e3e3e3,
-            "card-text-color": #000,
-            // formular
-            "form-bg-color": #fff, // no effect yet
-            "form-text-color": #fff, // no effect yet
-    ),
-    dark: (
-            "style-color": #4154c9,
-            "bg-color": rgb(38, 41, 43),
-            "text-color": rgb(231, 227, 225),
-            // links
-            "link-color": rgb(231, 227, 225),
-            "link-hover-color": darken(rgb(231, 227, 225), $link-hover-intensity-adjust),
-            "link-active-color": darken(rgb(231, 227, 225), $link-hover-intensity-adjust),
-            // homepage
-            "home-page-item-bg-color": rgb(18, 20, 21),
-            "home-page-item-hover-bg-color": lighten(rgb(18, 20, 21), $hover-intensity-adjust / 2),
-            "home-page-item-maintenance-bg-color": rgba(18, 20, 21, 0.5),
-            "home-page-item-shadow-color": black,
-            // inputs
-            "input-bg-color": rgb(23, 25, 26),
-            "input-border-color": rgb(18, 20, 21),
-            "input-text-color": rgb(231, 227, 225),
-            "input-placeholder-color": rgb(158, 150, 137),
-            // nav
-            "nav-bg-color": rgb(18, 20, 21),
-            // footer
-            "footer-bg-color": rgb(27, 30, 31),
-            // controlfooter
-            "control-footer-bg-color": rgb(18, 20, 21),
-            // stepcomponent tabs
-            "step-tab-bg": rgb(18, 20, 21),
-            "step-tab-color": rgb(231, 227, 225),
-            "step-tab-active-bg": #4154c9,
-            "step-tab-active-color": #fff,
-            "step-tab-hover-bg": #4154c9,
-            "step-tab-hover-color": #fff,
-            // tables
-            "table-bg-color": rgb(18, 20, 21),
-            // card (also accordion & progressbar)
-            "card-bg-color": rgb(23, 25, 26),
-            "card-text-color": rgb(231, 227, 225),
-            // formular
-            "form-bg-color": rgb(23, 25, 26),
-            "form-text-color": rgb(231, 227, 225),
-            "form-border-color": rgb(20, 20, 20),
-            "form-disabled-bg-color": rgba(23, 25, 26, 0.7),
-            "form-disabled-text-color": rgba(231, 227, 225, 0.8),
-            "form-disabled-border-color": rgba(20, 20, 20, 0.7),
-    )
+        light: (
+                "style-color": #22007C,
+                "bg-color": #e6e6e6,
+                "text-color": #151515,
+                "text-color-clear": #000,
+          // links
+                "link-color": #151515,
+                "link-hover-color": lighten(#151515, $link-hover-intensity-adjust * 2),
+                "link-active-color": lighten(#151515, $link-hover-intensity-adjust * 2),
+          // homepage
+                "home-page-item-bg-color": rgb(248, 249, 250),
+                "home-page-item-hover-bg-color": darken(rgb(248, 249, 250), $hover-intensity-adjust),
+                "home-page-item-maintenance-bg-color": rgba(248, 249, 250, 0.3),
+                "home-page-item-shadow-color": black,
+          // inputs
+                "input-bg-color": #e0e0e0,
+                "input-border-color": #bebebe,
+                "input-text-color": #0e0e0e,
+                "input-placeholder-color": rgba(14, 14, 14, 0.6),
+          // nav
+                "nav-bg-color": #f8f9faff,
+          // footer
+                "footer-bg-color": #F3F3F3,
+          // controlfooter
+                "control-footer-bg-color": #FFFFFF,
+          // stepcomponent tabs
+                "step-tab-bg": #484848,
+                "step-tab-color": #fff,
+                "step-tab-active-bg": #22007C,
+                "step-tab-active-color": #fff,
+                "step-tab-hover-bg": #343434,
+                "step-tab-hover-color": #fff,
+          // tables
+                "table-bg-color": #f8f9faff,
+          // card
+                "card-bg-color": #e3e3e3,
+                "card-text-color": #000,
+          // formular
+                "form-bg-color": #fff, // no effect yet
+                "form-text-color": #fff, // no effect yet
+        ),
+        dark: (
+                "style-color": #4154c9,
+                "bg-color": rgb(38, 41, 43),
+                "text-color": rgb(231, 227, 225),
+                "text-color-clear": #fff,
+          // links
+                "link-color": rgb(231, 227, 225),
+                "link-hover-color": darken(rgb(231, 227, 225), $link-hover-intensity-adjust),
+                "link-active-color": darken(rgb(231, 227, 225), $link-hover-intensity-adjust),
+          // homepage
+                "home-page-item-bg-color": rgb(18, 20, 21),
+                "home-page-item-hover-bg-color": lighten(rgb(18, 20, 21), $hover-intensity-adjust / 2),
+                "home-page-item-maintenance-bg-color": rgba(18, 20, 21, 0.5),
+                "home-page-item-shadow-color": black,
+          // inputs
+                "input-bg-color": rgb(23, 25, 26),
+                "input-border-color": rgb(18, 20, 21),
+                "input-text-color": rgb(231, 227, 225),
+                "input-placeholder-color": rgb(158, 150, 137),
+          // nav
+                "nav-bg-color": rgb(18, 20, 21),
+          // footer
+                "footer-bg-color": rgb(27, 30, 31),
+          // controlfooter
+                "control-footer-bg-color": rgb(18, 20, 21),
+          // stepcomponent tabs
+                "step-tab-bg": rgb(18, 20, 21),
+                "step-tab-color": rgb(231, 227, 225),
+                "step-tab-active-bg": #4154c9,
+                "step-tab-active-color": #fff,
+                "step-tab-hover-bg": lighten(rgb(18, 20, 21), 5%),
+                "step-tab-hover-color": #fff,
+          // tables
+                "table-bg-color": rgb(18, 20, 21),
+          // card (also accordion & progressbar)
+                "card-bg-color": rgb(23, 25, 26),
+                "card-text-color": rgb(231, 227, 225),
+          // formular
+                "form-bg-color": rgb(23, 25, 26),
+                "form-text-color": rgb(231, 227, 225),
+                "form-border-color": rgb(20, 20, 20),
+                "form-disabled-bg-color": rgba(23, 25, 26, 0.7),
+                "form-disabled-text-color": rgba(231, 227, 225, 0.8),
+                "form-disabled-border-color": rgba(20, 20, 20, 0.7),
+        )
 );
 
 
 $theme-map: null;
 
 @mixin theme() {
-    @each $theme, $map in $themes {
-        $theme-map: $map !global;
+  @each $theme, $map in $themes {
+    $theme-map: $map !global;
 
-        .#{$theme} & {
-            @content;
-        }
+    .#{$theme} & {
+      @content;
     }
-    $theme-map: null !global;
+  }
+  $theme-map: null !global;
 }
 
 @function get($key) {
-    @return map-get($theme-map, $key);
+  @return map-get($theme-map, $key);
 }

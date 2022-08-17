@@ -23,7 +23,7 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, any> {
 
         return (
             <>
-                <Table className={"collaborators-table"}>
+                <Table variant={"dark"} hover bordered className={"collaborators-table"}>
                     <thead>
                     <tr>
                         <th>Username</th>

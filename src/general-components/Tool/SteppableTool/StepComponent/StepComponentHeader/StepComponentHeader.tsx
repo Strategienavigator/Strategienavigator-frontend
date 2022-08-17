@@ -1,25 +1,31 @@
 import React, {PureComponent} from "react";
 import {Tool} from "../../../Tool";
 import {isDesktop} from "../../../../Desktop";
-import {Collapse, Form} from "react-bootstrap";
+import {Button, Collapse, Form} from "react-bootstrap";
 
 import "./step-header.scss";
 import {SharedSaveContext} from "../../../../Contexts/SharedSaveContextComponent";
-import {EditSavesPermission, hasPermission} from "../../../../Permissions";
+import {EditSavesPermission, hasPermission, InviteToSavePermission} from "../../../../Permissions";
+import {SaveResource} from "../../../../Datastructures";
+import FAE from "../../../../Icons/FAE";
+import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
+import {SaveInvitation} from "../../../../Sharing/SaveInvitation";
 
 
 export interface StepComponentHeaderProp {
     tool: Tool<any>
+    associatedSave: SaveResource<any>
     saveName: string
     saveDescription: string
     saveMetaChanged: (name: string, description: string) => void
 }
 
-export interface StepComponentState {
-    showStepHeaderDesc: boolean
+export interface StepComponentHeaderState {
+    showStepHeaderDesc: boolean,
+    showInviteModal: boolean
 }
 
-export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, StepComponentState> {
+export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, StepComponentHeaderState> {
     /**
      * Definiert auf welchen Context zugegriffen werden soll
      */
@@ -29,7 +35,8 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
     constructor(props: StepComponentHeaderProp, context: any) {
         super(props, context);
         this.state = {
-            showStepHeaderDesc: isDesktop()
+            showStepHeaderDesc: isDesktop(),
+            showInviteModal: false
         }
     }
 
@@ -38,6 +45,18 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
             <div className={"stepHeaderContainer"}>
                 <div className={"toolName"}>
                     {this.props.tool.getToolName()}
+
+                    {hasPermission(this.context.permission, InviteToSavePermission) && (
+                        <Button type={"button"} variant={"primary"} className={"inviteSave"}
+                                onClick={() => {
+                                    this.setState({
+                                        showInviteModal: true
+                                    });
+                                }}
+                        >
+                            <FAE icon={faUserPlus}/>
+                        </Button>
+                    )}
                 </div>
                 <div className={"stepHeader form"}>
                     <Form.Control
@@ -63,6 +82,22 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                         </div>
                     </Collapse>
                 </div>
+
+                <SharedSaveContext.Consumer>
+                    {(context) => {
+                        return (
+                            <SaveInvitation
+                                show={this.state.showInviteModal}
+                                save={this.props.associatedSave}
+                                onClose={() => {
+                                    this.setState({
+                                        showInviteModal: false
+                                    });
+                                }}
+                            />
+                        );
+                    }}
+                </SharedSaveContext.Consumer>
             </div>
         );
     }

@@ -104,7 +104,7 @@ export class CreateToolModal extends Component<CreateToolModalProps, CreateToolM
                     </Button>
                     <Button variant={"dark"} disabled={this.props.isCreatingNewSave} type={"submit"}
                             form={"toolhomeInput"}>
-                        <Loader payload={[]} loaded={!this.props.isCreatingNewSave} transparent variant={"dark"}
+                        <Loader payload={[]} loaded={!this.props.isCreatingNewSave} transparent variant={"auto"}
                                 size={15} text={<span>&nbsp;Jetzt beginnen</span>}>
                             Jetzt beginnen
                         </Loader>

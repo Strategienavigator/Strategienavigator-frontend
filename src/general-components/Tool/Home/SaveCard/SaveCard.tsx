@@ -11,6 +11,7 @@ import {SharedSaveContext} from "../../../Contexts/SharedSaveContextComponent";
 import './save-card.scss';
 import {DeleteSavePermission, hasPermission, InviteToSavePermission} from "../../../Permissions";
 import {ButtonPanel} from "../../../ButtonPanel/ButtonPanel";
+import {isDesktop} from "../../../Desktop";
 
 
 export interface SaveCardProps {
@@ -31,6 +32,8 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             if (isDeleting)
                 classes.push("disabled");
 
+            let formattedCreatedDate = new Date(this.props.save.created_at).toLocaleDateString("de-DE");
+
             return (
                 <SharedSaveContext.Consumer>
                     {(context) => (
@@ -44,6 +47,12 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                     >
                                         {this.props.save!.description && this.props.save!.description}
                                     </Card.Text>
+                                    <small
+                                        title={"Erstelldatum: " + formattedCreatedDate}
+                                        className={`created-date text-muted ${isDesktop() && "desktop"}`}
+                                    >
+                                        {formattedCreatedDate}
+                                    </small>
                                 </Card.Body>
                             </Card>
 

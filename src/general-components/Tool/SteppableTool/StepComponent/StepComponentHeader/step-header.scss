@@ -6,6 +6,7 @@
   margin-bottom: 1rem;
   font-size: 13pt;
   font-weight: 600;
+  position: relative;
 
   .toolName {
     font-weight: 700;
@@ -15,6 +16,12 @@
 
     @include theme() {
       border-left-color: get("style-color");
+    }
+
+    .inviteSave {
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
 }

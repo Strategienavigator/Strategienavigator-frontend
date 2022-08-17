@@ -8,7 +8,7 @@ export interface LoaderState {
     loaded: boolean
 }
 
-export type LoaderVariants = "dark" | "light";
+export type LoaderVariants = "auto" | "light" | "dark" | "style";
 export type LoaderAlignments = "center" | "right" | "left";
 
 export interface LoaderProps {
@@ -63,18 +63,19 @@ export class Loader extends Component<LoaderProps, LoaderState> {
 
     render() {
         let loaded = (this.props.loaded !== undefined) ? this.props.loaded : this.state.loaded;
+
         return (
             <>
                 {(this.props.animate || !loaded) && (
                     <div
                         className={
                             ["loader",
-                                loaded ? "loaded" : "",
+                                loaded && "loaded",
                                 this.props.fullscreen ? "fullscreen" : "",
                                 this.props.animate ? "animate" : "",
                                 this.props.transparent ? "transparent" : "",
-                                this.props.alignment ? this.props.alignment : "center",
-                                this.props.variant ? this.props.variant : "light"
+                                this.props.alignment ?? "center",
+                                this.props.variant ?? "auto"
                             ].join(" ")
                         }>
                         <Spinner className={"spinner"}

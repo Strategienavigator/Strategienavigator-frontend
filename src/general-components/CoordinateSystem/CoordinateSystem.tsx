@@ -7,6 +7,7 @@ import {Property} from "csstype";
 import {CustomGrid} from "./Grid/CustomGrid";
 import {Point} from "./Point/Point";
 import {Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
+import {getMixOfColors} from "../Color";
 
 
 /**
@@ -28,9 +29,14 @@ export interface NumberRange {
  */
 interface AxisInterface {
     /**
-     * Maximalwert der Achse
+     * Maximalwert der Achse, Auto sorgt für eigene Maximalwerte
      */
-    maxValue: number,
+    maxValue?: number | "auto",
+    /**
+     * Gibt an wie viel datenwerte an den Achsen geschrieben werden sollen. Die Werte werden mit Hilfe der maxValue automatisch aufgeteilt.
+     * Ist Standardmäßig auf auto
+     */
+    valueAccuracy?: number | "auto"
     /**
      * Name der Achse
      */
@@ -39,11 +45,6 @@ interface AxisInterface {
      * Kann angegeben werden um die Datenwerte der Achse verschiedenst zu rendern
      */
     valueRenderer?: ValueRenderer,
-    /**
-     * Gibt an wieviel datenwerte an den Achsen geschrieben werden sollen. Die Werte werden mit Hilfe der maxValue automatisch aufgeteilt.
-     * Ist Standardmäßig 3
-     */
-    valueAccuracy?: number
 }
 
 /**
@@ -85,7 +86,8 @@ interface axisValues {
 
 interface PointGroup {
     name: string,
-    points: Point[]
+    points: Point[],
+    middlePoint: Point
 }
 
 type PointGroups = PointGroup[]
@@ -144,32 +146,59 @@ export interface CoordinateSystemProps {
     heightRange: NumberRange,
 }
 
+interface CoordinateSystemState {
+    maxY: number,
+    maxX: number,
+    valueAccuracyY: number,
+    valueAccuracyX: number
+}
+
 /**
  * Dient zum darstellen eines Koordinatensystem
  */
-class CoordinateSystem extends Component<CoordinateSystemProps, any> {
+class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystemState> {
     // Standardwerte
     static standardValueRenderer = new NumberValueRenderer(0);
     static maxWidth = 700;
     static standardThickness = 1;
-    static standardAccuracy = 3;
-    static pointGroupDeviation = 0.005;
+    static pointGroupDeviation = 0.09;
 
     // Standardwerte der Größen
     static standardPointSize = 4;
     static minPointSize = 3;
     static maxPointSize = 12;
 
-    private static isInRange(value: number, range: NumberRange): boolean {
-        return value <= range.end && value >= range.start;
+    state = {
+        maxY: 6,
+        maxX: 6,
+        valueAccuracyY: 6,
+        valueAccuracyX: 6
     }
 
-    private static isPointInGroup(p: Point, group: PointGroup): boolean {
-        for (const point of group.points) {
-            if (p === point)
-                return true;
+    static getDerivedStateFromProps(props: CoordinateSystemProps, state: CoordinateSystemState): CoordinateSystemState {
+        let maxY, maxX;
+        if (props.axis.y.maxValue === undefined || props.axis.y.maxValue === "auto") {
+            maxY = Math.round(Math.max(...props.points.map(p => p.y))) + 1;
+        } else {
+            maxY = props.axis.y.maxValue;
         }
-        return false;
+
+        if (props.axis.x.maxValue === undefined || props.axis.x.maxValue === "auto") {
+            maxX = Math.round(Math.max(...props.points.map(p => p.x))) + 1;
+        } else {
+            maxX = props.axis.x.maxValue;
+        }
+
+        return {
+            maxY: maxY,
+            maxX: maxX,
+            valueAccuracyY: maxY,
+            valueAccuracyX: maxX
+        }
+    }
+
+    private static isInRange(value: number, range: NumberRange): boolean {
+        return value <= range.end && value >= range.start;
     }
 
     render() {
@@ -182,12 +211,10 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
         let xAxisValueRenderer = (this.props.axis.x.valueRenderer) ?? CoordinateSystem.standardValueRenderer;
         let yAxisValueRenderer = (this.props.axis.y.valueRenderer) ?? CoordinateSystem.standardValueRenderer;
 
-        let xAxisValues = this.getAxisValues(this.props.widthRange, this.props.axis.x)
-        let yAxisValues = this.getAxisValues(this.props.heightRange, this.props.axis.y);
+        let xAxisValues = this.getAxisValues(this.props.widthRange, this.props.axis.x, "x");
+        let yAxisValues = this.getAxisValues(this.props.heightRange, this.props.axis.y, "y");
 
-        let xAxisAccuracy = this.getAxisAccuracy(this.props.axis.x);
-        let yAxisAccuracy = this.getAxisAccuracy(this.props.axis.y);
-        let gridItems = this.getGridItems(xAxisAccuracy * yAxisAccuracy);
+        let gridItems = this.getGridItems(this.state.valueAccuracyX * this.state.valueAccuracyY);
 
         let pointGroups = this.getPointGroups();
 
@@ -202,8 +229,8 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                             <div
                                 className={"grid-overlay"}
                                 style={{
-                                    gridTemplateRows: this.getGridString(yAxisAccuracy),
-                                    gridTemplateColumns: this.getGridString(xAxisAccuracy),
+                                    gridTemplateRows: this.getGridString(this.state.valueAccuracyY),
+                                    gridTemplateColumns: this.getGridString(this.state.valueAccuracyX),
                                 }}
                             >
                                 {gridItems}
@@ -211,67 +238,81 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                         )}
                     <div className={"coordinate-system"}>
                         <div className={"points"}>
-                            {pointGroups.map((pointGroup) => {
-                                return pointGroup.points.map((point, index) => {
-                                    let maxX = this.props.axis.x.maxValue;
-                                    let maxY = this.props.axis.y.maxValue;
+                            {pointGroups.map((pointGroup, index) => {
+                                let point = pointGroup.middlePoint;
 
-                                    if (point.x > maxX || point.y > maxY) {
-                                        throw Error("Point outside of Coordinate-System.");
-                                    }
+                                if (point.x > this.state.maxX || point.y > this.state.maxY) {
+                                    throw Error(`Point ${point.toString()} outside of Coordinate-System.`);
+                                }
 
-                                    let leftPlacement = (point.x / maxX) * 100;
-                                    let rightPlacement = 100 - leftPlacement;
+                                console.log(this.state);
 
-                                    let bottomPlacement = (point.y / maxY) * 100;
-                                    let topPlacement = 100 - bottomPlacement;
+                                let leftPlacement = (point.x / this.state.maxX) * 100;
+                                let rightPlacement = 100 - leftPlacement;
 
-                                    let sizeMultiplier = point.sizeMultiplier;
-                                    let size = Math.min(Math.max(CoordinateSystem.minPointSize, CoordinateSystem.standardPointSize * sizeMultiplier), CoordinateSystem.maxPointSize);
+                                let bottomPlacement = (point.y / this.state.maxY) * 100;
+                                let topPlacement = 100 - bottomPlacement;
 
-                                    return (
-                                        <div
-                                            key={"POINT-" + point.x + "-" + point.y + "-" + index}
-                                            className={"point"}
-                                            data-x={point.x}
-                                            data-y={point.y}
-                                            style={{
-                                                top: String(topPlacement) + "%",
-                                                left: String(leftPlacement) + "%",
-                                                bottom: String(bottomPlacement) + "%",
-                                                right: String(rightPlacement) + "%",
-                                                width: String(size) + "%",
-                                                height: String(size) + "%"
-                                            }}
+                                let sizeMultiplier = point.sizeMultiplier;
+                                let size = Math.min(
+                                    Math.max(
+                                        CoordinateSystem.minPointSize,
+                                        CoordinateSystem.standardPointSize * sizeMultiplier
+                                    ),
+                                    CoordinateSystem.maxPointSize
+                                );
+
+                                return (
+                                    <div
+                                        key={`POINT-GROUP-${index}`}
+                                        className={"point group"}
+                                        data-x={point.x}
+                                        data-y={point.y}
+                                        style={{
+                                            top: String(topPlacement) + "%",
+                                            left: String(leftPlacement) + "%",
+                                            bottom: String(bottomPlacement) + "%",
+                                            right: String(rightPlacement) + "%",
+                                            width: String(size) + "%",
+                                            height: String(size) + "%"
+                                        }}
+                                    >
+                                        <OverlayTrigger
+                                            trigger={["hover", "focus"]}
+                                            placement={"top"}
+                                            overlay={(this.props.tooltipContentRenderer) ? (
+                                                <Tooltip>
+                                                    <div
+                                                        className={`group ${pointGroup.name}`}
+                                                        data-group={pointGroup.name}
+                                                    >
+                                                        {pointGroup.points.map((point, groupIndex) => {
+                                                            return (
+                                                                <div key={`tooltip-point-${index}-${groupIndex}`}
+                                                                     className={`point`} data-point={point.header}>
+                                                                    {this.props.tooltipContentRenderer?.call(this.props.tooltipContentRenderer, point)}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </Tooltip>
+                                            ) : <></>}
                                         >
-                                            <OverlayTrigger
-                                                trigger={["hover", "focus"]}
-                                                placement={"top"}
-                                                overlay={(this.props.tooltipContentRenderer) ? (
-                                                    <Tooltip>
-                                                        <div className={`group ${pointGroup.name}`}
-                                                             data-group={pointGroup.name}>
-                                                            {pointGroup.points.map((point2) => {
-                                                                return (
-                                                                    <div className={`point`} data-point={point2.header}>
-                                                                        {this.props.tooltipContentRenderer?.call(this.props.tooltipContentRenderer, point2)}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    </Tooltip>
-                                                ) : <></>}
+                                            <div
+                                                className={"circle"}
+                                                style={{
+                                                    backgroundColor: point.color
+                                                }}
                                             >
-                                                <div
-                                                    className={"circle"}
-                                                    style={{
-                                                        backgroundColor: point.color
-                                                    }}
-                                                />
-                                            </OverlayTrigger>
-                                        </div>
-                                    );
-                                })
+                                                {pointGroup.points.length > 1 && (
+                                                    <span className={"pointgroup-length"}>
+                                                        {pointGroup.points.length}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </OverlayTrigger>
+                                    </div>
+                                );
                             })}
                         </div>
 
@@ -349,45 +390,58 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
 
     private getPointGroups(): PointGroups {
         let groups: PointGroups = [];
-        let g = 1;
-        let currentGroup: PointGroup = {
-            name: "group-" + g,
-            points: []
-        };
+        let remainingPoints = this.props.points;
 
-        for (let i = 1; i < this.props.points.length; i++) {
-            let point = this.props.points[i];
-            let prevPoint = this.props.points[i - 1];
-
-            let xRange: NumberRange = {
-                start: prevPoint.x * (1 - CoordinateSystem.pointGroupDeviation),
-                end: prevPoint.x * (1 + CoordinateSystem.pointGroupDeviation)
-            };
-            let yRange: NumberRange = {
-                start: prevPoint.y * (1 - CoordinateSystem.pointGroupDeviation),
-                end: prevPoint.y * (1 + CoordinateSystem.pointGroupDeviation)
-            };
-
-            if (CoordinateSystem.isInRange(point.x, xRange) && CoordinateSystem.isInRange(point.y, yRange)) {
-                if (!CoordinateSystem.isPointInGroup(prevPoint, currentGroup)) {
-                    currentGroup.points.push(prevPoint);
-                }
-                currentGroup.points.push(point);
-            } else {
-                if (i === 1) {
-                    currentGroup.points.push(prevPoint);
-                }
-                groups.push(currentGroup);
-                g++;
-                currentGroup = {
-                    name: "group-" + g,
-                    points: []
-                };
-                currentGroup.points.push(point);
-            }
+        const removePoint = (point: Point) => {
+            remainingPoints = remainingPoints.filter((p) => {
+                return point !== p;
+            });
         }
-        if (!groups.includes(currentGroup))
+
+        let g = 1;
+        while (remainingPoints.length > 0) {
+            let point = remainingPoints[0];
+            let currentGroup: PointGroup = {
+                name: "group-" + g,
+                points: [],
+                middlePoint: new Point(0, 0, "", 0)
+            };
+            currentGroup.points.push(point);
+            removePoint(point);
+
+            for (const checkPoint of remainingPoints) {
+                let xRange: NumberRange = {
+                    start: checkPoint.x * (1 - CoordinateSystem.pointGroupDeviation),
+                    end: checkPoint.x * (1 + CoordinateSystem.pointGroupDeviation)
+                };
+                let yRange: NumberRange = {
+                    start: checkPoint.y * (1 - CoordinateSystem.pointGroupDeviation),
+                    end: checkPoint.y * (1 + CoordinateSystem.pointGroupDeviation)
+                };
+
+                if (
+                    CoordinateSystem.isInRange(point.x, xRange)
+                    && CoordinateSystem.isInRange(point.y, yRange)
+                ) {
+                    currentGroup.points.push(checkPoint);
+                    removePoint(checkPoint);
+                }
+            }
+
+            // build middlepoint
+            let xValues: number[] = currentGroup.points.map((p) => p.x);
+            let yValues: number[] = currentGroup.points.map((p) => p.y);
+            let xAvg = xValues.reduce((a, b) => a + b, 0) / xValues.length;
+            let yAvg = yValues.reduce((a, b) => a + b, 0) / xValues.length;
+
+            let sm = currentGroup.points.map(p => p.sizeMultiplier).reduce((a, b) => a + b, 0) / currentGroup.points.length;
+            let color = getMixOfColors(currentGroup.points.map(p => p.color));
+
+            currentGroup.middlePoint = new Point(xAvg, yAvg, "Mittelpunkt-" + g, sm, color);
+
             groups.push(currentGroup);
+            g++;
+        }
         return groups;
     }
 
@@ -406,7 +460,7 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
         let grid = this.props.gridDisplay;
 
         for (let i = 0; i < amount; i++) {
-            let item = <div key={"item-" + i}/>;
+            let item = <div key={"grid-item-" + i}/>;
 
             if (typeof grid === "object" && !(grid instanceof CustomGrid)) {
                 let borderStyle = (grid.style) ? grid.style : "solid";
@@ -415,7 +469,7 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
 
                 item = (
                     <div
-                        key={"item-" + i}
+                        key={"custom-grid-item-" + i}
                         style={{
                             borderStyle: borderStyle,
                             borderWidth: thickness,
@@ -440,16 +494,12 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
         }
     }
 
-    private getAxisAccuracy = (axis: AxisInterface): number => {
-        return (axis.valueAccuracy) ? axis.valueAccuracy : CoordinateSystem.standardAccuracy;
-    }
-
-    private getAxisValues = (range: NumberRange, axis: AxisInterface): number[] => {
-        let accuracy = this.getAxisAccuracy(axis);
+    private getAxisValues = (range: NumberRange, axis: AxisInterface, axisIdentifier: "x" | "y"): number[] => {
+        let accuracy = (axisIdentifier === "y") ? this.state.valueAccuracyY : this.state.valueAccuracyX;
         let values: number[] = [];
 
         for (let i = 1; i < (accuracy + 1); i++) {
-            values.push(i * (axis.maxValue / accuracy));
+            values.push(i * (((axisIdentifier === "y") ? this.state.maxY : this.state.maxX) / accuracy));
         }
 
         return values;

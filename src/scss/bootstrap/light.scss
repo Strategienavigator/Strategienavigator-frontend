@@ -27,7 +27,7 @@ $form-check-input-checked-color: white;
 
 // TABLES
 $table-variants: (
-  "light": map_get(map_get($themes, "light"), "table-bg-color")
+        "light": map_get(map_get($themes, "light"), "table-bg-color")
 );
 
 // ACCORDION
@@ -49,5 +49,13 @@ $theme-colors: (
 );
 
 .btn-primary, .btn-primary * {
+  color: white;
+}
+
+.badge.bg-dark {
+  background-color: $style-color !important;
+}
+
+.badge.bg-dark, .badge.bg-dark * {
   color: white;
 }
