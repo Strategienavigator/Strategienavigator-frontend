@@ -245,8 +245,6 @@ class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystem
                                     throw Error(`Point ${point.toString()} outside of Coordinate-System.`);
                                 }
 
-                                console.log(this.state);
-
                                 let leftPlacement = (point.x / this.state.maxX) * 100;
                                 let rightPlacement = 100 - leftPlacement;
 
