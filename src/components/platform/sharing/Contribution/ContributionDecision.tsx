@@ -14,9 +14,8 @@ import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons/";
 
 
 import "./contribution-decision.scss";
-import {CollaboratorsComponent} from "../../../../general-components/CollaboratorsComponent/CollaboratorsComponent";
 import {Messages} from "../../../../general-components/Messages/Messages";
-import {getSaveURL} from "../../../../general-components/Save";
+import {getSaveURL, getSharedSavePermissionText} from "../../../../general-components/Save";
 
 
 interface ContributionDecisionState {
@@ -95,7 +94,7 @@ export class ContributionDecision extends Component<RouteComponentProps<{ shared
 
                             <p>
                                 Sie werden folgende Berechtigung erhalten: <br/>
-                                <b>{CollaboratorsComponent.permissionSwitch(this.state.sharedSave?.permission as number)}</b>
+                                <b>{getSharedSavePermissionText(this.state.sharedSave?.permission as number)}</b>
                             </p>
 
                             <p>
@@ -105,7 +104,7 @@ export class ContributionDecision extends Component<RouteComponentProps<{ shared
                             <LoadingButton
                                 onClick={() => this.acceptInvitation()}
                                 defaultChild={"Annehmen"}
-                                isSaving={this.state.isAccepting}
+                                isLoading={this.state.isAccepting}
                                 defaultIcon={faCheck}
                                 savingChild={"Annehmen"}
                             />
@@ -114,7 +113,7 @@ export class ContributionDecision extends Component<RouteComponentProps<{ shared
                                 variant={"danger"}
                                 defaultChild={"Ablehnen"}
                                 defaultIcon={faTimes}
-                                isSaving={this.state.isDeclining}
+                                isLoading={this.state.isDeclining}
                                 savingChild={"Ablehnen"}
                             />
                         </>

@@ -1,5 +1,5 @@
 import {APIArgs, callAPI} from "../API";
-import {DefaultResponse, InvitationLinkResource, PaginationResource} from "../../Datastructures";
+import {DefaultResponse, InvitationLinkResource, PaginationResource, SharedSavePermission} from "../../Datastructures";
 
 
 /**
@@ -23,7 +23,7 @@ const showInvitationLink = async (invitationToken: string, apiArgs?: APIArgs) =>
 }
 
 export interface CreateInviteInterface {
-    permission: number
+    permission: SharedSavePermission
     expiry_date: Date | null
     save_id: number
 }

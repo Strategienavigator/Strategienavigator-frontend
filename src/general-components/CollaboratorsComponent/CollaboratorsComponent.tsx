@@ -1,7 +1,7 @@
 import {Component} from "react";
 import {Table} from "react-bootstrap";
 import {SharedSaveResource} from "../Datastructures";
-
+import {getSharedSavePermissionText} from "../Save";
 
 import "./collabortors-component.scss"
 
@@ -12,20 +12,15 @@ export interface CollaboratorsProps {
 
 class CollaboratorsComponent extends Component<CollaboratorsProps, any> {
 
-    public static permissionSwitch(permission: number): string {
-        switch (permission) {
-            case 0:
-                return "Nur Lesen";
-            case 1:
-                return "Lesen & Schreiben";
-            case 2:
-                return "Admin";
-            default:
-                return "";
-        }
-    }
-
     render() {
+        if (this.props.collaborators.length <= 0) {
+            return (
+                <span>
+                    Keine Kollaboratoren vorhanden...
+                </span>
+            );
+        }
+
         return (
             <>
                 <Table className={"collaborators-table"}>
@@ -42,7 +37,7 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, any> {
                         return (
                             <tr key={`collaboration-component-tr-${value.id}`}>
                                 <td>{value.user.username}</td>
-                                <td>{CollaboratorsComponent.permissionSwitch(value.permission)}</td>
+                                <td>{getSharedSavePermissionText(value.permission)}</td>
                             </tr>
                         );
                     })}

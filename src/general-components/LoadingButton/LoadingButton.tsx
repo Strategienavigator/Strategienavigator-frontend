@@ -10,7 +10,7 @@ export interface LoadingButtonProps extends ButtonProps {
     /**
      * Whether the loading animation should be played
      */
-    isSaving: boolean
+    isLoading: boolean
     /**
      * What is inside the button while saving
      */
@@ -38,15 +38,15 @@ export class LoadingButton extends Component<LoadingButtonProps, {}> {
 
 
     render() {
-        const {isSaving, savingChild, defaultChild, showIcons, defaultIcon, ...props} = this.props;
+        const {isLoading, savingChild, defaultChild, showIcons, defaultIcon, ...props} = this.props;
 
         return (
             <Button
                 {...props}
-                disabled={isSaving}
+                disabled={isLoading}
             >
 
-                {!isSaving ? (
+                {!isLoading ? (
                     <>{showIcons && (<FAE icon={defaultIcon}/>)} {defaultChild}</>
                 ) : (
 

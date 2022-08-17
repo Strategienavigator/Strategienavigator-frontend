@@ -9,10 +9,12 @@ import {ExportButton} from "../../../ExportButton";
 import FAE from "../../../../Icons/FAE";
 import {ButtonItem, NextStepItem} from "../../../../ControlFooter/ControlFooter";
 import {FooterContext} from "../../../../Contexts/FooterContextComponent";
+import {ISharedSaveContext} from "../../../../Contexts/SharedSaveContextComponent";
+import {ButtonPanel} from "../../../../ButtonPanel/ButtonPanel";
+import {hasPermission, ResetSavePermission, SaveSavePermission} from "../../../../Permissions";
 
 
 export interface DesktopButtonsState {
-
 }
 
 export interface DesktopButtonsProps {
@@ -26,11 +28,11 @@ export interface DesktopButtonsProps {
     onSave: () => void,
     onReset: () => void
     onExportClick: () => void
-    customNextButton?: CustomNextButton
+    customNextButton?: CustomNextButton,
+    sharedSaveContext: ISharedSaveContext
 }
 
 export class StepComponentButtons extends PureComponent<DesktopButtonsProps, DesktopButtonsState> {
-
     /**
      * Definiert auf welchen Context zugegriffen werden soll
      */
@@ -41,13 +43,11 @@ export class StepComponentButtons extends PureComponent<DesktopButtonsProps, Des
         this.setFooterButtons();
     }
 
-
     componentWillUnmount() {
         this.context.clearItems();
     }
 
     componentDidUpdate(prevProps: Readonly<DesktopButtonsProps>, prevState: Readonly<DesktopButtonsState>, snapshot?: any) {
-
         if (
             prevProps.customNextButton !== this.props.customNextButton ||
             prevProps.isSaving !== this.props.isSaving ||
@@ -60,74 +60,80 @@ export class StepComponentButtons extends PureComponent<DesktopButtonsProps, Des
     render() {
         if (!this.props.isMobile) {
             return (
-                <>
+                <ButtonPanel buttonPerCol={2} auto={false}>
                     <Button
                         variant={"dark"}
                         type={"button"}
                         onClick={this.props.onNext}
                         disabled={this.props.nextDisabled}
-                        className={"mt-2 mx-2"}
                         key={"customNextButton"}
                     >
                         <FAE icon={faCaretRight}/> {this.props.customNextButton?.text ?? "Weiter"}
                     </Button>
 
-                    <Button
-                        variant={"dark"}
-                        type={"button"}
-                        className={"mt-2"}
-                        onClick={this.props.onReset}
-                        key={"resetButton"}
-                    >
-                        <FAE
-                            icon={faUndo}/> Zurücksetzen
-                    </Button>
+                    {(hasPermission(this.props.sharedSaveContext.permission, ResetSavePermission)) && (
+                        <Button
+                            variant={"dark"}
+                            type={"button"}
+                            onClick={this.props.onReset}
+                            key={"resetButton"}
+                        >
+                            <FAE
+                                icon={faUndo}/> Zurücksetzen
+                        </Button>
+                    )}
 
-                    <br/>
-
-                    <LoadingButton
-                        variant={"dark"}
-                        type={"button"}
-                        onClick={this.props.onSave}
-                        className={"mt-2 mx-2"}
-                        key={"saveButton"}
-                        isSaving={this.props.isSaving}
-                        savingChild={"Speichern"}
-                        defaultChild={"Speichern"}
-                    />
+                    {(hasPermission(this.props.sharedSaveContext.permission, SaveSavePermission)) && (
+                        <LoadingButton
+                            variant={"dark"}
+                            type={"button"}
+                            onClick={this.props.onSave}
+                            key={"saveButton"}
+                            isLoading={this.props.isSaving}
+                            savingChild={"Speichern"}
+                            defaultChild={"Speichern"}
+                        />
+                    )}
 
                     <ExportButton
                         onClick={this.props.onExportClick}
                     />
-                </>
+                </ButtonPanel>
             );
         }
-
         return null;
     }
 
     private setFooterButtons = () => {
-        this.context.setItem(1, {
-            reset: this.props.onReset
-        });
+        let place = 1;
 
+        if (hasPermission(this.props.sharedSaveContext.permission, ResetSavePermission)) {
+            this.context.setItem(place, {
+                reset: this.props.onReset
+            });
+            place++;
+        }
 
-        this.context.setItem(2, {
+        this.context.setItem(place, {
             button: {
                 text: "Exportieren",
                 icon: faFileExport,
                 callback: this.props.onExportClick
             }
         });
+        place++;
 
-        this.context.setItem(3, {
-            button: {
-                callback: this.props.onSave,
-                text: "Speichern",
-                icon: faSave
-            },
-            disabled: this.props.isSaving
-        });
+        if (hasPermission(this.props.sharedSaveContext.permission, SaveSavePermission)) {
+            this.context.setItem(place, {
+                button: {
+                    callback: this.props.onSave,
+                    text: "Speichern",
+                    icon: faSave
+                },
+                disabled: this.props.isSaving
+            });
+            place++;
+        }
 
         let nextButton: NextStepItem | ButtonItem = {
             nextStep: this.props.onNext,
@@ -140,6 +146,7 @@ export class StepComponentButtons extends PureComponent<DesktopButtonsProps, Des
             }
         }
 
-        this.context.setItem(4, nextButton);
+        this.context.setItem(place, nextButton);
+        place++;
     }
 }

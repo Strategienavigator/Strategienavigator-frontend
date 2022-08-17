@@ -1,10 +1,13 @@
-import {Button, FloatingLabel, Form, FormControl, FormGroup, FormSelect, Modal} from "react-bootstrap";
+import {FloatingLabel, Form, FormControl, FormGroup, FormSelect, Modal} from "react-bootstrap";
 
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {useState} from "react";
+import {SharedSavePermission} from "../../Datastructures";
+import {getSharedSavePermissionOptions} from "../../Save";
+import {LoadingButton} from "../../LoadingButton/LoadingButton";
 
 
-export type InvitationPermission = "0" | "1";
+export type InvitationPermission = SharedSavePermission.READ | SharedSavePermission.WRITE;
 export type InvitationExpiryDate = "infinite" | "week" | "month" | "own" | Date;
 
 export interface InvitationLinkProps {
@@ -14,7 +17,7 @@ export interface InvitationLinkProps {
 }
 
 function InvitationLinkModal(props: InvitationLinkProps) {
-    let defaultPermission: InvitationPermission = "0";
+    let defaultPermission: InvitationPermission = SharedSavePermission.READ;
     let defaultExpiryDate: InvitationExpiryDate = "infinite";
     let defaultOwnDate = new Date();
     defaultOwnDate.setDate(defaultOwnDate.getDate() + 7);
@@ -27,6 +30,8 @@ function InvitationLinkModal(props: InvitationLinkProps) {
     const [dateGreaterThanToday, setDateGreaterThanToday] = useState(false);
     let minDate = new Date();
     minDate.setDate(minDate.getDate() + 1);
+
+    const [isCreating, setCreating] = useState(false);
 
     return (
         <ModalCloseable
@@ -53,11 +58,10 @@ function InvitationLinkModal(props: InvitationLinkProps) {
                         <FloatingLabel label={"Berechtigung"}>
                             <FormSelect required={true} size={"sm"} defaultValue={defaultPermission} id={"permission"}
                                         onChange={(e) => {
-                                            setPermission(e.target.value as InvitationPermission);
+                                            setPermission(parseInt(e.target.value) as InvitationPermission);
                                         }}
                             >
-                                <option value={"0"}>Nur Lesen</option>
-                                <option value={"1"}>Lesen und Schreiben</option>
+                                {getSharedSavePermissionOptions(SharedSavePermission.READ, SharedSavePermission.WRITE)}
                             </FormSelect>
                         </FloatingLabel>
                     </FormGroup>
@@ -111,7 +115,7 @@ function InvitationLinkModal(props: InvitationLinkProps) {
                         )}
                     </FormGroup>
 
-                    <Button
+                    <LoadingButton
                         size={"sm"}
                         variant={"primary"}
                         onClick={async () => {
@@ -142,19 +146,24 @@ function InvitationLinkModal(props: InvitationLinkProps) {
                                     date = new Date(date.setDate(date.getDate() + 7));
                                 }
 
+                                setCreating(true);
                                 await props.onCreation(permission, date);
+
+                                props.onClose();
 
                                 setNoDate(false);
                                 setDateGreaterThanToday(false);
                                 setExpiryDate(defaultExpiryDate);
                                 setPermission(defaultPermission);
-
-                                props.onClose();
+                                setCreating(false);
                             }
                         }}
+                        defaultChild={"Link erstellen"}
+                        savingChild={"Link wird erstellt..."}
+                        isLoading={isCreating}
                     >
                         Link erstellen
-                    </Button>
+                    </LoadingButton>
                 </Form>
             </Modal.Body>
         </ModalCloseable>

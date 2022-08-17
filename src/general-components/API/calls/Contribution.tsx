@@ -1,5 +1,5 @@
 import {APIArgs, callAPI} from "../API";
-import {DefaultResponse, SharedSaveResource} from "../../Datastructures";
+import {DefaultResponse, SharedSavePermission, SharedSaveResource} from "../../Datastructures";
 
 
 /**
@@ -9,7 +9,7 @@ import {DefaultResponse, SharedSaveResource} from "../../Datastructures";
  * @param apiArgs API Argumente
  */
 const getContributors = async (saveID: number, apiArgs?: APIArgs) => {
-    return await callAPI<{data: SharedSaveResource[]}>("api/saves/" + saveID + "/contributors", "GET", undefined, true, apiArgs)
+    return await callAPI<{ data: SharedSaveResource[] }>("api/saves/" + saveID + "/contributors", "GET", undefined, true, apiArgs)
 }
 
 /**
@@ -19,7 +19,7 @@ const getContributors = async (saveID: number, apiArgs?: APIArgs) => {
  * @param apiArgs API Argumente
  */
 const showContributions = async (userID: number, apiArgs?: APIArgs) => {
-    return await callAPI<{data: SharedSaveResource[]}>("api/users/" + userID + "/contributions", "GET", undefined, true, apiArgs);
+    return await callAPI<{ data: SharedSaveResource[] }>("api/users/" + userID + "/contributions", "GET", undefined, true, apiArgs);
 }
 
 /**
@@ -33,7 +33,7 @@ const showContribution = async (contributionID: number, apiArgs?: APIArgs) => {
 }
 
 interface CreateContribution {
-    permission: number
+    permission: SharedSavePermission
 }
 
 /**
@@ -52,7 +52,7 @@ const createContribution = async (saveID: number, userID: number, data: CreateCo
 }
 
 interface UpdateContribution {
-    permission: number
+    permission: SharedSavePermission
     revoked: boolean
 }
 

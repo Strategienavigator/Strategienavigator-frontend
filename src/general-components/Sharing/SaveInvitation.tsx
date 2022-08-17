@@ -3,25 +3,26 @@ import {Badge, Button, FormControl, InputGroup, Modal, Table} from "react-bootst
 import "./save-invitation-modal.scss";
 import {faCopy, faSearch, faUsers} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../Icons/FAE";
-import {Component} from "react";
+import {Component, ReactNode} from "react";
 import {InvitationLinkModal} from "./InvitationLinkModal/InvitationLinkModal";
 import {ModalCloseable} from "../Modal/ModalCloseable";
 import {
-    InvitationLinkResource, SharedSaveResource,
+    InvitationLinkResource,
+    SharedSavePermission,
+    SharedSaveResource,
     SimpleSaveResource,
-    SimplestUserResource,
     UserSearchResultResource
 } from "../Datastructures";
 import {Loader} from "../Loader/Loader";
 import {createInvitationLink, deleteInvitationLink, showInvitationLinks} from "../API/calls/Invitations";
-import {faTrash} from "@fortawesome/free-solid-svg-icons/";
+import {faTimes, faTrash} from "@fortawesome/free-solid-svg-icons/";
 import {Messages} from "../Messages/Messages";
 import {SingleInviteModal} from "./SingleInviteModal/SingleInviteModal";
-import { searchUser } from "../API/calls/User";
+import {searchUser} from "../API/calls/User";
 import {createContribution, getContributors} from "../API/calls/Contribution";
-import {CreateContextOptions} from "vm";
 import {CollaboratorsModal} from "./CollaboratorsModal/CollaboratorsModal";
 import {LoadingButton} from "../LoadingButton/LoadingButton";
+import {ButtonPanel} from "../ButtonPanel/ButtonPanel";
 
 
 export interface SaveInvitationProps {
@@ -38,37 +39,57 @@ export interface SaveInvitationState {
     showInvitationLinkModal: boolean,
     links: InvitationLinkResource[],
     deleteInvitationLink: string | null,
+    isDeleting: boolean,
     inviteSuccess?: boolean,
     showCollaboratorsModal: boolean,
     contributorsLoading: boolean,
-    contributors: SharedSaveResource[]
+    contributors: SharedSaveResource[],
+    showCopyModal: InvitationLinkResource | null
 }
 
 class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState> {
     private timeout: NodeJS.Timeout | undefined;
+    private defaultState = {
+        searchItems: [],
+        isSearching: false,
+        showSingleInviteModal: null,
+        searchText: null,
+        showInvitationLinkModal: false,
+        links: [],
+        deleteInvitationLink: null,
+        isDeleting: false,
+        inviteSuccess: undefined,
+        showCollaboratorsModal: false,
+        contributors: [],
+        contributorsLoading: false,
+        showCopyModal: null
+    };
 
     constructor(props: SaveInvitationProps | Readonly<SaveInvitationProps>) {
         super(props);
 
-        this.state = {
-            searchItems: [],
-            isSearching: false,
-            showSingleInviteModal: null,
-            searchText: null,
-            showInvitationLinkModal: false,
-            links: [],
-            deleteInvitationLink: null,
-            inviteSuccess: undefined,
-            showCollaboratorsModal: false,
-            contributors: [],
-            contributorsLoading: false
-        }
+        this.state = this.defaultState;
     }
 
     render() {
         const getLinks = async () => {
             if (this.props.save !== null) {
                 await this.loadInviteLinks(this.props.save);
+            }
+        }
+
+        const switchPermissionText = (permission: SharedSavePermission): ReactNode => {
+            switch (permission) {
+                case SharedSavePermission.READ:
+                    return (<>nur zum <b>Lesen</b></>);
+                case SharedSavePermission.ADMIN:
+                    return (<>mit <b>Adminrechten</b></>);
+                case SharedSavePermission.WRITE:
+                    return (<>mit <b>Lese- und Schreibrechten</b></>);
+                case SharedSavePermission.OWNER:
+                    return (<>mit <b>Besitzerrechten</b></>);
+                default:
+                    return (<b>ohne Berechtigung</b>);
             }
         }
 
@@ -88,53 +109,73 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                     <Modal.Body>
                         <div className={"link"}>
                             <Loader
-                                payload={[getLinks]}
+                                payload={[this.resetSearchUser, getLinks]}
                                 transparent={true}
                                 size={50}
                             >
-                                <h5>
-                                    Alle Einladungslinks&nbsp;
-                                    <Badge
-                                        bg={"dark"}
-                                        pill={true}
-                                    >
-                                        {this.state.links.length}
-                                    </Badge>
-                                </h5>
+                                {(this.state.links.length > 0) ? (
+                                    <h5>
+                                        Alle Einladungslinks&nbsp;
+                                        <Badge
+                                            bg={"dark"}
+                                            pill={true}
+                                        >
+                                            {this.state.links.length}
+                                        </Badge>
+                                    </h5>
+                                ) : (
+                                    <span>
+                                        Keine Einladungslinks vorhanden...
+                                    </span>
+                                )}
 
                                 <Table
+                                    className={"invitation-links-table"}
                                     hover={true}
                                     size={"sm"}
                                 >
                                     <tbody>
                                     {this.state.links.map((link, index) => {
+                                        let dateRaw = link.expiry_date;
+                                        let infinite = dateRaw === null;
+                                        let date = new Date(dateRaw);
+                                        let dateFormatted = date.toLocaleDateString("de-DE");
+
+                                        let text = (
+                                            <span>
+                                              {infinite && (<b>Unendlicher </b>)}Einladungslink {!infinite && (<>bis
+                                                zum <b>{dateFormatted}</b></>)} {switchPermissionText(link.permission)}.
+                                          </span>
+                                        );
+
                                         return (
                                             <tr key={link.token + "-" + index}>
-                                                <td>/invitation/{link.token}</td>
-                                                <td
-                                                    onClick={async () => {
-                                                        let location = window.location.origin;
-                                                        await navigator.clipboard.writeText(location + "/invitation/" + link.token);
-                                                        Messages.add("Link kopiert!", "SUCCESS", Messages.TIMER);
-                                                    }}
-                                                >
-                                                    <FAE
-                                                        style={{cursor: "pointer"}}
-                                                        icon={faCopy}
-                                                    />
-                                                </td>
-                                                <td
-                                                    onClick={() => {
-                                                        this.setState({
-                                                            deleteInvitationLink: link.token
-                                                        });
-                                                    }}
-                                                >
-                                                    <FAE
-                                                        style={{cursor: "pointer"}}
-                                                        className={"text-danger"}
-                                                        icon={faTrash}
-                                                    />
+                                                <td>{text}</td>
+                                                <td>
+                                                    <ButtonPanel buttonPerCol={2} flexHAlign={"flex-end"}>
+                                                        <Button
+                                                            size={"sm"}
+                                                            variant={"dark"}
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    showCopyModal: link
+                                                                });
+                                                            }}
+                                                        >
+                                                            <FAE icon={faCopy}/>
+                                                        </Button>
+                                                        <Button
+                                                            size={"sm"}
+                                                            variant={"danger"}
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    deleteInvitationLink: link.token
+                                                                });
+                                                            }}
+                                                        >
+                                                            <FAE icon={faTrash}/>
+                                                        </Button>
+                                                    </ButtonPanel>
                                                 </td>
                                             </tr>
                                         );
@@ -247,7 +288,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
 
                                 }}
                                 defaultChild={"Kollaborateure anzeigen"}
-                                isSaving={this.state.contributorsLoading}
+                                isLoading={this.state.contributorsLoading}
                                 savingChild={"Kollaborateure anzeigen"}
                                 defaultIcon={faUsers}
                             />
@@ -289,7 +330,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                             });
 
                             let data = {
-                              permission: parseInt(permission)
+                                permission: permission
                             };
                             let call = await createContribution(this.props.save.id, user.id, data);
 
@@ -309,16 +350,53 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                         if (this.props.save !== null) {
                             let link = await createInvitationLink({
                                 save_id: this.props.save.id,
-                                permission: parseInt(permission),
+                                permission: permission,
                                 expiry_date: expiry_date
                             });
 
                             if (link?.success) {
                                 await this.loadInviteLinks(this.props.save);
+                                Messages.add("Einladungslink erstellt!", "SUCCESS", Messages.TIMER);
                             }
                         }
                     }}
                 />
+
+                <ModalCloseable
+                    backdrop centered
+                    show={this.state.showCopyModal !== null}
+                    className={"second-modal copy-modal"}
+                    backdropClassName={"second-modal-backdrop"}
+                    onHide={() => {
+                        this.setState({
+                            showCopyModal: null
+                        });
+                    }}
+                >
+                    <Modal.Header>
+                        <h5>Link kopieren</h5>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <InputGroup>
+                            <FormControl
+                                type={"text"}
+                                required
+                                readOnly
+                                value={window.location.origin + "/invitation/" + this.state.showCopyModal?.token}
+                            />
+                            <Button
+                                variant={"dark"}
+                                onClick={async () => {
+                                    let location = window.location.origin;
+                                    await navigator.clipboard.writeText(location + "/invitation/" + this.state.showCopyModal?.token);
+                                    Messages.add("Link kopiert!", "SUCCESS", Messages.TIMER);
+                                }}
+                            >
+                                <FAE icon={faCopy}/>
+                            </Button>
+                        </InputGroup>
+                    </Modal.Body>
+                </ModalCloseable>
 
                 <ModalCloseable
                     backdrop={true}
@@ -328,7 +406,8 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                     show={this.state.deleteInvitationLink !== null}
                     onHide={() => {
                         this.setState({
-                            deleteInvitationLink: null
+                            deleteInvitationLink: null,
+                            isDeleting: false
                         });
                     }}
                 >
@@ -340,27 +419,37 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                         Dieser Vorgang kann <b>NICHT</b> rückgängig gemacht werden!
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button
+                        <LoadingButton
                             variant={"danger"}
                             onClick={async () => {
                                 if (this.state.deleteInvitationLink !== null && this.props.save !== null) {
+                                    this.setState({
+                                        isDeleting: true
+                                    });
+
                                     await deleteInvitationLink(this.state.deleteInvitationLink);
                                     await this.loadInviteLinks(this.props.save);
 
+                                    Messages.add("Einladungslink gelöscht!", "SUCCESS", Messages.TIMER);
+
                                     this.setState({
-                                        deleteInvitationLink: null
+                                        deleteInvitationLink: null,
+                                        isDeleting: false
                                     });
                                 }
                             }}
-                        >
-                            Löschen
-                        </Button>
+                            defaultChild={"Löschen"}
+                            savingChild={"Wird gelöscht..."}
+                            defaultIcon={faTimes}
+                            isLoading={this.state.isDeleting}
+                        />
 
                         <Button
                             variant={"primary"}
                             onClick={() => {
                                 this.setState({
-                                    deleteInvitationLink: null
+                                    deleteInvitationLink: null,
+                                    isDeleting: false
                                 });
                             }}
                         >
@@ -374,7 +463,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
 
     searchForUser = async () => {
         let searchText = this.state.searchText;
-        if (searchText) {
+        if (searchText && searchText !== "") {
             this.setState({
                 isSearching: true
             });
@@ -387,6 +476,10 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                 isSearching: false
             });
         }
+    }
+
+    private resetSearchUser = async (): Promise<any> => {
+        this.setState(this.defaultState);
     }
 
     private loadInviteLinks = async (save: SimpleSaveResource) => {

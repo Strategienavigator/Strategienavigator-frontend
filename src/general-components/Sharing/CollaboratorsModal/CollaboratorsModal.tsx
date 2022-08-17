@@ -12,23 +12,25 @@ interface CollaboratorsModalProps {
 
 function CollaboratorsModal(props: CollaboratorsModalProps) {
     return (
-      <ModalCloseable
-        show={props.show}
-        className={"second-modal"}
-        backdropClassName={"second-modal-backdrop"}
-        centered
-        onHide={() => {
-            props.onClose();
-        }}
-        keyboard={true}
-      >
-          <Modal.Header>
-              <h5>Alle aktuellen Kollaborateure <Badge bg={"dark"} pill>{props.contributors.filter((v) => {return v.accepted;}).length}</Badge></h5>
-          </Modal.Header>
-          <Modal.Body>
-            <CollaboratorsComponent collaborators={props.contributors} />
-          </Modal.Body>
-      </ModalCloseable>
+        <ModalCloseable
+            show={props.show}
+            className={"second-modal"}
+            backdropClassName={"second-modal-backdrop"}
+            centered
+            onHide={() => {
+                props.onClose();
+            }}
+            keyboard={true}
+        >
+            <Modal.Header>
+                <h5>Alle aktuellen Kollaborateure <Badge bg={"dark"} pill>{props.contributors.filter((v) => {
+                    return v.accepted;
+                }).length}</Badge></h5>
+            </Modal.Header>
+            <Modal.Body>
+                <CollaboratorsComponent collaborators={props.contributors}/>
+            </Modal.Body>
+        </ModalCloseable>
     );
 }
 

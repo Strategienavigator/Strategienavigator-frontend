@@ -8,8 +8,7 @@ import {InvitationLinkResource} from "../../../../general-components/Datastructu
 import {Loader} from "../../../../general-components/Loader/Loader";
 import {LoadingButton} from "../../../../general-components/LoadingButton/LoadingButton";
 import {Messages} from "../../../../general-components/Messages/Messages";
-import {CollaboratorsComponent} from "../../../../general-components/CollaboratorsComponent/CollaboratorsComponent";
-import {getSaveURL} from "../../../../general-components/Save";
+import {getSaveURL, getSharedSavePermissionText} from "../../../../general-components/Save";
 
 
 export interface InvitationDecisionState {
@@ -56,7 +55,7 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
 
                     <p>
                         Sie werden folgende Berechtigung erhalten: <br/>
-                        <b>{CollaboratorsComponent.permissionSwitch(this.state.link?.permission as number)}</b>
+                        <b>{getSharedSavePermissionText(this.state.link?.permission as number)}</b>
                     </p>
 
                     <p>
@@ -67,7 +66,7 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
                         showIcons={false}
                         className={"accept"}
                         savingChild={"Annehmen"}
-                        isSaving={this.state.isSaving}
+                        isLoading={this.state.isSaving}
                         defaultChild={"Annehmen"}
                         onClick={() => this.acceptInvitation()}
                     />

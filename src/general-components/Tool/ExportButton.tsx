@@ -68,7 +68,6 @@ function ExportButton(props: ExportButtonProps) {
         <>
             <Button
                 variant={"dark"}
-                className={"mt-2"}
                 onClick={props.onClick}
             >
                 <FAE icon={faFileExport}/> Exportieren

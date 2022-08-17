@@ -15,6 +15,7 @@ import {deleteSave, getSaves} from "../../API/calls/Saves";
 import {DeleteSaveModal} from "./DeleteSaveModal/DeleteSaveModal";
 import FAE from "../../Icons/FAE";
 import {SaveInvitation} from "../../Sharing/SaveInvitation";
+import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 
 
 export interface ToolHomeInfo {
@@ -60,7 +61,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
 
     private paginationLoader: PaginationLoader<SimpleSaveResource>;
-    private savesControlCallbacks: SavesControlCallbacks;
+    private readonly savesControlCallbacks: SavesControlCallbacks;
 
     constructor(props: ToolHomeProps | Readonly<ToolHomeProps>) {
         super(props);
@@ -114,7 +115,8 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     getTutorialCanvas = () => {
         return (
-            <Offcanvas placement={"start"} show={this.state.showTutorial}>
+            <Offcanvas placement={"start"} onHide={() => this.setState({showTutorial: false})}
+                       show={this.state.showTutorial}>
                 <OffcanvasHeader closeButton onClick={() => this.setState({showTutorial: false})}>
                     <Offcanvas.Title>{this.props.tool.getToolName()}</Offcanvas.Title>
                 </OffcanvasHeader>
@@ -187,18 +189,22 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
                 {(this.state.showTutorial && this.props.tool?.hasTutorial()) && this.getTutorialCanvas()}
 
-                <DeleteSaveModal
-                    show={this.state.showDeleteModal}
-                    save={this.state.deleteSave ?? null}
-                    onClose={this.onCloseDeleteModal}
-                    onDelete={this.onDeleteModal}
-                />
+                <SharedSaveContextComponent save={this.state.deleteSave!}>
+                    <DeleteSaveModal
+                        show={this.state.showDeleteModal}
+                        save={this.state.deleteSave ?? null}
+                        onClose={this.onCloseDeleteModal}
+                        onDelete={this.onDeleteModal}
+                    />
+                </SharedSaveContextComponent>
 
-                <SaveInvitation
-                    show={this.state.showInviteModal !== null}
-                    save={this.state.showInviteModal}
-                    onClose={this.closeInviteModal}
-                />
+                <SharedSaveContextComponent save={this.state.showInviteModal!}>
+                    <SaveInvitation
+                        show={this.state.showInviteModal !== null}
+                        save={this.state.showInviteModal}
+                        onClose={this.closeInviteModal}
+                    />
+                </SharedSaveContextComponent>
             </div>
         );
     }

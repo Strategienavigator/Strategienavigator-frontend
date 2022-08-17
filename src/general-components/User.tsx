@@ -6,8 +6,8 @@ class User {
     private username: string;
     private email: string;
     private anonymous: boolean;
-    private owned_saves: number[];
-    private shared_saves: number[];
+    private readonly owned_saves: number[];
+    private readonly shared_saves: number[];
     private created_at: Date;
 
     constructor(id: number, username: string, email: string, anonymous: boolean, owned_saves: number[], shared_saves: number[],

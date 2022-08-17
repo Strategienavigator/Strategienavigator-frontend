@@ -2,37 +2,3 @@
   margin-bottom: 0.75rem;
   align-items: center;
 }
-
-.deleteButton {
-  margin-top: 5px;
-}
-
-.buttonGroup {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 0.25rem 0;
-}
-
-.buttonGroup button {
-  flex: 0 0 auto;
-  margin: 0 0.5rem;
-}
-
-.buttonGroup button:last-child {
-  margin-left: 0.5rem;
-  margin-right: 0;
-}
-
-.buttonGroup button:first-child {
-  margin-right: 0.5rem;
-  margin-left: 0;
-}
-
-@media screen and (max-width: 460px) {
-  .buttonGroup button {
-    margin: 0 0 0.25rem 0 !important;
-    width: 100%;
-  }
-}

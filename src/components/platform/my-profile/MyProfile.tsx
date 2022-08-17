@@ -19,6 +19,7 @@ import {LoadingButton} from "../../../general-components/LoadingButton/LoadingBu
 import FAE from "../../../general-components/Icons/FAE";
 import {ModalCloseable} from "../../../general-components/Modal/ModalCloseable";
 import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
+import {ButtonPanel} from "../../../general-components/ButtonPanel/ButtonPanel";
 
 
 export interface MyProfileState {
@@ -192,7 +193,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 <h4>
                     <FAE icon={faUser}/> &nbsp;{this.context.user?.getUsername()}
                     {(this.state.edit) && (
-                        <Button style={{float: "right"}} disabled={this.state.isSaving} size={"sm"} variant={"dark"}
+                        <Button style={{float: "right"}} disabled={this.state.isSaving} variant={"dark"}
                                 className={"editButton"} onClick={this.changeView}>
                             <FAE icon={faArrowLeft}/> &nbsp;Zurück
                         </Button>
@@ -271,10 +272,10 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     </>
                 )}
 
-                <hr/>
-
                 {(!this.state.edit) && (
                     <div>
+                        <hr/>
+
                         <h5>Überblick Analysen</h5>
                         <Row>
                             <Col>
@@ -298,27 +299,25 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 )}
 
                 {(!this.state.edit) && (
-                    <Button size={"sm"} variant={"dark"} className={"editButton"} onClick={this.changeView}>
+                    <Button variant={"dark"} className={"editButton"} onClick={this.changeView}>
                         <FAE icon={faPencilAlt}/> &nbsp; Bearbeiten
                     </Button>
                 )}
                 {(this.state.edit) && (
-                    <>
-                        <div className={"buttonGroup"}>
-                            <LoadingButton
-                                disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
-                                size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}
-                                isSaving={this.state.isSaving} savingChild={"Speichert"}
-                                defaultChild={"Änderungen speichern"}/>
-                        </div>
-                        <div className={"buttonGroup"}>
-                            <Button disabled={this.state.isSaving} size={"sm"} variant={"danger"}
-                                    className={"deleteButton"}
-                                    onClick={this.showDeleteModal}>
-                                <FAE icon={faTrash}/> &nbsp; Benutzer löschen
-                            </Button>
-                        </div>
-                    </>
+                    <ButtonPanel buttonPerCol={2}>
+                        <LoadingButton
+                            disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
+                            type={"submit"} variant={"dark"} className={"editButton"}
+                            isLoading={this.state.isSaving} savingChild={"Speichert"}
+                            defaultChild={"Änderungen speichern"}
+                        />
+
+                        <Button disabled={this.state.isSaving} variant={"danger"}
+                                className={"deleteButton"}
+                                onClick={this.showDeleteModal}>
+                            <FAE icon={faTrash}/> &nbsp; Benutzer löschen
+                        </Button>
+                    </ButtonPanel>
                 )}
 
                 <ModalCloseable

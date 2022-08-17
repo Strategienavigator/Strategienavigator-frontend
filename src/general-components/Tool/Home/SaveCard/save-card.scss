@@ -3,7 +3,6 @@
 .save {
   transition: background-color 0.3s ease-out;
   position: relative;
-  overflow: hidden;
 }
 
 .save.disabled {
@@ -20,17 +19,6 @@
 
   .deleting {
     opacity: 1;
-    float: right;
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    color: #ffffff;
-    border: 1px darken($danger, 10%) solid;
-    border-radius: 0.25rem;
-    padding: 0.5rem;
-    background-color: $danger;
-    font-size: 11pt;
-    font-weight: 600;
   }
 }
 
@@ -55,23 +43,11 @@
   user-select: none;
 }
 
-.save {
-  .deleteSave, .inviteSave {
-    position: absolute;
-    top: 15px;
-    padding: 0.25rem 0.75rem;
-  }
-
-  .deleteSave {
-    right: 10px;
-  }
-
-  .inviteSave {
-    position: absolute;
-    right: 55px;
-  }
+.save .button-panel {
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
 }
-
 
 .dummy {
   display: inline-block;

@@ -80,7 +80,8 @@ const callAPI = async <D extends object>(
         let callData = null;
         try {
             callData = await call.json();
-        } catch (ex) {}
+        } catch (ex) {
+        }
 
         // BUILD RESPONSE
         return {

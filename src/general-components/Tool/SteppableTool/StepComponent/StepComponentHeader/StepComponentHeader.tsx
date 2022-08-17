@@ -1,9 +1,11 @@
-import {PureComponent} from "react";
+import React, {PureComponent} from "react";
 import {Tool} from "../../../Tool";
 import {isDesktop} from "../../../../Desktop";
 import {Collapse, Form} from "react-bootstrap";
 
 import "./step-header.scss";
+import {SharedSaveContext} from "../../../../Contexts/SharedSaveContextComponent";
+import {EditSavesPermission, hasPermission} from "../../../../Permissions";
 
 
 export interface StepComponentHeaderProp {
@@ -18,6 +20,11 @@ export interface StepComponentState {
 }
 
 export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, StepComponentState> {
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = SharedSaveContext;
+    context!: React.ContextType<typeof SharedSaveContext>
 
     constructor(props: StepComponentHeaderProp, context: any) {
         super(props, context);
@@ -39,6 +46,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                         onChange={this.onChangeCurrentName}
                         onFocus={this.showDescription}
                         onBlur={this.showDescriptionIfDesktop}
+                        disabled={!hasPermission(this.context.permission, EditSavesPermission)}
                     />
 
                     <Collapse in={this.state.showStepHeaderDesc}>
@@ -50,6 +58,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                                 onBlur={this.showDescriptionIfDesktop}
                                 value={this.props.saveDescription}
                                 onChange={this.onChangeCurrentDescription}
+                                disabled={!hasPermission(this.context.permission, EditSavesPermission)}
                             />
                         </div>
                     </Collapse>
