@@ -1,6 +1,9 @@
+@import "/src/themes.scss";
 
 #swot-factors .accordion-body {
-  background-color: #f1f1f1;
+  @include theme() {
+    background-color: get("bg-color");
+  }
 }
 
 #swot-classify-alternate-actions {
@@ -103,6 +106,8 @@
 
 .alternative-actions {
   .progressBar .progress-bar {
-    background-color: #060139;
+    @include theme() {
+      background-color: get("style-color");
+    }
   }
 }

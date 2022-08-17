@@ -83,6 +83,13 @@ interface axisValues {
     endShare: number
 }
 
+interface PointGroup {
+    name: string,
+    points: Point[]
+}
+
+type PointGroups = PointGroup[]
+
 /**
  * Props des Koordinatensystems
  */
@@ -146,11 +153,24 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
     static maxWidth = 700;
     static standardThickness = 1;
     static standardAccuracy = 3;
+    static pointGroupDeviation = 0.005;
 
     // Standardwerte der Größen
     static standardPointSize = 4;
     static minPointSize = 3;
     static maxPointSize = 12;
+
+    private static isInRange(value: number, range: NumberRange): boolean {
+        return value <= range.end && value >= range.start;
+    }
+
+    private static isPointInGroup(p: Point, group: PointGroup): boolean {
+        for (const point of group.points) {
+            if (p === point)
+                return true;
+        }
+        return false;
+    }
 
     render() {
         let maxWidth = (this.props.maxWidth) ?? CoordinateSystem.maxWidth;
@@ -168,6 +188,8 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
         let xAxisAccuracy = this.getAxisAccuracy(this.props.axis.x);
         let yAxisAccuracy = this.getAxisAccuracy(this.props.axis.y);
         let gridItems = this.getGridItems(xAxisAccuracy * yAxisAccuracy);
+
+        let pointGroups = this.getPointGroups();
 
         return (
             <div className={"coordinate-system-wrapper"} style={{maxWidth: maxWidth}}>
@@ -189,56 +211,67 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                         )}
                     <div className={"coordinate-system"}>
                         <div className={"points"}>
-                            {this.props.points.map((point, index) => {
-                                let maxX = this.props.axis.x.maxValue;
-                                let maxY = this.props.axis.y.maxValue;
+                            {pointGroups.map((pointGroup) => {
+                                return pointGroup.points.map((point, index) => {
+                                    let maxX = this.props.axis.x.maxValue;
+                                    let maxY = this.props.axis.y.maxValue;
 
-                                if (point.x > maxX || point.y > maxY) {
-                                    throw Error("Point outside of Coordinate-System.");
-                                }
+                                    if (point.x > maxX || point.y > maxY) {
+                                        throw Error("Point outside of Coordinate-System.");
+                                    }
 
-                                let leftPlacement = (point.x / maxX) * 100;
-                                let rightPlacement = 100 - leftPlacement;
+                                    let leftPlacement = (point.x / maxX) * 100;
+                                    let rightPlacement = 100 - leftPlacement;
 
-                                let bottomPlacement = (point.y / maxY) * 100;
-                                let topPlacement = 100 - bottomPlacement;
+                                    let bottomPlacement = (point.y / maxY) * 100;
+                                    let topPlacement = 100 - bottomPlacement;
 
-                                let sizeMultiplier = point.sizeMultiplier;
-                                let size = Math.min(Math.max(CoordinateSystem.minPointSize, CoordinateSystem.standardPointSize * sizeMultiplier), CoordinateSystem.maxPointSize);
+                                    let sizeMultiplier = point.sizeMultiplier;
+                                    let size = Math.min(Math.max(CoordinateSystem.minPointSize, CoordinateSystem.standardPointSize * sizeMultiplier), CoordinateSystem.maxPointSize);
 
-                                return (
-                                    <div
-                                        key={"POINT-" + point.x + "-" + point.y + "-" + index}
-                                        className={"point"}
-                                        data-x={point.x}
-                                        data-y={point.y}
-                                        style={{
-                                            top: String(topPlacement) + "%",
-                                            left: String(leftPlacement) + "%",
-                                            bottom: String(bottomPlacement) + "%",
-                                            right: String(rightPlacement) + "%",
-                                            width: String(size) + "%",
-                                            height: String(size) + "%"
-                                        }}
-                                    >
-                                        <OverlayTrigger
-                                            trigger={["hover", "focus"]}
-                                            placement="top"
-                                            overlay={(this.props.tooltipContentRenderer) ? (
-                                                <Tooltip>
-                                                    {this.props.tooltipContentRenderer(point)}
-                                                </Tooltip>
-                                            ) : <></>}
+                                    return (
+                                        <div
+                                            key={"POINT-" + point.x + "-" + point.y + "-" + index}
+                                            className={"point"}
+                                            data-x={point.x}
+                                            data-y={point.y}
+                                            style={{
+                                                top: String(topPlacement) + "%",
+                                                left: String(leftPlacement) + "%",
+                                                bottom: String(bottomPlacement) + "%",
+                                                right: String(rightPlacement) + "%",
+                                                width: String(size) + "%",
+                                                height: String(size) + "%"
+                                            }}
                                         >
-                                            <div
-                                                className={"circle"}
-                                                style={{
-                                                    backgroundColor: point.color
-                                                }}
-                                            />
-                                        </OverlayTrigger>
-                                    </div>
-                                );
+                                            <OverlayTrigger
+                                                trigger={["hover", "focus"]}
+                                                placement={"top"}
+                                                overlay={(this.props.tooltipContentRenderer) ? (
+                                                    <Tooltip>
+                                                        <div className={`group ${pointGroup.name}`}
+                                                             data-group={pointGroup.name}>
+                                                            {pointGroup.points.map((point2) => {
+                                                                return (
+                                                                    <div className={`point`} data-point={point2.header}>
+                                                                        {this.props.tooltipContentRenderer?.call(this.props.tooltipContentRenderer, point2)}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </Tooltip>
+                                                ) : <></>}
+                                            >
+                                                <div
+                                                    className={"circle"}
+                                                    style={{
+                                                        backgroundColor: point.color
+                                                    }}
+                                                />
+                                            </OverlayTrigger>
+                                        </div>
+                                    );
+                                })
                             })}
                         </div>
 
@@ -312,6 +345,50 @@ class CoordinateSystem extends Component<CoordinateSystemProps, any> {
                 </div>
             </div>
         );
+    }
+
+    private getPointGroups(): PointGroups {
+        let groups: PointGroups = [];
+        let g = 1;
+        let currentGroup: PointGroup = {
+            name: "group-" + g,
+            points: []
+        };
+
+        for (let i = 1; i < this.props.points.length; i++) {
+            let point = this.props.points[i];
+            let prevPoint = this.props.points[i - 1];
+
+            let xRange: NumberRange = {
+                start: prevPoint.x * (1 - CoordinateSystem.pointGroupDeviation),
+                end: prevPoint.x * (1 + CoordinateSystem.pointGroupDeviation)
+            };
+            let yRange: NumberRange = {
+                start: prevPoint.y * (1 - CoordinateSystem.pointGroupDeviation),
+                end: prevPoint.y * (1 + CoordinateSystem.pointGroupDeviation)
+            };
+
+            if (CoordinateSystem.isInRange(point.x, xRange) && CoordinateSystem.isInRange(point.y, yRange)) {
+                if (!CoordinateSystem.isPointInGroup(prevPoint, currentGroup)) {
+                    currentGroup.points.push(prevPoint);
+                }
+                currentGroup.points.push(point);
+            } else {
+                if (i === 1) {
+                    currentGroup.points.push(prevPoint);
+                }
+                groups.push(currentGroup);
+                g++;
+                currentGroup = {
+                    name: "group-" + g,
+                    points: []
+                };
+                currentGroup.points.push(point);
+            }
+        }
+        if (!groups.includes(currentGroup))
+            groups.push(currentGroup);
+        return groups;
     }
 
     /**

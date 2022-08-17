@@ -1,16 +1,21 @@
-@import "src/scss/variables/variables";
+@import "src/themes";
 
 .input-group, .addCard {
   margin-top: 5px;
 }
 
 .addCard {
-  background-color: $color;
   transition: 0.2s;
   cursor: pointer;
 
+  @include theme() {
+    background-color: get("style-color");
+  }
+
   :hover {
-    background-color: lighten($color, 10%);
+    @include theme() {
+      background-color: lighten(get("style-color"), 10%);
+    }
   }
 
   * {
@@ -36,31 +41,49 @@
     border-left: none;
   }
 
+  .id.disabled {
+    @include theme() {
+      background-color: adjust-color(get("input-bg-color"), $alpha: -0.3);
+      border-color: adjust-color(get("input-border-color"), $alpha: -0.3);
+    }
+  }
+
   .id {
-    border: 1px solid #ced4da;
+    border: 1px solid;
     border-right: none;
     padding: 0.375rem 0.5rem;
-    background-color: white;
+
+    @include theme() {
+      background-color: get("input-bg-color");
+      border-color: get("input-border-color");
+    }
   }
 
   .id:empty {
+    display: none;
     padding: 0 !important;
   }
 
-  .id[aria-disabled="true"] {
-    background-color: #e9ecef;
-  }
-
   button.noButton {
-    color: $color;
-    background-color: white;
-    border: 1px solid #ced4da;
+    border: 1px solid;
     border-left: none;
-  }
 
-  button:focus {
-    box-shadow: none;
-  }
+    @include theme() {
+      border-color: get("input-border-color");
+      background-color: get("input-bg-color");
+      color: get("style-color") !important;
+    }
 
+    > svg {
+      @include theme() {
+        color: get("text-color") !important;
+      }
+    }
+  }
+  button.noButton:hover {
+    @include theme() {
+      background-color: darken(get("input-bg-color"), 2%);
+    }
+  }
 
 }

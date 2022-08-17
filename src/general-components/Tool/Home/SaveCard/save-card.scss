@@ -1,4 +1,5 @@
 @import "~bootstrap/scss/bootstrap-utilities";
+@import "/src/themes.scss";
 
 .save {
   transition: background-color 0.3s ease-out;
@@ -10,11 +11,6 @@
 
   * {
     pointer-events: none;
-  }
-
-  .save-card {
-    opacity: 0.80;
-    background-color: #e1e1e1;
   }
 
   .deleting {
@@ -31,11 +27,18 @@
 
 .save-body {
   padding: 0.8rem 0.8rem;
-}
 
-.save-card:hover {
-  background-color: var(--bs-gray-200);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  .created-date.desktop {
+    position: absolute;
+    right: 0.3rem;
+    bottom: 0.3rem;
+  }
+
+  .card-title {
+    @include theme() {
+      color: get("style-color");
+    }
+  }
 }
 
 .save-card-dummy {
@@ -51,8 +54,11 @@
 
 .dummy {
   display: inline-block;
-  color: #eeeeee;
-  background-color: #eeeeee;
   border-radius: 5px;
+
+  @include theme() {
+    background-color: darken(get("card-bg-color"), 2%) !important;
+    color: darken(get("card-bg-color"), 2%) !important;
+  }
 }
 

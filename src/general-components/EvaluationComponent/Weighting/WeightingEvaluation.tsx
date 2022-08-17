@@ -46,7 +46,7 @@ class WeightingEvaluation<D = any> {
     private readonly fields: CardComponentFields<D>;
     private readonly comparisons: CompareComponentValues;
 
-    private sortedResult: SingleResult[];
+    private readonly sortedResult: SingleResult[];
 
     constructor(cardComponentFields: CardComponentFields<D>, compareComponentValues: CompareComponentValues) {
         this.fields = cardComponentFields;
@@ -90,7 +90,7 @@ class WeightingEvaluation<D = any> {
      * @returns {any[]}
      */
     public static sort(unsorted: any[]) {
-        let sorted = unsorted.sort((a, b) => {
+        return unsorted.sort((a, b) => {
             if (a.points > b.points) {
                 return -1;
             }
@@ -99,7 +99,6 @@ class WeightingEvaluation<D = any> {
             }
             return 0;
         });
-        return sorted;
     }
 
     /**
@@ -181,8 +180,8 @@ class WeightingEvaluation<D = any> {
         let rank = 1;
         let i = 0;
 
-        for (const field of this.values.result) {
-            if (i > 0 && field.points < this.values.result[i - 1].points) {
+        for (const field of this.sortedResult) {
+            if (i > 0 && field.points < this.sortedResult[i - 1].points) {
                 rank++;
             }
             field.rank = rank;

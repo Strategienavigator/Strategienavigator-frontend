@@ -31,7 +31,11 @@ export const SettingsContext = createContext<ISettingsContext>({
     isLoading: false
 });
 
+export type SettingsChanger = (oldSettings: SettingsList, newSettings: SettingsList) => void;
+
+
 export class SettingsContextComponent extends Component<any, SettingsContextState> {
+    private static settingsChanger: SettingsChanger[] = [];
     private settingsCache?: SettingsCache;
 
     constructor(props: any) {
@@ -47,6 +51,18 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
         }
     }
 
+    public static addSettingsChangeListener(listener: SettingsChanger) {
+        if (!SettingsContextComponent.settingsChanger.some((find) => find === listener)) {
+            SettingsContextComponent.settingsChanger.push(listener);
+        }
+    }
+
+    public static removeSettingsChangeListener(listener: SettingsChanger) {
+        let index = SettingsContextComponent.settingsChanger.indexOf(listener);
+        if (index >= 0) {
+            SettingsContextComponent.settingsChanger.slice(index, 1);
+        }
+    }
 
     render() {
         return (
@@ -98,6 +114,10 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
             this.setLoading(true);
 
             await this.settingsCache.updateUserData();
+
+            for (const f of SettingsContextComponent.settingsChanger) {
+                f(this.state.settingsContext.settings, this.settingsCache.userSettings);
+            }
 
             this.setState({
                 settingsContext: {

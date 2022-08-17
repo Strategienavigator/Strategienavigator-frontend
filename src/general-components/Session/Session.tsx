@@ -10,8 +10,6 @@ import {createUser} from "../API/calls/User";
 export type UserCallback = (user: User | null) => void;
 
 class Session {
-
-
     static userChangedCallbacks: UserCallback[] = [];
     static currentUser: User | null = null;
 

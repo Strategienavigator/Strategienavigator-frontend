@@ -1,13 +1,25 @@
-@import "scss/variables/variables";
-@import "~bootstrap/scss/bootstrap.scss";
-@import "scss/feedback.scss";
-@import "scss/accordion.scss";
-@import "scss/modal.scss";
+// BOOTSTRAP
+@import "./scss/bootstrap/bootstrap.scss";
 
+// IMPORTED STYLES
+@import "scss/feedback.scss";
+@import "scss/modal.scss";
+@import "scss/links.scss";
+
+
+// STYLE
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body.smooth-transition {
+  transition: 0.5s ease-in-out;
+
+  * {
+    transition: 0.5s ease-in-out;
+  }
 }
 
 body, #root, html {
@@ -16,13 +28,17 @@ body, #root, html {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $bgColor;
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
   height: 100%;
   position: relative;
   z-index: 500;
+
+  @include theme() {
+    background-color: get("bg-color");
+    color: get("text-color");
+  }
 }
 
 #root {
@@ -48,7 +64,13 @@ code {
 }
 
 svg {
-  color: $color;
+  @include theme() {
+    color: get("style-color");
+  }
+}
+
+button.btn > svg {
+  color: white;
 }
 
 #content {

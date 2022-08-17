@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import './index.scss';
+
 import Nav from "./components/platform/nav/Nav";
 import {BrowserRouter as Router, matchPath, Switch} from "react-router-dom";
 import {ProtectedRoute as Route} from "./general-components/ProtectedRoute";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.scss';
 
 import {Imprint} from "./components/platform/imprint/Imprint";
 import {DataPrivacy} from "./components/platform/data-privacy/DataPrivacy";
@@ -33,7 +34,11 @@ import {ErrorPages} from "./general-components/Error/ErrorPages/ErrorPages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
 import {InvitationDecision} from "./components/platform/sharing/Invitation/InvitationDecision";
 import {ContributionDecision} from "./components/platform/sharing/Contribution/ContributionDecision";
+import {SettingsContextComponent} from "./general-components/Contexts/SettingsContextComponent";
+import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
 
+// Add SettingsChangeListener for Darkmode
+SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
 
 /**
  *
@@ -101,7 +106,7 @@ const getAppContent = () => {
     return (
         <>
             <GlobalContexts key={"global-contexts"}>
-                <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
+                <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"} payload={[]}>
                     <Router ref={routerRef}>
 
                         <Nav/>
@@ -168,7 +173,7 @@ const manageLoading = async () => {
     ReactDOM.render(
         <React.StrictMode>
             <GlobalContexts key={"global-contexts"}>
-                <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
+                <Loader key={"loader"} animate fullscreen loaded={false} variant={"style"} payload={[]}/>
             </GlobalContexts>
         </React.StrictMode>,
         document.getElementById('root')

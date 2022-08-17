@@ -1,3 +1,5 @@
+@import "/src/themes.scss";
+
 // HEADER
 .singleComparison.header {
   font-weight: 700;
@@ -41,7 +43,9 @@
   white-space: break-spaces;
 
   .comparison[aria-disabled="true"] {
-    color: transparentize(black, 0.7);
+    @include theme() {
+      color: transparentize(get("text-color"), 0.7);
+    }
   }
 
   .comparison {

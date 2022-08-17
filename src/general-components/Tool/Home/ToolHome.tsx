@@ -158,16 +158,15 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
 
                     <span className={"sorting-button"}>
-                        <span>
-                            {isDesktop() && (
-                                <>
-                                    Nach Erstelldatum sortieren:
-                                </>
-                            )}
-                        </span>
+                        {isDesktop() && (
+                            <span>Nach Erstelldatum sortieren: </span>
+                        )}
+
                         <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
                                 className={"btn btn-primary"}
-                                onClick={this.orderingChangedCallback}>
+                                onClick={this.orderingChangedCallback}
+                                title={"Nach Erstelldatum sortieren"}
+                        >
                             <FAE
                                 icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
                         </Button>
