@@ -1,0 +1,53 @@
+@import "/src/themes.scss";
+
+$style-color: map_get(map_get($themes, "light"), "style-color");
+$bg-color: map_get(map_get($themes, "light"), "bg-color");
+
+// DROPDOWN
+$dropdown-link-active-bg: $style-color !important;
+$dropdown-link-active-color: white !important;
+$dropdown-link-hover-bg: $style-color !important;
+$dropdown-link-hover-color: white !important;
+
+// INPUTS
+$input-focus-box-shadow: 0 0 0 0.25rem adjust-color($style-color, $alpha: -0.9);
+$input-focus-border-color: adjust-color($style-color, $alpha: -0.6);
+$input-bg: map_get(map_get($themes, "light"), "input-bg-color");
+$input-color: map_get(map_get($themes, "light"), "input-text-color");
+$input-border-color: map_get(map_get($themes, "light"), "input-border-color");
+$input-focus-bg: map_get(map_get($themes, "light"), "input-bg-color");
+$input-focus-color: map_get(map_get($themes, "light"), "input-text-color");
+$input-focus-border-color: darken(map_get(map_get($themes, "light"), "input-border-color"), 2%);
+$input-placeholder-color: map_get(map_get($themes, "light"), "input-placeholder-color");
+
+// FORM-CHECK
+$form-check-input-checked-bg-color: $style-color;
+$form-check-input-focus-box-shadow: 0 0 0 0.25rem adjust-color($style-color, $alpha: -0.9);
+$form-check-input-checked-color: white;
+
+// TABLES
+$table-variants: (
+  "light": map_get(map_get($themes, "light"), "table-bg-color")
+);
+
+// ACCORDION
+$accordion-button-active-color: $style-color;
+$accordion-icon-active-color: $style-color;
+$accordion-icon-color: $style-color;
+
+.accordion-body {
+  background-color: $bg-color;
+  border: 1px solid darken($bg-color, 8%);
+  border-top: none;
+}
+
+// THEMES
+$theme-colors: (
+        "dark": $style-color,
+        "primary": $style-color,
+        "blue": $style-color
+);
+
+.btn-primary, .btn-primary * {
+  color: white;
+}

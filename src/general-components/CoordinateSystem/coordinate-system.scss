@@ -36,6 +36,7 @@ $opacity: 0.75;
     > div {
       display: flex;
       justify-content: flex-start;
+      min-width: fit-content;
 
       > div.point {
         border-left: 10px solid;
@@ -62,8 +63,11 @@ $opacity: 0.75;
   display: grid;
 
   > div {
-    border: 1px solid #d3d3d3;
+    border: 1px solid rgb(211, 211, 211);
   }
+}
+.dark .grid-overlay > div {
+  border: 1px solid rgba(211, 211, 211, 0.4);
 }
 
 .coordinate-system {

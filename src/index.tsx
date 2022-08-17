@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import './index.scss';
+
 import Nav from "./components/platform/nav/Nav";
 import {BrowserRouter as Router, matchPath, Switch} from "react-router-dom";
 import {ProtectedRoute as Route} from "./general-components/ProtectedRoute";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.scss';
 
 import {Imprint} from "./components/platform/imprint/Imprint";
 import {DataPrivacy} from "./components/platform/data-privacy/DataPrivacy";
@@ -31,7 +32,12 @@ import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/Portfolio
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import {ErrorPages} from "./general-components/Error/ErrorPages/ErrorPages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
+import {SettingsContextComponent} from "./general-components/Contexts/SettingsContextComponent";
+import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
 
+
+// Add SettingsChangeListener for Darkmode
+SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
 
 /**
  *

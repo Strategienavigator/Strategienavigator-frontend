@@ -1,0 +1,102 @@
+@import "/src/themes.scss";
+
+$style-color: map_get(map_get($themes, "dark"), "style-color");
+$bg-color: map_get(map_get($themes, "dark"), "bg-color");
+$text-color: map_get(map_get($themes, "dark"), "text-color");
+
+$input-bg-color: map_get(map_get($themes, "dark"), "input-bg-color");
+$input-text-color: map_get(map_get($themes, "dark"), "input-text-color");
+$own-input-border-color: map_get(map_get($themes, "dark"), "input-border-color");
+
+$own-card-bg-color: map_get(map_get($themes, "dark"), "card-bg-color");
+$own-card-text-color: map_get(map_get($themes, "dark"), "card-text-color");
+
+$form-bg-color: map_get(map_get($themes, "dark"), "form-bg-color");
+$form-text-color: map_get(map_get($themes, "dark"), "form-text-color");
+$form-border-color: map_get(map_get($themes, "dark"), "form-border-color");
+$form-disabled-bg-color: map_get(map_get($themes, "dark"), "form-disabled-bg-color");
+$form-disabled-text-color: map_get(map_get($themes, "dark"), "form-disabled-text-color");
+$form-disabled-border-color: map_get(map_get($themes, "dark"), "form-disabled-border-color");
+
+// DROPDOWN
+$dropdown-bg: darken($bg-color, 1%);
+$dropdown-border-color: darken($bg-color, 8%);
+$dropdown-link-active-bg: darken($bg-color, 8%);
+$dropdown-link-active-color: $text-color;
+$dropdown-link-hover-bg: darken($bg-color, 8%);
+$dropdown-link-hover-color: $text-color;
+
+// INPUTS
+$input-focus-box-shadow: 0 0 0 0.25rem adjust-color($style-color, $alpha: -0.9);
+$input-focus-border-color: adjust-color($style-color, $alpha: -0.6);
+$input-bg: $input-bg-color;
+$input-color: $input-text-color;
+$input-border-color: $own-input-border-color;
+$input-focus-bg: $input-bg-color;
+$input-focus-color: $input-text-color;
+$input-focus-border-color: darken($own-input-border-color, 2%);
+$input-placeholder-color: map_get(map_get($themes, "dark"), "input-placeholder-color");
+$input-disabled-bg: adjust-color($input-bg-color, $alpha: -0.3);
+$input-disabled-border-color: adjust-color($own_input-border-color, $alpha: -0.3);
+
+// MODAL
+$modal-content-bg: $bg-color;
+$modal-content-color: $text-color;
+
+// TABLES
+$table-variants: (
+  "light": map_get(map_get($themes, "dark"), "table-bg-color"),
+  "dark": map_get(map_get($themes, "dark"), "table-bg-color"),
+);
+
+// CARD
+$card-bg: $own-card-bg-color;
+$card-color: $own-card-text-color;
+$card-border-color: darken(map_get(map_get($themes, "dark"), "card-bg-color"), 3%);
+
+// ACCORDION
+$accordion-bg: $own-card-bg-color;
+$accordion-border-color: darken($own-card-bg-color, 3%);
+$accordion-button-bg: $own-card-bg-color;
+$accordion-button-color: $own-card-text-color;
+$accordion-button-active-bg: $own-card-bg-color;
+$accordion-button-active-color: $own-card-text-color;
+$accordion-icon-active-color: $own-card-text-color;
+$accordion-icon-color: $own-card-text-color;
+
+.accordion-body {
+  background-color: $bg-color;
+  border: 1px solid lighten($bg-color, 4%);
+  border-top: none;
+}
+
+// OFFCANVAS
+$offcanvas-bg-color: $bg-color;
+$offcanvas-color: $text-color;
+
+// PROGRESSBAR
+$progress-bar-bg: map_get(map_get($themes, "dark"), "card-bg-color");
+$progress-bar-color: map_get(map_get($themes, "dark"), "card-text-color");
+$progress-bg: map_get(map_get($themes, "dark"), "card-bg-color");
+
+// THEMES
+$theme-colors: (
+    "dark": $style-color,
+    "primary": $style-color,
+    "blue": $style-color,
+    "light": $bg-color
+);
+$dark: $bg-color;
+
+// FORM SELECT
+$form-select-bg: $form-bg-color;
+$form-select-color: $form-text-color;
+$form-select-border-color: $form-border-color;
+$form-select-disabled-bg: $form-disabled-bg-color;
+$form-select-disabled-color: $form-disabled-text-color;
+$form-select-disabled-border-color: $form-border-color;
+
+// FORM CHECKBOX
+$form-check-input-bg: $form-bg-color;
+$form-check-input-checked-bg-color: $style-color;
+$form-check-input-checked-border-color: $style-color;

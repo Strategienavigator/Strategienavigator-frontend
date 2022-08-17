@@ -90,7 +90,7 @@ export class SettingsCache {
     public shouldUpdate() {
         let today = new Date();
         let diff = today.getTime() - this.lastLoad.getTime()
-        return diff > 300000// 1000*60*5 5min
+        return diff > 300000; // 1000*60*5 5min
     }
 
     /**
@@ -99,7 +99,7 @@ export class SettingsCache {
      * @param cachedUserSettings Ob die User Einstellungen auch aus dem Cache geladen werden dürfen
      * @private
      */
-    private async loadData(cachedSettings: boolean = false, cachedUserSettings: boolean = false) {
+    private async loadData(cachedSettings: boolean = false, cachedUserSettings: boolean = false): Promise<UserSetting[]> {
         // Promise.all damit die Backend calls gleichzeitig stattfinden können und nicht nacheinander passieren müssen
         const [settings, userSettings] = await Promise.all([this.settingsLoader.getAll(cachedSettings), this.userSettingsLoader.getAll(cachedUserSettings)]);
         return settings.map((s) => {

@@ -1,8 +1,10 @@
-@import "src/scss/variables/variables";
+@import "src/themes";
 
 
 .navbar {
-  background-color: $navBGColor;
+  @include theme() {
+    background-color: get("nav-bg-color");
+  }
 }
 
 nav {
@@ -44,9 +46,12 @@ nav .dropdown-menu .dropdown-item:active * {
     max-height: 90vh;
     overflow-y: auto;
     padding: 0.5rem 1rem;
-    background-color: lighten($navBGColor, 50%);
     transform: translateX(-50%);
     border: 1px solid lightgrey;
+
+    @include theme() {
+      background-color: get("nav-bg-color");
+    }
 
     .header {
       padding-left: 0.5rem;
@@ -63,7 +68,9 @@ nav .dropdown-menu .dropdown-item:active * {
       width: 100%;
 
       .result.active, .result.none {
-        background-color: darken($navBGColor, 2%);
+        @include theme() {
+          background-color: darken(get("nav-bg-color"), 2%);
+        }
       }
 
       .result.none {

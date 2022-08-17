@@ -1,0 +1,22 @@
+@import "src/themes";
+
+a {
+  text-decoration: none !important;
+  transition: 0.15s !important;
+
+  @include theme() {
+    color: get("link-color") !important;
+  }
+}
+
+a:hover {
+  @include theme() {
+    color: get("link-hover-color") !important;
+  }
+}
+
+a:active, a:focus {
+  @include theme() {
+    color: get("link-active-color") !important;
+  }
+}

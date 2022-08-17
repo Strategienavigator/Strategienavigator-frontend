@@ -4,7 +4,7 @@ import {Property} from "csstype";
 /**
  * @type {string[]} Enthält die Farben der Punkte
  */
-export const PointColors = ["red", "blue", "green", "yellow", "orange", "gold", "violet", "cyan"];
+export const PointColors = ["red", "lime", "fuchsia", "gold", "darkgreen", "bisque", "navy", "deepskyblue"];
 
 /**
  * Stellt einen Punkt im Koordinatensystem dar

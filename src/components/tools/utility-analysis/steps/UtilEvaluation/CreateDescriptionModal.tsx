@@ -25,7 +25,7 @@ function CreateDescriptionModal(props: CreateDescriptionModalProps) {
             >
                 <Modal.Body>
                     <div className={"test"}>
-                        <Table striped bordered hover>
+                        <Table striped variant={"light"} bordered hover>
                             <thead>
                             <tr>
                                 <th>Skala</th>

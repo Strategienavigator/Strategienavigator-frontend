@@ -1,3 +1,5 @@
+@import "src/themes";
+
 
 .controlFooter.show {
   display: flex !important;
@@ -7,10 +9,13 @@
 
 .controlFooter {
   display: none;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  background-color: #f8f9fa;
-  color: black;
+
+  @include theme() {
+    background-color: get("control-footer-bg-color");
+    color: get("text-color");
+  }
 
   .item {
     flex: auto 0 0;
@@ -32,11 +37,15 @@
 
   .item:empty {
     padding: 0 !important;
+    display: none;
   }
 
-  * {
-    color: black;
+  button {
     text-decoration: none;
+
+    @include theme() {
+      color: get("text-color");
+    }
   }
 
   > * {
