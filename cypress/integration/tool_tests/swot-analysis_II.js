@@ -62,7 +62,9 @@ function FillActionStep(index)
     }
     
 }
-
+/*
+Description: Checking the right colours on the div for the right position
+*/
 function CheckColor()
 {
     //Checkt die Farbe des Divs
@@ -78,6 +80,12 @@ function CheckColor()
         })
 
 }
+/*
+Description: Gets the testdata frm "tooltestdata" for simple fillings
+Parameters:
+    dataTyp - DOMELMENT: is in this case the DOM-Element that needs to be wrapped where the data shall be inputted
+    isName - BOOL -just a question if its the name key: value or the desc key:value    
+*/
 function UseTestData(dataTyp, isName)
 { 
     cy.fixture("tooltestdata").then(function (testdata)
