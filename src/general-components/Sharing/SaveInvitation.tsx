@@ -102,6 +102,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                     centered
                     onHide={this.props.onClose}
                     keyboard={true}
+                    fullscreen={"md-down"}
                 >
                     <Modal.Header>
                         <h4>Einladung erstellen</h4>
@@ -300,7 +301,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                             size={"sm"}
                             onClick={this.props.onClose}
                         >
-                            Abbrechen
+                            Schließen
                         </Button>
                     </Modal.Footer>
                 </ModalCloseable>
@@ -386,16 +387,20 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                 readOnly
                                 value={window.location.origin + "/invitation/" + this.state.showCopyModal?.token}
                             />
-                            <Button
-                                variant={"dark"}
-                                onClick={async () => {
-                                    let location = window.location.origin;
-                                    await navigator.clipboard.writeText(location + "/invitation/" + this.state.showCopyModal?.token);
-                                    Messages.add("Link kopiert!", "SUCCESS", Messages.TIMER);
-                                }}
-                            >
-                                <FAE icon={faCopy}/>
-                            </Button>
+                            {(window.navigator.clipboard && window.isSecureContext) && (
+                                <Button
+                                    variant={"dark"}
+                                    onClick={async () => {
+                                        if (window.navigator.clipboard && window.isSecureContext) {
+                                            let location = window.location.origin;
+                                            await window.navigator.clipboard.writeText(location + "/invitation/" + this.state.showCopyModal?.token);
+                                            Messages.add("Link kopiert!", "SUCCESS", Messages.TIMER);
+                                        }
+                                    }}
+                                >
+                                    <FAE icon={faCopy}/>
+                                </Button>
+                            )}
                         </InputGroup>
                     </Modal.Body>
                 </ModalCloseable>

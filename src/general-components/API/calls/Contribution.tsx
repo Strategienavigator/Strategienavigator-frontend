@@ -51,7 +51,7 @@ const createContribution = async (saveID: number, userID: number, data: CreateCo
     return await callAPI("api/saves/" + saveID + "/contributors/" + userID, "POST", apiData, true, apiArgs);
 }
 
-interface UpdateContribution {
+export interface UpdateContribution {
     permission: SharedSavePermission
     revoked: boolean
 }
@@ -66,7 +66,7 @@ interface UpdateContribution {
 const updateContribution = async (contributionID: number, data: UpdateContribution, apiArgs?: APIArgs) => {
     let apiData = new FormData();
     apiData.append("permission", String(data.permission));
-    apiData.append("revoked", String(data.revoked));
+    apiData.append("revoked", String(data.revoked ? 1 : 0));
 
     return await callAPI("api/contribution/" + contributionID, "PUT", apiData, true, apiArgs)
 }

@@ -1,5 +1,5 @@
 import {ModalCloseable} from "../../Modal/ModalCloseable";
-import {Badge, Modal} from "react-bootstrap";
+import {Badge, Button, Modal} from "react-bootstrap";
 import {SharedSaveResource} from "../../Datastructures";
 import {CollaboratorsComponent} from "../../CollaboratorsComponent/CollaboratorsComponent";
 
@@ -21,6 +21,7 @@ function CollaboratorsModal(props: CollaboratorsModalProps) {
                 props.onClose();
             }}
             keyboard={true}
+            fullscreen={"md-down"}
         >
             <Modal.Header>
                 <h5>Alle aktuellen Kollaborateure <Badge bg={"dark"} pill>{props.contributors.filter((v) => {
@@ -28,8 +29,20 @@ function CollaboratorsModal(props: CollaboratorsModalProps) {
                 }).length}</Badge></h5>
             </Modal.Header>
             <Modal.Body>
-                <CollaboratorsComponent collaborators={props.contributors}/>
+                <CollaboratorsComponent
+                    collaborators={props.contributors}
+                    editable
+                    deletable
+                />
             </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    size={"sm"}
+                    onClick={() => props.onClose()}
+                >
+                    Zurück
+                </Button>
+            </Modal.Footer>
         </ModalCloseable>
     );
 }

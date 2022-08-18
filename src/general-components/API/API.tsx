@@ -11,10 +11,12 @@ export interface CallInterface<D> {
 
 export interface APIArgs {
     errorCallback?: APIErrorCallback
+    keepalive?: boolean
 }
 
 export const DefaultAPIArgs = {
-    errorCallback: undefined
+    errorCallback: undefined,
+    keepalive: false
 }
 
 /**
@@ -41,40 +43,41 @@ const callAPI = async <D extends object>(
     token?: boolean,
     apiArgs?: APIArgs
 ): Promise<CallInterface<D> | null> => {
+    let callURL = process.env.REACT_APP_API + URL;
+
+    // METHOD
+    if (data?.constructor.name === "FormData" && method === "PUT") {
+        (data as FormData).append("_method", "PUT");
+        method = "POST";
+    }
+    if (data?.constructor.name === "URLSearchParams") {
+        callURL = callURL.concat("?" + (data as URLSearchParams).toString());
+        data = undefined;
+    }
+
+    // HEADER
+    let headers: HeadersInit = new Headers();
+    headers.append("Accept", "application/json");
+
+    // TODO: CAN BE REMOVED LATER
+    headers.append("Bypass-Tunnel-Reminder", "bypass");
+
+    // TOKEN
+    if (token !== undefined && token) {
+        let apiToken = Session.getToken() as string;
+        headers.append("Authorization", "Bearer " + apiToken);
+    }
+
+    // REQUEST-INIT
+    let requestInit: RequestInit = {
+        method: method,
+        headers: headers,
+        body: data,
+        mode: "cors",
+        keepalive: apiArgs?.keepalive
+    }
+
     try {
-        let callURL = process.env.REACT_APP_API + URL;
-
-        // METHOD
-        if (data?.constructor.name === "FormData" && method === "PUT") {
-            (data as FormData).append("_method", "PUT");
-            method = "POST";
-        }
-        if (data?.constructor.name === "URLSearchParams") {
-            callURL = callURL.concat("?" + (data as URLSearchParams).toString());
-            data = undefined;
-        }
-
-        // HEADER
-        let headers: HeadersInit = new Headers();
-        headers.append("Accept", "application/json");
-
-        // TODO: CAN BE REMOVED LATER
-        headers.append("Bypass-Tunnel-Reminder", "bypass");
-
-        // TOKEN
-        if (token !== undefined && token) {
-            let apiToken = Session.getToken() as string;
-            headers.append("Authorization", "Bearer " + apiToken);
-        }
-
-        // REQUEST-INIT
-        let requestInit: RequestInit = {
-            method: method,
-            headers: headers,
-            body: data,
-            mode: "cors"
-        }
-
         // CALL THE API
         let call = await fetch(callURL, requestInit);
         let callData = null;
