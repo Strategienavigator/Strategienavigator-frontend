@@ -1,13 +1,14 @@
+var testIndex = 0
 describe('SWOT Analyisis Part II', () => {
     beforeEach(() =>{
         cy.task("queryDb",`DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
         cy.CreateSave("swot-1","TEST-SWOT VON MAX",2)
     })
     it('trys to load save and create action steps',() =>{
-
-       cy.LoginAndLoad("swot")
-        
-       cy.contains("Weiter")
+       
+        cy.LoginAndLoad("swot")
+       
+        cy.contains("Weiter")
         .click()  
         for (let i = 0; i < 64; i++) 
         {
@@ -41,16 +42,19 @@ function FillActionStep(index)
         {
             if($name.is(":visible"))
             {
-                UseTestData($name)                
+                UseTestData($name, true)
+                
             }
-         }) 
+        }) 
          cy.get('textarea[placeholder="Beschreibung"]')
          .each(($desc) =>{
              if($desc.is(":visible"))
              {
-                UseTestData($desc)
+                UseTestData($desc, false)
+                
              }
-         })       
+        })
+
     }else
     {
         cy.get("[type=checkbox]")
@@ -65,28 +69,32 @@ function CheckColor()
     cy.get('div[class="green"]')
         .each(($divG) =>
         {
-            cy.wrap($divG)
-            .should('have.css', 'background-color', 'rgb(0, 128, 0)')
+            cy.wrap($divG).should('have.css', 'background-color', 'rgb(0, 128, 0)')
         })
         cy.get('div[class="red"]')
         .each(($divG) =>
         {
-            cy.wrap($divG)
-            .should('have.css', 'background-color', 'rgb(255, 0, 0)')
+            cy.wrap($divG).should('have.css', 'background-color', 'rgb(255, 0, 0)')
         })
 
 }
-function UseTestData(dataTyp)
+function UseTestData(dataTyp, isName)
 { 
     cy.fixture("tooltestdata").then(function (testdata)
     {
         this.testdata = testdata;
 
         let data = this.testdata.data
-        let index = Math.floor(Math.random()*data.length)
-        
-        cy.wrap(dataTyp)
-        .type(data[index]["name"]) 
+        //let index = Math.floor(Math.random()*data.length)
+        if (isName)
+        {
+            cy.wrap(dataTyp)
+            .type(data[testIndex]["name"])
+        }else{
+            cy.wrap(dataTyp)
+            .type(data[testIndex]["desc"])
+        }
+        testIndex += 1
      })
      
  }

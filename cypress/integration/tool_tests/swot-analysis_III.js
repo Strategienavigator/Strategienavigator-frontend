@@ -38,22 +38,41 @@ describe('SWOT Analyisis Part III', () => {
         for (let i = 0; i < 84; i++) 
         {         
             cy.get("form[id='swot-classify-alternate-actions']>.actionCards")
-            .find("button[class='btn btn-primary btn-sm']")
+            .find("button[class='btn btn-primary btn-sm']").as("button")
             .first()
             .click()   
             
             let select
+            let value
+
+            cy.get("@button")
+            .parent()
+            .parent()
+            .children()
+            .next()
+            .first()
+            .invoke("text")
+            .as("text")
 
             if (i % 2)
             {               
                 select = 'droppable-1'
+                value = "input[value='Klassifikation 1']"
             }else
             {
                 select = 'droppable-2'
+                value = "input[value='Klassifikation 2']"
             }
             cy.get('.modal-body select').select(select)
-        }
 
+            cy.get(value)
+            .click()
+            cy.wait(100)
+            cy.get('@text').then((text) => {
+                cy.contains(text)
+            })
+           
+        }
         cy.contains("Speichern")
         .click();   
         cy.log("No real check here, can't figure one out")
