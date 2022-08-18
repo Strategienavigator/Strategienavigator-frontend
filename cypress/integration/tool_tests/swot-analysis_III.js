@@ -3,9 +3,10 @@ const { wait } = require("@testing-library/react");
 describe('SWOT Analyisis Part III', () => {
     beforeEach(() =>{
         cy.task("queryDb",`DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
-        cy.CreateSave("swot-2","TEST-SWOT VON MAX",2)
+        
     })
     it('trys to classify the steps',() =>{
+        cy.CreateSave("swot-2","TEST-SWOT VON MAX",2)
         cy.LoginAndLoad("swot")
 
         cy.get("button[class='addClassification btn btn-primary']")
@@ -44,33 +45,17 @@ describe('SWOT Analyisis Part III', () => {
             let select
 
             if (i % 2)
-            {
-                
+            {               
                 select = 'droppable-1'
-
             }else
             {
                 select = 'droppable-2'
             }
             cy.get('.modal-body select').select(select)
-    
         }
+
         cy.contains("Speichern")
         .click();   
-        CheckDistributionOfCards()
+        cy.log("No real check here, can't figure one out")
     })
 })
-function CheckDistributionOfCards()
-{
-    cy.get("button[class='accordion-button collapsed']")
-    .each(($list) => {
-        
-        cy.wrap($list)
-        .click()
-        cy.get("div[class='actionCard'")
-        .find("div[class='actionCard card'")
-        .each(($card) =>{ 
-        })
-
-    })
-}

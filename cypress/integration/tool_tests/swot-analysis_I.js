@@ -173,13 +173,13 @@ function FillFactors()
   //fixtures tootestdata swot werden hier genutzt
   cy.fixture("tooltestdata").then(function (testdata)
   {
-  this.testdata = testdata;
-  var swot = this.testdata.swot
-  cy.get("input")
-    .each(GetFillFunction("title", swot))
+    this.testdata = testdata;
+    var swot = this.testdata.swot
+    cy.get("input")
+      .each(GetFillFunction("title", swot))
 
-  cy.get("textArea")
-    .each(GetFillFunction("desc", swot))
+    cy.get("textArea")
+      .each(GetFillFunction("desc", swot))
   })
 
   //Hier wird nur übeprüft ob die richtigen Daten im richtigen Feld landen.

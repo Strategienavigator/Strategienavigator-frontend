@@ -41,8 +41,7 @@ function FillActionStep(index)
         {
             if($name.is(":visible"))
             {
-                UseTestData($name)
-                
+                UseTestData($name)                
             }
          }) 
          cy.get('textarea[placeholder="Beschreibung"]')
@@ -66,12 +65,14 @@ function CheckColor()
     cy.get('div[class="green"]')
         .each(($divG) =>
         {
-            cy.wrap($divG).should('have.css', 'background-color', 'rgb(0, 128, 0)')
+            cy.wrap($divG)
+            .should('have.css', 'background-color', 'rgb(0, 128, 0)')
         })
         cy.get('div[class="red"]')
         .each(($divG) =>
         {
-            cy.wrap($divG).should('have.css', 'background-color', 'rgb(255, 0, 0)')
+            cy.wrap($divG)
+            .should('have.css', 'background-color', 'rgb(255, 0, 0)')
         })
 
 }
