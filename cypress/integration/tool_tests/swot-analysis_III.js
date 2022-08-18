@@ -75,6 +75,5 @@ describe('SWOT Analyisis Part III', () => {
         }
         cy.contains("Speichern")
         .click();   
-        cy.log("No real check here, can't figure one out")
     })
 })
