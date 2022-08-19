@@ -43,8 +43,10 @@ describe('SWOT Analyisis Part III', () => {
             .click()   
             
             let select
-            let value
+            let inputValue
+            let valueText
 
+            //To get a specific child and the text out of it.
             cy.get("@button")
             .parent()
             .parent()
@@ -57,19 +59,32 @@ describe('SWOT Analyisis Part III', () => {
             if (i % 2)
             {               
                 select = 'droppable-1'
-                value = "input[value='Klassifikation 1']"
+                inputValue = "input[value='Klassifikation 1']"
+                valueText = 'Klassifikation 1'
+
             }else
             {
                 select = 'droppable-2'
-                value = "input[value='Klassifikation 2']"
+                inputValue = "input[value='Klassifikation 2']"
+                valueText = 'Klassifikation 2'
             }
             cy.get('.modal-body select').select(select)
 
-            cy.get(value)
-            .click()
-            cy.wait(100)
             cy.get('@text').then((text) => {
+                //going through the tree to find current parents and being part of the right input group
                 cy.contains(text)
+                .parent()
+                .parent()
+                .parent()
+                .parent()
+                .parent()
+                .parent()
+                .parent()
+                .children(".accordion-header")
+                .children(".accordion-button")
+                .children(".input-group")
+                .find("input")
+                .should("contain.value", valueText)
             })
            
         }
