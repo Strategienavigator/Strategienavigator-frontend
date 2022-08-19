@@ -1,3 +1,4 @@
+@import "~bootstrap/scss/variables";
 @import "/src/themes.scss";
 
 $style-color: map_get(map_get($themes, "light"), "style-color");
@@ -27,7 +28,8 @@ $form-check-input-checked-color: white;
 
 // TABLES
 $table-variants: (
-        "light": map_get(map_get($themes, "light"), "table-bg-color")
+        "light": map_get(map_get($themes, "light"), "table-bg-color"),
+        "dark": map_get(map_get($themes, "dark"), "table-bg-color"),
 );
 
 // ACCORDION
@@ -43,9 +45,14 @@ $accordion-icon-color: $style-color;
 
 // THEMES
 $theme-colors: (
-        "dark": $style-color,
         "primary": $style-color,
-        "blue": $style-color
+        "success":    $success,
+        "info":       $info,
+        "warning":    $warning,
+        "danger":     $danger,
+        "dark": $style-color,
+        "blue": $style-color,
+        "light": $light
 );
 
 .btn-primary, .btn-primary * {
