@@ -163,7 +163,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
     public onAPIError(error: Error): void {
-        Messages.add(error.name, "DANGER", Messages.TIMER);
+        Messages.add(error.message, "DANGER", Messages.TIMER);
     }
 
     public lock = async (save: SaveResource<any>) => {

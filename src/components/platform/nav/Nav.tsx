@@ -54,9 +54,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return true;
         if (nextState.searchLoading !== this.state.searchLoading)
             return true;
-        if (nextState.searchResult !== this.state.searchResult)
-            return true;
-        return false;
+        return nextState.searchResult !== this.state.searchResult;
     }
 
     setExpanded = (value: boolean) => {
@@ -182,7 +180,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                         className={"searchOutputContainer " + (this.state.showSearchOutput ? "show" : "")}>
                                         <div className={"header"}>
                                             <Badge pill bg={"dark"}>
-                                                <Loader payload={[]} variant={"style"}
+                                                <Loader payload={[]} variant={"light"}
                                                         loaded={!this.state.searchLoading}
                                                         transparent
                                                         size={10}>

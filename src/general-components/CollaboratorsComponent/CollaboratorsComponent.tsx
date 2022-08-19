@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {Button, Modal, Table} from "react-bootstrap";
+import {Button, FormSelect, Modal, Table} from "react-bootstrap";
 import {SharedSavePermission, SharedSaveResource} from "../Datastructures";
 import FAE from "../Icons/FAE";
 import {getSharedSavePermissionOptions, getSharedSavePermissionText} from "../Save";
@@ -97,7 +97,7 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, Collaborators
         return (
             <>
                 <div className={"collaborators-container"}>
-                    <Table variant={"dark"} hover>
+                    <Table hover>
                         <thead>
                         <tr>
                             <th>Username</th>
@@ -114,12 +114,16 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, Collaborators
                                     <td>{value.user.username}</td>
                                     <td>
                                         {this.state.editable ? (
-                                            <select
-                                                disabled={this.state.isEditing || this.state.isDeleting} defaultValue={value.permission} onChange={async (e) => {
-                                                await this.changePermission(value, Number(e.target.value));
-                                            }}>
+                                            <FormSelect
+                                                disabled={this.state.isEditing || this.state.isDeleting}
+                                                defaultValue={value.permission}
+                                                onChange={async (e) => {
+                                                    await this.changePermission(value, Number(e.target.value));
+                                                }}
+                                                size={"sm"}
+                                            >
                                                 {getSharedSavePermissionOptions()}
-                                            </select>
+                                            </FormSelect>
                                         ) : getSharedSavePermissionText(value.permission)}
                                     </td>
                                     {this.state.deletable && (

@@ -89,10 +89,11 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             <div className={"save"}>
                 <Card className={"mt-2 mb-2 save-card-dummy"}>
                     <Card.Body className={"save-body"}>
-                        <Card.Title className={"dummy"}>Dummy title which is long</Card.Title> <br/>
-                        <Card.Text
-                            className={"save-desc mb-1 dummy"}>eine relativ lange beschreibung die nicht zu lang
-                            ist</Card.Text>
+                        <Card.Title className={"dummy"}>..............................</Card.Title>
+                        <br/>
+                        <Card.Text className={"save-desc mb-1 dummy"}>
+                            ......................................................
+                        </Card.Text>
                     </Card.Body>
                 </Card>
             </div>

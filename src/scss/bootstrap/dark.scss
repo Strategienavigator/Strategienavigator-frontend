@@ -45,8 +45,13 @@ $modal-content-bg: $bg-color;
 $modal-content-color: $text-color;
 
 // TABLES
+$table-bg: map_get(map_get($themes, "dark"), "table-bg-color");
+$table-color: map_get(map_get($themes, "dark"), "table-color");
+$table-hover-bg: lighten(map_get(map_get($themes, "dark"), "table-bg-color"), 6.7%);
+$table-hover-color: darken(map_get(map_get($themes, "dark"), "table-color"), 6.7%);
+
 $table-variants: (
-        "light": map_get(map_get($themes, "dark"), "table-bg-color"),
+        "light": darken(map_get(map_get($themes, "dark"), "table-bg-color"), 4%),
         "dark": map_get(map_get($themes, "dark"), "table-bg-color"),
 );
 
@@ -88,6 +93,11 @@ $progress-bg: map_get(map_get($themes, "dark"), "card-bg-color");
 .badge.bg-dark, .badge.bg-dark * {
   color: white;
 }
+
+// MODAL
+$modal-content-border-color: adjust-color(map_get(map_get($themes, "dark"), "hr-border-color"), $alpha: -0.80);
+$modal-footer-border-color: adjust-color(map_get(map_get($themes, "dark"), "hr-border-color"), $alpha: -0.75);
+$modal-header-border-color: adjust-color(map_get(map_get($themes, "dark"), "hr-border-color"), $alpha: -0.75);
 
 // THEMES
 $theme-colors: (

@@ -17,6 +17,8 @@ $themes: (
                 "bg-color": #e6e6e6,
                 "text-color": #151515,
                 "text-color-clear": #000,
+          // hr
+                "hr-border-color": #151515,
           // links
                 "link-color": #151515,
                 "link-hover-color": lighten(#151515, $link-hover-intensity-adjust * 2),
@@ -27,7 +29,7 @@ $themes: (
                 "home-page-item-maintenance-bg-color": rgba(248, 249, 250, 0.3),
                 "home-page-item-shadow-color": black,
           // inputs
-                "input-bg-color": #f5f5f5,
+                "input-bg-color": #fff,
                 "input-border-color": #bebebe,
                 "input-text-color": #0e0e0e,
                 "input-placeholder-color": rgba(14, 14, 14, 0.6),
@@ -46,6 +48,7 @@ $themes: (
                 "step-tab-hover-color": #fff,
           // tables
                 "table-bg-color": #f8f9faff,
+                "table-color": #151515,
           // card
                 "card-bg-color": #e3e3e3,
                 "card-text-color": #000,
@@ -56,8 +59,10 @@ $themes: (
         dark: (
                 "style-color": #4154c9,
                 "bg-color": rgb(38, 41, 43),
-                "text-color": rgb(231, 227, 225),
+                "text-color": rgb(239, 238, 235),
                 "text-color-clear": #fff,
+          // hr
+                "hr-border-color": rgb(114, 115, 119),
           // links
                 "link-color": rgb(231, 227, 225),
                 "link-hover-color": darken(rgb(231, 227, 225), $link-hover-intensity-adjust),
@@ -68,7 +73,7 @@ $themes: (
                 "home-page-item-maintenance-bg-color": rgba(18, 20, 21, 0.5),
                 "home-page-item-shadow-color": black,
           // inputs
-                "input-bg-color": rgb(23, 25, 26),
+                "input-bg-color": rgb(34, 35, 38),
                 "input-border-color": rgb(18, 20, 21),
                 "input-text-color": rgb(231, 227, 225),
                 "input-placeholder-color": rgb(158, 150, 137),
@@ -86,12 +91,13 @@ $themes: (
                 "step-tab-hover-bg": lighten(rgb(18, 20, 21), 5%),
                 "step-tab-hover-color": #fff,
           // tables
-                "table-bg-color": rgb(18, 20, 21),
+                "table-bg-color": rgb(38, 41, 43),
+                "table-color": rgb(231, 227, 225),
           // card (also accordion & progressbar)
                 "card-bg-color": rgb(23, 25, 26),
                 "card-text-color": rgb(231, 227, 225),
           // formular
-                "form-bg-color": rgb(23, 25, 26),
+                "form-bg-color": rgb(34, 35, 38),
                 "form-text-color": rgb(231, 227, 225),
                 "form-border-color": rgb(20, 20, 20),
                 "form-disabled-bg-color": rgba(23, 25, 26, 0.7),

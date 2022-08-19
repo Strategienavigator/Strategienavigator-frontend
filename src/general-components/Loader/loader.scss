@@ -43,8 +43,14 @@
   }
 
   .spinner {
-    border-color: #f3f3f3;
+    border-color: #fff;
   }
+}
+
+.loader.transparent.style .spinner{
+    @include theme() {
+      border-color: get("text-color");
+    }
 }
 
 // LIGHT

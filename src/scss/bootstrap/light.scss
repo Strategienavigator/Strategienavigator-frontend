@@ -55,6 +55,11 @@ $theme-colors: (
         "light": $light
 );
 
+// MODAL
+$modal-content-border-color: adjust-color(map_get(map_get($themes, "light"), "hr-border-color"), $alpha: -0.80);
+$modal-footer-border-color: adjust-color(map_get(map_get($themes, "light"), "hr-border-color"), $alpha: -0.75);
+$modal-header-border-color: adjust-color(map_get(map_get($themes, "light"), "hr-border-color"), $alpha: -0.75);
+
 .btn-primary, .btn-primary * {
   color: white;
 }

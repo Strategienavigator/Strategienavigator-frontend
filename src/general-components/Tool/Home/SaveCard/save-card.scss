@@ -52,13 +52,17 @@
   top: 0;
 }
 
+.save-card-dummy .save-desc.dummy {
+  height: 17px;
+}
+
 .dummy {
   display: inline-block;
   border-radius: 5px;
 
   @include theme() {
-    background-color: darken(get("card-bg-color"), 2%) !important;
-    color: darken(get("card-bg-color"), 2%) !important;
+    background-color: lighten(get("card-bg-color"), 7%) !important;
+    color: lighten(get("card-bg-color"), 7%) !important;
   }
 }
 

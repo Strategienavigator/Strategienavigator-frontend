@@ -12,16 +12,6 @@
 }
 
 body {
-  button.btn.btn-danger {
-    background-color: $danger;
-    color: white;
-  }
-
-  button.btn.btn-danger:hover {
-    color: white;
-    background-color: darken($danger, 6%);
-  }
-
   button.btn-transparent {
     background-color: transparent;
     border-color: transparent;
