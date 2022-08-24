@@ -4,7 +4,7 @@ import {
     ClassificationValues,
     ClassifiedAlternateAction
 } from "../SWOTClassifyAlternativeActionsComponent";
-import {Accordion, Button, FormControl, FormControlProps, InputGroup} from "react-bootstrap";
+import {Accordion, Button, FormControl, InputGroup} from "react-bootstrap";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/";
 import {SelectClassificationModal} from "./SelectClassificationModal";
@@ -16,10 +16,11 @@ import {ClassifyingCardList} from "./ClassifyingCardList/ClassifyingCardList";
 import FAE from "../../../../../../general-components/Icons/FAE";
 
 
-interface NormalClassifyingProps extends FormControlProps {
+interface NormalClassifyingProps {
     classificationController: ClassificationController
     classifications: ClassificationValues[]
     actions: ClassifiedAlternateAction[]
+    disabled: boolean
 }
 
 interface NormalClassifyingState {
@@ -51,18 +52,21 @@ class NormalClassifying extends PureComponent<NormalClassifyingProps, NormalClas
                                             eventKey={classification.droppableID}>
                                 <Accordion.Header>
                                     <InputGroup>
-                                        <Button
-                                            variant={"danger"}
-                                            size={"sm"}
-                                            name={classification.droppableID}
-                                            onClick={this.onClassificationRemoveClick}
-                                        >
-                                            <FAE style={{verticalAlign: "middle"}} icon={faTrash}/>
-                                        </Button>
+                                        {(!this.props.disabled) && (
+                                            <Button
+                                                variant={"danger"}
+                                                size={"sm"}
+                                                name={classification.droppableID}
+                                                onClick={this.onClassificationRemoveClick}
+                                            >
+                                                <FAE style={{verticalAlign: "middle"}} icon={faTrash}/>
+                                            </Button>
+                                        )}
 
                                         <FormControl
                                             type={"text"}
                                             name={classification.droppableID}
+                                            disabled={this.props.disabled}
                                             placeholder={"Klassifikation..."}
                                             onChange={this.onClassificationNameChanged}
                                             value={classification.name}
@@ -70,13 +74,22 @@ class NormalClassifying extends PureComponent<NormalClassifyingProps, NormalClas
                                     </InputGroup>
                                 </Accordion.Header>
                                 <Accordion.Body>
-                                    <ClassifyingCardList actions={classification.actions}
-                                                         onOpenClassificationModalClick={this.onOpenClassificationModalClick}/>
+                                    <ClassifyingCardList
+                                        disabled={this.props.disabled}
+                                        actions={classification.actions}
+                                        onOpenClassificationModalClick={this.onOpenClassificationModalClick}
+                                    />
                                 </Accordion.Body>
                             </Accordion.Item>
                         );
                     })}
                 </Accordion>
+
+                {(this.props.disabled && classifications.length <= 0) && (
+                    <span>
+                        Keine Klassifikationen vorhanden...
+                    </span>
+                )}
 
                 {(!this.props.disabled && (
                         SWOTClassifyAlternativeActions.maxClassifications
@@ -96,6 +109,7 @@ class NormalClassifying extends PureComponent<NormalClassifyingProps, NormalClas
                             <ClassifyingCard
                                 key={"classifying-card-" + action.name + "-" + index}
                                 action={action}
+                                disabled={this.props.disabled}
                                 onChangeClick={this.onOpenClassificationModalClick}
                             />
                         );

@@ -237,13 +237,13 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                         {(!this.state.minLength) && (
                             <Row className={"text-danger"}>
                                 <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
-                                <Col xs={10}>Ihr Passwort muss mindestens acht Zeichen haben !</Col>
+                                <Col xs={10}>Ihr Passwort muss mindestens acht Zeichen haben!</Col>
                             </Row>
                         )}
                         {(!this.state.maxLength) && (
                             <Row className={"text-danger"}>
                                 <Col xs={2}><FAE className={"text-danger"} icon={faTimes}/></Col>
-                                <Col xs={10}>Ihr Passwort darf maximal 120 Zeichen beinhalten !</Col>
+                                <Col xs={10}>Ihr Passwort darf maximal 120 Zeichen beinhalten!</Col>
                             </Row>
                         )}
                         {(this.state.invalidChar) && (
@@ -255,7 +255,7 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                         {(this.state.valid) && (
                             <Row className={"text-success"}>
                                 <Col xs={2}><FAE className={"text-success"} icon={faCheck}/></Col>
-                                <Col xs={10}>Ihr Passwort ist gültig !</Col>
+                                <Col xs={10}>Ihr Passwort ist gültig!</Col>
                             </Row>
                         )}
                     </Card>
@@ -276,9 +276,10 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                             />
                             <Form.Label htmlFor={"passwordConfirm"}>Passwort wiederholen</Form.Label>
                         </Form.Floating>
-                        <div className={"feedback"}>
+
+                        <div className={"feedbackContainer"}>
                             {(!this.state.passwordMatching && this.state.confirmFieldTouched) && (
-                                <div className="invalid-feedback d-block">
+                                <div className="feedback DANGER">
                                     Passwörter müssen übereinstimmen!
                                 </div>
                             )}

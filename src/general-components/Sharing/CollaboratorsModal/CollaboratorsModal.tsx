@@ -25,7 +25,7 @@ function CollaboratorsModal(props: CollaboratorsModalProps) {
         >
             <Modal.Header>
                 <h5>Alle aktuellen Kollaborateure <Badge bg={"dark"} pill>{props.contributors.filter((v) => {
-                    return v.accepted;
+                    return v.accepted && !v.revoked;
                 }).length}</Badge></h5>
             </Modal.Header>
             <Modal.Body>

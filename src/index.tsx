@@ -13,7 +13,7 @@ import {DataPrivacy} from "./components/platform/data-privacy/DataPrivacy";
 import {Home} from "./components/platform/home/Home";
 import {Login} from "./components/platform/login/Login";
 import {Logout} from "./components/platform/logout/Logout";
-import {Register} from "./components/platform/register/Register";
+import Register from "./components/platform/register/Register";
 import {Settings} from "./components/platform/settings/Settings";
 import {MyProfile} from "./components/platform/my-profile/MyProfile";
 import {Session} from "./general-components/Session/Session";
