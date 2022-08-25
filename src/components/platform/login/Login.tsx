@@ -1,5 +1,5 @@
 import {Component, FormEvent} from "react";
-import {Button, Form, Spinner} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import {Session} from "../../../general-components/Session/Session";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
@@ -11,7 +11,8 @@ import "./login.scss";
 import {Link} from "react-router-dom";
 import {faSignInAlt, faUserSecret} from "@fortawesome/free-solid-svg-icons/";
 import {AnonymousModal} from "../../../general-components/ProtectedRoute";
-import FAE from "../../../general-components/Icons/FAE";
+import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
+import {ButtonPanel} from "../../../general-components/ButtonPanel/ButtonPanel";
 
 
 export interface LoginState {
@@ -118,9 +119,9 @@ export class LoginComponent extends Component<any, LoginState> {
                     />
                 </Form.Group>
 
-                <div className={"feedback"}>
+                <div className={"feedbackContainer"}>
                     {(this.state.loaded && this.state.failed) && (
-                        <div className="invalid-feedback d-block">
+                        <div className="feedback DANGER">
                             Anmeldung fehlgeschlagen!
                         </div>
                     )}
@@ -130,41 +131,27 @@ export class LoginComponent extends Component<any, LoginState> {
 
                 <hr/>
 
-                <Button disabled={this.state.isLoggingIn} type={"submit"} variant={"dark"}>
-                    {(this.state.isLoggingIn) ? (
-                        <Spinner
-                            as="span"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                        />
-                    ) : (
-                        <FAE icon={faSignInAlt}/>
-                    )}
-                    {" "}Anmelden
-                </Button>
+                <ButtonPanel>
+                    <LoadingButton
+                        isLoading={this.state.isLoggingIn}
+                        defaultChild={"Anmelden"}
+                        defaultIcon={faSignInAlt}
+                        savingChild={"Wird angemeldet..."}
+                        type={"submit"}
+                    />
 
-                &nbsp;
-
-                <Button disabled={this.state.isLoggingInAnonymously} onClick={() => {
-                    this.setState({
-                        showAnonymousModal: true
-                    });
-                }} type={"button"} variant={"dark"}>
-                    {(this.state.isLoggingInAnonymously) ? (
-                        <Spinner
-                            as="span"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                        />
-                    ) : (
-                        <FAE icon={faUserSecret}/>
-                    )}
-                    {" "}Anonym Anmelden
-                </Button>
+                    <LoadingButton
+                        isLoading={this.state.isLoggingInAnonymously}
+                        defaultChild={"Anonym Anmelden"}
+                        defaultIcon={faUserSecret}
+                        savingChild={"Wird angemeldet..."}
+                        onClick={() => {
+                            this.setState({
+                                showAnonymousModal: true
+                            });
+                        }}
+                    />
+                </ButtonPanel>
 
                 {(
                     this.state.showAnonymousModal

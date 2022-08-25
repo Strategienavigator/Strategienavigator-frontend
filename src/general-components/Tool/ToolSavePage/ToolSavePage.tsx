@@ -124,7 +124,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                                         });
                                     }}
                                 >
-                                    <FAE icon={faCheck} /> Ok
+                                    <FAE icon={faCheck}/> Ok
                                 </Button>
                                 <Button
                                     variant={"primary"}
@@ -163,6 +163,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
     public onAPIError(error: Error): void {
+        // TODO: remove later
         Messages.add(error.message, "DANGER", Messages.TIMER);
     }
 

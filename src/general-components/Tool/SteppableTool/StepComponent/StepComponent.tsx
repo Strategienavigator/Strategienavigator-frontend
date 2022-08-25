@@ -18,6 +18,7 @@ import {IUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
 import {SteppableTool} from "../SteppableTool";
 import {SharedSaveContext,} from "../../../Contexts/SharedSaveContextComponent";
 import {EditSavesPermission, hasPermission} from "../../../Permissions";
+import {SharedSavePermission} from "../../../Datastructures";
 
 
 export interface StepDefinition<T extends object> {
@@ -248,7 +249,13 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                             <StepComponentButtons
                                 isMobile={!isDesktop()}
                                 customNextButton={customNextButton}
-                                nextDisabled={this.isLastStep() && !this.hasNextSubStep()}
+                                nextDisabled={(
+                                    this.isLastStep() &&
+                                    !this.hasNextSubStep()
+                                ) || (
+                                    this.context.permission === SharedSavePermission.READ &&
+                                    !this.hasNextStep()
+                                )}
                                 isSaving={this.props.isSaving}
                                 onNext={this.tryNextStep}
                                 onReset={this.showResetModal}
@@ -393,6 +400,16 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     }
 
+    private hasNextStep(): boolean {
+        let newStepIndex = this.state.currentStep + 1;
+
+        if (newStepIndex < this.props.steps.length) {
+            let newStep = this.props.steps[newStepIndex];
+            return this.withData(newStep.dataHandler.isUnlocked);
+        }
+        return false;
+    }
+
     private hasNextSubStep(): boolean {
         if (!this.hasSubSteps())
             return false;
@@ -461,17 +478,16 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private setSubStep = (step: number, force: boolean = false) => {
-        if (force || this.withData(this.getCurrentStep().subStep?.isStepUnlocked.bind(this, step))) {
-            this.setState({
-                currentSubStep: step
-            });
-            return true;
-        }
-        return false;
+        this.setState({
+            currentSubStep: step
+        });
+        return true;
     }
 
     private requestSubStep = (step: number) => {
-        if (this.state.currentStep !== this.state.progress) {
+        let currentStep = this.getCurrentStep();
+        let data = this.props.save.data;
+        if (currentStep.subStep?.isStepUnlocked(step, data)) {
             return this.setSubStep(step);
         }
         return false;
