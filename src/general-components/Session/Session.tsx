@@ -55,7 +55,7 @@ class Session {
     static logout = async () => {
         let call = await callAPI("oauth/token/" + Session.token.breakDown()?.id, "DELETE", undefined, true);
 
-        if (call && call.success) {
+        if ((call && call.success) || call?.status === 401) {
             Session.setCurrent(null);
             Session.removeTokens();
         }

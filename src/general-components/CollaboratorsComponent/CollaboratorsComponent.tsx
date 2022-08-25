@@ -45,46 +45,6 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, Collaborators
         };
     }
 
-    private async changePermission(save: SharedSaveResource, permission: SharedSavePermission) {
-        this.setState({
-           isEditing: true
-        });
-
-        let data: UpdateContribution = {
-            permission: permission,
-            revoked: false
-        };
-
-        let call = await updateContribution(save.id, data);
-        if(call && call.success) {
-            Messages.add("Berechtigung geändert", "SUCCESS", Messages.TIMER);
-        }
-
-        this.setState({
-            isEditing: false
-        });
-    }
-
-    private async deleteCollaborator(save: SharedSaveResource) {
-        this.setState({
-            isDeleting: true
-        });
-
-        let data: UpdateContribution = {
-            permission: save.permission,
-            revoked: true
-        };
-
-        let call = await updateContribution(save.id, data);
-        if(call && call.success) {
-            Messages.add("Kollaborateur entfernt!", "SUCCESS", Messages.TIMER);
-        }
-
-        this.setState({
-            isDeleting: false
-        });
-    }
-
     render() {
         if (this.props.collaborators.length <= 0) {
             return (
@@ -102,7 +62,7 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, Collaborators
                         <tr>
                             <th>Username</th>
                             <th>Berechtigung</th>
-                            {this.state.deletable && <th />}
+                            {this.state.deletable && <th/>}
                         </tr>
                         </thead>
                         <tbody>
@@ -139,7 +99,7 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, Collaborators
                                                 variant={"danger"}
                                                 size={"sm"}
                                             >
-                                                <FAE icon={faTrash} />
+                                                <FAE icon={faTrash}/>
                                             </Button>
                                         </td>
                                     )}
@@ -211,6 +171,46 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, Collaborators
                 </div>
             </>
         );
+    }
+
+    private async changePermission(save: SharedSaveResource, permission: SharedSavePermission) {
+        this.setState({
+            isEditing: true
+        });
+
+        let data: UpdateContribution = {
+            permission: permission,
+            revoked: false
+        };
+
+        let call = await updateContribution(save.id, data);
+        if (call && call.success) {
+            Messages.add("Berechtigung geändert", "SUCCESS", Messages.TIMER);
+        }
+
+        this.setState({
+            isEditing: false
+        });
+    }
+
+    private async deleteCollaborator(save: SharedSaveResource) {
+        this.setState({
+            isDeleting: true
+        });
+
+        let data: UpdateContribution = {
+            permission: save.permission,
+            revoked: true
+        };
+
+        let call = await updateContribution(save.id, data);
+        if (call && call.success) {
+            Messages.add("Kollaborateur entfernt!", "SUCCESS", Messages.TIMER);
+        }
+
+        this.setState({
+            isDeleting: false
+        });
     }
 
 }

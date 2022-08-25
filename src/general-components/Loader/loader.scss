@@ -47,10 +47,10 @@
   }
 }
 
-.loader.transparent.style .spinner{
-    @include theme() {
-      border-color: get("text-color");
-    }
+.loader.transparent.style .spinner {
+  @include theme() {
+    border-color: get("text-color");
+  }
 }
 
 // LIGHT
