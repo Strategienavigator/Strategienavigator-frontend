@@ -102,10 +102,10 @@ $modal-header-border-color: adjust-color(map_get(map_get($themes, "dark"), "hr-b
 // THEMES
 $theme-colors: (
         "primary": $style-color,
-        "success":    $success,
-        "info":       $info,
-        "warning":    $warning,
-        "danger":     $danger,
+        "success": $success,
+        "info": $info,
+        "warning": $warning,
+        "danger": $danger,
         "dark": $style-color,
         "blue": $style-color,
         "light": $bg-color

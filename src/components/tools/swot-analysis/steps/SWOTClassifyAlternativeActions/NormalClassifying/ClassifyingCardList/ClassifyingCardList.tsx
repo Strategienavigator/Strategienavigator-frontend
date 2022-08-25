@@ -6,6 +6,7 @@ import {ClassifyingCard} from "../ClassifyingCard/ClassifyingCard";
 interface ClassifyingCardListProps {
     actions: ClassifiedAlternateAction[]
     onOpenClassificationModalClick: (id: string) => void
+    disabled: boolean
 }
 
 class ClassifyingCardList extends PureComponent<ClassifyingCardListProps, {}> {
@@ -16,6 +17,7 @@ class ClassifyingCardList extends PureComponent<ClassifyingCardListProps, {}> {
                     {this.props.actions.map((action, index) => {
                         return (
                             <ClassifyingCard
+                                disabled={this.props.disabled}
                                 key={action.name + "-" + action.index + "-" + index}
                                 action={action}
                                 onChangeClick={this.props.onOpenClassificationModalClick}
