@@ -36,6 +36,7 @@ import {InvitationDecision} from "./components/platform/sharing/Invitation/Invit
 import {ContributionDecision} from "./components/platform/sharing/Contribution/ContributionDecision";
 import {SettingsContextComponent} from "./general-components/Contexts/SettingsContextComponent";
 import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
+import {enablePatches} from "immer";
 
 // Add SettingsChangeListener for Darkmode
 SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
@@ -192,7 +193,7 @@ const buildApp = async () => {
 }
 
 buildApp().then(() => {
-    // do absolutely nothing
+    enablePatches();
 });
 
 // If you want to start measuring performance in your app, pass a function

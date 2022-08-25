@@ -11,7 +11,7 @@ import {Messages} from "../../Messages/Messages";
 import {Button, Modal} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
-import produce from "immer";
+import produce, {applyPatches} from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
 import {UIErrorContextComponent} from "../../Contexts/UIErrorContext/UIErrorContext";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
@@ -56,6 +56,8 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
      */
     private saveDirty: boolean = false;
 
+    private websocket?: WebSocket;
+
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
         this.state = {
@@ -72,6 +74,9 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     componentDidMount() {
         window.addEventListener("beforeunload", this.onBeforeUnload);
         window.addEventListener("beforeunload", this.onUnloadUnLock);
+
+        this.websocket = new WebSocket(process.env.REACT_APP_COLLABORATION_URL);
+        this.websocket.onmessage = this.remoteUpdateSave;
     }
 
     componentWillUnmount = async () => {
@@ -87,6 +92,12 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         let save = this.state.save;
         if (save) {
             await this.lockSave(save, false, true);
+        }
+
+        this.websocket?.close();
+
+        if (save) {
+            await this.unlock(save);
         }
     }
 
@@ -241,17 +252,37 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     }
 
-    private updateSave(changes: ((save: WritableDraft<SaveResource<D>>) => void) | SaveResource<D>, callback?: () => void) {
+    private updateSave = (changes: ((save: WritableDraft<SaveResource<D>>) => void) | SaveResource<D>, callback?: () => void) => {
+        let newSave;
         if (typeof changes === "object") {
-            this.setState({
-                save: changes
-            }, callback);
+            newSave = changes;
+
         } else {
             if (this.state.save !== undefined) {
-                this.setState({
-                    save: produce(this.state.save, changes)
-                }, callback)
+                newSave = produce(this.state.save, changes, (patches, inversePatches) => {
+                    this.websocket?.send(JSON.stringify(patches));
+                });
             }
+            this.saveDirty = true;
+        }
+
+        this.setState({
+            save: newSave
+        }, callback);
+    }
+
+    private remoteUpdateSave = (message: MessageEvent) => {
+        let data = message.data;
+
+        let patches = JSON.parse(data);
+
+        let old = this.state.save;
+
+        if (old !== undefined) {
+            let newSave = applyPatches<SaveResource<D>>(old, patches);
+            this.setState({
+                save: newSave
+            });
             this.saveDirty = true;
         }
     }
