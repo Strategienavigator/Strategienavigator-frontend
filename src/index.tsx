@@ -38,6 +38,8 @@ import {SettingsContextComponent} from "./general-components/Contexts/SettingsCo
 import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
 import {enablePatches} from "immer";
 
+require("./setupEcho.ts");
+
 // Add SettingsChangeListener for Darkmode
 SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
 

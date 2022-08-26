@@ -1,0 +1,36 @@
+@import "src/themes.scss";
+
+.collaborators.dots {
+  margin: 0.75rem 0;
+  border-radius: 2px;
+  overflow-y: auto;
+  padding: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 76px;
+
+  @include theme() {
+    border: 1px solid darken(get("bg-color"), 10%);
+    background-color: darken(get("bg-color"), 3%);
+  }
+
+  .collaborator {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25rem;
+    border: 2px solid black;
+    border-radius: 50px;
+    color: black;
+  }
+}
+.collaborators.dots:empty {
+  padding: 0;
+  margin: 0;
+  height: 0;
+  display: none;
+}
