@@ -1,72 +1,60 @@
-const { wait } = require("@testing-library/react");
-
+var testIndex = 0
 describe('SWOT Analyisis Part II', () => {
     beforeEach(() =>{
         cy.task("queryDb",`DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
         cy.CreateSave("swot-1","TEST-SWOT VON MAX",2)
     })
     it('trys to load save and create action steps',() =>{
-        cy.visit("/")
-        cy.loginViaApi()
-        cy.visit("/swot-analysis")
-
-        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
-        cy.contains("TEST-SWOT VON MAX")
-        .click()
-
-        cy.wait("@loadSave")
-        cy.get("@loadSave")
-        .its("response")
-        .should('include',
-        {
-            statusCode: 200
-        })
-
-        cy.url()
-            .should("include", "swot-analysis")
-        cy.log("Save loaded")
-
+       
+        cy.LoginAndLoad("swot")
+       
         cy.contains("Weiter")
-            .click()
+        .click()  
+        for (let i = 0; i < 64; i++) 
+        {
+            FillActionStep(i)
         
-            for (let i = 0; i < 64; i++) 
-            {
-                FillActionStep(i)
-            
-                cy.log("Step: " + i)
-                if(i < 63)
-                    {
-                    cy.contains("Nächster")
-                    .click()
-                    }
-            }
-            CheckColor()        
+            cy.log("Step: " + i)
+            if(i < 63)
+                {
+                cy.contains("Nächster")
+                .click()
+                }
+        }
+        CheckColor() 
+              
+        cy.contains("Nächster")
+        .click()  
+        cy.contains("Speichern")
+        .click();   
     })
 })
 function FillActionStep(index)
 {
-    if(index % 2)
+    cy.get("div[class='alternative-actions']")
+    .find("div[class='addCard card']")
+    .click()
+
+    if(index % 3)
     {
         cy.get('input[placeholder="Bezeichnung"]')
         .each(($name) =>
         {
             if($name.is(":visible"))
             {
-                cy.wrap($name)
-                .type("GERADEREARERRERERER") 
-
-               
-                cy.get('textarea[placeholder="Beschreibung"]')
-                .each(($desc) =>{
-                    if($desc.is(":visible"))
-                    {
-                        cy.wrap($desc)
-                        .type("Bescheeieriibib")
-                    }
-                })
-
+                UseTestData($name, true)
+                
             }
-         })        
+        }) 
+         cy.get('textarea[placeholder="Beschreibung"]')
+         .each(($desc) =>{
+             if($desc.is(":visible"))
+             {
+                UseTestData($desc, false)
+                
+             }
+        })
+
     }else
     {
         cy.get("[type=checkbox]")
@@ -74,7 +62,9 @@ function FillActionStep(index)
     }
     
 }
-
+/*
+Description: Checking the right colours on the div for the right position
+*/
 function CheckColor()
 {
     //Checkt die Farbe des Divs
@@ -90,3 +80,29 @@ function CheckColor()
         })
 
 }
+/*
+Description: Gets the testdata frm "tooltestdata" for simple fillings
+Parameters:
+    dataTyp - DOMELMENT: is in this case the DOM-Element that needs to be wrapped where the data shall be inputted
+    isName - BOOL -just a question if its the name key: value or the desc key:value    
+*/
+function UseTestData(dataTyp, isName)
+{ 
+    cy.fixture("tooltestdata").then(function (testdata)
+    {
+        this.testdata = testdata;
+
+        let data = this.testdata.data
+        //let index = Math.floor(Math.random()*data.length)
+        if (isName)
+        {
+            cy.wrap(dataTyp)
+            .type(data[testIndex]["name"])
+        }else{
+            cy.wrap(dataTyp)
+            .type(data[testIndex]["desc"])
+        }
+        testIndex += 1
+     })
+     
+ }
