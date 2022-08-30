@@ -89,6 +89,6 @@ module.exports = (on, config) => {
         });
     }
 
-    return require('cypress-local-config')(config);
+    return config;
 }
 

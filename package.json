@@ -64,7 +64,7 @@
     "@types/file-saver": "^2.0.4",
     "@types/xlsx": "^0.0.36",
     "bcrypt": "^5.0.1",
-    "cypress": "^9.6.1",
+    "cypress": "^10.6.0",
     "cypress-local-config": "^0.0.2",
     "cypress-terminal-report": "^3.5.2",
     "eslint-plugin-cypress": "^2.12.1",
