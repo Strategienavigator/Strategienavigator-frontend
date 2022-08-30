@@ -65,8 +65,6 @@
     "@types/xlsx": "^0.0.36",
     "bcrypt": "^5.0.1",
     "cypress": "^10.6.0",
-    "cypress-local-config": "^0.0.2",
-    "cypress-terminal-report": "^3.5.2",
     "eslint-plugin-cypress": "^2.12.1",
     "mysql2": "^2.3.3",
     "smtp-tester": "^1.2.0",

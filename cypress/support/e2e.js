@@ -19,7 +19,4 @@ import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-if(Cypress.testingType !== 'component'){
-    require('cypress-terminal-report/src/installLogsCollector')();
-}
 

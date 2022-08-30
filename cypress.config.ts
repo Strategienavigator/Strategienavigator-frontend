@@ -26,8 +26,9 @@ export default defineConfig({
     baseUrl: 'http://localhost:3000',
     experimentalSessionAndOrigin: true,
   },
-  component: {
-    setupNodeEvents(on, config) {},
-    specPattern: 'src/**/*spec.tsx',
-  },
+  //component: {
+  //setupNodeEvents(on, config) {},
+  //specPattern: 'src/**/*spec.tsx',
+  //},
+ 
 })

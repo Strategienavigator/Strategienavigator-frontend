@@ -36,7 +36,8 @@ module.exports = (on, config) => {
             console.log('--- email ---')
             console.log(addr, id, email)
         })
-
+        
+        /*
         const options = {
             outputRoot: 'cypress/',
             outputTarget: {
@@ -45,7 +46,9 @@ module.exports = (on, config) => {
             },
             printLogsToFile: 'always'
         };
+        
         require('cypress-terminal-report/src/installLogsPrinter')(on, options);
+        */
 
 
         const mysql = require("mysql2");
