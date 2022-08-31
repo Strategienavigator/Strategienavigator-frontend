@@ -1,10 +1,6 @@
 import './tool-save-page.scss'
 import React, {Component, ReactNode} from "react";
-import {
-    LiveSaveUpdateResource,
-    SaveResource,
-    SharedSavePermission,
-} from "../../Datastructures";
+import {LiveSaveUpdateResource, SaveResource, SharedSavePermission,} from "../../Datastructures";
 import {Session} from "../../Session/Session";
 import {Loader} from "../../Loader/Loader";
 import {Prompt, RouteComponentProps} from "react-router";
@@ -97,11 +93,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         window.removeEventListener("beforeunload", this.onUnloadUnLock);
     }
 
-    private closeWebsocketConnection() {
-        this.state.connection?.disconnect();
-        console.log("Websocket disconnected!");
-    }
-
     onUnloadUnLock = async () => {
         let save = this.state.save;
         if (save) {
@@ -117,9 +108,16 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         let channelName = "savechannel." + this.state.save!.id;
         let connection = createSocketConnection();
 
+        connection.connector.pusher.connection.bind("connected", () => {
+            console.log("Websocket connected!"); // TODO: in state umwandeln
+        });
+        connection.connector.pusher.connection.bind("disconnected", () => {
+            console.log("Websocket disconnected!"); // TODO: in state umwandeln
+        });
+
         let channel = connection.join(channelName);
         channel.subscribed(() => {
-            console.log("Websocket connected!");
+            console.log("channel subscribed");  // TODO: in state umwandeln
         });
 
         /**
@@ -147,7 +145,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                 <SharedSaveContextComponent save={this.state.save!}>
                     <Loader payload={[async () => this.retrieveSave(ID), this.createSocketConnection]} transparent
                             alignment={"center"} fullscreen animate={false}>
-                        <WebsocketChannelContextComponent<PresenceChannel>
+                        <WebsocketChannelContextComponent
                             channel={this.state.channel ?? null}
                             connection={this.state.connection ?? null}
                         >
@@ -165,7 +163,8 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                                 }}
                             >
                                 <Modal.Body>
-                                    Dieser Speicherstand wird aktuell bearbeitet, daher können Sie diesen nur beobachten...
+                                    Dieser Speicherstand wird aktuell bearbeitet, daher können Sie diesen nur
+                                    beobachten...
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button
@@ -225,6 +224,10 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     public unlock = async (save: SaveResource<any>) => {
         return await this.lockSave(save, false);
+    }
+
+    private closeWebsocketConnection() {
+        this.state.connection?.disconnect();
     }
 
     private onBeforeUnload = (e: BeforeUnloadEvent) => {

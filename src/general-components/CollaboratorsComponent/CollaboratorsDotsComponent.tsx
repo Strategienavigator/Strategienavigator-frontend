@@ -4,12 +4,13 @@ import {SimplestUserResource} from "../Datastructures";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {Session} from "../Session/Session";
 
+
 export interface CollaboratorsDotsComponentProps {
     collaborators: SimplestUserResource[]
 }
 
 export class CollaboratorsDotsComponent extends Component<CollaboratorsDotsComponentProps, any> {
-    alpha = 0.6;
+    alpha = 0.45;
     colors = [
         `rgba(255, 0, 0, ${this.alpha})`, // red
         `rgba(0, 255, 0, ${this.alpha})`, // lime
@@ -21,10 +22,6 @@ export class CollaboratorsDotsComponent extends Component<CollaboratorsDotsCompo
         `rgba(0, 191, 255, ${this.alpha})` // deepskyblue
     ];
 
-    private getColor(index: number) {
-        return this.colors[index % this.colors.length];
-    }
-
     render = () => {
         return (
             <div className={"collaborators dots"}>
@@ -33,7 +30,7 @@ export class CollaboratorsDotsComponent extends Component<CollaboratorsDotsCompo
                     return (
                         <OverlayTrigger
                             key={`collaborator-${index}-${user.id}-${user.username}`}
-                            trigger={["hover", "focus"]}
+                            trigger={["hover", "focus", "click"]}
                             placement={"top"}
                             overlay={
                                 <Tooltip>
@@ -52,6 +49,10 @@ export class CollaboratorsDotsComponent extends Component<CollaboratorsDotsCompo
                 }))}
             </div>
         );
+    }
+
+    private getColor(index: number) {
+        return this.colors[index % this.colors.length];
     }
 
 }

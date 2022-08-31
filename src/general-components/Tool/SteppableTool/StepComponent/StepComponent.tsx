@@ -168,6 +168,17 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         }
     }
 
+    static getDerivedStateFromProps(props: StepComponentProps<any>, state: StepComponentState): StepComponentState | null {
+        const progress = StepComponent.getLastUnlockedStep(props.steps, props.save.data);
+        if (state.currentStep > progress) {
+            return {
+                ...state,
+                currentStep: progress
+            }
+        }
+        return null;
+    }
+
     private static getLastUnlockedStep<D extends object>(steps: StepDefinition<D>[], data: D) {
         let progress = -1;
         steps.forEach((step) => {

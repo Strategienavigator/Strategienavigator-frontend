@@ -2,6 +2,7 @@ import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import {Session} from "./general-components/Session/Session";
 
+
 declare global {
     interface Window {
         Pusher: Pusher,

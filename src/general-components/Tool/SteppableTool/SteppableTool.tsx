@@ -10,12 +10,10 @@ import {withUIErrorContext} from "../../Contexts/UIErrorContext/UIErrorContext";
 
 
 abstract class SteppableTool<D extends object> extends Tool<D> {
+    private readonly typeStepComponent: any;
 
     // STEP COMPONENT
     private steps: Array<StepDefinition<any>> = [];
-
-    private readonly typeStepComponent;
-
 
     protected constructor(props: RouteComponentProps, context: any, toolName: string, toolIcon: IconDefinition, toolID: number) {
         super(props, context, toolName, toolIcon, toolID);

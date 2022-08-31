@@ -1,29 +1,33 @@
 import {Component, createContext} from "react";
-import {Channel} from "laravel-echo/src/channel/channel";
 import Echo, {PresenceChannel} from "laravel-echo";
 import {SimplestUserResource} from "../Datastructures";
 
 
-export interface IWebsocketChannelContext<D extends Channel> {
+export interface IWebsocketChannelContext {
     connection: Echo | null,
-    channel: D | null,
+    channel: PresenceChannel | null,
+    collaborators: SimplestUserResource[]
 }
 
-export interface WebsocketChannelContextProps<D extends Channel> {
+export interface WebsocketChannelContextProps {
     connection: Echo | null,
-    channel: D | null,
+    channel: PresenceChannel | null,
 }
 
-export interface WebsocketChannelContextState<D extends Channel> {
-    socketContext: IWebsocketChannelContext<D>
+export interface WebsocketChannelContextState {
+    socketContext: IWebsocketChannelContext,
+    registeredHere: boolean,
+    registeredJoin: boolean,
+    registeredLeave: boolean
 }
 
-export const WebsocketChannelContext = createContext<IWebsocketChannelContext<any>>({
+export const WebsocketChannelContext = createContext<IWebsocketChannelContext>({
     connection: null,
     channel: null,
+    collaborators: []
 });
 
-export class WebsocketChannelContextComponent<D extends Channel> extends Component<WebsocketChannelContextProps<D>, WebsocketChannelContextState<D>> {
+export class WebsocketChannelContextComponent extends Component<WebsocketChannelContextProps, WebsocketChannelContextState> {
 
     constructor(props: any) {
         super(props);
@@ -32,17 +36,31 @@ export class WebsocketChannelContextComponent<D extends Channel> extends Compone
             socketContext: {
                 connection: null,
                 channel: null,
-            }
+                collaborators: []
+            },
+            registeredHere: false,
+            registeredJoin: false,
+            registeredLeave: false
         }
     }
 
-    static getDerivedStateFromProps(props: WebsocketChannelContextProps<any>, state: WebsocketChannelContextState<any>): WebsocketChannelContextState<any> {
-        return {
-            socketContext: {
-                channel: props.channel,
-                connection: props.connection
+    static getDerivedStateFromProps(props: WebsocketChannelContextProps, state: WebsocketChannelContextState): WebsocketChannelContextState | null {
+        if (
+            state.socketContext.channel !== props.channel ||
+            state.socketContext.connection !== props.connection
+        ) {
+            return {
+                socketContext: {
+                    channel: props.channel,
+                    connection: props.connection,
+                    collaborators: []
+                },
+                registeredHere: false,
+                registeredJoin: false,
+                registeredLeave: false
             }
         }
+        return null;
     }
 
     render() {
@@ -51,6 +69,80 @@ export class WebsocketChannelContextComponent<D extends Channel> extends Compone
                 {this.props.children}
             </WebsocketChannelContext.Provider>
         );
+    }
+
+    componentDidMount() {
+        this.registerListener();
+    }
+
+    private registerListener() {
+        let channel = this.state.socketContext.channel;
+        let [here, join, leave] = Array(3).fill(false);
+
+        if (channel) {
+            /**
+             * HERE
+             */
+            if (!this.state.registeredHere) {
+                channel.here((users: SimplestUserResource[]) => {
+                    console.log("Current collaborators:", users.map((u) => u.username));
+                    this.setState({
+                        socketContext: {
+                            ...this.state.socketContext,
+                            collaborators: users
+                        }
+                    });
+                });
+                here = true;
+            }
+
+            /**
+             * JOINING
+             */
+            if (!this.state.registeredJoin) {
+                channel.joining((user: SimplestUserResource) => {
+                    console.log("Collaborator joined:", user.username);
+
+                    this.setState((state) => {
+                        const collaborators = state.socketContext.collaborators.concat(user);
+                        return {
+                            socketContext: {
+                                ...state.socketContext,
+                                collaborators: collaborators
+                            }
+                        };
+                    });
+                });
+                join = true;
+            }
+
+            /**
+             * LEAVING
+             */
+            if (!this.state.registeredLeave) {
+                channel.leaving((user: SimplestUserResource) => {
+                    console.log("Collaborator left:", user.username);
+
+                    this.setState(function (state) {
+                        let index = state.socketContext.collaborators.indexOf(user);
+                        const collaborators = state.socketContext.collaborators.filter((item, j) => index !== j);
+                        return {
+                            socketContext: {
+                                ...state.socketContext,
+                                collaborators: collaborators
+                            }
+                        };
+                    });
+                });
+                leave = true;
+            }
+
+            this.setState({
+                registeredLeave: leave,
+                registeredHere: here,
+                registeredJoin: join
+            });
+        }
     }
 
 }
