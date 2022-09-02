@@ -11,9 +11,9 @@ export default defineConfig({
     DB_PASSWORD: '',
     DB_PORT: 3306,
     SMTP_PORT: 7777,
-    BACKEND_URL: 'http://localhost/toolbox-backend/public/',
-    APP_CLIENT_ID: 2,
-    APP_CLIENT_SECRET: 'ytr2ITFQRMCvez8CVFnK9oEzy5QvZb7vAz49eYaO',
+    BACKEND_URL: 'http://strategietools.test/',
+    APP_CLIENT_ID: 1,
+    APP_CLIENT_SECRET: 'eSwPHSsR5TZ1SOlGS184NY5omV7NMuFQXrNgnBSj',
     TEST_LOGIN_USERNAME: 'max@test.test',
     TEST_LOGIN_PASSWORD: 'password',
   },
@@ -30,5 +30,5 @@ export default defineConfig({
   //setupNodeEvents(on, config) {},
   //specPattern: 'src/**/*spec.tsx',
   //},
- 
+
 })
