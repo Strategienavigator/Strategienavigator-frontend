@@ -27,10 +27,6 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
         }
     }
 
-    async componentDidMount() {
-        await this.pageChosenCallback(this.state.page);
-    }
-
     render(): ReactNode {
         this.checkPage();
 
