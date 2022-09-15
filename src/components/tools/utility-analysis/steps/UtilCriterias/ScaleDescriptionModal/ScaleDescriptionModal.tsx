@@ -1,10 +1,10 @@
 import {Button, Modal, Table} from "react-bootstrap";
 import React from "react";
-import {UACriteriaCustomDescriptionValues} from "../UtilCriterias/UACriteriaCustomDescription";
+import {UACriteriaCustomDescriptionValues} from "../UACriteriaCustomDescription";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
-import FAE from "../../../../../general-components/Icons/FAE";
-import "./create-description-modal.scss";
-import {ModalCloseable} from "../../../../../general-components/Modal/ModalCloseable";
+import FAE from "../../../../../../general-components/Icons/FAE";
+import "./scale-description-modal.scss";
+import {ModalCloseable} from "../../../../../../general-components/Modal/ModalCloseable";
 
 
 interface CreateDescriptionModalProps {
@@ -13,7 +13,7 @@ interface CreateDescriptionModalProps {
     onClose: () => void
 }
 
-function CreateDescriptionModal(props: CreateDescriptionModalProps) {
+function ScaleDescriptionModal(props: CreateDescriptionModalProps) {
     return (
         <>
             <ModalCloseable
@@ -26,19 +26,19 @@ function CreateDescriptionModal(props: CreateDescriptionModalProps) {
             >
                 <Modal.Body>
                     <div className={"test"}>
-                        <Table striped variant={"light"} bordered hover>
+                        <Table variant={"light"} bordered hover>
                             <thead>
-                            <tr>
-                                <th>Skala</th>
-                                <th>Beschreibung</th>
-                            </tr>
+                                <tr>
+                                    <th>Skala</th>
+                                    <th>Beschreibung</th>
+                                </tr>
                             </thead>
                             <tbody>
                             {props.values.headers.map((v, index) => {
                                 return (
                                     <tr
                                         key={"custom-description-modal-" + v.header + "-" + index}
-                                        aria-disabled={true}
+                                        className={(!props.values.activeIndices.includes(index + 1)) ? "tr-inactive" : ""}
                                     >
                                         <td className={"header"}>{v.header}</td>
                                         <td className={"desc"}>{v.desc}</td>
@@ -62,5 +62,5 @@ function CreateDescriptionModal(props: CreateDescriptionModalProps) {
 }
 
 export {
-    CreateDescriptionModal
+    ScaleDescriptionModal
 }

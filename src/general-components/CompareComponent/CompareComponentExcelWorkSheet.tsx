@@ -6,6 +6,7 @@ import {CompareComponentValues, SingleComparison} from "./CompareComponent";
 import {CompareHeaderAdapter} from "./Header/CompareHeaderAdapter";
 import {CardComponentFields} from "../CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "../../components/tools/utility-analysis/steps/UtilCriterias/UACriteriaCustomDescription";
+import {WeightingEvaluation} from "../EvaluationComponent/Weighting/WeightingEvaluation";
 
 
 class CompareComponentExcelWorkSheet extends ExcelExporter<any> {
@@ -111,6 +112,25 @@ class CompareComponentExcelWorkSheet extends ExcelExporter<any> {
         return ws;
     }
 
+    public basedOnWeightingCardComponent<D extends object>(values: { fields: CardComponentFields<D>, comparisons: CompareComponentValues[] }, weighting: CompareComponentValues): WorkSheet {
+        let evaluation = new WeightingEvaluation(values.fields, weighting).getValues();
+        let indices: number[] = [];
+        values.fields = values.fields.filter((item, i) => {
+            let some = evaluation.result.some((item) => {
+                return values.fields[i] === item.criteria && item.points !== 0;
+            });
+
+            if (some)
+                indices.push(i);
+
+            return some;
+        });
+        values.comparisons = values.comparisons.filter((item, i) => {
+           return indices.includes(i);
+        });
+        return this.basedOnCardComponent(values);
+    }
+
     public basedOnCardComponent<D extends object>(values: { fields: CardComponentFields<D>, comparisons: CompareComponentValues[] }): WorkSheet {
         let ws: WorkSheet = {};
         let cell = this.starterCell;
@@ -129,7 +149,6 @@ class CompareComponentExcelWorkSheet extends ExcelExporter<any> {
             if (extra !== undefined && Object.keys(extra).length > 0) {
                 activeIndices = extra.activeIndices;
             }
-            console.log(field.extra, extra, activeIndices);
 
             ws = Object.assign(ws, new CompareComponentExcelWorkSheet(this.adapter, values.comparisons[i], this.header, activeIndices, cell).getExcelSheet());
             cell.r += 2;

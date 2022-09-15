@@ -82,15 +82,15 @@ class PortfolioExcelExporter extends ExcelExporter<PortfolioAnalysisValues> {
         }
 
         // 4. Bewertung
-        if (this.isFilled(objects) && this.isFilled(criterias) && this.isFilled(evaluation)) {
+        if (this.isFilled(objects) && this.isFilled(criterias) && this.isFilled(evaluation) && this.isFilled(weighting)) {
             let adapter = new LinearCardComponentFieldsAdapter(objects?.objects);
-            let ws = new CompareComponentExcelWorkSheet(adapter, evaluation?.attractivity[0], PortEvaluation.header, undefined, {
+            let ws = new CompareComponentExcelWorkSheet(adapter, evaluation?.attractivity[0].rating, PortEvaluation.header, undefined, {
                 c: 0,
                 r: 1
-            }).basedOnCardComponent({
+            }).basedOnWeightingCardComponent({
                 fields: criterias?.attractivity,
-                comparisons: evaluation?.attractivity
-            });
+                comparisons: evaluation?.attractivity.map((item) => item.rating)
+            }, weighting.attractivity);
             ws["A1"] = {
                 v: "Marktattraktivität", t: "s", s: this.getHeaderStyle()
             };
@@ -99,13 +99,13 @@ class PortfolioExcelExporter extends ExcelExporter<PortfolioAnalysisValues> {
                 v: "Wettbewerbsposition", t: "s", s: this.getHeaderStyle()
             };
 
-            this.addSheet("Bewertung", Object.assign(ws, new CompareComponentExcelWorkSheet(adapter, evaluation?.["comp-standing"][0], PortEvaluation.header, undefined, {
+            this.addSheet("Bewertung", Object.assign(ws, new CompareComponentExcelWorkSheet(adapter, evaluation?.["comp-standing"][0].rating, PortEvaluation.header, undefined, {
                 c: 0,
                 r: lastRow + 1
-            }).basedOnCardComponent({
+            }).basedOnWeightingCardComponent({
                 fields: criterias?.["comp-standing"],
-                comparisons: evaluation?.["comp-standing"]
-            })));
+                comparisons: evaluation?.["comp-standing"].map((item) => item.rating)
+            }, weighting?.["comp-standing"])));
         }
 
         // 5. Ergebnis

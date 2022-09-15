@@ -8,6 +8,7 @@ import * as SettingsAPI from "../../../general-components/API/calls/Settings";
 import {Session} from "../../../general-components/Session/Session";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {SettingsContext} from "../../../general-components/Contexts/SettingsContextComponent";
+import {PortfolioQuadrantsSettingType} from "../../../general-components/Settings/Types/PortfolioQuadrantsType/PortfolioQuadrantsSettingType";
 
 
 export interface UserSettingProxy {
@@ -37,15 +38,17 @@ export interface SettingsState {
  */
 export class Settings extends Component<{}, SettingsState> {
 
-
     /**
-     * Map die ein JSXElement für den angegeben Einstellungstyp liefter
+     * Map die ein JSXElement für den angegeben Einstellungstyp liefert
      *
      * Schlüssel ist der Name des Typs
      */
     static typeDict: { [id: string]: (props: SettingsTypeProps, key: string | number) => JSX.Element } = {
         "toggle": (props: SettingsTypeProps, key: string | number) => {
             return <ToggleSettingType {...props} key={key}/>
+        },
+        "portfolio-quadrants": (props: SettingsTypeProps, key: string | number) => {
+            return <PortfolioQuadrantsSettingType {...props} key={key} />
         }
     }
 
@@ -122,7 +125,17 @@ export class Settings extends Component<{}, SettingsState> {
         return (
             <>
                 <Loader payload={[]} loaded={!this.context.isLoading} transparent={true}>
-                    {settings}
+
+                    <div className={"settings"}>
+                        {settings.map((item, i) => {
+                            return (
+                                <div className={"setting"} key={`settings-${i}`}>
+                                    {item}
+                                </div>
+                            );
+                        })}
+                    </div>
+
                     <Button variant={"primary"} className={"mt-3"}
                             onClick={async () => await this.saveSettings()}
                             disabled={this.state.saving}>

@@ -48,7 +48,7 @@ export interface CardComponentProps<D> {
     /**
      * React component, welcher unter den normalen Eingabefeldern des CardComponents angezeigt wird
      */
-    customDescription?: FunctionComponent<CustomDescriptionComponentProps<D>> | ComponentClass<CustomDescriptionComponentProps<D>>
+    customDescriptions?: FunctionComponent<CustomDescriptionComponentProps<D>>[] | ComponentClass<CustomDescriptionComponentProps<D>>[]
     /**
      * sollte den standard Wert für das extra Feld im CardComponentField zurück geben
      *
@@ -57,7 +57,7 @@ export interface CardComponentProps<D> {
     customDescValuesFactory?: () => D
 }
 
-class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> {
+class CardComponent<D extends object> extends PureComponent<CardComponentProps<D>, {}> {
 
     getAllCards = () => {
         let required = (this.props.required !== undefined) ? this.props.required : true;
@@ -82,7 +82,7 @@ class CardComponent<D = never> extends PureComponent<CardComponentProps<D>, {}> 
                          onDelete={this.removeCard.bind(this, index)}
                          onChange={this.cardUpdatedListener}
                          customDescValues={value.extra}
-                         customDesc={this.props.customDescription}/>
+                         customDescs={this.props.customDescriptions}/>
             );
         });
     }

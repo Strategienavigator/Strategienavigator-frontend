@@ -4,7 +4,6 @@ import {ChangeEvent} from "react";
 import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
 import {isDesktop} from "../../../../../general-components/Desktop";
 
-
 /**
  * Werte für die Custom Description
  */
@@ -54,7 +53,7 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
 
                                 <div className={"headers"}>
                                     {values.headers.map((v, index) => {
-                                        let mustBeChecked = (index === 0 || index === headerLength - 1) ? true : undefined;
+                                        let mustBeChecked = (index === 0 || index === headerLength - 1) ? true : undefined
                                         let shallBeChecked = values.activeIndices.includes(index + 1);
 
                                         return (
@@ -65,8 +64,8 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
                                                 <Col className={"checkbox"}>
                                                     <Form.Check
                                                         onChange={this.toggledSelection}
-                                                        checked={mustBeChecked ? mustBeChecked : shallBeChecked}
-                                                        disabled={mustBeChecked}
+                                                        checked={mustBeChecked ?? shallBeChecked}
+                                                        disabled={this.props.disabled ? true : mustBeChecked}
                                                         value={index + 1}
                                                     />
                                                 </Col>

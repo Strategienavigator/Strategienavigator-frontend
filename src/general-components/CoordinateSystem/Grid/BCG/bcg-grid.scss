@@ -1,5 +1,5 @@
 
-.grid-overlay.BCG {
+.grid-overlay.BCG, .grid-overlay.quadrants {
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 1fr;
 
@@ -12,22 +12,22 @@
     letter-spacing: 2px;
   }
 
-  > div.qm {
+  > div.ul {
     justify-content: flex-start;
     align-items: flex-start;
   }
 
-  > div.stars {
+  > div.ur {
     justify-content: flex-end;
     align-items: flex-start;
   }
 
-  > div.pd {
+  > div.bl {
     justify-content: flex-start;
     align-items: flex-end;
   }
 
-  > div.cc {
+  > div.br {
     justify-content: flex-end;
     align-items: flex-end;
   }
