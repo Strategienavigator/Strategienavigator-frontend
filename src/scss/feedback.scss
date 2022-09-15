@@ -21,12 +21,27 @@ $feedbackColorDarken: 5%;
 
     svg {
       vertical-align: middle;
+      font-size: 150%;
     }
 
     @include theme() {
       color: get("color");
       border-left-color: get("color");
       background-color: get("color");
+    }
+  }
+
+  .feedback.INFO {
+    @include theme() {
+      color: get("text-color") !important;
+      background-color: darken(get("bg-color"), 8%);
+      border-left-color: get("text-color") !important;
+    }
+
+    > svg {
+      @include theme() {
+        color: get("text-color") !important;
+      }
     }
   }
 

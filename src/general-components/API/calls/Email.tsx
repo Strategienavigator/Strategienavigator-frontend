@@ -9,7 +9,7 @@ import {AvailabilityCheckResource, DefaultResponse} from "../../Datastructures";
  * @param apiArgs API Argumente
  */
 const verifyEmail = async (emailToken: string, apiArgs?: APIArgs) => {
-    return await callAPI("api/email/verify/" + emailToken, "PUT", undefined, false, apiArgs);
+    return await callAPI<{email: string}>("api/email/verify/" + emailToken, "PUT", undefined, false, apiArgs);
 }
 
 /**

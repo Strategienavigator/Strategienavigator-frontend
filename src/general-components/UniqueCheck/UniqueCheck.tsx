@@ -26,6 +26,11 @@ export interface UniqueCheckProps {
      * Ob Fehler angezeigt werden sollen
      */
     suppressErrors: boolean
+    /**
+     * Wird aufgerufen wenn der Wert sich ändert
+     * @param {string} value Der Wert
+     */
+    onChangedValue?: (value: string) => void
 }
 
 export interface UniqueCheckState {
@@ -63,6 +68,14 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
             isLoading: false,
             error: false
         };
+    }
+
+    public isAvailable = (): boolean | undefined => {
+        return this.state.success;
+    }
+
+    public getReason = (): "taken" | "blocked" | "invalid" | undefined => {
+        return this.state.reason;
     }
 
     /**
@@ -105,7 +118,12 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
         return (
             <>
                 <Form.Control
-                    onChange={(e) => this.changed(e)}
+                    onChange={async (e) => {
+                        if (this.props.onChangedValue) {
+                            this.props.onChangedValue(e.target.value);
+                        }
+                        await this.changed(e)
+                    }}
                     {...propsForInput}
                 />
                 <div className={"uniqueOutput feedbackContainer"}>

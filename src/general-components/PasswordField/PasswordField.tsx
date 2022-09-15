@@ -75,6 +75,8 @@ export interface PasswordFieldProps {
     text?: string
     required?: boolean
     id?: string
+    onChange?: (value: string) => void
+    autofocus?: boolean
     // changeHandler?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     confirm?: boolean
 }
@@ -193,9 +195,13 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                         type={(this.state.viewPassword) ? "text" : "password"}
                         name={(this.props.id !== undefined) ? this.props.id : "password"}
                         size={"sm"}
+                        autoFocus={this.props.autofocus}
                         placeholder={"*********"}
                         required={(this.props.required !== undefined) ? this.props.required : false}
                         onChange={(e) => {
+                            if (this.props.onChange) {
+                                this.props.onChange(e.target.value);
+                            }
                             this.changed(e)
                         }}
                     />
@@ -271,6 +277,9 @@ class PasswordField<P> extends React.Component<P & PasswordFieldProps, PasswordF
                                 placeholder={"*********"}
                                 required={(this.props.required !== undefined) ? this.props.required : false}
                                 onChange={(e) => {
+                                    if (this.props.onChange) {
+                                        this.props.onChange(e.target.value);
+                                    }
                                     this.passwordConfirmChanged(e)
                                 }}
                             />

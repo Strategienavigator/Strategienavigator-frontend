@@ -14,6 +14,7 @@ import FAE from "../../../../general-components/Icons/FAE";
 export interface EmailVerificationState {
     loaded: boolean
     success?: boolean
+    email?: string
 }
 
 export interface RouteMatches {
@@ -39,7 +40,8 @@ export class EmailVerification extends Component<RouteComponentProps<RouteMatche
         if (call) {
             this.setState({
                 loaded: true,
-                success: call.success
+                success: call.success,
+                email: call.success ? call.callData.email : undefined
             });
         }
     }
@@ -57,7 +59,7 @@ export class EmailVerification extends Component<RouteComponentProps<RouteMatche
                             <FAE icon={faCheck}/>
                             <h4>Ihre E-Mail wurde erfolgreich verifiziert!</h4>
 
-                            <Link to={"/login"}>
+                            <Link to={"/login" + ((this.state.email) ? (`?email=${this.state.email}`) : "")}>
                                 <Button variant="dark">
                                     Jetzt Anmelden
                                 </Button>

@@ -49,6 +49,25 @@ const updateUser = async (userID: number, data: UpdateData, apiArgs?: APIArgs) =
 }
 
 /**
+ * Portiert einen Benutzeraccount von Anonym auf Normal
+ *
+ * @param {UpdateData} data Die Daten des Benutzers
+ * @param {APIArgs} apiArgs Die API-Argumente
+ * @returns {Promise<CallInterface<object> | null>}
+ */
+const portUser = async (data: UpdateData, apiArgs?: APIArgs) => {
+    let formData = new FormData();
+    if(data.email !== undefined)
+        formData.append("email", data.email);
+    if (data.username !== undefined)
+        formData.append("username", data.username);
+    if (data.password !== undefined)
+        formData.append("password", data.password);
+
+    return await callAPI("api/user/port", "POST", formData, true, apiArgs);
+}
+
+/**
  * Löscht einen Benutzer
  *
  * @param userID Die ID des Benutzers
@@ -75,5 +94,6 @@ export {
     createUser,
     updateUser,
     deleteUser,
-    searchUser
+    searchUser,
+    portUser
 }
