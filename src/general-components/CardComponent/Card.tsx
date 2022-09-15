@@ -28,7 +28,7 @@ export interface CardProps<D = never> {
     onChange: (index: number, name: string, desc: string, customDescValues?: D) => void
     onDelete?: (index: number) => void
     customDescValues?: D
-    customDesc?: FunctionComponent<CustomDescriptionComponentProps<D>> | ComponentClass<CustomDescriptionComponentProps<D>>
+    customDescs?: FunctionComponent<CustomDescriptionComponentProps<D>>[] | ComponentClass<CustomDescriptionComponentProps<D>>[]
     placeholder?: CardComponentFieldPlaceholder
 }
 
@@ -56,12 +56,12 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
         };
     }
 
-    public static empty(): CardComponentField {
+    public static empty(extra?: any): CardComponentField {
         return {
             id: "",
             desc: "",
             name: "",
-            extra: undefined
+            extra: extra
         };
     }
 
@@ -127,14 +127,20 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
     }
 
     render = () => {
-        let customDesc;
-        if (this.props.customDesc && this.props.customDescValues !== undefined) {
-            customDesc = React.createElement(this.props.customDesc, {
-                value: this.props.customDescValues,
-                disabled: this.props.disabled,
-                name: this.props.name,
-                onChanged: this.customDescChanged
-            });
+        let customDescs: any[] = [];
+
+        if (this.props.customDescs && this.props.customDescValues !== undefined) {
+            let i = 0;
+            for (const customDesc of this.props.customDescs) {
+                customDescs.push(React.createElement(customDesc, {
+                    value: this.props.customDescValues,
+                    key: `custom-description-${i}`,
+                    disabled: this.props.disabled,
+                    name: this.props.name,
+                    onChanged: this.customDescChanged
+                }));
+                i++;
+            }
         }
 
         return (
@@ -178,7 +184,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                             value={this.props.desc}
                             placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}/>
                         <div>
-                            {customDesc}
+                            {customDescs}
                         </div>
                     </div>
                 </Collapse>

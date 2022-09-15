@@ -37,7 +37,7 @@ export class PortResult implements StepDefinition<PortfolioAnalysisValues>, Step
             // Attractivity
             let aCriterias = data["port-criterias"].attractivity;
             let aWeighting = data["port-weighting"].attractivity;
-            let aEvaluation = data["port-evaluation"].attractivity;
+            let aEvaluation = data["port-evaluation"].attractivity.map(item => item.rating);
 
             let aResultEvaluation = ResultEvaluation.from(aCriterias, objects, aWeighting, aEvaluation, PortEvaluation.header);
             let aResult = aResultEvaluation.getResult();
@@ -45,7 +45,7 @@ export class PortResult implements StepDefinition<PortfolioAnalysisValues>, Step
             // Standing
             let sCriterias = data["port-criterias"]["comp-standing"];
             let sWeighting = data["port-weighting"]["comp-standing"];
-            let sEvaluation = data["port-evaluation"]["comp-standing"];
+            let sEvaluation = data["port-evaluation"]["comp-standing"].map(item => item.rating);
 
             let sResultEvaluation = ResultEvaluation.from(sCriterias, objects, sWeighting, sEvaluation, PortEvaluation.header);
             let sResult = sResultEvaluation.getResult();
