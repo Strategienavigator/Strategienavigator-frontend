@@ -37,6 +37,11 @@ interface HoverWindowProps extends HoverWindowCustomPopupProps {
 interface HoverWindowState {
 }
 
+/**
+ * Zeigt ein popover fenster mit der definierten Überschrift und beschreibung
+ *
+ * ACHTUNG: Alle children erhalten keine pointer-events mehr, wenn sie benötigt werden müssen sie mit `style={{pointerEvents:"auto"}}` wieder aktiviert werden
+ */
 class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
 
 
@@ -60,7 +65,7 @@ class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
 
 
         //TODO make own component
-        const popover = (
+        const popover = popupFunction ?? (
             <Popover id="popover-basic">
                 {customProps.title !== undefined ? (
                     <Popover.Header as="h3">{customProps.title}</Popover.Header>) : undefined}
@@ -72,9 +77,14 @@ class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
         );
 
         return (
-            <OverlayTrigger trigger={this.props.trigger} overlay={popupFunction ?? popover}
+            <OverlayTrigger trigger={this.props.trigger} overlay={popover}
                             onToggle={this.props.onToggle} placement={placement}>
-                {children}
+                <div>
+                    <div style={{pointerEvents:"none"}}>
+                        {children}
+                    </div>
+
+                </div>
             </OverlayTrigger>
         );
     }
