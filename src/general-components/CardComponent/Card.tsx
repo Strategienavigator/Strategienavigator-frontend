@@ -137,8 +137,11 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
             });
         }
 
+        // because of event bubbling onFocus and onBlur are called for all children
         return (
-            <div>
+            <div
+                onFocus={this.showDescription}
+                onBlur={this.closeDescriptionIfChanged}>
                 <InputGroup>
                     <div className={(this.props.disabled) ? "id disabled" : "id"}>
                         {this.props.id}
@@ -146,9 +149,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                     <FormControl
                         required={this.props.required}
                         disabled={this.props.disabled}
-                        onBlur={this.closeIfChanged}
                         onChange={this.nameChanged}
-                        onFocus={this.showDescription}
                         name={this.props.name + "[" + this.props.index + "][name]"}
                         spellCheck={false}
                         value={this.props.value}
@@ -169,8 +170,6 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                             required={this.props.required}
                             disabled={this.props.disabled}
                             onChange={this.descChanged}
-                            onFocus={() => this.setState({showDesc: true})}
-                            onBlur={() => this.state.descChanged ? this.setState({showDesc: false}) : null}
                             as="textarea"
                             spellCheck={false}
                             style={{maxHeight: 500}}
@@ -207,8 +206,8 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
         this.setState({showDesc: true})
     }
 
-    private closeIfChanged = () => {
-        if (this.state.descChanged) {
+    private closeDescriptionIfChanged = () => {
+        if(this.state.descChanged){
             this.setState({showDesc: false})
         }
     }
