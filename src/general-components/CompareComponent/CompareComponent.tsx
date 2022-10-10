@@ -3,6 +3,7 @@ import {CompareAdapter} from "./Adapter/CompareAdapter";
 import {CompareHeader, CompareHeaderAdapter} from "./Header/CompareHeaderAdapter";
 
 import "./compare-component.scss";
+import {HoverWindow} from "../HoverWindow/HoverWindow";
 
 
 /**
@@ -62,9 +63,17 @@ export interface SingleComparison {
      */
     first: string
     /**
+     * Beschreibung der linken Auswahlmöglichkeit
+     */
+    firstDesc?: string
+    /**
      * Rechte Auswahlmöglichkeit, wenn sie fehlt wird nichts angezeigt
      */
     second?: string
+    /**
+     * Beschreibung der rechten Auswahlmöglichkeit
+     */
+    secondDesc?: string
 }
 
 interface CompareComponentState {
@@ -82,11 +91,20 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
 
                 {this.props.values.comparisons.map((comparison, index) => {
                     const compMeta = this.props.fields.getEntry(index);
+                    const firstName = (<div className={"first"}>
+                        {compMeta.first}
+                    </div>);
+                    const secondName = compMeta.second && (<div className={"second"}>
+                        {compMeta.second}
+                    </div>);
                     return (
                         <div key={"field-" + name + index} className={"singleComparison"}>
-                            <div className={"first"}>
-                                {compMeta.first}
-                            </div>
+
+                            {compMeta.firstDesc ? (
+                                <HoverWindow description={compMeta.firstDesc}>
+                                    {firstName}
+                                </HoverWindow>
+                            ) : firstName}
                             <div className={"comparisons"}>
                                 {header.getHeaders().map((item, headerIndex) => {
                                     let checked = (comparison.value !== null) ? (parseInt(comparison.value) === headerIndex) : false;
@@ -113,11 +131,11 @@ class CompareComponent extends Component<CompareComponentProps, CompareComponent
                                     );
                                 })}
                             </div>
-                            {compMeta.second && (
-                                <div className={"second"}>
-                                    {compMeta.second}
-                                </div>
-                            )}
+                            {secondName && compMeta.secondDesc ? (
+                                <HoverWindow description={compMeta.secondDesc}>
+                                    {secondName}
+                                </HoverWindow>
+                            ) : secondName}
                         </div>
                     );
                 })}
