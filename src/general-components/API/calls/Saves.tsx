@@ -1,5 +1,6 @@
 import {APIArgs, callAPI} from "../API";
 import {PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
+import {get} from "immer/dist/utils/common";
 
 
 export interface GetSavesArguments {
@@ -27,6 +28,10 @@ export interface GetSavesArguments {
      * Ob die speicherstände absteigend oder aufsteigend nach erstelldatum sortiert werden sollen
      */
     orderDesc?: boolean
+    /**
+     * Zeigt auch die gelöschten Speicherstände an
+     */
+    deleted?: boolean
 }
 
 /**
@@ -54,6 +59,10 @@ const getSaves = async (userID: number, getSavesArguments: GetSavesArguments, ap
     }
     if (getSavesArguments.description) {
         data.append("description", getSavesArguments.description);
+        searchParams = true;
+    }
+    if (getSavesArguments.deleted) {
+        data.append("deleted", getSavesArguments.deleted ? "1" : "0");
         searchParams = true;
     }
 
