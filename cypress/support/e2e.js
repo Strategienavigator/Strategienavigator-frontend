@@ -24,8 +24,6 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-const { createLogicalNot } = require("typescript");
-
 Cypress.Commands.add('loginViaApi', (username = Cypress.env("TEST_LOGIN_USERNAME"), password = Cypress.env("TEST_LOGIN_PASSWORD")) => {
 
     let data = {
@@ -44,40 +42,40 @@ Cypress.Commands.add('loginViaApi', (username = Cypress.env("TEST_LOGIN_USERNAME
 
 //Index ist welche Logindata von der testLoginData.json
 Cypress.Commands.add('loginViaVisual',(index = -1)=>{
-    
+
     cy.fixture("testLoginData").then(function (LoginData)
-     {
-    this.LoginData = LoginData;
-
-    var username
-    var password
-    if (index == -1)
     {
-        username = Cypress.env("TEST_LOGIN_USERNAME")
-        password = Cypress.env("TEST_LOGIN_PASSWORD")
-    }else{
-        username = this.LoginData[index]["username"]
-        password =  this.LoginData[index]["password"]
-    }
+        this.LoginData = LoginData;
 
-    cy.log(username)
-    cy.log('Logs in visual as ' + username)
+        var username
+        var password
+        if (index == -1)
+        {
+            username = Cypress.env("TEST_LOGIN_USERNAME")
+            password = Cypress.env("TEST_LOGIN_PASSWORD")
+        }else{
+            username = this.LoginData[index]["username"]
+            password =  this.LoginData[index]["password"]
+        }
 
-    cy.visit("/login")
-    cy.get('input[id="email"]')
-    .clear()
-    .type(username)
-    cy.get('input[id="password"]')
-    .clear()
-    .type(password)
-    cy.intercept("GET",/.*users.*/).as('user')
-    cy.get('button[type="submit"]')
-    .click()
+        cy.log(username)
+        cy.log('Logs in visual as ' + username)
 
-    cy.log("Logged in as "+ username)
-    cy.wait("@user")
-     })
-}) 
+        cy.visit("/login")
+        cy.get('input[id="email"]')
+            .clear()
+            .type(username)
+        cy.get('input[id="password"]')
+            .clear()
+            .type(password)
+        cy.intercept("GET",/.*users.*/).as('user')
+        cy.get('button[type="submit"]')
+            .click()
+
+        cy.log("Logged in as "+ username)
+        cy.wait("@user")
+    })
+})
 //site = name of the site example: login
 //clickOn = element that contains a text example: "Login" for a Button with Login on it
 Cypress.Commands.add("visitSite",(site, clickOn)=>{
@@ -95,13 +93,13 @@ Cypress.Commands.add("visitSite",(site, clickOn)=>{
 //tool_id int : Which tool, 2 for SWOT-Analysis
 //owner_id int: optional: standard is 0 for max@test.test
 Cypress.Commands.add('CreateSave',(saveSlot, name, tool_id, owner_id = 1)=>{
-    
+
     cy.fixture("saveData/"+saveSlot).then(function (SaveData)
-     {
+    {
         this.SaveData = SaveData
         var save = JSON.stringify(SaveData)
         cy.task("queryDb",
-        `INSERT INTO toolbox.saves
+            `INSERT INTO toolbox.saves
         (data, name, tool_id, owner_id, description)
         VALUES
         ('`+save+`',
@@ -109,5 +107,38 @@ Cypress.Commands.add('CreateSave',(saveSlot, name, tool_id, owner_id = 1)=>{
         `+tool_id+`,
         `+owner_id+`,
         "TEST_SAVE");`);
-     })
+    })
+})
+//Parameter
+//tool: string = Which tool to load a save from
+//Options: "swot"
+Cypress.Commands.add('LoginAndLoad',(tool) =>{
+
+    if (tool == "swot")
+    {
+        cy.visit("/")
+        cy.loginViaApi()
+        cy.visit("/swot-analysis")
+        cy.url()
+            .should("include","swot-analysis")
+
+        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
+        cy.contains("TEST-SWOT VON MAX")
+            .click()
+
+
+        cy.wait("@loadSave")
+        cy.get("@loadSave")
+            .its("response")
+            .should('include',
+                {
+                    statusCode: 200
+                })
+
+        cy.url()
+            .should("include", "swot-analysis")
+
+    }
+    cy.log(tool+" - Save loaded")
+
 })
