@@ -40,7 +40,7 @@ describe('register on the Website', () => {
         cy.intercept('POST', /.*api\/users.*/).as('create')
         cy.get('button[type=submit]').click()
 
-        cy.get("div[class='feedback SUCCESS']")
+        cy.get(".feedback.SUCCESS")
         .contains("Username ist Verfügbar!")
         .should("be.visible")
 

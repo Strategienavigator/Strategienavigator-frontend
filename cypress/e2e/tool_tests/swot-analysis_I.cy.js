@@ -86,12 +86,12 @@ describe('SWOT Analyisis Part I', () => {
         //
         //Karten werden hinzugefügt und mit Testdaten gefüllt
         //Es werden erst alle Accordions zusammengeklappt!
-        cy.get("button[class='accordion-button']")
+        cy.get(".accordion-button")
           .click()
 
         //Gehe schritt für Schritt die Accordions durch und fügen Inputfelder hinzu bis wir 4 erreicht haben
         //Dann werden diese mit hilfe von FillFactors mit Testdaten aufgefüllt
-        cy.get("button[class='accordion-button collapsed']")
+        cy.get(".accordion-button collapse")
           .each(($press) =>
           {
             var counter = -2; //Input des SWOT-Namens und Beshreibung werden nicht gezählt
@@ -113,7 +113,7 @@ describe('SWOT Analyisis Part I', () => {
                 }
               })
 
-            cy.get('div[class="addCard card"]')
+            cy.get('.addCard.card')
               .each(($add) =>
               {
                 if ($add.is(":visible"))

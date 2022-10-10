@@ -93,7 +93,7 @@ describe('Checking Profile', () => {
             statusCode: 200
           })
 
-        cy.get('div [class="feedback text-success"]')
+        cy.get('.feedback.text-success')
         .should('not.be.visible')
 
         cy.reload();
@@ -124,7 +124,7 @@ describe('Checking Profile', () => {
             statusCode: 200
           })
 
-        cy.get('div [class="feedback text-success"]')
+        cy.get('.feedback.text-success')
         .should('not.be.visible')
 
         cy.reload();
