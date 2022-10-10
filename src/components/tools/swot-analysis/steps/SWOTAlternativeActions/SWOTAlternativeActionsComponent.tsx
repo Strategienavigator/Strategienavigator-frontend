@@ -108,7 +108,7 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
 
                     <Row className={"mb-3 mt-3"}>
                         <Col sm={isDesktop() ? 6 : 12}>
-                            <HoverWindow description={firstIdDescription} placement={"bottom"}>
+                            <HoverWindow description={firstIdDescription} placement={"bottom"} pointerDisable={!this.props.disabled}>
                                 <Form.Select id={"first"}
                                              disabled={!this.props.disabled}
                                              value={firstId}
@@ -129,7 +129,7 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                         </Col>
                         <Col sm={isDesktop() ? 6 : 12}>
 
-                            <HoverWindow description={secondIdDescription} placement={"bottom"}>
+                            <HoverWindow description={secondIdDescription} placement={"bottom"} pointerDisable={!this.props.disabled}>
                                 <Form.Select id={"second"}
                                              disabled={!this.props.disabled}
                                              value={secondId}

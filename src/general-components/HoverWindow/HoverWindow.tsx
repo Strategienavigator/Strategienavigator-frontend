@@ -32,17 +32,26 @@ interface HoverWindowProps extends HoverWindowCustomPopupProps {
      * Stellt ein auf welcher Seite, das Popup Fenster angezeigt werden soll
      */
     placement?: Placement
+    /**
+     * Definiert ob alle click events für die children deaktiviert werden sollen. Das wird benötigt, wenn die children disabled sind oder können
+     */
+    pointerDisable: boolean
 }
 
 interface HoverWindowState {
 }
 
+/**
+ * Zeigt ein popover fenster mit der definierten Überschrift und beschreibung
+ *
+ */
 class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
 
 
     static defaultProps = {
         trigger: ["hover", "focus"],
-        disabled: false
+        disabled: false,
+        pointerDisable: false
     }
 
     render() {
@@ -60,7 +69,7 @@ class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
 
 
         //TODO make own component
-        const popover = (
+        const popover = popupFunction ?? (
             <Popover id="popover-basic">
                 {customProps.title !== undefined ? (
                     <Popover.Header as="h3">{customProps.title}</Popover.Header>) : undefined}
@@ -70,11 +79,17 @@ class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
                     </Popover.Body>) : undefined}
             </Popover>
         );
-
         return (
-            <OverlayTrigger trigger={this.props.trigger} overlay={popupFunction ?? popover}
+            <OverlayTrigger trigger={this.props.trigger} overlay={popover}
                             onToggle={this.props.onToggle} placement={placement}>
-                {children}
+                {this.props.pointerDisable ? (
+                    <div>
+                        <div style={{pointerEvents: "none"}}>
+                            {children}
+                        </div>
+                    </div>
+                ) : children}
+
             </OverlayTrigger>
         );
     }
