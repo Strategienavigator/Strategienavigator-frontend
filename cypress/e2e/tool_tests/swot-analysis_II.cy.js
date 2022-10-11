@@ -10,21 +10,23 @@ describe('SWOT Analyisis Part II', () => {
        
         cy.contains("Weiter")
         .click()  
-        for (let i = 0; i < 64; i++) 
+
+        let MAX_SUM_ACTIONS = 16
+        for (let i = 0; i < MAX_SUM_ACTIONS; i++) 
         {
             FillActionStep(i)
         
             cy.log("Step: " + i)
-            if(i < 63)
+            if(i < MAX_SUM_ACTIONS -1)
                 {
                 cy.contains("Nächster")
                 .click()
                 }
         }
         CheckColor() 
-              
         cy.contains("Nächster")
-        .click()  
+        .click()
+        
         cy.contains("Speichern")
         .click();   
     })

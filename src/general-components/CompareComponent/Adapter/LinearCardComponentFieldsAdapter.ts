@@ -19,7 +19,7 @@ class LinearCardComponentFieldsAdapter extends CompareAdapter {
      * @param index
      */
     getEntry(index: number): SingleComparison {
-        return {first: this.cardComponentFields[index].name};
+        return {first: this.cardComponentFields[index].name, firstDesc: this.cardComponentFields[index].desc};
     }
 
     getLength(): number {

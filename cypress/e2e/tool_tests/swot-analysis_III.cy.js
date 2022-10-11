@@ -32,8 +32,8 @@ describe('SWOT Analyisis Part III', () => {
             .click()
             }
         })
-        
-        for (let i = 0; i < 84; i++)
+        let MAX_SUM_STEPS = 20
+        for (let i = 0; i < MAX_SUM_STEPS; i++) 
         {
             cy.get("form[id='swot-classify-alternate-actions']>.actionCards")
             .find(".btn.btn-primary.btn-sm").as("button")
