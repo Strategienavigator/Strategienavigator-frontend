@@ -10,8 +10,12 @@ import {
 } from "../../../../../general-components/CompareComponent/CompareComponent";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {UtilEvaluation} from "./UtilEvaluation";
-import {LinearCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
-import {UACriteriaCustomDescriptionInfoPanel} from "../UtilCriterias/ScaleDescriptionModal/UACriteriaCustomDescriptionInfoPanel";
+import {
+    LinearCardComponentFieldsAdapter
+} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
+import {
+    UACriteriaCustomDescriptionInfoPanel
+} from "../UtilCriterias/ScaleDescriptionModal/UACriteriaCustomDescriptionInfoPanel";
 import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 
@@ -74,7 +78,7 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, UtilEvaluation
                         if (!weightingValues.result.some((item) => {
                             return item.criteria === criteria && item.points !== 0;
                         })) {
-                            return;
+                            return null;
                         }
 
                         const rating = values.evaluation[criteriaIndex].rating;

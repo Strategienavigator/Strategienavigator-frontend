@@ -93,7 +93,7 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
                 if (!weightingValues.result.some((item) => {
                     return item.criteria === criteria && item.points !== 0;
                 })) {
-                    return;
+                    return null;
                 }
 
                 return (
