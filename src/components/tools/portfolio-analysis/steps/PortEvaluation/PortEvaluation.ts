@@ -7,8 +7,10 @@ import {PortfolioAnalysisValues} from "../../PortfolioAnalysis";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
-import {PortEvaluationComponent} from "./PortEvaluationComponent";
+import {PortEvaluationComponent, Rating} from "./PortEvaluationComponent";
 import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
+import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
+import {CompareComponentValues} from "../../../../../general-components/CompareComponent/CompareComponent";
 
 
 export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, StepDataHandler<PortfolioAnalysisValues> {
@@ -44,19 +46,24 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
                     header: null
                 };
             });
-            let attractivitys = [];
-            let standings = [];
+            let compareCValues: CompareComponentValues = {
+              comparisons: compareValues,
+              headers: PortEvaluation.header.getHeaders()
+            };
 
+            let attractivitys: Rating[] = [];
             for (let i = 0; i < attractivityCriterias.length; i++) {
                 attractivitys.push({
-                    comparisons: compareValues,
-                    headers: PortEvaluation.header.getHeaders()
+                    rating: compareCValues,
+                    criteriaIndex: i
                 });
             }
+
+            let standings: Rating[] = [];
             for (let i = 0; i < standingCriterias.length; i++) {
                 standings.push({
-                    comparisons: compareValues,
-                    headers: PortEvaluation.header.getHeaders()
+                    rating: compareCValues,
+                    criteriaIndex: i
                 });
             }
 
@@ -74,18 +81,28 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
     validateData(data: PortfolioAnalysisValues): UIError[] {
         let errors: UIError[] = [];
         let evaluation = data["port-evaluation"]?.attractivity;
+        let criteriasA = data["port-criterias"]?.attractivity;
+        let weightingA = data["port-weighting"]?.attractivity;
 
-        if (evaluation !== undefined) {
+        if (evaluation && criteriasA && weightingA) {
+            let weightingEvalA = new WeightingEvaluation(criteriasA, weightingA);
             let errorFound = false;
             let i = 0;
+
             while (!errorFound && i < evaluation.length) {
                 let e = 0;
-                while (!errorFound && e < evaluation[i].comparisons.length) {
-                    let value = evaluation[i].comparisons[e].value;
-                    if (value === null || value === "") {
-                        errorFound = true;
+                let criteria = criteriasA[evaluation[i].criteriaIndex];
+
+                if (weightingEvalA.getValues().result.some((item) => {
+                    return item.criteria === criteria && item.points !== 0;
+                })) {
+                    while (!errorFound && e < evaluation[i].rating.comparisons.length) {
+                        let value = evaluation[i].rating.comparisons[e].value;
+                        if (value === null || value === "") {
+                            errorFound = true;
+                        }
+                        e++;
                     }
-                    e++;
                 }
                 i++;
             }
@@ -98,17 +115,26 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
                 });
             } else {
                 evaluation = data["port-evaluation"]?.["comp-standing"];
+                let criteriasS = data["port-criterias"]?.["comp-standing"];
+                let weightingS = data["port-weighting"]?.["comp-standing"];
                 i = 0;
 
-                if (evaluation) {
+                if (evaluation && criteriasS && weightingS) {
                     while (!errorFound && i < evaluation.length) {
                         let e = 0;
-                        while (!errorFound && e < evaluation[i].comparisons.length) {
-                            let value = evaluation[i].comparisons[e].value;
-                            if (value === null || value === "") {
-                                errorFound = true;
+                        let criteria = criteriasS[evaluation[i].criteriaIndex];
+                        let weightingEvalS = new WeightingEvaluation(criteriasS, weightingS);
+
+                        if (weightingEvalS.getValues().result.some((item) => {
+                            return item.criteria === criteria && item.points !== 0;
+                        })) {
+                            while (!errorFound && e < evaluation[i].rating.comparisons.length) {
+                                let value = evaluation[i].rating.comparisons[e].value;
+                                if (value === null || value === "") {
+                                    errorFound = true;
+                                }
+                                e++;
                             }
-                            e++;
                         }
                         i++;
                     }

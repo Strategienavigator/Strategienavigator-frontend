@@ -25,15 +25,12 @@ export class ToggleSettingType extends Component<ToggleSettingTypeProps, {}> {
         this.props.valueChanged(this.parseValue((event.target as HTMLInputElement).checked));
     }
 
-
     render() {
-
         return (
             <div className="parent">
                 <Form.Check.Label className="title" htmlFor={"checkbox-" + this.props.name}>
                     <span>{this.props.name}</span><br/>
                     <span className={"text-muted"}>{this.props.description}</span>
-
 
                 </Form.Check.Label>
                 <div className="type">

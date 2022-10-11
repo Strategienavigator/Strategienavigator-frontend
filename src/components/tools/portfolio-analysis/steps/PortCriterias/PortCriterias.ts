@@ -13,9 +13,11 @@ import {
     isCardComponentFilled,
     isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
+import {PortEvaluation} from "../PortEvaluation/PortEvaluation";
 
 
 export class PortCriterias implements StepDefinition<PortfolioAnalysisValues>, StepDataHandler<PortfolioAnalysisValues> {
+    static header = PortEvaluation.header;
     static MIN: number = 2;
     static MAX: number = 6;
     dataHandler: StepDataHandler<PortfolioAnalysisValues>;
@@ -37,13 +39,20 @@ export class PortCriterias implements StepDefinition<PortfolioAnalysisValues>, S
     fillFromPreviousValues(data: Draft<PortfolioAnalysisValues>): void {
         data["port-criterias"] = {
             "attractivity": [
-                Card.empty(),
-                Card.empty()
+                Card.empty(PortCriterias.getDefaultExtraData()),
+                Card.empty(PortCriterias.getDefaultExtraData())
             ],
             "comp-standing": [
-                Card.empty(),
-                Card.empty()
+                Card.empty(PortCriterias.getDefaultExtraData()),
+                Card.empty(PortCriterias.getDefaultExtraData())
             ]
+        };
+    }
+
+    static getDefaultExtraData() {
+        return {
+            headers: PortCriterias.header.getHeaders(),
+            activeIndices: Array(PortCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
         };
     }
 

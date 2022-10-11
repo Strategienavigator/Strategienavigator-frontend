@@ -8,11 +8,15 @@ import {CardComponent, CardComponentFields} from "../../../../../general-compone
 import {PortCriterias} from "./PortCriterias";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import React from "react";
+import {
+    UACriteriaCustomDescription,
+    UACriteriaCustomDescriptionValues
+} from "../../../utility-analysis/steps/UtilCriterias/UACriteriaCustomDescription";
 
 
 interface PortCriteriasValues {
-    "attractivity": CardComponentFields,
-    "comp-standing": CardComponentFields
+    "attractivity": CardComponentFields<UACriteriaCustomDescriptionValues>,
+    "comp-standing": CardComponentFields<UACriteriaCustomDescriptionValues>
 }
 
 class PortCriteriasComponent extends Step<PortfolioAnalysisValues, {}> {
@@ -35,9 +39,11 @@ class PortCriteriasComponent extends Step<PortfolioAnalysisValues, {}> {
                 <>
                     <h5>Marktattraktivität</h5>
 
-                    <CardComponent
+                    <CardComponent<UACriteriaCustomDescriptionValues>
                         name={"attractivity"}
                         values={criterias["attractivity"]}
+                        customDescriptions={[UACriteriaCustomDescription]}
+                        customDescValuesFactory={PortCriterias.getDefaultExtraData}
                         disabled={this.props.disabled}
                         min={PortCriterias.MIN}
                         max={PortCriterias.MAX}
@@ -48,9 +54,11 @@ class PortCriteriasComponent extends Step<PortfolioAnalysisValues, {}> {
 
                     <h5>Wettbewerbsposition</h5>
 
-                    <CardComponent
+                    <CardComponent<UACriteriaCustomDescriptionValues>
                         name={"comp-standing"}
                         values={criterias["comp-standing"]}
+                        customDescriptions={[UACriteriaCustomDescription]}
+                        customDescValuesFactory={PortCriterias.getDefaultExtraData}
                         disabled={this.props.disabled}
                         min={PortCriterias.MIN}
                         max={PortCriterias.MAX}

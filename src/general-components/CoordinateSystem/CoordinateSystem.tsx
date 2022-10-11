@@ -164,9 +164,9 @@ class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystem
     static pointGroupDeviation = 0.09;
 
     // Standardwerte der Größen
-    static standardPointSize = 4;
-    static minPointSize = 3;
-    static maxPointSize = 12;
+    static standardPointSize = 6;
+    static minPointSize = 5;
+    static maxPointSize = 14;
 
     state = {
         maxY: 6,
