@@ -171,9 +171,9 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
         return (showNormal === true) ? (
             <NormalClassifying
                 actions={actions}
+                disabled={this.props.disabled}
                 classifications={classifications}
                 classificationController={this.classificationController}
-
             />
         ) : (
             <DragAndDropClassifying

@@ -33,8 +33,8 @@ describe('SWOT Analyisis Part II', () => {
 })
 function FillActionStep(index)
 {
-    cy.get("div[class='alternative-actions']")
-    .find("div[class='addCard card']")
+    cy.get(".alternative-actions")
+    .find(".addCard.card")
     .click()
 
     if(index % 3)
@@ -70,12 +70,12 @@ Description: Checking the right colours on the div for the right position
 function CheckColor()
 {
     //Checkt die Farbe des Divs
-    cy.get('div[class="green"]')
+    cy.get('.green')
         .each(($divG) =>
         {
             cy.wrap($divG).should('have.css', 'background-color', 'rgb(0, 128, 0)')
         })
-        cy.get('div[class="red"]')
+        cy.get('.red')
         .each(($divG) =>
         {
             cy.wrap($divG).should('have.css', 'background-color', 'rgb(255, 0, 0)')

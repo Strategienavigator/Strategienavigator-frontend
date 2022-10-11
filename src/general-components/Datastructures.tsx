@@ -1,61 +1,46 @@
 /**
+ * Dieses Enum repräsentiert eine Permission für einen SharedSave
+ */
+export enum SharedSavePermission {
+    /**
+     * Der Speicherstand kann nur gelesen werden
+     * @type {SharedSavePermission.READ}
+     */
+    READ = 0,
+    /**
+     * Der Speicherstand kann gelesen und beschrieben werden
+     * @type {SharedSavePermission.WRITE}
+     */
+    WRITE = 1,
+    /**
+     * Der Benutzer erhält Adminrechte
+     * @type {SharedSavePermission.ADMIN}
+     */
+    ADMIN = 2,
+    /**
+     * Der Speicherstand gehört dem Besitzer
+     * @type {SharedSavePermission.OWNER}
+     */
+    OWNER = 3,
+}
+
+/**
  * Repräsentiert einen Speicherstand.
  * Der Typparameter steht für die Daten, da diese von Tool zu Tool unterschiedlich sind
  */
-export type SaveResource<D = object> = {
+export interface SaveResource<D = object> extends SimpleSaveResource {
     /**
-     * Die ID des Speicherstands
+     * Data des Speicherstands
      */
-    id: number
+    data: D,
     /**
-     * Der Benutzername vom Besitzer
+     * Alle Kollaborateure
      */
-    owner: string
+    contributors: SimplestUserResource[],
     /**
-     * Die ID vom Besitzer
+     * Alle eingeladenen Benutzer
      */
-    owner_id: number
-    /**
-     * Die ID des dazugehörigen Tools
-     */
-    tool_id: number
-    /**
-     * Die Daten des Speicherstands.
-     * Sind vom Typ D (Generic/Typparameter)
-     */
-    data: D
-    /**
-     * Der Name des Speicherstands
-     */
-    name: string
-    /**
-     * Die Beschreibung des Speicherstands
-     */
-    description: string
-    /**
-     * Die ID des Benutzers der aktuell den Speicherstand bearbeitet. Sollte keiner diesen bearbeiten steht hier null
-     */
-    locked_by: number | null
-    /**
-     * Der Zeitstempel wann der Speicherstand erstellt wurde
-     */
-    created_at: string
-    /**
-     * Der Zeitstempel wann der Speicherstand das letzte mal abgespeichert wurde
-     */
-    updated_at: string
-    /**
-     * Der Zeitstempel wann der Speicherstand das letzte mal bearbeitet wurde
-     */
-    last_locked: string | null
-    /**
-     * Ein Array aus Benutzer-IDs. Stellen die Benutzer dar, welche am Speicherstand mitarbeiten
-     */
-    contributors: Array<number>
-    /**
-     * Ein Array aus Benutzer-IDs. Stellen die Benutzer dar, welche eingeladen wurden am Speicherstand mitzuarbeiten
-     */
-    invited: Array<number>
+    invited: SimplestUserResource[]
 }
 
 /**
@@ -77,17 +62,11 @@ export type SimpleSaveResource = {
     /**
      * Der Zeitstempel wann der Speicherstand das letzte mal bearbeitet wurde
      */
-    last_locked: Date
-    /**
-     * Die ID vom Besitzer
-     */
-    owner_id: number
-
+    last_locked: string
     /**
      * name des Eigentümers
      */
-    owner: string
-
+    owner: SimplestUserResource
     /**
      * ob das Konto des Eigentümers gerade gelöscht wird
      */
@@ -101,9 +80,27 @@ export type SimpleSaveResource = {
      */
     description: string
     /**
-     * Ein Array aus Benutzer-IDs. Stellen die Benutzer dar, welche am Speicherstand mitarbeiten
+     * Wann erstellt?
      */
-    contributors: Array<number>
+    created_at: string,
+    /**
+     * Zuletzt bearbeitet
+     */
+    updated_at: string
+    /**
+     * Die Berechtigung der Einladung
+     */
+    permission?: {
+        /**
+         * Die Berechtigung die die Person erhält, sollte diese die Einladung akzeptieren.
+         * Die Berechtigung wird mittels Integer angegeben
+         */
+        permission: SharedSavePermission
+        /**
+         * Das Datum wann die Einladung erfolgte
+         */
+        created_at: string
+    }
 }
 
 /**
@@ -111,26 +108,45 @@ export type SimpleSaveResource = {
  */
 export type InvitationLinkResource = {
     /**
-     * Die ID der Einladung
-     */
-    id: number
-    /**
      * Das Datum wann die Einladung ausläuft
      */
-    expiry_date: Date
+    expiry_date: string
     /**
      * Die Berechtigung die die Person erhält, sollte diese die Einladung akzeptieren.
      * Die Berechtigung wird mittels Integer angegeben
      */
-    permission: number
-    /**
-     * Die ID des Speicherstands, zu dem der Benutzer eingeladen wurde
-     */
-    save_id: number
+    permission: SharedSavePermission
     /**
      * Das Datum wann die Einladung erfolgte
      */
-    created_at: Date
+    created_at: string
+    /**
+     * Die ID des Speicherstands, zu dem der Benutzer eingeladen wurde
+     */
+    save: SimplerSaveResource
+    /**
+     * Der Token des Einladungslinks
+     */
+    token: string
+}
+
+export type SimplerSaveResource = {
+    /**
+     * Die ID des Saves
+     */
+    id: number,
+    /**
+     * Die Bezeichnung des Saves
+     */
+    name: string,
+    /**
+     * Der Inhaber des Saves
+     */
+    owner: SimplestUserResource,
+    /**
+     * Das Tool des Saves
+     */
+    tool: ToolResource
 }
 
 /**
@@ -144,9 +160,22 @@ export type PasswordResetResource = {
     /**
      * Das Datum, wann der Password-reset ausläuft
      */
-    expiry_date: Date
+    expiry_date: string
 }
 
+/**
+ * Datenressource eines Benutzers im simpelsten Zustand
+ */
+export type SimplestUserResource = {
+    /**
+     * Die ID des Benutzers
+     */
+    id: number,
+    /**
+     * Der Benutzername des Benutzers
+     */
+    username: string
+}
 
 /**
  * Sollte eine Abfrage stattfinden, wo eine Pagination eingebunden ist, wird diese hier dargestellt.
@@ -213,15 +242,15 @@ export type UserResource = {
     /**
      * Erstelldatum des Benutzerkontos
      */
-    created_at: Date
+    created_at: string
     /**
      * Array mit der IDs der von diesem Benutzer erstellten Speicherstände
      */
-    owned_saves: Array<number>
+    owned_saves: Array<SimplerSaveResource>
     /**
      * Array mit IDs der mit diesem Benutzer geteilten Speicherstände
      */
-    shared_saves: Array<number>
+    shared_saves: Array<SharedSaveUserResource>
     /**
      * Array mit Einladungen an diesen Benutzer
      */
@@ -277,15 +306,19 @@ export type SharedSaveResource = {
     /**
      * ID des eingeladenen Benutzers
      */
-    user: number
+    user: SimplestUserResource
     /**
      * ID des geteilten Speicherstandes
      */
-    save: number
+    save: SimplerSaveResource
     /**
      * Die Berechtigung die der eingeladene Benutzer erhält
      */
-    permission: number
+    permission: SharedSavePermission
+    /**
+     * Das Datum wann die Einladung erfolgte
+     */
+    created_at: string
     /**
      * Boolean ob die Einladung angenommen wurde
      */
@@ -302,13 +335,17 @@ export type SharedSaveResource = {
 
 export type SharedSaveUserResource = {
     /**
-     * ID des Speicherstandes
+     * Der Speicherstand
      */
-    save_id: number
+    save: SimplerSaveResource
     /**
      * Berechtigung für den Speicherstand
      */
-    permission: number
+    permission: SharedSavePermission
+    /**
+     * Das Datum wann die Einladung erfolgte
+     */
+    created_at: string
 }
 
 export type AvailabilityCheckResource = {
@@ -338,6 +375,8 @@ export type UserSettingResource = {
      */
     value: string
 }
+
+export type UserSearchResultResource = SimplestUserResource;
 
 export type SettingResource = {
     /**

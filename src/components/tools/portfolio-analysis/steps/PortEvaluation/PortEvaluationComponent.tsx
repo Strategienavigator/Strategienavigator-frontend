@@ -14,11 +14,20 @@ import {LinearCardComponentFieldsAdapter} from "../../../../../general-component
 import {PortEvaluation} from "./PortEvaluation";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {Accordion} from "react-bootstrap";
+import {UACriteriaCustomDescriptionValues} from "../../../utility-analysis/steps/UtilCriterias/UACriteriaCustomDescription";
+import {UACriteriaCustomDescriptionInfoPanel} from "../../../utility-analysis/steps/UtilCriterias/ScaleDescriptionModal/UACriteriaCustomDescriptionInfoPanel";
+import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
+import {ReactNode} from "react";
 
+
+export interface Rating {
+    criteriaIndex: number,
+    rating: CompareComponentValues
+}
 
 interface PortEvaluationValues {
-    "attractivity": CompareComponentValues[]
-    "comp-standing": CompareComponentValues[]
+    "attractivity": Rating[]
+    "comp-standing": Rating[]
 }
 
 class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
@@ -45,49 +54,74 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
         );
     }
 
-    getCompareComponents(type: "attractivity" | "comp-standing"): JSX.Element[] {
+    getCompareComponents(type: "attractivity" | "comp-standing"): ReactNode[] {
         let allValues = this.props.save.data["port-evaluation"];
         let allCriterias = this.props.save.data["port-criterias"];
+        let allWeighting = this.props.save.data["port-weighting"];
         let objects = this.props.save.data["port-objects"];
-        let criterias: CardComponentFields;
+        let criterias: CardComponentFields<UACriteriaCustomDescriptionValues>;
 
-        if (allCriterias?.attractivity !== undefined && allCriterias["comp-standing"] !== undefined && objects !== undefined) {
+        if (
+            allCriterias &&
+            allCriterias?.attractivity !== undefined &&
+            allCriterias["comp-standing"] !== undefined &&
+            allValues &&
+            allValues.attractivity !== undefined &&
+            allValues["comp-standing"] !== undefined &&
+            allWeighting &&
+            allWeighting["comp-standing"] !== undefined &&
+            allWeighting.attractivity !== undefined &&
+            objects !== undefined
+        ) {
+            let weighting : CompareComponentValues;
+            let values : Rating[];
             if (type === "attractivity") {
+                weighting = allWeighting.attractivity;
+                values = allValues.attractivity;
                 criterias = allCriterias?.attractivity;
             } else {
+                weighting = allWeighting["comp-standing"];
+                values = allValues["comp-standing"];
                 criterias = allCriterias?.["comp-standing"];
             }
+            let weightingEval = new WeightingEvaluation(criterias, weighting);
+            let weightingValues = weightingEval.getValues();
 
             let adapter = new LinearCardComponentFieldsAdapter(objects.objects);
 
-            return criterias.map((item, index) => {
-                if (allValues) {
-                    let values;
-                    if (type === "attractivity") {
-                        values = allValues.attractivity[index];
-                    } else {
-                        values = allValues["comp-standing"][index];
-                    }
-
-                    return (
-                        <div key={"evaluation-" + index + "-" + type} className={"evaluation"}>
-                            <h6>{item.name}</h6>
-
-                            <CompareComponent
-                                name={type + "-" + index}
-                                header={PortEvaluation.header}
-                                fields={adapter}
-                                values={values}
-                                disabled={this.props.disabled}
-                                onChanged={(values) => {
-                                    this.valuesChanged(values, index, type);
-                                }}
-                            />
-                        </div>
-                    );
+            return criterias.map((criteria, index) => {
+                if (!weightingValues.result.some((item) => {
+                    return item.criteria === criteria && item.points !== 0;
+                })) {
+                    return null;
                 }
-                return <></>;
-            });
+
+                return (
+                    <div key={"evaluation-" + index + "-" + type} className={"evaluation"}>
+                        <h6>
+                            {criteria.name}
+
+                            {criteria.extra !== undefined && (
+                                <UACriteriaCustomDescriptionInfoPanel
+                                    values={criteria.extra}
+                                />
+                            )}
+                        </h6>
+
+                        <CompareComponent
+                            name={type + "-" + index}
+                            header={PortEvaluation.header}
+                            disabledComparisons={criteria.extra?.activeIndices}
+                            fields={adapter}
+                            values={values[index].rating}
+                            disabled={this.props.disabled}
+                            onChanged={(values) => {
+                                this.valuesChanged(values, index, type);
+                            }}
+                        />
+                    </div>
+                );
+            })
         }
         return [];
     }
@@ -125,9 +159,9 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
         this.props.saveController.onChanged((save) => {
             if (save.data["port-evaluation"] !== undefined) {
                 if (type === "attractivity") {
-                    save.data["port-evaluation"].attractivity[index] = values;
+                    save.data["port-evaluation"].attractivity[index].rating = values;
                 } else {
-                    save.data["port-evaluation"]["comp-standing"][index] = values;
+                    save.data["port-evaluation"]["comp-standing"][index].rating = values;
                 }
             }
         });

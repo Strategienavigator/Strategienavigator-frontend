@@ -1,5 +1,5 @@
 import React, {FormEvent, PureComponent} from "react";
-import {Button, Form} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
@@ -9,6 +9,8 @@ import {checkEmail} from "../../../general-components/API/calls/Email";
 
 import "./register.scss";
 import {Messages} from "../../../general-components/Messages/Messages";
+import {RouteComponentProps, withRouter} from "react-router";
+import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 
 
 interface RegisterState {
@@ -16,7 +18,7 @@ interface RegisterState {
     loaded?: boolean
 }
 
-export class Register extends PureComponent<{}, RegisterState> {
+class Register extends PureComponent<RouteComponentProps, RegisterState> {
 
     constructor(props: any) {
         super(props);
@@ -38,13 +40,16 @@ export class Register extends PureComponent<{}, RegisterState> {
         let password: string = extractFromForm(e, "password") as string;
 
         let call = await Session.register(email, username, password);
+
         this.setState({
             isRegistering: false
         });
+
         if (call?.success) {
             Messages.add("Konto erstellt!\nÜberprüfe deine Emails!", "SUCCESS", Messages.TIMER);
+            this.props.history.push("/login");
         } else {
-            Messages.add("Fehlgeschlagen!", "DANGER", Messages.TIMER);
+            Messages.add("Fehlgeschlagen! Überprüfen Sie Ihre Eingaben!", "DANGER", Messages.TIMER);
         }
     }
 
@@ -93,13 +98,17 @@ export class Register extends PureComponent<{}, RegisterState> {
                 <hr/>
 
                 {/*SUBMIT*/}
-                <Button disabled={this.state.isRegistering} type={"submit"}
-                        variant={"dark"}>
-                    {" "}Registrieren
-                </Button>
-
+                <LoadingButton
+                    type={"submit"}
+                    defaultChild={"Registrieren"}
+                    savingChild={"Wird registriert..."}
+                    showIcons
+                    isLoading={this.state.isRegistering}
+                />
             </Form>
         );
     }
 
 }
+
+export default withRouter(Register);

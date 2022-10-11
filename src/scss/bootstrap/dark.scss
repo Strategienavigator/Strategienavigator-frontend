@@ -1,3 +1,4 @@
+@import "~bootstrap/scss/variables";
 @import "/src/themes.scss";
 
 $style-color: map_get(map_get($themes, "dark"), "style-color");
@@ -44,9 +45,14 @@ $modal-content-bg: $bg-color;
 $modal-content-color: $text-color;
 
 // TABLES
+$table-bg: map_get(map_get($themes, "dark"), "table-bg-color");
+$table-color: map_get(map_get($themes, "dark"), "table-color");
+$table-hover-bg: lighten(map_get(map_get($themes, "dark"), "table-bg-color"), 6.7%);
+$table-hover-color: darken(map_get(map_get($themes, "dark"), "table-color"), 6.7%);
+
 $table-variants: (
-  "light": map_get(map_get($themes, "dark"), "table-bg-color"),
-  "dark": map_get(map_get($themes, "dark"), "table-bg-color"),
+        "light": darken(map_get(map_get($themes, "dark"), "table-bg-color"), 4%),
+        "dark": map_get(map_get($themes, "dark"), "table-bg-color"),
 );
 
 // CARD
@@ -79,14 +85,36 @@ $progress-bar-bg: map_get(map_get($themes, "dark"), "card-bg-color");
 $progress-bar-color: map_get(map_get($themes, "dark"), "card-text-color");
 $progress-bg: map_get(map_get($themes, "dark"), "card-bg-color");
 
+// BADGES
+.badge.bg-dark {
+  background-color: $style-color !important;
+}
+
+.badge.bg-dark, .badge.bg-dark * {
+  color: white;
+}
+
+// MODAL
+$modal-content-border-color: adjust-color(map_get(map_get($themes, "dark"), "hr-border-color"), $alpha: -0.80);
+$modal-footer-border-color: adjust-color(map_get(map_get($themes, "dark"), "hr-border-color"), $alpha: -0.75);
+$modal-header-border-color: adjust-color(map_get(map_get($themes, "dark"), "hr-border-color"), $alpha: -0.75);
+
 // THEMES
 $theme-colors: (
-    "dark": $style-color,
-    "primary": $style-color,
-    "blue": $style-color,
-    "light": $bg-color
+        "primary": $style-color,
+        "success": $success,
+        "info": $info,
+        "warning": $warning,
+        "danger": $danger,
+        "dark": $style-color,
+        "blue": $style-color,
+        "light": $bg-color
 );
-$dark: $bg-color;
+
+// TEXT MUTED
+div.text-muted, span.text-muted, h1.text-muted, h2.text-muted, h3.text-muted, h4.text-muted, h5.text-muted, h6.text-muted, p.text-muted, small.text-muted {
+  color: adjust-color($text-color, $alpha: -0.25) !important;
+}
 
 // FORM SELECT
 $form-select-bg: $form-bg-color;

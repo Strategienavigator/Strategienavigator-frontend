@@ -52,7 +52,7 @@ class WeightingEvaluationComponent extends Component<EvaluationComponentProps, a
                             <tr key={"criteria-evaluation-" + v.criteria.id + "-" + index}>
                                 <td>
                                     {v.criteria.name}<br/>
-                                    <small>{v.criteria.desc}</small>
+                                    <small className={"text-muted"}>{v.criteria.desc}</small>
                                 </td>
                                 <td>{(Math.round(((v.points / sum) * 100) * 100) / 100)} %</td>
                                 <td className={"fixed"}>{v.points}</td>

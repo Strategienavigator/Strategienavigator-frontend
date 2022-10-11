@@ -7,8 +7,13 @@ $feedbackColorDarken: 5%;
   margin: 0 !important;
 }
 
+.feedbackContainer.sm {
+  font-size: 11pt;
+}
+
 .feedbackContainer {
   margin: 0.5rem 0.25rem;
+  font-size: 12pt;
 
   .feedback {
     padding: 0.5rem 1rem;

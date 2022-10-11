@@ -97,6 +97,7 @@
         background-color: get("home-page-item-maintenance-bg-color");
       }
     }
+
     * {
       @include theme() {
         color: adjust-color(get("style-color"), $alpha: -0.5)

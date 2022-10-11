@@ -9,6 +9,7 @@ import {UtilEvaluationComponent} from "./UtilEvaluationComponent";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilCriterias} from "../UtilCriterias/UtilCriterias";
 import {CompareComponentValues} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 
 class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
@@ -32,11 +33,12 @@ class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataH
 
     fillFromPreviousValues(data: Draft<UtilityAnalysisValues>): void {
         let criterias = data["ua-criterias"];
+        let weighting = data["ua-weighting"];
         let objects = data["ua-investigation-obj"];
         let evaluation = data["ua-evaluation"];
         let evaluations = [];
 
-        if (criterias && objects) {
+        if (criterias && objects && weighting) {
             for (let c = 0; c < criterias.criterias.length; c++) {
                 let objectsIndexes = [];
                 for (let o = 0; o < objects.objects.length; o++) {
@@ -79,19 +81,31 @@ class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataH
 
     validateData(data: UtilityAnalysisValues): UIError[] {
         let errors: UIError[] = [];
+        let criterias = data["ua-criterias"];
         let evaluation = data["ua-evaluation"];
+        let weighting = data["ua-weighting"];
 
-        if (evaluation) {
+        if (evaluation && weighting && criterias) {
+            let weightingEval = new WeightingEvaluation(criterias.criterias, weighting);
+
             let errorFound = false;
             let i = 0;
+
             while (!errorFound && i < evaluation.evaluation.length) {
                 let e = 0;
-                while (!errorFound && e < evaluation.evaluation[i].rating.comparisons.length) {
-                    let value = evaluation.evaluation[i].rating.comparisons[e].value;
-                    if (value === null || value === "") {
-                        errorFound = true;
+                let criteria = criterias.criterias[evaluation.evaluation[i].criteriaIndex];
+
+                if (weightingEval.getValues().result.some((item) => {
+                    return item.criteria === criteria && item.points !== 0;
+                })) {
+                    while (!errorFound && e < evaluation.evaluation[i].rating.comparisons.length) {
+                        let value = evaluation.evaluation[i].rating.comparisons[e].value;
+
+                        if (value === null || value === "") {
+                            errorFound = true;
+                        }
+                        e++;
                     }
-                    e++;
                 }
                 i++;
             }

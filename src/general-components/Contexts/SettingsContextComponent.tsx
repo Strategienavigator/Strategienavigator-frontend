@@ -107,7 +107,7 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
     }
 
     /**
-     * L�dt alle Einstellungen aus dem Backend neu, �ndert die State variable zu den neuen Werten
+     * Lädt alle Einstellungen aus dem Backend neu, Ändert die State variable zu den neuen Werten
      */
     updateSettings = async () => {
         if (this.settingsCache) {
@@ -130,7 +130,7 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
     }
 
     /**
-     * �ndert den State
+     * Ändert den State
      * @param isLoading ob das die Einstellungen gerade aus dem Backend abgerufen werden
      * @private
      */
@@ -142,7 +142,6 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
                 isLoading: isLoading
             }
         });
-
     }
 
 }

@@ -5,27 +5,18 @@
   @import "./light.scss";
   @import "~bootstrap/scss/bootstrap";
 }
+
 .dark {
   @import "./dark.scss";
   @import "~bootstrap/scss/bootstrap";
 }
 
 body {
-  button.btn.btn-danger {
-    background-color: $danger;
-    color: white;
-  }
-  button.btn.btn-danger:hover {
-    color: white;
-    background-color: darken($danger, 6%);
-  }
   button.btn-transparent {
     background-color: transparent;
     border-color: transparent;
   }
-  .badge.bg-dark, .badge.bg-dark * {
-    color: white;
-  }
+
   .modal-backdrop {
     z-index: 1044 !important;
   }

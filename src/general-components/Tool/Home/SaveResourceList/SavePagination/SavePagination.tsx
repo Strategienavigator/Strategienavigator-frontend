@@ -6,6 +6,7 @@ import {Card} from "react-bootstrap";
 import './save-pagination.scss'
 import {SaveResourceListProps} from "../SaveResourceList";
 import {SaveCard} from "../../SaveCard/SaveCard";
+import {SharedSaveContextComponent} from "../../../../Contexts/SharedSaveContextComponent";
 
 
 interface SavePaginationState {
@@ -44,18 +45,29 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
                         </Card>
                     )}
 
-                    {page?.data.map(save => {
+                    {page?.data.map((save) => {
                         return (
-                            <SaveCard key={save.tool_id + " " + save.id} save={save}
-                                      toolLink={this.props.tool!.getLink()} onTrash={() => {
-                                this.props.savesControlCallbacks.deleteSave(save);
-                            }}/>
+                            <SharedSaveContextComponent
+                                key={save.tool_id + " " + save.id}
+                                save={save}
+                            >
+                                <SaveCard
+                                    save={save}
+                                    toolLink={this.props.tool!.getLink()}
+                                    onTrash={() => {
+                                        this.props.savesControlCallbacks.deleteSave(save);
+                                    }}
+                                    onInvite={(save: SimpleSaveResource) => {
+                                        this.props.savesControlCallbacks.openInviteModal(save);
+                                    }}
+                                />
+                            </SharedSaveContextComponent>
                         );
                     })
                     ?? // alternative if page is undefined
-                    Array.from(new Array(15).keys()).map(value => {
+                    Array.from(new Array(4).keys()).map((value, index) => {
                         return (
-                            <SaveCard/>
+                            <SaveCard key={"dummy-" + index}/>
                         );
                     })}
 
@@ -139,8 +151,6 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
             this.props.savesControlCallbacks.loadPage(nextPage);
             return;
         }
-
-
     }
 
     private getCurrentPage() {

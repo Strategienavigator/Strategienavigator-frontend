@@ -10,11 +10,13 @@ import {
 } from "../../../../../general-components/CompareComponent/CompareComponent";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {UtilEvaluation} from "./UtilEvaluation";
-import {LinearCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
-import {Button} from "react-bootstrap";
-import {CreateDescriptionModal} from "./CreateDescriptionModal";
-import FAE from "../../../../../general-components/Icons/FAE";
-import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import {
+    LinearCardComponentFieldsAdapter
+} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
+import {
+    UACriteriaCustomDescriptionInfoPanel
+} from "../UtilCriterias/ScaleDescriptionModal/UACriteriaCustomDescriptionInfoPanel";
+import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 
 export interface UtilEvaluationValues {
@@ -60,16 +62,25 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, UtilEvaluation
 
     build(): JSX.Element {
         const values = this.props.save.data["ua-evaluation"];
+        const weighting = this.props.save.data["ua-weighting"];
         const investigationObjs = this.props.save.data["ua-investigation-obj"]?.objects;
 
         const criterias = this.props.save.data["ua-criterias"]?.criterias;
 
-        if (values && investigationObjs && criterias) {
-            const adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
+        if (values && investigationObjs && criterias && weighting) {
+            let adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
+            let weightingEval = new WeightingEvaluation(criterias, weighting);
+            let weightingValues = weightingEval.getValues();
 
             return (
                 <>
                     {criterias.map((criteria, criteriaIndex) => {
+                        if (!weightingValues.result.some((item) => {
+                            return item.criteria === criteria && item.points !== 0;
+                        })) {
+                            return null;
+                        }
+
                         const rating = values.evaluation[criteriaIndex].rating;
 
                         return (
@@ -78,33 +89,11 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, UtilEvaluation
                                     {criteria.name}
 
                                     {(criteria.extra !== undefined) && (
-                                        <>
-                                            &nbsp;
-                                            <Button
-                                                onClick={() => {
-                                                    this.setState({
-                                                        showModal: criteriaIndex
-                                                    });
-                                                }}
-                                                size={"sm"}
-                                            >
-                                                Skala <FAE icon={faInfoCircle}/>
-                                            </Button>
-                                        </>
+                                        <UACriteriaCustomDescriptionInfoPanel
+                                            values={criteria.extra}
+                                        />
                                     )}
                                 </div>
-
-                                {(criteria.extra !== undefined) && (
-                                    <CreateDescriptionModal
-                                        show={criteriaIndex === this.state.showModal}
-                                        values={criteria.extra}
-                                        onClose={() => {
-                                            this.setState({
-                                                showModal: -1
-                                            });
-                                        }}
-                                    />
-                                )}
 
                                 <CompareComponent
                                     header={UtilEvaluation.header}

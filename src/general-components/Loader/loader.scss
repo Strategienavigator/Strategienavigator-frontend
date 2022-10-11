@@ -15,6 +15,64 @@
   width: 12vh;
   height: 12vh;
   border-width: 0.5vh;
+  border-color: #fff;
+  border-right-color: transparent !important;
+}
+
+// AUTO
+.loader.auto {
+  @include theme() {
+    color: get("text-color");
+    background-color: get("bg-color");
+    border-color: get("text-color");
+  }
+
+  .spinner {
+    @include theme() {
+      border-color: get("text-color");
+    }
+  }
+}
+
+// STYLE
+.loader.style {
+  @include theme() {
+    background-color: get("style-color");
+    color: get("style-color");
+    border-color: get("style-color");
+  }
+
+  .spinner {
+    border-color: #fff;
+  }
+}
+
+.loader.transparent.style .spinner {
+  @include theme() {
+    border-color: get("text-color");
+  }
+}
+
+// LIGHT
+.loader.light {
+  background-color: rgb(38, 41, 43);
+  color: #f3f3f3;
+  border-color: #f3f3f3;
+
+  .spinner {
+    border-color: #f3f3f3;
+  }
+}
+
+// DARK
+.loader.dark {
+  background-color: #f3f3f3;
+  color: rgb(38, 41, 43);
+  border-color: rgb(38, 41, 43);
+
+  .spinner {
+    border-color: rgb(38, 41, 43);
+  }
 }
 
 // TEXT
@@ -40,40 +98,6 @@
 .loader.right {
   justify-content: flex-end;
   align-items: center;
-}
-
-// DARK
-.loader.dark {
-  color: #b6b6b6;
-
-  @include theme() {
-    background-color: get("style-color");
-  }
-}
-
-.loader.dark .spinner {
-  border-color: #b6b6b6;
-
-  @include theme() {
-    border-right-color: get("style-color");
-  }
-}
-
-// LIGHT
-.loader.light {
-  background-color: #d3d3d3;
-
-  @include theme() {
-    color: get("style-color");
-  }
-}
-
-.loader.light .spinner {
-  border-right-color: #d3d3d3;
-
-  @include theme() {
-    border-color: get("style-color");
-  }
 }
 
 // TRANSPARENT

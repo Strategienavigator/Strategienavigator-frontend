@@ -9,6 +9,11 @@ import {NumberValueRenderer} from "../../../../../general-components/CoordinateS
 import {Point} from "../../../../../general-components/CoordinateSystem/Point/Point";
 import {ResultEvaluationValue} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluation";
 import {PointComponent} from "../../../../../general-components/CoordinateSystem/Point/PointComponent";
+import React from "react";
+import {SettingsContext} from "../../../../../general-components/Contexts/SettingsContextComponent";
+import {QuadrantGrid} from "../../../../../general-components/CoordinateSystem/Grid/QuadrantGrid";
+import {PortfolioQuadrantsSettingValues} from "../../../../../general-components/Settings/Types/PortfolioQuadrantsType/PortfolioQuadrantsSettingType";
+import {CustomGrid} from "../../../../../general-components/CoordinateSystem/Grid/CustomGrid";
 
 
 interface PortResultValues {
@@ -20,6 +25,11 @@ interface PortResultValues {
 }
 
 class PortResultComponent extends Step<PortfolioAnalysisValues, {}> {
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = SettingsContext;
+    context!: React.ContextType<typeof SettingsContext>
 
     public constructor(props: StepProp<PortfolioAnalysisValues>, context: any) {
         super(props, context);
@@ -33,6 +43,12 @@ class PortResultComponent extends Step<PortfolioAnalysisValues, {}> {
 
     build(): JSX.Element {
         if (this.props.save.data["port-result"] !== undefined) {
+            let gridSetting = JSON.parse(this.context.settings.getSetting(2).value) as PortfolioQuadrantsSettingValues;
+            let grid: boolean | CustomGrid = true;
+            if (gridSetting && gridSetting.toggled) {
+                grid = new QuadrantGrid(gridSetting.quadrants.map((v) => v.value));
+            }
+
             return (
                 <>
                     <CoordinateSystem
@@ -40,20 +56,20 @@ class PortResultComponent extends Step<PortfolioAnalysisValues, {}> {
                         axisThickness={1}
                         axis={{
                             y: {
-                                maxValue: 6,
+                                maxValue: "auto",
+                                valueAccuracy: "auto",
                                 name: "Marktattraktivität",
-                                valueRenderer: new NumberValueRenderer(0),
-                                valueAccuracy: 6
+                                valueRenderer: new NumberValueRenderer(0)
                             },
                             x: {
-                                maxValue: 6,
+                                maxValue: "auto",
+                                valueAccuracy: "auto",
                                 name: "Wettbewerbsposition",
-                                valueRenderer: new NumberValueRenderer(0),
-                                valueAccuracy: 6
+                                valueRenderer: new NumberValueRenderer(0)
                             }
                         }}
                         points={this.props.save.data["port-result"].points}
-                        gridDisplay={true}
+                        gridDisplay={grid}
                         widthRange={{
                             start: 0,
                             end: 10

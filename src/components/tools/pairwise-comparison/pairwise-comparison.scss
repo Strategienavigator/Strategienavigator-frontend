@@ -1,11 +1,5 @@
-@import "~bootstrap/scss/bootstrap-utilities";
-
 .resultTable {
   table-layout: auto;
-
-  small {
-    color: $gray-700;
-  }
 }
 
 .resultTable .fixed {

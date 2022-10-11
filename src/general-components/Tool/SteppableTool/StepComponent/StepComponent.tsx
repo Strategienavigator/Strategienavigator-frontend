@@ -16,6 +16,9 @@ import {Exporter} from "../../../Export/Exporter";
 import {Draft} from "immer";
 import {IUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
 import {SteppableTool} from "../SteppableTool";
+import {SharedSaveContext,} from "../../../Contexts/SharedSaveContextComponent";
+import {EditSavesPermission, hasPermission} from "../../../Permissions";
+import {SharedSavePermission} from "../../../Datastructures";
 
 
 export interface StepDefinition<T extends object> {
@@ -125,7 +128,6 @@ export interface StepComponentState {
      * maximal freigeschalteter Schritt
      */
     progress: number
-
     /**
      * if the current step has substeps which state is currently displayed
      */
@@ -135,10 +137,13 @@ export interface StepComponentState {
 }
 
 class StepComponent<D extends object> extends Component<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, StepComponentState> {
-
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = SharedSaveContext;
+    context!: React.ContextType<typeof SharedSaveContext>
 
     private readonly stepController: StepController;
-
 
     constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & { uiErrorContext: IUIErrorContext });
     constructor(props: StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, context: any);
@@ -210,6 +215,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     render = () => {
         const customNextButton = this.getCustomNextButton();
         const header = <StepComponentHeader tool={this.props.tool}
+                                            associatedSave={this.props.save}
                                             saveName={this.props.save.name}
                                             saveDescription={this.props.save.description}
                                             saveMetaChanged={this.changeSaveMeta}/>;
@@ -240,16 +246,22 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                 })}
                             </Nav>
 
-
                             <StepComponentButtons
                                 isMobile={!isDesktop()}
                                 customNextButton={customNextButton}
-                                nextDisabled={this.isLastStep() && !this.hasNextSubStep()}
+                                nextDisabled={(
+                                    this.isLastStep() &&
+                                    !this.hasNextSubStep()
+                                ) || (
+                                    this.context.permission === SharedSavePermission.READ &&
+                                    !this.hasNextStep()
+                                )}
                                 isSaving={this.props.isSaving}
                                 onNext={this.tryNextStep}
                                 onReset={this.showResetModal}
                                 onSave={this.save}
                                 onExportClick={this.showExportModal}
+                                sharedSaveContext={this.context}
                             />
 
                             {this.shouldExtraWindowRender() && (
@@ -259,8 +271,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                         <Col className={"tabsContent"}>
                             <Tab.Content>
                                 {this.props.steps.map((step, index) => {
-
-
                                     return (
                                         <Tab.Pane key={"2" + (index)} eventKey={index}>
                                             <div className={"stepTitle"}>{step.title}</div>
@@ -270,7 +280,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                                 saveController: this.props.saveController,
                                                 isSaving: this.props.isSaving,
                                                 id: step.id,
-                                                disabled: index < this.state.progress /*|| !this.withData(step.dataHandler.isUnlocked)*/,
+                                                disabled: !hasPermission(this.context.permission, EditSavesPermission) || index < this.state.progress /*|| !this.withData(step.dataHandler.isUnlocked)*/,
                                                 stepController: this.stepController,
                                                 currentSubStep: this.state.currentSubStep,
                                                 validationFailed: index === this.state.progress && anyErrors
@@ -301,10 +311,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     public tryNextStep = (): void => {
-
         this.clearErrors();
         if (this.hasNextSubStep()) {
-
             const validated = this.validateSubStep(this.state.currentStep, this.state.currentSubStep);
 
             if (validated) {
@@ -392,6 +400,16 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     }
 
+    private hasNextStep(): boolean {
+        let newStepIndex = this.state.currentStep + 1;
+
+        if (newStepIndex < this.props.steps.length) {
+            let newStep = this.props.steps[newStepIndex];
+            return this.withData(newStep.dataHandler.isUnlocked);
+        }
+        return false;
+    }
+
     private hasNextSubStep(): boolean {
         if (!this.hasSubSteps())
             return false;
@@ -447,7 +465,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                     this.props.steps[i]?.dataHandler.deleteData(newData);
                 }
                 this.props.steps[index]?.dataHandler.fillFromPreviousValues(newData);
-
             }
         });
     }
@@ -461,21 +478,17 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private setSubStep = (step: number, force: boolean = false) => {
-        if (force || this.withData(this.getCurrentStep().subStep?.isStepUnlocked.bind(this, step))) {
-            this.setState({
-                currentSubStep: step
-            });
-            return true;
-        }
-        return false;
-
+        this.setState({
+            currentSubStep: step
+        });
+        return true;
     }
 
     private requestSubStep = (step: number) => {
-        if (this.state.currentStep !== this.state.progress) {
-
-            let result = this.setSubStep(step);
-            return result;
+        let currentStep = this.getCurrentStep();
+        let data = this.props.save.data;
+        if (currentStep.subStep?.isStepUnlocked(step, data)) {
+            return this.setSubStep(step);
         }
         return false;
     }
@@ -486,8 +499,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
      * Next step is unlocked if possible.
      */
     private nextStep = () => {
-
-
         const currentStep = this.getCurrentStep();
 
         let newStepIndex = this.state.currentStep + 1;

@@ -53,7 +53,7 @@ export class AboutUs extends Component<any, any> {
         return (<>
             <h2>Über Uns</h2>
 
-            <hr />
+            <hr/>
 
             <p>
                 <h3>Beschreibung</h3>

@@ -1,5 +1,5 @@
 import {APIArgs, callAPI} from "../API";
-import {DefaultResponse, PaginationResource, SharedSaveResource} from "../../Datastructures";
+import {DefaultResponse, SharedSavePermission, SharedSaveResource} from "../../Datastructures";
 
 
 /**
@@ -9,7 +9,7 @@ import {DefaultResponse, PaginationResource, SharedSaveResource} from "../../Dat
  * @param apiArgs API Argumente
  */
 const getContributors = async (saveID: number, apiArgs?: APIArgs) => {
-    return await callAPI<PaginationResource<SharedSaveResource>>("api/saves/" + saveID + "/contributors", "GET", undefined, true, apiArgs)
+    return await callAPI<{ data: SharedSaveResource[] }>("api/saves/" + saveID + "/contributors", "GET", undefined, true, apiArgs)
 }
 
 /**
@@ -19,7 +19,7 @@ const getContributors = async (saveID: number, apiArgs?: APIArgs) => {
  * @param apiArgs API Argumente
  */
 const showContributions = async (userID: number, apiArgs?: APIArgs) => {
-    return await callAPI<PaginationResource<SharedSaveResource>>("api/users/" + userID + "/contributions", "GET", undefined, true, apiArgs);
+    return await callAPI<{ data: SharedSaveResource[] }>("api/users/" + userID + "/contributions", "GET", undefined, true, apiArgs);
 }
 
 /**
@@ -33,7 +33,7 @@ const showContribution = async (contributionID: number, apiArgs?: APIArgs) => {
 }
 
 interface CreateContribution {
-    permission: number
+    permission: SharedSavePermission
 }
 
 /**
@@ -51,8 +51,8 @@ const createContribution = async (saveID: number, userID: number, data: CreateCo
     return await callAPI("api/saves/" + saveID + "/contributors/" + userID, "POST", apiData, true, apiArgs);
 }
 
-interface UpdateContribution {
-    permission: number
+export interface UpdateContribution {
+    permission: SharedSavePermission
     revoked: boolean
 }
 
@@ -66,7 +66,7 @@ interface UpdateContribution {
 const updateContribution = async (contributionID: number, data: UpdateContribution, apiArgs?: APIArgs) => {
     let apiData = new FormData();
     apiData.append("permission", String(data.permission));
-    apiData.append("revoked", String(data.revoked));
+    apiData.append("revoked", String(data.revoked ? 1 : 0));
 
     return await callAPI("api/contribution/" + contributionID, "PUT", apiData, true, apiArgs)
 }

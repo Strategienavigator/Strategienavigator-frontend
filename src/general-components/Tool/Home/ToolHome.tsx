@@ -14,6 +14,8 @@ import {Session} from "../../Session/Session";
 import {deleteSave, getSaves} from "../../API/calls/Saves";
 import {DeleteSaveModal} from "./DeleteSaveModal/DeleteSaveModal";
 import FAE from "../../Icons/FAE";
+import {SaveInvitation} from "../../Sharing/SaveInvitation";
+import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 
 
 export interface ToolHomeInfo {
@@ -36,6 +38,7 @@ interface ToolHomeState {
     paginationSettings: SavesPaginationSetting
     isLoadingPage: boolean
     showDeleteModal: boolean
+    showInviteModal: null | SimpleSaveResource
     deleteSave?: SimpleSaveResource
 }
 
@@ -44,6 +47,7 @@ export interface SavesControlCallbacks {
     updatePages: () => void
     updateSettings: (settings: SavesPaginationSetting) => void
     deleteSave: (save: SimpleSaveResource) => void
+    openInviteModal: (save: SimpleSaveResource) => void
 }
 
 class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
@@ -57,7 +61,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
 
     private paginationLoader: PaginationLoader<SimpleSaveResource>;
-    private savesControlCallbacks: SavesControlCallbacks;
+    private readonly savesControlCallbacks: SavesControlCallbacks;
 
     constructor(props: ToolHomeProps | Readonly<ToolHomeProps>) {
         super(props);
@@ -66,7 +70,8 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             loadPage: this.loadPage,
             updatePages: this.updatePages,
             updateSettings: this.updateSettings,
-            deleteSave: this.deleteSave
+            deleteSave: this.deleteSave,
+            openInviteModal: this.openInviteModal
         };
 
         this.paginationLoader = new PaginationLoader<SimpleSaveResource>(async (page, perPage) => {
@@ -85,6 +90,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             showDeleteModal: false,
             showTutorial: false,
             isLoadingPage: false,
+            showInviteModal: null,
             paginationSettings: {
                 orderDesc: true
             }
@@ -109,7 +115,8 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     getTutorialCanvas = () => {
         return (
-            <Offcanvas placement={"start"} show={this.state.showTutorial}>
+            <Offcanvas placement={"start"} onHide={() => this.setState({showTutorial: false})}
+                       show={this.state.showTutorial}>
                 <OffcanvasHeader closeButton onClick={() => this.setState({showTutorial: false})}>
                     <Offcanvas.Title>{this.props.tool.getToolName()}</Offcanvas.Title>
                 </OffcanvasHeader>
@@ -154,6 +161,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         {isDesktop() && (
                             <span>Nach Erstelldatum sortieren: </span>
                         )}
+
                         <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
                                 className={"btn btn-primary"}
                                 onClick={this.orderingChangedCallback}
@@ -180,11 +188,22 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
                 {(this.state.showTutorial && this.props.tool?.hasTutorial()) && this.getTutorialCanvas()}
 
-                <DeleteSaveModal
-                    show={this.state.showDeleteModal}
-                    save={this.state.deleteSave ?? null}
-                    onClose={this.onCloseDeleteModal}
-                    onDelete={this.onDeleteModal}/>
+                <SharedSaveContextComponent save={this.state.deleteSave!}>
+                    <DeleteSaveModal
+                        show={this.state.showDeleteModal}
+                        save={this.state.deleteSave ?? null}
+                        onClose={this.onCloseDeleteModal}
+                        onDelete={this.onDeleteModal}
+                    />
+                </SharedSaveContextComponent>
+
+                <SharedSaveContextComponent save={this.state.showInviteModal!}>
+                    <SaveInvitation
+                        show={this.state.showInviteModal !== null}
+                        save={this.state.showInviteModal}
+                        onClose={this.closeInviteModal}
+                    />
+                </SharedSaveContextComponent>
             </div>
         );
     }
@@ -250,6 +269,18 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         this.updateSettings({
             ...this.state.paginationSettings,
             orderDesc: !this.state.paginationSettings.orderDesc,
+        });
+    }
+
+    private openInviteModal = async (save: SimpleSaveResource) => {
+        this.setState({
+            showInviteModal: save,
+        });
+    }
+
+    private closeInviteModal = async () => {
+        this.setState({
+            showInviteModal: null
         });
     }
 

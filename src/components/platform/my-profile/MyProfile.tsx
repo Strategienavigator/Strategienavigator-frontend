@@ -17,7 +17,9 @@ import {Loader} from "../../../general-components/Loader/Loader";
 import "./my-profile.scss";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import FAE from "../../../general-components/Icons/FAE";
+import {ModalCloseable} from "../../../general-components/Modal/ModalCloseable";
 import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
+import {ButtonPanel} from "../../../general-components/ButtonPanel/ButtonPanel";
 
 
 export interface MyProfileState {
@@ -46,7 +48,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         this.state = {
             edit: false,
             delete: false,
-            showDeleteModal: true,
+            showDeleteModal: false,
             passwordFieldTouched: false,
             isSaving: false,
         }
@@ -191,7 +193,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 <h4>
                     <FAE icon={faUser}/> &nbsp;{this.context.user?.getUsername()}
                     {(this.state.edit) && (
-                        <Button style={{float: "right"}} disabled={this.state.isSaving} size={"sm"} variant={"dark"}
+                        <Button style={{float: "right"}} disabled={this.state.isSaving} variant={"dark"}
                                 className={"editButton"} onClick={this.changeView}>
                             <FAE icon={faArrowLeft}/> &nbsp;Zurück
                         </Button>
@@ -270,10 +272,10 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     </>
                 )}
 
-                <hr/>
-
                 {(!this.state.edit) && (
                     <div>
+                        <hr/>
+
                         <h5>Überblick Analysen</h5>
                         <Row>
                             <Col>
@@ -297,55 +299,51 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                 )}
 
                 {(!this.state.edit) && (
-                    <Button size={"sm"} variant={"dark"} className={"editButton"} onClick={this.changeView}>
+                    <Button variant={"dark"} className={"editButton"} onClick={this.changeView}>
                         <FAE icon={faPencilAlt}/> &nbsp; Bearbeiten
                     </Button>
                 )}
                 {(this.state.edit) && (
-                    <>
-                        <div className={"buttonGroup"}>
-                            <LoadingButton
-                                disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
-                                size={"sm"} type={"submit"} variant={"dark"} className={"editButton"}
-                                isSaving={this.state.isSaving} savingChild={"Speichert"}
-                                defaultChild={"Änderungen speichern"}/>
-                        </div>
-                        <div className={"buttonGroup"}>
-                            <Button disabled={this.state.isSaving} size={"sm"} variant={"danger"}
-                                    className={"deleteButton"}
-                                    onClick={this.showDeleteModal}>
-                                <FAE icon={faTrash}/> &nbsp; Benutzer löschen
-                            </Button>
-                        </div>
-                    </>
+                    <ButtonPanel buttonPerCol={2}>
+                        <LoadingButton
+                            disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
+                            type={"submit"} variant={"dark"} className={"editButton"}
+                            isLoading={this.state.isSaving} savingChild={"Speichert"}
+                            defaultChild={"Änderungen speichern"}
+                        />
+
+                        <Button disabled={this.state.isSaving} variant={"danger"}
+                                className={"deleteButton"}
+                                onClick={this.showDeleteModal}>
+                            <FAE icon={faTrash}/> &nbsp; Benutzer löschen
+                        </Button>
+                    </ButtonPanel>
                 )}
 
-                {(this.state.delete) && (
-                    <Modal
-                        show={this.state.showDeleteModal}
-                        backdrop="static"
-                        keyboard={true}
-                    >
-                        <Modal.Header>
-                            <Modal.Title>Wollen Sie Ihr Profil wirklich löschen?</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
-                            Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses
-                            Zeitraumes wird
-                            Ihr Account unwiderruflich gelöscht!
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant={"light"} onClick={this.hideDeleteModal}>
-                                Abbrechen
-                            </Button>
-                            <Button variant="dark" onClick={this.delete}>
-                                Ja, Account löschen!
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-
+                <ModalCloseable
+                    show={this.state.showDeleteModal}
+                    backdrop="static"
+                    onHide={this.hideDeleteModal}
+                    keyboard={true}
+                >
+                    <Modal.Header>
+                        <Modal.Title>Wollen Sie Ihr Profil wirklich löschen?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
+                        Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses
+                        Zeitraumes wird
+                        Ihr Account unwiderruflich gelöscht!
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant={"light"} onClick={this.hideDeleteModal}>
+                            Abbrechen
+                        </Button>
+                        <Button variant="dark" onClick={this.delete}>
+                            Ja, Account löschen!
+                        </Button>
+                    </Modal.Footer>
+                </ModalCloseable>
             </Form>
         );
     }

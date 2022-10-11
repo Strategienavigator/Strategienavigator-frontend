@@ -1,0 +1,39 @@
+
+.save-invitation-modal {
+  h5 {
+    font-size: 13pt;
+    font-weight: 600;
+  }
+}
+
+.copy-modal .modal-dialog {
+  max-width: 650px;
+}
+
+.invitation-links-table {
+  tbody, thead {
+    display: block;
+  }
+
+  tbody {
+    max-height: 192px;
+    overflow-y: auto;
+  }
+
+  tr {
+    display: flex;
+
+    td:first-child {
+      display: flex;
+      align-items: center;
+      flex: auto 1 1;
+      text-align: left;
+    }
+
+    td:last-child {
+      flex: 90px 0 0;
+      padding: 0 0.5rem;
+    }
+  }
+
+}

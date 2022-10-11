@@ -13,7 +13,7 @@ import {DataPrivacy} from "./components/platform/data-privacy/DataPrivacy";
 import {Home} from "./components/platform/home/Home";
 import {Login} from "./components/platform/login/Login";
 import {Logout} from "./components/platform/logout/Logout";
-import {Register} from "./components/platform/register/Register";
+import Register from "./components/platform/register/Register";
 import {Settings} from "./components/platform/settings/Settings";
 import {MyProfile} from "./components/platform/my-profile/MyProfile";
 import {Session} from "./general-components/Session/Session";
@@ -32,9 +32,10 @@ import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/Portfolio
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
 import {ErrorPages} from "./general-components/Error/ErrorPages/ErrorPages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
+import {InvitationDecision} from "./components/platform/sharing/Invitation/InvitationDecision";
+import {ContributionDecision} from "./components/platform/sharing/Contribution/ContributionDecision";
 import {SettingsContextComponent} from "./general-components/Contexts/SettingsContextComponent";
 import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
-
 
 // Add SettingsChangeListener for Darkmode
 SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
@@ -58,6 +59,9 @@ const getRouterSwitch = () => {
             <Route loggedIn={false} path={"/register"} exact component={Register}/>
             <Route loggedIn={true} path={"/settings"} exact component={Settings}/>
             <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact component={MyProfile}/>
+
+            <Route loggedIn={true} path={"/invite/:sharedSaveID"} component={ContributionDecision}/>
+            <Route loggedIn={true} path={"/invitation/:token"} component={InvitationDecision}/>
 
             <Route path={"/verify-email/:token"} component={EmailVerification}/>
             <Route path={"/reset-password/:token"} component={PasswordReset}/>
@@ -102,13 +106,7 @@ const getAppContent = () => {
     return (
         <>
             <GlobalContexts key={"global-contexts"}>
-                <Loader key={"loader"} animate fullscreen loaded={true} variant={"dark"} payload={[]}>
-                    <Messages
-                        xAlignment={"CENTER"}
-                        yAlignment={"BOTTOM"}
-                        style={{marginBottom: 65}}
-                    />
-
+                <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"} payload={[]}>
                     <Router ref={routerRef}>
 
                         <Nav/>
@@ -121,8 +119,6 @@ const getAppContent = () => {
 
                         {getAppFooter()}
                     </Router>
-
-
                 </Loader>
             </GlobalContexts>
         </>
@@ -135,6 +131,16 @@ const renderApp = () => {
             {getAppContent()}
         </React.StrictMode>,
         document.getElementById('root')
+    );
+    ReactDOM.render(
+        <React.StrictMode>
+            <Messages
+                xAlignment={"CENTER"}
+                yAlignment={"BOTTOM"}
+                style={{marginBottom: 65}}
+            />
+        </React.StrictMode>,
+        document.getElementById("messages")
     );
 }
 
@@ -167,7 +173,7 @@ const manageLoading = async () => {
     ReactDOM.render(
         <React.StrictMode>
             <GlobalContexts key={"global-contexts"}>
-                <Loader key={"loader"} animate fullscreen loaded={false} variant={"dark"} payload={[]}/>
+                <Loader key={"loader"} animate fullscreen loaded={false} variant={"style"} payload={[]}/>
             </GlobalContexts>
         </React.StrictMode>,
         document.getElementById('root')

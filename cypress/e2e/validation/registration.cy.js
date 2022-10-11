@@ -12,7 +12,7 @@ describe('register on the Website', () => {
         .its("response.body")
         .should('nested.include',{"data.available": true
         })
-        cy.get("div")
+        cy
         .contains("E-Mail ist Verfügbar!")
         .should("be.visible")
 
@@ -26,21 +26,20 @@ describe('register on the Website', () => {
         .its("response.body")
         .should('nested.include',{"data.available": true
         })
-        cy.get("div")
+        cy
         .contains("Username ist Verfügbar!")
         .should("be.visible")
 
         //--
         cy.get('#password').type('Password123*')
         cy.get('#passwordConfirm').type('Password123*')
-        cy.get("div")
-        .contains("Ihr Passwort ist gültig !")
+        cy.contains("Ihr Passwort ist gültig!")
         .should("be.visible")
 
         cy.intercept('POST', /.*api\/users.*/).as('create')
         cy.get('button[type=submit]').click()
 
-        cy.get("div[class='feedback SUCCESS']")
+        cy.get(".feedback.SUCCESS")
         .contains("Username ist Verfügbar!")
         .should("be.visible")
 
@@ -55,7 +54,7 @@ describe('register on the Website', () => {
             statusCode: 201
           })
 
-        cy.get("div")
+        cy
         .contains("Konto erstellt! Überprüfe deine Emails!")
         .should("be.visible")
     })

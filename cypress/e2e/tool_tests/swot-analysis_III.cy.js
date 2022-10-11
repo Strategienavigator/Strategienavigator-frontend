@@ -1,5 +1,3 @@
-const { wait } = require("@testing-library/react");
-
 describe('SWOT Analyisis Part III', () => {
     beforeEach(() =>{
         cy.task("queryDb",`DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
@@ -9,14 +7,14 @@ describe('SWOT Analyisis Part III', () => {
         cy.CreateSave("swot-2","TEST-SWOT VON MAX",2)
         cy.LoginAndLoad("swot")
 
-        cy.get("button[class='addClassification btn btn-primary']")
+        cy.get(".addClassification.btn.btn-primary")
         .click()
         cy.wait(100)
         cy.get("input[name='droppable-1']")
         .clear()
         .type("Klassifikation 1")
         
-        cy.get("button[class='addClassification btn btn-primary']")
+        cy.get(".addClassification.btn.btn-primary")
         .click()
         cy.wait(100)
         cy.get("input[name='droppable-2']")
@@ -25,7 +23,7 @@ describe('SWOT Analyisis Part III', () => {
         
    
         //collapse accordion to hide 
-        cy.get("button[class='accordion-button']")
+        cy.get(".accordion-button")
         .each(($button) =>
         {  
             if($button.is(":visible"))
@@ -36,9 +34,9 @@ describe('SWOT Analyisis Part III', () => {
         })
         let MAX_SUM_STEPS = 20
         for (let i = 0; i < MAX_SUM_STEPS; i++) 
-        {         
+        {
             cy.get("form[id='swot-classify-alternate-actions']>.actionCards")
-            .find("button[class='btn btn-primary btn-sm']").as("button")
+            .find(".btn.btn-primary.btn-sm").as("button")
             .first()
             .click()   
             

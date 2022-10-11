@@ -30,15 +30,15 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
      * @return {WorkSheet} Die erstellte Excel-Seite
      * @private
      */
-    private static getEvaluationSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, investigationObjs: CardComponentFields, evaluation: UtilEvaluationValues) {
+    private static getEvaluationSheet(criterias: CardComponentFields<UACriteriaCustomDescriptionValues>, investigationObjs: CardComponentFields, evaluation: UtilEvaluationValues, weighting: UtilWeightingValues) {
         let adapter = new LinearCardComponentFieldsAdapter(investigationObjs);
 
-        return new CompareComponentExcelWorkSheet(adapter, evaluation.evaluation[0].rating, UtilEvaluation.header).basedOnCardComponent({
+        return new CompareComponentExcelWorkSheet(adapter, evaluation.evaluation[0].rating, UtilEvaluation.header).basedOnWeightingCardComponent({
             fields: criterias,
             comparisons: evaluation.evaluation.map((value) => {
                 return value.rating;
             })
-        });
+        }, weighting);
     }
 
     /**
@@ -80,10 +80,10 @@ class UtilityAnalysisExcelExporter extends ExcelExporter<UtilityAnalysisValues> 
                 }).getExcelSheet());
 
                 if (this.isFilled(weighting)) {
-                    this.addSheet("Gewichtung der Kriterien", UtilityAnalysisExcelExporter.getWeightingSheet(criterias.criterias, weighting));
+                    this.addSheet("Gewichtung", UtilityAnalysisExcelExporter.getWeightingSheet(criterias.criterias, weighting));
 
                     if (this.isFilled(evaluation)) {
-                        this.addSheet("Evaluation", UtilityAnalysisExcelExporter.getEvaluationSheet(criterias.criterias, investigationObjs.objects, evaluation));
+                        this.addSheet("Bewertung", UtilityAnalysisExcelExporter.getEvaluationSheet(criterias.criterias, investigationObjs.objects, evaluation, weighting));
 
                         if (this.isFilled(result)) {
                             this.addSheet("Ergebnis", this.getResultSheet(result));

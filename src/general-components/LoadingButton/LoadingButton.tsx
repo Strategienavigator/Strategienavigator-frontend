@@ -1,7 +1,7 @@
 import React, {Component, ReactNode} from "react";
 import {Button, ButtonProps} from "react-bootstrap";
 import {faSave} from "@fortawesome/free-solid-svg-icons";
-import {Loader} from "../Loader/Loader";
+import {Loader, LoaderVariants} from "../Loader/Loader";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import FAE from "../Icons/FAE";
 
@@ -10,7 +10,7 @@ export interface LoadingButtonProps extends ButtonProps {
     /**
      * Whether the loading animation should be played
      */
-    isSaving: boolean
+    isLoading: boolean
     /**
      * What is inside the button while saving
      */
@@ -27,6 +27,10 @@ export interface LoadingButtonProps extends ButtonProps {
      * Icon which is schon while not saving
      */
     defaultIcon: IconDefinition
+    /**
+     * The style of the Loader
+     */
+    loaderVariant?: LoaderVariants
 }
 
 export class LoadingButton extends Component<LoadingButtonProps, {}> {
@@ -36,22 +40,49 @@ export class LoadingButton extends Component<LoadingButtonProps, {}> {
         defaultIcon: faSave
     }
 
-
     render() {
-        const {isSaving, savingChild, defaultChild, showIcons, defaultIcon, ...props} = this.props;
+        let {
+            isLoading,
+            savingChild,
+            defaultChild,
+            variant,
+            loaderVariant,
+            showIcons,
+            defaultIcon,
+            ...props
+        } = this.props;
+
+        if (!variant)
+            variant = "primary";
+
+        if (!loaderVariant) {
+            switch (variant) {
+                case "dark":
+                    loaderVariant = "light";
+                    break;
+                case "primary":
+                    loaderVariant = "light";
+                    break;
+                case "light":
+                    loaderVariant = "dark";
+                    break;
+                default:
+                    break;
+            }
+        }
 
         return (
             <Button
                 {...props}
-                disabled={isSaving}
+                disabled={isLoading}
+                variant={variant}
             >
-
-                {!isSaving ? (
+                {!isLoading ? (
                     <>{showIcons && (<FAE icon={defaultIcon}/>)} {defaultChild}</>
                 ) : (
 
                     showIcons ? (
-                            <Loader payload={[]} variant={props.variant === "dark" ? "dark" : "light"}
+                            <Loader payload={[]} variant={loaderVariant ?? "light"}
                                     text={<span>&nbsp;{savingChild}</span>}
                                     transparent size={20} loaded={false}/>)
                         : savingChild

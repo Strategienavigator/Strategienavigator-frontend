@@ -5,6 +5,7 @@ import {Card} from "react-bootstrap";
 import {SaveCard} from "../../SaveCard/SaveCard";
 import {Loader} from "../../../../Loader/Loader";
 import {SaveResourceListProps} from "../SaveResourceList";
+import {SharedSaveContextComponent} from "../../../../Contexts/SharedSaveContextComponent";
 
 
 export interface SaveInfinityScrollState {
@@ -77,10 +78,19 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                         return value.data.map(v => {
                             let save = v;
                             return (
-                                <SaveCard key={save.id} save={save} toolLink={this.props.tool.getLink()}
-                                          onTrash={() => {
-                                              this.props.savesControlCallbacks.deleteSave(save);
-                                          }}/>
+                                <SharedSaveContextComponent
+                                    key={save.id}
+                                    save={save}
+                                >
+                                    <SaveCard save={save} toolLink={this.props.tool.getLink()}
+                                              onTrash={() => {
+                                                  this.props.savesControlCallbacks.deleteSave(save);
+                                              }}
+                                              onInvite={(save) => {
+                                                  this.props.savesControlCallbacks.openInviteModal(save);
+                                              }}
+                                    />
+                                </SharedSaveContextComponent>
                             );
                         })
                     })}

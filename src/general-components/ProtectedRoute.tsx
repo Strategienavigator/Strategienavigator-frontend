@@ -7,6 +7,7 @@ import {reload_app} from "../index";
 import {Loader} from "./Loader/Loader";
 import {faCheckCircle, faExclamationTriangle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import FAE from "./Icons/FAE";
+import {ModalCloseable} from "./Modal/ModalCloseable";
 
 
 interface ProtectedRouteProps extends RouteProps {
@@ -25,9 +26,19 @@ export function AnonymousModal(props: {
     let [disagreementLoading, setDisagreementLoading] = useState(false);
 
     return (
-        <Modal
+        <ModalCloseable
             show={showModal}
             backdrop="static"
+            onHide={async () => {
+                setDisagreementLoading(true);
+                await props.onDisagreement();
+                setShowModal(false);
+                setDisagreementLoading(false);
+
+                if (props.onShowChange) {
+                    props.onShowChange(false);
+                }
+            }}
             centered
             keyboard={true}
         >
@@ -68,7 +79,7 @@ export function AnonymousModal(props: {
                         props.onShowChange(false);
                     }
                 }}>
-                    <Loader payload={[]} variant={"dark"} transparent size={15} text={<span>&nbsp;Annehmen</span>}
+                    <Loader payload={[]} variant={"auto"} transparent size={15} text={<span>&nbsp;Annehmen</span>}
                             loaded={!agreementLoading}>
                         <FAE icon={faCheckCircle}/> Annehmen
                     </Loader>
@@ -84,13 +95,13 @@ export function AnonymousModal(props: {
                         props.onShowChange(false);
                     }
                 }}>
-                    <Loader payload={[]} variant={"dark"} transparent size={15} text={<span>&nbsp;Ablehnen</span>}
+                    <Loader payload={[]} variant={"auto"} transparent size={15} text={<span>&nbsp;Ablehnen</span>}
                             loaded={!disagreementLoading}>
                         <FAE icon={faTimesCircle}/> Ablehnen
                     </Loader>
                 </Button>
             </Modal.Footer>
-        </Modal>
+        </ModalCloseable>
     );
 }
 

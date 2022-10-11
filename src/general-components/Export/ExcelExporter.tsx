@@ -104,7 +104,7 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         worksheet["B2"] = {v: data.description, t: "s"} as CellObject;
 
         worksheet["A3"] = {v: "Besitzer:", t: "s", s: headerStyle} as CellObject;
-        worksheet["B3"] = {v: data.owner, t: "s"} as CellObject;
+        worksheet["B3"] = {v: data.owner.username, t: "s"} as CellObject;
 
         worksheet["A5"] = {v: "Erstellt am:", t: "s", s: headerStyle} as CellObject;
         worksheet["B5"] = {v: new Date(data.created_at), t: "d", z: "dd.MM.yyyy hh:mm"} as CellObject;

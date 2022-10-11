@@ -15,10 +15,10 @@ class BCGCustomGrid extends CustomGrid {
 
     protected getItems(): ReactElement[] {
         return [
-            <div key={"qm"} className={"qm"}>Question Marks</div>,
-            <div key={"stars"} className={"stars"}>Stars</div>,
-            <div key={"pd"} className={"pd"}>Poor Dogs</div>,
-            <div key={"cc"} className={"cc"}>Cash Cows</div>
+            <div key={"bcg-ul"} className={"ul"}>Question Marks</div>,
+            <div key={"bcg-ur"} className={"ur"}>Stars</div>,
+            <div key={"bcg-bl"} className={"bl"}>Poor Dogs</div>,
+            <div key={"bcg-br"} className={"br"}>Cash Cows</div>
         ];
     }
 

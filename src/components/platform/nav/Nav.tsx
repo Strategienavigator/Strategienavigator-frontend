@@ -54,9 +54,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return true;
         if (nextState.searchLoading !== this.state.searchLoading)
             return true;
-        if (nextState.searchResult !== this.state.searchResult)
-            return true;
-        return false;
+        return nextState.searchResult !== this.state.searchResult;
     }
 
     setExpanded = (value: boolean) => {
@@ -182,7 +180,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                         className={"searchOutputContainer " + (this.state.showSearchOutput ? "show" : "")}>
                                         <div className={"header"}>
                                             <Badge pill bg={"dark"}>
-                                                <Loader payload={[]} variant={"dark"} loaded={!this.state.searchLoading}
+                                                <Loader payload={[]} variant={"light"}
+                                                        loaded={!this.state.searchLoading}
                                                         transparent
                                                         size={10}>
                                                     {this.state.searchResult.length}
@@ -191,7 +190,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                             Ergebnisse
                                         </div>
                                         <div className={"output"}>
-                                            <Loader payload={[]} variant={"light"} loaded={!this.state.searchLoading}
+                                            <Loader payload={[]} variant={"style"} loaded={!this.state.searchLoading}
                                                     transparent
                                                     size={100} alignment={"center"}>
                                                 {this.state.searchResult.map((value) => {
@@ -200,7 +199,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                                         <Card as={NavLink}
                                                               title={(value.description !== null) ? "Beschreibung: " + value.description : ""}
                                                               to={link} onMouseDown={() => {
-                                                            this.props.history.push(link);
+                                                            this.props.history.push(link); // TODO: Wenn man bereits auf einem Save ist, wird nicht der Push registriert, evtl. reload einbauen
                                                         }} key={"SAVE" + value.id} body className={"result"}>
                                                             {value.name} | {this.getToolName(value.tool_id)}
                                                         </Card>

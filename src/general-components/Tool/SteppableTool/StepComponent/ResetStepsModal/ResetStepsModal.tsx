@@ -2,6 +2,7 @@ import {memo} from "react";
 
 import './reset-steps-modal.scss';
 import {Button, Modal} from "react-bootstrap";
+import {ModalCloseable} from "../../../../Modal/ModalCloseable";
 
 
 export interface ResetStepsModalProps {
@@ -14,8 +15,9 @@ export interface ResetStepsModalProps {
 function ResetStepsModal(props: ResetStepsModalProps) {
 
     return (
-        <Modal
+        <ModalCloseable
             show={props.show}
+            onHide={props.onNo}
             backdrop="static"
             keyboard={true}
         >
@@ -45,7 +47,7 @@ function ResetStepsModal(props: ResetStepsModalProps) {
                     Ja, ab diesem Schritt neu beginnen!
                 </Button>
             </Modal.Footer>
-        </Modal>
+        </ModalCloseable>
     );
 }
 

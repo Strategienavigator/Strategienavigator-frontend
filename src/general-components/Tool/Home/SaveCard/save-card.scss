@@ -4,7 +4,6 @@
 .save {
   transition: background-color 0.3s ease-out;
   position: relative;
-  overflow: hidden;
 }
 
 .save.disabled {
@@ -16,17 +15,6 @@
 
   .deleting {
     opacity: 1;
-    float: right;
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    color: #efefef;
-    border: 1px darken($danger, 10%) solid;
-    border-radius: 0.25rem;
-    padding: 0.5rem;
-    background-color: $danger;
-    font-size: 11pt;
-    font-weight: 600;
   }
 }
 
@@ -39,6 +27,18 @@
 
 .save-body {
   padding: 0.8rem 0.8rem;
+
+  .created-date.desktop {
+    position: absolute;
+    right: 0.3rem;
+    bottom: 0.3rem;
+  }
+
+  .card-title {
+    @include theme() {
+      color: get("style-color");
+    }
+  }
 }
 
 .save-card-dummy {
@@ -46,11 +46,14 @@
   user-select: none;
 }
 
-.save .deleteSave {
+.save .button-panel {
   position: absolute;
-  top: 15px;
-  right: 10px;
-  padding: 0.25rem 0.75rem;
+  right: 0.5rem;
+  top: 0;
+}
+
+.save-card-dummy .save-desc.dummy {
+  height: 17px;
 }
 
 .dummy {
@@ -58,8 +61,8 @@
   border-radius: 5px;
 
   @include theme() {
-    background-color: darken(get("card-bg-color"), 2%);
-    color: darken(get("card-bg-color"), 2%);
+    background-color: lighten(get("card-bg-color"), 7%) !important;
+    color: lighten(get("card-bg-color"), 7%) !important;
   }
 }
 

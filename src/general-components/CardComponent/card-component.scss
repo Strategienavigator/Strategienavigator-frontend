@@ -80,6 +80,7 @@
       }
     }
   }
+
   button.noButton:hover {
     @include theme() {
       background-color: darken(get("input-bg-color"), 2%);

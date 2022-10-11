@@ -9,6 +9,7 @@ import {HoverWindow} from "../../../../../../../general-components/HoverWindow/H
 interface ClassifyingCardProps {
     action: ClassifiedAlternateAction
     onChangeClick: (indexName: string) => void
+    disabled: boolean
 }
 
 class ClassifyingCard extends PureComponent<ClassifyingCardProps, {}> {
@@ -22,11 +23,13 @@ class ClassifyingCard extends PureComponent<ClassifyingCardProps, {}> {
                         <Col>{action.name}</Col>
                         <Col>{action.action.name}</Col>
                         <Col>
-                            <Button
-                                size={"sm"}
-                                onClick={this.onClick}>
-                                <FAE rotation={90} icon={faArrowsAlt}/>
-                            </Button>
+                            {(!this.props.disabled) && (
+                                <Button
+                                    size={"sm"}
+                                    onClick={this.onClick}>
+                                    <FAE rotation={90} icon={faArrowsAlt}/>
+                                </Button>
+                            )}
                         </Col>
                     </Row>
                 </Card>

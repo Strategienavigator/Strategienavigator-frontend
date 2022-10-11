@@ -1,10 +1,15 @@
+// THEMES
+@import "/src/themes.scss";
 
 // BOOTSTRAP
 @import "./scss/bootstrap/bootstrap.scss";
 
 // IMPORTED STYLES
+@import "scss/tables.scss";
 @import "scss/feedback.scss";
+@import "scss/modal.scss";
 @import "scss/links.scss";
+@import "scss/hr.scss";
 
 
 // STYLE
@@ -16,6 +21,7 @@
 
 body.smooth-transition {
   transition: 0.5s ease-in-out;
+
   * {
     transition: 0.5s ease-in-out;
   }
@@ -67,6 +73,7 @@ svg {
     color: get("style-color");
   }
 }
+
 button.btn > svg {
   color: white;
 }

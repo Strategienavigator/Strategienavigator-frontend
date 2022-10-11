@@ -1,0 +1,9 @@
+@import "/src/themes.scss";
+
+hr {
+  @include theme() {
+    border: none;
+    border-top: 1px solid get("hr-border-color") !important;
+    opacity: 0.3;
+  }
+}

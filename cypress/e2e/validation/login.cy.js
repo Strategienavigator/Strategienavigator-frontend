@@ -35,7 +35,7 @@ describe('Checking Login', () => {
             statusCode: 400
         })
 
-        cy.get('div[class="feedback"]')
+        cy.get('.feedback')
         .should('be.visible')
 
         cy.url().should("include", "login")
@@ -56,7 +56,7 @@ describe('Checking Login', () => {
             statusCode: 400
         })
 
-        cy.get('div[class="feedback"]')
+        cy.get('.feedback')
         .should('be.visible')
         cy.url()
         .should("include", "login")
