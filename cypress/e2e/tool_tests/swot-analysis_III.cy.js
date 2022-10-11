@@ -14,7 +14,7 @@ describe('SWOT Analyisis Part III', () => {
         .clear()
         .type("Klassifikation 1")
         
-        cy.get(".addClassification.btn.btn-primary']")
+        cy.get(".addClassification.btn.btn-primary")
         .click()
         cy.wait(100)
         cy.get("input[name='droppable-2']")
