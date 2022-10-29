@@ -404,3 +404,19 @@ export type SettingResource = {
      */
     default: string
 }
+
+
+export interface CaptchaResponse {
+    /**
+     * Ob das Captcha case sensitive ist
+     */
+    sensitive: boolean,
+    /**
+     * Der Key des Captchas
+     */
+    key: string,
+    /**
+     * Die Bilddaten des Captchas
+     */
+    img: string
+}

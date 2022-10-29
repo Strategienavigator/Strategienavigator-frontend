@@ -13,15 +13,19 @@ export type UpdateData = {
  * @param username Benutzername des neuen Nutzers
  * @param email Email Adresse des neuen Nutzers
  * @param password Passwort des neuen Nutzers
+ * @param captchaKey key des captchas
+ * @param captcha die antwort des captchas
  * @param anonymousID id des anonymen Nutzers, wenn er angegeben wird, werden alle Speicherstände und Einstellungen des anonymen Nutzers übernommen
  * @param apiArgs Normale api Argumente
  */
-const createUser = async (username: string, email: string, password: string, anonymousID?: number, apiArgs?: APIArgs) => {
+const createUser = async (username: string, email: string, password: string, captchaKey: string, captcha: string, anonymousID?: number, apiArgs?: APIArgs) => {
     let formData = new FormData();
 
     formData.append("email", email);
     formData.append("username", username);
     formData.append("password", password);
+    formData.append("captcha_key", captchaKey);
+    formData.append("captcha", captcha);
     if (anonymousID !== undefined)
         formData.append("anonymous_id", anonymousID.toString(10));
 
