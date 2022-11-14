@@ -1,5 +1,5 @@
 import './create-tool-modal.scss'
-import React, {Component, FormEvent} from "react";
+import React, {ChangeEvent, ChangeEventHandler, Component, FormEvent} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {Loader} from "../../Loader/Loader";
 import {extractFromForm} from "../../FormHelper";
@@ -11,6 +11,7 @@ interface CreateToolModalState {
     }
     descriptionError?: {
         empty?: boolean
+        tooLong?: boolean
     }
 }
 
@@ -21,7 +22,7 @@ interface CreateToolModalProps {
 }
 
 export class CreateToolModal extends Component<CreateToolModalProps, CreateToolModalState> {
-
+    public static MAX_LENGTH_DESC: number = 300;
 
     constructor(props: Readonly<CreateToolModalProps> | (CreateToolModalProps));
     constructor(props: CreateToolModalProps, context: any);
@@ -83,6 +84,14 @@ export class CreateToolModal extends Component<CreateToolModalProps, CreateToolM
                                 rows={10}
                                 size={"sm"}
                                 placeholder="Beschreibung"
+                                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                                    let value = e.currentTarget.value;
+                                    this.setState({
+                                       descriptionError: {
+                                           tooLong: value.length > CreateToolModal.MAX_LENGTH_DESC
+                                       }
+                                    });
+                                }}
                             />
                             <Form.Label htmlFor={"description"}>Beschreibung</Form.Label>
                         </Form.Floating>
@@ -92,6 +101,11 @@ export class CreateToolModal extends Component<CreateToolModalProps, CreateToolM
                                 {this.state.descriptionError.empty && (
                                     <div className={"feedback DANGER"}>
                                         Bitte geben Sie eine Beschreibung an.
+                                    </div>
+                                )}
+                                {this.state.descriptionError.tooLong && (
+                                    <div className={"feedback DANGER"}>
+                                        Bitte geben Sie maximal {CreateToolModal.MAX_LENGTH_DESC} Zeichen an.
                                     </div>
                                 )}
                             </div>
@@ -142,9 +156,16 @@ export class CreateToolModal extends Component<CreateToolModalProps, CreateToolM
                 }
             });
         }
+        if (desc?.length > CreateToolModal.MAX_LENGTH_DESC) {
+            error = true;
+            this.setState({
+               descriptionError: {
+                   tooLong: true
+               }
+            });
+        }
 
         if (!error) {
-
             this.props.onSaveCreated(name, desc);
         }
     }

@@ -11,6 +11,7 @@ import FAE from "../../../../Icons/FAE";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
 import {SaveInvitation} from "../../../../Sharing/SaveInvitation";
 import {HeaderCollaborators} from "./HeaderCollaborators";
+import {CreateToolModal} from "../../../CreateToolModal/CreateToolModal";
 
 
 export interface StepComponentHeaderProp {
@@ -23,7 +24,8 @@ export interface StepComponentHeaderProp {
 
 export interface StepComponentHeaderState {
     showStepHeaderDesc: boolean,
-    showInviteModal: boolean
+    showInviteModal: boolean,
+    descriptionTooLong: boolean
 }
 
 export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, StepComponentHeaderState> {
@@ -37,7 +39,8 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
         super(props, context);
         this.state = {
             showStepHeaderDesc: isDesktop(),
-            showInviteModal: false
+            showInviteModal: false,
+            descriptionTooLong: false
         }
     }
 
@@ -80,6 +83,13 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                                 onChange={this.onChangeCurrentDescription}
                                 disabled={!hasPermission(this.context.permission, EditSavesPermission)}
                             />
+                            {this.state.descriptionTooLong && (
+                                <div className={"feedbackContainer"}>
+                                    <div className={"feedback DANGER"}>
+                                        Beschreibung darf maximal {CreateToolModal.MAX_LENGTH_DESC} Zeichen lang sein.
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </Collapse>
                 </div>
@@ -114,6 +124,9 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
 
     onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
         const description = e.currentTarget.value;
+        this.setState({
+           descriptionTooLong: description.length > CreateToolModal.MAX_LENGTH_DESC
+        });
         this.props.saveMetaChanged(this.props.saveName, description);
     }
 
