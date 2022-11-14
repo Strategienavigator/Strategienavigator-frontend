@@ -1,7 +1,7 @@
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {Badge, Button, Modal} from "react-bootstrap";
 import {SharedSaveResource} from "../../Datastructures";
-import {CollaboratorsComponent} from "../../CollaboratorsComponent/CollaboratorsComponent";
+import {CollaboratorsTableComponent} from "../../CollaboratorsComponent/CollaboratorsTableComponent";
 
 
 interface CollaboratorsModalProps {
@@ -29,7 +29,7 @@ function CollaboratorsModal(props: CollaboratorsModalProps) {
                 }).length}</Badge></h5>
             </Modal.Header>
             <Modal.Body>
-                <CollaboratorsComponent
+                <CollaboratorsTableComponent
                     collaborators={props.contributors}
                     editable
                     deletable

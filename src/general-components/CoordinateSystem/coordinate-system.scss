@@ -63,6 +63,9 @@ $opacity: 0.75;
   height: 100%;
   width: 100%;
   display: grid;
+  @include theme() {
+    background-color: darken(get("bg-color"), 3%);
+  }
 
   > div {
     border: 1px solid rgb(211, 211, 211);

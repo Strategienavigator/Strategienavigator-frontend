@@ -276,7 +276,7 @@ class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystem
                                         }}
                                     >
                                         <OverlayTrigger
-                                            trigger={["hover", "focus"]}
+                                            trigger={["hover", "focus", "click"]}
                                             placement={"top"}
                                             overlay={(this.props.tooltipContentRenderer) ? (
                                                 <Tooltip>

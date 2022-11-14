@@ -10,6 +10,7 @@ import {SaveResource} from "../../../../Datastructures";
 import FAE from "../../../../Icons/FAE";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
 import {SaveInvitation} from "../../../../Sharing/SaveInvitation";
+import {HeaderCollaborators} from "./HeaderCollaborators";
 
 
 export interface StepComponentHeaderProp {
@@ -98,6 +99,10 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                         );
                     }}
                 </SharedSaveContext.Consumer>
+
+                <HeaderCollaborators
+                    save={this.props.associatedSave}
+                />
             </div>
         );
     }

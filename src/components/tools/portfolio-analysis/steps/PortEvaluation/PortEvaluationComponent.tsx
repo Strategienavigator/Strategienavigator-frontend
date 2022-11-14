@@ -94,7 +94,6 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
                     return item.criteria === criteria && item.points !== 0;
                 })) {
                     return null;
-                }
 
                 return (
                     <div key={"evaluation-" + index + "-" + type} className={"evaluation"}>

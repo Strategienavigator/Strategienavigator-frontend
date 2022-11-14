@@ -4,7 +4,7 @@ import {SharedSavePermission, SharedSaveResource} from "../Datastructures";
 import FAE from "../Icons/FAE";
 import {getSharedSavePermissionOptions, getSharedSavePermissionText} from "../Save";
 
-import "./collabortors-component.scss"
+import "./collabortors-table-component.scss"
 import {faTrash} from "@fortawesome/free-solid-svg-icons/faTrash";
 import {LoadingButton} from "../LoadingButton/LoadingButton";
 import {Messages} from "../Messages/Messages";
@@ -28,7 +28,7 @@ interface CollaboratorsComponentState {
     isEditing: boolean
 }
 
-class CollaboratorsComponent extends Component<CollaboratorsProps, CollaboratorsComponentState> {
+class CollaboratorsTableComponent extends Component<CollaboratorsProps, CollaboratorsComponentState> {
     state = {
         deletable: false,
         editable: false,
@@ -216,5 +216,5 @@ class CollaboratorsComponent extends Component<CollaboratorsProps, Collaborators
 }
 
 export {
-    CollaboratorsComponent
+    CollaboratorsTableComponent
 }
