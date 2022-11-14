@@ -14,7 +14,7 @@ import CompareHeaderAdapter_ts from "../../../../general-components/CompareCompo
 class PCJSONImporter extends JSONImporter {
 
     protected validate(data: object): Promise<void> {
-        const {PairwiseComparisonValues_ti} = createCheckers(
+        let {PairwiseComparisonValues_ti} = createCheckers(
             PairwiseComparison_ts,
             PCCriteriasComponent_ts,
             PCPairComparisonComponent_ts,

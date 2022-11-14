@@ -18,6 +18,7 @@ import {SaveInvitation} from "../../Sharing/SaveInvitation";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 import {ButtonPanel} from "../../ButtonPanel/ButtonPanel";
 import {ImportModal} from "./Import/ImportModal";
+import {Messages} from "../../Messages/Messages";
 
 
 export interface ToolHomeInfo {
@@ -233,6 +234,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                     onClose={this.onCloseImportModal}
                     onSuccess={(save) => {
                         this.props.tool.switchPage(save.id.toString());
+                        Messages.add("Importieren erfolgreich!", "SUCCESS", Messages.TIMER);
                     }}
                 />
             </div>

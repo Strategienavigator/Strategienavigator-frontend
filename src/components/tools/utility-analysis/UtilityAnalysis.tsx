@@ -15,6 +15,7 @@ import {UtilWeighting} from "./steps/UtilWeighting/UtilWeighting";
 import {UtilEvaluation} from "./steps/UtilEvaluation/UtilEvaluation";
 import {UtilResult} from "./steps/UtilityResult/UtilResult";
 import {UtilityAnalysisExcelExporter} from "./export/UtilityAnalysisExcelExporter";
+import {UtilityJSONImporter} from "./import/UtilityJSONImporter";
 
 
 export interface UtilityAnalysisValues {
@@ -32,7 +33,6 @@ export interface UtilityAnalysisValues {
  */
 class UtilityAnalysis extends SteppableTool<UtilityAnalysisValues> {
 
-
     constructor(props: RouteComponentProps, context: any) {
         super(props, context, "Nutzwertanalyse", faBorderAll, 1);
 
@@ -41,13 +41,13 @@ class UtilityAnalysis extends SteppableTool<UtilityAnalysisValues> {
         this.addExporter(new JSONExporter());
         this.addExporter(new UtilityAnalysisExcelExporter());
 
+        this.setImporter(new UtilityJSONImporter());
+
         this.addStep(new UtilInvestigationObjects());
         this.addStep(new UtilCriterias());
         this.addStep(new UtilWeighting());
         this.addStep(new UtilEvaluation());
         this.addStep(new UtilResult());
-
-
     }
 
     protected getInitData(): UtilityAnalysisValues {

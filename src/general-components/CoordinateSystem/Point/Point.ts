@@ -1,6 +1,14 @@
 import {Property} from "csstype";
 
 
+export interface PointInterface {
+    x: number,
+    y: number,
+    sizeMultiplier: number,
+    header: string,
+    color: Property.BackgroundColor
+}
+
 /**
  * @type {string[]} Enthält die Farben der Punkte
  */

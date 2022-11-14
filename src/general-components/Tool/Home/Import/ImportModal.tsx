@@ -84,12 +84,13 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
                         } else {
                             this.props.onSuccess(saved.callData);
                         }
-                    } catch (e: unknown) {
+                    } catch (e) {
                         if (e instanceof JSONImporterError) {
                             this.setState({
                                 error: e.message
                             });
                         }
+                        console.log(e);
                     }
                 } else {
                     this.setState({
