@@ -80,10 +80,9 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             return await getSaves(userId, {
                 toolID: this.props.tool.getID(),
                 page: page,
-                ...this.state.paginationSettings
+                ...this.state.paginationSettings,
+                deleted: false
             });
-
-
         });
 
         this.state = {
