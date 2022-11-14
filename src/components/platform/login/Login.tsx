@@ -1,19 +1,18 @@
 import {Component, FormEvent} from "react";
-import {Col, Form, Row} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import {Session} from "../../../general-components/Session/Session";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
-import {match, RouteComponentProps, withRouter} from "react-router";
+import {RouteComponentProps, withRouter} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {Messages} from "../../../general-components/Messages/Messages";
 
 import "./login.scss";
-import {Link, matchPath} from "react-router-dom";
-import {faInfo, faSignInAlt, faUserSecret} from "@fortawesome/free-solid-svg-icons/";
+import {Link} from "react-router-dom";
+import {faSignInAlt, faUserSecret} from "@fortawesome/free-solid-svg-icons/";
 import {AnonymousModal} from "../../../general-components/ProtectedRoute";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import {ButtonPanel} from "../../../general-components/ButtonPanel/ButtonPanel";
-import FAE from "../../../general-components/Icons/FAE";
 
 
 export interface LoginState {

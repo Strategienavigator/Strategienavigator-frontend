@@ -5,14 +5,18 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {PortfolioAnalysisValues} from "../../PortfolioAnalysis";
 import {CoordinateSystem} from "../../../../../general-components/CoordinateSystem/CoordinateSystem";
-import {NumberValueRenderer} from "../../../../../general-components/CoordinateSystem/ValueRenderer/NumberValueRenderer";
+import {
+    NumberValueRenderer
+} from "../../../../../general-components/CoordinateSystem/ValueRenderer/NumberValueRenderer";
 import {Point} from "../../../../../general-components/CoordinateSystem/Point/Point";
 import {ResultEvaluationValue} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluation";
 import {PointComponent} from "../../../../../general-components/CoordinateSystem/Point/PointComponent";
 import React from "react";
 import {SettingsContext} from "../../../../../general-components/Contexts/SettingsContextComponent";
 import {QuadrantGrid} from "../../../../../general-components/CoordinateSystem/Grid/QuadrantGrid";
-import {PortfolioQuadrantsSettingValues} from "../../../../../general-components/Settings/Types/PortfolioQuadrantsType/PortfolioQuadrantsSettingType";
+import {
+    PortfolioQuadrantsSettingValues
+} from "../../../../../general-components/Settings/Types/PortfolioQuadrantsType/PortfolioQuadrantsSettingType";
 import {CustomGrid} from "../../../../../general-components/CoordinateSystem/Grid/CustomGrid";
 
 

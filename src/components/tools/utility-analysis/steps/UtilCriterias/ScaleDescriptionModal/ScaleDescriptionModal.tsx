@@ -28,10 +28,10 @@ function ScaleDescriptionModal(props: CreateDescriptionModalProps) {
                     <div className={"test"}>
                         <Table variant={"light"} bordered hover>
                             <thead>
-                                <tr>
-                                    <th>Skala</th>
-                                    <th>Beschreibung</th>
-                                </tr>
+                            <tr>
+                                <th>Skala</th>
+                                <th>Beschreibung</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {props.values.headers.map((v, index) => {

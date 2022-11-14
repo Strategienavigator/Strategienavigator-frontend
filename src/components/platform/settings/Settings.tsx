@@ -8,7 +8,9 @@ import * as SettingsAPI from "../../../general-components/API/calls/Settings";
 import {Session} from "../../../general-components/Session/Session";
 import {Loader} from "../../../general-components/Loader/Loader";
 import {SettingsContext} from "../../../general-components/Contexts/SettingsContextComponent";
-import {PortfolioQuadrantsSettingType} from "../../../general-components/Settings/Types/PortfolioQuadrantsType/PortfolioQuadrantsSettingType";
+import {
+    PortfolioQuadrantsSettingType
+} from "../../../general-components/Settings/Types/PortfolioQuadrantsType/PortfolioQuadrantsSettingType";
 
 
 export interface UserSettingProxy {
@@ -48,7 +50,7 @@ export class Settings extends Component<{}, SettingsState> {
             return <ToggleSettingType {...props} key={key}/>
         },
         "portfolio-quadrants": (props: SettingsTypeProps, key: string | number) => {
-            return <PortfolioQuadrantsSettingType {...props} key={key} />
+            return <PortfolioQuadrantsSettingType {...props} key={key}/>
         }
     }
 

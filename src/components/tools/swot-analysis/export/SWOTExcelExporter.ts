@@ -4,7 +4,9 @@ import {SaveResource} from "../../../../general-components/Datastructures";
 import XLSX, {CellAddress, CellObject, Range, WorkSheet} from "xlsx-js-style";
 import {SwotFactorsValues} from "../steps/SWOTFactors/SWOTFactorsComponent";
 import {SWOTAlternativeActionsValues} from "../steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
-import {SWOTClassifyAlternativeActionsValues} from "../steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
+import {
+    SWOTClassifyAlternativeActionsValues
+} from "../steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 
 

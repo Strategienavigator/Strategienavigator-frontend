@@ -32,6 +32,13 @@ export class PortCriterias implements StepDefinition<PortfolioAnalysisValues>, S
         this.title = "2. Kriterien festlegen";
     }
 
+    static getDefaultExtraData() {
+        return {
+            headers: PortCriterias.header.getHeaders(),
+            activeIndices: Array(PortCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
+        };
+    }
+
     deleteData(data: Draft<PortfolioAnalysisValues>): void {
         data["port-criterias"] = undefined;
     }
@@ -46,13 +53,6 @@ export class PortCriterias implements StepDefinition<PortfolioAnalysisValues>, S
                 Card.empty(PortCriterias.getDefaultExtraData()),
                 Card.empty(PortCriterias.getDefaultExtraData())
             ]
-        };
-    }
-
-    static getDefaultExtraData() {
-        return {
-            headers: PortCriterias.header.getHeaders(),
-            activeIndices: Array(PortCriterias.header.getCount()).fill(0).map((_, i) => i + 1)
         };
     }
 

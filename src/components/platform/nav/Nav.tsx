@@ -1,18 +1,10 @@
 import React, {ChangeEvent, Component} from "react";
-import {
-    Badge,
-    Card,
-    Container,
-    Dropdown,
-    FormControl,
-    Nav as BootstrapNav,
-    Navbar,
-    NavDropdown
-} from "react-bootstrap";
+import {Badge, Card, Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
     faBalanceScale,
-    faCog, faExchangeAlt,
+    faCog,
+    faExchangeAlt,
     faHome,
     faShieldAlt,
     faSignInAlt,
@@ -204,7 +196,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                                 Ergebnisse
                                             </div>
                                             <div className={"output"}>
-                                                <Loader payload={[]} variant={"style"} loaded={!this.state.searchLoading}
+                                                <Loader payload={[]} variant={"style"}
+                                                        loaded={!this.state.searchLoading}
                                                         transparent
                                                         size={100} alignment={"center"}>
                                                     {this.state.searchResult.map((value) => {
@@ -261,7 +254,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                                     anonPortModalShow: true
                                                 });
                                             }}
-                                           role={"button"}>
+                                                           role={"button"}>
                                                 <FAE icon={faExchangeAlt}/>&nbsp;
                                                 Anonymes Konto Portieren
                                             </Dropdown.Item>
@@ -312,7 +305,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                     this.setState({
                         anonPortModalShow: false
                     });
-                }} />
+                }}/>
             </>
         );
     }

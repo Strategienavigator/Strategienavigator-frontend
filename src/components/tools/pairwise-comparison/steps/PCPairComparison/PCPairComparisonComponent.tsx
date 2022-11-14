@@ -7,7 +7,9 @@ import {
     CompareComponent,
     CompareComponentValues
 } from "../../../../../general-components/CompareComponent/CompareComponent";
-import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
 import {PCPairComparison} from "./PCPairComparison";
 

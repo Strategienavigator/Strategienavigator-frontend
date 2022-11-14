@@ -47,78 +47,6 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
         }
     }
 
-    private onPort = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        let user = Session.currentUser;
-        let email = extractFromForm(e, "email") as string;
-        let username = extractFromForm(e, "username") as string;
-        let password = extractFromForm(e, "password") as string;
-
-        this.setState({
-            isPorting: true
-        });
-
-        if (
-            this.passwordField.current &&
-            this.uniqueUsername.current &&
-            this.uniqueEmail.current &&
-            user
-        ) {
-            let errors: Errors = {
-                emailEmpty: isEmpty(email),
-                usernameEmpty: isEmpty(username)
-            };
-
-            if (
-                !errors.emailEmpty &&
-                !errors.usernameEmpty &&
-                this.uniqueEmail.current.isAvailable() &&
-                this.uniqueUsername.current.isAvailable() &&
-                this.passwordField.current.isMatching() &&
-                this.passwordField.current.isValid()
-            ) {
-                let call = await portUser({
-                    email: email,
-                    password: password,
-                    username: username
-                });
-
-                if (call && call.success) {
-                    let logoutCall = await Session.logout();
-
-                    if (logoutCall && logoutCall.success) {
-                        Messages.add((
-                            <div>
-                                Konto erfolgreich portiert.<br />
-                                Überprüfen Sie Ihre E-Mails!
-                            </div>
-                        ), "SUCCESS", 8000);
-
-                        this.props.onClose();
-                        this.props.history.push(`/login?email=${email}&bestaetigen`);
-                    } else {
-                        this.setState({
-                            success: false
-                        });
-                    }
-                } else {
-                    this.setState({
-                       success: false
-                    });
-                }
-            } else {
-                this.setState({
-                    errors: errors
-                });
-            }
-
-            this.setState({
-                isPorting: false
-            });
-        }
-    }
-
     resetError = () => {
         this.setState({
             errors: {},
@@ -237,6 +165,78 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
                 </Form>
             </ModalCloseable>
         );
+    }
+
+    private onPort = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        let user = Session.currentUser;
+        let email = extractFromForm(e, "email") as string;
+        let username = extractFromForm(e, "username") as string;
+        let password = extractFromForm(e, "password") as string;
+
+        this.setState({
+            isPorting: true
+        });
+
+        if (
+            this.passwordField.current &&
+            this.uniqueUsername.current &&
+            this.uniqueEmail.current &&
+            user
+        ) {
+            let errors: Errors = {
+                emailEmpty: isEmpty(email),
+                usernameEmpty: isEmpty(username)
+            };
+
+            if (
+                !errors.emailEmpty &&
+                !errors.usernameEmpty &&
+                this.uniqueEmail.current.isAvailable() &&
+                this.uniqueUsername.current.isAvailable() &&
+                this.passwordField.current.isMatching() &&
+                this.passwordField.current.isValid()
+            ) {
+                let call = await portUser({
+                    email: email,
+                    password: password,
+                    username: username
+                });
+
+                if (call && call.success) {
+                    let logoutCall = await Session.logout();
+
+                    if (logoutCall && logoutCall.success) {
+                        Messages.add((
+                            <div>
+                                Konto erfolgreich portiert.<br/>
+                                Überprüfen Sie Ihre E-Mails!
+                            </div>
+                        ), "SUCCESS", 8000);
+
+                        this.props.onClose();
+                        this.props.history.push(`/login?email=${email}&bestaetigen`);
+                    } else {
+                        this.setState({
+                            success: false
+                        });
+                    }
+                } else {
+                    this.setState({
+                        success: false
+                    });
+                }
+            } else {
+                this.setState({
+                    errors: errors
+                });
+            }
+
+            this.setState({
+                isPorting: false
+            });
+        }
     }
 
 }

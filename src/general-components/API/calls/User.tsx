@@ -57,7 +57,7 @@ const updateUser = async (userID: number, data: UpdateData, apiArgs?: APIArgs) =
  */
 const portUser = async (data: UpdateData, apiArgs?: APIArgs) => {
     let formData = new FormData();
-    if(data.email !== undefined)
+    if (data.email !== undefined)
         formData.append("email", data.email);
     if (data.username !== undefined)
         formData.append("username", data.username);

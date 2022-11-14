@@ -8,7 +8,9 @@ import {
     CompareComponent,
     CompareComponentValues
 } from "../../../../../general-components/CompareComponent/CompareComponent";
-import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PortWeighting} from "./PortWeighting";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 

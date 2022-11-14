@@ -213,7 +213,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
     }
 
     private closeDescriptionIfChanged = () => {
-        if(this.state.descChanged){
+        if (this.state.descChanged) {
             this.setState({showDesc: false})
         }
     }
