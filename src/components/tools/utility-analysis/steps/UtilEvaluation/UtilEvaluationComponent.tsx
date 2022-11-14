@@ -74,7 +74,7 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, UtilEvaluation
                         if (!weightingValues.result.some((item) => {
                             return item.criteria === criteria && item.points !== 0;
                         })) {
-                            return;
+                            return null;
                         }
 
                         const rating = values.evaluation[criteriaIndex].rating;

@@ -2,7 +2,6 @@
 
 Name                    | Datum ▼       | Befehl
 ----------------------- | ------------- | --------------------------
-react-beautiful-dnd	    | 01.09.2021    | react-beautiful-dnd
 string-similarity       | 30.08.2021    | string-similarity
 TypeDoc                 | 26.08.2021    | typedoc
 SCSS                    | 14.07.2021    | node-sass

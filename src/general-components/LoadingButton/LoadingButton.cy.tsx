@@ -1,6 +1,5 @@
-import {mount} from "@cypress/react";
+import {mount} from "cypress/react"
 import {LoadingButton} from "./LoadingButton";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../index.scss';
 
 

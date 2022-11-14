@@ -44,7 +44,9 @@ class MatchCardComponentFieldsAdapter extends CompareAdapter {
 
         return {
             first: this.cardComponentFields[firstIndex].name,
-            second: this.cardComponentFields[secondIndex].name
+            firstDesc: this.cardComponentFields[firstIndex].desc,
+            second: this.cardComponentFields[secondIndex].name,
+            secondDesc: this.cardComponentFields[secondIndex].desc
         };
     }
 

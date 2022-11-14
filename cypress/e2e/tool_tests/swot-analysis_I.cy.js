@@ -81,29 +81,7 @@ describe('SWOT Analyisis Part I', () => {
 
       it('trys to fill factors in saved TEST-SWOT VON MAX', () =>{
         cy.CreateSave("swot-1","TEST-SWOT VON MAX",2)
-        
-        cy.visit("/")
-        cy.loginViaApi()
-        cy.visit("/swot-analysis")
-        cy.url()
-          .should("include","swot-analysis")
-
-        cy.intercept('GET', /.*api\/saves.*/).as('loadSave')
-        cy.contains("TEST-SWOT VON MAX")
-          .click()
-
-        
-        cy.wait("@loadSave")
-        cy.get("@loadSave")
-        .its("response")
-        .should('include',
-        {
-          statusCode: 200
-        })
-
-        cy.url()
-          .should("include", "swot-analysis")
-        cy.log("Save loaded")
+        cy.LoginAndLoad("swot")
 
         //
         //Karten werden hinzugefügt und mit Testdaten gefüllt
@@ -113,7 +91,7 @@ describe('SWOT Analyisis Part I', () => {
 
         //Gehe schritt für Schritt die Accordions durch und fügen Inputfelder hinzu bis wir 4 erreicht haben
         //Dann werden diese mit hilfe von FillFactors mit Testdaten aufgefüllt
-        cy.get("button[class='accordion-button collapsed']")
+        cy.get(".accordion-button.collapsed")
           .each(($press) =>
           {
             var counter = -2; //Input des SWOT-Namens und Beshreibung werden nicht gezählt
@@ -135,7 +113,7 @@ describe('SWOT Analyisis Part I', () => {
                 }
               })
 
-            cy.get('div[class="addCard card"]')
+            cy.get('.addCard.card')
               .each(($add) =>
               {
                 if ($add.is(":visible"))
@@ -195,13 +173,13 @@ function FillFactors()
   //fixtures tootestdata swot werden hier genutzt
   cy.fixture("tooltestdata").then(function (testdata)
   {
-  this.testdata = testdata;
-  var swot = this.testdata.swot
-  cy.get("input")
-    .each(GetFillFunction("title", swot))
+    this.testdata = testdata;
+    var swot = this.testdata.swot
+    cy.get("input")
+      .each(GetFillFunction("title", swot))
 
-  cy.get("textArea")
-    .each(GetFillFunction("desc", swot))
+    cy.get("textArea")
+      .each(GetFillFunction("desc", swot))
   })
 
   //Hier wird nur übeprüft ob die richtigen Daten im richtigen Feld landen.

@@ -37,6 +37,7 @@ module.exports = (on, config) => {
             console.log(addr, id, email)
         })
 
+
         const options = {
             outputRoot: 'cypress/',
             outputTarget: {
@@ -45,12 +46,14 @@ module.exports = (on, config) => {
             },
             printLogsToFile: 'always'
         };
+
         require('cypress-terminal-report/src/installLogsPrinter')(on, options);
+
 
 
         const mysql = require("mysql2");
         const bcrypt = require('bcrypt');
-      
+
         function queryTestDb(query, config) {
             // creates a new mysql connection using credentials from cypress.json env's
             const connection = mysql.createConnection({
@@ -77,7 +80,7 @@ module.exports = (on, config) => {
         on("task", {
             queryDb: query => {
                 return queryTestDb(query, config);
-            }  
+            }
         });
         on("task", {
             bcrypt: password => {
@@ -85,10 +88,10 @@ module.exports = (on, config) => {
                 var myPlaintextPassword = password;
                 var passwordHashed = bcrypt.hashSync(myPlaintextPassword,saltRounds)
                 return passwordHashed;
-            }  
+            }
         });
     }
 
-    return require('cypress-local-config')(config);
+    return config;
 }
 

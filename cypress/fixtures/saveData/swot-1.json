@@ -11,16 +11,6 @@
                 "id":"2",
                 "name":"Produkt wird auch in anderen Ländern beliebter",
                 "desc":"anderen Ländern beliebter"
-             },
-             {
-                "id":"3",
-                "name":"Neue Technologien",
-                "desc":"Technologien"
-             },
-             {
-                "id":"4",
-                "name":"Demographische Veränderung",
-                "desc":"Veränderung"
              }
           ],
           "strengths":[
@@ -33,16 +23,6 @@
                 "id":"B",
                 "name":"Erfolgreiche Marketingkampagnen",
                 "desc":"Marketingkampagnen"
-             },
-             {
-                "id":"C",
-                "name":"Moderne Produktionsmaschinen",
-                "desc":"Produktionsmaschinen"
-             },
-             {
-                "id":"D",
-                "name":"Gut gelegener Standort",
-                "desc":"Gut gelegener Standort"
              }
           ],
           "weaknesses":[
@@ -55,16 +35,6 @@
                 "id":"b",
                 "name":"Produkte wenig nachhaltig",
                 "desc":"nachhaltig"
-             },
-             {
-                "id":"c",
-                "name":"Hohe Fluktuationsrate",
-                "desc":"Fluktuationsrate"
-             },
-             {
-                "id":"d",
-                "name":"Geringe finanzielle Möglichkeiten ",
-                "desc":"Möglichkeiten"
              }
           ],
           "risks":[
@@ -77,16 +47,6 @@
                 "id":"II",
                 "name":"Neue Konkurrenz aus dem Ausland",
                 "desc":"dem Ausland"
-             },
-             {
-                "id":"III",
-                "name":"Sinkendes Preisniveau",
-                "desc":"Preisniveau"
-             },
-             {
-                "id":"IV",
-                "name":"Neue Gesetze",
-                "desc":"Gesetze"
              }
           ]
        }

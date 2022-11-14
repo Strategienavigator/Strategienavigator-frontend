@@ -80,10 +80,9 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             return await getSaves(userId, {
                 toolID: this.props.tool.getID(),
                 page: page,
-                ...this.state.paginationSettings
+                ...this.state.paginationSettings,
+                deleted: false
             });
-
-
         });
 
         this.state = {
@@ -106,7 +105,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         });
         this.context.setItem(2, {settings: true});
 
-        this.loadPage(0);
+        this.loadPage(1);
     }
 
     componentWillUnmount() {
@@ -246,7 +245,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             saves: undefined
         });
         this.paginationLoader.clearCache();
-        await this.paginationLoader.loadPage(0);
+        await this.paginationLoader.loadPage(1);
         this.updateSavesState();
 
     }
