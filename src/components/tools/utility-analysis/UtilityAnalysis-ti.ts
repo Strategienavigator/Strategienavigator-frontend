@@ -5,7 +5,7 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const UtilityAnalysisValues = t.iface([], {
-  "ua-investigation-obj": t.opt("UtilInvestigationObjectsValues"),
+  "ua-investigation-obj": "UtilInvestigationObjectsValues",
   "ua-criterias": t.opt("UtilCriteriasValues"),
   "ua-weighting": t.opt("UtilWeightingValues"),
   "ua-evaluation": t.opt("UtilEvaluationValues"),

@@ -5,7 +5,7 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PortfolioAnalysisValues = t.iface([], {
-  "port-objects": t.opt("PortCreateObjectsValues"),
+  "port-objects": "PortCreateObjectsValues",
   "port-criterias": t.opt("PortCriteriasValues"),
   "port-weighting": t.opt("PortWeightingValues"),
   "port-evaluation": t.opt("PortEvaluationValues"),
