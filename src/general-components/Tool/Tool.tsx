@@ -182,6 +182,13 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
         }
     }
 
+    /**
+     * Kreiert einen neuen Save
+     *
+     * @param {string} name Name des Saves
+     * @param {string} description Beschreibung des Saves
+     * @returns {Promise<void>}
+     */
     private createNewSave = async (name: string, description: string) => {
         this.setState({
             isCreatingNewSave: true
@@ -196,7 +203,6 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
 
         let saved = await createSave(data);
         if (saved) {
-
             this.setState({
                 isCreatingNewSave: false
             });

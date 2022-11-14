@@ -227,7 +227,14 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                     />
                 </SharedSaveContextComponent>
 
-                <ImportModal show={this.state.showImportModal} tool={this.props.tool} onClose={this.onCloseImportModal} />
+                <ImportModal
+                    show={this.state.showImportModal}
+                    tool={this.props.tool}
+                    onClose={this.onCloseImportModal}
+                    onSuccess={(save) => {
+                        this.props.tool.switchPage(save.id.toString());
+                    }}
+                />
             </div>
         );
     }

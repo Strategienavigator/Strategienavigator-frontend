@@ -1,6 +1,8 @@
+
+
 export class JSONImporterError extends Error {
-    constructor();
-    constructor(msg?: string) {
+    constructor(msg?: string);
+    constructor(msg: string) {
         if (msg != undefined) {
             super(msg);
         } else {
@@ -9,10 +11,23 @@ export class JSONImporterError extends Error {
     }
 }
 
+/**
+ *
+ */
 abstract class JSONImporter {
-
+    /**
+     *
+     * @param {object} data
+     * @returns {Promise<void>}
+     * @protected
+     */
     protected abstract validate(data: object): Promise<void>;
 
+    /**
+     *
+     * @param {string} rawString
+     * @returns {Promise<void>}
+     */
     public async onImport(rawString: string): Promise<void> {
         try {
             let jsonString = JSON.parse(rawString);
