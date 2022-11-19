@@ -4,6 +4,8 @@ import {CaptchaResponse} from "../Datastructures";
 import {getCaptcha} from "../API/calls/Captcha";
 import {Form} from "react-bootstrap";
 
+import './captcha-image.scss';
+
 interface CaptchaComponentProps {
     /**
      * name des input elements des captcha keys
@@ -18,7 +20,12 @@ interface CaptchaComponentProps {
     /**
      * input tag name of the captcha
      */
-    captchaName: string
+    captchaName: string,
+
+    /**
+     * interval at which the image is refreshed in seconds
+     */
+    refreshIntervall: number
 
 }
 
@@ -54,7 +61,8 @@ class CaptchaComponent extends Component<CaptchaComponentProps, CaptchaComponent
     static defaultProps = {
         keyName: "captcha_key",
         label: "Captcha",
-        captchaName: "captcha"
+        captchaName: "captcha",
+        refreshIntervall: 60
     }
     private scheduler?: NodeJS.Timeout;
 
@@ -102,7 +110,7 @@ class CaptchaComponent extends Component<CaptchaComponentProps, CaptchaComponent
     }
 
     private scheduleRefresh = () => {
-        this.scheduler = setTimeout(this.loadCaptcha, 60 * 1000)
+        this.scheduler = setTimeout(this.loadCaptcha, this.props.refreshIntervall * 1000)
     }
 
 
@@ -127,11 +135,22 @@ class CaptchaComponent extends Component<CaptchaComponentProps, CaptchaComponent
 
 
     render() {
+
+        let scrolling = !this.state.loading && !this.state.error
         return (
             <div className={"mt-2"}>
-                <div className={"m-2"}>
-                    <img className={"border-dark border"} src={this.state.img}
-                         alt={"Captcha Bild, frage eine Person um Hilfe."}/>
+                <div className={"my-2 ms-1"}>
+                    <div className={"image-container"}>
+                        <img className={"border-dark border image"} src={this.state.img}
+                             alt={"Captcha Bild, frage eine Person um Hilfe."}/>
+                        <div style={{
+                            animationDuration: this.props.refreshIntervall + "s"
+                        }} className={"scrollbar" + (scrolling ? " scrolling-bar" : "")}>
+
+                        </div>
+                    </div>
+
+
                     <input
                         id={this.props.keyName}
                         type={"hidden"}
