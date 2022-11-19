@@ -68,9 +68,9 @@ const portUser = async (data: UpdateData & { captcha: string, captcha_key: strin
     if (data.password !== undefined)
         formData.append("password", data.password);
     if (data.captcha !== undefined)
-        formData.append("password", data.captcha);
+        formData.append("captcha", data.captcha);
     if (data.captcha_key !== undefined)
-        formData.append("password", data.captcha_key);
+        formData.append("captcha_key", data.captcha_key);
 
     return await callAPI("api/user/port", "POST", formData, true, apiArgs);
 }
