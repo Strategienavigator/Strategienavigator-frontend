@@ -55,11 +55,11 @@ const updateUser = async (userID: number, data: UpdateData, apiArgs?: APIArgs) =
 /**
  * Portiert einen Benutzeraccount von Anonym auf Normal
  *
- * @param {UpdateData} data Die Daten des Benutzers
+ * @param {UpdateData & { captcha: string, captcha_key: string }} data Die Daten des Benutzers
  * @param {APIArgs} apiArgs Die API-Argumente
  * @returns {Promise<CallInterface<object> | null>}
  */
-const portUser = async (data: UpdateData, apiArgs?: APIArgs) => {
+const portUser = async (data: UpdateData & { captcha: string, captcha_key: string }, apiArgs?: APIArgs) => {
     let formData = new FormData();
     if (data.email !== undefined)
         formData.append("email", data.email);
@@ -67,6 +67,10 @@ const portUser = async (data: UpdateData, apiArgs?: APIArgs) => {
         formData.append("username", data.username);
     if (data.password !== undefined)
         formData.append("password", data.password);
+    if (data.captcha !== undefined)
+        formData.append("password", data.captcha);
+    if (data.captcha_key !== undefined)
+        formData.append("password", data.captcha_key);
 
     return await callAPI("api/user/port", "POST", formData, true, apiArgs);
 }

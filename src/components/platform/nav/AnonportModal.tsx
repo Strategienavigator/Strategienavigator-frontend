@@ -14,6 +14,7 @@ import {LoadingButton} from "../../../general-components/LoadingButton/LoadingBu
 import {portUser} from "../../../general-components/API/calls/User";
 import {RouteComponentProps, withRouter} from "react-router";
 import {Messages} from "../../../general-components/Messages/Messages";
+import {CaptchaComponent} from "../../../general-components/Captcha/CaptchaComponent";
 
 
 export interface AnonportModalProps {
@@ -133,6 +134,8 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
                             onChange={this.resetError}
                         />
 
+                        <CaptchaComponent/>
+
                         <div className={"feedbackContainer"}>
                             {(
                                 this.state.success !== undefined &&
@@ -174,6 +177,8 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
         let email = extractFromForm(e, "email") as string;
         let username = extractFromForm(e, "username") as string;
         let password = extractFromForm(e, "password") as string;
+        let captcha = extractFromForm(e, "captcha") as string;
+        let captchaKey = extractFromForm(e, "captcha_key") as string;
 
         this.setState({
             isPorting: true
@@ -201,7 +206,9 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
                 let call = await portUser({
                     email: email,
                     password: password,
-                    username: username
+                    username: username,
+                    captcha: captcha,
+                    captcha_key: captchaKey
                 });
 
                 if (call && call.success) {
