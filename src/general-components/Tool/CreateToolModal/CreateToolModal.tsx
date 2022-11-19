@@ -1,5 +1,5 @@
 import './create-tool-modal.scss'
-import React, {ChangeEvent, ChangeEventHandler, Component, FormEvent} from "react";
+import React, {ChangeEvent, Component, FormEvent} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {Loader} from "../../Loader/Loader";
 import {extractFromForm} from "../../FormHelper";
