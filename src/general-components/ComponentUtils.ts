@@ -33,6 +33,11 @@ function compareWithoutFunctions<T extends Object>(oldData: T, newData: T, exclu
     return true;
 }
 
+function isEmpty(s: string) {
+    return !(s && s !== "" && s.length !== 0);
+}
+
 export {
-    compareWithoutFunctions
+    compareWithoutFunctions,
+    isEmpty
 }

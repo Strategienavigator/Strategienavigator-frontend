@@ -5,15 +5,23 @@ import {SaveResource} from "../../../../general-components/Datastructures";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "../steps/UtilCriterias/UACriteriaCustomDescription";
 import {UtilWeightingValues} from "../steps/UtilWeighting/UtilWeightingComponent";
-import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {UtilEvaluationValues} from "../steps/UtilEvaluation/UtilEvaluationComponent";
-import {LinearCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
+import {
+    LinearCardComponentFieldsAdapter
+} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
 import {UtilResultValues} from "../steps/UtilityResult/UtilResultComponent";
 import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
 import {UtilEvaluation} from "../steps/UtilEvaluation/UtilEvaluation";
-import {CompareComponentExcelWorkSheet} from "../../../../general-components/CompareComponent/CompareComponentExcelWorkSheet";
+import {
+    CompareComponentExcelWorkSheet
+} from "../../../../general-components/CompareComponent/CompareComponentExcelWorkSheet";
 import {UtilWeighting} from "../steps/UtilWeighting/UtilWeighting";
-import {WeightingEvaluationExcelWorkSheet} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationExcelWorkSheet";
+import {
+    WeightingEvaluationExcelWorkSheet
+} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationExcelWorkSheet";
 import {WeightingEvaluation} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 

@@ -1,5 +1,6 @@
 import {APIArgs, callAPI} from "../API";
 import {PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
+import {Patch} from "immer";
 
 
 export interface GetSavesArguments {
@@ -27,6 +28,10 @@ export interface GetSavesArguments {
      * Ob die speicherstände absteigend oder aufsteigend nach erstelldatum sortiert werden sollen
      */
     orderDesc?: boolean
+    /**
+     * Zeigt auch die gelöschten Speicherstände an
+     */
+    deleted?: boolean
 }
 
 /**
@@ -54,6 +59,10 @@ const getSaves = async (userID: number, getSavesArguments: GetSavesArguments, ap
     }
     if (getSavesArguments.description) {
         data.append("description", getSavesArguments.description);
+        searchParams = true;
+    }
+    if (getSavesArguments.deleted) {
+        data.append("deleted", getSavesArguments.deleted ? "1" : "0");
         searchParams = true;
     }
 
@@ -106,6 +115,7 @@ const updateSave = async (save: SaveResource<any>, apiArgs?: APIArgs) => {
 
     return await updateSaveData(saveID, data, apiArgs);
 }
+
 /**
  * Updatet einen Save
  *
@@ -117,6 +127,21 @@ const updateSaveData = async (saveID: number, data: FormData, apiArgs?: APIArgs)
     data.append("_method", "PUT");
 
     return await callAPI("api/saves/" + saveID, "POST", data, true, apiArgs);
+}
+
+/**
+ * Broadcastet die Änderungen am Save
+ *
+ * @param {number} saveID Die ID des Saves
+ * @param {Patch[]} patches Die Patches
+ * @param {APIArgs} apiArgs API Argumente
+ * @returns {Promise<CallInterface<object> | null>}
+ */
+const broadcastSavePatches = async (saveID: number, patches: Patch[], apiArgs?: APIArgs) => {
+    let data = new FormData();
+    data.append("data", JSON.stringify(patches));
+
+    return await callAPI("api/saves/" + saveID + "/broadcast", "POST", data, true, apiArgs);
 }
 
 /**
@@ -153,6 +178,7 @@ export {
     getSave,
     deleteSave,
     updateSave,
+    broadcastSavePatches,
     lockSave,
     createSave
 }

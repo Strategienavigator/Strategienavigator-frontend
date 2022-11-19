@@ -3,7 +3,7 @@ import {Form} from "react-bootstrap";
 import {Session} from "../../../general-components/Session/Session";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
-import {withRouter} from "react-router";
+import {RouteComponentProps, withRouter} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {Messages} from "../../../general-components/Messages/Messages";
 
@@ -23,7 +23,7 @@ export interface LoginState {
     loaded?: boolean
 }
 
-export class LoginComponent extends Component<any, LoginState> {
+export class LoginComponent extends Component<RouteComponentProps<any, any, any>, LoginState> {
 
     constructor(props: any) {
         super(props);
@@ -88,6 +88,15 @@ export class LoginComponent extends Component<any, LoginState> {
     }
 
     render() {
+        let params: URLSearchParams = new URLSearchParams(this.props.location.search);
+
+        let email;
+        if (params.has("email")) {
+            email = params.get("email") ?? undefined;
+        }
+
+        let hasCheckNotice = params.has("bestaetigen");
+
         return (
             <Form className={"loginContainer"} onSubmit={async (e) => {
                 e.preventDefault();
@@ -103,12 +112,13 @@ export class LoginComponent extends Component<any, LoginState> {
                         type="email"
                         name={"email"}
                         size={"sm"}
+                        defaultValue={email}
                         placeholder="name@example.com"
                     />
                     <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
                 </Form.Floating>
 
-                <PasswordField check={false}/>
+                <PasswordField autofocus={email !== undefined} check={false}/>
 
                 <Form.Group className={"mb-2 mt-2"}>
                     <Form.Check
@@ -125,11 +135,18 @@ export class LoginComponent extends Component<any, LoginState> {
                             Anmeldung fehlgeschlagen!
                         </div>
                     )}
+                    {(hasCheckNotice) && (
+                        <div className={"feedback INFO"}>
+                            Eventuell müssen Sie noch Ihre E-Mail-Adresse noch bestätigen!
+                        </div>
+                    )}
                 </div>
 
-                <Link to={"/reset-password"} className={"link-primary"}>Passwort vergessen?</Link>
-
                 <hr/>
+
+                <p><Link to={"/reset-password"} className={"link-primary"}>
+                    Passwort vergessen?
+                </Link></p>
 
                 <ButtonPanel>
                     <LoadingButton

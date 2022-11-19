@@ -3,10 +3,16 @@ import {PortfolioAnalysisValues} from "../PortfolioAnalysis";
 import {WorkBook} from "xlsx-js-style";
 import {SaveResource} from "../../../../general-components/Datastructures";
 import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
-import {CompareComponentExcelWorkSheet} from "../../../../general-components/CompareComponent/CompareComponentExcelWorkSheet";
-import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {
+    CompareComponentExcelWorkSheet
+} from "../../../../general-components/CompareComponent/CompareComponentExcelWorkSheet";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PortWeighting} from "../steps/PortWeighting/PortWeighting";
-import {LinearCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
+import {
+    LinearCardComponentFieldsAdapter
+} from "../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
 import {PortEvaluation} from "../steps/PortEvaluation/PortEvaluation";
 import {PointExcelSheet} from "../../../../general-components/CoordinateSystem/Point/PointExcelSheet";
 

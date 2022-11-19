@@ -47,8 +47,8 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
                 };
             });
             let compareCValues: CompareComponentValues = {
-              comparisons: compareValues,
-              headers: PortEvaluation.header.getHeaders()
+                comparisons: compareValues,
+                headers: PortEvaluation.header.getHeaders()
             };
 
             let attractivitys: Rating[] = [];

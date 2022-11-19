@@ -2,6 +2,7 @@ import {CustomGrid} from "./CustomGrid";
 
 import "./BCG/bcg-grid.scss";
 
+
 class QuadrantGrid extends CustomGrid {
     private quadrants: string[] = [];
 

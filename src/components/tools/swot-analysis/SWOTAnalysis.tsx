@@ -1,7 +1,9 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
 import {SwotFactorsValues} from "./steps/SWOTFactors/SWOTFactorsComponent";
 import {SWOTAlternativeActionsValues} from "./steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
-import {SWOTClassifyAlternativeActionsValues} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
+import {
+    SWOTClassifyAlternativeActionsValues
+} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActionsComponent";
 
 import "./swot-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";

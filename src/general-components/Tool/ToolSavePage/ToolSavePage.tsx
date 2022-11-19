@@ -1,17 +1,17 @@
 import './tool-save-page.scss'
 import React, {Component, ReactNode} from "react";
-import {SaveResource, SharedSavePermission} from "../../Datastructures";
+import {LiveSaveUpdateResource, SaveResource, SharedSavePermission,} from "../../Datastructures";
 import {Session} from "../../Session/Session";
 import {Loader} from "../../Loader/Loader";
 import {Prompt, RouteComponentProps} from "react-router";
 import * as H from "history";
-import {getSave, lockSave, updateSave} from "../../API/calls/Saves";
+import {broadcastSavePatches, getSave, lockSave, updateSave} from "../../API/calls/Saves";
 import {Tool} from "../Tool";
 import {Messages} from "../../Messages/Messages";
 import {Button, Modal} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
-import produce from "immer";
+import produce, {applyPatches} from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
 import {UIErrorContextComponent} from "../../Contexts/UIErrorContext/UIErrorContext";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
@@ -20,6 +20,9 @@ import {showErrorPage} from "../../../index";
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import FAE from '../../Icons/FAE';
+import {createSocketConnection} from "../../../setupEcho";
+import Echo, {PresenceChannel} from "laravel-echo";
+import {WebsocketChannelContextComponent} from "../../Contexts/WebsocketChannelContextComponent";
 
 
 interface ToolSaveController<D> {
@@ -43,7 +46,9 @@ interface ToolSavePageState<D extends object> {
     isSaving: boolean
     showConfirmToolRouteChangeModal: boolean
     lastLocation?: H.Location,
-    isLocked: boolean
+    isLocked: boolean,
+    connection?: Echo;
+    channel?: PresenceChannel;
 }
 
 
@@ -55,6 +60,9 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
      * @private
      */
     private saveDirty: boolean = false;
+
+    private updateTimeout: NodeJS.Timeout | undefined;
+    private updateTimeoutMS: number = 370;
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
@@ -79,6 +87,8 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             await this.unlock(this.state.save);
         }
 
+        this.closeWebsocketConnection();
+
         window.removeEventListener("beforeunload", this.onBeforeUnload);
         window.removeEventListener("beforeunload", this.onUnloadUnLock);
     }
@@ -88,6 +98,43 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         if (save) {
             await this.lockSave(save, false, true);
         }
+
+        if (save) {
+            await this.unlock(save);
+        }
+    }
+
+    createSocketConnection = async () => {
+        let channelName = "savechannel." + this.state.save!.id;
+        let connection = createSocketConnection();
+
+        connection.connector.pusher.connection.bind("connected", () => {
+            console.log("Websocket connected!"); // TODO: in state umwandeln
+        });
+        connection.connector.pusher.connection.bind("disconnected", () => {
+            console.log("Websocket disconnected!"); // TODO: in state umwandeln
+        });
+
+        let channel = connection.join(channelName);
+        channel.subscribed(() => {
+            console.log("channel subscribed");  // TODO: in state umwandeln
+        });
+
+        /**
+         * Watchout for updates
+         */
+        channel.listen("LiveSaveUpdate", (message: LiveSaveUpdateResource) => {
+            let userID = Session.currentUser?.getID();
+
+            if (userID !== message.sender.id) {
+                this.remoteUpdateSave(message);
+            }
+        });
+
+        this.setState({
+            connection: connection,
+            channel: channel
+        });
     }
 
     render() {
@@ -96,46 +143,51 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         return (
             <Route>
                 <SharedSaveContextComponent save={this.state.save!}>
-                    <Loader payload={[() => this.retrieveSave(ID)]} transparent
+                    <Loader payload={[async () => this.retrieveSave(ID), this.createSocketConnection]} transparent
                             alignment={"center"} fullscreen animate={false}>
-
-                        <UIErrorContextComponent>
-                            {this.getView()}
-                        </UIErrorContextComponent>
-
-                        <ModalCloseable
-                            show={this.state.isLocked}
-                            backdrop centered
-                            onHide={() => {
-                                this.setState({
-                                    isLocked: false
-                                });
-                            }}
+                        <WebsocketChannelContextComponent
+                            channel={this.state.channel ?? null}
+                            connection={this.state.connection ?? null}
                         >
-                            <Modal.Body>
-                                Dieser Speicherstand wird aktuell bearbeitet, daher können Sie diesen nur beobachten...
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button
-                                    variant={"dark"}
-                                    onClick={() => {
-                                        this.setState({
-                                            isLocked: false
-                                        });
-                                    }}
-                                >
-                                    <FAE icon={faCheck}/> Ok
-                                </Button>
-                                <Button
-                                    variant={"primary"}
-                                    onClick={() => {
-                                        this.props.history.goBack();
-                                    }}
-                                >
-                                    Zurück
-                                </Button>
-                            </Modal.Footer>
-                        </ModalCloseable>
+                            <UIErrorContextComponent>
+                                {this.getView()}
+                            </UIErrorContextComponent>
+
+                            <ModalCloseable
+                                show={this.state.isLocked}
+                                backdrop centered
+                                onHide={() => {
+                                    this.setState({
+                                        isLocked: false
+                                    });
+                                }}
+                            >
+                                <Modal.Body>
+                                    Dieser Speicherstand wird aktuell bearbeitet, daher können Sie diesen nur
+                                    beobachten...
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button
+                                        variant={"dark"}
+                                        onClick={() => {
+                                            this.setState({
+                                                isLocked: false
+                                            });
+                                        }}
+                                    >
+                                        <FAE icon={faCheck}/> Ok
+                                    </Button>
+                                    <Button
+                                        variant={"primary"}
+                                        onClick={() => {
+                                            this.props.history.goBack();
+                                        }}
+                                    >
+                                        Zurück
+                                    </Button>
+                                </Modal.Footer>
+                            </ModalCloseable>
+                        </WebsocketChannelContextComponent>
                     </Loader>
 
                     <Prompt message={this.denyRouteChange}/>
@@ -153,7 +205,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         // Dont show if save is unchanged
         if (!this.shouldPreventRouteChange())
             return true;
-
 
         this.setState({
             showConfirmToolRouteChangeModal: true,
@@ -173,6 +224,10 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     public unlock = async (save: SaveResource<any>) => {
         return await this.lockSave(save, false);
+    }
+
+    private closeWebsocketConnection() {
+        this.state.connection?.disconnect();
     }
 
     private onBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -205,6 +260,8 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     };
 
     private performRouteChange = () => {
+        this.closeWebsocketConnection();
+
         this.props.history.push(this.state.lastLocation?.pathname as string);
         if ((this.state.lastLocation?.pathname as string).startsWith(this.props.tool.getLink())) {
             this.setState({
@@ -241,17 +298,39 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     }
 
-    private updateSave(changes: ((save: WritableDraft<SaveResource<D>>) => void) | SaveResource<D>, callback?: () => void) {
+    private updateSave = (changes: ((save: WritableDraft<SaveResource<D>>) => void) | SaveResource<D>, callback?: () => void) => {
+        let newSave;
         if (typeof changes === "object") {
-            this.setState({
-                save: changes
-            }, callback);
+            newSave = changes;
         } else {
             if (this.state.save !== undefined) {
-                this.setState({
-                    save: produce(this.state.save, changes)
-                }, callback)
+                newSave = produce(this.state.save, changes, async (patches, inversePatches) => {
+                    if (this.updateTimeout) {
+                        clearTimeout(this.updateTimeout);
+                    }
+
+                    this.updateTimeout = setTimeout(async () => {
+                        await broadcastSavePatches(this.state.save!.id, patches);
+                    }, this.updateTimeoutMS);
+                });
             }
+            this.saveDirty = true;
+        }
+
+        this.setState({
+            save: newSave
+        }, callback);
+    }
+
+    private remoteUpdateSave = (message: LiveSaveUpdateResource) => {
+        let patches = JSON.parse(message.patches);
+        let old = this.state.save;
+
+        if (old !== undefined) {
+            let newSave = applyPatches<SaveResource<D>>(old, patches);
+            this.setState({
+                save: newSave
+            });
             this.saveDirty = true;
         }
     }

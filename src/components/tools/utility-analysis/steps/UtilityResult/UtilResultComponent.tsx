@@ -5,7 +5,9 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
-import {ResultEvaluationComponent} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluationComponent";
+import {
+    ResultEvaluationComponent
+} from "../../../../../general-components/EvaluationComponent/Result/ResultEvaluationComponent";
 
 
 export interface UtilResultValues {

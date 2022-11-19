@@ -25,6 +25,24 @@ export enum SharedSavePermission {
 }
 
 /**
+ * Repräsentiert ein Live Update eines Saves bei einer Websocket-Verbindung
+ */
+export interface LiveSaveUpdateResource {
+    /**
+     * Der Save welcher upgedatet wird
+     */
+    save: SimplerSaveResource,
+    /**
+     * Der Absender
+     */
+    sender: SimplestUserResource,
+    /**
+     * Die Patches als decodierter JSON-String welche angewendet werden sollen
+     */
+    patches: string
+}
+
+/**
  * Repräsentiert einen Speicherstand.
  * Der Typparameter steht für die Daten, da diese von Tool zu Tool unterschiedlich sind
  */

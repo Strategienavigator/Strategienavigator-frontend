@@ -6,7 +6,7 @@ import {ScaleDescriptionModal} from "./ScaleDescriptionModal";
 import {UACriteriaCustomDescriptionValues} from "../UACriteriaCustomDescription";
 
 
-function UACriteriaCustomDescriptionInfoPanel(props: {values: UACriteriaCustomDescriptionValues}) {
+function UACriteriaCustomDescriptionInfoPanel(props: { values: UACriteriaCustomDescriptionValues }) {
     let [showModal, setShowModal] = useState(false);
 
     return (

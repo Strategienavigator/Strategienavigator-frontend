@@ -50,7 +50,7 @@ class Register extends PureComponent<RouteComponentProps, RegisterState> {
 
         if (call?.success) {
             Messages.add("Konto erstellt!\nÜberprüfe deine Emails!", "SUCCESS", Messages.TIMER);
-            this.props.history.push("/login");
+            this.props.history.push(`/login?email=${email}&bestaetigen`);
         } else {
             Messages.add("Fehlgeschlagen! Überprüfen Sie Ihre Eingaben!", "DANGER", Messages.TIMER);
         }

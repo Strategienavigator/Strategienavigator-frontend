@@ -7,7 +7,9 @@ import {PCPairComparisonComponent} from "./PCPairComparisonComponent";
 import {Draft} from "immer";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
-import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {CompareValue} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 

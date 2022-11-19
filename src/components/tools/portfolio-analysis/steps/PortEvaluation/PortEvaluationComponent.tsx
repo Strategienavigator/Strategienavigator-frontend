@@ -10,12 +10,18 @@ import {
     CompareComponent,
     CompareComponentValues
 } from "../../../../../general-components/CompareComponent/CompareComponent";
-import {LinearCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
+import {
+    LinearCardComponentFieldsAdapter
+} from "../../../../../general-components/CompareComponent/Adapter/LinearCardComponentFieldsAdapter";
 import {PortEvaluation} from "./PortEvaluation";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {Accordion} from "react-bootstrap";
-import {UACriteriaCustomDescriptionValues} from "../../../utility-analysis/steps/UtilCriterias/UACriteriaCustomDescription";
-import {UACriteriaCustomDescriptionInfoPanel} from "../../../utility-analysis/steps/UtilCriterias/ScaleDescriptionModal/UACriteriaCustomDescriptionInfoPanel";
+import {
+    UACriteriaCustomDescriptionValues
+} from "../../../utility-analysis/steps/UtilCriterias/UACriteriaCustomDescription";
+import {
+    UACriteriaCustomDescriptionInfoPanel
+} from "../../../utility-analysis/steps/UtilCriterias/ScaleDescriptionModal/UACriteriaCustomDescriptionInfoPanel";
 import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 import {ReactNode} from "react";
 
@@ -73,8 +79,8 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
             allWeighting.attractivity !== undefined &&
             objects !== undefined
         ) {
-            let weighting : CompareComponentValues;
-            let values : Rating[];
+            let weighting: CompareComponentValues;
+            let values: Rating[];
             if (type === "attractivity") {
                 weighting = allWeighting.attractivity;
                 values = allValues.attractivity;

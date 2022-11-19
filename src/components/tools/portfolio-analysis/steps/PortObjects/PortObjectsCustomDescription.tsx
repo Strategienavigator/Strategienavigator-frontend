@@ -1,4 +1,6 @@
-import {CustomDescriptionComponent} from "../../../../../general-components/CardComponent/CustomDescriptionComponent/CustomDescriptionComponent";
+import {
+    CustomDescriptionComponent
+} from "../../../../../general-components/CardComponent/CustomDescriptionComponent/CustomDescriptionComponent";
 import {FormControl} from "react-bootstrap";
 import React, {ChangeEvent} from "react";
 

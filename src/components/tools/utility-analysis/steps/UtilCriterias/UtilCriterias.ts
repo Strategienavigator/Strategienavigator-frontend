@@ -13,7 +13,9 @@ import {
     isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
 import {UACriteriaCustomDescriptionValues} from "./UACriteriaCustomDescription";
-import {CompareStarHeader} from "../../../../../general-components/CompareComponent/Header/StarHeader/CompareStarHeader";
+import {
+    CompareStarHeader
+} from "../../../../../general-components/CompareComponent/Header/StarHeader/CompareStarHeader";
 
 
 class UtilCriterias implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {

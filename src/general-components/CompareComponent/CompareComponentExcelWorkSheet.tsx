@@ -5,7 +5,9 @@ import {CompareAdapter} from "./Adapter/CompareAdapter";
 import {CompareComponentValues, SingleComparison} from "./CompareComponent";
 import {CompareHeaderAdapter} from "./Header/CompareHeaderAdapter";
 import {CardComponentFields} from "../CardComponent/CardComponent";
-import {UACriteriaCustomDescriptionValues} from "../../components/tools/utility-analysis/steps/UtilCriterias/UACriteriaCustomDescription";
+import {
+    UACriteriaCustomDescriptionValues
+} from "../../components/tools/utility-analysis/steps/UtilCriterias/UACriteriaCustomDescription";
 import {WeightingEvaluation} from "../EvaluationComponent/Weighting/WeightingEvaluation";
 
 
@@ -126,7 +128,7 @@ class CompareComponentExcelWorkSheet extends ExcelExporter<any> {
             return some;
         });
         values.comparisons = values.comparisons.filter((item, i) => {
-           return indices.includes(i);
+            return indices.includes(i);
         });
         return this.basedOnCardComponent(values);
     }

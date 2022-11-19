@@ -8,7 +8,9 @@ import {StepProp} from "../../../../../general-components/Tool/SteppableTool/Ste
 import {Draft} from "immer";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {PortWeightingComponent} from "./PortWeightingComponent";
-import {MatchCardComponentFieldsAdapter} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 
 

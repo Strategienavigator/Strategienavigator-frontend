@@ -18,7 +18,7 @@ export interface PortfolioQuadrantsSettingValues {
 
 export class PortfolioQuadrantsSettingType extends Component<PortfolioQuadrantsSettingTypeProps, {}> {
 
-    getDefaults() : PortfolioQuadrantsSettingValues {
+    getDefaults(): PortfolioQuadrantsSettingValues {
         return {
             toggled: false,
             quadrants: [
@@ -77,7 +77,7 @@ export class PortfolioQuadrantsSettingType extends Component<PortfolioQuadrantsS
 
                     <div className="type">
                         <Form.Check.Input aria-label={this.props.name} id={"checkbox-" + this.props.name}
-                                          onChange={this.toggleChanged} checked={toggled} />
+                                          onChange={this.toggleChanged} checked={toggled}/>
                     </div>
                 </div>
 
@@ -85,16 +85,17 @@ export class PortfolioQuadrantsSettingType extends Component<PortfolioQuadrantsS
                     <Card>
                         <Card.Body>
                             {(values.quadrants.map((quadrant, i) => {
-                               return (
-                                   <InputGroup size={"sm"} key={"quadrant-" + i}>
-                                       <InputGroup.Text>
-                                           {quadrant.header}
-                                       </InputGroup.Text>
-                                       <FormControl type={"text"} value={quadrant.value} onChange={(event: ChangeEvent<any>) => {
-                                           this.valueChanged(event, i);
-                                       }} />
-                                   </InputGroup>
-                               );
+                                return (
+                                    <InputGroup size={"sm"} key={"quadrant-" + i}>
+                                        <InputGroup.Text>
+                                            {quadrant.header}
+                                        </InputGroup.Text>
+                                        <FormControl type={"text"} value={quadrant.value}
+                                                     onChange={(event: ChangeEvent<any>) => {
+                                                         this.valueChanged(event, i);
+                                                     }}/>
+                                    </InputGroup>
+                                );
                             }))}
                         </Card.Body>
                     </Card>

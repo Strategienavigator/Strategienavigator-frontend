@@ -1,8 +1,11 @@
 import {Accordion, Col, Form, FormControl, InputGroup, Row} from "react-bootstrap";
-import {CustomDescriptionComponent} from "../../../../../general-components/CardComponent/CustomDescriptionComponent/CustomDescriptionComponent";
+import {
+    CustomDescriptionComponent
+} from "../../../../../general-components/CardComponent/CustomDescriptionComponent/CustomDescriptionComponent";
 import {ChangeEvent} from "react";
 import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
 import {isDesktop} from "../../../../../general-components/Desktop";
+
 
 /**
  * Werte für die Custom Description

@@ -46,30 +46,30 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
                     )}
 
                     {page?.data.map((save) => {
-                        return (
-                            <SharedSaveContextComponent
-                                key={save.tool_id + " " + save.id}
-                                save={save}
-                            >
-                                <SaveCard
+                            return (
+                                <SharedSaveContextComponent
+                                    key={save.tool_id + " " + save.id}
                                     save={save}
-                                    toolLink={this.props.tool!.getLink()}
-                                    onTrash={() => {
-                                        this.props.savesControlCallbacks.deleteSave(save);
-                                    }}
-                                    onInvite={(save: SimpleSaveResource) => {
-                                        this.props.savesControlCallbacks.openInviteModal(save);
-                                    }}
-                                />
-                            </SharedSaveContextComponent>
-                        );
-                    })
-                    ?? // alternative if page is undefined
-                    Array.from(new Array(4).keys()).map((value, index) => {
-                        return (
-                            <SaveCard key={"dummy-" + index}/>
-                        );
-                    })}
+                                >
+                                    <SaveCard
+                                        save={save}
+                                        toolLink={this.props.tool!.getLink()}
+                                        onTrash={() => {
+                                            this.props.savesControlCallbacks.deleteSave(save);
+                                        }}
+                                        onInvite={(save: SimpleSaveResource) => {
+                                            this.props.savesControlCallbacks.openInviteModal(save);
+                                        }}
+                                    />
+                                </SharedSaveContextComponent>
+                            );
+                        })
+                        ?? // alternative if page is undefined
+                        Array.from(new Array(4).keys()).map((value, index) => {
+                            return (
+                                <SaveCard key={"dummy-" + index}/>
+                            );
+                        })}
 
                 </div>
                 <div className={"mt-2"}>

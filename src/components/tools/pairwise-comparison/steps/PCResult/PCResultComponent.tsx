@@ -4,7 +4,9 @@ import {
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {PairwiseComparisonValues} from "../../PairwiseComparison";
-import {WeightingEvaluationComponent} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationComponent";
+import {
+    WeightingEvaluationComponent
+} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationComponent";
 import {EvaluationValues} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 
 

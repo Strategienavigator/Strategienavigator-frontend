@@ -4,10 +4,14 @@ import {SaveResource} from "../../../../general-components/Datastructures";
 import {Range, WorkBook, WorkSheet} from "xlsx-js-style";
 import {PCPairComparisonValues} from "../steps/PCPairComparison/PCPairComparisonComponent";
 import {CardComponentFields} from "../../../../general-components/CardComponent/CardComponent";
-import {MatchCardComponentFieldsAdapter} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
+import {
+    MatchCardComponentFieldsAdapter
+} from "../../../../general-components/CompareComponent/Adapter/MatchCardComponentFieldsAdapter";
 import {PCCriteriasValues} from "../steps/PCCriterias/PCCriteriasComponent";
 import {WeightingEvaluation} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
-import {WeightingEvaluationExcelWorkSheet} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationExcelWorkSheet";
+import {
+    WeightingEvaluationExcelWorkSheet
+} from "../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluationExcelWorkSheet";
 import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
 
 
