@@ -15,6 +15,8 @@ import {CreateToolModal} from "../../../CreateToolModal/CreateToolModal";
 import {UserContext} from "../../../../Contexts/UserContextComponent";
 import {faPencilAlt} from "@fortawesome/free-solid-svg-icons/";
 import {lockSave} from "../../../../API/calls/Saves";
+import {ToolSaveController} from "../../../ToolSavePage/ToolSavePage";
+import {LoadingButton} from "../../../../LoadingButton/LoadingButton";
 
 
 export interface StepComponentHeaderProp {
@@ -23,12 +25,14 @@ export interface StepComponentHeaderProp {
     saveName: string
     saveDescription: string
     saveMetaChanged: (name: string, description: string) => void
+    saveController: ToolSaveController<any>
 }
 
 export interface StepComponentHeaderState {
     showStepHeaderDesc: boolean,
     showInviteModal: boolean,
-    descriptionTooLong: boolean
+    descriptionTooLong: boolean,
+    loadingUnlock: boolean
 }
 
 export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, StepComponentHeaderState> {
@@ -43,7 +47,8 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
         this.state = {
             showStepHeaderDesc: isDesktop(),
             showInviteModal: false,
-            descriptionTooLong: false
+            descriptionTooLong: false,
+            loadingUnlock: false
         }
     }
 
@@ -54,10 +59,16 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                     {(userContext) => {
                         return hasPermission(this.context.permission, [SharedSavePermission.READ]) &&
                             this.props.associatedSave.owner.id === userContext.user?.getID() && (
-                                <Button type={"button"} variant={"success"} className={"reclaimEditor"}
-                                        onClick={this.lockSave}>
-                                    <FAE icon={faPencilAlt}/> Bearbeiter werden
-                                </Button>
+                                <LoadingButton
+                                    isLoading={this.state.loadingUnlock}
+                                    defaultChild={"Bearbeiter werden"}
+                                    defaultIcon={faPencilAlt}
+                                    savingChild={"Bearbeiter werden"}
+                                    type={"button"}
+                                    variant={"success"}
+                                    onClick={this.lockSave}
+                                    className={"reclaimEditor"}
+                                />
                             );
                     }}
                 </UserContext.Consumer>
@@ -159,11 +170,12 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
     }
 
     private lockSave = async () => {
+        this.setState({loadingUnlock: true});
 
         let response = await lockSave(this.props.associatedSave.id, true);
-
+        this.setState({loadingUnlock: false});
         if (response?.success === true) {
-            this.context.updatePermission(SharedSavePermission.OWNER);
+            this.props.saveController.updateSaveFromRemote();
         }
     }
 }

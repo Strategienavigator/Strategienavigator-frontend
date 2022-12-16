@@ -28,6 +28,7 @@ import {WebsocketChannelContextComponent} from "../../Contexts/WebsocketChannelC
 interface ToolSaveController<D> {
     save: () => Promise<boolean>
     onChanged: (changes: (save: WritableDraft<SaveResource<D>>) => void) => void
+    updateSaveFromRemote: () => void
 }
 
 interface ToolSaveProps<D extends object> {
@@ -42,6 +43,7 @@ interface ToolSavePageProps<D extends object> {
 }
 
 interface ToolSavePageState<D extends object> {
+    isLoading: boolean
     save?: SaveResource<D>
     isSaving: boolean
     showConfirmToolRouteChangeModal: boolean
@@ -69,17 +71,21 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         this.state = {
             showConfirmToolRouteChangeModal: false,
             isSaving: false,
-            isLocked: true
+            isLocked: true,
+            isLoading: true
         }
         this.saveController = {
             save: this.save.bind(this),
-            onChanged: this.updateSave.bind(this)
+            onChanged: this.updateSave.bind(this),
+            updateSaveFromRemote: this.updateSaveFromRemote
         }
     }
 
     componentDidMount() {
         window.addEventListener("beforeunload", this.onBeforeUnload);
         window.addEventListener("beforeunload", this.onUnloadUnLock);
+        this.firstLoad();
+
     }
 
     componentWillUnmount = async () => {
@@ -102,6 +108,22 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         if (save) {
             await this.unlock(save);
         }
+    }
+
+    private firstLoad = () => {
+        let ID = parseInt(this.props.match.params.id as string);
+        let socketPromise = this.createSocketConnection()
+        let savePromise = this.retrieveSave(ID);
+
+        Promise.all([socketPromise, savePromise]).then(() => {
+            this.setState({
+                isLoading: false
+            });
+        }).catch(() => {
+            this.setState({
+                isLoading: false
+            });
+        });
     }
 
     createSocketConnection = async () => {
@@ -138,12 +160,10 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
     render() {
-        let ID = parseInt(this.props.match.params.id as string);
-
         return (
             <Route>
-                <SharedSaveContextComponent save={this.state.save!}>
-                    <Loader payload={[async () => this.retrieveSave(ID), this.createSocketConnection]} transparent
+                <SharedSaveContextComponent permission={this.getPermissionOfSave()}>
+                    <Loader payload={[]} loaded={!this.state.isLoading} transparent
                             alignment={"center"} fullscreen animate={false}>
                         <WebsocketChannelContextComponent
                             channel={this.state.channel ?? null}
@@ -349,6 +369,14 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         });
     }
 
+    private updateSaveFromRemote = async () => {
+        this.setState({isLoading:true});
+        if (this.state.save) {
+            await this.retrieveSave(this.state.save.id);
+        }
+        this.setState({isLoading:false});
+    }
+
     private retrieveSave = async (ID: number) => {
         let call = await getSave<any>(ID, {errorCallback: this.onAPIError});
 
@@ -375,10 +403,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                     isLocked = false;
                 }
 
-                if (isLocked) {
-                    data.permission.permission = SharedSavePermission.READ;
-                }
-
                 await this.lock(data);
 
                 if (!data.locked_by) {
@@ -401,13 +425,34 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             return;
         }
     }
+
+    private getPermissionOfSave(): SharedSavePermission {
+        let s = this.state.save;
+        if (!s) {
+            return SharedSavePermission.READ;
+        }
+        let isLocked = s.locked_by ? s.locked_by !== Session.currentUser?.getID() : false;
+        if (!s.permission) {
+            return s.owner.id === Session.currentUser?.getID() ?
+                isLocked ?
+                    SharedSavePermission.READ :
+                    SharedSavePermission.ADMIN :
+                SharedSavePermission.READ;
+        }
+
+        if (isLocked) {
+            return SharedSavePermission.READ;
+        }
+        return s.permission.permission;
+    }
 }
 
 
 export type{
     ToolSavePageProps,
     ToolSavePageState,
-    ToolSaveProps
+    ToolSaveProps,
+    ToolSaveController
 }
 
 export {

@@ -15,7 +15,6 @@ import {deleteSave, getSaves} from "../../API/calls/Saves";
 import {DeleteSaveModal} from "./DeleteSaveModal/DeleteSaveModal";
 import FAE from "../../Icons/FAE";
 import {SaveInvitation} from "../../Sharing/SaveInvitation";
-import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 
 
 export interface ToolHomeInfo {
@@ -187,22 +186,17 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
                 {(this.state.showTutorial && this.props.tool?.hasTutorial()) && this.getTutorialCanvas()}
 
-                <SharedSaveContextComponent save={this.state.deleteSave!}>
-                    <DeleteSaveModal
-                        show={this.state.showDeleteModal}
-                        save={this.state.deleteSave ?? null}
-                        onClose={this.onCloseDeleteModal}
-                        onDelete={this.onDeleteModal}
-                    />
-                </SharedSaveContextComponent>
-
-                <SharedSaveContextComponent save={this.state.showInviteModal!}>
-                    <SaveInvitation
-                        show={this.state.showInviteModal !== null}
-                        save={this.state.showInviteModal}
-                        onClose={this.closeInviteModal}
-                    />
-                </SharedSaveContextComponent>
+                <DeleteSaveModal
+                    show={this.state.showDeleteModal}
+                    save={this.state.deleteSave ?? null}
+                    onClose={this.onCloseDeleteModal}
+                    onDelete={this.onDeleteModal}
+                />
+                <SaveInvitation
+                    show={this.state.showInviteModal !== null}
+                    save={this.state.showInviteModal}
+                    onClose={this.closeInviteModal}
+                />
             </div>
         );
     }
