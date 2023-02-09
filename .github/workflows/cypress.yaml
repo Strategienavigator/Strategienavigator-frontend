@@ -67,6 +67,7 @@ jobs:
           version: 2
           args: '--optimize-autoloader'
           working_dir: 'backend'
+          php_extensions: gd
 
       - name: cache larvel config
         env:
