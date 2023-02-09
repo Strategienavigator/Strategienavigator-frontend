@@ -1,7 +1,9 @@
 ## Alle Bibliotheken (Packages)
 
- Name                   | Datum ▼    | Befehl                            
-------------------------|------------|-----------------------------------
+ Name                   | Datum ▼ | Befehl                            
+------------------------|------------|------------------------------------
+ ts-interface-checker   | 14.11.2022 | ts-interface-checker                
+ ts-interface-builder   | 14.11.2022 | ts-interface-builder              
  string-similarity      | 30.08.2021 | string-similarity                 
  TypeDoc                | 26.08.2021 | typedoc                           
  SCSS                   | 14.07.2021 | node-sass                         
