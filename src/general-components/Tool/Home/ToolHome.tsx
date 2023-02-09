@@ -2,7 +2,7 @@ import React, {Component, ReactNode} from "react";
 import {Tool} from "../Tool";
 import {Badge, Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
-import {faInfoCircle, faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
+import {faFileImport, faInfoCircle, faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 
 import "./tool-home.scss";
@@ -16,6 +16,9 @@ import {DeleteSaveModal} from "./DeleteSaveModal/DeleteSaveModal";
 import FAE from "../../Icons/FAE";
 import {SaveInvitation} from "../../Sharing/SaveInvitation";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
+import {ButtonPanel} from "../../ButtonPanel/ButtonPanel";
+import {ImportModal} from "./Import/ImportModal";
+import {Messages} from "../../Messages/Messages";
 
 
 export interface ToolHomeInfo {
@@ -40,6 +43,7 @@ interface ToolHomeState {
     showDeleteModal: boolean
     showInviteModal: null | SimpleSaveResource
     deleteSave?: SimpleSaveResource
+    showImportModal: boolean
 }
 
 export interface SavesControlCallbacks {
@@ -92,18 +96,31 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
             showInviteModal: null,
             paginationSettings: {
                 orderDesc: true
-            }
+            },
+            showImportModal: false
         }
     }
 
     componentDidMount() {
-        this.context.setItem(1, {
+        let place = 1;
+        this.context.setItem(place, {
             newTool: {
                 callback: () => this.props.tool.switchPage("new"),
                 title: "Neue Analyse"
             }
         });
-        this.context.setItem(2, {settings: true});
+        if (this.props.tool.hasImporter()) {
+            place++;
+            this.context.setItem(place, {
+                button: {
+                    icon: faFileImport,
+                    callback: () => this.onImport(),
+                    text: "Importieren"
+                }
+            });
+        }
+        place++;
+        this.context.setItem(place, {settings: true});
 
         this.loadPage(1);
     }
@@ -150,11 +167,18 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 </h4>
                 <div className={"button-container mb-0 mt-2"}>
                     {isDesktop() && (
-                        <Button onClick={this.onNewSaveButtonClick} size={"sm"} variant={"dark"}>
-                            <FAE icon={faPlusSquare}/> Neue Analyse
-                        </Button>
-                    )}
+                        <ButtonPanel>
+                            <Button onClick={this.onNewSaveButtonClick} size={"sm"} variant={"dark"}>
+                                <FAE icon={faPlusSquare}/> Neue Analyse
+                            </Button>
 
+                            {(this.props.tool.hasImporter()) && (
+                                <Button size={"sm"} onClick={this.onImport} variant={"dark"}>
+                                    <FAE icon={faFileImport}/> Analyse importieren
+                                </Button>
+                            )}
+                        </ButtonPanel>
+                    )}
 
                     <span className={"sorting-button"}>
                         {isDesktop() && (
@@ -203,8 +227,24 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         onClose={this.closeInviteModal}
                     />
                 </SharedSaveContextComponent>
+
+                <ImportModal
+                    show={this.state.showImportModal}
+                    tool={this.props.tool}
+                    onClose={this.onCloseImportModal}
+                    onSuccess={(save) => {
+                        this.props.tool.switchPage(save.id.toString());
+                        Messages.add("Importieren erfolgreich!", "SUCCESS", Messages.TIMER);
+                    }}
+                />
             </div>
         );
+    }
+
+    private onCloseImportModal = () => {
+        this.setState({
+            showImportModal: false
+        });
     }
 
     private onCloseDeleteModal = () => {
@@ -287,6 +327,12 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
         this.setState({
             showDeleteModal: true,
             deleteSave: save
+        });
+    }
+
+    private onImport = () => {
+        this.setState({
+            showImportModal: true
         });
     }
 }

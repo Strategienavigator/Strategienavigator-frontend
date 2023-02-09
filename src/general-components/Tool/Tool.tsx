@@ -9,6 +9,7 @@ import "./tool.scss";
 import {Exporter} from "../Export/Exporter";
 import {createSave} from "../API/calls/Saves";
 import {ToolSavePage, ToolSaveProps} from "./ToolSavePage/ToolSavePage";
+import {JSONImporter} from "../Import/JSONImporter";
 
 
 interface ToolState {
@@ -30,11 +31,13 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
     private maintenance = false;
 
     // TOOL HOME
-    private toolHomeRef: RefObject<ToolHome>
+    private readonly toolHomeRef: RefObject<ToolHome>
 
     // Export
-    private exporters: Exporter<object>[];
+    private readonly exporters: Exporter<object>[];
 
+    // Import
+    private importer?: JSONImporter;
 
     constructor(props: RouteComponentProps<{}>, context: any, toolName: string, toolIcon: IconDefinition, toolID: number) {
         super(props, context);
@@ -73,12 +76,20 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
         return this.toolID;
     }
 
+    public getImporter = (): JSONImporter | undefined => {
+        return this.importer;
+    }
+
     public getExporters = (): Exporter<object>[] => {
         return this.exporters;
     }
 
     public setMaintenance(maintenance: boolean) {
         this.maintenance = maintenance;
+    }
+
+    public hasImporter = (): boolean => {
+        return this.getImporter() !== undefined;
     }
 
     public hasTutorial = (): boolean => {
@@ -149,6 +160,14 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
     }
 
     /**
+     * Setzt den Importer des Tools.
+     * @protected
+     */
+    protected setImporter(importer: JSONImporter) {
+        this.importer = importer;
+    }
+
+    /**
      * Fügt den übergebenen Exporter hinzu.
      *
      * Es darf kein exporter doppelt existieren und keine zwei Exporter mit dem selben Namen existieren
@@ -163,6 +182,13 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
         }
     }
 
+    /**
+     * Kreiert einen neuen Save
+     *
+     * @param {string} name Name des Saves
+     * @param {string} description Beschreibung des Saves
+     * @returns {Promise<void>}
+     */
     private createNewSave = async (name: string, description: string) => {
         this.setState({
             isCreatingNewSave: true
@@ -177,7 +203,6 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
 
         let saved = await createSave(data);
         if (saved) {
-
             this.setState({
                 isCreatingNewSave: false
             });

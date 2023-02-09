@@ -31,9 +31,14 @@ function forEachChildrenRecursively(roots: ReactNode[], func: (node: ReactNode) 
  *
  * @param {React.FormEvent<HTMLFormElement>} form
  * @param {string} name
+ * @param onReceiveFileInput
  * @returns {CardComponentFields | Array<string> | string | boolean | null}
  */
-const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardComponentFields | Array<string> | string | boolean | RadioNodeList | null => {
+const extractFromForm = (
+    form: FormEvent<HTMLFormElement>,
+    name: string,
+    onReceiveFileInput?: (content: string | null) => void
+): CardComponentFields | Array<string> | string | boolean | RadioNodeList | null => {
     let target: HTMLFormElement = form.currentTarget;
     let elements = target.elements;
     let element: RadioNodeList | Element | null = elements.namedItem(name);
@@ -63,6 +68,26 @@ const extractFromForm = (form: FormEvent<HTMLFormElement>, name: string): CardCo
      */
     if (input.type === "checkbox") {
         return input.checked;
+    }
+    /*
+
+     File
+
+     */
+    if (input.type === "file" && input.files != null) {
+        let reader = new FileReader();
+        reader.onload = function (ev: ProgressEvent<FileReader>) {
+            let content = ev.target?.result as string;
+            if (content) {
+                onReceiveFileInput?.call(onReceiveFileInput, content);
+            }
+        };
+        let file = input.files.item(0);
+        if (file != null) {
+            reader.readAsText(file, "UTF-8");
+        } else {
+            onReceiveFileInput?.call(onReceiveFileInput, null);
+        }
     }
 
     /*

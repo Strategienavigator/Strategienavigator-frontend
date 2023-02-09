@@ -1,54 +1,54 @@
 {
-    "swot-factors":{
-       "factors":{
-          "chances":[
-             {
-                "id":"1",
-                "name":"Produkt ist im Trend",
-                "desc":"Trend"
-             },
-             {
-                "id":"2",
-                "name":"Produkt wird auch in anderen Ländern beliebter",
-                "desc":"anderen Ländern beliebter"
-             }
-          ],
-          "strengths":[
-             {
-                "id":"A",
-                "name":"Motivierte Mitarbeiter mit viel Know How",
-                "desc":"Motivierte Mitarbeiter"
-             },
-             {
-                "id":"B",
-                "name":"Erfolgreiche Marketingkampagnen",
-                "desc":"Marketingkampagnen"
-             }
-          ],
-          "weaknesses":[
-             {
-                "id":"a",
-                "name":"Hohe Personalkosten",
-                "desc":"Personalkosten "
-             },
-             {
-                "id":"b",
-                "name":"Produkte wenig nachhaltig",
-                "desc":"nachhaltig"
-             }
-          ],
-          "risks":[
-             {
-                "id":"I",
-                "name":"Kunden achten stark auf Nachhaltigkeit",
-                "desc":"Nachhaltigkeit"
-             },
-             {
-                "id":"II",
-                "name":"Neue Konkurrenz aus dem Ausland",
-                "desc":"dem Ausland"
-             }
-          ]
-       }
+  "swot-factors": {
+    "factors": {
+      "chances": [
+        {
+          "id": "1",
+          "name": "Produkt ist im Trend",
+          "desc": "Trend"
+        },
+        {
+          "id": "2",
+          "name": "Produkt wird auch in anderen Ländern beliebter",
+          "desc": "anderen Ländern beliebter"
+        }
+      ],
+      "strengths": [
+        {
+          "id": "A",
+          "name": "Motivierte Mitarbeiter mit viel Know How",
+          "desc": "Motivierte Mitarbeiter"
+        },
+        {
+          "id": "B",
+          "name": "Erfolgreiche Marketingkampagnen",
+          "desc": "Marketingkampagnen"
+        }
+      ],
+      "weaknesses": [
+        {
+          "id": "a",
+          "name": "Hohe Personalkosten",
+          "desc": "Personalkosten "
+        },
+        {
+          "id": "b",
+          "name": "Produkte wenig nachhaltig",
+          "desc": "nachhaltig"
+        }
+      ],
+      "risks": [
+        {
+          "id": "I",
+          "name": "Kunden achten stark auf Nachhaltigkeit",
+          "desc": "Nachhaltigkeit"
+        },
+        {
+          "id": "II",
+          "name": "Neue Konkurrenz aus dem Ausland",
+          "desc": "dem Ausland"
+        }
+      ]
     }
- }
+  }
+}

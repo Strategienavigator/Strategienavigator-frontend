@@ -13,6 +13,7 @@ import {RouteComponentProps} from "react-router";
 import {SWOTFactors} from "./steps/SWOTFactors/SWOTFactors";
 import {SWOTAlternativeActions} from "./steps/SWOTAlternativeActions/SWOTAlternativeActions";
 import {SWOTClassifyAlternativeActions} from "./steps/SWOTClassifyAlternativeActions/SWOTClassifyAlternativeActions";
+import {SWOTJSONImporter} from "./import/SWOTJSONImporter";
 
 
 interface SWOTAnalysisValues {
@@ -28,6 +29,8 @@ class SWOTAnalysis extends SteppableTool<SWOTAnalysisValues> {
 
         this.addExporter(new JSONExporter());
         this.addExporter(new SWOTExcelExporter());
+
+        this.setImporter(new SWOTJSONImporter());
 
         this.addStep(new SWOTFactors());
         this.addStep(new SWOTAlternativeActions())

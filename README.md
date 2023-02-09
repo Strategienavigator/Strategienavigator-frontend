@@ -18,10 +18,10 @@ Das Toolbox-Backend ist [hier:link:](https://github.com/ricom/toolbox-backend) z
 
 ## Voraussetzungen
 
-Programm/Package | min. Version
------------- | -------------
-NodeJS | > = 14.17.6
-npm  | > = 7.19.1
+ Programm/Package | min. Version 
+------------------|--------------
+ NodeJS           | > = 14.17.6  
+ npm              | > = 7.19.1   
 
 #### Mögliche IDE's
 
@@ -55,7 +55,8 @@ npm install
 
 Dieser Schritt kann je nach System und Internetverbindung mehr Zeit in Anspruch nehmen.<br /><br />
 
-Um nun das Projekt zu konfigurieren, muss die **.env.development.local** Datei erstellt und eingerichtet werden. Hierzu kopieren wir die
+Um nun das Projekt zu konfigurieren, muss die **.env.development.local** Datei erstellt und eingerichtet werden. Hierzu
+kopieren wir die
 mitgelieferte **.env.development.local.example** Datei.
 
 ```shell
@@ -66,7 +67,8 @@ copy .env.development.local.example .env.development.local   // Windows
 cp .env.development.local.example .env.development.local     // Linux
 ```
 
-Wenn die **.env.development.local** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie
+Wenn die **.env.development.local** Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei
+und stellen Sie
 die vorhandenen Umgebungsvariablen ein. Hierzu können Sie [folgende Dokumentation](./ENV.md) benutzen.<br /><br />
 
 Nun ist die Installation abgeschlossen und der Entwicklungsserver kann gestartet werden. Hierzu ist folgender Befehl
@@ -82,7 +84,9 @@ Der Server ist nun unter [http://localhost:3000:link:](http://localhost:3000) er
 Sämtliche Editierungen werden beim Abspeichern automatisch aktualisiert.
 
 ## Cypress
-Für die Nutzung von Cypress zur Erstellung und Testen von Szenarien können sie [folgende Dokumentantion](./TESTING.md) verwenden.
+
+Für die Nutzung von Cypress zur Erstellung und Testen von Szenarien können sie [folgende Dokumentantion](./TESTING.md)
+verwenden.
 
 ## Guidelines für Beteiligte
 
