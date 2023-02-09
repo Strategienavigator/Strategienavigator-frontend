@@ -178,7 +178,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                             onChange={this.descChanged}
                             as="textarea"
                             spellCheck={false}
-                            style={{maxHeight: 500}}
+                            style={{maxHeight: 500, height: 70}}
                             name={this.props.name + "[" + this.props.index + "][desc]"}
                             value={this.props.desc}
                             placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}/>
