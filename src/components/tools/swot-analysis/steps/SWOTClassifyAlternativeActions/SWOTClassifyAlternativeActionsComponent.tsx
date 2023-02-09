@@ -3,10 +3,11 @@ import {Card} from "react-bootstrap";
 import {CardComponentField} from "../../../../../general-components/CardComponent/CardComponent";
 import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {DragAndDropClassifying} from "./DragAndDropClassifying";
-import {NormalClassifying} from "./NormalClassifying/NormalClassifying";
+import {ModalClassifying} from "./ModalClassifying/ModalClassifying";
 import {isDesktop} from "../../../../../general-components/Desktop";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTClassifyAlternativeActions} from "./SWOTClassifyAlternativeActions";
+import {NormalClassifying} from "./NormalClassifying/NormalClassifying";
 
 
 export interface ClassificationController {
@@ -67,7 +68,6 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
         }
         const newDroppableID = "droppable-" + (highestId + 1);
 
-
         this.props.saveController.onChanged(save => {
             save.data["swot-classify-alternate-actions"]?.classifications.push({
                 name: "",
@@ -82,7 +82,6 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
     }
 
     removeClassification = (droppableID: string): void => {
-
         this.props.saveController.onChanged(save => {
             const classificationIndex = save.data["swot-classify-alternate-actions"]?.classifications.findIndex(c => c.droppableID === droppableID);
             if (classificationIndex !== undefined && classificationIndex >= 0) {
@@ -159,27 +158,41 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
             );
         }
 
-
         let dragAndDropActionSize = 0; // good would be maximum 14
-        let showNormal;
+        let normal = false, drag = false, modal = false;
+
         if (!isDesktop()) {
-            showNormal = true; // change if you want drag and drop functionality
+            modal = true;
         } else if (actionCount > dragAndDropActionSize) {
-            showNormal = true;
+            normal = true;
         }
 
-        return (showNormal === true) ? (
-            <NormalClassifying
-                actions={actions}
-                disabled={this.props.disabled}
-                classifications={classifications}
-                classificationController={this.classificationController}
-            />
-        ) : (
-            <DragAndDropClassifying
-                step3Instance={this}
-            />
-        );
+        if (normal) {
+            return (
+                <NormalClassifying
+                    actions={actions}
+                    disabled={this.props.disabled}
+                    classifications={classifications}
+                    classificationController={this.classificationController}
+                />
+            );
+        } else if (drag) {
+            return (
+                <DragAndDropClassifying
+                    step3Instance={this}
+                />
+            );
+        } else if (modal) {
+            return (
+                <ModalClassifying
+                    actions={actions}
+                    disabled={this.props.disabled}
+                    classifications={classifications}
+                    classificationController={this.classificationController}
+                />
+            );
+        }
+        return <></>;
     }
 
     private requireStepData = () => {
