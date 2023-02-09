@@ -89,7 +89,7 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
     }
 
     public hasImporter = (): boolean => {
-        return this.getImporter() != undefined;
+        return this.getImporter() !== undefined;
     }
 
     public hasTutorial = (): boolean => {

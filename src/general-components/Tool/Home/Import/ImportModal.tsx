@@ -157,7 +157,7 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
             extractFromForm(e, "file", async (content) => {
                 if (content != null) {
                     let importer = this.props.tool.getImporter();
-                    if (importer == undefined) {
+                    if (importer === undefined) {
                         throw new Error("No importer set for analysis: " + this.props.tool.getToolName());
                     }
 

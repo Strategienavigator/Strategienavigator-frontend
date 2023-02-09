@@ -1,7 +1,7 @@
 export class JSONImporterError extends Error {
     constructor(msg?: string);
     constructor(msg: string) {
-        if (msg != undefined) {
+        if (msg !== undefined) {
             super(msg);
         } else {
             super("Die Datei konnte nicht übersetzt werden.");
