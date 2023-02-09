@@ -5,17 +5,17 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const Rating = t.iface([], {
-  "criteriaIndex": "number",
-  "rating": "CompareComponentValues",
+    "criteriaIndex": "number",
+    "rating": "CompareComponentValues",
 });
 
 export const PortEvaluationValues = t.iface([], {
-  "attractivity": t.array("Rating"),
-  "comp-standing": t.array("Rating"),
+    "attractivity": t.array("Rating"),
+    "comp-standing": t.array("Rating"),
 });
 
 const PortEvaluationComponent_ts: t.ITypeSuite = {
-  Rating,
-  PortEvaluationValues,
+    Rating,
+    PortEvaluationValues,
 };
 export default PortEvaluationComponent_ts;

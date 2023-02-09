@@ -35,79 +35,6 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
         noDesc: false
     }
 
-    private onSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        this.setState({
-            noFile: false,
-            error: null,
-            loadingImport: true
-        });
-
-        let name = extractFromForm(e, "name") as string;
-        let description = extractFromForm(e, "description") as string;
-
-        let hasName = true, hasDesc = true;
-
-        if (isEmpty(name)) {
-            hasName = false;
-            this.setState({
-                noName: true
-            });
-        }
-        if (isEmpty(description)) {
-            hasDesc = false;
-            this.setState({
-               noDesc: true
-            });
-        }
-
-        if (hasName && hasDesc) {
-            extractFromForm(e, "file", async (content) => {
-                if (content != null) {
-                    let importer = this.props.tool.getImporter();
-                    if (importer == undefined) {
-                        throw new Error("No importer set for analysis: " + this.props.tool.getToolName());
-                    }
-
-                    try {
-                        await importer.onImport(content);
-
-                        let data = new FormData();
-                        data.set("name", name);
-                        data.set("description", description);
-                        data.set("tool_id", this.props.tool.getID().toString());
-                        data.set("data", content);
-                        let saved = await createSave(data);
-
-                        if (saved == null || !saved?.success) {
-                            throw new JSONImporterError("Fehler beim Speichern! Bitte versuchen Sie es später erneut.");
-                        } else {
-                            this.props.onSuccess(saved.callData);
-                        }
-                    } catch (e) {
-                        if (e instanceof JSONImporterError) {
-                            this.setState({
-                                error: e.message
-                            });
-                        }
-                        console.log(e);
-                    }
-                } else {
-                    this.setState({
-                        noFile: true
-                    });
-                }
-                this.setState({
-                    loadingImport: false
-                });
-            });
-        } else {
-            this.setState({
-                loadingImport: false
-            });
-        }
-    }
-
     public render() {
         return (
             <ModalCloseable
@@ -198,6 +125,79 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
                 </Form>
             </ModalCloseable>
         );
+    }
+
+    private onSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        this.setState({
+            noFile: false,
+            error: null,
+            loadingImport: true
+        });
+
+        let name = extractFromForm(e, "name") as string;
+        let description = extractFromForm(e, "description") as string;
+
+        let hasName = true, hasDesc = true;
+
+        if (isEmpty(name)) {
+            hasName = false;
+            this.setState({
+                noName: true
+            });
+        }
+        if (isEmpty(description)) {
+            hasDesc = false;
+            this.setState({
+                noDesc: true
+            });
+        }
+
+        if (hasName && hasDesc) {
+            extractFromForm(e, "file", async (content) => {
+                if (content != null) {
+                    let importer = this.props.tool.getImporter();
+                    if (importer == undefined) {
+                        throw new Error("No importer set for analysis: " + this.props.tool.getToolName());
+                    }
+
+                    try {
+                        await importer.onImport(content);
+
+                        let data = new FormData();
+                        data.set("name", name);
+                        data.set("description", description);
+                        data.set("tool_id", this.props.tool.getID().toString());
+                        data.set("data", content);
+                        let saved = await createSave(data);
+
+                        if (saved == null || !saved?.success) {
+                            throw new JSONImporterError("Fehler beim Speichern! Bitte versuchen Sie es später erneut.");
+                        } else {
+                            this.props.onSuccess(saved.callData);
+                        }
+                    } catch (e) {
+                        if (e instanceof JSONImporterError) {
+                            this.setState({
+                                error: e.message
+                            });
+                        }
+                        console.log(e);
+                    }
+                } else {
+                    this.setState({
+                        noFile: true
+                    });
+                }
+                this.setState({
+                    loadingImport: false
+                });
+            });
+        } else {
+            this.setState({
+                loadingImport: false
+            });
+        }
     }
 
 }

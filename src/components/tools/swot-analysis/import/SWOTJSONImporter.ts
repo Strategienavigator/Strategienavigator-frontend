@@ -7,7 +7,8 @@ import SWOTClassifyAlternativeActionsComponent_ts
 import SWOTFactorsComponent_ts from "../steps/SWOTFactors/SWOTFactorsComponent-ti";
 import CardComponent_ts from "../../../../general-components/CardComponent/CardComponent-ti";
 
-class SWOTJSONImporter extends JSONImporter{
+
+class SWOTJSONImporter extends JSONImporter {
     protected validate(data: object): Promise<void> {
         let {SWOTAnalysisValues} = createCheckers(
             SWOTAnalysis_ts,
@@ -19,7 +20,7 @@ class SWOTJSONImporter extends JSONImporter{
 
         try {
             SWOTAnalysisValues.check(data);
-        } catch(e) {
+        } catch (e) {
             throw new JSONImporterError();
         }
 

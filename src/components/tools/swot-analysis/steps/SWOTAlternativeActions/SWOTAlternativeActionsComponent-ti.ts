@@ -5,19 +5,18 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const AlternateAction = t.iface([], {
-  "name": "string",
-  "hasNone": "boolean",
-  "alternatives": "CardComponentFields",
+    "name": "string",
+    "hasNone": "boolean",
+    "alternatives": "CardComponentFields",
 });
 
 export const SWOTAlternativeActionsValues = t.iface([], {
-  "actions": t.array("AlternateAction"),
+    "actions": t.array("AlternateAction"),
 });
 
 
-
 const SWOTAlternativeActionsComponent_ts: t.ITypeSuite = {
-  AlternateAction,
-  SWOTAlternativeActionsValues,
+    AlternateAction,
+    SWOTAlternativeActionsValues,
 };
 export default SWOTAlternativeActionsComponent_ts;

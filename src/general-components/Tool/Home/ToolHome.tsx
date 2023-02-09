@@ -1,6 +1,6 @@
 import React, {Component, ReactNode} from "react";
 import {Tool} from "../Tool";
-import {Badge, Button, ButtonGroup, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
+import {Badge, Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
 import {isDesktop} from "../../Desktop";
 import {faFileImport, faInfoCircle, faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
@@ -243,7 +243,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     private onCloseImportModal = () => {
         this.setState({
-           showImportModal: false
+            showImportModal: false
         });
     }
 
@@ -332,7 +332,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     private onImport = () => {
         this.setState({
-           showImportModal: true
+            showImportModal: true
         });
     }
 }

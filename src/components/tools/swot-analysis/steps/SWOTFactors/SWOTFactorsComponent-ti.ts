@@ -5,16 +5,16 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const SwotFactorsValues = t.iface([], {
-  "factors": t.iface([], {
-    "chances": "CardComponentFields",
-    "risks": "CardComponentFields",
-    "strengths": "CardComponentFields",
-    "weaknesses": "CardComponentFields",
-  }),
+    "factors": t.iface([], {
+        "chances": "CardComponentFields",
+        "risks": "CardComponentFields",
+        "strengths": "CardComponentFields",
+        "weaknesses": "CardComponentFields",
+    }),
 });
 
 
 const SWOTFactorsComponent_ts: t.ITypeSuite = {
-  SwotFactorsValues,
+    SwotFactorsValues,
 };
 export default SWOTFactorsComponent_ts;

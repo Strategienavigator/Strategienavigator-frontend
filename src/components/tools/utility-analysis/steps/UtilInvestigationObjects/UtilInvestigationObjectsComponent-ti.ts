@@ -5,10 +5,10 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const UtilInvestigationObjectsValues = t.iface([], {
-  "objects": "CardComponentFields",
+    "objects": "CardComponentFields",
 });
 
 const UtilInvestigationObjectsComponent_ts: t.ITypeSuite = {
-  UtilInvestigationObjectsValues,
+    UtilInvestigationObjectsValues,
 };
 export default UtilInvestigationObjectsComponent_ts;

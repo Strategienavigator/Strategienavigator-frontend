@@ -4,10 +4,9 @@
 import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
-export const PCResultValues = t.iface(["EvaluationValues"], {
-});
+export const PCResultValues = t.iface(["EvaluationValues"], {});
 
 const PCResultComponent_ts: t.ITypeSuite = {
-  PCResultValues,
+    PCResultValues,
 };
 export default PCResultComponent_ts;

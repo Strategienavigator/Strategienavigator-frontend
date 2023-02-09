@@ -5,14 +5,14 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PortResultValues = t.iface([], {
-  "results": t.iface([], {
-    "attractivity": "ResultEvaluationValue",
-    "comp-standing": "ResultEvaluationValue",
-  }),
-  "points": t.array("Point"),
+    "results": t.iface([], {
+        "attractivity": "ResultEvaluationValue",
+        "comp-standing": "ResultEvaluationValue",
+    }),
+    "points": t.array("Point"),
 });
 
 const PortResultComponent_ts: t.ITypeSuite = {
-  PortResultValues,
+    PortResultValues,
 };
 export default PortResultComponent_ts;

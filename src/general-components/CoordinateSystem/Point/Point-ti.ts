@@ -5,14 +5,14 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const Point = t.iface([], {
-  "x": "number",
-  "y": "number",
-  "sizeMultiplier": "number",
-  "header": "string",
-  "color": "string",
+    "x": "number",
+    "y": "number",
+    "sizeMultiplier": "number",
+    "header": "string",
+    "color": "string",
 });
 
 const Point_ts: t.ITypeSuite = {
-  Point,
+    Point,
 };
 export default Point_ts;

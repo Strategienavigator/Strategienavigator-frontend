@@ -5,17 +5,17 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const CompareValue = t.iface([], {
-  "value": t.union("null", "string"),
-  "header": t.union("null", "string"),
+    "value": t.union("null", "string"),
+    "header": t.union("null", "string"),
 });
 
 export const CompareComponentValues = t.iface([], {
-  "comparisons": t.array("CompareValue"),
-  "headers": t.array("CompareHeader"),
+    "comparisons": t.array("CompareValue"),
+    "headers": t.array("CompareHeader"),
 });
 
 const CompareComponent_ts: t.ITypeSuite = {
-  CompareValue,
-  CompareComponentValues
+    CompareValue,
+    CompareComponentValues
 };
 export default CompareComponent_ts;

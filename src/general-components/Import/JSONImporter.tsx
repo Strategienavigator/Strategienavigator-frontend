@@ -14,16 +14,6 @@ export class JSONImporterError extends Error {
  */
 abstract class JSONImporter {
     /**
-     * Validiert das JSON Object.
-     * Wirft ein JSONImporterError falls fehler auftreten.
-     *
-     * @param {object} data Das JSON-Objekt
-     * @returns {Promise<void>}
-     * @protected
-     */
-    protected abstract validate(data: object): Promise<void>;
-
-    /**
      * Wird aufgerufen wenn der Import beginnen soll.
      * Wandelt den Rohstring in ein JSON-Objekt um und validiert dies.
      *
@@ -42,6 +32,16 @@ abstract class JSONImporter {
             }
         }
     }
+
+    /**
+     * Validiert das JSON Object.
+     * Wirft ein JSONImporterError falls fehler auftreten.
+     *
+     * @param {object} data Das JSON-Objekt
+     * @returns {Promise<void>}
+     * @protected
+     */
+    protected abstract validate(data: object): Promise<void>;
 
 }
 

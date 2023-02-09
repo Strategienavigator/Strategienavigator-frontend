@@ -5,10 +5,10 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PortCreateObjectsValues = t.iface([], {
-  "objects": "CardComponentFields",
+    "objects": "CardComponentFields",
 });
 
 const PortObjectsComponent_ts: t.ITypeSuite = {
-  PortCreateObjectsValues
+    PortCreateObjectsValues
 };
 export default PortObjectsComponent_ts;

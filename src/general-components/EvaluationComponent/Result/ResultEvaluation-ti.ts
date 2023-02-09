@@ -5,25 +5,25 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const ResultEvaluationResult = t.iface([], {
-  "object": "CardComponentField",
-  "points": "number",
-  "rank": "number",
+    "object": "CardComponentField",
+    "points": "number",
+    "rank": "number",
 });
 
 export const ResultEvaluationPercentages = t.iface([], {
-  "criteria": "CardComponentField",
-  "points": "number",
-  "percentage": "number",
+    "criteria": "CardComponentField",
+    "points": "number",
+    "percentage": "number",
 });
 
 export const ResultEvaluationValue = t.iface([], {
-  "result": t.array("ResultEvaluationResult"),
-  "percentages": t.array("ResultEvaluationPercentages"),
+    "result": t.array("ResultEvaluationResult"),
+    "percentages": t.array("ResultEvaluationPercentages"),
 });
 
 const ResultEvaluation_ts: t.ITypeSuite = {
-  ResultEvaluationResult,
-  ResultEvaluationPercentages,
-  ResultEvaluationValue,
+    ResultEvaluationResult,
+    ResultEvaluationPercentages,
+    ResultEvaluationValue,
 };
 export default ResultEvaluation_ts;

@@ -5,14 +5,14 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const UtilityAnalysisValues = t.iface([], {
-  "ua-investigation-obj": "UtilInvestigationObjectsValues",
-  "ua-criterias": t.opt("UtilCriteriasValues"),
-  "ua-weighting": t.opt("UtilWeightingValues"),
-  "ua-evaluation": t.opt("UtilEvaluationValues"),
-  "ua-result": t.opt("UtilResultValues"),
+    "ua-investigation-obj": "UtilInvestigationObjectsValues",
+    "ua-criterias": t.opt("UtilCriteriasValues"),
+    "ua-weighting": t.opt("UtilWeightingValues"),
+    "ua-evaluation": t.opt("UtilEvaluationValues"),
+    "ua-result": t.opt("UtilResultValues"),
 });
 
 const UtilityAnalysis_ts: t.ITypeSuite = {
-  UtilityAnalysisValues,
+    UtilityAnalysisValues,
 };
 export default UtilityAnalysis_ts;

@@ -4,10 +4,9 @@
 import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
-export const PCPairComparisonValues = t.iface(["CompareComponentValues"], {
-});
+export const PCPairComparisonValues = t.iface(["CompareComponentValues"], {});
 
 const PCPairComparisonComponent_ts: t.ITypeSuite = {
-  PCPairComparisonValues,
+    PCPairComparisonValues,
 };
 export default PCPairComparisonComponent_ts;

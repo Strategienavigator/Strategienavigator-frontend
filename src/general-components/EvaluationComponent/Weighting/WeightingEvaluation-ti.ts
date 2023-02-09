@@ -5,18 +5,18 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const SingleResult = t.iface([], {
-  "criteria": "CardComponentField",
-  "points": "number",
-  "rank": "number",
+    "criteria": "CardComponentField",
+    "points": "number",
+    "rank": "number",
 });
 
 export const EvaluationValues = t.iface([], {
-  "result": t.array("SingleResult"),
-  "resultAsString": "string",
+    "result": t.array("SingleResult"),
+    "resultAsString": "string",
 });
 
 const WeightingEvaluation_ts: t.ITypeSuite = {
-  SingleResult,
-  EvaluationValues,
+    SingleResult,
+    EvaluationValues,
 };
 export default WeightingEvaluation_ts;

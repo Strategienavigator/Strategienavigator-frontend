@@ -5,10 +5,10 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const UtilCriteriasValues = t.iface([], {
-  "criterias": "CardComponentFields",
+    "criterias": "CardComponentFields",
 });
 
 const UtilCriteriasComponent_ts: t.ITypeSuite = {
-  UtilCriteriasValues,
+    UtilCriteriasValues,
 };
 export default UtilCriteriasComponent_ts;

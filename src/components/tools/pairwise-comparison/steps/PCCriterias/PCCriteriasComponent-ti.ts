@@ -5,14 +5,13 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PCCriteriasValues = t.iface([], {
-  "criterias": "CardComponentFields",
+    "criterias": "CardComponentFields",
 });
 
-export const PCCriteriasState = t.iface([], {
-});
+export const PCCriteriasState = t.iface([], {});
 
 const PCCriteriasComponent_ts: t.ITypeSuite = {
-  PCCriteriasValues,
-  PCCriteriasState,
+    PCCriteriasValues,
+    PCCriteriasState,
 };
 export default PCCriteriasComponent_ts;

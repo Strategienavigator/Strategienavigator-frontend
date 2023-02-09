@@ -5,11 +5,11 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PortWeightingValues = t.iface([], {
-  "attractivity": "CompareComponentValues",
-  "comp-standing": "CompareComponentValues",
+    "attractivity": "CompareComponentValues",
+    "comp-standing": "CompareComponentValues",
 });
 
 const PortWeightingComponent_ts: t.ITypeSuite = {
-  PortWeightingValues,
+    PortWeightingValues,
 };
 export default PortWeightingComponent_ts;

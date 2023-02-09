@@ -4,10 +4,9 @@
 import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
-export const UtilWeightingValues = t.iface(["CompareComponentValues"], {
-});
+export const UtilWeightingValues = t.iface(["CompareComponentValues"], {});
 
 const UtilWeightingComponent_ts: t.ITypeSuite = {
-  UtilWeightingValues,
+    UtilWeightingValues,
 };
 export default UtilWeightingComponent_ts;
