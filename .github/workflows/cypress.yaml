@@ -43,7 +43,7 @@ jobs:
         with:
           version: 2
           working_dir: 'backend'
-          php_extensions: ext-gd
+          php_extensions: gd
       - name: setup backend
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
