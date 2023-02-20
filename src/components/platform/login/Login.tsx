@@ -25,6 +25,8 @@ export interface LoginState {
 
 export class LoginComponent extends Component<RouteComponentProps<any, any, any>, LoginState> {
 
+    public static defaultPath: string = "/my-profile";
+
     constructor(props: any) {
         super(props);
 
@@ -34,6 +36,12 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
             showAnonymousModal: false,
             failed: false
         };
+    }
+
+    getPath = () => {
+        let params: URLSearchParams = new URLSearchParams(this.props.location.search);
+        let origin = params.get("origin");
+        return (origin != null) ? origin : LoginComponent.defaultPath;
     }
 
     login = async (e: FormEvent<HTMLFormElement>) => {
@@ -46,13 +54,13 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
         let rememberMe: boolean = extractFromForm(e, "rememberMe") as boolean;
 
         let user = await Session.login(email, password, rememberMe);
+        let path = this.getPath();
 
         if (user !== null) {
             reload_app();
 
             Messages.add("Willkommen zurück!", "SUCCESS", Messages.TIMER);
-
-            this.props.history.push("/my-profile");
+            this.props.history.push(path);
         } else {
             this.setState({
                 loaded: true,
@@ -76,9 +84,11 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
             let username = anonUser.username;
 
             let user = await Session.login(username, password, true);
+            let path = this.getPath();
+
             if (user) {
                 Messages.add("Sie wurden anonym angemeldet!", "SUCCESS", Messages.TIMER);
-                this.props.history.push("/my-profile");
+                this.props.history.push(path);
             }
         }
 
@@ -138,6 +148,11 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
                     {(hasCheckNotice) && (
                         <div className={"feedback INFO"}>
                             Eventuell müssen Sie noch Ihre E-Mail-Adresse noch bestätigen!
+                        </div>
+                    )}
+                    {(params.has("origin")) && (
+                        <div className={"feedback INFO"}>
+                            Sie müssen sich vorher anmelden um diese Aktion auszuführen!
                         </div>
                     )}
                 </div>
