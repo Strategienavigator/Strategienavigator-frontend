@@ -19,10 +19,10 @@ const ms = require('smtp-tester');
 module.exports = (on, config) => {
     // `on` is used to hook into various events Cypress emits
     // `config` is the resolved Cypress config
-
+    
     // Usage: cy.task('queryDb', query)
-
-
+    
+    
     if (config.testingType === 'component') {
         require('@cypress/react/plugins/react-scripts')(on, config)
     } else {
@@ -30,37 +30,36 @@ module.exports = (on, config) => {
         const port = config.env["SMTP_PORT"];
         const mailServer = ms.init(port)
         console.log('mail server at port %d', port)
-
+        
         // process all emails
         mailServer.bind((addr, id, email) => {
             console.log('--- email ---')
             console.log(addr, id, email)
         })
-
-
+        
+        
         const options = {
             outputRoot: 'cypress/',
             outputTarget: {
                 'logs/txt|txt': 'txt',
-                'logs/json|json': 'json',
+                'logs/json|json': 'json'
             },
             printLogsToFile: 'always'
         };
-
+        
         require('cypress-terminal-report/src/installLogsPrinter')(on, options);
-
-
-
+        
+        
         const mysql = require("mysql2");
         const bcrypt = require('bcrypt');
-
+        
         function queryTestDb(query, config) {
             // creates a new mysql connection using credentials from cypress.json env's
             const connection = mysql.createConnection({
                 "host": config.env.DB_HOST,
                 "user": config.env.DB_USER,
                 "password": config.env.DB_PASSWORD,
-                "port":config.env.DB_PORT
+                "port": config.env.DB_PORT
             });
             // start connection to db
             connection.connect();
@@ -76,7 +75,7 @@ module.exports = (on, config) => {
                 });
             });
         }
-
+        
         on("task", {
             queryDb: query => {
                 return queryTestDb(query, config);
@@ -86,12 +85,12 @@ module.exports = (on, config) => {
             bcrypt: password => {
                 const saltRounds = 10;
                 var myPlaintextPassword = password;
-                var passwordHashed = bcrypt.hashSync(myPlaintextPassword,saltRounds)
+                var passwordHashed = bcrypt.hashSync(myPlaintextPassword, saltRounds)
                 return passwordHashed;
             }
         });
     }
-
+    
     return config;
 }
 

@@ -87,9 +87,9 @@ export class CreateToolModal extends Component<CreateToolModalProps, CreateToolM
                                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                                     let value = e.currentTarget.value;
                                     this.setState({
-                                       descriptionError: {
-                                           tooLong: value.length > CreateToolModal.MAX_LENGTH_DESC
-                                       }
+                                        descriptionError: {
+                                            tooLong: value.length > CreateToolModal.MAX_LENGTH_DESC
+                                        }
                                     });
                                 }}
                             />
@@ -159,9 +159,9 @@ export class CreateToolModal extends Component<CreateToolModalProps, CreateToolM
         if (desc?.length > CreateToolModal.MAX_LENGTH_DESC) {
             error = true;
             this.setState({
-               descriptionError: {
-                   tooLong: true
-               }
+                descriptionError: {
+                    tooLong: true
+                }
             });
         }
 

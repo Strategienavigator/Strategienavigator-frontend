@@ -42,6 +42,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           version: 2
+          php_extensions: gd
           working_dir: 'backend'
       - name: setup backend
         env:
@@ -66,6 +67,7 @@ jobs:
           version: 2
           args: '--optimize-autoloader'
           working_dir: 'backend'
+          php_extensions: gd
 
       - name: cache larvel config
         env:

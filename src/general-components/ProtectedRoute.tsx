@@ -1,4 +1,4 @@
-import {Redirect, RouteProps, useHistory} from "react-router";
+import {Redirect, RouteProps, useHistory, useLocation} from "react-router";
 import {Link, Route} from "react-router-dom";
 import {Session} from "./Session/Session";
 import {Button, Modal} from "react-bootstrap";
@@ -110,6 +110,7 @@ export function AnonymousModal(props: {
 
 function ProtectedRoute(props: ProtectedRouteProps) {
     let history = useHistory();
+    let location = useLocation();
 
     if (props.loggedIn !== undefined) {
         if (props.loggedIn === Session.isLoggedIn()) {
@@ -139,9 +140,8 @@ function ProtectedRoute(props: ProtectedRouteProps) {
                     <AnonymousModal onDisagreement={redirectUser} onAgreement={loginAnonymous}/>
                 );
             }
-
             return (
-                <Redirect to={"/login"}/>
+                <Redirect to={"/login?origin=" + location.pathname + location.search}/>
             );
         } else {
             return (

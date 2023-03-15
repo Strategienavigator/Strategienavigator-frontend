@@ -10,6 +10,7 @@ import {PCPairComparison} from "./steps/PCPairComparison/PCPairComparison";
 import {PCResult} from "./steps/PCResult/PCResult";
 import {PCExcelExporter} from "./export/PCExcelExporter";
 import {PCCriteriasValues} from "./steps/PCCriterias/PCCriteriasComponent";
+import {PCJSONImporter} from "./import/PCJSONImporter";
 
 
 /**
@@ -31,6 +32,8 @@ class PairwiseComparison extends SteppableTool<PairwiseComparisonValues> {
 
         this.addExporter(new JSONExporter());
         this.addExporter(new PCExcelExporter());
+
+        this.setImporter(new PCJSONImporter());
 
         this.addStep(new PCCriterias());
         this.addStep(new PCPairComparison());

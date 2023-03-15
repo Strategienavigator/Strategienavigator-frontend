@@ -40,7 +40,6 @@ abstract class SteppableTool<D extends object> extends Tool<D> {
 
         let typesProps = props as stepProps;
 
-
         return React.createElement(this.typeStepComponent, typesProps, null);
 
     }

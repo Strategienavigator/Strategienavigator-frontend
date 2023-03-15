@@ -1,0 +1,25 @@
+
+.menuCard {
+  position: relative;
+
+  > .menu {
+    display: none;
+    z-index: 500;
+    padding: 0.25rem;
+    position: absolute;
+    right: -100px;
+    top: 92%;
+
+    select {
+      padding: 0 !important;
+
+      option {
+        padding: 0.4rem 0.75rem;
+      }
+    }
+  }
+
+  > .menu.show {
+    display: block;
+  }
+}

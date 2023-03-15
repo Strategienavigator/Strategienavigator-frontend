@@ -1,12 +1,13 @@
 import React, {PureComponent} from "react";
 import {ClassifiedAlternateAction} from "../../SWOTClassifyAlternativeActionsComponent";
-import {ClassifyingCard} from "../ClassifyingCard/ClassifyingCard";
 
 
 interface ClassifyingCardListProps {
     actions: ClassifiedAlternateAction[]
-    onOpenClassificationModalClick: (id: string) => void
-    disabled: boolean
+    onClassificationClick: (id: string) => void
+    disabled: boolean,
+    cardElement: JSX.Element
+    text?: string
 }
 
 class ClassifyingCardList extends PureComponent<ClassifyingCardListProps, {}> {
@@ -15,20 +16,18 @@ class ClassifyingCardList extends PureComponent<ClassifyingCardListProps, {}> {
             <>
                 <div className={"actionCards"}>
                     {this.props.actions.map((action, index) => {
-                        return (
-                            <ClassifyingCard
-                                disabled={this.props.disabled}
-                                key={action.name + "-" + action.index + "-" + index}
-                                action={action}
-                                onChangeClick={this.props.onOpenClassificationModalClick}
-                            />
-                        );
+                        return React.cloneElement(this.props.cardElement, {
+                            key: action.name + "-" + action.index + "-" + index,
+                            action: action,
+                            onChangeClick: this.props.onClassificationClick,
+                            disabled: this.props.disabled,
+                        });
                     })}
                 </div>
 
                 {(this.props.actions.length <= 0) && (
                     <span>
-                        Keine Handlungsalternativen zugeordnet...
+                        {this.props.text ?? "Keine Handlungsalternativen zugeordnet..."}
                     </span>
                 )}
             </>
