@@ -1,6 +1,11 @@
 import './tool-save-page.scss'
 import React, {Component, ReactNode} from "react";
-import {LiveSaveUpdateResource, SaveResource, SharedSavePermission,} from "../../Datastructures";
+import {
+    LiveSaveUpdateResource,
+    SaveResource,
+    SharedSavePermission,
+    SharedSavePermissionDefault,
+} from "../../Datastructures";
 import {Session} from "../../Session/Session";
 import {Loader} from "../../Loader/Loader";
 import {Prompt, RouteComponentProps} from "react-router";
@@ -71,7 +76,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         this.state = {
             showConfirmToolRouteChangeModal: false,
             isSaving: false,
-            isLocked: true,
+            isLocked: false,
             isLoading: true
         }
         this.saveController = {
@@ -81,11 +86,10 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         }
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
         window.addEventListener("beforeunload", this.onBeforeUnload);
         window.addEventListener("beforeunload", this.onUnloadUnLock);
-        this.firstLoad();
-
+        await this.firstLoad();
     }
 
     componentWillUnmount = async () => {
@@ -110,24 +114,11 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         }
     }
 
-    private firstLoad = () => {
-        let ID = parseInt(this.props.match.params.id as string);
-        let socketPromise = this.createSocketConnection()
-        let savePromise = this.retrieveSave(ID);
-
-        Promise.all([socketPromise, savePromise]).then(() => {
-            this.setState({
-                isLoading: false
-            });
-        }).catch(() => {
-            this.setState({
-                isLoading: false
-            });
-        });
-    }
-
-    createSocketConnection = async () => {
-        let channelName = "savechannel." + this.state.save!.id;
+    createSocketConnection = async (save: SaveResource<D>): Promise<{
+        connection: Echo,
+        channel: PresenceChannel
+    }> => {
+        let channelName = "savechannel." + save.id;
         let connection = createSocketConnection();
 
         connection.connector.pusher.connection.bind("connected", () => {
@@ -153,10 +144,10 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             }
         });
 
-        this.setState({
+        return {
             connection: connection,
             channel: channel
-        });
+        };
     }
 
     render() {
@@ -222,7 +213,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
     denyRouteChange = (location: H.Location): boolean => {
-        // Dont show if save is unchanged
+        // Don't show if save is unchanged
         if (!this.shouldPreventRouteChange())
             return true;
 
@@ -244,6 +235,35 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     public unlock = async (save: SaveResource<any>) => {
         return await this.lockSave(save, false);
+    }
+
+    private firstLoad = async () => {
+        let ID = parseInt(this.props.match.params.id as string);
+        let save = await this.retrieveSave(ID);
+
+        let isLocked: boolean | undefined = undefined;
+        let socketInfo: { connection: any; channel: any; } | undefined = undefined;
+
+        if (save) {
+            socketInfo = await this.createSocketConnection(save);
+            isLocked = await this.checkLockStatus(save);
+
+            if (save && socketInfo && isLocked !== undefined) {
+                this.setState({
+                    save: save,
+                    isLoading: false,
+                    isLocked: isLocked,
+                    connection: socketInfo.connection,
+                    channel: socketInfo.channel
+                });
+            } else {
+                showErrorPage(404);
+                return;
+            }
+        } else {
+            showErrorPage(404);
+            return;
+        }
     }
 
     private closeWebsocketConnection() {
@@ -370,52 +390,50 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
     private updateSaveFromRemote = async () => {
-        this.setState({isLoading:true});
+        this.setState({isLoading: true});
         if (this.state.save) {
-            await this.retrieveSave(this.state.save.id);
+            let save = await this.retrieveSave(this.state.save.id);
+            if (save) {
+                this.setState({
+                    save: save,
+                    isLoading: false
+                });
+            }
         }
-        this.setState({isLoading:false});
+        this.setState({isLoading: false});
     }
 
-    private retrieveSave = async (ID: number) => {
+    private checkLockStatus = async (save: SaveResource<D>): Promise<boolean> => {
+        save.permission = save.permission ?? {
+            permission: SharedSavePermissionDefault,
+            created_at: ""
+        };
+        let permission = save.permission.permission;
+        let isLocked = hasPermission(permission, EditSavesPermission);
+
+        if (
+            save.locked_by === null ||
+            save.locked_by === Session.currentUser?.getID()
+        ) {
+            isLocked = false;
+        }
+
+        await this.lock(save);
+
+        if (save.locked_by === null) {
+            save.locked_by = Session.currentUser!.getID();
+        }
+        return isLocked;
+    }
+
+    private retrieveSave = async (ID: number): Promise<SaveResource<D> | undefined> => {
         let call = await getSave<any>(ID, {errorCallback: this.onAPIError});
 
         if (call && call.success) {
-            let isLocked;
-            let data: SaveResource<D> = {
-                ...call.callData,
-                data: JSON.parse(call.callData.data)
-            };
-
-            if (data.tool_id === this.props.tool.getID()) {
-                data.permission = data.permission ?? {
-                    permission: SharedSavePermission.OWNER,
-                    created_at: ""
-                };
-                let permission = data.permission.permission;
-
-                isLocked = hasPermission(permission, EditSavesPermission);
-
-                if (
-                    data.locked_by === null ||
-                    data.locked_by === Session.currentUser?.getID()
-                ) {
-                    isLocked = false;
-                }
-
-                await this.lock(data);
-
-                if (!data.locked_by) {
-                    data.locked_by = Session.currentUser!.getID();
-                }
-
-                await new Promise<void>(resolve => {
-                    this.updateSave(data, resolve);
-                });
-
-                this.setState({
-                    isLocked: isLocked
-                });
+            if (call.callData.tool_id === this.props.tool.getID()) {
+                let save: SaveResource<D> = call.callData;
+                save.data = JSON.parse(call.callData.data);
+                return save;
             } else {
                 showErrorPage(403);
                 return;

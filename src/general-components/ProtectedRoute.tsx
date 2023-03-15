@@ -8,7 +8,6 @@ import {Loader} from "./Loader/Loader";
 import {faCheckCircle, faExclamationTriangle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import FAE from "./Icons/FAE";
 import {ModalCloseable} from "./Modal/ModalCloseable";
-import {CaptchaComponent} from "./Captcha/CaptchaComponent";
 
 
 interface ProtectedRouteProps extends RouteProps {

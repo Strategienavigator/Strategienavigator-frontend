@@ -50,7 +50,7 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            Um einen Speicherstand zu importieren müssen Sie noch die Datei des Speicherstandes
+                            Um einen Speicherstand zu importieren, müssen Sie die Datei des Speicherstandes
                             auswählen.
                             <br/><br/>
                             <b>Wichtig:</b> Es muss sich hierbei um die Analyse "{this.props.tool.getToolName()}"
@@ -182,7 +182,6 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
                                 error: e.message
                             });
                         }
-                        console.log(e);
                     }
                 } else {
                     this.setState({

@@ -1,5 +1,5 @@
 import {createContext, PureComponent} from "react";
-import {SharedSavePermission} from "../Datastructures";
+import {SharedSavePermission, SharedSavePermissionDefault} from "../Datastructures";
 
 
 /**
@@ -14,7 +14,7 @@ export interface ISharedSaveContext {
  * @type {React.Context<ISharedSaveContext>}
  */
 export const SharedSaveContext = createContext<ISharedSaveContext>({
-    permission: SharedSavePermission.OWNER
+    permission: SharedSavePermissionDefault
 });
 
 /**
@@ -27,7 +27,7 @@ export interface SharedSaveState {
  * Interface für die Props des SharedSaveContextComponent
  */
 export interface SharedSaveContextComponentProps {
-    permission: SharedSavePermission
+    permission?: SharedSavePermission
 }
 
 /**
@@ -35,12 +35,10 @@ export interface SharedSaveContextComponentProps {
  */
 class SharedSaveContextComponent extends PureComponent<SharedSaveContextComponentProps, SharedSaveState> {
 
-
-
-
     render() {
+        let permission = this.props.permission ?? SharedSavePermissionDefault;
         return (
-            <SharedSaveContext.Provider value={{permission: this.props.permission}}>
+            <SharedSaveContext.Provider value={{permission: permission}}>
                 {this.props.children}
             </SharedSaveContext.Provider>
         );

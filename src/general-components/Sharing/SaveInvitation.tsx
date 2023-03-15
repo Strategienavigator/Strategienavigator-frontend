@@ -1,7 +1,7 @@
 import {Badge, Button, FormControl, InputGroup, Modal, Table} from "react-bootstrap";
 
 import "./save-invitation-modal.scss";
-import {faCopy, faSearch, faUsers} from "@fortawesome/free-solid-svg-icons";
+import {faCopy, faSearch, faUsersCog} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../Icons/FAE";
 import {Component, ReactNode} from "react";
 import {InvitationLinkModal} from "./InvitationLinkModal/InvitationLinkModal";
@@ -23,6 +23,7 @@ import {createContribution, getContributors} from "../API/calls/Contribution";
 import {CollaboratorsModal} from "./CollaboratorsModal/CollaboratorsModal";
 import {LoadingButton} from "../LoadingButton/LoadingButton";
 import {ButtonPanel} from "../ButtonPanel/ButtonPanel";
+import {CollaboratorsDotsComponent} from "../CollaboratorsComponent/CollaboratorsDotsComponent";
 
 
 export interface SaveInvitationProps {
@@ -43,6 +44,7 @@ export interface SaveInvitationState {
     inviteSuccess?: boolean,
     showCollaboratorsModal: boolean,
     contributorsLoading: boolean,
+    contributorsButtonLoading: boolean,
     contributors: SharedSaveResource[],
     showCopyModal: InvitationLinkResource | null
 }
@@ -61,7 +63,8 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         inviteSuccess: undefined,
         showCollaboratorsModal: false,
         contributors: [],
-        contributorsLoading: false,
+        contributorsLoading: true,
+        contributorsButtonLoading: false,
         showCopyModal: null
     };
 
@@ -69,6 +72,19 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         super(props);
 
         this.state = this.defaultState;
+    }
+
+    getContributors = async () => {
+        if (this.props.save) {
+            let call = await getContributors(this.props.save.id);
+
+            if (call && call?.success) {
+                this.setState({
+                    contributorsLoading: false,
+                    contributors: call.callData.data
+                });
+            }
+        }
     }
 
     render() {
@@ -112,7 +128,9 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                             <Loader
                                 payload={[this.resetSearchUser, getLinks]}
                                 transparent={true}
-                                size={50}
+                                alignment={"left"}
+                                variant={"auto"}
+                                size={35}
                             >
                                 {(this.state.links.length > 0) ? (
                                     <h5>
@@ -187,6 +205,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                             </Loader>
 
                             <Button
+                                className={"mt-3"}
                                 size={"sm"}
                                 onClick={this.openInvitationLinkModal}
                             >
@@ -271,29 +290,60 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                 }
                             </div>
 
-                            <LoadingButton
-                                size={"sm"}
-                                onClick={async () => {
-                                    if (this.props.save) {
-                                        this.setState({contributorsLoading: true});
+                            <hr/>
 
-                                        let call = await getContributors(this.props.save.id);
+                            <Loader payload={[this.getContributors]} transparent
+                                    loaded={!this.state.contributorsLoading} size={35} alignment={"left"}>
+                                {(this.state.contributors.filter((v) => {
+                                    return v.accepted && !v.revoked;
+                                }).length <= 0) ? (
+                                    <span>
+                                        Keine Kollaborateure vorhanden...
+                                    </span>
+                                ) : (
+                                    <>
+                                        <h5>
+                                            Kollaborateure
+                                            &nbsp;
+                                            <Badge bg={"dark"} pill>
+                                                {this.state.contributors.filter((v) => {
+                                                    return v.accepted && !v.revoked;
+                                                }).length}
+                                            </Badge>
+                                        </h5>
 
-                                        if (call && call?.success) {
-                                            this.setState({
-                                                showCollaboratorsModal: true,
-                                                contributorsLoading: false,
-                                                contributors: call.callData.data
-                                            });
-                                        }
-                                    }
+                                        <CollaboratorsDotsComponent
+                                            collaborators={this.state.contributors.filter((v) => {
+                                                return v.accepted && !v.revoked;
+                                            }).map(v => v.user)}
+                                        />
 
-                                }}
-                                defaultChild={"Kollaborateure anzeigen"}
-                                isLoading={this.state.contributorsLoading}
-                                savingChild={"Kollaborateure anzeigen"}
-                                defaultIcon={faUsers}
-                            />
+                                        <LoadingButton
+                                            size={"sm"}
+                                            onClick={async () => {
+                                                if (this.props.save) {
+                                                    this.setState({contributorsButtonLoading: true});
+
+                                                    let call = await getContributors(this.props.save.id);
+
+                                                    if (call && call?.success) {
+                                                        this.setState({
+                                                            showCollaboratorsModal: true,
+                                                            contributorsButtonLoading: false,
+                                                            contributors: call.callData.data
+                                                        });
+                                                    }
+                                                }
+                                            }}
+                                            className={"mt-2"}
+                                            defaultChild={"Berechtigungen anpassen"}
+                                            isLoading={this.state.contributorsButtonLoading}
+                                            savingChild={"Berechtigungen anpassen"}
+                                            defaultIcon={faUsersCog}
+                                        />
+                                    </>
+                                )}
+                            </Loader>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
@@ -311,8 +361,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                     contributors={this.state.contributors}
                     onClose={() => {
                         this.setState({
-                            showCollaboratorsModal: false,
-                            contributors: []
+                            showCollaboratorsModal: false
                         });
                     }}
                 />

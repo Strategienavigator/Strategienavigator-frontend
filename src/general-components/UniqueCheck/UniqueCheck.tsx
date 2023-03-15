@@ -187,7 +187,6 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
                     }
                 }
 
-
                 this.setState({
                     success: undefined,
                     error: true,

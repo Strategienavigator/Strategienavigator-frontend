@@ -21,8 +21,10 @@ export enum SharedSavePermission {
      * Der Speicherstand gehört dem Besitzer
      * @type {SharedSavePermission.OWNER}
      */
-    OWNER = 3,
+    OWNER = 3
 }
+
+export const SharedSavePermissionDefault = SharedSavePermission.OWNER;
 
 /**
  * Repräsentiert ein Live Update eines Saves bei einer Websocket-Verbindung

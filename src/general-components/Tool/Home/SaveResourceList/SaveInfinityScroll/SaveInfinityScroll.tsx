@@ -6,7 +6,6 @@ import {SaveCard} from "../../SaveCard/SaveCard";
 import {Loader} from "../../../../Loader/Loader";
 import {SaveResourceListProps} from "../SaveResourceList";
 import {SharedSaveContextComponent} from "../../../../Contexts/SharedSaveContextComponent";
-import {SharedSavePermission} from "../../../../Datastructures";
 
 
 export interface SaveInfinityScrollState {
@@ -81,7 +80,7 @@ export class SaveInfinityScroll extends Component<SaveResourceListProps, SaveInf
                             return (
                                 <SharedSaveContextComponent
                                     key={save.id}
-                                    permission={save.permission?.permission ?? SharedSavePermission.READ}
+                                    permission={save.permission?.permission}
                                 >
                                     <SaveCard save={save} toolLink={this.props.tool.getLink()}
                                               onTrash={() => {

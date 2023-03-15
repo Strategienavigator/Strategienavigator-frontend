@@ -65,16 +65,15 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                                     defaultIcon={faPencilAlt}
                                     savingChild={"Bearbeiter werden"}
                                     type={"button"}
+                                    size={"sm"}
                                     variant={"success"}
                                     onClick={this.lockSave}
-                                    className={"reclaimEditor"}
+                                    className={"reclaimEditor mb-2"}
                                 />
                             );
                     }}
                 </UserContext.Consumer>
                 <div className={"toolName"}>
-
-
                     {this.props.tool.getToolName()}
 
                     {hasPermission(this.context.permission, InviteToSavePermission) && (
@@ -171,9 +170,9 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
 
     private lockSave = async () => {
         this.setState({loadingUnlock: true});
-
         let response = await lockSave(this.props.associatedSave.id, true);
         this.setState({loadingUnlock: false});
+
         if (response?.success === true) {
             this.props.saveController.updateSaveFromRemote();
         }

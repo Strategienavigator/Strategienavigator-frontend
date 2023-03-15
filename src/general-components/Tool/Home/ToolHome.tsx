@@ -211,7 +211,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
                 {(this.state.showTutorial && this.props.tool?.hasTutorial()) && this.getTutorialCanvas()}
 
-                <SharedSaveContextComponent save={this.state.deleteSave!}>
+                <SharedSaveContextComponent permission={this.state.deleteSave?.permission?.permission}>
                     <DeleteSaveModal
                         show={this.state.showDeleteModal}
                         save={this.state.deleteSave ?? null}
@@ -220,7 +220,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                     />
                 </SharedSaveContextComponent>
 
-                <SharedSaveContextComponent save={this.state.showInviteModal!}>
+                <SharedSaveContextComponent permission={this.state.showInviteModal?.permission?.permission}>
                     <SaveInvitation
                         show={this.state.showInviteModal !== null}
                         save={this.state.showInviteModal}
