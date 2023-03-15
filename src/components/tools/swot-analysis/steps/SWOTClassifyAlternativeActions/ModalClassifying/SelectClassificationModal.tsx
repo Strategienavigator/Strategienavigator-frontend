@@ -32,25 +32,21 @@ interface SelectClassificationModalProps {
     onClose: () => void
 }
 
-
-function SelectClassificationModal(props: SelectClassificationModalProps) {
-
-
-    const findClassification = (action: string | undefined): ClassificationValues | null => {
-        if (action === undefined)
-            return null;
-        for (const classification of props.classifications) {
-            for (const classificationAction of classification.actions) {
-                if (classificationAction.indexName === action) {
-                    return classification;
-                }
+export function findClassification(action: string | undefined, classifications: ClassificationValues[]): ClassificationValues | null {
+    if (action === undefined)
+        return null;
+    for (const classification of classifications) {
+        for (const classificationAction of classification.actions) {
+            if (classificationAction.indexName === action) {
+                return classification;
             }
         }
-        return null;
     }
+    return null;
+}
 
-
-    const foundClassification = findClassification(props.action);
+function SelectClassificationModal(props: SelectClassificationModalProps) {
+    const foundClassification = findClassification(props.action, props.classifications);
 
     return (
         <ModalCloseable
@@ -84,14 +80,14 @@ function SelectClassificationModal(props: SelectClassificationModalProps) {
 
                             if (props.action) {
                                 let oldClassification: ClassificationValues | null = null;
-                                let newClassification: ClassificationValues | null = null;
+                                let newClassification: ClassificationValues | null;
 
                                 if (foundClassification) {
-                                    oldClassification = foundClassification
+                                    oldClassification = foundClassification;
                                 }
 
                                 // classification must be undefined if _none is selected as destination classification
-                                newClassification = classification ?? null
+                                newClassification = classification ?? null;
                                 props.onSelect(oldClassification, newClassification, props.action)
                             }
 

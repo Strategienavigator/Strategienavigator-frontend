@@ -1,0 +1,43 @@
+@import "../../../../../../../node_modules/bootstrap/scss/bootstrap-utilities";
+
+.actionCards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.actionCards * {
+  box-sizing: border-box;
+}
+
+.actionCard {
+  flex: 49.5% 0 1;
+  margin: 0.25%;
+}
+
+.actionCard .row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.actionCard .row > .col:first-child {
+  max-width: max-content;
+}
+
+.actionCard .row .col:last-child {
+  max-width: max-content;
+  text-align: right;
+}
+
+#swot-classify-alternate-actions .accordion-button::after {
+  margin-left: 1rem;
+}
+
+@include media-breakpoint-down(lg) {
+  .actionCard {
+    flex: 100% 1 1;
+    max-width: 100%;
+  }
+}

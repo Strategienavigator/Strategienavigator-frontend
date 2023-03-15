@@ -125,7 +125,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
     onChangeCurrentDescription = (e: { currentTarget: { value: string; }; }) => {
         const description = e.currentTarget.value;
         this.setState({
-           descriptionTooLong: description.length > CreateToolModal.MAX_LENGTH_DESC
+            descriptionTooLong: description.length > CreateToolModal.MAX_LENGTH_DESC
         });
         this.props.saveMetaChanged(this.props.saveName, description);
     }
