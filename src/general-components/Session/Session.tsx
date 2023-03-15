@@ -140,8 +140,8 @@ class Session {
         return null;
     }
 
-    static register = async (email: string, username: string, password: string): Promise<CallInterface<object> | null> => {
-        return await createUser(username, email, password);
+    static register = async (email: string, username: string, password: string, captchaKey: string, captcha: string): Promise<CallInterface<object> | null> => {
+        return await createUser(username, email, password, captchaKey, captcha);
     }
 
     private static callUserChangedCallback(user: User | null) {

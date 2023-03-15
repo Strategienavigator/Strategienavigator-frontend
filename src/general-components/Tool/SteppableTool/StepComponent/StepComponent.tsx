@@ -229,7 +229,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                             associatedSave={this.props.save}
                                             saveName={this.props.save.name}
                                             saveDescription={this.props.save.description}
-                                            saveMetaChanged={this.changeSaveMeta}/>;
+                                            saveMetaChanged={this.changeSaveMeta}
+                                            saveController={this.props.saveController}/>;
 
         const anyErrors = Object.keys(this.props.uiErrorContext.errors).length > 0;
 

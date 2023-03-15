@@ -1,0 +1,35 @@
+.image{
+  width: 150%;
+}
+
+.scrollbar {
+  background: red;
+  height: 0.15em;
+  width: 0;
+  position: absolute;
+  bottom: var(--bs-border-width);
+  left: var(--bs-border-width);
+  right: var(--bs-border-width);
+}
+
+.scrolling-bar {
+  animation-name: changewidth;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-timing-function: linear;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+@keyframes changewidth {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}

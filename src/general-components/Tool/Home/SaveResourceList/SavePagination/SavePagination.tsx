@@ -1,5 +1,5 @@
 import React, {Component, ReactNode} from "react";
-import {SimpleSaveResource} from "../../../../Datastructures";
+import {SharedSavePermission, SimpleSaveResource} from "../../../../Datastructures";
 import {PaginationFooter} from "../../../../PaginationFooter/PaginationFooter";
 import {Card} from "react-bootstrap";
 
@@ -49,7 +49,7 @@ class SavePagination extends Component<SaveResourceListProps, SavePaginationStat
                             return (
                                 <SharedSaveContextComponent
                                     key={save.tool_id + " " + save.id}
-                                    save={save}
+                                    permission={save.permission?.permission ?? SharedSavePermission.READ}
                                 >
                                     <SaveCard
                                         save={save}

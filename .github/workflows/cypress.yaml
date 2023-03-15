@@ -79,6 +79,7 @@ jobs:
           EMAIL_FILTER_DISABLED: true
           MAIL_FROM_ADDRESS: strategienavigator@jade-hs.de
           MAIL_PORT: 7777
+          CAPTCHA_DISABLE: true
         working-directory: backend
         run: |
           php artisan config:cache

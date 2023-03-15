@@ -11,6 +11,7 @@ import "./register.scss";
 import {Messages} from "../../../general-components/Messages/Messages";
 import {RouteComponentProps, withRouter} from "react-router";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
+import {CaptchaComponent} from "../../../general-components/Captcha/CaptchaComponent";
 
 
 interface RegisterState {
@@ -38,8 +39,10 @@ class Register extends PureComponent<RouteComponentProps, RegisterState> {
         let email: string = extractFromForm(e, "email") as string;
         let username: string = extractFromForm(e, "username") as string;
         let password: string = extractFromForm(e, "password") as string;
+        let captchaKey: string = extractFromForm(e, "captcha_key") as string;
+        let captcha: string = extractFromForm(e, "captcha") as string;
 
-        let call = await Session.register(email, username, password);
+        let call = await Session.register(email, username, password, captchaKey, captcha);
 
         this.setState({
             isRegistering: false
@@ -94,6 +97,8 @@ class Register extends PureComponent<RouteComponentProps, RegisterState> {
 
                 {/*PASSWORD*/}
                 <PasswordField required confirm check={true} eye={true}/>
+
+                <CaptchaComponent/>
 
                 <hr/>
 

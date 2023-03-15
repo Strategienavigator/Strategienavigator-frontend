@@ -1,14 +1,12 @@
-import {Component, createContext} from "react";
-import {SharedSavePermission, SimpleSaveResource} from "../Datastructures";
-import {Session} from "../Session/Session";
+import {createContext, PureComponent} from "react";
+import {SharedSavePermission} from "../Datastructures";
 
 
 /**
  * Interface des SharedSaveContext
  */
 export interface ISharedSaveContext {
-    permission: SharedSavePermission,
-    updatePermission: (newPermission: SharedSavePermission) => void
+    permission: SharedSavePermission
 }
 
 /**
@@ -16,67 +14,36 @@ export interface ISharedSaveContext {
  * @type {React.Context<ISharedSaveContext>}
  */
 export const SharedSaveContext = createContext<ISharedSaveContext>({
-    permission: SharedSavePermission.OWNER,
-    updatePermission: () => {
-    }
+    permission: SharedSavePermission.OWNER
 });
 
 /**
  * Interface für den SharedSaveState
  */
 export interface SharedSaveState {
-    sharedSaveContext: ISharedSaveContext
 }
 
 /**
  * Interface für die Props des SharedSaveContextComponent
  */
 export interface SharedSaveContextComponentProps {
-    save: SimpleSaveResource // TODO: change to SharedSaveRessource only
+    permission: SharedSavePermission
 }
 
 /**
  * SharedSaveContextComponent
  */
-class SharedSaveContextComponent extends Component<SharedSaveContextComponentProps, SharedSaveState> {
+class SharedSaveContextComponent extends PureComponent<SharedSaveContextComponentProps, SharedSaveState> {
 
-    constructor(props: SharedSaveContextComponentProps | Readonly<SharedSaveContextComponentProps>) {
-        super(props);
 
-        this.state = {
-            sharedSaveContext: {
-                permission: SharedSavePermission.OWNER,
-                updatePermission: this.updatePermission
-            }
-        }
-    }
 
-    static getDerivedStateFromProps(props: SharedSaveContextComponentProps, state: SharedSaveState) {
-        return {
-            sharedSaveContext: {
-                permission: (props.save && props.save.permission) ? props.save.permission.permission : (
-                    props.save && props.save.owner.id === Session.currentUser?.getID()
-                ) ? SharedSavePermission.OWNER : SharedSavePermission.READ,
-                updatePermission: state.sharedSaveContext.updatePermission
-            }
-        };
-    }
 
     render() {
         return (
-            <SharedSaveContext.Provider value={this.state.sharedSaveContext}>
+            <SharedSaveContext.Provider value={{permission: this.props.permission}}>
                 {this.props.children}
             </SharedSaveContext.Provider>
         );
-    }
-
-    private updatePermission = (newPermission: SharedSavePermission) => {
-        this.setState({
-            sharedSaveContext: {
-                permission: newPermission,
-                updatePermission: this.updatePermission
-            }
-        });
     }
 
 }
