@@ -156,6 +156,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                         required={this.props.required}
                         disabled={this.props.disabled}
                         onChange={this.nameChanged}
+                        tabIndex={(this.props.index * 3) + 1}
                         name={this.props.name + "[" + this.props.index + "][name]"}
                         spellCheck={false}
                         value={this.props.value}
@@ -163,7 +164,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                     />
                     {
                         ((!this.props.disabled) && this.props.onDelete !== undefined) ? (
-                            <Button className={"noButton"} onClick={this.onDelete} variant={"link"}>
+                            <Button className={"noButton"} onClick={this.onDelete} tabIndex={(this.props.index * 3) + 3} variant={"link"}>
                                 <FAE icon={faTimes}/>
                             </Button>
                         ) : undefined
@@ -178,6 +179,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                             onChange={this.descChanged}
                             as="textarea"
                             spellCheck={false}
+                            tabIndex={(this.props.index * 3) + 2}
                             style={{maxHeight: 500, height: 70}}
                             name={this.props.name + "[" + this.props.index + "][desc]"}
                             value={this.props.desc}
