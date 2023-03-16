@@ -55,6 +55,12 @@ export class Home extends Component<any, HomeState> {
                     icon: faChartPie,
                     link: "/abc-analysis",
                     maintenance: true
+                },
+                {
+                    name: "Persona Analyse",
+                    icon: faChartPie,
+                    link: "/persona-analysis",
+                    maintenance: false
                 }
             ]
         }
