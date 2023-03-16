@@ -2,7 +2,7 @@ import React, {Component, FormEvent} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
 import {faArrowLeft, faPencilAlt, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
-import {Button, Col, Form, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Form, Modal, Row} from "react-bootstrap";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {deleteUser, UpdateData, updateUser} from "../../../general-components/API/calls/User";
@@ -20,6 +20,11 @@ import FAE from "../../../general-components/Icons/FAE";
 import {ModalCloseable} from "../../../general-components/Modal/ModalCloseable";
 import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
 import {ButtonPanel} from "../../../general-components/ButtonPanel/ButtonPanel";
+import {getLastOpenedSaves} from "../../../general-components/API/calls/Saves";
+import {SimpleSaveResource} from "../../../general-components/Datastructures";
+import {Tools} from "../home/Home";
+import {getSaveURL} from "../../../general-components/Save";
+import {Link} from "react-router-dom";
 
 
 export interface MyProfileState {
@@ -30,6 +35,7 @@ export interface MyProfileState {
     passwordNotMatching?: boolean
     isSaving: boolean
     isSaved?: boolean
+    lastOpenedSaves?: SimpleSaveResource[]
 }
 
 export class MyProfileComponent extends Component<any, MyProfileState> {
@@ -51,6 +57,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             showDeleteModal: false,
             passwordFieldTouched: false,
             isSaving: false,
+            lastOpenedSaves: undefined
         }
     }
 
@@ -96,7 +103,6 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
     saveChanges = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-
         this.setState({
             isSaving: true
         });
@@ -112,7 +118,6 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         let needs_update = new_email !== undefined || new_username !== undefined || new_password.length > 0;
 
         if (needs_update) {
-
             let data: UpdateData = {
                 current_password: current_password,
                 email: new_email,
@@ -176,6 +181,14 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         Messages.add("Ihr Konto wurde gelöscht!", "SUCCESS", 7000);
 
         reload_app();
+    }
+
+    getLastOpenedSaves = async () => {
+        let call = await getLastOpenedSaves();
+
+        this.setState({
+            lastOpenedSaves: call?.callData.data
+        });
     }
 
     render() {
@@ -275,20 +288,89 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                     <div>
                         <hr/>
 
-                        <h5>Überblick Analysen</h5>
-                        <Row>
-                            <Col>
-                                Eigene Analysen <br/>
-                                {this.context.user?.getOwnedSavesAmount()}
-                            </Col>
-                            <Col>
-                                Geteilte Analysen <br/>
-                                {this.context.user?.getSharedSavesAmount()}
-                            </Col>
-                        </Row>
+                        <Card>
+                            <Card.Header>
+                                <h5 className={"mt-2 mb-2"}>Überblick Analysen</h5>
+                            </Card.Header>
+                            <Card.Body>
+                                <Row>
+                                    <Col lg={8}>
+                                        <div>
+                                            <h5>Zuletzt geöffnet</h5>
+
+                                            <hr/>
+
+                                            <Loader size={70} payload={[this.getLastOpenedSaves]} variant={"auto"}
+                                                    alignment={"center"} transparent>
+                                                <Row>
+                                                    {(this.state.lastOpenedSaves !== undefined && this.state.lastOpenedSaves?.map((save, index) => {
+                                                        let tool = Tools.find((v) => v.id === save.tool_id);
+                                                        let lastOpened = new Date(save.last_opened);
+                                                        let timeString = `${lastOpened.toLocaleDateString()}, ${lastOpened.toLocaleTimeString().split(":").slice(0, 2).join(":")} Uhr`;
+
+                                                        if (tool === undefined)
+                                                            return;
+
+                                                        return (
+                                                            <Col key={"lo-save-" + save.id + "-" + index} lg={6}>
+                                                                <Card as={Link} to={getSaveURL(save.id, tool.id)} body
+                                                                      className={"last-opened-save mb-1"}>
+                                                                    <Row>
+                                                                        <Col xs={"auto"} title={tool.name}>
+                                                                            <FAE icon={tool.icon}/>
+                                                                        </Col>
+                                                                        <Col>
+                                                                            {save.name}
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <Row>
+                                                                        <Col>
+                                                                            <small className={"text-muted"}>
+                                                                                {timeString}
+                                                                            </small>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Card>
+                                                            </Col>
+                                                        );
+                                                    }))}
+                                                </Row>
+                                            </Loader>
+                                        </div>
+                                    </Col>
+                                    <Col lg={4}>
+                                        <div>
+                                            <h5>Statistiken</h5>
+
+                                            <hr/>
+
+                                            <Row>
+                                                <Col xs={"auto"}>
+                                                    <Badge bg={"dark"} pill>
+                                                        {this.context.user?.getOwnedSavesAmount()}
+                                                    </Badge>
+                                                </Col>
+                                                <Col>
+                                                    Anzahl eigener Analysen
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col xs={"auto"}>
+                                                    <Badge bg={"dark"} pill>
+                                                        {this.context.user?.getSharedSavesAmount()}
+                                                    </Badge>
+                                                </Col>
+                                                <Col>
+                                                    Anzahl geteilter Analysen
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Card.Body>
+                        </Card>
                         <hr/>
                     </div>
-
                 )}
 
                 {(this.state.isSaved !== undefined && this.state.isSaved) && (

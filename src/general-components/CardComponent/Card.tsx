@@ -164,7 +164,8 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                     />
                     {
                         ((!this.props.disabled) && this.props.onDelete !== undefined) ? (
-                            <Button className={"noButton"} onClick={this.onDelete} tabIndex={(this.props.index * 3) + 3} variant={"link"}>
+                            <Button className={"noButton"} onClick={this.onDelete} tabIndex={(this.props.index * 3) + 3}
+                                    variant={"link"}>
                                 <FAE icon={faTimes}/>
                             </Button>
                         ) : undefined

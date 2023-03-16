@@ -16,6 +16,7 @@ nav {
 /* TODO: temporary fix, change this so the bootstrap implementation works */
 .light .dropdown-item:hover, .light .dropdown-item.active, .dark .dropdown-item:hover, .dark .dropdown-item.active {
   color: var(--bs-dropdown-link-hover-color) !important;
+
   svg {
     color: var(--bs-dropdown-link-hover-color) !important;
   }

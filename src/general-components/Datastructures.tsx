@@ -76,6 +76,10 @@ export type SimpleSaveResource = {
      */
     locked_by: number
     /**
+     * Wann der Speicherstand zuletzt geöffnet wurde
+     */
+    last_opened: string
+    /**
      * Der Name des Speicherstands
      */
     name: string

@@ -90,6 +90,16 @@ const getSave = async <D extends unknown>(saveID: number, apiArgs?: APIArgs) => 
 }
 
 /**
+ * Holt sich die 5 zuletzt geöffneten Speicherstände
+ *
+ * @param {APIArgs} apiArgs
+ * @returns {Promise<CallInterface<object> | null>}
+ */
+const getLastOpenedSaves = async (apiArgs?: APIArgs) => {
+    return await callAPI<{ data: SimpleSaveResource[] }>("api/saves/index/last", "GET", undefined, true, apiArgs);
+}
+
+/**
  * Löscht den Save mit der angegebenen ID
  *
  * @param saveID Die ID des Speicherstandes
@@ -176,6 +186,7 @@ const createSave = async <D extends unknown>(data: FormData, apiArgs?: APIArgs) 
 export {
     getSaves,
     getSave,
+    getLastOpenedSaves,
     deleteSave,
     updateSave,
     broadcastSavePatches,

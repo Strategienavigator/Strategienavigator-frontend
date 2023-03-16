@@ -1,4 +1,5 @@
 import {SharedSavePermission} from "./Datastructures";
+import {Tools} from "../components/platform/home/Home";
 
 
 /**
@@ -9,26 +10,13 @@ import {SharedSavePermission} from "./Datastructures";
  * @returns {string} URL zum Speicherstand
  */
 const getSaveURL = (saveID: number, toolID: number) => {
-    let loc = "";
-    switch (toolID) {
-        case 1:
-            loc += "/utility-analysis/";
+    let loc = "/";
+
+    for (const tool of Tools) {
+        if (tool.id === toolID) {
+            loc = tool.link + "/"
             break;
-        case 2:
-            loc += "/swot-analysis/";
-            break;
-        case 3:
-            loc += "/pairwise-comparison/";
-            break;
-        case 4:
-            loc += "/portfolio-analysis/";
-            break;
-        case 5:
-            loc += "/abc-analysis/";
-            break;
-        default:
-            loc = "/";
-            break;
+        }
     }
 
     if (loc !== "/") {

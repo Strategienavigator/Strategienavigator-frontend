@@ -18,55 +18,51 @@ interface HomeState {
     }[]
 }
 
-export class Home extends Component<any, HomeState> {
-    private readonly items;
-
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            tools: [
-                {
-                    name: "SWOT Analyse",
-                    icon: faThLarge,
-                    link: "/swot-analysis",
-                    maintenance: false
-                },
-                {
-                    name: "Paarweiser Vergleich",
-                    icon: faSortAmountDownAlt,
-                    link: "/pairwise-comparison",
-                    maintenance: false
-                },
-                {
-                    name: "Nutzwertanalyse",
-                    icon: faBorderAll,
-                    link: "/utility-analysis",
-                    maintenance: false
-                },
-                {
-                    name: "Portfolio Analyse",
-                    icon: faArrowsAlt,
-                    link: "/portfolio-analysis",
-                    maintenance: false
-                },
-                {
-                    name: "ABC Analyse",
-                    icon: faChartPie,
-                    link: "/abc-analysis",
-                    maintenance: true
-                }
-            ]
-        }
-
-        this.items = this.state.tools;
+export const Tools = [
+    {
+        id: 2,
+        name: "SWOT Analyse",
+        icon: faThLarge,
+        link: "/swot-analysis",
+        maintenance: false
+    },
+    {
+        id: 3,
+        name: "Paarweiser Vergleich",
+        icon: faSortAmountDownAlt,
+        link: "/pairwise-comparison",
+        maintenance: false
+    },
+    {
+        id: 1,
+        name: "Nutzwertanalyse",
+        icon: faBorderAll,
+        link: "/utility-analysis",
+        maintenance: false
+    },
+    {
+        id: 4,
+        name: "Portfolio Analyse",
+        icon: faArrowsAlt,
+        link: "/portfolio-analysis",
+        maintenance: false
+    },
+    {
+        id: 5,
+        name: "ABC Analyse",
+        icon: faChartPie,
+        link: "/abc-analysis",
+        maintenance: true
     }
+];
+
+export class Home extends Component<any, HomeState> {
 
     render() {
         return (
             <div className={"container"}>
                 <Row className={"tools"}>
-                    {(this.state.tools.map(value => {
+                    {(Tools.map(value => {
                         let classes = ["tool"];
                         let title = value.name;
 
