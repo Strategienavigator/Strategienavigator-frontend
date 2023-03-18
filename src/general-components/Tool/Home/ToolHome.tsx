@@ -88,7 +88,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 deleted: false
             });
         });
-
+        console.log('paginationLoader',this.paginationLoader)
         this.state = {
             showDeleteModal: false,
             showTutorial: false,
@@ -149,10 +149,8 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     render = () => {
         let title = this.props.tool.getToolName();
-<<<<<<< Updated upstream
+        console.log(this.state.saves)
 
-=======
->>>>>>> Stashed changes
         return (
             <div className={"toolHome"}>
                 <h4>

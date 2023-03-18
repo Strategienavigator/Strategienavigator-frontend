@@ -11,6 +11,7 @@ import {isDesktop} from "../../../../general-components/Desktop";
 class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
 
     getAction(actions: any, first: string, second: any): AlternateAction | null {
+        console.log(1)
         for (const action of actions) {
             let name = action.name;
             if (name === first + "-" + second) {
@@ -36,10 +37,10 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
     }
 
     render() {
+        
         let data = this.getData() as SWOTAnalysisValues;
         let factors = data["swot-factors"]?.factors;
         let actions = data["alternative-actions"]?.actions;
-
         if (data && factors && actions) {
 
             //Hier entstehen die Punkte für die Chancen

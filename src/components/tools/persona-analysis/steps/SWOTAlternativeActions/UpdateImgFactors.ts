@@ -2,7 +2,6 @@
 import {
     StepDataHandler,
     StepDefinition,
-
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {PersonaAnalysisValues} from "../../PersonaAnalysis";
 import {UpdateImgActionsValues , UploadImgInfoValues} from "../../steps/SWOTAlternativeActions/UpdateImgActionsValuesComponent";
@@ -81,7 +80,6 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
         d.factors.alter = ""
         d.factors.profibild = ""
         data["uploadImage_actions"] = d;
-
         return data;
     }
 
@@ -94,4 +92,3 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
 
 
 }
-

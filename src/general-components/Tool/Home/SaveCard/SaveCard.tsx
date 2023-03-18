@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import {Button, Card} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faUser} from "@fortawesome/free-solid-svg-icons";
 import {SimpleSaveResource} from "../../../Datastructures";
 import FAE from "../../../Icons/FAE";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons/";
@@ -32,6 +33,11 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             if (isDeleting)
                 classes.push("disabled");
 
+            let tool_id = this.props.save.tool_id;
+            let isPersona = (tool_id ===5)
+            let saveToSend = this.props.save
+            
+            
             let formattedCreatedDate = new Date(this.props.save.created_at).toLocaleDateString("de-DE");
 
             return (
@@ -56,7 +62,7 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                 </Card.Body>
                             </Card>
 
-                            <ButtonPanel buttonPerCol={2}>
+                            <ButtonPanel buttonPerCol={3}>
                                 {(isDeleting) && (
                                     <Button disabled variant={"danger"} className={"deleting"}>
                                         Inhaber löscht aktuell sein Konto!
@@ -72,12 +78,23 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                         <FAE icon={faUserPlus}/>
                                     </Button>
                                 )}
+                                  {( isPersona ) && (
+                                    <Link to={{ 
+                                        pathname :"persona/" + this.props.save!.id,
+                                        state : saveToSend
+                                        }}>
+                                    <Button  variant={"danger"} className={"personaPdf"} >
+                                        <FAE icon={faUser}/>
+                                    </Button>
+                                    </Link>
+                                )}
                                 {(hasPermission(context.permission, DeleteSavePermission) && !!this.props.onTrash && !isDeleting) && (
                                     <Button type={"button"} variant={"danger"} className={"deleteSave"}
                                             onClick={this.props.onTrash}>
                                         <FAE icon={faTrash}/>
                                     </Button>
                                 )}
+                              
                             </ButtonPanel>
                         </div>
                     )}
@@ -99,9 +116,16 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             </div>
         )
     }
-<<<<<<< Updated upstream
-=======
-   
 
->>>>>>> Stashed changes
+
+
+   
+    onPersona = (save: number) =>  {
+        return (e : any)=>{
+            console.log(e);
+            
+            console.log(save);
+        }
+    }
+
 }
