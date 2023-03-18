@@ -1,0 +1,480 @@
+{
+  "swot-factors": {
+    "factors": {
+      "chances": [
+        {
+          "id": "1",
+          "name": "Produkt ist im Trend",
+          "desc": "Trend"
+        },
+        {
+          "id": "2",
+          "name": "Produkt wird auch in anderen Ländern beliebter",
+          "desc": "anderen Ländern beliebter"
+        }
+      ],
+      "strengths": [
+        {
+          "id": "A",
+          "name": "Motivierte Mitarbeiter mit viel Know How",
+          "desc": "Motivierte Mitarbeiter"
+        },
+        {
+          "id": "B",
+          "name": "Erfolgreiche Marketingkampagnen",
+          "desc": "Marketingkampagnen"
+        }
+      ],
+      "weaknesses": [
+        {
+          "id": "a",
+          "name": "Hohe Personalkosten",
+          "desc": "Personalkosten "
+        },
+        {
+          "id": "b",
+          "name": "Produkte wenig nachhaltig",
+          "desc": "nachhaltig"
+        }
+      ],
+      "risks": [
+        {
+          "id": "I",
+          "name": "Kunden achten stark auf Nachhaltigkeit",
+          "desc": "Nachhaltigkeit"
+        },
+        {
+          "id": "II",
+          "name": "Neue Konkurrenz aus dem Ausland",
+          "desc": "dem Ausland"
+        }
+      ]
+    }
+  },
+  "alternative-actions": {
+    "actions": [
+      {
+        "name": "A-1",
+        "hasNone": true,
+        "alternatives": [
+        ]
+      },
+      {
+        "name": "A-2",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Kalýves Polygýrou",
+            "desc": "Ukraine"
+          },
+          {
+            "id": null,
+            "name": "San Francisco",
+            "desc": "Hungary"
+          }
+        ]
+      },
+      {
+        "name": "A-I",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Huicheng",
+            "desc": "Russia"
+          },
+          {
+            "id": null,
+            "name": "Barroso",
+            "desc": "New Zealand"
+          }
+        ]
+      },
+      {
+        "name": "A-II",
+        "hasNone": true,
+        "alternatives": [
+        ]
+      },
+      {
+        "name": "B-1",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Cirumput",
+            "desc": "France"
+          },
+          {
+            "id": null,
+            "name": "Fond du Sac",
+            "desc": "Brazil"
+          }
+        ]
+      },
+      {
+        "name": "B-2",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Poções",
+            "desc": "Cyprus"
+          },
+          {
+            "id": null,
+            "name": "Jiamiao",
+            "desc": "China"
+          }
+        ]
+      },
+      {
+        "name": "B-I",
+        "hasNone": true,
+        "alternatives": [
+        ]
+      },
+      {
+        "name": "B-II",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Huayllabamba",
+            "desc": "Indonesia"
+          },
+          {
+            "id": null,
+            "name": "Talangbetutu",
+            "desc": "Mexico"
+          }
+        ]
+      },
+      {
+        "name": "a-1",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Paris 07",
+            "desc": "Thailand"
+          },
+          {
+            "id": null,
+            "name": "Shahr-e Şafā",
+            "desc": "Ukraine"
+          }
+        ]
+      },
+      {
+        "name": "a-2",
+        "hasNone": true,
+        "alternatives": [
+        ]
+      },
+      {
+        "name": "a-I",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Popayán",
+            "desc": "Kuwait"
+          },
+          {
+            "id": null,
+            "name": "Taiping",
+            "desc": "Indonesia"
+          }
+        ]
+      },
+      {
+        "name": "a-II",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Mengeš",
+            "desc": "China"
+          },
+          {
+            "id": null,
+            "name": "Tarbes",
+            "desc": "Russia"
+          }
+        ]
+      },
+      {
+        "name": "b-1",
+        "hasNone": true,
+        "alternatives": [
+        ]
+      },
+      {
+        "name": "b-2",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Baru",
+            "desc": "Russia"
+          },
+          {
+            "id": null,
+            "name": "Changle",
+            "desc": "East Timor"
+          }
+        ]
+      },
+      {
+        "name": "b-I",
+        "hasNone": false,
+        "alternatives": [
+          {
+            "id": null,
+            "name": "Privas",
+            "desc": "Denmark"
+          },
+          {
+            "id": null,
+            "name": "Aso",
+            "desc": "Russia"
+          }
+        ]
+      },
+      {
+        "name": "b-II",
+        "hasNone": true,
+        "alternatives": [
+        ]
+      }
+    ]
+  },
+  "swot-classify-alternate-actions": {
+    "actions": [
+      {
+        "indexName": "A-2-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "A-2",
+        "action": {
+          "id": null,
+          "name": "Kalýves Polygýrou",
+          "desc": "Ukraine"
+        }
+      },
+      {
+        "indexName": "A-2-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "A-2",
+        "action": {
+          "id": null,
+          "name": "San Francisco",
+          "desc": "Hungary"
+        }
+      },
+      {
+        "indexName": "A-I-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "A-I",
+        "action": {
+          "id": null,
+          "name": "Huicheng",
+          "desc": "Russia"
+        }
+      },
+      {
+        "indexName": "A-I-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "A-I",
+        "action": {
+          "id": null,
+          "name": "Barroso",
+          "desc": "New Zealand"
+        }
+      },
+      {
+        "indexName": "B-1-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "B-1",
+        "action": {
+          "id": null,
+          "name": "Cirumput",
+          "desc": "France"
+        }
+      },
+      {
+        "indexName": "B-1-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "B-1",
+        "action": {
+          "id": null,
+          "name": "Fond du Sac",
+          "desc": "Brazil"
+        }
+      },
+      {
+        "indexName": "B-2-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "B-2",
+        "action": {
+          "id": null,
+          "name": "Poções",
+          "desc": "Cyprus"
+        }
+      },
+      {
+        "indexName": "B-2-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "B-2",
+        "action": {
+          "id": null,
+          "name": "Jiamiao",
+          "desc": "China"
+        }
+      },
+      {
+        "indexName": "B-II-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "B-II",
+        "action": {
+          "id": null,
+          "name": "Huayllabamba",
+          "desc": "Indonesia"
+        }
+      },
+      {
+        "indexName": "B-II-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "B-II",
+        "action": {
+          "id": null,
+          "name": "Talangbetutu",
+          "desc": "Mexico"
+        }
+      },
+      {
+        "indexName": "a-1-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "a-1",
+        "action": {
+          "id": null,
+          "name": "Paris 07",
+          "desc": "Thailand"
+        }
+      },
+      {
+        "indexName": "a-1-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "a-1",
+        "action": {
+          "id": null,
+          "name": "Shahr-e Şafā",
+          "desc": "Ukraine"
+        }
+      },
+      {
+        "indexName": "a-I-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "a-I",
+        "action": {
+          "id": null,
+          "name": "Popayán",
+          "desc": "Kuwait"
+        }
+      },
+      {
+        "indexName": "a-I-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "a-I",
+        "action": {
+          "id": null,
+          "name": "Taiping",
+          "desc": "Indonesia"
+        }
+      },
+      {
+        "indexName": "a-II-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "a-II",
+        "action": {
+          "id": null,
+          "name": "Mengeš",
+          "desc": "China"
+        }
+      },
+      {
+        "indexName": "a-II-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "a-II",
+        "action": {
+          "id": null,
+          "name": "Tarbes",
+          "desc": "Russia"
+        }
+      },
+      {
+        "indexName": "b-2-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "b-2",
+        "action": {
+          "id": null,
+          "name": "Baru",
+          "desc": "Russia"
+        }
+      },
+      {
+        "indexName": "b-2-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "b-2",
+        "action": {
+          "id": null,
+          "name": "Changle",
+          "desc": "East Timor"
+        }
+      },
+      {
+        "indexName": "b-I-0",
+        "index": 0,
+        "alreadyAdded": false,
+        "name": "b-I",
+        "action": {
+          "id": null,
+          "name": "Privas",
+          "desc": "Denmark"
+        }
+      },
+      {
+        "indexName": "b-I-1",
+        "index": 1,
+        "alreadyAdded": false,
+        "name": "b-I",
+        "action": {
+          "id": null,
+          "name": "Aso",
+          "desc": "Russia"
+        }
+      }
+    ],
+    "classifications": [
+    ]
+  }
+}
