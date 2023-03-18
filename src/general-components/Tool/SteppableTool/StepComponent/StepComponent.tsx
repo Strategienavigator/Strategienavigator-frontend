@@ -414,7 +414,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private hasNextStep(): boolean {
         let newStepIndex = this.state.currentStep + 1;
-
+        console.log('newStepIndex',newStepIndex)
         if (newStepIndex < this.props.steps.length) {
             let newStep = this.props.steps[newStepIndex];
             return this.withData(newStep.dataHandler.isUnlocked);

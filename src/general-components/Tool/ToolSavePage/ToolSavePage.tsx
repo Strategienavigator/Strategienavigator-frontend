@@ -324,7 +324,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             });
             // saveData.append("tool_id", String(save.tool_id)); no need to send tool_id because it is immutable
             const call = await updateSave(this.state.save!, {errorCallback: this.onAPIError});
-
+            console.log('this.state',this.state)
             this.setState({
                 isSaving: false
             });

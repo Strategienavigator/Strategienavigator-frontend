@@ -149,7 +149,10 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     render = () => {
         let title = this.props.tool.getToolName();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         return (
             <div className={"toolHome"}>
                 <h4>

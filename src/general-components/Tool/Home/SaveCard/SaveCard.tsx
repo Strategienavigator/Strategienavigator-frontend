@@ -99,4 +99,9 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             </div>
         )
     }
+<<<<<<< Updated upstream
+=======
+   
+
+>>>>>>> Stashed changes
 }
