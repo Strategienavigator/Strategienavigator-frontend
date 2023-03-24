@@ -1,0 +1,107 @@
+
+.getBorder{
+  border: none;
+  width: 1200px;
+  height: 700px;
+  position: absolute;
+  right: 730px;
+  padding-left: 60px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+.childBox{
+  border: 2px solid #A6AAA9;
+  // width: 100px;
+  height: 100px;
+  margin-right: 5px;
+  height: 302px;
+}
+.langBox{
+  height: 630px;
+  
+}
+ .untenChild{
+ position: relative;
+ top: 26px;
+ border: 0px solid none;
+}
+.withoutBorder{
+  border:0px solid white !important;
+}
+.descriptBox{
+position: relative;
+top: 10px;
+height: 200px;
+width: 530px !important;
+}
+#titel{
+  font-weight: 600;
+ position: relative;
+ right: 260px;
+ bottom: 10px;
+}
+
+#personaBild{
+width: 200px;
+height: 250px;
+margin:20px 0 20px 28px;
+}
+.vollname{
+  font-size: 34px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.baseInfoItem{
+  font-size: 20px;
+  text-align: center;
+  font-weight: 400;
+  color: #247BCD;
+}
+ .head {
+  
+word-wrap:break-word; 
+word-break:break-all;
+font-weight: 600;
+margin-bottom: 20px;
+font-size: 18px;
+// position: absolute;
+// top: 10px;
+// right: 20px;
+text-align: right;
+}
+.text{
+  color: #247BCD;
+  text-align: left;
+  overflow:auto;
+}
+.icons{
+  font-size: 40px;
+  margin:5px 0 0  0;
+  color: #A6AAA9 !important;
+ display: inline-block;
+//  margin-bottom: 30px;
+  
+}
+.zitatZiel{
+  margin-right: 80px;
+
+}
+.hobby{
+  margin-right: 20px;
+
+}
+.station{
+  margin-right: 20px;
+}
+.prob{
+  margin-right: 40px;
+
+}
+.motiv{
+  margin-right: 150px;
+}
+.extra{
+  margin-right: 80px;
+}
