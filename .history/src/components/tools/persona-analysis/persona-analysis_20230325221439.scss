@@ -1,0 +1,22 @@
+@import "/src/themes.scss";
+
+
+
+.dragClone .actionCard {
+  transform: rotate(3deg);
+}
+
+.dragClone .card-body {
+  padding: 0.25rem 0.75rem;
+}
+
+.alternative-actions {
+  .progressBar .progress-bar {
+    @include theme() {
+      background-color: get("style-color");
+    }
+  }
+}
+.getBorder{
+  border: 2px solid black;
+}

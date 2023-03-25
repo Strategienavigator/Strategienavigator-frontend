@@ -1,0 +1,116 @@
+@import "/src/themes.scss";
+
+#swot-factors2 .accordion-body {
+  @include theme() {
+    background-color: get("bg-color");
+  }
+}
+
+#swot-classify-alternate-actions {
+  .card .card-body {
+    padding: 0.25rem 0.75rem;
+  }
+
+  .FormControl {
+    margin: 0 0 10px;
+  }
+
+  .xButton:hover {
+    background-color: darken(white, 10%);
+  }
+
+  .addClassification {
+    margin: 10px 0;
+    width: 100%;
+
+    * {
+      color: white;
+    }
+  }
+
+  .classification .dropzone {
+    width: 100%;
+    min-height: 41px;
+    overflow-x: auto;
+    border: 2px dashed #b4b4b4;
+    padding: 0.5rem;
+    margin-top: 5px;
+  }
+
+  .classification .dropzone.isDraggingOver {
+    background-color: darken(#e6e6e6, 10%);
+    border-color: darken(#b4b4b4, 13%);
+  }
+
+  .classification .dropzone {
+    margin-right: 5px;
+  }
+
+  .actions {
+    margin: 0.75rem 0;
+
+    .withoutClassification {
+      font-weight: 700;
+    }
+  }
+
+  .actionRow {
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    flex-wrap: wrap;
+
+    .actionCol {
+      flex: max-content 0 0;
+      padding: 0 0.15rem;
+      max-width: max-content;
+      min-width: max-content;
+      margin: 0.15rem 0;
+    }
+
+    .actionCol .displayAction {
+      flex-wrap: nowrap;
+    }
+
+    .actionCol .displayAction > * {
+      flex: auto 0 0;
+      width: auto;
+      min-width: max-content;
+    }
+
+    .displayAction .displayAction .text {
+      * {
+        white-space: nowrap
+      }
+
+      white-space: nowrap
+    }
+
+    .actionCol .displayAction .icon {
+      text-align: center;
+    }
+
+    .actionCol.notDragging {
+      transform: none !important;
+    }
+  }
+}
+
+.dragClone .actionCard {
+  transform: rotate(3deg);
+}
+
+.dragClone .card-body {
+  padding: 0.25rem 0.75rem;
+}
+
+.alternative-actions {
+  .progressBar .progress-bar {
+    @include theme() {
+      background-color: get("style-color");
+    }
+  }
+}
+.getBorder{
+  border: 2px solid black;
+}
