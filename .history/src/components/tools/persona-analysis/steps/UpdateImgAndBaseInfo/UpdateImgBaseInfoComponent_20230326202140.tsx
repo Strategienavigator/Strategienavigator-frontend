@@ -34,6 +34,13 @@ export interface UploadImgInfoValues {
 
 export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues, UploadImgsState> {
 
+    // private nameChanged = this.applyProfibildInfoChanges.bind(this, "name");
+    // private vornameChanged = this.applyProfibildInfoChanges.bind(this, "vorname");
+    // private alterChanged=this.applyProfibildInfoChanges.bind(this, "alter");
+    // private imgChanged=this.applyProfibildInfoChanges.bind(this, "profibild");
+
+
+
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
     }
@@ -109,7 +116,7 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
             );
         }
 
-        //This is a 404 error
+        //这是404报错
         showErrorPage(404);
         return <p>"ERROR"</p>;
     }
@@ -145,4 +152,33 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
             }
         })
     }
+
+
+    // 传值存在问题
+    // private applyProfibildInfoChanges(type: String , values: any) {
+
+    //     this.props.saveController.onChanged(save => {
+    //         const data = save.data["uploadImage_actions"];
+           
+    //         if (data !== undefined) {
+                
+    //             switch (type) {
+    //                 case "name":
+    //                     data.factors.name = 'update';
+    //                     break;
+    //                 case "vorname":
+    //                     data.factors.vorname = 'update';
+    //                     break;
+    //                 case "alter":
+    //                     data.factors.alter = 'update';
+    //                     break;
+    //                 case "profibild":
+    //                      data.factors.profibild = 'update';
+    //                     break;
+                    
+    //             }
+    //         } 
+    //     });
+    // }
+
 }

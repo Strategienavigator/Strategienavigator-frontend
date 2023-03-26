@@ -96,6 +96,10 @@ export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, St
         return data['uploadImage_actions']?.factors.name !== undefined&&data['uploadImage_actions']?.factors.vorname !== undefined && data['uploadImage_actions']?.factors.name.length > 0 && data['uploadImage_actions']?.factors.vorname.length > 0;
     }
 
+    // isUnlocked(data: PersonaAnalysisValues): boolean {
+    //     return true;
+    // }
+
     // Fill in the initialized value
    fillFromPreviousValues   (data: PersonaAnalysisValues): PersonaAnalysisValues { 
         return this.deleteData(data);

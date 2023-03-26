@@ -96,12 +96,17 @@ export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, St
         return data['uploadImage_actions']?.factors.name !== undefined&&data['uploadImage_actions']?.factors.vorname !== undefined && data['uploadImage_actions']?.factors.name.length > 0 && data['uploadImage_actions']?.factors.vorname.length > 0;
     }
 
-    // Fill in the initialized value
+    // isUnlocked(data: PersonaAnalysisValues): boolean {
+    //     return true;
+    // }
+
+    // 填充初始化的值
    fillFromPreviousValues   (data: PersonaAnalysisValues): PersonaAnalysisValues { 
         return this.deleteData(data);
     }
 
-    // clear the value
+    
+    // 把值清空
     deleteData(data: PersonaAnalysisValues): PersonaAnalysisValues {
        
         let d = PersonaFactors.requireData(data);

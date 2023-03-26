@@ -34,6 +34,7 @@ export class PersonaShow implements StepDefinition<PersonaAnalysisValues>, StepD
         return flag1 && flag2;
     };
 
+
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => this.deleteData(data);
 
     deleteData(data: PersonaAnalysisValues): PersonaAnalysisValues {

@@ -6,7 +6,8 @@ import * as t from "ts-interface-checker";
 
 export const PersonaAnalysisValues = t.iface([], {
     "persona-factors": "PersonaFactorsValues",
-    "uploadImage_actions":t.opt("UpdateImgValues")
+    "uploadImage_actions":t.opt("UpdateImgValues"),
+    "persona-factors2": "PersonaFactorsValues2"
 });
 
 const PersonaAnalysis_ts: t.ITypeSuite = {

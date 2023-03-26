@@ -7,6 +7,7 @@ import {Col, Row} from "react-bootstrap";
 import {isDesktop} from "../../../../../general-components/Desktop";
 import {faSignInAlt, faHospital,faBullseye,faBug,faCoffee,faCoins,faBook,faGrinHearts} from "@fortawesome/free-solid-svg-icons/";
 import FAE from "../../../../../general-components/Icons/FAE";
+import  "./show.scss"
 
 export interface PersonaShowValues {
 
@@ -172,7 +173,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                 </Col>
                         </Row>
                
-                  </div>
+               </div>
             </div>
     }
 }

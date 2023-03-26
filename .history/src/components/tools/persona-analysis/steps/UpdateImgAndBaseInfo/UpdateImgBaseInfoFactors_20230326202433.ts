@@ -46,7 +46,9 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
    // Determine whether the previous page is completed, this method is used to mark whether this page is unlocked
     isUnlocked = (data: PersonaAnalysisValues): boolean =>    true;
     
-    // Initialized value
+
+
+    // 初始化的值
     fillFromPreviousValues = (data: PersonaAnalysisValues) => {
         let analysisValues = data["uploadImage_actions"];
         if (analysisValues === undefined) {
@@ -64,6 +66,8 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
    
        
     };
+
+
 
     deleteData(data: PersonaAnalysisValues): PersonaAnalysisValues {
         
