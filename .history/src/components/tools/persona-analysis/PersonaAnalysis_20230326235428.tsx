@@ -21,7 +21,7 @@ interface PersonaAnalysisValues {
 class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
 
     constructor(props: RouteComponentProps<{ id: string }>, context: any) {
-        super(props, context, "Persona", faThLarge, 6);
+        super(props, context, "Persona", faThLarge, 1);
 
                 this.addExporter(new JSONExporter());
                 this.addStep(new ImgFactors());
