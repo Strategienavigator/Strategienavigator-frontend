@@ -45,7 +45,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
             return <div >{"• "+b.name}{b.desc}</div>  
         })     
         let baseInfoName =  this.props.save.data['uploadImage_actions']?.factors.surname+", "+this.props.save.data['uploadImage_actions']?.factors.name
-        let baseInfoAlter=  this.props.save.data['uploadImage_actions']?.factors.age==''?'':+" Jahre Alt,"
+        let baseInfoAlter=  this.props.save.data['uploadImage_actions']?.factors.age==''?'':+" Jahre Alt"
         let baseInfoImg=this.props.save.data['uploadImage_actions']?.factors.avatar
         let imgSrc=baseInfoImg==""||baseInfoImg==undefined?"https://img95.699pic.com/xsj/0v/4e/fx.jpg!/fh/300":baseInfoImg
 
@@ -55,7 +55,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                         <Row>
                             <Col className={"childBox langBox"} sm={{span:2,offset:0}}>
                                 <div className={"head"}>
-                                <FAE className={"icons zitatZiel"} icon={faBook}/>Zitat<br/>
+                                <FAE className={"icons zitatZiel"} icon={faBook}/>Zitat
                                 </div>
                                 <div className={"text"}>
                                 { zitat }
@@ -65,7 +65,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                 <Row>
                                 <Col className={"childBox"} sm={{span:14,offset:0}}>
                                     <div className={"head"}>
-                                    <FAE className={"icons hobby"} icon={faCoffee}/> Interessen<br/>/Hobbys<br/>
+                                    <FAE className={"icons hobby"} icon={faCoffee}/> Interessen<br/>/Hobbys
                                     </div>
                                     <div className={"text"}>
                                         { hobiese }
@@ -76,7 +76,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                 <Row className={"untenChild"}>
                                 <Col className={"childBox"} sm={{span:14,offset:0}}>
                                     <div className={"head"}>
-                                    <FAE className={"icons"} icon={faCoins}/>  Verschiedenes<br/>
+                                    <FAE className={"icons"} icon={faCoins}/>  Verschiedenes
                                     </div>
                                     <div className={"text"}>
                                         { qualifikation}
@@ -91,7 +91,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                     <Col>{baseInfoName}</Col>
                                 </Row>
                                 <Row className={"baseInfoItem"}>
-                                <Col>{baseInfoAlter}</Col> 
+                                <Col>{baseInfoAlter},</Col> 
                                 </Row>
                             
                                 <Row className={"baseInfoItem"}>
@@ -119,8 +119,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                 <Row>
                                 <Col className={"childBox"} sm={{span:14,offset:0}}>
                                     <div className={"head"}>
-                                    <FAE className={"icons zitatZiel"} icon={faBullseye}/>Ziele<br/>/Wünsche<br/>
-                                    
+                                    <FAE className={"icons zitatZiel"} icon={faBullseye}/>Ziele<br/>/Wünsche
                                     </div>
                                     <div className={"text"}>
                                         { motivation }
@@ -131,7 +130,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                 <Row className={"untenChild"}>
                                 <Col className={"childBox"} sm={{span:14,offset:0}}>
                                     <div className={"head"}>
-                                    <FAE className={"icons prob"} icon={faBug}/>Probleme<br/>
+                                    <FAE className={"icons prob"} icon={faBug}/>Probleme
                                     </div>
                                     <div className={"text"}>
                                         {bedürfnisse}
@@ -142,7 +141,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                             </Col>
                             <Col className={"childBox langBox"} sm={{span:2,offset:0}}>
                                     <div className={"head"}>
-                                    <FAE className={"icons station"} icon={faHospital}/> Auf Station,<br/> weil…<br/>
+                                    <FAE className={"icons station"} icon={faHospital}/> Auf Station,<br/> weil…
                                     </div>
                                     <div className={"text"}>
                                         { art_der_Erkrankung  }
@@ -155,7 +154,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                 <Col className={"childBox descriptBox"} sm={{span:8,offset:0}} >
                                     <div className={"head"}>
                                     <FAE className={"icons motiv"} icon={faGrinHearts}/> Welches ist das dominierende Motiv?<br/>
-                                    Wie lässt sich dies erklären?<br/>   
+                                    Wie lässt sich dies erklären?    
                                     </div>
                                     <div className={"text"}>
                                         { zitat }
@@ -165,7 +164,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                     <div className={"head"}>
                                     <FAE className={"icons extra"} icon={faSignInAlt}/>Wie lässt sich die Persona
                                     in ein / zwei Sätzen,<br/>
-                                    ein/ zwei Schlagworten beschreiben?<br/>    
+                                    ein/ zwei Schlagworten beschreiben?    
                                     </div>
                                     <div className={"text"}>
                                         {charaktereigenschaften}

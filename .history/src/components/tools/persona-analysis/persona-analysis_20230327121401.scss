@@ -58,15 +58,14 @@ overflow-x: hidden;
 }
 .childBox{
   border: 2px solid #A6AAA9;
-  overflow: auto;
-  overflow-x: hidden;
+  // width: 100px;
   height: 100px;
   margin-right: 5px;
   height: 302px;
-  word-break: break-all;
 }
 .langBox{
   height: 630px;
+  
 }
  .untenChild{
  position: relative;
@@ -111,9 +110,6 @@ margin:20px 0 20px 28px;
   text-align: center;
   font-weight: 400;
   color: #247BCD;
-  overflow: auto;
-  overflow-x: hidden;
-
 }
  .head {
   
@@ -130,10 +126,7 @@ text-align: right;
 .text{
   color: #247BCD;
   text-align: left;
-  table-layout:fixed; 
-  word-break:break-all;
-   overflow:hidden; 
-   word-wrap: break-word
+  overflow:hidden;
 }
 .icons{
   font-size: 40px;
@@ -171,10 +164,5 @@ text-align: right;
 .myborder{
   border: 5px solid black;
 }
-.childBox::-webkit-scrollbar {
-  width: 5px;
-}
-.childBox::-webkit-scrollbar-thumb{
-background-color:#A6AAA9;
-  }
+
 

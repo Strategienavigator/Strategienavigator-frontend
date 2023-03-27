@@ -58,15 +58,15 @@ overflow-x: hidden;
 }
 .childBox{
   border: 2px solid #A6AAA9;
-  overflow: auto;
-  overflow-x: hidden;
+  // width: 100px;
   height: 100px;
   margin-right: 5px;
   height: 302px;
-  word-break: break-all;
 }
 .langBox{
   height: 630px;
+  overflow:auto;
+  overflow-x: hidden; 
 }
  .untenChild{
  position: relative;
@@ -171,10 +171,10 @@ text-align: right;
 .myborder{
   border: 5px solid black;
 }
-.childBox::-webkit-scrollbar {
+.langBox::-webkit-scrollbar {
   width: 5px;
 }
-.childBox::-webkit-scrollbar-thumb{
+.langBox::-webkit-scrollbar-thumb{
 background-color:#A6AAA9;
   }
 
