@@ -90,16 +90,15 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
                 message: errorText("Vorname"),
                 level: "error"
             });  
-        }
-        if ((data["uploadImage_actions"]?.factors.age==''||data["uploadImage_actions"]?.factors.age==undefined||!Number.isFinite(data["uploadImage_actions"]?.factors.age))) {
+        if ((data["uploadImage_actions"]?.factors.age==''||data["uploadImage_actions"]?.factors.age==undefined)||!Number.isFinite(data["uploadImage_actions"]?.factors.age)) {
             errors.push({
-                id: "uploadImage_actions.ageError",
-                message: errorText("Alter mit richtige Format"),
+                id: "uploadImage_actions.surnameError",
+                message: errorText("Alter"),
                 level: "error"
-            });  
+            });    
         }
         return errors;
     }
 
 
-    }
+}
