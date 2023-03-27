@@ -76,7 +76,7 @@ export class PersonaShowComponent extends Step<PersonaAnalysisValues, PersonaSho
                                 <Row className={"untenChild"}>
                                 <Col className={"childBox"} sm={{span:14,offset:0}}>
                                     <div className={"head"}>
-                                    <FAE className={"icons diff"} icon={faCoins}/>  Verschiedenes<br/> 
+                                    <FAE className={"icons"} icon={faCoins}/> &nbsp Verschiedenes<br/>
                                     </div>
                                     <div className={"text"}>
                                         { qualifikation}

@@ -26,8 +26,8 @@ overflow-x: hidden;
 
 .getBorder{
   border: none;
-  width: 840px;
-  height: 400px;
+  width: 65%;
+  height: 70%;
   position: absolute;
   right: 430px;
   padding-left: 60px;
@@ -36,8 +36,8 @@ overflow-x: hidden;
 }
 .getBorderPhone{
   border: none;
-  width: 600px;
-  height: 350px;
+  width: 50%;
+  height: 80%;
  text-align: center;
   padding-left: 30px;
   overflow: auto;
@@ -51,7 +51,10 @@ overflow-x: hidden;
    
 }
 .getBorderPhone .head{
-  font-size: 14px;
+  font-size: 10px;
+}
+.getBorderPhone .text{
+  font-size: 10px;
 }
 .getBorderPhone .icons{
   font-size: 0px;
@@ -80,19 +83,19 @@ overflow-x: hidden;
 position: relative;
 top: 10px;
 height: 200px;
-width: 370px !important;
+width: 47% !important;
 }
 #titel{
- font-weight: 600;
+  font-weight: 600;
  position: relative;
  right: 260px;
  bottom: 10px;
 }
 
 .personaBild{
-width: 160px;
-height: 200px;
-margin:20px 0 20px 5px;
+width: 80%;
+height: 30%;
+margin:20px 0 20px 18px;
 }
 .personaBildPhone{
   width: 100px;
@@ -100,14 +103,14 @@ margin:20px 0 20px 5px;
   margin:20px 0 20px 6px;
   }
 .vollname{
-  font-size: 34px;
+  font-size: 24px;
   font-weight: 600;
   text-align: center;
   margin-bottom: 30px;
 }
 
 .baseInfoItem{
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   font-weight: 400;
   color: #247BCD;
@@ -115,7 +118,8 @@ margin:20px 0 20px 5px;
   overflow-x: hidden;
 
 }
-.head { 
+ .head {
+  
 word-wrap:break-word; 
 word-break:break-all;
 font-weight: 600;
@@ -136,36 +140,39 @@ text-align: right;
   font-size: 20px;
   margin:5px 0 0  0;
   color: #A6AAA9 !important;
- display: inline-block;
-//  margin-bottom: 30px;
+  display: inline-block;
   
 }
 .zitatZiel{
-  position: relative;
-  right: 65px;
+position: relative;
+right: 60px;
 
 }
 .hobby{
   position: relative;
-  right: 25px;
+  right: 20px;
 
 }
 .station{
   position: relative;
-  right: 25px;
+  right: 20px;
 }
 .prob{
   position: relative;
   right: 35px;
 
 }
+.diff{
+  position: relative;
+  right: 5px;
+}
 .motiv{
   position: relative;
-  right: 120px;
+  right: 110px;
 }
 .extra{
   position: relative;
-  right: 75px;
+  right: 70px;
 }
 .box{
   height: 100px;

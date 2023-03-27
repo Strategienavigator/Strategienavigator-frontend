@@ -26,10 +26,10 @@ overflow-x: hidden;
 
 .getBorder{
   border: none;
-  width: 840px;
-  height: 400px;
+  width: 80%;
+  height: 700px;
   position: absolute;
-  right: 430px;
+  right: 730px;
   padding-left: 60px;
   overflow: auto;
   overflow-x: hidden;
@@ -80,19 +80,19 @@ overflow-x: hidden;
 position: relative;
 top: 10px;
 height: 200px;
-width: 370px !important;
+width: 530px !important;
 }
 #titel{
- font-weight: 600;
+  font-weight: 600;
  position: relative;
  right: 260px;
  bottom: 10px;
 }
 
 .personaBild{
-width: 160px;
-height: 200px;
-margin:20px 0 20px 5px;
+width: 200px;
+height: 250px;
+margin:20px 0 20px 28px;
 }
 .personaBildPhone{
   width: 100px;
@@ -107,7 +107,7 @@ margin:20px 0 20px 5px;
 }
 
 .baseInfoItem{
-  font-size: 14px;
+  font-size: 20px;
   text-align: center;
   font-weight: 400;
   color: #247BCD;
@@ -115,12 +115,16 @@ margin:20px 0 20px 5px;
   overflow-x: hidden;
 
 }
-.head { 
+ .head {
+  
 word-wrap:break-word; 
 word-break:break-all;
 font-weight: 600;
 margin-bottom: 20px;
-font-size: 12px;
+font-size: 18px;
+// position: absolute;
+// top: 10px;
+// right: 20px;
 text-align: right;
 }
 .text{
@@ -128,12 +132,11 @@ text-align: right;
   text-align: left;
   table-layout:fixed; 
   word-break:break-all;
-  overflow:hidden; 
-  word-wrap: break-word;
-  font-size: 12px;
+   overflow:hidden; 
+   word-wrap: break-word
 }
 .icons{
-  font-size: 20px;
+  font-size: 40px;
   margin:5px 0 0  0;
   color: #A6AAA9 !important;
  display: inline-block;
@@ -141,31 +144,25 @@ text-align: right;
   
 }
 .zitatZiel{
-  position: relative;
-  right: 65px;
+  margin-right: 80px;
 
 }
 .hobby{
-  position: relative;
-  right: 25px;
+  margin-right: 20px;
 
 }
 .station{
-  position: relative;
-  right: 25px;
+  margin-right: 20px;
 }
 .prob{
-  position: relative;
-  right: 35px;
+  margin-right: 40px;
 
 }
 .motiv{
-  position: relative;
-  right: 120px;
+  margin-right: 150px;
 }
 .extra{
-  position: relative;
-  right: 75px;
+  margin-right: 80px;
 }
 .box{
   height: 100px;
