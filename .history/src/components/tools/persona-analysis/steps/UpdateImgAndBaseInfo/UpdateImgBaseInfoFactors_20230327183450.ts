@@ -91,7 +91,7 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
                 level: "error"
             });  
         }
-        if ((data["uploadImage_actions"]?.factors.age==''||data["uploadImage_actions"]?.factors.age==undefined||!parseInt(data["uploadImage_actions"]?.factors.age))){
+        if ((data["uploadImage_actions"]?.factors.age==''||data["uploadImage_actions"]?.factors.age==undefined||!Number.isInteger(data["uploadImage_actions"]?.factors.age))){
             errors.push({
                 id: "uploadImage_actions.ageError",
                 message: errorText("Alter mit richtige Format"),
