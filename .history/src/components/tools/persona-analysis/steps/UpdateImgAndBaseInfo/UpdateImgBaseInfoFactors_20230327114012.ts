@@ -33,7 +33,8 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
                     name: '',
                     surname: '',
                     age: '',
-                    avatar: ''
+                    profibild: '',
+                    profibildName: '',
                 }
             }
         };
@@ -54,7 +55,8 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
                     name: "",
                     surname: "",
                     age: "",
-                    avatar: ""
+                    profibild: "",
+                    profibildName: ""
                 }
             }
         }
@@ -69,7 +71,7 @@ export class ImgFactors implements StepDefinition<PersonaAnalysisValues>, StepDa
         d.factors.name = ""
         d.factors.surname = ""
         d.factors.age = ""
-        d.factors.avatar = ""
+        d.factors.profibild = ""
         data["uploadImage_actions"] = d;
         return data;
     }

@@ -91,13 +91,13 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
                     <Row className={"mb-3 mt-3"}> 
                          <Col sm={isDesktop() ? 6 : 12}>
                             <div>
-                               Avatar:<br/> <input type='file' disabled={this.props.disabled} className="form-control" name="avatar" onChange={this.applyProfibildInfoChanges1.bind(this)}/>
+                               avatar:<br/> <input type='file' disabled={this.props.disabled} className="form-control" name="avatar" onChange={this.applyProfibildInfoChanges1.bind(this)}/>
                                 <br/>
-                               Name: <input type='text' disabled={this.props.disabled} value={values.surname} className="form-control" name = 'surname' onChange={this.applyProfibildInfoChanges1.bind(this)} />
+                               surname: <input type='text' disabled={this.props.disabled} value={values.surname} className="form-control" name = 'surname' onChange={this.applyProfibildInfoChanges1.bind(this)} />
                                <UIErrorBanner id={"uploadImage_actions.surnameError"}/>
-                               Vorname: <input type='text' disabled={this.props.disabled}   value={values.name} className="form-control" name = 'name' onChange={this.applyProfibildInfoChanges1.bind(this)} />
+                               name: <input type='text' disabled={this.props.disabled}   value={values.name} className="form-control" name = 'name' onChange={this.applyProfibildInfoChanges1.bind(this)} />
                                <UIErrorBanner id={"uploadImage_actions.nameError"}/>
-                               Alter: <input type='text' disabled={this.props.disabled}  value={values.age} className="form-control" name = 'age' onChange={this.applyProfibildInfoChanges1.bind(this)} />  
+                               age: <input type='text' disabled={this.props.disabled}  value={values.age} className="form-control" name = 'age' onChange={this.applyProfibildInfoChanges1.bind(this)} />  
                                <UIErrorBanner id={"uploadImage_actions.ageError"}/>        
                             </div>
                         </Col>

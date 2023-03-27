@@ -15,9 +15,9 @@ export interface UploadImgValues {
 
     factors: {
         name: string
-        surname: string
-        age: string
-        avatar: string
+        vorname: string
+        alter: string
+        profibild: string
     },
     
 }
@@ -50,7 +50,7 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
         return shouldUpdate;
     }
 
-    getValues(name:any,surname:any,age:any,imgSrc:any){
+    getValues(name:any,vorname:any,alter:any,imgSrc:any){
         this.props.saveController.onChanged(save => {
             const data = save.data["uploadImage_actions"];
             if (data !== undefined) {
@@ -59,9 +59,9 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
                 save.data["uploadImage_actions"] = {
                     factors:{
                         name: '123',
-                        surname: surname,
-                        age: age,
-                        avatar: ''
+                        vorname: vorname,
+                        alter: alter,
+                        profibild: ''
                     }
                 }
             }
@@ -91,14 +91,14 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
                     <Row className={"mb-3 mt-3"}> 
                          <Col sm={isDesktop() ? 6 : 12}>
                             <div>
-                               Avatar:<br/> <input type='file' disabled={this.props.disabled} className="form-control" name="avatar" onChange={this.applyProfibildInfoChanges1.bind(this)}/>
+                               profibild:<br/> <input type='file' disabled={this.props.disabled} className="form-control" name="profibild" onChange={this.applyProfibildInfoChanges1.bind(this)}/>
                                 <br/>
-                               Name: <input type='text' disabled={this.props.disabled} value={values.surname} className="form-control" name = 'surname' onChange={this.applyProfibildInfoChanges1.bind(this)} />
-                               <UIErrorBanner id={"uploadImage_actions.surnameError"}/>
-                               Vorname: <input type='text' disabled={this.props.disabled}   value={values.name} className="form-control" name = 'name' onChange={this.applyProfibildInfoChanges1.bind(this)} />
+                               vorname: <input type='text' disabled={this.props.disabled} value={values.vorname} className="form-control" name = 'vorname' onChange={this.applyProfibildInfoChanges1.bind(this)} />
+                               <UIErrorBanner id={"uploadImage_actions.vornameError"}/>
+                               name: <input type='text' disabled={this.props.disabled}   value={values.name} className="form-control" name = 'name' onChange={this.applyProfibildInfoChanges1.bind(this)} />
                                <UIErrorBanner id={"uploadImage_actions.nameError"}/>
-                               Alter: <input type='text' disabled={this.props.disabled}  value={values.age} className="form-control" name = 'age' onChange={this.applyProfibildInfoChanges1.bind(this)} />  
-                               <UIErrorBanner id={"uploadImage_actions.ageError"}/>        
+                               alter: <input type='text' disabled={this.props.disabled}  value={values.alter} className="form-control" name = 'alter' onChange={this.applyProfibildInfoChanges1.bind(this)} />  
+                               <UIErrorBanner id={"uploadImage_actions.alterError"}/>        
                             </div>
                         </Col>
                      </Row>
@@ -114,7 +114,7 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
      async applyProfibildInfoChanges1(e:any){
         let value:string = e.target.value;
         let name =  e.target.name;
-        if(name === "avatar"){
+        if(name === "profibild"){
             const data  = await this.handleFileChange(e) 
            value = data as string
         }
@@ -128,14 +128,14 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
                     case "name":
                         data.factors.name = value;
                         break;
-                    case "surname":
-                        data.factors.surname =value;
+                    case "vorname":
+                        data.factors.vorname =value;
                         break;
-                    case "age":
-                        data.factors.age = value;
+                    case "alter":
+                        data.factors.alter = value;
                         break;
-                    case "avatar":
-                        data.factors.avatar = value;
+                    case "profibild":
+                        data.factors.profibild = value;
                         break;
         
                 }

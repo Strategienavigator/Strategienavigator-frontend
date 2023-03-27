@@ -25,7 +25,7 @@ class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
     }
 
     protected renderShortDescription() {
-        return null;
+        return "dsdsds";
     }
 
     protected renderTutorial() {
