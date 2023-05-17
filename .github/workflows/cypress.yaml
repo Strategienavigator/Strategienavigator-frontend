@@ -98,7 +98,7 @@ jobs:
         uses: actions/setup-python@v3
 
       - name: Cypress install
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           runTests: false
           working-directory: frontend
@@ -116,7 +116,7 @@ jobs:
           python frontend_patcher.py -s ../frontend/build/build.zip -t .
 
       - name: Cypress run tests
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           install: false
           working-directory: frontend
@@ -154,8 +154,8 @@ jobs:
       - name: clone frontend
         uses: actions/checkout@v3
       - name: Cypress run component tests
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
-          command: npx cypress run-ct
+          component: true
         env:
           CYPRESS_VIDEO: false
