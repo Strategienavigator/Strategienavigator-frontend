@@ -225,7 +225,7 @@ export class DataPrivacy extends Component<any, any> {
                 </ol>
                 <p><br/> <strong>Rechte der betroffenen Person</strong></p>
                 <ol style={{margin: "10px 0px", padding: "15px"}}>
-                    <li><strong>Widerspruch oder Widerruf gegen die Verarbeitung Ihrer Daten<br/><br/> Soweit die
+                    <li><strong>Widerspruch oder Widerruf gegen die Verarbeitung Ihrer Daten</strong><br/><br/> Soweit die
                         Verarbeitung auf Ihrer
                         Einwilligung gemäß Art. 6 Abs. 1 S. 1 lit. a), Art. 7 DS-GVO beruht, haben Sie das Recht, die
                         Einwilligung
