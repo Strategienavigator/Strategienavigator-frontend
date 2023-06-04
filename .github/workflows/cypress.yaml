@@ -22,12 +22,15 @@ jobs:
         ports:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+    strategy:
+      matrix:
+        version: [14,16,18]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.5.2
         with:
-          node-version: 14
+          node-version: ${{ matrix.version }}
       - name: clone backend
         uses: actions/checkout@v3
         with:
