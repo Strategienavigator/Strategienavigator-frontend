@@ -309,7 +309,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
                                                         let timeString = `${lastOpened.toLocaleDateString()}, ${lastOpened.toLocaleTimeString().split(":").slice(0, 2).join(":")} Uhr`;
 
                                                         if (tool === undefined)
-                                                            return;
+                                                            return null;
 
                                                         return (
                                                             <Col key={"lo-save-" + save.id + "-" + index} lg={6}>
