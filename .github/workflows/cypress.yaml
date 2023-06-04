@@ -160,6 +160,10 @@ jobs:
     steps:
       - name: clone frontend
         uses: actions/checkout@v3
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.5.2
+        with:
+          node-version: 16
       - name: Cypress run component tests
         uses: cypress-io/github-action@v5
         with:
