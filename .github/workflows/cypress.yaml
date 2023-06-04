@@ -112,6 +112,9 @@ jobs:
           REACT_APP_CLIENT_ID: 2
           REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
           REACT_APP_API: 'http://localhost:8000/'
+          REACT_APP_COLLABORATION_URL: 'ws://test.test'
+          REACT_APP_COLLABORATION_KEY: 'asdf'
+          REACT_APP_COLLABORATION_PORT: 1241
         run: |
           npm run build
           cd build
