@@ -14,7 +14,7 @@ export interface PersonaPersonalityValues {
 export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}> {
 
     static DEFAULT_MIN = 1;
-    static DEFAULT_MAX = 8;
+    static DEFAULT_MAX = 5;
 
     static MIN_CITATION = PersonaPersonalityComponent.DEFAULT_MIN;
     static MAX_CITATION = PersonaPersonalityComponent.DEFAULT_MAX;

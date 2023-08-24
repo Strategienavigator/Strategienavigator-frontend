@@ -1,6 +1,7 @@
 import {ExtraWindowComponent} from "../../../../general-components/Tool/ExtraWindowComponent/ExtraWindowComponent";
 import {PersonaAnalysisValues} from "../PersonaAnalysis";
 import "./persona-info-shower.scss";
+import {Image} from "react-bootstrap";
 
 class PersonaAnalysisInfoShower extends ExtraWindowComponent<PersonaAnalysisValues, {}> {
 
@@ -10,9 +11,9 @@ class PersonaAnalysisInfoShower extends ExtraWindowComponent<PersonaAnalysisValu
         if (data) {
             return (
                 <div className={"persona-info-shower"}>
-                    <div>{data.firstname} {data.lastname}</div>
+                    <div className={"name"}>{data.firstname} {data.lastname}</div>
                     <div className={"image-container"}>
-                        <img src={data.avatar ?? ""} className={"image"} alt={"Avatar vom Persona"} />
+                        <Image src={data.avatar ?? ""} thumbnail className={"image"} alt={"Avatar vom Persona"} />
                     </div>
                     <div className={"info"}>
                         <div className={"age"}>

@@ -36,7 +36,8 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
             "firstname": null,
             "lastname": null,
             "age": null,
-            "avatar": "https://www.afd-muc-west.de/wp-content/uploads/2018/01/csm_person-placeholder-male_5602d73d5e.png"
+            // TODO: build in backend resource port
+            "avatar": "https://www.masslive.com/resizer/kNl3qvErgJ3B0Cu-WSBWFYc1B8Q=/arc-anglerfish-arc2-prod-advancelocal/public/W5HI6Y4DINDTNP76R6CLA5IWRU.jpeg"
         };
         return data;
     }
