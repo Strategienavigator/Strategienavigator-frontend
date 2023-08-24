@@ -2,7 +2,7 @@ import {
     StepDataHandler,
     StepDefinition,
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
-import {PersonaAnalysisValues} from "../../PersonaAnalysis";
+import {PersonaAnalysisValues} from "../../PersonaAnalysis-old";
 import {PersonaFactorsComponent} from "./PersonaFactorsComponent";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {

@@ -4,7 +4,7 @@ import {
     StepDataHandler,
     StepDefinition,
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
-import {PersonaAnalysisValues} from "../../PersonaAnalysis";
+import {PersonaAnalysisValues} from "../../PersonaAnalysis-old";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import { PersonaShowComponent } from "./PersonaShowComponent";

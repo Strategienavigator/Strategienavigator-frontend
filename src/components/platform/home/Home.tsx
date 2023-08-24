@@ -1,7 +1,14 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Col, Row} from "react-bootstrap";
-import {faArrowsAlt, faBorderAll, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
+import {
+    faArrowsAlt,
+    faBorderAll,
+    faChartPie,
+    faSortAmountDownAlt,
+    faThLarge,
+    faUserCircle
+} from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 import "./home.scss";
@@ -48,21 +55,26 @@ export const Tools = [
         maintenance: false
     },
     {
+        id:6,
+        name: "Persona Analyse",
+        icon: faUserCircle,
+        link: "/persona-analysis",
+        maintenance: false
+    },
+    {
+        id:6,
+        name: "Persona Analyse (ALT)",
+        icon: faUserCircle,
+        link: "/persona-analysis-old",
+        maintenance: false
+    },
+    {
         id: 5,
         name: "ABC Analyse",
         icon: faChartPie,
         link: "/abc-analysis",
         maintenance: true
     }
-    ,
-        
-    {               
-        id:6,
-        name: "Persona Analyse",
-        icon: faChartPie,
-        link: "/persona-analysis",
-        maintenance: false
-     }
 ];
 
 export class Home extends Component<any, HomeState> {

@@ -1,6 +1,100 @@
 @import "/src/themes.scss";
 
+#swot-factors .accordion-body {
+  @include theme() {
+    background-color: get("bg-color");
+  }
+}
 
+#swot-classify-alternate-actions {
+  .card .card-body {
+    padding: 0.25rem 0.75rem;
+  }
+
+  .FormControl {
+    margin: 0 0 10px;
+  }
+
+  .xButton:hover {
+    background-color: darken(white, 10%);
+  }
+
+  .addClassification {
+    margin: 10px 0;
+    width: 100%;
+
+    * {
+      color: white;
+    }
+  }
+
+  .classification .dropzone {
+    width: 100%;
+    min-height: 41px;
+    overflow-x: auto;
+    border: 2px dashed #b4b4b4;
+    padding: 0.5rem;
+    margin-top: 5px;
+  }
+
+  .classification .dropzone.isDraggingOver {
+    background-color: darken(#e6e6e6, 10%);
+    border-color: darken(#b4b4b4, 13%);
+  }
+
+  .classification .dropzone {
+    margin-right: 5px;
+  }
+
+  .actions {
+    margin: 0.75rem 0;
+
+    .withoutClassification {
+      font-weight: 700;
+    }
+  }
+
+  .actionRow {
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    flex-wrap: wrap;
+
+    .actionCol {
+      flex: max-content 0 0;
+      padding: 0 0.15rem;
+      max-width: max-content;
+      min-width: max-content;
+      margin: 0.15rem 0;
+    }
+
+    .actionCol .displayAction {
+      flex-wrap: nowrap;
+    }
+
+    .actionCol .displayAction > * {
+      flex: auto 0 0;
+      width: auto;
+      min-width: max-content;
+    }
+
+    .displayAction .displayAction .text {
+      * {
+        white-space: nowrap
+      }
+
+      white-space: nowrap
+    }
+
+    .actionCol .displayAction .icon {
+      text-align: center;
+    }
+
+    .actionCol.notDragging {
+      transform: none !important;
+    }
+  }
+}
 
 .dragClone .actionCard {
   transform: rotate(3deg);
@@ -17,198 +111,3 @@
     }
   }
 }
-
-.uploadImage_actions{
-overflow: auto;
-overflow-x: hidden;
-}
-
-
-.getBorder{
-  border: none;
-  width: 840px;
-  height: 400px;
-  position: absolute;
-  right: 430px;
-  padding-left: 60px;
-  overflow: auto;
-  overflow-x: hidden;
-}
-.getBorderPhone{
-  border: none;
-  width: 100%;
-  height: 350px;
- text-align: center;
-  padding-left: 30px;
-  overflow: auto;
-  overflow-x: hidden;
-
-}
-.getBorderPhone .childBox{
-  width: 75px;
-  height: 152px;
-}
-.getBorderPhone .head{
-  font-size: 7px;
-}
-.getBorderPhone .baseInfoItem{
-  table-layout:fixed; 
-  word-break:break-all;
-  overflow:hidden; 
-   
-}
-.getBorderPhone .head{
-  font-size: 8px;
-}
-.getBorderPhone .icons{
-  font-size: 0px;
-}
-.getBorderPhone .langBox{
-  height: 330px;
-}
-.getBorderPhone .personaBildPhone{
-  width: 60px;
-  height: 90px;
-  position: relative;
-  right: 14px;
-  bottom: 15px;
-}
-.getBorderPhone .vollname{
-  font-size: 8px;
-  font-weight: 800;
-}
-.getBorderPhone .baseInfoItem{
-  font-size: 8px;
-}
-.getBorderPhone .text{
-  font-size: 8px;
-}
-.getBorderPhone .descriptBox{
-  height: 100px;
-  margin-bottom: 10px;
-}
-.childBox{
-  border: 2px solid #A6AAA9;
-  overflow: auto;
-  overflow-x: hidden;
-  height: 100px;
-  margin-right: 5px;
-  height: 302px;
-  word-break: break-all;
-}
-.langBox{
-  height: 630px;
-}
- .untenChild{
- position: relative;
- top: 26px;
- border: 0px solid none;
-}
-.withoutBorder{
-  border:0px solid white !important;
-}
-.descriptBox{
-position: relative;
-top: 10px;
-height: 200px;
-width: 370px !important;
-}
-#titel{
- font-weight: 600;
- position: relative;
- right: 260px;
- bottom: 10px;
-}
-
-.personaBild{
-width: 160px;
-height: 200px;
-margin:20px 0 20px 5px;
-}
-.personaBildPhone{
-  width: 100px;
-  height: 150px;
-  margin:20px 0 20px 6px;
-  }
-.vollname{
-  font-size: 20px;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.baseInfoItem{
-  font-size: 14px;
-  text-align: center;
-  font-weight: 400;
-  color: #247BCD;
-  overflow: auto;
-  overflow-x: hidden;
-
-}
-.head { 
-word-wrap:break-word; 
-word-break:break-all;
-font-weight: 600;
-margin-bottom: 20px;
-font-size: 12px;
-text-align: right;
-}
-.text{
-  color: #247BCD;
-  text-align: left;
-  table-layout:fixed; 
-  word-break:break-all;
-  overflow:hidden; 
-  word-wrap: break-word;
-  font-size: 12px;
-}
-.icons{
-  font-size: 20px;
-  margin:5px 0 0  0;
-  color: #A6AAA9 !important;
- display: inline-block;
-//  margin-bottom: 30px;
-  
-}
-.zitatZiel{
-  position: relative;
-  right: 65px;
-
-}
-.hobby{
-  position: relative;
-  right: 25px;
-
-}
-.station{
-  position: relative;
-  right: 25px;
-}
-.prob{
-  position: relative;
-  right: 35px;
-
-}
-.motiv{
-  position: relative;
-  right: 120px;
-}
-.extra{
-  position: relative;
-  right: 75px;
-}
-.box{
-  height: 100px;
-  width: 100px;    
-}
-.myborder{
-  border: 5px solid black;
-}
-.childBox::-webkit-scrollbar {
-  width: 5px;
-}
-.childBox::-webkit-scrollbar-thumb{
-background-color:#A6AAA9;
-  }
-

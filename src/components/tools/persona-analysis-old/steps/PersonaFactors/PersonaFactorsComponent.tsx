@@ -7,7 +7,7 @@ import {
     Step,
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {PersonaAnalysisValues} from "../../PersonaAnalysis";
+import {PersonaAnalysisValues} from "../../PersonaAnalysis-old";
 import {PersonaFactors} from "./PersonaFactors";
 import {showErrorPage} from "../../../../../index";
 import {IUIErrorContext} from "../../../../../general-components/Contexts/UIErrorContext/UIErrorContext";

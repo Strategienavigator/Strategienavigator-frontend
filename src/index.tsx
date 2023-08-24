@@ -26,7 +26,7 @@ import {ControlFooter} from "./general-components/ControlFooter/ControlFooter";
 import {EmailVerification} from "./components/platform/verifications/EMail/EmailVerification";
 import {PasswordReset} from "./components/platform/verifications/PasswordReset/PasswordReset";
 import {SWOTAnalysis} from "./components/tools/swot-analysis/SWOTAnalysis";
-import {PersonaAnalysis} from "./components/tools/persona-analysis/PersonaAnalysis";
+import {PersonaAnalysisOld} from "./components/tools/persona-analysis-old/PersonaAnalysis-old";
 import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
 import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
@@ -38,6 +38,7 @@ import {ContributionDecision} from "./components/platform/sharing/Contribution/C
 import {SettingsContextComponent} from "./general-components/Contexts/SettingsContextComponent";
 import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
 import {enablePatches} from "immer";
+import {PersonaAnalysis} from "./components/tools/persona-analysis/PersonaAnalysis";
 
 require("./setupEcho.ts");
 // Add SettingsChangeListener for Darkmode
@@ -74,6 +75,7 @@ const getRouterSwitch = () => {
             <Route loginAnonymous={true} loggedIn={true} path={"/abc-analysis"} component={ABCAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/swot-analysis"} component={SWOTAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/persona-analysis"} component={PersonaAnalysis}/>
+            <Route loginAnonymous={true} loggedIn={true} path={"/persona-analysis-old"} component={PersonaAnalysisOld}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/utility-analysis"} component={UtilityAnalysis}/>
 

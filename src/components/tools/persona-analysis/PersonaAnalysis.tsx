@@ -1,27 +1,35 @@
-import {faThLarge} from "@fortawesome/free-solid-svg-icons";
-import {PersonaFactorsValues} from "./steps/PersonaFactors/PersonaFactorsComponent";
-import {UploadImgValues} from "./steps/UpdateImgAndBaseInfo/UpdateImgBaseInfoComponent";
+import {faUserCircle} from "@fortawesome/free-solid-svg-icons";
+
 import "./persona-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {RouteComponentProps} from "react-router";
-import {PersonaFactors} from "./steps/PersonaFactors/PersonaFactors"
-import {ImgFactors} from "./steps/UpdateImgAndBaseInfo/UpdateImgBaseInfoFactors";
-import { PersonaShow } from "./steps/PersonaShow/PersonaShow";
+import {PersonaJSONImporter} from "./import/PersonaJSONImporter";
+import {PersonaInfoValues} from "./steps/PersonaInfo/PersonaInfoComponent";
+import {PersonaInfo} from "./steps/PersonaInfo/PersonaInfo";
+import {PersonaPersonalityValues} from "./steps/PersonaPersonality/PersonaPersonalityComponent";
+import {PersonaPersonality} from "./steps/PersonaPersonality/PersonaPersonality";
+import {PersonaSummaryValues} from "./steps/PersonaSummary/PersonaSummaryComponent";
+import {PersonaSummary} from "./steps/PersonaSummary/PersonaSummary";
+
 
 interface PersonaAnalysisValues {
-    "persona-factors"?: PersonaFactorsValues,
-    "uploadImage_actions"?: UploadImgValues ,
+    "persona-info"?: PersonaInfoValues,
+    "persona-personality"?: PersonaPersonalityValues,
+    "persona-summary"?: PersonaSummaryValues
 }
 
 class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
 
     constructor(props: RouteComponentProps<{ id: string }>, context: any) {
-        super(props, context, "Persona", faThLarge, 6);
-                this.addExporter(new JSONExporter());
-                this.addStep(new ImgFactors());
-                this.addStep(new PersonaFactors());
-                this.addStep(new PersonaShow());   
+        super(props, context, "Persona Analyse", faUserCircle, 6);
+
+        this.addExporter(new JSONExporter());
+        this.setImporter(new PersonaJSONImporter());
+
+        this.addStep(new PersonaInfo());
+        this.addStep(new PersonaPersonality())
+        this.addStep(new PersonaSummary());
     }
 
     protected renderShortDescription() {
@@ -29,11 +37,7 @@ class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
     }
 
     protected renderTutorial() {
-        return (
-            <p>
-                Persona info 
-            </p>
-        );
+        return null;
     }
 
     protected getInitData(): PersonaAnalysisValues {

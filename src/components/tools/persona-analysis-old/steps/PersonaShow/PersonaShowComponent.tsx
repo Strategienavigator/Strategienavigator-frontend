@@ -2,7 +2,7 @@ import {
     Step,
     StepProp
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
-import {PersonaAnalysisValues} from "../../PersonaAnalysis";
+import {PersonaAnalysisValues} from "../../PersonaAnalysis-old";
 import {Col, Row} from "react-bootstrap";
 import {isDesktop} from "../../../../../general-components/Desktop";
 import {faSignInAlt, faHospital,faBullseye,faBug,faCoffee,faCoins,faBook,faGrinHearts} from "@fortawesome/free-solid-svg-icons/";
