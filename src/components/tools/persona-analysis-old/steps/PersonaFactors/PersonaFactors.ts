@@ -9,13 +9,13 @@ import {
     CardComponentField,
     isCardComponentFilled,
     isCardComponentTooLong,
-} from "../../../../../general-components/FeaturesItem/CardComponent";
+} from "../../../../../general-components/CardComponent/CardComponent";
 import {CounterInterface} from "../../../../../general-components/Counter/CounterInterface";
 import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 
 
-export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues>  {
+export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues> {
 
     public static min = 1;
     public static max = 8;
@@ -28,7 +28,7 @@ export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, St
     public static hobiesCounter = new NumberCounter();
     public static motivationCounter = new NumberCounter();
     public static zitatCounter = new NumberCounter();
- 
+
 
     form: React.FunctionComponent<StepProp<PersonaAnalysisValues>> | React.ComponentClass<StepProp<PersonaAnalysisValues>>;
     id: string;
@@ -59,10 +59,11 @@ export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, St
                     hobies: [],
                     motivation: [],
                     zitat: []
-                
+
                 }
             }
-        };
+        }
+
         return d;
     }
 
@@ -73,7 +74,8 @@ export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, St
         }
         return a;
     }
-       //desc is the specific content written name is the title
+
+    //desc is the specific content written name is the title
     private static defaultCardComponent(id: string | null): CardComponentField {
         return {
             desc: "",
@@ -84,28 +86,28 @@ export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, St
 
     // TODO judges whether the previous page is completed, this method is used to mark whether this page is unlocked
     isUnlocked(data: PersonaAnalysisValues): boolean {
-        if(data['persona-factors'] === undefined){
-            let initData:PersonaAnalysisValues = this.fillFromPreviousValues(data);
+        if (data['persona-factors'] === undefined) {
+            let initData: PersonaAnalysisValues = this.fillFromPreviousValues(data);
             data['persona-factors'] = initData['persona-factors']
         }
-        return data['uploadImage_actions']?.factors.name !== undefined&&data['uploadImage_actions']?.factors.surname !== undefined && data['uploadImage_actions']?.factors.name.length > 0 && data['uploadImage_actions']?.factors.surname.length > 0;
+        return data['uploadImage_actions']?.factors.name !== undefined && data['uploadImage_actions']?.factors.surname !== undefined && data['uploadImage_actions']?.factors.name.length > 0 && data['uploadImage_actions']?.factors.surname.length > 0;
     }
 
     // Fill in the initialized value
-   fillFromPreviousValues   (data: PersonaAnalysisValues): PersonaAnalysisValues { 
+    fillFromPreviousValues(data: PersonaAnalysisValues): PersonaAnalysisValues {
         return this.deleteData(data);
     }
 
     // clear the value
     deleteData(data: PersonaAnalysisValues): PersonaAnalysisValues {
-       
+
         let d = PersonaFactors.requireData(data);
         d.factors.qualifikation = [];
         d.factors.art_der_Erkrankung = PersonaFactors.getDefaultArray(PersonaFactors.art_der_ErkrankungCounter);
         d.factors.beraterOrAngehörige = PersonaFactors.getDefaultArray(PersonaFactors.beraterOrAngehörigeCounter);
         d.factors.familieOrFreunde = PersonaFactors.getDefaultArray(PersonaFactors.familieOrFreundeCounter);
         d.factors.charaktereigenschaften = PersonaFactors.getDefaultArray(PersonaFactors.charaktereigenschaftenCounter);
-        d.factors.bedürfnisse= PersonaFactors.getDefaultArray(PersonaFactors.bedürfnisseCounter);
+        d.factors.bedürfnisse = PersonaFactors.getDefaultArray(PersonaFactors.bedürfnisseCounter);
         d.factors.hobies = PersonaFactors.getDefaultArray(PersonaFactors.hobiesCounter);
         d.factors.motivation = PersonaFactors.getDefaultArray(PersonaFactors.motivationCounter);
         d.factors.zitat = PersonaFactors.getDefaultArray(PersonaFactors.zitatCounter);
@@ -189,19 +191,19 @@ export class PersonaFactors implements StepDefinition<PersonaAnalysisValues>, St
                 level: "error"
             });
         }
-        
-       
+
+
         if (
             isCardComponentTooLong(data["persona-factors"]?.factors.qualifikation) ||
             isCardComponentTooLong(data["persona-factors"]?.factors.art_der_Erkrankung) ||
-            isCardComponentTooLong(data["persona-factors"]?.factors.beraterOrAngehörige)||
-            isCardComponentTooLong(data["persona-factors"]?.factors.familieOrFreunde)||
-            isCardComponentTooLong(data["persona-factors"]?.factors.charaktereigenschaften)||
-            isCardComponentTooLong(data["persona-factors"]?.factors.bedürfnisse)||
-            isCardComponentTooLong(data["persona-factors"]?.factors.hobies)||
-            isCardComponentTooLong(data["persona-factors"]?.factors.motivation)||
+            isCardComponentTooLong(data["persona-factors"]?.factors.beraterOrAngehörige) ||
+            isCardComponentTooLong(data["persona-factors"]?.factors.familieOrFreunde) ||
+            isCardComponentTooLong(data["persona-factors"]?.factors.charaktereigenschaften) ||
+            isCardComponentTooLong(data["persona-factors"]?.factors.bedürfnisse) ||
+            isCardComponentTooLong(data["persona-factors"]?.factors.hobies) ||
+            isCardComponentTooLong(data["persona-factors"]?.factors.motivation) ||
             isCardComponentTooLong(data["persona-factors"]?.factors.zitat)
-           
+
         ) {
             errors.push({
                 id: "persona-analysis.too-long",

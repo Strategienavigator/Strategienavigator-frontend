@@ -1,5 +1,5 @@
 import React from "react";
-import {CardComponent, CardComponentFields} from "../../../../../general-components/FeaturesItem/CardComponent";
+import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {Accordion} from "react-bootstrap";
 import {isDesktop} from "../../../../../general-components/Desktop";
 import {
@@ -12,7 +12,6 @@ import {PersonaFactors} from "./PersonaFactors";
 import {showErrorPage} from "../../../../../index";
 import {IUIErrorContext} from "../../../../../general-components/Contexts/UIErrorContext/UIErrorContext";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
-import { PersonaFactorsValues } from "./PersonaFactorsComponent_ti";
 
 
 export interface PersonaFactorsValues {
@@ -26,7 +25,7 @@ export interface PersonaFactorsValues {
         hobies: CardComponentFields
         motivation: CardComponentFields
         zitat: CardComponentFields
-    
+
     }
 }
 
@@ -38,17 +37,18 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
 
     private qualifikationChanged = this.applyCardComponentChanges.bind(this, "qualifikation");
     private art_der_ErkrankungChanged = this.applyCardComponentChanges.bind(this, "art_der_Erkrankung");
-    private beraterOrAngehörigeChanged=this.applyCardComponentChanges.bind(this, "beraterOrAngehörige");
-    private familieOrFreundeChanged=this.applyCardComponentChanges.bind(this, "familieOrFreunde");
-    private charaktereigenschaftenChanged=this.applyCardComponentChanges.bind(this, "charaktereigenschaften");
-    private bedürfnisseChanged=this.applyCardComponentChanges.bind(this, "bedürfnisse");
-    private hobiesChanged=this.applyCardComponentChanges.bind(this, "hobies");
-    private motivationChanged=this.applyCardComponentChanges.bind(this, "motivation");
-    private zitatChanged=this.applyCardComponentChanges.bind(this, "zitat");
+    private beraterOrAngehörigeChanged = this.applyCardComponentChanges.bind(this, "beraterOrAngehörige");
+    private familieOrFreundeChanged = this.applyCardComponentChanges.bind(this, "familieOrFreunde");
+    private charaktereigenschaftenChanged = this.applyCardComponentChanges.bind(this, "charaktereigenschaften");
+    private bedürfnisseChanged = this.applyCardComponentChanges.bind(this, "bedürfnisse");
+    private hobiesChanged = this.applyCardComponentChanges.bind(this, "hobies");
+    private motivationChanged = this.applyCardComponentChanges.bind(this, "motivation");
+    private zitatChanged = this.applyCardComponentChanges.bind(this, "zitat");
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
     }
+
     // react native method
     shouldComponentUpdate(nextProps: Readonly<StepProp<PersonaAnalysisValues>>, nextState: Readonly<PersonaFactorsState>, nextContext: IUIErrorContext): boolean {
         let shouldUpdate: boolean;
@@ -56,11 +56,11 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
         const oldSave = this.props.save;
         const newSave = nextProps.save;
         if (!shouldUpdate) {
-            if (oldSave.data["persona-factors"] !== newSave.data["persona-factors"] || 
-            oldSave.data["uploadImage_actions"] !== newSave.data['uploadImage_actions']) {
+            if (oldSave.data["persona-factors"] !== newSave.data["persona-factors"] ||
+                oldSave.data["uploadImage_actions"] !== newSave.data['uploadImage_actions']) {
                 shouldUpdate = true;
             }
-            
+
         }
         return shouldUpdate;
     }
@@ -72,7 +72,7 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
         let activeKey = "view";
         let lastValues = this.props.save.data["uploadImage_actions"]?.factors;
         let values = this.props.save.data["persona-factors"]?.factors;
-  
+
         if (lastValues !== undefined && values !== undefined) {
             return (
                 <div className={"persona-factors"}>
@@ -80,7 +80,7 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
                                defaultActiveKey={isDesktop() ? "qualifikation" : undefined}>
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "qualifikation"}>
                             <Accordion.Header>
-                            Qualifikation</Accordion.Header>
+                                Qualifikation</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.qualifikation}
@@ -96,7 +96,7 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
 
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "art_der_Erkrankung"}>
                             <Accordion.Header>
-                            Art_der_Erkrankung</Accordion.Header>
+                                Art_der_Erkrankung</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.art_der_Erkrankung}
@@ -112,7 +112,7 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
 
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "beraterOrAngehörige"}>
                             <Accordion.Header>
-                            Berater oder Angehörige</Accordion.Header>
+                                Berater oder Angehörige</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.beraterOrAngehörige}
@@ -126,10 +126,10 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
                             </Accordion.Body>
                         </Accordion.Item>
 
-                        
+
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "familieOrFreunde"}>
                             <Accordion.Header>
-                            Familie oder Freunde</Accordion.Header>
+                                Familie oder Freunde</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.familieOrFreunde}
@@ -145,7 +145,7 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
 
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "charaktereigenschaften"}>
                             <Accordion.Header>
-                            Charaktereigenschaften</Accordion.Header>
+                                Charaktereigenschaften</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.charaktereigenschaften}
@@ -161,7 +161,7 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
 
                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "bedürfnisse"}>
                             <Accordion.Header>
-                            Bedürfnisse</Accordion.Header>
+                                Bedürfnisse</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.bedürfnisse}
@@ -175,9 +175,9 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
                             </Accordion.Body>
                         </Accordion.Item>
 
-                       <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "hobies"}>
+                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "hobies"}>
                             <Accordion.Header>
-                            Hobies</Accordion.Header>
+                                Hobies</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.hobies}
@@ -191,9 +191,9 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
                             </Accordion.Body>
                         </Accordion.Item>
 
-                         <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "motivation"}>
+                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "motivation"}>
                             <Accordion.Header>
-                            Motivation</Accordion.Header>
+                                Motivation</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.motivation}
@@ -207,9 +207,9 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
                             </Accordion.Body>
                         </Accordion.Item>
 
-                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey :"zitat"}>
+                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "zitat"}>
                             <Accordion.Header>
-                            Zitat</Accordion.Header>
+                                Zitat</Accordion.Header>
                             <Accordion.Body>
                                 <CardComponent required={false}
                                                values={values.zitat}
@@ -221,7 +221,7 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
                                                onChanged={this.zitatChanged}/>
                                 <UIErrorBanner id={"persona-analysis.zitatError"}/>
                             </Accordion.Body>
-                        </Accordion.Item> 
+                        </Accordion.Item>
 
                     </Accordion>
 
@@ -230,13 +230,14 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
             );
         }
 
-       showErrorPage(404);
+        showErrorPage(404);
         return <p>"ERROR"</p>;
 
 
     }
+
 //？？
-    private applyCardComponentChanges(type: String , values: any) {
+    private applyCardComponentChanges(type: String, values: any) {
         this.props.saveController.onChanged(save => {
             const data = save.data["persona-factors"];
             if (data !== undefined) {
@@ -251,17 +252,17 @@ export class PersonaFactorsComponent extends Step<PersonaAnalysisValues, Persona
                         data.factors.beraterOrAngehörige = values;
                         break;
                     case "familieOrFreunde":
-                         data.factors.familieOrFreunde = values;
+                        data.factors.familieOrFreunde = values;
                         break;
                     case "charaktereigenschaften":
                         data.factors.charaktereigenschaften = values;
                         break;
                     case "bedürfnisse":
                         data.factors.bedürfnisse = values;
-                            break;
+                        break;
                     case "hobies":
                         data.factors.hobies = values;
-                            break;
+                        break;
                     case "motivation":
                         data.factors.motivation = values;
                         break;

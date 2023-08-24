@@ -80,8 +80,6 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
             });
         }
 
-        console.log(d?.age);
-
         // Alter
         if (d?.age == null || d?.age === -1 || (d?.age < PersonaInfo.AGE_MIN || d?.age > PersonaInfo.AGE_MAX)) {
             errors.push({

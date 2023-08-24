@@ -55,17 +55,19 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Vorname</Form.Label>
-                            <Form.Control disabled={this.props.disabled} onChange={this.firstNameChanged} type={"text"} value={data?.firstname ?? ""} placeholder={"Max"}/>
-                            <UIErrorBanner id={"firstname.empty"} />
-                            <UIErrorBanner id={"firstname.toolong"} />
+                            <Form.Control disabled={this.props.disabled} onChange={this.firstNameChanged} type={"text"}
+                                          value={data?.firstname ?? ""} placeholder={"Max"}/>
+                            <UIErrorBanner id={"firstname.empty"}/>
+                            <UIErrorBanner id={"firstname.toolong"}/>
                         </Form.Group>
                     </Col>
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Nachname</Form.Label>
-                            <Form.Control disabled={this.props.disabled} onChange={this.lastNameChanged} type={"text"} value={data?.lastname ?? ""} placeholder={"Mustermann"}/>
-                            <UIErrorBanner id={"lastname.empty"} />
-                            <UIErrorBanner id={"lastname.toolong"} />
+                            <Form.Control disabled={this.props.disabled} onChange={this.lastNameChanged} type={"text"}
+                                          value={data?.lastname ?? ""} placeholder={"Mustermann"}/>
+                            <UIErrorBanner id={"lastname.empty"}/>
+                            <UIErrorBanner id={"lastname.toolong"}/>
                         </Form.Group>
                     </Col>
                 </Row>
@@ -74,22 +76,25 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Alter</Form.Label>
-                            <Form.Control disabled={this.props.disabled} onChange={this.ageChanged} type={"number"} value={data?.age === -1 ? undefined : data?.age ?? ""} min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}/>
-                            <UIErrorBanner id={"age.invalid"} />
-                            <UIErrorBanner id={"age.outofrange"} />
+                            <Form.Control disabled={this.props.disabled} onChange={this.ageChanged} type={"number"}
+                                          value={data?.age === -1 ? undefined : data?.age ?? ""}
+                                          min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}/>
+                            <UIErrorBanner id={"age.invalid"}/>
+                            <UIErrorBanner id={"age.outofrange"}/>
                         </Form.Group>
                     </Col>
-                    <Col sm={6}></Col>
+                    <Col sm={6}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Avatar/Personenfoto</Form.Label>
+                            <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview}/>
+                        </Form.Group>
+                    </Col>
                 </Row>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Avatar wählen...</Form.Label>
-                    <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview} />
-                </Form.Group>
 
                 <div className={"avatar-preview"}>
                     {(this.state.avatarPreview !== null || data?.avatar) && (
-                        <Image src={this.state.avatarPreview ?? (data?.avatar ?? undefined)} thumbnail rounded className={"avatar"} alt={"Avatar Vorschau"} />
+                        <Image src={this.state.avatarPreview ?? (data?.avatar ?? undefined)} thumbnail rounded
+                               className={"avatar"} alt={"Avatar Vorschau"}/>
                     )}
                 </div>
             </>
@@ -120,7 +125,7 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
         this.props.saveController.onChanged(save => {
             let data = save.data["persona-info"];
             if (data !== undefined) {
-                let parsed= parseInt(e.target.value);
+                let parsed = parseInt(e.target.value);
                 if (isNaN(parsed)) {
                     data.age = -1;
                 } else {

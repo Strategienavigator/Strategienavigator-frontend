@@ -58,7 +58,9 @@ const UIErrorContext = React.createContext<IUIErrorContext>({
 });
 
 
-const withUIErrorContext = <P extends object>(Component: React.ComponentType<P & { uiErrorContext: IUIErrorContext }>) =>
+const withUIErrorContext = <P extends object>(Component: React.ComponentType<P & {
+    uiErrorContext: IUIErrorContext
+}>) =>
     class WithLoading extends React.Component<P> {
         render() {
             return (

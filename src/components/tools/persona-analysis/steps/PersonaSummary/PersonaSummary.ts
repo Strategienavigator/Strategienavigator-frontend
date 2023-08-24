@@ -17,7 +17,7 @@ export class PersonaSummary implements StepDefinition<PersonaAnalysisValues>, St
     dataHandler: StepDataHandler<PersonaAnalysisValues>;
 
     constructor() {
-        this.id = "persona-info";
+        this.id = "persona-summary";
         this.title = "3. Ihr Persona";
         this.form = PersonaSummaryComponent;
         this.dataHandler = this;

@@ -6,21 +6,21 @@ import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {RouteComponentProps} from "react-router";
 import {PersonaFactors} from "./steps/PersonaFactors/PersonaFactors"
 import {ImgFactors} from "./steps/UpdateImgAndBaseInfo/UpdateImgBaseInfoFactors";
-import { PersonaShow } from "./steps/PersonaShow/PersonaShow";
+import {PersonaShow} from "./steps/PersonaShow/PersonaShow";
 
 interface PersonaAnalysisValues {
     "persona-factors"?: PersonaFactorsValues,
-    "uploadImage_actions"?: UploadImgValues ,
+    "uploadImage_actions"?: UploadImgValues,
 }
 
 class PersonaAnalysisOld extends SteppableTool<PersonaAnalysisValues> {
 
     constructor(props: RouteComponentProps<{ id: string }>, context: any) {
         super(props, context, "Persona", faThLarge, 6);
-                this.addExporter(new JSONExporter());
-                this.addStep(new ImgFactors());
-                this.addStep(new PersonaFactors());
-                this.addStep(new PersonaShow());   
+        this.addExporter(new JSONExporter());
+        this.addStep(new ImgFactors());
+        this.addStep(new PersonaFactors());
+        this.addStep(new PersonaShow());
     }
 
     protected renderShortDescription() {
@@ -30,7 +30,7 @@ class PersonaAnalysisOld extends SteppableTool<PersonaAnalysisValues> {
     protected renderTutorial() {
         return (
             <p>
-                Persona info 
+                Persona info
             </p>
         );
     }

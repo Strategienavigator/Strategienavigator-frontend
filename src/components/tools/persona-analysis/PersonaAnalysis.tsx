@@ -33,11 +33,26 @@ class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
     }
 
     protected renderShortDescription() {
-        return null;
+        return (
+            <>
+                Personas veranschaulichen typische Vertreter Ihrer Zielgruppe.
+                Vielfältige Informationen zu ihrer Lebenswelt machen sie als Menschen verstehbar und ermöglichen es den Projektbeteiligten sich mit ihnen zu identifizieren.
+            </>
+        );
     }
 
     protected renderTutorial() {
-        return null;
+        return (
+            <>
+                Personas veranschaulichen typische Vertreter Ihrer Zielgruppe.
+                Vielfältige Informationen zu ihrer Lebenswelt machen sie als Menschen verstehbar und ermöglichen es den Projektbeteiligten sich mit ihnen zu identifizieren
+                <br/><br/>
+                Besonders hilfreich ist die Entwicklung von Personas zu Beginn eines Projekts, z.B. wenn ein neues Produkt entwickelt wird oder ein Relaunch ansteht.
+                Personas vermitteln allen Projektbeteiligten ein einheitliches Verständnis von der Zielgruppe und dienen als Entscheidungsgrundlage für den weiteren Entwicklungsprozess.
+                <br/><br/>
+                Quelle: www.usability.de (Aufgerufen am 24. Aug 2023)
+            </>
+        );
     }
 
     protected getInitData(): PersonaAnalysisValues {

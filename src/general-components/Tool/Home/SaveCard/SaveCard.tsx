@@ -3,7 +3,6 @@ import React, {Component} from "react";
 import {Button, Card} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
-import {faUser} from "@fortawesome/free-solid-svg-icons";
 import {SimpleSaveResource} from "../../../Datastructures";
 import FAE from "../../../Icons/FAE";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons/";
@@ -34,10 +33,10 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                 classes.push("disabled");
 
             let tool_id = this.props.save.tool_id;
-            let isPersona = (tool_id ===6)
+            let isPersona = (tool_id === 6)
             let saveToSend = this.props.save
-            
-            
+
+
             let formattedCreatedDate = new Date(this.props.save.created_at).toLocaleDateString("de-DE");
 
             return (
@@ -78,7 +77,7 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                         <FAE icon={faUserPlus}/>
                                     </Button>
                                 )}
-                                  {/* {( isPersona ) && (
+                                {/* {( isPersona ) && (
                                     <Link to={{ 
                                         pathname :"persona/" + this.props.save!.id,
                                         state : saveToSend
@@ -94,7 +93,7 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                         <FAE icon={faTrash}/>
                                     </Button>
                                 )}
-                              
+
                             </ButtonPanel>
                         </div>
                     )}
@@ -118,12 +117,10 @@ export class SaveCard extends Component<SaveCardProps, {}> {
     }
 
 
-
-   
-    onPersona = (save: number) =>  {
-        return (e : any)=>{
+    onPersona = (save: number) => {
+        return (e: any) => {
             console.log(e);
-            
+
             console.log(save);
         }
     }

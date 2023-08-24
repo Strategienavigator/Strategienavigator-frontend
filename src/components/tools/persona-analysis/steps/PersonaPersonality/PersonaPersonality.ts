@@ -27,12 +27,42 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
         {
             name: "citations",
             min: PersonaPersonalityComponent.MIN_CITATION,
-            max:PersonaPersonalityComponent.MAX_CITATION
+            max: PersonaPersonalityComponent.MAX_CITATION
+        },
+        {
+            name: "hobbys",
+            min: PersonaPersonalityComponent.MIN_HOBBYS,
+            max: PersonaPersonalityComponent.MAX_HOBBYS
+        },
+        {
+            name: "illness",
+            min: PersonaPersonalityComponent.MIN_ILLNESS,
+            max: PersonaPersonalityComponent.MAX_ILLNESS
+        },
+        {
+            name: "family",
+            min: PersonaPersonalityComponent.MIN_FAMILY,
+            max: PersonaPersonalityComponent.MAX_FAMILY
+        },
+        {
+            name: "wishes",
+            min: PersonaPersonalityComponent.MIN_WISHES,
+            max: PersonaPersonalityComponent.MAX_WISHES
+        },
+        {
+            name: "problems",
+            min: PersonaPersonalityComponent.MIN_PROBLEMS,
+            max: PersonaPersonalityComponent.MAX_PROBLEMS
+        },
+        {
+            name: "characteristics",
+            min: PersonaPersonalityComponent.MIN_CHARACTERISTICS,
+            max: PersonaPersonalityComponent.MAX_CHARACTERISTICS
         }
     ];
 
     constructor() {
-        this.id = "persona-info";
+        this.id = "persona-personality";
         this.title = "2. Personalität kreieren";
         this.form = PersonaPersonalityComponent;
         this.dataHandler = this;
@@ -47,9 +77,7 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => this.deleteData(data);
 
     deleteData(data: PersonaAnalysisValues): PersonaAnalysisValues {
-        let d: PersonaPersonalityValues = {
-            citations: []
-        };
+        let d = this.properties.map((i) => i.name).reduce((a, v) => ({...a, [v]: []}), {}) as PersonaPersonalityValues;
 
         // generiere leere zeilen für min werte
         for (const item of this.properties) {
@@ -76,9 +104,9 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
                 // empty
                 if (!isCardComponentFilled(d[name], false)) {
                     errors.push({
-                       id: `${name}.empty`,
-                       message: "Bitte füllen Sie alle Felder aus!",
-                       level: "error"
+                        id: `${name}.empty`,
+                        message: "Bitte füllen Sie alle Felder aus!",
+                        level: "error"
                     });
                 }
 

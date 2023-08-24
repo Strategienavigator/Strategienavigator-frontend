@@ -55,14 +55,14 @@ export const Tools = [
         maintenance: false
     },
     {
-        id:6,
+        id: 6,
         name: "Persona Analyse",
         icon: faUserCircle,
         link: "/persona-analysis",
         maintenance: false
     },
     {
-        id:6,
+        id: 6,
         name: "Persona Analyse (ALT)",
         icon: faUserCircle,
         link: "/persona-analysis-old",

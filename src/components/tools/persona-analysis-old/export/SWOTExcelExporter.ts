@@ -278,5 +278,4 @@
 // export {
 //     SWOTExcelExporter
 // }
-export {  
-}
+export {}

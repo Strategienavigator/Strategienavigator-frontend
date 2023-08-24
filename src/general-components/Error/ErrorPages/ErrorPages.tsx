@@ -21,7 +21,9 @@ export type ErrorComponentTypes =
 class ErrorPages extends Component<RouteComponentProps<{ code: string }>, any> {
     private code: number;
 
-    constructor(props: RouteComponentProps<{ code: string; }, StaticContext, unknown> | Readonly<RouteComponentProps<{ code: string; }, StaticContext, unknown>>) {
+    constructor(props: RouteComponentProps<{ code: string; }, StaticContext, unknown> | Readonly<RouteComponentProps<{
+        code: string;
+    }, StaticContext, unknown>>) {
         super(props);
         this.code = parseInt(this.props.match.params.code);
     }

@@ -37,7 +37,7 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
     }
 
     render() {
-        
+
         let data = this.getData() as SWOTAnalysisValues;
         let factors = data["swot-factors"]?.factors;
         let actions = data["alternative-actions"]?.actions;

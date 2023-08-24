@@ -19,7 +19,7 @@ export interface UploadImgValues {
         age: string
         avatar: string
     },
-    
+
 }
 
 interface UploadImgsState {
@@ -27,8 +27,8 @@ interface UploadImgsState {
 }
 
 export interface UploadImgInfoValues {
-    actions:UploadImgValues[]
-    result:any
+    actions: UploadImgValues[]
+    result: any
 }
 
 export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues, UploadImgsState> {
@@ -50,14 +50,14 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
         return shouldUpdate;
     }
 
-    getValues(name:any,surname:any,age:any,imgSrc:any){
+    getValues(name: any, surname: any, age: any, imgSrc: any) {
         this.props.saveController.onChanged(save => {
             const data = save.data["uploadImage_actions"];
             if (data !== undefined) {
 
-            }else{
+            } else {
                 save.data["uploadImage_actions"] = {
-                    factors:{
+                    factors: {
                         name: '123',
                         surname: surname,
                         age: age,
@@ -65,43 +65,51 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
                     }
                 }
             }
-       })
-        
+        })
+
     }
 
-     handleFileChange = async (e:any)=> {
+    handleFileChange = async (e: any) => {
 
         const file = e.currentTarget.files[0];
-          return  new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result);
             reader.onerror = (error) => reject(error);
-              });
+        });
     }
-  
+
 
     build(): JSX.Element {
 
         let values = this.props.save.data["uploadImage_actions"]?.factors;
         if (values !== undefined) {
             return (
-            
-                <div className={"uploadImage_actions"} >
-                    <Row className={"mb-3 mt-3"}> 
-                         <Col sm={isDesktop() ? 6 : 12}>
+
+                <div className={"uploadImage_actions"}>
+                    <Row className={"mb-3 mt-3"}>
+                        <Col sm={isDesktop() ? 6 : 12}>
                             <div>
-                               Profibild:<br/> <input type='file' disabled={this.props.disabled} className="form-control" name="avatar" onChange={this.applyProfibildInfoChanges1.bind(this)}/>
+                                Profibild:<br/> <input type='file' disabled={this.props.disabled}
+                                                       className="form-control" name="avatar"
+                                                       onChange={this.applyProfibildInfoChanges1.bind(this)}/>
                                 <br/>
-                               Name: <input type='text' disabled={this.props.disabled} value={values.surname} className="form-control" name = 'surname' onChange={this.applyProfibildInfoChanges1.bind(this)} />
-                               <UIErrorBanner id={"uploadImage_actions.surnameError"}/>
-                               Vorname: <input type='text' disabled={this.props.disabled}   value={values.name} className="form-control" name = 'name' onChange={this.applyProfibildInfoChanges1.bind(this)} />
-                               <UIErrorBanner id={"uploadImage_actions.nameError"}/>
-                               Alter: <input type='text' disabled={this.props.disabled}  value={values.age} className="form-control" name = 'age' onChange={this.applyProfibildInfoChanges1.bind(this)} />  
-                               <UIErrorBanner id={"uploadImage_actions.ageError"}/>        
+                                Name: <input type='text' disabled={this.props.disabled} value={values.surname}
+                                             className="form-control" name='surname'
+                                             onChange={this.applyProfibildInfoChanges1.bind(this)}/>
+                                <UIErrorBanner id={"uploadImage_actions.surnameError"}/>
+                                Vorname: <input type='text' disabled={this.props.disabled} value={values.name}
+                                                className="form-control" name='name'
+                                                onChange={this.applyProfibildInfoChanges1.bind(this)}/>
+                                <UIErrorBanner id={"uploadImage_actions.nameError"}/>
+                                Alter: <input type='text' disabled={this.props.disabled} value={values.age}
+                                              className="form-control" name='age'
+                                              onChange={this.applyProfibildInfoChanges1.bind(this)}/>
+                                <UIErrorBanner id={"uploadImage_actions.ageError"}/>
                             </div>
                         </Col>
-                     </Row>
+                    </Row>
                 </div>
             );
         }
@@ -111,25 +119,25 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
         return <p>"ERROR"</p>;
     }
 
-     async applyProfibildInfoChanges1(e:any){
-        let value:string = e.target.value;
-        let name =  e.target.name;
-        if(name === "avatar"){
-            const data  = await this.handleFileChange(e) 
-           value = data as string
+    async applyProfibildInfoChanges1(e: any) {
+        let value: string = e.target.value;
+        let name = e.target.name;
+        if (name === "avatar") {
+            const data = await this.handleFileChange(e)
+            value = data as string
         }
-       
-      
+
+
         this.props.saveController.onChanged(save => {
             const data = save.data["uploadImage_actions"];
-            
+
             if (data !== undefined && data.factors !== undefined) {
-                switch(name){
+                switch (name) {
                     case "name":
                         data.factors.name = value;
                         break;
                     case "surname":
-                        data.factors.surname =value;
+                        data.factors.surname = value;
                         break;
                     case "age":
                         data.factors.age = value;
@@ -137,7 +145,7 @@ export class UpdateImgActionsValuesComponent extends Step<PersonaAnalysisValues,
                     case "avatar":
                         data.factors.avatar = value;
                         break;
-        
+
                 }
             }
         })

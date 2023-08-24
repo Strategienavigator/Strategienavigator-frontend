@@ -88,7 +88,7 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 deleted: false
             });
         });
-        console.log('paginationLoader',this.paginationLoader)
+        console.log('paginationLoader', this.paginationLoader)
         this.state = {
             showDeleteModal: false,
             showTutorial: false,
@@ -166,6 +166,9 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Badge>
                     )}
                 </h4>
+
+                {this.props.info?.shortDescription}
+
                 <div className={"button-container mb-0 mt-2"}>
                     {isDesktop() && (
                         <ButtonPanel>
@@ -196,8 +199,6 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                         </Button>
                     </span>
                 </div>
-
-                {this.props.info?.shortDescription}
 
                 <hr/>
 

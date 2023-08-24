@@ -1,5 +1,3 @@
-
-
 import {
     StepDataHandler,
     StepDefinition,
@@ -7,9 +5,9 @@ import {
 import {PersonaAnalysisValues} from "../../PersonaAnalysis-old";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
-import { PersonaShowComponent } from "./PersonaShowComponent";
+import {PersonaShowComponent} from "./PersonaShowComponent";
 
-export class PersonaShow implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues>  {
+export class PersonaShow implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues> {
 
     form: React.FunctionComponent<StepProp<PersonaAnalysisValues>> | React.ComponentClass<StepProp<PersonaAnalysisValues>>;
     id: string;
@@ -22,15 +20,15 @@ export class PersonaShow implements StepDefinition<PersonaAnalysisValues>, StepD
         this.title = "3. persona show";
         this.form = PersonaShowComponent;
         this.dataHandler = this;
-       
+
     }
 
     // TODO Determine whether the first two pages are complete finished
-    isUnlocked (data: PersonaAnalysisValues): boolean {
-        let flag1 :boolean = data['uploadImage_actions']?.factors.name !== undefined && data['uploadImage_actions']?.factors.name.length > 0;
-        let flag2 :boolean = data["persona-factors"]?.factors.qualifikation!==undefined &&   data["persona-factors"].factors.qualifikation.length > 0
-        && data["persona-factors"].factors.qualifikation[0].name !== '';
-        console.log("result3",flag1,flag2, flag1 && flag2)
+    isUnlocked(data: PersonaAnalysisValues): boolean {
+        let flag1: boolean = data['uploadImage_actions']?.factors.name !== undefined && data['uploadImage_actions']?.factors.name.length > 0;
+        let flag2: boolean = data["persona-factors"]?.factors.qualifikation !== undefined && data["persona-factors"].factors.qualifikation.length > 0
+            && data["persona-factors"].factors.qualifikation[0].name !== '';
+        console.log("result3", flag1, flag2, flag1 && flag2)
         return flag1 && flag2;
     };
 

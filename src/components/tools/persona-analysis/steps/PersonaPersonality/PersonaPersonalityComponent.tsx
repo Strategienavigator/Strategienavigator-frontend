@@ -7,13 +7,20 @@ import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UI
 
 
 export interface PersonaPersonalityValues {
-    citations: CardComponentFields;
-    [key: string]: CardComponentFields;
+    citations: CardComponentFields,
+    hobbys: CardComponentFields,
+    family: CardComponentFields,
+    wishes: CardComponentFields,
+    problems: CardComponentFields,
+    characteristics: CardComponentFields,
+    illness: CardComponentFields,
+
+    [key: string]: CardComponentFields
 }
 
 export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}> {
 
-    static DEFAULT_MIN = 1;
+    static DEFAULT_MIN = 0;
     static DEFAULT_MAX = 5;
 
     static MIN_CITATION = PersonaPersonalityComponent.DEFAULT_MIN;
@@ -39,11 +46,66 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
 
     static MIN_CHARACTERISTICS = PersonaPersonalityComponent.DEFAULT_MIN;
     static MAX_CHARACTERISTICS = PersonaPersonalityComponent.DEFAULT_MAX;
-
+    static COUNTER = new NumberCounter();
     // Change listener
     private citationsChanged = this.applyChanges.bind(this, "cit");
-
-    static COUNTER = new NumberCounter();
+    private hobbysChanged = this.applyChanges.bind(this, "hob");
+    private familyChanged = this.applyChanges.bind(this, "fam");
+    private illnessChanged = this.applyChanges.bind(this, "ill");
+    private problemsChanged = this.applyChanges.bind(this, "pro");
+    private wishesChanged = this.applyChanges.bind(this, "wis");
+    private characteristicsChanged = this.applyChanges.bind(this, "cha");
+    public items = [
+        {
+            legend: "Hobbys und Interessen",
+            name: "hobbys",
+            min: PersonaPersonalityComponent.MIN_HOBBYS,
+            max: PersonaPersonalityComponent.MAX_HOBBYS,
+            changeListener: this.hobbysChanged
+        },
+        {
+            legend: "Krankheiten",
+            name: "illness",
+            min: PersonaPersonalityComponent.MIN_ILLNESS,
+            max: PersonaPersonalityComponent.MAX_ILLNESS,
+            changeListener: this.illnessChanged
+        },
+        {
+            legend: "Familie und Freunde",
+            name: "family",
+            min: PersonaPersonalityComponent.MIN_FAMILY,
+            max: PersonaPersonalityComponent.MAX_FAMILY,
+            changeListener: this.familyChanged
+        },
+        {
+            legend: "Probleme und Hürden",
+            name: "problems",
+            min: PersonaPersonalityComponent.MIN_PROBLEMS,
+            max: PersonaPersonalityComponent.MAX_PROBLEMS,
+            changeListener: this.problemsChanged
+        },
+        {
+            legend: "Wünsche und Ziele",
+            name: "wishes",
+            min: PersonaPersonalityComponent.MIN_WISHES,
+            max: PersonaPersonalityComponent.MAX_WISHES,
+            changeListener: this.wishesChanged
+        },
+        {
+            legend: "Charakteristiken",
+            name: "characteristics",
+            min: PersonaPersonalityComponent.MIN_CHARACTERISTICS,
+            max: PersonaPersonalityComponent.MAX_CHARACTERISTICS,
+            changeListener: this.characteristicsChanged
+        },
+        {
+            legend: "Zitate und Sprüche",
+            name: "citations",
+            min: PersonaPersonalityComponent.MIN_CITATION,
+            max: PersonaPersonalityComponent.MAX_CITATION,
+            changeListener: this.citationsChanged
+        },
+    ];
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
@@ -55,42 +117,65 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
         if (data) {
             return (
                 <>
-                    <fieldset>
-                        <legend>
-                            Zitate und Sprüche
-                        </legend>
-                        <div>
-                            <CardComponent
-                                name={"citations"}
-                                values={data.citations}
-                                disabled={this.props.disabled}
-                                min={PersonaPersonalityComponent.MIN_CITATION}
-                                max={PersonaPersonalityComponent.MAX_CITATION}
-                                counter={PersonaPersonalityComponent.COUNTER}
-                                hideDesc={true}
-                                required={true}
-                                onChanged={this.citationsChanged}
-                            />
-                            <UIErrorBanner id={"citations.empty"} />
-                            <UIErrorBanner id={"citations.toolong"} />
-                        </div>
-                    </fieldset>
+                    {(this.items.map((item) => {
+                        if (data) {
+                            return (
+                                <fieldset key={`persona-item-${item.name}`}>
+                                    <legend>{item.legend}</legend>
+                                    <div>
+                                        <CardComponent
+                                            name={item.name}
+                                            values={data[item.name]}
+                                            disabled={this.props.disabled}
+                                            min={item.min}
+                                            max={item.max}
+                                            counter={PersonaPersonalityComponent.COUNTER}
+                                            hideDesc={true}
+                                            required={true}
+                                            onChanged={item.changeListener}
+                                        />
+                                        <UIErrorBanner id={`${item.name}.empty`}/>
+                                        <UIErrorBanner id={`${item.name}.toolong`}/>
+                                    </div>
+                                </fieldset>
+                            );
+                        }
+                        return null;
+                    }))}
                 </>
             );
         }
         return (<></>);
     }
 
-    private applyChanges(type: "cit", values: CardComponentFields) {
+    private applyChanges(type: "cit" | "hob" | "fam" | "ill" | "pro" | "wis" | "cha", values: CardComponentFields) {
         this.props.saveController.onChanged(save => {
-           const data = save.data["persona-personality"];
-           if (data) {
-               switch (type) {
-                   case "cit":
-                       data.citations = values;
-                       break;
-               }
-           }
+            const data = save.data["persona-personality"];
+            if (data) {
+                switch (type) {
+                    case "cit":
+                        data.citations = values;
+                        break;
+                    case "hob":
+                        data.hobbys = values;
+                        break;
+                    case "ill":
+                        data.illness = values;
+                        break;
+                    case "fam":
+                        data.family = values;
+                        break;
+                    case "pro":
+                        data.problems = values;
+                        break;
+                    case "wis":
+                        data.wishes = values;
+                        break;
+                    case "cha":
+                        data.characteristics = values;
+                        break;
+                }
+            }
         });
     }
 

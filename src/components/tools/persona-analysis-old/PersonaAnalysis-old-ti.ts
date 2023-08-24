@@ -5,7 +5,7 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 export const PersonaAnalysisValues = t.iface([], {
     "persona-factors": "PersonaFactorsValues",
-    "uploadImage_actions":t.opt("UpdateImgValues")
+    "uploadImage_actions": t.opt("UpdateImgValues")
 });
 const PersonaAnalysis_ts: t.ITypeSuite = {
     PersonaAnalysisValues,
