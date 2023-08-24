@@ -17,19 +17,30 @@ export interface PersonaInfoValues {
     "avatar": string | null
 }
 
-export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
+interface PersonaInfoComponentState {
+    avatarPreview: string | null
+}
+
+export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInfoComponentState> {
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
+
+        this.state = {
+            avatarPreview: null
+        }
     }
 
-    shouldComponentUpdate(nextProps: Readonly<StepProp<PersonaAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: Readonly<StepProp<PersonaAnalysisValues>>, nextState: Readonly<PersonaInfoComponentState>, nextContext: any): boolean {
         let shouldUpdate: boolean;
         shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
         if (!shouldUpdate) {
             const oldSave = this.props.save;
             const newSave = nextProps.save;
             if (oldSave.data["persona-info"] !== newSave.data["persona-info"]) {
+                shouldUpdate = true;
+            }
+            if (this.state.avatarPreview !== nextState.avatarPreview) {
                 shouldUpdate = true;
             }
         }
@@ -73,10 +84,22 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
 
                 <Form.Group className="mb-3">
                     <Form.Label>Avatar wählen...</Form.Label>
-                    <Form.Control type="file" />
+                    <Form.Control type="file" onChange={this.generatePreview} />
                 </Form.Group>
+
+                <div className={"avatar-preview"}>
+                    {this.state.avatarPreview !== null && (
+                        <img src={this.state.avatarPreview ?? undefined} className={"avatar"} alt={"Avatar Vorschau"} />
+                    )}
+                </div>
             </>
         );
+    }
+
+    generatePreview = (e: ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            avatarPreview: e.target.files !== null ? URL.createObjectURL(e.target.files.item(0)) : null
+        });
     }
 
     firstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
