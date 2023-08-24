@@ -41,8 +41,12 @@ class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
     }
 
     protected getInitData(): PersonaAnalysisValues {
-        let data: PersonaAnalysisValues = {};
-        this.getStep(0).dataHandler.fillFromPreviousValues(data);
+        let data = {
+            "persona-info": undefined,
+            "persona-personality": undefined,
+            "persona-summary": undefined
+        };
+        this.getStep(0).dataHandler.deleteData(data);
         return data;
     }
 

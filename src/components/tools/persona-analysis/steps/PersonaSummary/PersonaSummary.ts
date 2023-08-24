@@ -23,9 +23,7 @@ export class PersonaSummary implements StepDefinition<PersonaAnalysisValues>, St
         this.dataHandler = this;
     }
 
-    isUnlocked(data: PersonaAnalysisValues): boolean {
-        return true;
-    }
+    isUnlocked = (data: PersonaAnalysisValues): boolean => data["persona-summary"] !== undefined;
 
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => this.deleteData(data);
 

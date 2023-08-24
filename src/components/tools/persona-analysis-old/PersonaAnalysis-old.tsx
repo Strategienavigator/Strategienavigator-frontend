@@ -1,7 +1,6 @@
 import {faThLarge} from "@fortawesome/free-solid-svg-icons";
 import {PersonaFactorsValues} from "./steps/PersonaFactors/PersonaFactorsComponent";
 import {UploadImgValues} from "./steps/UpdateImgAndBaseInfo/UpdateImgBaseInfoComponent";
-import "./persona-analysis.scss";
 import {SteppableTool} from "../../../general-components/Tool/SteppableTool/SteppableTool";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import {RouteComponentProps} from "react-router";
