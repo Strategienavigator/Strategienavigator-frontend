@@ -8,9 +8,9 @@ import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/Cust
 import {Card} from "./Card";
 
 
-export function isCardComponentFilled(cardComponentFields?: CardComponentFields<object>) {
+export function isCardComponentFilled(cardComponentFields?: CardComponentFields<object>, withDesc?: boolean) {
     return cardComponentFields?.every((field: CardComponentField<object>) => {
-        return field.name.length > 0 && field.desc.length > 0;
+        return field.name.length > 0 && (withDesc ? field.desc.length > 0 : true);
     });
 }
 

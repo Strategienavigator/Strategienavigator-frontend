@@ -9,6 +9,10 @@ import React from "react";
 import {PersonaPersonalityComponent, PersonaPersonalityValues} from "./PersonaPersonalityComponent";
 import {PersonaAnalysisValues} from "../../PersonaAnalysis";
 import {PersonaAnalysisInfoShower} from "../../matrix/PersonaAnalysisInfoShower";
+import {
+    isCardComponentFilled,
+    isCardComponentTooLong
+} from "../../../../../general-components/CardComponent/CardComponent";
 
 
 export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues> {
@@ -62,8 +66,34 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
         return data;
     }
 
-    validateData(data: PersonaAnalysisValues): UIError[] {
-        return Array<UIError>();
+    validateData = (data: PersonaAnalysisValues): UIError[] => {
+        let errors = Array<UIError>();
+        let names = this.properties.map((item) => item.name);
+        let d = data["persona-personality"];
+
+        if (d) {
+            for (const name of names) {
+                // empty
+                if (!isCardComponentFilled(d[name], false)) {
+                    errors.push({
+                       id: `${name}.empty`,
+                       message: "Bitte füllen Sie alle Felder aus!",
+                       level: "error"
+                    });
+                }
+
+                // too long
+                if (isCardComponentTooLong(d[name])) {
+                    errors.push({
+                        id: `${name}.toolong`,
+                        message: "Einige Feld sind zu Lang!",
+                        level: "error"
+                    });
+                }
+            }
+        }
+
+        return errors;
     }
 
 

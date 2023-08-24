@@ -55,7 +55,7 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Vorname</Form.Label>
-                            <Form.Control onChange={this.firstNameChanged} type={"text"} value={data?.firstname ?? ""} placeholder={"Max"}/>
+                            <Form.Control disabled={this.props.disabled} onChange={this.firstNameChanged} type={"text"} value={data?.firstname ?? ""} placeholder={"Max"}/>
                             <UIErrorBanner id={"firstname.empty"} />
                             <UIErrorBanner id={"firstname.toolong"} />
                         </Form.Group>
@@ -63,7 +63,7 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Nachname</Form.Label>
-                            <Form.Control onChange={this.lastNameChanged} type={"text"} value={data?.lastname ?? ""} placeholder={"Mustermann"}/>
+                            <Form.Control disabled={this.props.disabled} onChange={this.lastNameChanged} type={"text"} value={data?.lastname ?? ""} placeholder={"Mustermann"}/>
                             <UIErrorBanner id={"lastname.empty"} />
                             <UIErrorBanner id={"lastname.toolong"} />
                         </Form.Group>
@@ -74,7 +74,7 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Alter</Form.Label>
-                            <Form.Control onChange={this.ageChanged} type={"number"} value={data?.age === -1 ? undefined : data?.age ?? ""} min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}/>
+                            <Form.Control disabled={this.props.disabled} onChange={this.ageChanged} type={"number"} value={data?.age === -1 ? undefined : data?.age ?? ""} min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}/>
                             <UIErrorBanner id={"age.invalid"} />
                             <UIErrorBanner id={"age.outofrange"} />
                         </Form.Group>
@@ -84,12 +84,12 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
 
                 <Form.Group className="mb-3">
                     <Form.Label>Avatar wählen...</Form.Label>
-                    <Form.Control type="file" onChange={this.generatePreview} />
+                    <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview} />
                 </Form.Group>
 
                 <div className={"avatar-preview"}>
-                    {this.state.avatarPreview !== null && (
-                        <Image src={this.state.avatarPreview ?? undefined} thumbnail rounded className={"avatar"} alt={"Avatar Vorschau"} />
+                    {(this.state.avatarPreview !== null || data?.avatar) && (
+                        <Image src={this.state.avatarPreview ?? (data?.avatar ?? undefined)} thumbnail rounded className={"avatar"} alt={"Avatar Vorschau"} />
                     )}
                 </div>
             </>

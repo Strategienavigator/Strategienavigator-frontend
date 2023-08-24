@@ -3,6 +3,7 @@ import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTo
 import {PersonaAnalysisValues} from "../../PersonaAnalysis";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
+import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 
 
 export interface PersonaPersonalityValues {
@@ -70,6 +71,8 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
                                 required={true}
                                 onChanged={this.citationsChanged}
                             />
+                            <UIErrorBanner id={"citations.empty"} />
+                            <UIErrorBanner id={"citations.toolong"} />
                         </div>
                     </fieldset>
                 </>
