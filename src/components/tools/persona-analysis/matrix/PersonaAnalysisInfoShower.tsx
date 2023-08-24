@@ -16,7 +16,7 @@ class PersonaAnalysisInfoShower extends ExtraWindowComponent<PersonaAnalysisValu
                     </div>
                     <div className={"info"}>
                         <div className={"age"}>
-                            {data.age} {((data.age ?? -1) > 1) ? "Jahre" : "Jahr"} alt
+                            {data.age} {((data.age ?? -1) === 1) ? "Jahr" : "Jahre"} alt
                         </div>
                     </div>
                 </div>

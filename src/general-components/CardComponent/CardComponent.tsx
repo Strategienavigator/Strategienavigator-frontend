@@ -42,6 +42,7 @@ export interface CardComponentProps<D> {
     max: number
     onChanged: (values: CardComponentFields<D>) => void
     hide?: boolean
+    hideDesc?: boolean
     required?: boolean
     counter?: CounterInterface
     placeholder?: CardComponentFieldPlaceholder
@@ -80,6 +81,7 @@ class CardComponent<D extends object> extends PureComponent<CardComponentProps<D
                          disabled={this.props.disabled}
                          required={required}
                          index={index}
+                         hideDesc={this.props.hideDesc ?? false}
                          onDelete={this.removeCard.bind(this, index)}
                          onChange={this.cardUpdatedListener}
                          customDescValues={value.extra}

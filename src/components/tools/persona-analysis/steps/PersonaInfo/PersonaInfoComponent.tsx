@@ -5,7 +5,7 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {PersonaAnalysisValues} from "../../PersonaAnalysis";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
-import {Col, Form, Row} from "react-bootstrap";
+import {Col, Form, Image, Row} from "react-bootstrap";
 import {ChangeEvent} from "react";
 import {PersonaInfo} from "./PersonaInfo";
 
@@ -89,7 +89,7 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
 
                 <div className={"avatar-preview"}>
                     {this.state.avatarPreview !== null && (
-                        <img src={this.state.avatarPreview ?? undefined} className={"avatar"} alt={"Avatar Vorschau"} />
+                        <Image src={this.state.avatarPreview ?? undefined} thumbnail rounded className={"avatar"} alt={"Avatar Vorschau"} />
                     )}
                 </div>
             </>

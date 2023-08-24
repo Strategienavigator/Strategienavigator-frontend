@@ -24,6 +24,7 @@ export interface CardProps<D = never> {
     value: string
     index: number
     disabled: boolean
+    hideDesc: boolean
     required: boolean
     onChange: (index: number, name: string, desc: string, customDescValues?: D) => void
     onDelete?: (index: number) => void
@@ -172,24 +173,26 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                     }
                 </InputGroup>
                 {/*TODO put this logic into higher component*/}
-                <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
-                    <div>
-                        <FormControl
-                            required={this.props.required}
-                            disabled={this.props.disabled}
-                            onChange={this.descChanged}
-                            as="textarea"
-                            spellCheck={false}
-                            tabIndex={(this.props.index * 3) + 2}
-                            style={{maxHeight: 500, height: 70}}
-                            name={this.props.name + "[" + this.props.index + "][desc]"}
-                            value={this.props.desc}
-                            placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}/>
+                {!this.props.hideDesc && (
+                    <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
                         <div>
-                            {customDescs}
+                            <FormControl
+                                required={this.props.required}
+                                disabled={this.props.disabled}
+                                onChange={this.descChanged}
+                                as="textarea"
+                                spellCheck={false}
+                                tabIndex={(this.props.index * 3) + 2}
+                                style={{maxHeight: 500, height: 70}}
+                                name={this.props.name + "[" + this.props.index + "][desc]"}
+                                value={this.props.desc}
+                                placeholder={(this.props.placeholder?.description !== undefined) ? this.props.placeholder?.description : "Beschreibung"}/>
+                            <div>
+                                {customDescs}
+                            </div>
                         </div>
-                    </div>
-                </Collapse>
+                    </Collapse>
+                )}
 
                 <div className={"feedbackContainer"}>
                     {(this.state.nameTooLong) && (

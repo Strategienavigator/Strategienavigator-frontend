@@ -10,11 +10,6 @@
     .avatar {
       max-height: 400px;
       max-width: 100%;
-      border: 4px solid;
-
-      @include theme() {
-        border-color: get("form-bg-color");
-      }
     }
   }
 }
