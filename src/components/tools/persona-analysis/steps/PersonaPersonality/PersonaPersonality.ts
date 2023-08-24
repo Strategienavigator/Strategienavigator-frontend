@@ -50,6 +50,11 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
             max: PersonaPersonalityComponent.MAX_WISHES
         },
         {
+            name: "motives",
+            min: PersonaPersonalityComponent.MIN_MOTIVES,
+            max: PersonaPersonalityComponent.MAX_MOTIVES
+        },
+        {
             name: "problems",
             min: PersonaPersonalityComponent.MIN_PROBLEMS,
             max: PersonaPersonalityComponent.MAX_PROBLEMS

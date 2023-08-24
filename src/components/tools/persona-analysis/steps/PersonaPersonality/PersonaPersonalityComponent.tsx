@@ -14,6 +14,7 @@ export interface PersonaPersonalityValues {
     problems: CardComponentFields,
     characteristics: CardComponentFields,
     illness: CardComponentFields,
+    motives: CardComponentFields,
 
     [key: string]: CardComponentFields
 }
@@ -47,6 +48,7 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
     static MIN_CHARACTERISTICS = PersonaPersonalityComponent.DEFAULT_MIN;
     static MAX_CHARACTERISTICS = PersonaPersonalityComponent.DEFAULT_MAX;
     static COUNTER = new NumberCounter();
+
     // Change listener
     private citationsChanged = this.applyChanges.bind(this, "cit");
     private hobbysChanged = this.applyChanges.bind(this, "hob");
@@ -55,6 +57,8 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
     private problemsChanged = this.applyChanges.bind(this, "pro");
     private wishesChanged = this.applyChanges.bind(this, "wis");
     private characteristicsChanged = this.applyChanges.bind(this, "cha");
+    private motivesChanged = this.applyChanges.bind(this, "mot");
+
     public items = [
         {
             legend: "Hobbys und Interessen",
@@ -92,11 +96,18 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
             changeListener: this.wishesChanged
         },
         {
-            legend: "Charakteristiken",
+            legend: "Charaktereigenschaften",
             name: "characteristics",
             min: PersonaPersonalityComponent.MIN_CHARACTERISTICS,
             max: PersonaPersonalityComponent.MAX_CHARACTERISTICS,
             changeListener: this.characteristicsChanged
+        },
+        {
+            legend: "Grundmotiv",
+            name: "motives",
+            min: PersonaPersonalityComponent.MIN_MOTIVES,
+            max: PersonaPersonalityComponent.MAX_MOTIVES,
+            changeListener: this.motivesChanged
         },
         {
             legend: "Zitate und Sprüche",
@@ -148,7 +159,7 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
         return (<></>);
     }
 
-    private applyChanges(type: "cit" | "hob" | "fam" | "ill" | "pro" | "wis" | "cha", values: CardComponentFields) {
+    private applyChanges(type: "cit" | "hob" | "fam" | "ill" | "pro" | "wis" | "cha" | "mot", values: CardComponentFields) {
         this.props.saveController.onChanged(save => {
             const data = save.data["persona-personality"];
             if (data) {
@@ -173,6 +184,9 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
                         break;
                     case "cha":
                         data.characteristics = values;
+                        break;
+                    case "mot":
+                        data.motives = values;
                         break;
                 }
             }

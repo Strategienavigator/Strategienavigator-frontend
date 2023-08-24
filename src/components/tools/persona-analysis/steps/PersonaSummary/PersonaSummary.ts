@@ -28,6 +28,7 @@ export class PersonaSummary implements StepDefinition<PersonaAnalysisValues>, St
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => this.deleteData(data);
 
     deleteData(data: PersonaAnalysisValues): PersonaAnalysisValues {
+        data["persona-summary"] = null;
         return data;
     }
 
