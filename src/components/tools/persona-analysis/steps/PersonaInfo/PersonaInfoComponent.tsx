@@ -22,6 +22,8 @@ interface PersonaInfoComponentState {
 }
 
 export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInfoComponentState> {
+    static FILETYPES = ".png, .jpg, .jpeg";
+    static MAXFILESIZE = 2;
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
@@ -88,6 +90,8 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                         <Form.Group className="mb-3">
                             <Form.Label>Avatar/Personenfoto</Form.Label>
                             <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview}/>
+                            <Form.Text>Gültige Dateitypen:{PersonaInfoComponent.FILETYPES}</Form.Text> <br />
+                            <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE} MB</Form.Text>
                         </Form.Group>
                     </Col>
                 </Row>
