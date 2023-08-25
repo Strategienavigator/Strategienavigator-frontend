@@ -78,7 +78,8 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                             <Form.Label>Alter</Form.Label>
                             <Form.Control disabled={this.props.disabled} onChange={this.ageChanged} type={"number"}
                                           value={data?.age === -1 ? undefined : data?.age ?? ""}
-                                          min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}/>
+                                          min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}
+                                          placeholder={"25"}/>
                             <UIErrorBanner id={"age.invalid"}/>
                             <UIErrorBanner id={"age.outofrange"}/>
                         </Form.Group>
