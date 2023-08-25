@@ -79,9 +79,7 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
 
     isUnlocked = (data: PersonaAnalysisValues): boolean => data["persona-personality"] !== undefined;
 
-    fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => this.deleteData(data);
-
-    deleteData(data: PersonaAnalysisValues): PersonaAnalysisValues {
+    fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => {
         let d = this.properties.map((i) => i.name).reduce((a, v) => ({...a, [v]: []}), {}) as PersonaPersonalityValues;
 
         // generiere leere zeilen für min werte
@@ -97,6 +95,10 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
 
         data["persona-personality"] = d;
         return data;
+    };
+
+    deleteData(data: PersonaAnalysisValues): void {
+        data["persona-personality"] = undefined;
     }
 
     validateData = (data: PersonaAnalysisValues): UIError[] => {
