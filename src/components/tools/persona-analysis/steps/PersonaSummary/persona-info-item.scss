@@ -1,0 +1,21 @@
+
+.info-container {
+  margin-bottom: 1.25rem;
+}
+
+.info-container {
+  .title {
+    padding: 0 0 0.5rem;
+    font-size: 13pt;
+    font-weight: 600;
+
+    .icon {
+      margin-right: 0.25rem;
+      font-size: 15pt;
+    }
+  }
+
+  .content .list-group-item {
+    padding: 0.35rem 0.5rem;
+  }
+}

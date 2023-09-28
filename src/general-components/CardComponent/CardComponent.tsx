@@ -8,9 +8,9 @@ import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/Cust
 import {Card} from "./Card";
 
 
-export function isCardComponentFilled(cardComponentFields?: CardComponentFields<object>) {
+export function isCardComponentFilled(cardComponentFields?: CardComponentFields<object>, withDesc?: boolean) {
     return cardComponentFields?.every((field: CardComponentField<object>) => {
-        return field.name.length > 0 && field.desc.length > 0;
+        return field.name.length > 0 && (withDesc ? field.desc.length > 0 : true);
     });
 }
 
@@ -42,6 +42,7 @@ export interface CardComponentProps<D> {
     max: number
     onChanged: (values: CardComponentFields<D>) => void
     hide?: boolean
+    hideDesc?: boolean
     required?: boolean
     counter?: CounterInterface
     placeholder?: CardComponentFieldPlaceholder
@@ -65,6 +66,7 @@ class CardComponent<D extends object> extends PureComponent<CardComponentProps<D
         // check and add minimum
         if (this.props.values.length < this.props.min) {
             for (let i = 0; i < this.props.min - this.props.values.length; i++) {
+                console.log(i)
                 this.addCard();
             }
         }
@@ -79,6 +81,7 @@ class CardComponent<D extends object> extends PureComponent<CardComponentProps<D
                          disabled={this.props.disabled}
                          required={required}
                          index={index}
+                         hideDesc={this.props.hideDesc ?? false}
                          onDelete={this.removeCard.bind(this, index)}
                          onChange={this.cardUpdatedListener}
                          customDescValues={value.extra}

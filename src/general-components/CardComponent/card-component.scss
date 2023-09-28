@@ -9,12 +9,12 @@
   cursor: pointer;
 
   @include theme() {
-    background-color: get("style-color");
+    background-color: darken(get("bg-color"), 10%);
   }
 
   :hover {
     @include theme() {
-      background-color: lighten(get("style-color"), 10%);
+      background-color: darken(get("bg-color"), 17%);
     }
   }
 
@@ -43,7 +43,7 @@
 
   .id.disabled {
     @include theme() {
-      background-color: adjust-color(get("input-bg-color"), $alpha: -0.3);
+      background-color: adjust-color(get("input-bg-color"), $alpha: -0.6);
       border-color: adjust-color(get("input-border-color"), $alpha: -0.3);
     }
   }
