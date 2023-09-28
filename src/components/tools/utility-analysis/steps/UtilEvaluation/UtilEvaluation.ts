@@ -1,4 +1,5 @@
 import {
+    ExtraWindowDefinition,
     StepDataHandler,
     StepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
@@ -10,6 +11,9 @@ import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilCriterias} from "../UtilCriterias/UtilCriterias";
 import {CompareComponentValues} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
+import {PortScaleDescriptionShower} from "../../../portfolio-analysis/matrix/PortScaleDescriptionShower";
+import {PortfolioAnalysisValues} from "../../../portfolio-analysis/PortfolioAnalysis";
+import {UAScaleDescriptionShower} from "../../matrix/UAScaleDescriptionShower";
 
 
 class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataHandler<UtilityAnalysisValues> {
@@ -19,12 +23,17 @@ class UtilEvaluation implements StepDefinition<UtilityAnalysisValues>, StepDataH
     form: React.FunctionComponent<StepProp<UtilityAnalysisValues>> | React.ComponentClass<StepProp<UtilityAnalysisValues>>;
     id: string;
     title: string;
+    extraWindow: ExtraWindowDefinition<UtilityAnalysisValues>;
 
     constructor() {
         this.id = "ua-evaluation";
         this.title = "4. Bewertung > Kriterien nach Objekt";
         this.form = UtilEvaluationComponent;
         this.dataHandler = this;
+        this.extraWindow = {
+            displayName: "Die aktuelle Skalabeschreibung",
+            extraWindowComponent: UAScaleDescriptionShower
+        };
     }
 
     deleteData(data: Draft<UtilityAnalysisValues>): void {

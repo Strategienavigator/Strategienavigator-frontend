@@ -36,7 +36,6 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             // let isPersona = (tool_id === 6)
             // let saveToSend = this.props.save
 
-
             let formattedCreatedDate = new Date(this.props.save.created_at).toLocaleDateString("de-DE");
 
             return (

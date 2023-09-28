@@ -34,6 +34,7 @@ export interface UtilEvaluationValues {
          */
         rating: CompareComponentValues
     }[]
+    currentHoveredCriteria?: number
 }
 
 interface UtilEvaluationComponentState {
@@ -84,7 +85,12 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, UtilEvaluation
                         const rating = values.evaluation[criteriaIndex].rating;
 
                         return (
-                            <div className={"comparison criteriaToObject"} key={"criteria-" + criteriaIndex}>
+                            <div
+                                className={"comparison criteriaToObject"}
+                                key={"criteria-" + criteriaIndex}
+                                onMouseEnter={() => this.onCurrentCriteriaChange(criteriaIndex)}
+                                onClick={() => this.onCurrentCriteriaChange(criteriaIndex)}
+                            >
                                 <div className={"criteria"}>
                                     {criteria.name}
 
@@ -114,6 +120,14 @@ class UtilEvaluationComponent extends Step<UtilityAnalysisValues, UtilEvaluation
             );
         }
         return <></>;
+    }
+
+    onCurrentCriteriaChange = (index: number) => {
+        this.props.saveController.onChanged((save) => {
+            if (save.data["ua-evaluation"]) {
+                save.data["ua-evaluation"].currentHoveredCriteria = index;
+            }
+        });
     }
 
     /**
