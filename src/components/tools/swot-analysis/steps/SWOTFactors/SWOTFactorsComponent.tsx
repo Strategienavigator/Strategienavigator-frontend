@@ -133,8 +133,6 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
 
         showErrorPage(404);
         return <p>"ERROR"</p>;
-
-
     }
 
     private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {

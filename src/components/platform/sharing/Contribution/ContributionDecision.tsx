@@ -28,9 +28,13 @@ interface ContributionDecisionState {
 }
 
 
-export class ContributionDecision extends Component<RouteComponentProps<{ sharedSaveID: string }>, ContributionDecisionState> {
+export class ContributionDecision extends Component<RouteComponentProps<{
+    sharedSaveID: string
+}>, ContributionDecisionState> {
 
-    constructor(props: RouteComponentProps<{ sharedSaveID: string; }, StaticContext, unknown> | Readonly<RouteComponentProps<{ sharedSaveID: string; }, StaticContext, unknown>>) {
+    constructor(props: RouteComponentProps<{
+        sharedSaveID: string;
+    }, StaticContext, unknown> | Readonly<RouteComponentProps<{ sharedSaveID: string; }, StaticContext, unknown>>) {
         super(props);
 
         this.state = {

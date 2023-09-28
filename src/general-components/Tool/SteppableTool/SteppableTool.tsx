@@ -25,6 +25,7 @@ abstract class SteppableTool<D extends object> extends Tool<D> {
         return this.steps[index];
     }
 
+    // 泛型控制传参类型
     protected addStep<E extends object>(step: StepDefinition<E>) {
         this.steps.push(step);
     }

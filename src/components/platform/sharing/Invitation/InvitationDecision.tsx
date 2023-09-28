@@ -18,7 +18,9 @@ export interface InvitationDecisionState {
 
 export class InvitationDecision extends Component<RouteComponentProps<{ token: string }>, InvitationDecisionState> {
 
-    constructor(props: RouteComponentProps<{ token: string; }, StaticContext, unknown> | Readonly<RouteComponentProps<{ token: string; }, StaticContext, unknown>>) {
+    constructor(props: RouteComponentProps<{ token: string; }, StaticContext, unknown> | Readonly<RouteComponentProps<{
+        token: string;
+    }, StaticContext, unknown>>) {
         super(props);
 
         this.state = {

@@ -1,7 +1,14 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Col, Row} from "react-bootstrap";
-import {faArrowsAlt, faBorderAll, faChartPie, faSortAmountDownAlt, faThLarge} from "@fortawesome/free-solid-svg-icons";
+import {
+    faArrowsAlt,
+    faBorderAll,
+    faChartPie,
+    faSortAmountDownAlt,
+    faThLarge,
+    faUserCircle
+} from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 import "./home.scss";
@@ -45,6 +52,13 @@ export const Tools = [
         name: "Portfolio Analyse",
         icon: faArrowsAlt,
         link: "/portfolio-analysis",
+        maintenance: false
+    },
+    {
+        id: 6,
+        name: "Persona Analyse",
+        icon: faUserCircle,
+        link: "/persona-analysis",
         maintenance: false
     },
     {

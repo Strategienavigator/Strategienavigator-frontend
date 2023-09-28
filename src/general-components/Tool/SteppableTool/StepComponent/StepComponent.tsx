@@ -136,7 +136,9 @@ export interface StepComponentState {
     showExportModal: boolean
 }
 
-class StepComponent<D extends object> extends Component<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, StepComponentState> {
+class StepComponent<D extends object> extends Component<StepComponentProps<D> & {
+    uiErrorContext: IUIErrorContext
+}, StepComponentState> {
     /**
      * Definiert auf welchen Context zugegriffen werden soll
      */
@@ -145,9 +147,13 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private readonly stepController: StepController;
 
-    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & { uiErrorContext: IUIErrorContext });
+    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & {
+        uiErrorContext: IUIErrorContext
+    });
     constructor(props: StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, context: any);
-    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, context?: any) {
+    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & {
+        uiErrorContext: IUIErrorContext
+    }, context?: any) {
         super(props, context);
         this.stepController = {
             requestStep: this.changeStep,
@@ -414,7 +420,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private hasNextStep(): boolean {
         let newStepIndex = this.state.currentStep + 1;
-
+        console.log('newStepIndex', newStepIndex)
         if (newStepIndex < this.props.steps.length) {
             let newStep = this.props.steps[newStepIndex];
             return this.withData(newStep.dataHandler.isUnlocked);

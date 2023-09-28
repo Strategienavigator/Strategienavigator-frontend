@@ -130,6 +130,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return "/pairwise-comparison/" + saveID;
         } else if (toolID === 4) {
             return "/portfolio-analysis/" + saveID;
+        } else if (toolID === 6) {
+            return "/persona-analysis/" + saveID;
         }
         return "/";
     }
@@ -143,6 +145,8 @@ class Nav extends Component<RouteComponentProps, NavState> {
             return "Paarweiser Vergleich";
         } else if (toolID === 4) {
             return "Portfolio Analyse";
+        } else if (toolID === 6) {
+            return "Persona Analyse";
         }
     }
 

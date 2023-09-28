@@ -50,7 +50,10 @@ export class SWOTAlternativeActions implements StepDefinition<SWOTAnalysisValues
         return {firstId: firstId, secondId: secondId};
     }
 
-    public static getActionIds(factors: SwotFactorsValues["factors"]): { firstIds: CardComponentFields, secondIds: CardComponentFields } {
+    public static getActionIds(factors: SwotFactorsValues["factors"]): {
+        firstIds: CardComponentFields,
+        secondIds: CardComponentFields
+    } {
         const firstIds = factors.strengths.concat(factors.weaknesses);
         const secondIds = factors.chances.concat(factors.risks);
         return {firstIds, secondIds}

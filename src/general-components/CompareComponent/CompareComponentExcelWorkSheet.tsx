@@ -114,7 +114,10 @@ class CompareComponentExcelWorkSheet extends ExcelExporter<any> {
         return ws;
     }
 
-    public basedOnWeightingCardComponent<D extends object>(values: { fields: CardComponentFields<D>, comparisons: CompareComponentValues[] }, weighting: CompareComponentValues): WorkSheet {
+    public basedOnWeightingCardComponent<D extends object>(values: {
+        fields: CardComponentFields<D>,
+        comparisons: CompareComponentValues[]
+    }, weighting: CompareComponentValues): WorkSheet {
         let evaluation = new WeightingEvaluation(values.fields, weighting).getValues();
         let indices: number[] = [];
         values.fields = values.fields.filter((item, i) => {
@@ -133,7 +136,10 @@ class CompareComponentExcelWorkSheet extends ExcelExporter<any> {
         return this.basedOnCardComponent(values);
     }
 
-    public basedOnCardComponent<D extends object>(values: { fields: CardComponentFields<D>, comparisons: CompareComponentValues[] }): WorkSheet {
+    public basedOnCardComponent<D extends object>(values: {
+        fields: CardComponentFields<D>,
+        comparisons: CompareComponentValues[]
+    }): WorkSheet {
         let ws: WorkSheet = {};
         let cell = this.starterCell;
 

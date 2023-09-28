@@ -1,0 +1,29 @@
+@import "/src/themes.scss";
+
+.persona-info-shower {
+  margin-top: 0.5rem;
+  display: inline-block;
+
+  .name {
+    border-radius: 0.35rem 0.35rem 0 0;
+  }
+
+  .info {
+    border-radius: 0 0 0.35rem 0.35rem;
+  }
+
+  .name, .info {
+    padding: 0.5rem 0.75rem;
+
+    @include theme() {
+      background-color: get("step-tab-bg");
+      color: get("step-tab-color");
+    }
+  }
+
+  .image {
+    max-height: 300px;
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
