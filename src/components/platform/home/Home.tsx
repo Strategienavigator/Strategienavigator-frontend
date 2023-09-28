@@ -62,13 +62,6 @@ export const Tools = [
         maintenance: false
     },
     {
-        id: 6,
-        name: "Persona Analyse (ALT)",
-        icon: faUserCircle,
-        link: "/persona-analysis-old",
-        maintenance: false
-    },
-    {
         id: 5,
         name: "ABC Analyse",
         icon: faChartPie,
