@@ -11,8 +11,6 @@ import {UtilityAnalysisValues} from "../../UtilityAnalysis";
 import {UtilCriterias} from "../UtilCriterias/UtilCriterias";
 import {CompareComponentValues} from "../../../../../general-components/CompareComponent/CompareComponent";
 import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
-import {PortScaleDescriptionShower} from "../../../portfolio-analysis/matrix/PortScaleDescriptionShower";
-import {PortfolioAnalysisValues} from "../../../portfolio-analysis/PortfolioAnalysis";
 import {UAScaleDescriptionShower} from "../../matrix/UAScaleDescriptionShower";
 
 

@@ -1,4 +1,3 @@
-
 import {ExtraWindowComponent} from "../../../../general-components/Tool/ExtraWindowComponent/ExtraWindowComponent";
 import {
     ScaleDescriptionTable

@@ -30,6 +30,6 @@ function ScaleDescriptionTable(props: UACriteriaCustomDescriptionValues) {
     )
 }
 
-export{
+export {
     ScaleDescriptionTable
 }

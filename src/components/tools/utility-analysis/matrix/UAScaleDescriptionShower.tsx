@@ -1,8 +1,5 @@
-
 import {ExtraWindowComponent} from "../../../../general-components/Tool/ExtraWindowComponent/ExtraWindowComponent";
-import {
-    ScaleDescriptionTable
-} from "../steps/UtilCriterias/ScaleDescriptionTable/ScaleDescriptionTable";
+import {ScaleDescriptionTable} from "../steps/UtilCriterias/ScaleDescriptionTable/ScaleDescriptionTable";
 
 import "./ua-scale-description-shower.scss";
 import {UtilityAnalysisValues} from "../UtilityAnalysis";

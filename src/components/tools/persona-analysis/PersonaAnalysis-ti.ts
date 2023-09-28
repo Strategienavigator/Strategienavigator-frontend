@@ -5,12 +5,12 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PersonaAnalysisValues = t.iface([], {
-  "persona-info": "PersonaInfoValues",
-  "persona-personality": t.opt("PersonaPersonalityValues"),
-  "persona-summary": t.opt("PersonaSummaryValues"),
+    "persona-info": "PersonaInfoValues",
+    "persona-personality": t.opt("PersonaPersonalityValues"),
+    "persona-summary": t.opt("PersonaSummaryValues"),
 });
 
 const PersonaAnalysis_ts: t.ITypeSuite = {
-  PersonaAnalysisValues,
+    PersonaAnalysisValues,
 };
 export default PersonaAnalysis_ts;
