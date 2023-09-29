@@ -149,7 +149,6 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     render = () => {
         let title = this.props.tool.getToolName();
-        console.log(this.state.saves)
 
         return (
             <div className={"toolHome"}>

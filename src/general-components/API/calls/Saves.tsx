@@ -109,7 +109,6 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
     return await callAPI("api/saves/" + saveID, "DELETE", undefined, true, apiArgs);
 }
 
-
 /**
  * Updatet einen Save
  *

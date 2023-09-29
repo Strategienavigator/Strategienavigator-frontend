@@ -32,10 +32,9 @@ export class SaveCard extends Component<SaveCardProps, {}> {
             if (isDeleting)
                 classes.push("disabled");
 
-            let tool_id = this.props.save.tool_id;
-            let isPersona = (tool_id === 6)
-            let saveToSend = this.props.save
-
+            // let tool_id = this.props.save.tool_id;
+            // let isPersona = (tool_id === 6)
+            // let saveToSend = this.props.save
 
             let formattedCreatedDate = new Date(this.props.save.created_at).toLocaleDateString("de-DE");
 

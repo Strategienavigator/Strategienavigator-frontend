@@ -22,8 +22,8 @@ interface PersonaInfoComponentState {
 }
 
 export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInfoComponentState> {
-    static FILETYPES = ".png, .jpg, .jpeg";
-    static MAXFILESIZE = 2;
+    static FILETYPES = ["png", "jpg", "jpeg"];
+    static MAXFILESIZE = 2000;
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
@@ -89,9 +89,13 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Avatar/Personenfoto</Form.Label>
-                            <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview}/>
-                            <Form.Text>Gültige Dateitypen:{PersonaInfoComponent.FILETYPES}</Form.Text> <br />
-                            <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE} MB</Form.Text>
+                            <Form.Control disabled={this.props.disabled} type="file" onChange={this.avatarChanged}/>
+                            <Form.Text>Gültige Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "."+i).join(", ")}</Form.Text> <br/>
+                            <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE / 1000} MB</Form.Text>
+
+                            <UIErrorBanner id={"avatar.empty"}/>
+                            <UIErrorBanner id={"avatar.size"}/>
+                            <UIErrorBanner id={"avatar.type"}/>
                         </Form.Group>
                     </Col>
                 </Row>
@@ -104,12 +108,6 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                 </div>
             </>
         );
-    }
-
-    generatePreview = (e: ChangeEvent<HTMLInputElement>) => {
-        this.setState({
-            avatarPreview: e.target.files !== null ? URL.createObjectURL(e.target.files.item(0)) : null
-        });
     }
 
     firstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
@@ -137,6 +135,21 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     data.age = parsed;
                 }
             }
+        });
+    }
+
+    avatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        let file = null;
+
+        if (e.target.files !== null) {
+            file = e.target.files.item(0);
+            if (file) {
+                this.props.resourceController.resources.set("avatar", file);
+            }
+        }
+
+        this.setState({
+            avatarPreview: file !== null ? URL.createObjectURL(file) : null
         });
     }
 }
