@@ -39,6 +39,7 @@ $input-focus-border-color: darken($own-input-border-color, 2%);
 $input-placeholder-color: map_get(map_get($themes, "dark"), "input-placeholder-color");
 $input-disabled-bg: adjust-color($input-bg-color, $alpha: -0.3);
 $input-disabled-border-color: adjust-color($own_input-border-color, $alpha: -0.3);
+$form-select-border-color: $own-input-border-color;
 
 // MODAL
 $modal-content-bg: $bg-color;

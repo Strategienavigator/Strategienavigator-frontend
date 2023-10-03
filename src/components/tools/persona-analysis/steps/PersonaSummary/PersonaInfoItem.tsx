@@ -8,7 +8,7 @@ import "./persona-info-item.scss";
 
 export interface PersonaInfoItemProps {
     title: string,
-    icon: IconDefinition,
+    icon?: IconDefinition,
     items: CardComponentFields
 }
 
@@ -20,7 +20,12 @@ function PersonaInfoItem(props: PersonaInfoItemProps) {
     return (
         <div className={"info-container"}>
             <div className={"title"}>
-                <FAE icon={props.icon} className={"icon"}/> {props.title}
+                {props.icon && (
+                    <>
+                        <FAE icon={props.icon} className={"icon"}/>&nbsp;
+                    </>
+                )}
+                {props.title}
             </div>
             <div className={"content"}>
                 <ListGroup>

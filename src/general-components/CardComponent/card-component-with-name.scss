@@ -1,0 +1,18 @@
+@import "src/themes";
+
+fieldset.card-component-with-name {
+  display: block;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 0.35em 0.75em 0.625em;
+  border: 2px groove;
+  position: relative;
+
+  @include theme() {
+    border-color: darken(get("bg-color"), 15%);
+  }
+
+  legend {
+    float: unset;
+  }
+}

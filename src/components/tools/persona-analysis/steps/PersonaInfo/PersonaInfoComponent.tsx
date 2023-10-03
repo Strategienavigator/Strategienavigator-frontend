@@ -8,22 +8,45 @@ import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UI
 import {Col, Form, Image, Row} from "react-bootstrap";
 import {ChangeEvent} from "react";
 import {PersonaInfo} from "./PersonaInfo";
+import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
+import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
 
 
 export interface PersonaInfoValues {
     "firstname": string | null,
     "lastname": string | null,
     "age": number | null,
-    "avatar": string | null
+    "avatar": string | null,
+    "income": number | null,
+    "family": CardComponentFields,
+    "familystatus": number
 }
 
 interface PersonaInfoComponentState {
     avatarPreview: string | null
 }
 
+export const getFamilyStatus = (i: number): string | undefined => {
+    switch (i) {
+        case 1:
+            return "Ledig";
+        case 2:
+            return "Verheiratet";
+        case 3:
+            return "Verwitwet";
+        case 4:
+            return "Geschieden";
+        default:
+            return "Nicht angegeben";
+    }
+}
+
 export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInfoComponentState> {
     static FILETYPES = ".png, .jpg, .jpeg";
     static MAXFILESIZE = 2;
+
+    static MAXFAMILY = 4;
+    static MINFAMILY = 0;
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
@@ -57,7 +80,8 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Vorname</Form.Label>
-                            <Form.Control disabled={this.props.disabled} onChange={this.firstNameChanged} type={"text"}
+                            <Form.Control disabled={this.props.disabled} required onChange={this.firstNameChanged}
+                                          type={"text"}
                                           value={data?.firstname ?? ""} placeholder={"Max"}/>
                             <UIErrorBanner id={"firstname.empty"}/>
                             <UIErrorBanner id={"firstname.toolong"}/>
@@ -66,7 +90,8 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Nachname</Form.Label>
-                            <Form.Control disabled={this.props.disabled} onChange={this.lastNameChanged} type={"text"}
+                            <Form.Control disabled={this.props.disabled} required onChange={this.lastNameChanged}
+                                          type={"text"}
                                           value={data?.lastname ?? ""} placeholder={"Mustermann"}/>
                             <UIErrorBanner id={"lastname.empty"}/>
                             <UIErrorBanner id={"lastname.toolong"}/>
@@ -83,25 +108,72 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                                           min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}
                                           placeholder={"25"}/>
                             <UIErrorBanner id={"age.invalid"}/>
-                            <UIErrorBanner id={"age.outofrange"}/>
                         </Form.Group>
                     </Col>
                     <Col sm={6}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Avatar/Personenfoto</Form.Label>
-                            <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview}/>
-                            <Form.Text>Gültige Dateitypen:{PersonaInfoComponent.FILETYPES}</Form.Text> <br />
-                            <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE} MB</Form.Text>
+                            <Form.Label>Einkommen (Netto/Monat in €)</Form.Label>
+                            <Form.Control disabled={this.props.disabled} onInput={this.incomeChanged} type={"text"}
+                                          placeholder={"2400"}/>
+                            <UIErrorBanner id={"income.invalid"}/>
                         </Form.Group>
                     </Col>
                 </Row>
 
-                <div className={"avatar-preview"}>
-                    {(this.state.avatarPreview !== null || data?.avatar) && (
-                        <Image src={this.state.avatarPreview ?? (data?.avatar ?? undefined)} thumbnail rounded
-                               className={"avatar"} alt={"Avatar Vorschau"}/>
-                    )}
-                </div>
+                <Form.Group className="mb-3">
+                    <Form.Label>Avatar/Personenfoto</Form.Label>
+                    <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview}/>
+                    <Form.Text>Gültige Dateitypen:{PersonaInfoComponent.FILETYPES}</Form.Text> <br/>
+                    <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE} MB</Form.Text>
+                </Form.Group>
+
+                <Row>
+                    <Col sm={6}>
+                        <div className={"avatar-preview"}>
+                            <Form.Label>Avatarvorschau</Form.Label><br/>
+
+                            {(this.state.avatarPreview !== null || data?.avatar) && (
+                                <Image src={this.state.avatarPreview ?? (data?.avatar ?? undefined)} thumbnail rounded
+                                       className={"avatar"} alt={"Avatar Vorschau"}/>
+                            )}
+                        </div>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Familienstand</Form.Label>
+                            <Form.Select
+                                disabled={this.props.disabled}
+                                onChange={this.onFamilyStatusChange}
+                                defaultValue={data?.familystatus}
+                            >
+                                <option value={0}>-- Auswählen --</option>
+                                {[...Array(4)].map((v, i) => {
+                                    return (
+                                        <option key={"family-status" + i} value={i + 1}>
+                                            {getFamilyStatus(i + 1)}
+                                        </option>
+                                    );
+                                })}
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Familie & Freunde</Form.Label>
+                            <CardComponent
+                                disabled={this.props.disabled}
+                                values={data?.family ?? []}
+                                max={PersonaInfoComponent.MAXFAMILY}
+                                min={PersonaInfoComponent.MINFAMILY}
+                                hideDesc
+                                required={false}
+                                counter={new NumberCounter()}
+                                name={"family"}
+                                onChanged={this.familyChanged}
+                            />
+
+                            <UIErrorBanner id={"family.length"}/>
+                        </Form.Group>
+                    </Col>
+                </Row>
             </>
         );
     }
@@ -136,6 +208,40 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                 } else {
                     data.age = parsed;
                 }
+            }
+        });
+    }
+
+    incomeChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        this.props.saveController.onChanged(save => {
+            let data = save.data["persona-info"];
+            if (data !== undefined) {
+                if (e.target.value.length <= 0) {
+                    data.income = null;
+                } else {
+                    let parsed = parseInt(e.target.value);
+                    if (isNaN(parsed)) {
+                        data.income = -1;
+                    } else {
+                        data.income = parsed;
+                    }
+                }
+            }
+        });
+    }
+
+    private onFamilyStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        this.props.saveController.onChanged(save => {
+            if (save.data["persona-info"]) {
+                save.data["persona-info"].familystatus = e.target.selectedIndex;
+            }
+        });
+    }
+
+    private familyChanged = (fields: CardComponentFields) => {
+        this.props.saveController.onChanged(save => {
+            if (save.data["persona-info"]) {
+                save.data["persona-info"].family = fields;
             }
         });
     }

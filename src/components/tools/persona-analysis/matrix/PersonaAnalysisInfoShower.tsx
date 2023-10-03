@@ -2,6 +2,7 @@ import {ExtraWindowComponent} from "../../../../general-components/Tool/ExtraWin
 import {PersonaAnalysisValues} from "../PersonaAnalysis";
 import "./persona-info-shower.scss";
 import {Image} from "react-bootstrap";
+import {getFamilyStatus} from "../steps/PersonaInfo/PersonaInfoComponent";
 
 class PersonaAnalysisInfoShower extends ExtraWindowComponent<PersonaAnalysisValues, {}> {
 
@@ -18,6 +19,12 @@ class PersonaAnalysisInfoShower extends ExtraWindowComponent<PersonaAnalysisValu
                     <div className={"info"}>
                         <div className={"age"}>
                             {data.age} {((data.age ?? -1) === 1) ? "Jahr" : "Jahre"} alt
+                            {(data.familystatus !== 0) && (
+                                <>
+                                    <br/>
+                                    Familienstand: {getFamilyStatus(data.familystatus)}
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
