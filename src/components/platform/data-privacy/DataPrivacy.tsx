@@ -42,12 +42,12 @@ export class DataPrivacy extends Component<any, any> {
                     <strong>1. Arten der Daten, die wir verarbeiten</strong><br/><br/> <br/>
 
                     <strong>2. Zwecke der
-                    Verarbeitung nach Art.
-                    13 Abs. 1 c) DS-GVO</strong><br/><br/> <br/>
+                        Verarbeitung nach Art.
+                        13 Abs. 1 c) DS-GVO</strong><br/><br/> <br/>
 
                     <strong>3. Kategorien der betroffenen Personen nach
-                    Art. 13 Abs. 1 e)
-                    DS-GVO</strong><br/><br/>
+                        Art. 13 Abs. 1 e)
+                        DS-GVO</strong><br/><br/>
                 </p>
                 <p>Die betroffenen Personen werden zusammenfassend als „Nutzer“ bezeichnet.</p>
                 <p><br/> <strong>Rechtsgrundlagen der Verarbeitung personenbezogener Daten</strong></p>
@@ -267,63 +267,63 @@ export class DataPrivacy extends Component<any, any> {
                         Widerspruchsrecht können Sie kostenfrei ausüben. Über Ihren Werbewiderspruch können Sie uns
                         unter den Kontaktdaten
                         (siehe oben) informieren.<br/><br/>
-                </li>
-                <li><strong>Recht auf Auskunft</strong><br/> Sie haben das Recht, von uns eine Bestätigung darüber
-                    zu verlangen, ob
-                    Sie betreffende personenbezogene Daten verarbeitet werden. Sofern dies der Fall ist, haben Sie
-                    ein Recht auf
-                    Auskunft über Ihre bei uns
-                    gespeicherten persönlichen Daten nach Art. 15 DS-GVO. Dies beinhaltet insbesondere die Auskunft
-                    über die
-                    Verarbeitungszwecke, die Kategorie der personenbezogenen Daten, die Kategorien von Empfängern,
-                    gegenüber denen
-                    Ihre Daten offengelegt wurden
-                    oder werden, die geplante Speicherdauer, die Herkunft ihrer Daten, sofern diese nicht direkt bei
-                    Ihnen erhoben
-                    wurden.<br/><br/></li>
-                <li><strong>Recht auf Berichtigung</strong><br/> Sie haben ein Recht auf Berichtigung unrichtiger
-                    oder auf
-                    Vervollständigung richtiger Daten nach Art.16 DS-GVO.<br/><br/></li>
-                <li><strong>Recht auf Löschung</strong><br/> Sie haben ein Recht auf Löschung Ihrer bei uns
-                    gespeicherten Daten nach
-                    Art. 17 DS-GVO, es sei denn gesetzliche oder vertraglichen Aufbewahrungsfristen oder andere
-                    gesetzliche Pflichten
-                    bzw. Rechte zur weiteren
-                    Speicherung stehen dieser entgegen.<br/><br/></li>
-                <li><strong>Recht auf Einschränkung</strong><br/> Sie haben das Recht, eine Einschränkung bei der
-                    Verarbeitung Ihrer
-                    personenbezogenen Daten zu verlangen, wenn eine der Voraussetzungen in Art. 18 Abs. 1 lit. a)
-                    bis d) DS-GVO
-                    erfüllt ist:<br/> • Wenn Sie
-                    die Richtigkeit der Sie betreffenden personenbezogenen für eine Dauer bestreiten, die es dem
-                    Verantwortlichen
-                    ermöglicht, die Richtigkeit der personenbezogenen Daten zu überprüfen;<br/><br/> • die
-                    Verarbeitung unrechtmäßig ist
-                    und Sie die Löschung
-                    der personenbezogenen Daten ablehnen und stattdessen die Einschränkung der Nutzung der
-                    personenbezogenen Daten
-                    verlangen;<br/><br/> • der Verantwortliche die personenbezogenen Daten für die Zwecke der
-                    Verarbeitung nicht länger
-                    benötigt, Sie diese
-                    jedoch zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen benötigen,
-                    oder<br/><br/> • wenn Sie
-                    Widerspruch gegen die Verarbeitung gemäß Art. 21 Abs. 1 DS-GVO eingelegt haben und noch nicht
-                    feststeht, ob die
-                    berechtigten Gründe des
-                    Verantwortlichen gegenüber Ihren Gründen überwiegen.<br/><br/></li>
-                <li><strong>Recht auf Datenübertragbarkeit</strong><br/> Sie haben ein Recht auf
-                    Datenübertragbarkeit nach Art. 20
-                    DS-GVO, was bedeutet, dass Sie die bei uns über Sie gespeicherten personenbezogenen Daten in
-                    einem strukturierten,
-                    gängigen und maschinenlesbaren
-                    Format erhalten können oder die Übermittlung an einen anderen Verantwortlichen verlangen
-                    können.<br/><br/></li>
-                <li><strong>Recht auf Beschwerde</strong><br/> Sie haben ein Recht auf Beschwerde bei einer
-                    Aufsichtsbehörde. In der
-                    Regel können Sie sich hierfür an die Aufsichtsbehörde insbesondere in dem Mitgliedstaat ihres
-                    Aufenthaltsorts,
-                    ihres Arbeitsplatzes oder
-                    des Orts des mutmaßlichen Verstoßes wenden.<br/><br/></li>
+                    </li>
+                    <li><strong>Recht auf Auskunft</strong><br/> Sie haben das Recht, von uns eine Bestätigung darüber
+                        zu verlangen, ob
+                        Sie betreffende personenbezogene Daten verarbeitet werden. Sofern dies der Fall ist, haben Sie
+                        ein Recht auf
+                        Auskunft über Ihre bei uns
+                        gespeicherten persönlichen Daten nach Art. 15 DS-GVO. Dies beinhaltet insbesondere die Auskunft
+                        über die
+                        Verarbeitungszwecke, die Kategorie der personenbezogenen Daten, die Kategorien von Empfängern,
+                        gegenüber denen
+                        Ihre Daten offengelegt wurden
+                        oder werden, die geplante Speicherdauer, die Herkunft ihrer Daten, sofern diese nicht direkt bei
+                        Ihnen erhoben
+                        wurden.<br/><br/></li>
+                    <li><strong>Recht auf Berichtigung</strong><br/> Sie haben ein Recht auf Berichtigung unrichtiger
+                        oder auf
+                        Vervollständigung richtiger Daten nach Art.16 DS-GVO.<br/><br/></li>
+                    <li><strong>Recht auf Löschung</strong><br/> Sie haben ein Recht auf Löschung Ihrer bei uns
+                        gespeicherten Daten nach
+                        Art. 17 DS-GVO, es sei denn gesetzliche oder vertraglichen Aufbewahrungsfristen oder andere
+                        gesetzliche Pflichten
+                        bzw. Rechte zur weiteren
+                        Speicherung stehen dieser entgegen.<br/><br/></li>
+                    <li><strong>Recht auf Einschränkung</strong><br/> Sie haben das Recht, eine Einschränkung bei der
+                        Verarbeitung Ihrer
+                        personenbezogenen Daten zu verlangen, wenn eine der Voraussetzungen in Art. 18 Abs. 1 lit. a)
+                        bis d) DS-GVO
+                        erfüllt ist:<br/> • Wenn Sie
+                        die Richtigkeit der Sie betreffenden personenbezogenen für eine Dauer bestreiten, die es dem
+                        Verantwortlichen
+                        ermöglicht, die Richtigkeit der personenbezogenen Daten zu überprüfen;<br/><br/> • die
+                        Verarbeitung unrechtmäßig ist
+                        und Sie die Löschung
+                        der personenbezogenen Daten ablehnen und stattdessen die Einschränkung der Nutzung der
+                        personenbezogenen Daten
+                        verlangen;<br/><br/> • der Verantwortliche die personenbezogenen Daten für die Zwecke der
+                        Verarbeitung nicht länger
+                        benötigt, Sie diese
+                        jedoch zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen benötigen,
+                        oder<br/><br/> • wenn Sie
+                        Widerspruch gegen die Verarbeitung gemäß Art. 21 Abs. 1 DS-GVO eingelegt haben und noch nicht
+                        feststeht, ob die
+                        berechtigten Gründe des
+                        Verantwortlichen gegenüber Ihren Gründen überwiegen.<br/><br/></li>
+                    <li><strong>Recht auf Datenübertragbarkeit</strong><br/> Sie haben ein Recht auf
+                        Datenübertragbarkeit nach Art. 20
+                        DS-GVO, was bedeutet, dass Sie die bei uns über Sie gespeicherten personenbezogenen Daten in
+                        einem strukturierten,
+                        gängigen und maschinenlesbaren
+                        Format erhalten können oder die Übermittlung an einen anderen Verantwortlichen verlangen
+                        können.<br/><br/></li>
+                    <li><strong>Recht auf Beschwerde</strong><br/> Sie haben ein Recht auf Beschwerde bei einer
+                        Aufsichtsbehörde. In der
+                        Regel können Sie sich hierfür an die Aufsichtsbehörde insbesondere in dem Mitgliedstaat ihres
+                        Aufenthaltsorts,
+                        ihres Arbeitsplatzes oder
+                        des Orts des mutmaßlichen Verstoßes wenden.<br/><br/></li>
                 </ol>
 
                 <p>

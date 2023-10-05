@@ -111,7 +111,8 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
                 <Form.Group className="mb-3">
                     <Form.Label>Avatar/Personenfoto</Form.Label>
                     <Form.Control disabled={this.props.disabled} type="file" onChange={this.avatarChanged}/>
-                    <Form.Text>Gültige Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "."+i).join(", ")}</Form.Text> <br/>
+                    <Form.Text>Gültige
+                        Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "." + i).join(", ")}</Form.Text> <br/>
                     <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE / 1000} MB</Form.Text>
                 </Form.Group>
 
@@ -210,6 +211,17 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
         });
     }
 
+    avatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        let file: File | null = null;
+        if (e.target.files !== null) {
+            file = e.target.files.item(0);
+            if (file) {
+                this.props.resourceManager.onChanged("avatar", file);
+                this.forceUpdate();
+            }
+        }
+    }
+
     private onFamilyStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
         this.props.saveController.onChanged(save => {
             if (save.data["persona-info"]) {
@@ -224,16 +236,5 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
                 save.data["persona-info"].family = fields;
             }
         });
-    }
-
-    avatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        let file: File | null = null;
-        if (e.target.files !== null) {
-            file = e.target.files.item(0);
-            if (file) {
-                this.props.resourceManager.onChanged("avatar", file);
-                this.forceUpdate();
-            }
-        }
     }
 }

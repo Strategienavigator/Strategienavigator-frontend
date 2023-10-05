@@ -5,12 +5,12 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PersonaInfoValues = t.iface([], {
-  "firstname": t.union("string", "null"),
-  "lastname": t.union("string", "null"),
-  "age": t.union("number", "null"),
-  "income": t.union("number", "null"),
-  "family": "CardComponentFields",
-  "familystatus": "number",
+    "firstname": t.union("string", "null"),
+    "lastname": t.union("string", "null"),
+    "age": t.union("number", "null"),
+    "income": t.union("number", "null"),
+    "family": "CardComponentFields",
+    "familystatus": "number",
 });
 
 const PersonaInfo_ts: t.ITypeSuite = {
