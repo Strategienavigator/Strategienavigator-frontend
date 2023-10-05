@@ -85,7 +85,6 @@ export class WebsocketChannelContextComponent extends Component<WebsocketChannel
              */
             if (!this.state.registeredHere) {
                 channel.here((users: SimplestUserResource[]) => {
-                    console.log("Current collaborators:", users.map((u) => u.username));
                     this.setState({
                         socketContext: {
                             ...this.state.socketContext,
@@ -101,8 +100,6 @@ export class WebsocketChannelContextComponent extends Component<WebsocketChannel
              */
             if (!this.state.registeredJoin) {
                 channel.joining((user: SimplestUserResource) => {
-                    console.log("Collaborator joined:", user.username);
-
                     this.setState((state) => {
                         const collaborators = state.socketContext.collaborators.concat(user);
                         return {
@@ -121,8 +118,6 @@ export class WebsocketChannelContextComponent extends Component<WebsocketChannel
              */
             if (!this.state.registeredLeave) {
                 channel.leaving((user: SimplestUserResource) => {
-                    console.log("Collaborator left:", user.username);
-
                     this.setState(function (state) {
                         let index = state.socketContext.collaborators.indexOf(user);
                         const collaborators = state.socketContext.collaborators.filter((item, j) => index !== j);

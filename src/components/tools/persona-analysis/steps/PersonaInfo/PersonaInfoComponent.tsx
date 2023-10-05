@@ -16,14 +16,9 @@ export interface PersonaInfoValues {
     "firstname": string | null,
     "lastname": string | null,
     "age": number | null,
-    "avatar": string | null,
     "income": number | null,
     "family": CardComponentFields,
     "familystatus": number
-}
-
-interface PersonaInfoComponentState {
-    avatarPreview: string | null
 }
 
 export const getFamilyStatus = (i: number): string | undefined => {
@@ -41,31 +36,24 @@ export const getFamilyStatus = (i: number): string | undefined => {
     }
 }
 
-export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInfoComponentState> {
-    static FILETYPES = ".png, .jpg, .jpeg";
-    static MAXFILESIZE = 2;
+export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
+    static FILETYPES = ["png", "jpg", "jpeg"];
+    static MAXFILESIZE = 2000;
 
     static MAXFAMILY = 4;
     static MINFAMILY = 0;
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
-
-        this.state = {
-            avatarPreview: null
-        }
     }
 
-    shouldComponentUpdate(nextProps: Readonly<StepProp<PersonaAnalysisValues>>, nextState: Readonly<PersonaInfoComponentState>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: Readonly<StepProp<PersonaAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
         let shouldUpdate: boolean;
         shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
         if (!shouldUpdate) {
             const oldSave = this.props.save;
             const newSave = nextProps.save;
             if (oldSave.data["persona-info"] !== newSave.data["persona-info"]) {
-                shouldUpdate = true;
-            }
-            if (this.state.avatarPreview !== nextState.avatarPreview) {
                 shouldUpdate = true;
             }
         }
@@ -122,20 +110,18 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
 
                 <Form.Group className="mb-3">
                     <Form.Label>Avatar/Personenfoto</Form.Label>
-                    <Form.Control disabled={this.props.disabled} type="file" onChange={this.generatePreview}/>
-                    <Form.Text>Gültige Dateitypen:{PersonaInfoComponent.FILETYPES}</Form.Text> <br/>
-                    <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE} MB</Form.Text>
+                    <Form.Control disabled={this.props.disabled} type="file" onChange={this.avatarChanged}/>
+                    <Form.Text>Gültige Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "."+i).join(", ")}</Form.Text> <br/>
+                    <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE / 1000} MB</Form.Text>
                 </Form.Group>
 
                 <Row>
                     <Col sm={6}>
                         <div className={"avatar-preview"}>
-                            <Form.Label>Avatarvorschau</Form.Label><br/>
-
-                            {(this.state.avatarPreview !== null || data?.avatar) && (
-                                <Image src={this.state.avatarPreview ?? (data?.avatar ?? undefined)} thumbnail rounded
-                                       className={"avatar"} alt={"Avatar Vorschau"}/>
-                            )}
+                            <Image
+                                src={this.props.resourceManager.getBlobURL("avatar") ?? undefined}
+                                thumbnail rounded
+                                className={"avatar"} alt={"Avatar Vorschau"}/>
                         </div>
                     </Col>
                     <Col sm={6}>
@@ -176,12 +162,6 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                 </Row>
             </>
         );
-    }
-
-    generatePreview = (e: ChangeEvent<HTMLInputElement>) => {
-        this.setState({
-            avatarPreview: e.target.files !== null ? URL.createObjectURL(e.target.files.item(0)) : null
-        });
     }
 
     firstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
@@ -244,5 +224,16 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                 save.data["persona-info"].family = fields;
             }
         });
+    }
+
+    avatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        let file: File | null = null;
+        if (e.target.files !== null) {
+            file = e.target.files.item(0);
+            if (file) {
+                this.props.resourceManager.onChanged("avatar", file);
+                this.forceUpdate();
+            }
+        }
     }
 }

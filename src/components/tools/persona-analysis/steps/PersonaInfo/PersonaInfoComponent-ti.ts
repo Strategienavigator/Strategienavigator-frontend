@@ -8,14 +8,12 @@ export const PersonaInfoValues = t.iface([], {
   "firstname": t.union("string", "null"),
   "lastname": t.union("string", "null"),
   "age": t.union("number", "null"),
-  "avatar": t.union("string", "null"),
   "income": t.union("number", "null"),
   "family": "CardComponentFields",
   "familystatus": "number",
 });
 
-
 const PersonaInfo_ts: t.ITypeSuite = {
-  PersonaInfoValues
+    PersonaInfoValues
 };
 export default PersonaInfo_ts;

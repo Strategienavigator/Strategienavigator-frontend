@@ -88,7 +88,6 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 deleted: false
             });
         });
-        console.log('paginationLoader', this.paginationLoader)
         this.state = {
             showDeleteModal: false,
             showTutorial: false,
@@ -149,7 +148,6 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
     render = () => {
         let title = this.props.tool.getToolName();
-        console.log(this.state.saves)
 
         return (
             <div className={"toolHome"}>

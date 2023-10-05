@@ -27,6 +27,17 @@ export enum SharedSavePermission {
 export const SharedSavePermissionDefault = SharedSavePermission.OWNER;
 
 /**
+ * Repräsentiert eine Resource in einem Save
+ */
+export interface SaveResourceResource {
+    id: number,
+    name: string,
+    type: string,
+    hash: string,
+    hash_function: string
+}
+
+/**
  * Repräsentiert ein Live Update eines Saves bei einer Websocket-Verbindung
  */
 export interface LiveSaveUpdateResource {
@@ -125,6 +136,10 @@ export type SimpleSaveResource = {
          */
         created_at: string
     }
+    /**
+     * Alle Ressourcen assoziert mit dem Save
+     */
+    resources: SaveResourceResource[]
 }
 
 /**

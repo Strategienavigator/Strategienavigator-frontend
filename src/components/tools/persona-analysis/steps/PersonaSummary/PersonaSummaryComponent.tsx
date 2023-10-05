@@ -69,7 +69,8 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
                             </div>
 
                             <div className={"avatar-container"}>
-                                <Image className={"avatar"} rounded src={info.avatar ?? undefined}/>
+                                <Image className={"avatar"} rounded
+                                       src={this.props.resourceManager.getBlobURL("avatar") ?? undefined}/>
                             </div>
 
                             {this.getItemElements(left)}

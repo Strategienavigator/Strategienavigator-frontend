@@ -16,6 +16,7 @@ export const PersonaPersonalityValues = t.iface([], {
 });
 
 const PersonaPersonality_ts: t.ITypeSuite = {
-  PersonaPersonalityValues,
-};
+    PersonaPersonalityValues,
+}
+
 export default PersonaPersonality_ts;

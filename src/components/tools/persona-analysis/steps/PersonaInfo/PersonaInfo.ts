@@ -8,6 +8,8 @@ import React from "react";
 import {PersonaInfoComponent} from "./PersonaInfoComponent";
 import {PersonaAnalysisValues} from "../../PersonaAnalysis";
 import {isCardComponentTooLong} from "../../../../../general-components/CardComponent/CardComponent";
+import {ResourcesType} from "../../../../../general-components/Tool/ToolSavePage/ToolSavePage";
+import {validateFile} from "../../../../../general-components/Tool/Resources";
 
 
 export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues> {
@@ -40,8 +42,6 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
             "firstname": null,
             "lastname": null,
             "age": null,
-            // TODO: build in backend resource port
-            "avatar": "https://www.masslive.com/resizer/kNl3qvErgJ3B0Cu-WSBWFYc1B8Q=/arc-anglerfish-arc2-prod-advancelocal/public/W5HI6Y4DINDTNP76R6CLA5IWRU.jpeg",
             "income": null,
             "family": [],
             "familystatus": 0
@@ -49,13 +49,42 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
         return data;
     }
 
-    deleteData(data: PersonaAnalysisValues): void {
+    deleteData(data: PersonaAnalysisValues, resources: ResourcesType): void {
         data = this.fillFromPreviousValues(data);
+        resources.delete("avatar");
     }
 
-    validateData(data: PersonaAnalysisValues): UIError[] {
+    validateData(data: PersonaAnalysisValues, resources: ResourcesType): UIError[] {
         let d = data["persona-info"];
         let errors = Array<UIError>();
+
+        let file = resources.get("avatar");
+        let fileVal = validateFile(file?.file, {
+            size: PersonaInfoComponent.MAXFILESIZE,
+            type: PersonaInfoComponent.FILETYPES.map(i => "image/" + i)
+        });
+
+        if (fileVal.isEmpty) {
+            errors.push({
+                id: "avatar.empty",
+                level: "error",
+                message: "Bitte laden Sie einen Avatar hoch!"
+            })
+        }
+        if (fileVal.tooBig) {
+            errors.push({
+                id: "avatar.size",
+                level: "error",
+                message: "Der hochgeladene Avatar darf maximal " + PersonaInfoComponent.MAXFILESIZE / 1000 + " MB groß sein!"
+            })
+        }
+        if (fileVal.notType) {
+            errors.push({
+                id: "avatar.type",
+                level: "error",
+                message: "Bitte laden Sie einen Avatar mit gültigen Dateitypen hoch!"
+            })
+        }
 
         // Vorname
         if (d?.firstname == null || d.firstname.length <= 0) {
