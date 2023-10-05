@@ -16,32 +16,21 @@ export interface PersonaInfoValues {
     "age": number | null
 }
 
-interface PersonaInfoComponentState {
-    avatarPreview: string | null
-}
-
-export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInfoComponentState> {
+export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
     static FILETYPES = ["png", "jpg", "jpeg"];
     static MAXFILESIZE = 2000;
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
-
-        this.state = {
-            avatarPreview: null
-        }
     }
 
-    shouldComponentUpdate(nextProps: Readonly<StepProp<PersonaAnalysisValues>>, nextState: Readonly<PersonaInfoComponentState>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: Readonly<StepProp<PersonaAnalysisValues>>, nextState: Readonly<{}>, nextContext: any): boolean {
         let shouldUpdate: boolean;
         shouldUpdate = !shallowCompareStepProps(this.props, nextProps);
         if (!shouldUpdate) {
             const oldSave = this.props.save;
             const newSave = nextProps.save;
             if (oldSave.data["persona-info"] !== newSave.data["persona-info"]) {
-                shouldUpdate = true;
-            }
-            if (this.state.avatarPreview !== nextState.avatarPreview) {
                 shouldUpdate = true;
             }
         }
@@ -107,7 +96,7 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
 
                 <div className={"avatar-preview"}>
                     <Image
-                        src={this.state.avatarPreview ?? this.props.resourceManager.getBlobURL("avatar") ?? undefined}
+                        src={this.props.resourceManager.getBlobURL("avatar") ?? undefined}
                         thumbnail rounded
                         className={"avatar"} alt={"Avatar Vorschau"}/>
                 </div>
@@ -145,16 +134,12 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
 
     avatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
         let file: File | null = null;
-
         if (e.target.files !== null) {
             file = e.target.files.item(0);
             if (file) {
                 this.props.resourceManager.onChanged("avatar", file);
+                this.forceUpdate();
             }
         }
-
-        this.setState({
-            avatarPreview: file !== null ? URL.createObjectURL(file) : null
-        });
     }
 }
