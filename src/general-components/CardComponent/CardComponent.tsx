@@ -66,7 +66,6 @@ class CardComponent<D extends object> extends PureComponent<CardComponentProps<D
         // check and add minimum
         if (this.props.values.length < this.props.min) {
             for (let i = 0; i < this.props.min - this.props.values.length; i++) {
-                console.log(i)
                 this.addCard();
             }
         }

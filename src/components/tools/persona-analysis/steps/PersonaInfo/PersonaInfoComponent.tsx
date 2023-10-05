@@ -48,11 +48,6 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
         return shouldUpdate;
     }
 
-    componentDidMount = async () => {
-        // let res = await callAPI("api/saves/1/resources/avatar", "GET", undefined, true);
-        // console.log(res);
-    }
-
     build(): JSX.Element {
         let data = this.props.save.data["persona-info"];
         return (

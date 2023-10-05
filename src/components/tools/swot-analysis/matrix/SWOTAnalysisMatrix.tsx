@@ -11,7 +11,6 @@ import {isDesktop} from "../../../../general-components/Desktop";
 class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
 
     getAction(actions: any, first: string, second: any): AlternateAction | null {
-        console.log(1)
         for (const action of actions) {
             let name = action.name;
             if (name === first + "-" + second) {

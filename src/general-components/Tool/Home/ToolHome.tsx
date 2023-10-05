@@ -88,7 +88,6 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                 deleted: false
             });
         });
-        console.log('paginationLoader', this.paginationLoader)
         this.state = {
             showDeleteModal: false,
             showTutorial: false,
