@@ -13,7 +13,8 @@ class PersonaAnalysisInfoShower extends ExtraWindowComponent<PersonaAnalysisValu
                 <div className={"persona-info-shower"}>
                     <div className={"name"}>{data.firstname} {data.lastname}</div>
                     <div className={"image-container"}>
-                        <Image src={data.avatar ?? ""} thumbnail className={"image"} alt={"Avatar vom Persona"}/>
+                        <Image src={this.props.resourceManager.getBlobURL("avatar") ?? undefined} thumbnail
+                               className={"image"} alt={"Avatar vom Persona"}/>
                     </div>
                     <div className={"info"}>
                         <div className={"age"}>

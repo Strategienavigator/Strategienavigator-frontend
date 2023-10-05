@@ -13,8 +13,7 @@ import {PersonaInfo} from "./PersonaInfo";
 export interface PersonaInfoValues {
     "firstname": string | null,
     "lastname": string | null,
-    "age": number | null,
-    "avatar": string | null
+    "age": number | null
 }
 
 interface PersonaInfoComponentState {
@@ -47,6 +46,11 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
             }
         }
         return shouldUpdate;
+    }
+
+    componentDidMount = async () => {
+        // let res = await callAPI("api/saves/1/resources/avatar", "GET", undefined, true);
+        // console.log(res);
     }
 
     build(): JSX.Element {
@@ -89,8 +93,14 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                     <Col sm={6}>
                         <Form.Group className="mb-3">
                             <Form.Label>Avatar/Personenfoto</Form.Label>
-                            <Form.Control disabled={this.props.disabled} type="file" onChange={this.avatarChanged}/>
-                            <Form.Text>Gültige Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "."+i).join(", ")}</Form.Text> <br/>
+                            <Form.Control
+                                disabled={this.props.disabled}
+                                type="file"
+                                onChange={this.avatarChanged}
+                            />
+                            <Form.Text>Gültige
+                                Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "." + i).join(", ")}</Form.Text>
+                            <br/>
                             <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE / 1000} MB</Form.Text>
 
                             <UIErrorBanner id={"avatar.empty"}/>
@@ -101,10 +111,10 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
                 </Row>
 
                 <div className={"avatar-preview"}>
-                    {(this.state.avatarPreview !== null || data?.avatar) && (
-                        <Image src={this.state.avatarPreview ?? (data?.avatar ?? undefined)} thumbnail rounded
-                               className={"avatar"} alt={"Avatar Vorschau"}/>
-                    )}
+                    <Image
+                        src={this.state.avatarPreview ?? this.props.resourceManager.getBlobURL("avatar") ?? undefined}
+                        thumbnail rounded
+                        className={"avatar"} alt={"Avatar Vorschau"}/>
                 </div>
             </>
         );
@@ -139,12 +149,12 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, PersonaInf
     }
 
     avatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        let file = null;
+        let file: File | null = null;
 
         if (e.target.files !== null) {
             file = e.target.files.item(0);
             if (file) {
-                this.props.resourceController.resources.set("avatar", file);
+                this.props.resourceManager.onChanged("avatar", file);
             }
         }
 

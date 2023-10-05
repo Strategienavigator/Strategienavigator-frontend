@@ -25,6 +25,7 @@ import {showErrorPage} from "../../../index";
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import FAE from '../../Icons/FAE';
+import {getSaveResource} from "../../API/calls/SaveResources";
 
 
 interface ToolSaveController<D> {
@@ -35,7 +36,7 @@ interface ToolSaveController<D> {
 
 interface ToolSaveProps<D extends object> {
     saveController: ToolSaveController<D>
-    resourceController: RessourceController
+    resourceManager: ResourceManager
     save: SaveResource<D>
     isSaving: boolean
 }
@@ -56,11 +57,15 @@ interface ToolSavePageState<D extends object> {
     // channel?: PresenceChannel;
 }
 
-interface RessourceController {
-    resources: ResourcesType
+export interface ResourceManager {
+    resources: ResourcesType,
+    onChanged: (name: string, file: File) => void,
+    hasResource: (name: string) => boolean,
+    getData: (name: string) => Blob | null,
+    getBlobURL: (name: string) => string | null
 }
 
-export type ResourcesType = Map<string, File>;
+export type ResourcesType = Map<string, { file: File, url: string }>;
 
 class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
 
@@ -74,7 +79,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     // private updateTimeout: NodeJS.Timeout | undefined;
     // private updateTimeoutMS: number = 370;
 
-    private readonly resourceController: RessourceController;
+    private readonly resourceManager: ResourceManager;
     private readonly resources: ResourcesType = new Map();
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
@@ -90,8 +95,12 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             onChanged: this.updateSave.bind(this),
             updateSaveFromRemote: this.updateSaveFromRemote
         }
-        this.resourceController = {
-            resources: this.resources
+        this.resourceManager = {
+            resources: this.resources,
+            onChanged: this.resourceChanged.bind(this),
+            hasResource: this.hasResource.bind(this),
+            getData: this.getResourceData.bind(this),
+            getBlobURL: this.getBlobURL.bind(this)
         }
     }
 
@@ -169,44 +178,44 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                         {/*    channel={this.state.channel ?? null}*/}
                         {/*    connection={this.state.connection ?? null}*/}
                         {/*>*/}
-                            <UIErrorContextComponent>
-                                {this.getView()}
-                            </UIErrorContextComponent>
+                        <UIErrorContextComponent>
+                            {this.getView()}
+                        </UIErrorContextComponent>
 
-                            <ModalCloseable
-                                show={this.state.isLocked}
-                                backdrop centered
-                                onHide={() => {
-                                    this.setState({
-                                        isLocked: false
-                                    });
-                                }}
-                            >
-                                <Modal.Body>
-                                    Dieser Speicherstand wird aktuell bearbeitet, daher können Sie diesen nur
-                                    beobachten...
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button
-                                        variant={"dark"}
-                                        onClick={() => {
-                                            this.setState({
-                                                isLocked: false
-                                            });
-                                        }}
-                                    >
-                                        <FAE icon={faCheck}/> Ok
-                                    </Button>
-                                    <Button
-                                        variant={"primary"}
-                                        onClick={() => {
-                                            this.props.history.goBack();
-                                        }}
-                                    >
-                                        Zurück
-                                    </Button>
-                                </Modal.Footer>
-                            </ModalCloseable>
+                        <ModalCloseable
+                            show={this.state.isLocked}
+                            backdrop centered
+                            onHide={() => {
+                                this.setState({
+                                    isLocked: false
+                                });
+                            }}
+                        >
+                            <Modal.Body>
+                                Dieser Speicherstand wird aktuell bearbeitet, daher können Sie diesen nur
+                                beobachten...
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button
+                                    variant={"dark"}
+                                    onClick={() => {
+                                        this.setState({
+                                            isLocked: false
+                                        });
+                                    }}
+                                >
+                                    <FAE icon={faCheck}/> Ok
+                                </Button>
+                                <Button
+                                    variant={"primary"}
+                                    onClick={() => {
+                                        this.props.history.goBack();
+                                    }}
+                                >
+                                    Zurück
+                                </Button>
+                            </Modal.Footer>
+                        </ModalCloseable>
                         {/*</WebsocketChannelContextComponent>*/}
                     </Loader>
 
@@ -293,7 +302,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             return this.props.element({
                 save: this.state.save,
                 saveController: this.saveController,
-                resourceController: this.resourceController,
+                resourceManager: this.resourceManager,
                 isSaving: this.state.isSaving
             });
         } else {
@@ -327,13 +336,56 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         return this.saveDirty;
     }
 
+    private resourcesMapToFileArray = (resources: ResourcesType): File[] => {
+        let files: File[] = [];
+        resources.forEach((value, key) => {
+            files.push(
+                new File([value.file], key, {type: value.file.type, lastModified: value.file.lastModified})
+            );
+        });
+        return files;
+    }
+
+    private resourceChanged = (name: string, file: File) => {
+        this.resources.set(name, {
+            file: file,
+            url: URL.createObjectURL(file)
+        });
+    }
+
+    private getResourceData = (name: string): Blob | null => {
+        let res = this.resources.get(name);
+        if (res) {
+            return res.file;
+        }
+        return null;
+    }
+
+    private getBlobURL = (name: string): string | null => {
+        let res = this.resources.get(name);
+        if (res) {
+            return res.url;
+        }
+        return null;
+    }
+
+    private hasResource = (name: string): boolean => {
+        return this.resources.has(name);
+    }
+
     private save = async () => {
         if (this.state.save !== undefined) {
             this.setState({
                 isSaving: true
             });
             // saveData.append("tool_id", String(save.tool_id)); no need to send tool_id because it is immutable
-            const call = await updateSave(this.state.save!, {errorCallback: this.onAPIError});
+            const call = await updateSave(
+                this.state.save!,
+                this.resourcesMapToFileArray(this.resources),
+                {
+                    errorCallback: this.onAPIError
+                }
+            );
 
             this.setState({
                 isSaving: false
@@ -443,6 +495,19 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             if (call.callData.tool_id === this.props.tool.getID()) {
                 let save: SaveResource<D> = call.callData;
                 save.data = JSON.parse(call.callData.data);
+
+                // load resources
+                for (const resource of save.resources) {
+                    let res = await getSaveResource(save, resource.name, {errorCallback: this.onAPIError});
+                    if (res !== null && res.success) {
+                        let blob = res.callData;
+                        let file = new File([blob], resource.name, {type: blob.type});
+                        this.resources.set(resource.name, {
+                            file: file,
+                            url: URL.createObjectURL(file)
+                        });
+                    }
+                }
                 return save;
             } else {
                 showErrorPage(403);

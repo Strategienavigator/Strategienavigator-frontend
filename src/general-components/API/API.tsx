@@ -81,9 +81,15 @@ const callAPI = async <D extends object>(
         // CALL THE API
         let call = await fetch(callURL, requestInit);
         let callData = null;
+        let callClone = call.clone();
+
         try {
             callData = await call.json();
         } catch (ex) {
+            try {
+                callData = await callClone.blob();
+            } catch (ex) {
+            }
         }
 
         // BUILD RESPONSE

@@ -1,4 +1,3 @@
-
 export interface ValidatedFile {
     isEmpty: boolean,
     tooBig: boolean,

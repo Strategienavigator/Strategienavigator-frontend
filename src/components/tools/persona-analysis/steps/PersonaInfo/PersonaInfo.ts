@@ -37,14 +37,14 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
         data["persona-info"] = {
             "firstname": null,
             "lastname": null,
-            "age": null,
-            "avatar": null
+            "age": null
         };
         return data;
     }
 
-    deleteData(data: PersonaAnalysisValues): void {
+    deleteData(data: PersonaAnalysisValues, resources: ResourcesType): void {
         data = this.fillFromPreviousValues(data);
+        resources.delete("avatar");
     }
 
     validateData(data: PersonaAnalysisValues, resources: ResourcesType): UIError[] {
@@ -52,7 +52,7 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
         let errors = Array<UIError>();
 
         let file = resources.get("avatar");
-        let fileVal = validateFile(file, {
+        let fileVal = validateFile(file?.file, {
             size: PersonaInfoComponent.MAXFILESIZE,
             type: PersonaInfoComponent.FILETYPES.map(i => "image/" + i)
         });

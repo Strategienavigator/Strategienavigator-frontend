@@ -113,13 +113,19 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
  * Updatet einen Save
  *
  * @param save Der zu aktualisierende Speicherstand
+ * @param resources
  * @param apiArgs API Argumente
  */
-const updateSave = async (save: SaveResource<any>, apiArgs?: APIArgs) => {
+const updateSave = async (save: SaveResource<any>, resources?: File[], apiArgs?: APIArgs) => {
     let data = new FormData();
     data.append("data", JSON.stringify(save.data));
     data.append("name", save.name as string);
     data.append("description", save.description as string);
+    if (resources) {
+        for (let i = 0; i < resources.length; i++) {
+            data.append("resources", resources[i]);
+        }
+    }
     const saveID = save.id;
 
     return await updateSaveData(saveID, data, apiArgs);
