@@ -17,7 +17,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_DATABASE: toolbox
+          MYSQL_DATABASE: strategienavigator
           MYSQL_ROOT_PASSWORD: '${{env.DB_PASSWORD}}'
         ports:
           - 3306/tcp
@@ -31,7 +31,7 @@ jobs:
       - name: clone backend
         uses: actions/checkout@v3
         with:
-          repository: 'ricom/toolbox-backend'
+          repository: 'ricom/Strategienavigator-backend'
           path: 'backend'
       - name: clone frontend
         uses: actions/checkout@v3

@@ -1,8 +1,8 @@
-# Strategietools-Frontend
+# Strategienavigator-Frontend
 
-![](https://shields.io/github/package-json/v/ricom/toolbox-frontend?style=flat-square) ![](https://img.shields.io/github/license/ricom/toolbox-frontend?style=flat-square)
+![](https://shields.io/github/package-json/v/ricom/Strategienavigator-frontend?style=flat-square) ![](https://img.shields.io/github/license/ricom/strategienavigator-frontend?style=flat-square)
 
-Das Projekt Strategietools basiert auf einer Idee aus der Software CRM-Navigator aus dem Jahre 2007. Die Strategietools
+Das Projekt Strategienavigator basiert auf einer Idee aus der Software CRM-Navigator aus dem Jahre 2007. Der Strategienavigator
 sollen jedem einen einfachen Zugang zu strategischen Werkzeugen bieten. Insbesondere ist der Einsatz in der Hochschule
 geplant. Aber auch allen Interessierten stehen die Werkzeuge zur Verfügung.
 
@@ -10,7 +10,7 @@ Das Projekt wird an der Jade Hochschule in Wilhelmshaven
 am [Fachbereich Management Information Technologie:link:](https://www.jade-hs.de/mit/) entwickelt.
 
 Das Frontend wurde mittels [Create React App](https://github.com/facebook/create-react-app) erstellt.  
-Das Toolbox-Backend ist [hier:link:](https://github.com/ricom/toolbox-backend) zu finden.
+Das Strategienavigator-Backend ist [hier:link:](https://github.com/ricom/Strategienavigator-backend) zu finden.
 
 ## Weitere Informationen
 
@@ -18,10 +18,10 @@ Das Toolbox-Backend ist [hier:link:](https://github.com/ricom/toolbox-backend) z
 
 ## Voraussetzungen
 
- Programm/Package | min. Version 
-------------------|--------------
- NodeJS           | > = 14.17.6  
- npm              | > = 7.19.1   
+| Programm/Package | min. Version |
+|------------------|--------------|
+| NodeJS           | > = 14.17.6  |
+| npm              | > = 7.19.1   |
 
 #### Mögliche IDE's
 
@@ -97,7 +97,7 @@ verwenden.
 
 ## Bugs
 
-Wenn ein Fehler gefunden wird, diesen bitte als [Issue](https://github.com/ricom/toolbox-frontend/issues) im Github
+Wenn ein Fehler gefunden wird, diesen bitte als [Issue](https://github.com/ricom/Strategienavigator-frontend/issues) im Github
 Repository eintragen.
 
 ## Lizenz
