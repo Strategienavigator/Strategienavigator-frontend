@@ -114,6 +114,10 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
                     <Form.Text>Gültige
                         Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "." + i).join(", ")}</Form.Text> <br/>
                     <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE / 1000} MB</Form.Text>
+
+                    <UIErrorBanner id={"avatar.empty"}/>
+                    <UIErrorBanner id={"avatar.size"}/>
+                    <UIErrorBanner id={"avatar.type"}/>
                 </Form.Group>
 
                 <Row>
