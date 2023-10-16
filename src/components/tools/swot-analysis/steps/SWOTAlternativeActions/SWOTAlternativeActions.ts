@@ -7,7 +7,7 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {AlternateAction, SWOTAlternativeActionsComponent} from "./SWOTAlternativeActionsComponent";
-import {SWOTAnalysisMatrix} from "../../matrix/SWOTAnalysisMatrix";
+import {SWOTAnalysisMatrix} from "../../extraWindow/SWOTAnalysisMatrix";
 import React from "react";
 import {StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";

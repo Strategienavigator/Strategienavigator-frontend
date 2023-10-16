@@ -38,6 +38,7 @@ import {SettingsContextComponent} from "./general-components/Contexts/SettingsCo
 import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
 import {enablePatches} from "immer";
 import {PersonaAnalysis} from "./components/tools/persona-analysis/PersonaAnalysis";
+import {TemplateAnalysis} from "./components/tools/template-analysis/TemplateAnalysis";
 
 require("./setupEcho.ts");
 // Add SettingsChangeListener for Darkmode
@@ -76,6 +77,7 @@ const getRouterSwitch = () => {
             <Route loginAnonymous={true} loggedIn={true} path={"/persona-analysis"} component={PersonaAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/utility-analysis"} component={UtilityAnalysis}/>
+            <Route loginAnonymous={false} loggedIn={true} path={"/template-analysis"} component={TemplateAnalysis}/>
 
             <Route path={"/error/:code"} component={ErrorPages}/>
 

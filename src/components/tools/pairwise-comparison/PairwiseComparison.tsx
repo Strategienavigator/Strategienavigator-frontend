@@ -3,13 +3,15 @@ import {SteppableTool} from "../../../general-components/Tool/SteppableTool/Step
 import {RouteComponentProps} from "react-router";
 import {JSONExporter} from "../../../general-components/Export/JSONExporter";
 import "./pairwise-comparison.scss";
-import {PCPairComparisonValues} from "./steps/PCPairComparison/PCPairComparisonComponent";
-import {PCResultValues} from "./steps/PCResult/PCResultComponent";
-import {PCCriterias} from "./steps/PCCriterias/PCCriterias";
+
 import {PCPairComparison} from "./steps/PCPairComparison/PCPairComparison";
-import {PCResult} from "./steps/PCResult/PCResult";
-import {PCExcelExporter} from "./export/PCExcelExporter";
+import {PCPairComparisonValues} from "./steps/PCPairComparison/PCPairComparisonComponent";
+import {PCCriterias} from "./steps/PCCriterias/PCCriterias";
 import {PCCriteriasValues} from "./steps/PCCriterias/PCCriteriasComponent";
+import {PCResult} from "./steps/PCResult/PCResult";
+import {PCResultValues} from "./steps/PCResult/PCResultComponent";
+
+import {PCExcelExporter} from "./export/PCExcelExporter";
 import {PCJSONImporter} from "./import/PCJSONImporter";
 
 
