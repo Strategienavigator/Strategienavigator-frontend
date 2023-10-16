@@ -1,7 +1,7 @@
 import {
+    ExtraWindowDefinition,
     StepDataHandler,
-    StepDefinition,
-	ExtraWindowDefinition
+    StepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {Draft} from "immer";
@@ -16,7 +16,7 @@ class TemplateStep2 implements StepDefinition<TemplateAnalysisValues>, StepDataH
     id: string;
     title: string;
     dataHandler: StepDataHandler<TemplateAnalysisValues>;
-	extraWindow: ExtraWindowDefinition<TemplateAnalysisValues>;
+    extraWindow: ExtraWindowDefinition<TemplateAnalysisValues>;
 
     constructor() {
         this.id = "template-step-2";
@@ -24,9 +24,9 @@ class TemplateStep2 implements StepDefinition<TemplateAnalysisValues>, StepDataH
         this.dataHandler = this;
         this.form = TemplateStep2Component;
         this.extraWindow = {
-			displayName: "ExtraWindow",
-			extraWindowComponent: TemplateStep2ExtraWindow,
-		};
+            displayName: "ExtraWindow",
+            extraWindowComponent: TemplateStep2ExtraWindow,
+        };
     }
 
     deleteData(data: Draft<TemplateAnalysisValues>): void {
@@ -49,7 +49,7 @@ class TemplateStep2 implements StepDefinition<TemplateAnalysisValues>, StepDataH
 
         return errors;
     }
-    
+
 
 }
 

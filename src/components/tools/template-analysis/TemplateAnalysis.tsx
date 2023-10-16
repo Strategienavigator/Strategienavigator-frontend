@@ -16,13 +16,13 @@ import "./template-analysis.scss";
 
 export interface TemplateAnalysisValues {
     "template-step-1"?: TemplateStep1Values,
-	"template-step-2"?: TemplateStep2Values,
-	"template-step-3"?: TemplateStep3Values
+    "template-step-2"?: TemplateStep2Values,
+    "template-step-3"?: TemplateStep3Values
 }
 
 /**
-* Repräsentiert das Tool "Template-Analyse"
-*/
+ * Repräsentiert das Tool "Template-Analyse"
+ */
 class TemplateAnalysis extends SteppableTool<TemplateAnalysisValues> {
 
     constructor(props: RouteComponentProps, context: any) {
@@ -33,22 +33,22 @@ class TemplateAnalysis extends SteppableTool<TemplateAnalysisValues> {
 
         // Exports
         this.addExporter(new JSONExporter());
-		this.addExporter(new TemplateAnalysisExcelExporter());
+        this.addExporter(new TemplateAnalysisExcelExporter());
 
         // Imports
         this.setImporter(new TemplateAnalysisJSONImporter());
 
         // Schritte
         this.addStep(new TemplateStep1());
-		this.addStep(new TemplateStep2());
-		this.addStep(new TemplateStep3());
+        this.addStep(new TemplateStep2());
+        this.addStep(new TemplateStep3());
     }
 
     protected getInitData(): TemplateAnalysisValues {
         let data = {
             "template-step-1": undefined,
-			"template-step-2": undefined,
-			"template-step-3": undefined
+            "template-step-2": undefined,
+            "template-step-3": undefined
         };
         this.getStep(0).dataHandler.fillFromPreviousValues(data);
         return data;

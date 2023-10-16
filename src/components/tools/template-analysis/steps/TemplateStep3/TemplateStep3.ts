@@ -1,7 +1,7 @@
 import {
     StepDataHandler,
     StepDefinition,
-	SubStepDefinition
+    SubStepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {Draft} from "immer";
@@ -15,7 +15,7 @@ class TemplateStep3 implements StepDefinition<TemplateAnalysisValues>, StepDataH
     id: string;
     title: string;
     dataHandler: StepDataHandler<TemplateAnalysisValues>;
-	subStep: SubStepDefinition<TemplateAnalysisValues>;
+    subStep: SubStepDefinition<TemplateAnalysisValues>;
 
     constructor() {
         this.id = "template-step-3";
@@ -45,7 +45,7 @@ class TemplateStep3 implements StepDefinition<TemplateAnalysisValues>, StepDataH
 
         return errors;
     }
-    
+
     getStepCount(data: TemplateAnalysisValues): number {
         return 0;
     }

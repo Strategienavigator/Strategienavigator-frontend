@@ -20,7 +20,7 @@ class TemplateStep1 implements StepDefinition<TemplateAnalysisValues>, StepDataH
         this.title = "1. Schritt 1";
         this.dataHandler = this;
         this.form = TemplateStep1Component;
-        
+
     }
 
     deleteData(data: Draft<TemplateAnalysisValues>): void {
@@ -43,7 +43,7 @@ class TemplateStep1 implements StepDefinition<TemplateAnalysisValues>, StepDataH
 
         return errors;
     }
-    
+
 
 }
 

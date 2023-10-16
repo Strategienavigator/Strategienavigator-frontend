@@ -7,6 +7,6 @@ import * as t from "ts-interface-checker";
 export const PersonaSummaryValues = t.union("null", "undefined");
 
 const PersonaSummary_ts: t.ITypeSuite = {
-  PersonaSummaryValues,
+    PersonaSummaryValues,
 };
 export default PersonaSummary_ts;

@@ -9,7 +9,7 @@ interface TemplateStep2ComponentState {
 
 }
 
-class TemplateStep2Component extends Step<TemplateAnalysisValues,TemplateStep2ComponentState> {
+class TemplateStep2Component extends Step<TemplateAnalysisValues, TemplateStep2ComponentState> {
 
     public constructor(props: StepProp<TemplateAnalysisValues> | Readonly<StepProp<TemplateAnalysisValues>>) {
         super(props);
