@@ -34,6 +34,7 @@ export interface Rating {
 interface PortEvaluationValues {
     "attractivity": Rating[]
     "comp-standing": Rating[]
+    "currentHoveredCriteria"?: number
 }
 
 class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
@@ -102,8 +103,16 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
                     return null;
                 }
 
+                console.log(this.props.save.data["port-evaluation"]?.currentHoveredCriteria);
+                let i = this.index += 1;
+
                 return (
-                    <div key={"evaluation-" + index + "-" + type} className={"evaluation"}>
+                    <div
+                        key={"evaluation-" + index + "-" + type}
+                        className={"evaluation"}
+                        onMouseEnter={() => this.onCurrentCriteriaChange(i)}
+                        onClick={() => this.onCurrentCriteriaChange(i)}
+                    >
                         <h6>
                             {criteria.name}
 
@@ -159,6 +168,14 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
                 </Accordion>
             </>
         );
+    }
+
+    onCurrentCriteriaChange = (index: number) => {
+        this.props.saveController.onChanged((save) => {
+            if (save.data["port-evaluation"]) {
+                save.data["port-evaluation"].currentHoveredCriteria = index;
+            }
+        });
     }
 
     valuesChanged = (values: CompareComponentValues, index: number, type: "attractivity" | "comp-standing") => {

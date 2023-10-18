@@ -1,4 +1,5 @@
 import {
+    ExtraWindowDefinition,
     StepDataHandler,
     StepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
@@ -11,6 +12,7 @@ import {PortEvaluationComponent, Rating} from "./PortEvaluationComponent";
 import {CompareSymbolHeader} from "../../../../../general-components/CompareComponent/Header/CompareSymbolHeader";
 import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 import {CompareComponentValues} from "../../../../../general-components/CompareComponent/CompareComponent";
+import {PortScaleDescriptionShower} from "../../matrix/PortScaleDescriptionShower";
 
 
 export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, StepDataHandler<PortfolioAnalysisValues> {
@@ -20,12 +22,17 @@ export class PortEvaluation implements StepDefinition<PortfolioAnalysisValues>, 
     form: FunctionComponent<StepProp<PortfolioAnalysisValues>> | ComponentClass<StepProp<PortfolioAnalysisValues>>;
     id: string;
     title: string;
+    extraWindow: ExtraWindowDefinition<PortfolioAnalysisValues>;
 
     constructor() {
         this.dataHandler = this;
         this.form = PortEvaluationComponent;
         this.id = "port-evaluation";
         this.title = "4. Bewertung";
+        this.extraWindow = {
+            displayName: "Die aktuelle Skalabeschreibung",
+            extraWindowComponent: PortScaleDescriptionShower
+        };
     }
 
     deleteData(data: Draft<PortfolioAnalysisValues>): void {
