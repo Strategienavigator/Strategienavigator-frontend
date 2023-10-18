@@ -28,7 +28,7 @@ class TemplateAnalysisExcelExporter extends ExcelExporter<TemplateAnalysisValues
 
     private getTemplateStep1Values(values: TemplateStep1Values): WorkSheet {
         let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
+        // let cell = {r: 0, c: 0};
 
         let range: Range = {
             s: {r: 0, c: 0},
@@ -40,7 +40,7 @@ class TemplateAnalysisExcelExporter extends ExcelExporter<TemplateAnalysisValues
 
     private getTemplateStep2Values(values: TemplateStep2Values): WorkSheet {
         let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
+        // let cell = {r: 0, c: 0};
 
         let range: Range = {
             s: {r: 0, c: 0},
@@ -52,7 +52,7 @@ class TemplateAnalysisExcelExporter extends ExcelExporter<TemplateAnalysisValues
 
     private getTemplateStep3Values(values: TemplateStep3Values): WorkSheet {
         let ws: WorkSheet = {};
-        let cell = {r: 0, c: 0};
+        // let cell = {r: 0, c: 0};
 
         let range: Range = {
             s: {r: 0, c: 0},

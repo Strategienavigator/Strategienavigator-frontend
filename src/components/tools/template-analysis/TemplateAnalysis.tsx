@@ -26,7 +26,7 @@ export interface TemplateAnalysisValues {
 class TemplateAnalysis extends SteppableTool<TemplateAnalysisValues> {
 
     constructor(props: RouteComponentProps, context: any) {
-        super(props, context, "Template-Analyse", faCube, 1);
+        super(props, context, "Template-Analyse", faCube, 9999);
 
         // Wartungarbeiten?
         this.setMaintenance(false);

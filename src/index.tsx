@@ -38,7 +38,8 @@ import {SettingsContextComponent} from "./general-components/Contexts/SettingsCo
 import {DarkModeChanger} from "./general-components/Darkmode/Darkmode";
 import {enablePatches} from "immer";
 import {PersonaAnalysis} from "./components/tools/persona-analysis/PersonaAnalysis";
-import {TemplateAnalysis} from "./components/tools/template-analysis/TemplateAnalysis";
+import * as process from "process";
+import {TestAnalysis} from "./components/tools/test-analysis/TestAnalysis";
 
 require("./setupEcho.ts");
 // Add SettingsChangeListener for Darkmode
@@ -77,7 +78,10 @@ const getRouterSwitch = () => {
             <Route loginAnonymous={true} loggedIn={true} path={"/persona-analysis"} component={PersonaAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/portfolio-analysis"} component={PortfolioAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/utility-analysis"} component={UtilityAnalysis}/>
-            <Route loginAnonymous={false} loggedIn={true} path={"/template-analysis"} component={TemplateAnalysis}/>
+
+            {/* DEV  */(process.env.NODE_ENV === "development") && (
+                <Route loginAnonymous={true} loggedIn={true} path={"/test-analysis"} component={TestAnalysis}/>
+            )}
 
             <Route path={"/error/:code"} component={ErrorPages}/>
 

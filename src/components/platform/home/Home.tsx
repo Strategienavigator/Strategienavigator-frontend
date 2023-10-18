@@ -7,13 +7,14 @@ import {
     faChartPie,
     faSortAmountDownAlt,
     faThLarge,
-    faUserCircle
+    faUserCircle, faVial
 } from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 import "./home.scss";
 import "./home-desk.scss"
 import FAE from "../../../general-components/Icons/FAE";
+import * as process from "process";
 
 
 interface HomeState {
@@ -69,6 +70,15 @@ export const Tools = [
         maintenance: true
     }
 ];
+if (process.env.NODE_ENV === "development") {
+    Tools.push({
+        id: 9999,
+        name: "Test-Analyse (DEV only)",
+        icon: faVial,
+        link: "/test-analysis",
+        maintenance: false
+    });
+}
 
 export class Home extends Component<any, HomeState> {
 
