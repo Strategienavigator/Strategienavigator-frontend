@@ -103,9 +103,7 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
                     return null;
                 }
 
-                console.log(this.props.save.data["port-evaluation"]?.currentHoveredCriteria);
                 let i = this.index += 1;
-
                 return (
                     <div
                         key={"evaluation-" + index + "-" + type}
