@@ -47,7 +47,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cypress": "cypress open",
-    "create-tool": "create-tool"
+    "create-tool": "create-tool",
+    "ts-interface-builder": "ts-interface-builder"
   },
   "eslintConfig": {
     "extends": [

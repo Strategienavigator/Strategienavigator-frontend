@@ -1,15 +1,23 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {PersonaAnalysisValues} from "../../PersonaAnalysis";
-import {Col, Image, Row} from "react-bootstrap";
-import {faBrain, faPaintRoller, faSmile, faUsers} from "@fortawesome/free-solid-svg-icons";
+import {Col, Image, ListGroup, ListGroupItem, Row} from "react-bootstrap";
 import {PersonaInfoItem} from "./PersonaInfoItem";
-import {faBook, faBullseye, faCoins, faHospital} from "@fortawesome/free-solid-svg-icons/";
+import {CardComponentFieldsWithNameValues} from "../../../../../general-components/CardComponent/CardComponentWithName";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
+import {PersonaPersonalityComponent} from "../PersonaPersonality/PersonaPersonalityComponent";
+import {faCoins, faUsers, faUserTag} from "@fortawesome/free-solid-svg-icons";
+import FAE from "../../../../../general-components/Icons/FAE";
+import {getFamilyStatus} from "../PersonaInfo/PersonaInfoComponent";
 
+interface Item extends CardComponentFieldsWithNameValues {
+    icon?: IconDefinition
+}
 
 export type PersonaSummaryValues = null | undefined;
 
 export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
+    private i: number = 0;
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
         super(props, context);
@@ -20,39 +28,115 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
         let personality = this.props.save.data["persona-personality"];
 
         if (info && personality) {
+            let items: Item[] = [
+                ...Object.values(personality.fields).map<Item>((data, index) => {
+                    return {
+                        name: PersonaPersonalityComponent.names[index],
+                        fields: data,
+                        icon: PersonaPersonalityComponent.icons[index]
+                    };
+                }),
+                ...personality.individual
+            ];
+            let left: Item[] = [];
+            let right: Item[] = [];
+            items.forEach((v, i) => {
+                if (i % 2) {
+                    right.push(v);
+                } else {
+                    left.push(v);
+                }
+            });
+
+            let income: string | null = null;
+            if (info.income !== null) {
+                income = new Intl.NumberFormat(
+                    "de-DE",
+                    {
+                        style: "currency",
+                        currency: "EUR"
+                    }
+                ).format(info.income);
+            }
+
+            this.i = 0;
             return (
                 <>
                     <Row>
-                        <Col sm={5}>
-                            <div className={"avatar-container"}>
-                                <Image className={"avatar"} rounded src={info.avatar ?? undefined}/>
-                            </div>
-
+                        <Col sm={6}>
                             <div className={"names"}>
                                 {info.firstname} {info.lastname}, {info.age} {info.age === 1 ? "Jahr" : "Jahre"} alt
                             </div>
 
-                            <PersonaInfoItem icon={faHospital} items={personality.illness}
-                                             title={"Auf der Krankenstation wegen..."}/>
-                            <PersonaInfoItem icon={faBook} items={personality.citations} title={"Zitat"}/>
-                            <PersonaInfoItem icon={faSmile} items={personality.motives}
-                                             title={"Welches Grundmotiv verfolgt dieses Persona und warum?"}/>
+                            <div className={"avatar-container"}>
+                                <Image className={"avatar"} rounded
+                                       src={this.props.resourceManager.getBlobURL("avatar") ?? undefined}/>
+                            </div>
+
+                            {this.getItemElements(left)}
                         </Col>
-                        <Col sm={7}>
-                            <PersonaInfoItem icon={faUsers} items={personality.family} title={"Familie und Freunde"}/>
-                            <PersonaInfoItem icon={faPaintRoller} items={personality.hobbys}
-                                             title={"Hobbys und Interessen"}/>
-                            <PersonaInfoItem icon={faBullseye} items={personality.wishes} title={"Ziele und Wünsche"}/>
-                            <PersonaInfoItem icon={faBrain} items={personality.characteristics}
-                                             title={"Wie lässt sich das Persona in Stichworten beschreiben?"}/>
-                            <PersonaInfoItem icon={faCoins} items={personality.problems}
-                                             title={"Welche Probleme und Hürden muss dieses Persona bewältigen?"}/>
+                        <Col sm={6}>
+                            {(income !== null) && (
+                                <this.InfoElement
+                                    icon={faCoins}
+                                    name={"Einkommen"}
+                                    values={[`Monatlicher Nettoverdienst von ${income}`]}
+                                />
+                            )}
+                            <this.InfoElement
+                                icon={faUserTag}
+                                name={"Familienstatus"}
+                                values={[getFamilyStatus(info.familystatus)]}
+                            />
+                            <this.InfoElement
+                                icon={faUsers}
+                                name={"Familie & Freunde"}
+                                values={info.family.length <= 0 ? ["Nicht angegeben"] : info.family.map<string>(i => i.name)}
+                            />
+                            {this.getItemElements(right)}
                         </Col>
                     </Row>
                 </>
             );
         }
         return <></>;
+    }
+
+    public InfoElement(props: {
+        icon: IconDefinition,
+        name: string,
+        values: ReactNode[]
+    }) {
+        return (
+            <div className={"info-container"}>
+                <div className={"title"}><FAE icon={props.icon}/> {props.name}</div>
+                <div className={"content"}>
+                    <ListGroup>
+                        {props.values.map((data, index) => {
+                            return (
+                                <ListGroupItem>
+                                    {data}
+                                </ListGroupItem>
+                            );
+                        })}
+                    </ListGroup>
+                </div>
+            </div>
+        );
+    }
+
+    getItemElements = (items: Item[]): JSX.Element[] => {
+        return items.map((data) => {
+            this.i += 1;
+            return (
+                <PersonaInfoItem
+                    key={"personality-item-individual-" + this.i}
+                    title={data.name}
+                    icon={data.icon}
+                    items={data.fields}
+                />
+            );
+        });
     }
 
 }

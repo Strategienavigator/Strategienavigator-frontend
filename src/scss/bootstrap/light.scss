@@ -20,6 +20,7 @@ $input-focus-bg: map_get(map_get($themes, "light"), "input-bg-color");
 $input-focus-color: map_get(map_get($themes, "light"), "input-text-color");
 $input-focus-border-color: darken(map_get(map_get($themes, "light"), "input-border-color"), 2%);
 $input-placeholder-color: map_get(map_get($themes, "light"), "input-placeholder-color");
+$form-select-border-color: map_get(map_get($themes, "light"), "input-border-color");
 
 // FORM-CHECK
 $form-check-input-checked-bg-color: $style-color;

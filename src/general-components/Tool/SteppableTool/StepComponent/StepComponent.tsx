@@ -9,7 +9,7 @@ import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeader";
 import {StepComponentButtons} from "./StepComponentButtons/StepComponentButtons";
 import ResetStepsModal from "./ResetStepsModal/ResetStepsModal";
 import {ExportModal} from "../../ExportButton";
-import {ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
+import {ResourcesType, ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {ExtraWindowProps} from "../../ExtraWindowComponent/ExtraWindowComponent";
 import {UIError} from "../../../Error/UIErrors/UIError";
 import {Exporter} from "../../../Export/Exporter";
@@ -74,7 +74,6 @@ export interface StepDataHandler<T extends object> {
      * @param data
      */
     isUnlocked: (data: T) => boolean
-
     /**
      * change data in a way that isUnlocked returns true
      * @param data
@@ -84,13 +83,12 @@ export interface StepDataHandler<T extends object> {
      * Diese Methode soll die Daten so verändern, dass isUnlocked false returned
      * @param data
      */
-    deleteData: (data: Draft<T>) => void
-
+    deleteData: (data: Draft<T>, resources: ResourcesType) => void
     /**
      * change data in a way that isUnlocked returns false
      * @param data
      */
-    validateData: (data: T) => UIError[]
+    validateData: (data: T, resources: ResourcesType) => UIError[]
 }
 
 export interface StepComponentProps<D extends object> extends ToolSaveProps<D> {
@@ -296,6 +294,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                                             {React.createElement(step.form, {
                                                 save: this.props.save,
                                                 saveController: this.props.saveController,
+                                                resourceManager: this.props.resourceManager,
                                                 isSaving: this.props.isSaving,
                                                 id: step.id,
                                                 disabled: !hasPermission(this.context.permission, EditSavesPermission) || index < this.state.progress /*|| !this.withData(step.dataHandler.isUnlocked)*/,
@@ -420,7 +419,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private hasNextStep(): boolean {
         let newStepIndex = this.state.currentStep + 1;
-        console.log('newStepIndex', newStepIndex)
         if (newStepIndex < this.props.steps.length) {
             let newStep = this.props.steps[newStepIndex];
             return this.withData(newStep.dataHandler.isUnlocked);
@@ -438,7 +436,6 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
         const stepCount = this.withData(step.subStep.getStepCount);
         return this.state.currentSubStep < (stepCount - 1);
-
     }
 
     /**
@@ -453,6 +450,15 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     private withData<E>(fn: ((data: D) => E) | undefined): E | undefined {
         if (fn !== undefined) {
             return fn(this.props.save.data);
+        }
+        return undefined;
+    }
+
+    private withDataAndResources<E>(fn: (data: D, resources: ResourcesType) => E): E
+    private withDataAndResources<E>(fn: ((data: D, resources: ResourcesType) => E) | undefined): E | undefined
+    private withDataAndResources<E>(fn: ((data: D, resources: ResourcesType) => E) | undefined): E | undefined {
+        if (fn !== undefined) {
+            return fn(this.props.save.data, this.props.resourceManager.resources);
         }
         return undefined;
     }
@@ -480,7 +486,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             if (index < this.props.steps.length) {
                 const newData = save.data;
                 for (let i = this.props.steps.length - 1; i >= index; i--) {
-                    this.props.steps[i]?.dataHandler.deleteData(newData);
+                    this.props.steps[i]?.dataHandler.deleteData(newData, this.props.resourceManager.resources);
                 }
                 this.props.steps[index]?.dataHandler.fillFromPreviousValues(newData);
             }
@@ -530,7 +536,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                 return;
             }
 
-            const currentValid = this.withData(currentStep.dataHandler.validateData).length === 0;
+            const currentValid = this.withDataAndResources(currentStep.dataHandler.validateData).length === 0;
 
             if (currentValid) {
                 if (this.unlockNextStep()) {
@@ -546,7 +552,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     private unlockNextStep(): boolean {
         const currenStep = this.getCurrentStep();
 
-        if (this.withData(currenStep.dataHandler.validateData).length === 0) {
+        if (this.withDataAndResources(currenStep.dataHandler.validateData).length === 0) {
             const nextStepIndex = this.state.currentStep + 1;
 
             if (nextStepIndex < this.props.steps.length) {
@@ -649,6 +655,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             let extraWindow = React.createElement(step.extraWindow.extraWindowComponent, {
                 tool: this.props.tool,
                 data: this.props.save.data,
+                resourceManager: this.props.resourceManager,
                 stepController: this.stepController
             });
             const getExtraWindowContainer = () => {
@@ -686,7 +693,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
 
     private validateStep = (step: number): boolean => {
-        const errors = this.withData(this.props.steps[step].dataHandler.validateData);
+        const errors = this.withDataAndResources(this.props.steps[step].dataHandler.validateData);
         if (errors.length > 0) {
             this.putErrors(errors);
             Messages.add(

@@ -6,10 +6,12 @@
 
   .name {
     border-radius: 0.35rem 0.35rem 0 0;
+    margin-bottom: -1px;
   }
 
   .info {
     border-radius: 0 0 0.35rem 0.35rem;
+    margin-top: -1px;
   }
 
   .name, .info {
@@ -22,8 +24,17 @@
   }
 
   .image {
+    height: 100%;
+    width: auto;
+
     max-height: 300px;
     max-width: 100%;
+
     border-radius: 0;
+    border: none;
+
+    @include theme() {
+      background-color: get("step-tab-bg");
+    }
   }
 }

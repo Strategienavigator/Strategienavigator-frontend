@@ -42,7 +42,6 @@ class ErrorPages extends Component<RouteComponentProps<{ code: string }>, any> {
 
     render() {
         let component = this.getErrorComponent();
-        // console.log(this.props.history.goBack());
 
         return (
             <div className={"errorpage"}>

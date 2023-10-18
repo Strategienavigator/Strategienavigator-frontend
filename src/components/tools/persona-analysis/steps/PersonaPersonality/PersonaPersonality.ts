@@ -13,6 +13,9 @@ import {
     isCardComponentFilled,
     isCardComponentTooLong
 } from "../../../../../general-components/CardComponent/CardComponent";
+import {
+    validateCardComponentWithNameFilled
+} from "../../../../../general-components/CardComponent/CardComponentWithName";
 
 
 export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues> {
@@ -25,44 +28,29 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
 
     private properties = [
         {
-            name: "citations",
-            min: PersonaPersonalityComponent.MIN_CITATION,
-            max: PersonaPersonalityComponent.MAX_CITATION
+            name: "demograph",
+            min: PersonaPersonalityComponent.MIN_DEMO,
+            max: PersonaPersonalityComponent.MAX_DEMO,
         },
         {
-            name: "hobbys",
-            min: PersonaPersonalityComponent.MIN_HOBBYS,
-            max: PersonaPersonalityComponent.MAX_HOBBYS
+            name: "pains",
+            min: PersonaPersonalityComponent.MIN_PAINS,
+            max: PersonaPersonalityComponent.MAX_PAINS,
         },
         {
-            name: "illness",
-            min: PersonaPersonalityComponent.MIN_ILLNESS,
-            max: PersonaPersonalityComponent.MAX_ILLNESS
+            name: "gains",
+            min: PersonaPersonalityComponent.MIN_GAINS,
+            max: PersonaPersonalityComponent.MAX_GAINS,
         },
         {
-            name: "family",
-            min: PersonaPersonalityComponent.MIN_FAMILY,
-            max: PersonaPersonalityComponent.MAX_FAMILY
-        },
-        {
-            name: "wishes",
-            min: PersonaPersonalityComponent.MIN_WISHES,
-            max: PersonaPersonalityComponent.MAX_WISHES
+            name: "statements",
+            min: PersonaPersonalityComponent.MIN_STATEMENTS,
+            max: PersonaPersonalityComponent.MAX_STATEMENTS,
         },
         {
             name: "motives",
             min: PersonaPersonalityComponent.MIN_MOTIVES,
-            max: PersonaPersonalityComponent.MAX_MOTIVES
-        },
-        {
-            name: "problems",
-            min: PersonaPersonalityComponent.MIN_PROBLEMS,
-            max: PersonaPersonalityComponent.MAX_PROBLEMS
-        },
-        {
-            name: "characteristics",
-            min: PersonaPersonalityComponent.MIN_CHARACTERISTICS,
-            max: PersonaPersonalityComponent.MAX_CHARACTERISTICS
+            max: PersonaPersonalityComponent.MAX_MOTIVES,
         }
     ];
 
@@ -82,17 +70,25 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => {
         let d = this.properties.map((i) => i.name).reduce((a, v) => ({...a, [v]: []}), {}) as PersonaPersonalityValues;
 
+        d.fields = {
+            demograph: [],
+            pains: [],
+            gains: [],
+            statements: [],
+            motives: []
+        };
+
         // generiere leere zeilen für min werte
         for (const item of this.properties) {
             for (let i = 0; i < item.min; i++) {
-                d[item.name].push({
+                d.fields[item.name].push({
                     name: "",
                     desc: "",
                     id: PersonaPersonalityComponent.COUNTER.get(i + 1)
                 });
             }
         }
-
+        d.individual = [];
         data["persona-personality"] = d;
         return data;
     };
@@ -107,9 +103,10 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
         let d = data["persona-personality"];
 
         if (d) {
+            // Fields
             for (const name of names) {
                 // empty
-                if (!isCardComponentFilled(d[name], false)) {
+                if (!isCardComponentFilled(d.fields[name], false)) {
                     errors.push({
                         id: `${name}.empty`,
                         message: "Bitte füllen Sie alle Felder aus!",
@@ -118,7 +115,7 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
                 }
 
                 // too long
-                if (isCardComponentTooLong(d[name])) {
+                if (isCardComponentTooLong(d.fields[name])) {
                     errors.push({
                         id: `${name}.toolong`,
                         message: "Einige Feld sind zu Lang!",
@@ -126,6 +123,9 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
                     });
                 }
             }
+
+            // Individuell
+            validateCardComponentWithNameFilled(d.individual, "individual", errors);
         }
 
         return errors;

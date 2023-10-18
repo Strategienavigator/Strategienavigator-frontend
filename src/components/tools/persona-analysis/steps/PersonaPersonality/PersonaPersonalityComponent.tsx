@@ -4,19 +4,24 @@ import {PersonaAnalysisValues} from "../../PersonaAnalysis";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {NumberCounter} from "../../../../../general-components/Counter/NumberCounter";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
+import {
+    CardComponentFieldsWithName,
+    CardComponentWithName
+} from "../../../../../general-components/CardComponent/CardComponentWithName";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
+import {faFire, faHeartbeat, faHeartBroken, faMicrophone, faUser} from "@fortawesome/free-solid-svg-icons";
 
 
 export interface PersonaPersonalityValues {
-    citations: CardComponentFields,
-    hobbys: CardComponentFields,
-    family: CardComponentFields,
-    wishes: CardComponentFields,
-    problems: CardComponentFields,
-    characteristics: CardComponentFields,
-    illness: CardComponentFields,
-    motives: CardComponentFields,
-
-    [key: string]: CardComponentFields
+    fields: {
+        demograph: CardComponentFields,
+        pains: CardComponentFields,
+        gains: CardComponentFields,
+        statements: CardComponentFields,
+        motives: CardComponentFields,
+        [key: string]: CardComponentFields,
+    }
+    individual: CardComponentFieldsWithName
 }
 
 export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}> {
@@ -24,98 +29,84 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
     static DEFAULT_MIN = 0;
     static DEFAULT_MAX = 5;
 
-    static MIN_CITATION = PersonaPersonalityComponent.DEFAULT_MIN;
-    static MAX_CITATION = PersonaPersonalityComponent.DEFAULT_MAX;
+    static MIN_DEMO = PersonaPersonalityComponent.DEFAULT_MIN;
+    static MAX_DEMO = PersonaPersonalityComponent.DEFAULT_MAX;
 
-    static MIN_HOBBYS = PersonaPersonalityComponent.DEFAULT_MIN;
-    static MAX_HOBBYS = PersonaPersonalityComponent.DEFAULT_MAX;
+    static MIN_PAINS = PersonaPersonalityComponent.DEFAULT_MIN;
+    static MAX_PAINS = PersonaPersonalityComponent.DEFAULT_MAX;
 
-    static MIN_WISHES = PersonaPersonalityComponent.DEFAULT_MIN;
-    static MAX_WISHES = PersonaPersonalityComponent.DEFAULT_MAX;
+    static MIN_GAINS = PersonaPersonalityComponent.DEFAULT_MIN;
+    static MAX_GAINS = PersonaPersonalityComponent.DEFAULT_MAX;
+
+    static MIN_STATEMENTS = PersonaPersonalityComponent.DEFAULT_MIN;
+    static MAX_STATEMENTS = PersonaPersonalityComponent.DEFAULT_MAX;
 
     static MIN_MOTIVES = PersonaPersonalityComponent.DEFAULT_MIN;
     static MAX_MOTIVES = PersonaPersonalityComponent.DEFAULT_MAX;
 
-    static MIN_PROBLEMS = PersonaPersonalityComponent.DEFAULT_MIN;
-    static MAX_PROBLEMS = PersonaPersonalityComponent.DEFAULT_MAX;
+    static MIN_INDIVIDUAL = 0;
+    static MAX_INDIVIDUAL = 5;
 
-    static MIN_ILLNESS = PersonaPersonalityComponent.DEFAULT_MIN;
-    static MAX_ILLNESS = PersonaPersonalityComponent.DEFAULT_MAX;
+    static MIN_INDIVIDUAL_CARDS = PersonaPersonalityComponent.DEFAULT_MIN;
+    static MAX_INDIVIDUAL_CARDS = PersonaPersonalityComponent.DEFAULT_MAX;
 
-    static MIN_FAMILY = PersonaPersonalityComponent.DEFAULT_MIN;
-    static MAX_FAMILY = PersonaPersonalityComponent.DEFAULT_MAX;
-
-    static MIN_CHARACTERISTICS = PersonaPersonalityComponent.DEFAULT_MIN;
-    static MAX_CHARACTERISTICS = PersonaPersonalityComponent.DEFAULT_MAX;
     static COUNTER = new NumberCounter();
-
+    public static names: string[] = [
+        "Demographische Daten",
+        "Pains (Frust, Probleme, Schmerzpunkte)",
+        "Gains (Ziele, Wünsche, Gewinne)",
+        "Statements (Zitate, Aussagen)",
+        "Dominierendes Grundmotiv"
+    ];
+    public static icons: IconDefinition[] = [
+        faUser,
+        faHeartBroken,
+        faHeartbeat,
+        faMicrophone,
+        faFire
+    ];
     // Change listener
-    private citationsChanged = this.applyChanges.bind(this, "cit");
-    private hobbysChanged = this.applyChanges.bind(this, "hob");
-    private familyChanged = this.applyChanges.bind(this, "fam");
-    private illnessChanged = this.applyChanges.bind(this, "ill");
-    private problemsChanged = this.applyChanges.bind(this, "pro");
-    private wishesChanged = this.applyChanges.bind(this, "wis");
-    private characteristicsChanged = this.applyChanges.bind(this, "cha");
+    private demoChanged = this.applyChanges.bind(this, "demo");
+    private painsChanged = this.applyChanges.bind(this, "pain");
+    private gainsChanged = this.applyChanges.bind(this, "gain");
+    private statementsChanged = this.applyChanges.bind(this, "state");
     private motivesChanged = this.applyChanges.bind(this, "mot");
-
     public items = [
         {
-            legend: "Hobbys und Interessen",
-            name: "hobbys",
-            min: PersonaPersonalityComponent.MIN_HOBBYS,
-            max: PersonaPersonalityComponent.MAX_HOBBYS,
-            changeListener: this.hobbysChanged
+            legend: PersonaPersonalityComponent.names[0],
+            name: "demograph",
+            min: PersonaPersonalityComponent.MIN_DEMO,
+            max: PersonaPersonalityComponent.MAX_DEMO,
+            changeListener: this.demoChanged
         },
         {
-            legend: "Krankheiten",
-            name: "illness",
-            min: PersonaPersonalityComponent.MIN_ILLNESS,
-            max: PersonaPersonalityComponent.MAX_ILLNESS,
-            changeListener: this.illnessChanged
+            legend: PersonaPersonalityComponent.names[1],
+            name: "pains",
+            min: PersonaPersonalityComponent.MIN_PAINS,
+            max: PersonaPersonalityComponent.MAX_PAINS,
+            changeListener: this.painsChanged
         },
         {
-            legend: "Familie und Freunde",
-            name: "family",
-            min: PersonaPersonalityComponent.MIN_FAMILY,
-            max: PersonaPersonalityComponent.MAX_FAMILY,
-            changeListener: this.familyChanged
+            legend: PersonaPersonalityComponent.names[2],
+            name: "gains",
+            min: PersonaPersonalityComponent.MIN_GAINS,
+            max: PersonaPersonalityComponent.MAX_GAINS,
+            changeListener: this.gainsChanged
         },
         {
-            legend: "Probleme und Hürden",
-            name: "problems",
-            min: PersonaPersonalityComponent.MIN_PROBLEMS,
-            max: PersonaPersonalityComponent.MAX_PROBLEMS,
-            changeListener: this.problemsChanged
+            legend: PersonaPersonalityComponent.names[3],
+            name: "statements",
+            min: PersonaPersonalityComponent.MIN_STATEMENTS,
+            max: PersonaPersonalityComponent.MAX_STATEMENTS,
+            changeListener: this.statementsChanged
         },
         {
-            legend: "Wünsche und Ziele",
-            name: "wishes",
-            min: PersonaPersonalityComponent.MIN_WISHES,
-            max: PersonaPersonalityComponent.MAX_WISHES,
-            changeListener: this.wishesChanged
-        },
-        {
-            legend: "Charaktereigenschaften",
-            name: "characteristics",
-            min: PersonaPersonalityComponent.MIN_CHARACTERISTICS,
-            max: PersonaPersonalityComponent.MAX_CHARACTERISTICS,
-            changeListener: this.characteristicsChanged
-        },
-        {
-            legend: "Grundmotiv",
+            legend: PersonaPersonalityComponent.names[4],
             name: "motives",
             min: PersonaPersonalityComponent.MIN_MOTIVES,
             max: PersonaPersonalityComponent.MAX_MOTIVES,
             changeListener: this.motivesChanged
-        },
-        {
-            legend: "Zitate und Sprüche",
-            name: "citations",
-            min: PersonaPersonalityComponent.MIN_CITATION,
-            max: PersonaPersonalityComponent.MAX_CITATION,
-            changeListener: this.citationsChanged
-        },
+        }
     ];
 
     public constructor(props: StepProp<PersonaAnalysisValues>, context: any) {
@@ -128,6 +119,8 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
         if (data) {
             return (
                 <>
+                    <h1>Vorgeschriebene Felder</h1>
+
                     {(this.items.map((item) => {
                         if (data) {
                             return (
@@ -136,7 +129,7 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
                                     <div>
                                         <CardComponent
                                             name={item.name}
-                                            values={data[item.name]}
+                                            values={data.fields[item.name]}
                                             disabled={this.props.disabled}
                                             min={item.min}
                                             max={item.max}
@@ -153,40 +146,57 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
                         }
                         return null;
                     }))}
+
+                    <h1>Individuelle Felder (Maximal 5)</h1>
+
+                    <CardComponentWithName
+                        name={"individual"}
+                        min={PersonaPersonalityComponent.MIN_INDIVIDUAL}
+                        max={PersonaPersonalityComponent.MAX_INDIVIDUAL}
+                        values={data.individual}
+                        disabled={this.props.disabled}
+                        onChanged={this.onIndividualChange}
+                        cardComponent={{
+                            hideDesc: true,
+                            max: PersonaPersonalityComponent.MAX_INDIVIDUAL_CARDS,
+                            min: PersonaPersonalityComponent.MIN_INDIVIDUAL_CARDS,
+                            counter: new NumberCounter()
+                        }}
+                    />
                 </>
             );
         }
         return (<></>);
     }
 
-    private applyChanges(type: "cit" | "hob" | "fam" | "ill" | "pro" | "wis" | "cha" | "mot", values: CardComponentFields) {
+    private onIndividualChange = (values: CardComponentFieldsWithName) => {
+        this.props.saveController.onChanged(save => {
+            let data = save.data["persona-personality"];
+            if (data) {
+                data.individual = values;
+            }
+        });
+    }
+
+    private applyChanges(type: "demo" | "pain" | "gain" | "state" | "mot", values: CardComponentFields) {
         this.props.saveController.onChanged(save => {
             const data = save.data["persona-personality"];
             if (data) {
                 switch (type) {
-                    case "cit":
-                        data.citations = values;
+                    case "demo":
+                        data.fields.demograph = values;
                         break;
-                    case "hob":
-                        data.hobbys = values;
+                    case "pain":
+                        data.fields.pains = values;
                         break;
-                    case "ill":
-                        data.illness = values;
+                    case "gain":
+                        data.fields.gains = values;
                         break;
-                    case "fam":
-                        data.family = values;
-                        break;
-                    case "pro":
-                        data.problems = values;
-                        break;
-                    case "wis":
-                        data.wishes = values;
-                        break;
-                    case "cha":
-                        data.characteristics = values;
+                    case "state":
+                        data.fields.statements = values;
                         break;
                     case "mot":
-                        data.motives = values;
+                        data.fields.motives = values;
                         break;
                 }
             }

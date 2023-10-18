@@ -5,17 +5,18 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const PersonaPersonalityValues = t.iface([], {
-    "citations": "CardComponentFields",
-    "hobbys": "CardComponentFields",
-    "family": "CardComponentFields",
-    "wishes": "CardComponentFields",
-    "problems": "CardComponentFields",
-    "characteristics": "CardComponentFields",
-    "illness": "CardComponentFields",
-    "motives": "CardComponentFields"
+    "fields": t.iface([], {
+        "demograph": "CardComponentFields",
+        "pains": "CardComponentFields",
+        "gains": "CardComponentFields",
+        "statements": "CardComponentFields",
+        "motives": "CardComponentFields"
+    }),
+    "individual": "CardComponentFieldsWithName",
 });
 
-const PersonaPersonalityComponent_ts: t.ITypeSuite = {
+const PersonaPersonality_ts: t.ITypeSuite = {
     PersonaPersonalityValues,
-};
-export default PersonaPersonalityComponent_ts;
+}
+
+export default PersonaPersonality_ts;
