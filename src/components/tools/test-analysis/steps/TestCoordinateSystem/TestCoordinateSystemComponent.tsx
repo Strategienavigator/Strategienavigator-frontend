@@ -9,7 +9,7 @@ interface TestCoordinateSystemComponentState {
 
 }
 
-class TestCoordinateSystemComponent extends Step<TestAnalysisValues,TestCoordinateSystemComponentState> {
+class TestCoordinateSystemComponent extends Step<TestAnalysisValues, TestCoordinateSystemComponentState> {
 
     public constructor(props: StepProp<TestAnalysisValues> | Readonly<StepProp<TestAnalysisValues>>) {
         super(props);

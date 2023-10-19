@@ -21,15 +21,15 @@ import {TestCoordinateSystem} from "./steps/TestCoordinateSystem/TestCoordinateS
 
 export interface TestAnalysisValues {
     "test-cardcomponent"?: TestCardcomponentValues,
-	"test-comparecomponent"?: TestComparecomponentValues,
-	"test-resources"?: TestResourcesValues,
-	"test-substeps"?: TestSubstepsValues,
+    "test-comparecomponent"?: TestComparecomponentValues,
+    "test-resources"?: TestResourcesValues,
+    "test-substeps"?: TestSubstepsValues,
     "test-coordinate-system"?: TestCoordinateSystemValues
 }
 
 /**
-* Repräsentiert das Tool "Test-Analyse"
-*/
+ * Repräsentiert das Tool "Test-Analyse"
+ */
 class TestAnalysis extends SteppableTool<TestAnalysisValues> {
 
     constructor(props: RouteComponentProps, context: any) {
@@ -40,25 +40,25 @@ class TestAnalysis extends SteppableTool<TestAnalysisValues> {
 
         // Exports
         this.addExporter(new JSONExporter());
-		this.addExporter(new TestAnalysisExcelExporter());
+        this.addExporter(new TestAnalysisExcelExporter());
 
         // Imports
         this.setImporter(new TestAnalysisJSONImporter());
 
         // Schritte
         this.addStep(new TestCardcomponent());
-		this.addStep(new TestComparecomponent());
-		this.addStep(new TestResources());
-		this.addStep(new TestSubsteps());
+        this.addStep(new TestComparecomponent());
+        this.addStep(new TestResources());
+        this.addStep(new TestSubsteps());
         this.addStep(new TestCoordinateSystem());
     }
 
     protected getInitData(): TestAnalysisValues {
         let data = {
             "test-cardcomponent": undefined,
-			"test-comparecomponent": undefined,
-			"test-resources": undefined,
-			"test-substeps": undefined,
+            "test-comparecomponent": undefined,
+            "test-resources": undefined,
+            "test-substeps": undefined,
             "test-coordinate-system": undefined
         };
         this.getStep(0).dataHandler.fillFromPreviousValues(data);

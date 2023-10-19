@@ -20,7 +20,7 @@ class TestResources implements StepDefinition<TestAnalysisValues>, StepDataHandl
         this.title = "3. Resourcen";
         this.dataHandler = this;
         this.form = TestResourcesComponent;
-        
+
     }
 
     deleteData(data: Draft<TestAnalysisValues>): void {
@@ -43,7 +43,7 @@ class TestResources implements StepDefinition<TestAnalysisValues>, StepDataHandl
 
         return errors;
     }
-    
+
 
 }
 

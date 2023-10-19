@@ -9,7 +9,7 @@ interface TestComparecomponentComponentState {
 
 }
 
-class TestComparecomponentComponent extends Step<TestAnalysisValues,TestComparecomponentComponentState> {
+class TestComparecomponentComponent extends Step<TestAnalysisValues, TestComparecomponentComponentState> {
 
     public constructor(props: StepProp<TestAnalysisValues> | Readonly<StepProp<TestAnalysisValues>>) {
         super(props);

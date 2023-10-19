@@ -9,7 +9,7 @@ interface TestResourcesComponentState {
 
 }
 
-class TestResourcesComponent extends Step<TestAnalysisValues,TestResourcesComponentState> {
+class TestResourcesComponent extends Step<TestAnalysisValues, TestResourcesComponentState> {
 
     public constructor(props: StepProp<TestAnalysisValues> | Readonly<StepProp<TestAnalysisValues>>) {
         super(props);

@@ -7,6 +7,8 @@ import {TestComparecomponentValues} from "../steps/TestComparecomponent/TestComp
 import {TestResourcesValues} from "../steps/TestResources/TestResourcesComponent";
 import {TestSubstepsValues} from "../steps/TestSubsteps/TestSubstepsComponent";
 import {TestCoordinateSystemValues} from "../steps/TestCoordinateSystem/TestCoordinateSystemComponent";
+import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
+import {MyCustomDescriptionValues} from "../steps/TestCardcomponent/CustomDescription/MyCustomDescription";
 
 
 class TestAnalysisExcelExporter extends ExcelExporter<TestAnalysisValues> {
@@ -37,15 +39,20 @@ class TestAnalysisExcelExporter extends ExcelExporter<TestAnalysisValues> {
     }
 
     private getTestCardcomponentValues(values: TestCardcomponentValues): WorkSheet {
-        let ws: WorkSheet = {};
-        // let cell = {r: 0, c: 0};
-
-        let range: Range = {
-            s: {r: 0, c: 0},
-            e: {r: 0, c: 0}
-        }
-        ws["!ref"] = XLSX.utils.encode_range(range);
-        return ws;
+        return new CardComponentExcelWorkSheet<MyCustomDescriptionValues>(
+            values.cards,
+            "Eintrag",
+            (extras) => {
+                return [
+                    {
+                        object: {
+                            v: extras.rating, t: "n"
+                        },
+                        header: "Bewertung"
+                    }
+                ];
+            }
+        ).getExcelSheet();
     }
 
     private getTestComparecomponentValues(values: TestComparecomponentValues): WorkSheet {

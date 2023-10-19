@@ -8,6 +8,10 @@ import {StepProp} from "../../../../../general-components/Tool/SteppableTool/Ste
 import {ComponentClass, FunctionComponent} from "react";
 import {TestAnalysisValues} from "../../TestAnalysis";
 import {TestCardcomponentComponent} from "./TestCardcomponentComponent";
+import {
+    isCardComponentFilled,
+    isCardComponentTooLong
+} from "../../../../../general-components/CardComponent/CardComponent";
 
 class TestCardcomponent implements StepDefinition<TestAnalysisValues>, StepDataHandler<TestAnalysisValues> {
     form: FunctionComponent<StepProp<TestAnalysisValues>> | ComponentClass<StepProp<TestAnalysisValues>>;
@@ -20,7 +24,6 @@ class TestCardcomponent implements StepDefinition<TestAnalysisValues>, StepDataH
         this.title = "1. CardComponent";
         this.dataHandler = this;
         this.form = TestCardcomponentComponent;
-        
     }
 
     deleteData(data: Draft<TestAnalysisValues>): void {
@@ -28,7 +31,9 @@ class TestCardcomponent implements StepDefinition<TestAnalysisValues>, StepDataH
     }
 
     fillFromPreviousValues(data: Draft<TestAnalysisValues>): void {
-        data["test-cardcomponent"] = {};
+        data["test-cardcomponent"] = {
+            cards: []
+        };
     }
 
     isUnlocked(data: TestAnalysisValues): boolean {
@@ -37,13 +42,27 @@ class TestCardcomponent implements StepDefinition<TestAnalysisValues>, StepDataH
 
     validateData(data: TestAnalysisValues): UIError[] {
         let errors: UIError[] = [];
+        let cards = data["test-cardcomponent"]?.cards;
 
-        // Validierung
-        // ...
+        if (!isCardComponentFilled(cards)) {
+            errors.push({
+                id: "empty",
+                message: "Bitte füllen Sie alle Felder aus!",
+                level: "error"
+            });
+        }
+
+        if (isCardComponentTooLong(cards)) {
+            errors.push({
+                id: "toolong",
+                message: "Einige Felder sind zu Lang!",
+                level: "error"
+            });
+        }
 
         return errors;
     }
-    
+
 
 }
 

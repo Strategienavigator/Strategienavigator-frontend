@@ -20,7 +20,7 @@ class TestComparecomponent implements StepDefinition<TestAnalysisValues>, StepDa
         this.title = "2. CompareComponent";
         this.dataHandler = this;
         this.form = TestComparecomponentComponent;
-        
+
     }
 
     deleteData(data: Draft<TestAnalysisValues>): void {
@@ -43,7 +43,7 @@ class TestComparecomponent implements StepDefinition<TestAnalysisValues>, StepDa
 
         return errors;
     }
-    
+
 
 }
 

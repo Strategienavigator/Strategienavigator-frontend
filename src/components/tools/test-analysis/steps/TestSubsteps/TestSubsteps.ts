@@ -1,8 +1,8 @@
 import {
+    ExtraWindowDefinition,
     StepDataHandler,
     StepDefinition,
-	ExtraWindowDefinition,
-	SubStepDefinition
+    SubStepDefinition
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/StepComponent";
 import {UIError} from "../../../../../general-components/Error/UIErrors/UIError";
 import {Draft} from "immer";
@@ -17,8 +17,8 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
     id: string;
     title: string;
     dataHandler: StepDataHandler<TestAnalysisValues>;
-	extraWindow: ExtraWindowDefinition<TestAnalysisValues>;
-	subStep: SubStepDefinition<TestAnalysisValues>;
+    extraWindow: ExtraWindowDefinition<TestAnalysisValues>;
+    subStep: SubStepDefinition<TestAnalysisValues>;
 
     constructor() {
         this.id = "test-substeps";
@@ -26,10 +26,10 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
         this.dataHandler = this;
         this.form = TestSubstepsComponent;
         this.extraWindow = {
-			displayName: "SubSteps",
-			extraWindowComponent: TestSubstepsExtraWindow,
-		};
-		this.subStep = this;
+            displayName: "SubSteps",
+            extraWindowComponent: TestSubstepsExtraWindow,
+        };
+        this.subStep = this;
     }
 
     deleteData(data: Draft<TestAnalysisValues>): void {
@@ -52,7 +52,7 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
 
         return errors;
     }
-    
+
     getStepCount(data: TestAnalysisValues): number {
         return 0;
     }
