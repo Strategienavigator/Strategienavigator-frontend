@@ -2,6 +2,7 @@
 
  Name                   | Datum ▼ | Befehl                            
 ------------------------|------------|------------------------------------
+ stratnavi-create-tool  | 20.10.2023 | stratnavi-create-tool 
  ts-interface-checker   | 14.11.2022 | ts-interface-checker                
  ts-interface-builder   | 14.11.2022 | ts-interface-builder              
  string-similarity      | 30.08.2021 | string-similarity                 
