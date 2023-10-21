@@ -40,7 +40,6 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => {
         data["persona-info"] = {
             "firstname": null,
-            "lastname": null,
             "age": null,
             "income": null,
             "family": [],
@@ -97,21 +96,6 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
             errors.push({
                 id: "firstname.toolong",
                 message: "Der Vorname darf nur maximal " + PersonaInfo.FIRST_NAME_MAX_LENGTH + " Zeichen besitzen!",
-                level: "error"
-            });
-        }
-
-        // Nachname
-        if (d?.lastname == null || d.lastname.length <= 0) {
-            errors.push({
-                id: "lastname.empty",
-                message: "Bitte geben Sie einen Nachnamen an!",
-                level: "error"
-            });
-        } else if (d.lastname.length > PersonaInfo.LAST_NAME_MAX_LENGTH) {
-            errors.push({
-                id: "lastname.toolong",
-                message: "Der Nachname darf nur maximal " + PersonaInfo.LAST_NAME_MAX_LENGTH + " Zeichen besitzen!",
                 level: "error"
             });
         }

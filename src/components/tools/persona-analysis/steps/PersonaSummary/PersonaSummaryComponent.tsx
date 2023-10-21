@@ -65,7 +65,7 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
                     <Row>
                         <Col sm={6}>
                             <div className={"names"}>
-                                {info.firstname} {info.lastname}, {info.age} {info.age === 1 ? "Jahr" : "Jahre"} alt
+                                {info.firstname}, {info.age} {info.age === 1 ? "Jahr" : "Jahre"} alt
                             </div>
 
                             <div className={"avatar-container"}>

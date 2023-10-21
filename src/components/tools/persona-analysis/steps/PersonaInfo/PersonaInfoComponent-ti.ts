@@ -6,7 +6,6 @@ import * as t from "ts-interface-checker";
 
 export const PersonaInfoValues = t.iface([], {
     "firstname": t.union("string", "null"),
-    "lastname": t.union("string", "null"),
     "age": t.union("number", "null"),
     "income": t.union("number", "null"),
     "family": "CardComponentFields",

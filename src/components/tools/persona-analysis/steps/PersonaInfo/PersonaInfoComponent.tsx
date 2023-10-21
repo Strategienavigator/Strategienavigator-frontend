@@ -14,7 +14,6 @@ import {NumberCounter} from "../../../../../general-components/Counter/NumberCou
 
 export interface PersonaInfoValues {
     "firstname": string | null,
-    "lastname": string | null,
     "age": number | null,
     "income": number | null,
     "family": CardComponentFields,
@@ -77,12 +76,12 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
                     </Col>
                     <Col sm={6}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Nachname</Form.Label>
-                            <Form.Control disabled={this.props.disabled} required onChange={this.lastNameChanged}
-                                          type={"text"}
-                                          value={data?.lastname ?? ""} placeholder={"Mustermann"}/>
-                            <UIErrorBanner id={"lastname.empty"}/>
-                            <UIErrorBanner id={"lastname.toolong"}/>
+                            <Form.Label>Alter</Form.Label>
+                            <Form.Control disabled={this.props.disabled} onChange={this.ageChanged} type={"number"}
+                                          value={data?.age === -1 ? undefined : data?.age ?? ""}
+                                          min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}
+                                          placeholder={"25"}/>
+                            <UIErrorBanner id={"age.invalid"}/>
                         </Form.Group>
                     </Col>
                 </Row>
@@ -90,12 +89,15 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
                 <Row>
                     <Col sm={6}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Alter</Form.Label>
-                            <Form.Control disabled={this.props.disabled} onChange={this.ageChanged} type={"number"}
-                                          value={data?.age === -1 ? undefined : data?.age ?? ""}
-                                          min={PersonaInfo.AGE_MIN} max={PersonaInfo.AGE_MAX}
-                                          placeholder={"25"}/>
-                            <UIErrorBanner id={"age.invalid"}/>
+                            <Form.Label>Avatar/Personenfoto</Form.Label>
+                            <Form.Control disabled={this.props.disabled} type="file" onChange={this.avatarChanged}/>
+                            <Form.Text>Gültige
+                                Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "." + i).join(", ")}</Form.Text> <br/>
+                            <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE / 1000} MB</Form.Text>
+
+                            <UIErrorBanner id={"avatar.empty"}/>
+                            <UIErrorBanner id={"avatar.size"}/>
+                            <UIErrorBanner id={"avatar.type"}/>
                         </Form.Group>
                     </Col>
                     <Col sm={6}>
@@ -107,18 +109,6 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
                         </Form.Group>
                     </Col>
                 </Row>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Avatar/Personenfoto</Form.Label>
-                    <Form.Control disabled={this.props.disabled} type="file" onChange={this.avatarChanged}/>
-                    <Form.Text>Gültige
-                        Dateitypen: {PersonaInfoComponent.FILETYPES.map(i => "." + i).join(", ")}</Form.Text> <br/>
-                    <Form.Text>Maximalgröße: {PersonaInfoComponent.MAXFILESIZE / 1000} MB</Form.Text>
-
-                    <UIErrorBanner id={"avatar.empty"}/>
-                    <UIErrorBanner id={"avatar.size"}/>
-                    <UIErrorBanner id={"avatar.type"}/>
-                </Form.Group>
 
                 <Row>
                     <Col sm={6}>
@@ -173,13 +163,6 @@ export class PersonaInfoComponent extends Step<PersonaAnalysisValues, {}> {
         this.props.saveController.onChanged(save => {
             let data = save.data["persona-info"];
             if (data !== undefined) data.firstname = e.target.value;
-        });
-    }
-
-    lastNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        this.props.saveController.onChanged(save => {
-            let data = save.data["persona-info"];
-            if (data !== undefined) data.lastname = e.target.value;
         });
     }
 
