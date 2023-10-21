@@ -114,7 +114,9 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
                     <ListGroup>
                         {props.values.map((data, index) => {
                             return (
-                                <ListGroupItem>
+                                <ListGroupItem
+                                    key={`list-group-item-${props.name}-${index}`}
+                                >
                                     {data}
                                 </ListGroupItem>
                             );

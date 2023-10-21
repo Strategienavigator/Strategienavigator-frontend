@@ -1,5 +1,6 @@
 import {Exporter} from "./Exporter";
 import {SaveResource} from "../Datastructures";
+import {SingleMessageProps} from "../Messages/Messages";
 
 
 class JSONExporter<D> extends Exporter<D> {
@@ -8,7 +9,11 @@ class JSONExporter<D> extends Exporter<D> {
         super("JSON", "json", "application/json");
     }
 
-    protected onExport(data: SaveResource<D>): BlobPart[] {
+    public validateExport(data: SaveResource<D>): SingleMessageProps[] {
+        return [];
+    }
+
+    protected async onExport(data: SaveResource<D>): Promise<BlobPart[]> {
         return [JSON.stringify(data.data, null, 4)];
     }
 }

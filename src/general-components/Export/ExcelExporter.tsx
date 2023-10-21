@@ -1,6 +1,7 @@
 import {Exporter} from "./Exporter";
 import {SaveResource} from "../Datastructures";
 import XLSX, {BookType, CellObject, CellStyle, WorkBook, WorkSheet} from "xlsx-js-style";
+import {SingleMessageProps} from "../Messages/Messages";
 
 
 abstract class ExcelExporter<D> extends Exporter<D> {
@@ -39,7 +40,7 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         return o !== undefined && Object.keys(o).length > 0;
     }
 
-    protected onExport(data: SaveResource<D>): BlobPart[] {
+    protected async onExport(data: SaveResource<D>): Promise<BlobPart[]> {
         // create new workbook
         this.workbook = XLSX.utils.book_new();
 
@@ -51,11 +52,15 @@ abstract class ExcelExporter<D> extends Exporter<D> {
             type: "array",
             Props: {
                 Title: data.name,
-                Author: "Strategietools",
+                Author: "Strategienavigator",
             },
             cellStyles: true,
         });
         return [buffer];
+    }
+
+    public validateExport(data: SaveResource<D>): SingleMessageProps[] {
+        return [];
     }
 
     protected updateWidth = (variable: number, w: number) => {
