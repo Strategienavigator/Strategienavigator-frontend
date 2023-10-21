@@ -1,14 +1,6 @@
 import {Property} from "csstype";
 
 
-export interface PointInterface {
-    x: number,
-    y: number,
-    sizeMultiplier: number,
-    header: string,
-    color: Property.BackgroundColor
-}
-
 /**
  * @type {string[]} Enthält die Farben der Punkte
  */
@@ -24,6 +16,15 @@ export const PointColors = [
 ];
 
 /**
+ * Gibt eine zufällige Farbe zurück
+ */
+export const getRandomPointColor = (): string => {
+    let length = PointColors.length;
+    let randomIndex = Math.floor(Math.random() * (length));
+    return PointColors[randomIndex];
+}
+
+/**
  * Stellt einen Punkt im Koordinatensystem dar
  */
 class Point {
@@ -37,7 +38,7 @@ class Point {
      * @param {number} x X-Wert
      * @param {number} y Y-Wert
      * @param {string} header Der Name des Punktes (Legendenbezeichnung, Tooltip-Header)
-     * @param {number} sizeMultiplier Kann angegeben werden um die Größe des Punktes anzupassen
+     * @param {number} sizeMultiplier Kann angegeben werden, um die Größe des Punktes anzupassen
      * @param {string} color Die Farbe des Punktes (Standard: Rot), RGB
      */
     constructor(x: number, y: number, header: string, sizeMultiplier: number, color?: string) {
@@ -49,7 +50,7 @@ class Point {
         if (color) {
             this.color = color;
         } else {
-            this.color = PointColors[0];
+            this.color = getRandomPointColor();
         }
     }
 

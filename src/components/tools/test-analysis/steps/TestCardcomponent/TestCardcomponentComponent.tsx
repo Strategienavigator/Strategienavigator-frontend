@@ -26,7 +26,7 @@ class TestCardcomponentComponent extends Step<TestAnalysisValues, TestCardcompon
                     <CardComponent<MyCustomDescriptionValues>
                         name={"Test"}
                         values={cards}
-                        disabled={false}
+                        disabled={this.props.disabled}
                         required={true}
                         customDescriptions={[MyCustomDescription]}
                         customDescValuesFactory={() => {
@@ -34,7 +34,7 @@ class TestCardcomponentComponent extends Step<TestAnalysisValues, TestCardcompon
                                 rating: 0
                             };
                         }}
-                        min={0}
+                        min={2}
                         max={5}
                         onChanged={(cards) => {
                             this.props.saveController.onChanged(save => {

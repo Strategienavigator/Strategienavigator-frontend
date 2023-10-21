@@ -7,7 +7,8 @@ import {
     faChartPie,
     faSortAmountDownAlt,
     faThLarge,
-    faUserCircle, faVial
+    faUserCircle,
+    faVial
 } from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 

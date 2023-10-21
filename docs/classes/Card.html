@@ -56,18 +56,26 @@
 					<a href="Card.html">Card</a>
 				</li>
 			</ul>
-			<h1>Class Card</h1>
+			<h1>Class Card&lt;D&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>D = <span class="tsd-signature-type">never</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Component</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/CardState.html" class="tsd-signature-type" data-tsd-kind="Interface">CardState</a><span class="tsd-signature-symbol">&gt;</span>
+						<span class="tsd-signature-type">Component</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/CardState.html" class="tsd-signature-type" data-tsd-kind="Interface">CardState</a><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">Card</span>
@@ -83,25 +91,29 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="Card.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite"><a href="Card.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Card.html#currentDesc" class="tsd-kind-icon">current<wbr>Desc</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Card.html#currentName" class="tsd-kind-icon">current<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Card.html#MAX_DESC_LENGTH" class="tsd-kind-icon">MAX_<wbr>DESC_<wbr>LENGTH</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="Card.html#MAX_NAME_LENGTH" class="tsd-kind-icon">MAX_<wbr>NAME_<wbr>LENGTH</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="Card.html#closeDescriptionIfChanged" class="tsd-kind-icon">close<wbr>Description<wbr>IfChanged</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="Card.html#componentDidMount" class="tsd-kind-icon">component<wbr>Did<wbr>Mount</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Card.html#customDescChanged" class="tsd-kind-icon">custom<wbr>Desc<wbr>Changed</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Card.html#descChanged" class="tsd-kind-icon">desc<wbr>Changed</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Card.html#getDescription" class="tsd-kind-icon">get<wbr>Description</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Card.html#getName" class="tsd-kind-icon">get<wbr>Name</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Card.html#isValid" class="tsd-kind-icon">is<wbr>Valid</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Card.html#nameChanged" class="tsd-kind-icon">name<wbr>Changed</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Card.html#onDelete" class="tsd-kind-icon">on<wbr>Delete</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="Card.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="Card.html#shouldComponentUpdate" class="tsd-kind-icon">should<wbr>Component<wbr>Update</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="Card.html#showDescription" class="tsd-kind-icon">show<wbr>Description</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Card.html#empty" class="tsd-kind-icon">empty</a></li>
 							</ul>
 						</section>
 					</div>
@@ -109,56 +121,120 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Card<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Card.html" class="tsd-signature-type" data-tsd-kind="Class">Card</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Card&lt;D&gt;<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Card.html" class="tsd-signature-type" data-tsd-kind="Class">Card</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides Component&lt;CardProps, CardState&gt;.constructor</p>
+								<p>Overrides Component&lt;CardProps&lt;D&gt;, CardState&gt;.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L32">src/general-components/CardComponent/CardComponent.tsx:32</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L49">src/general-components/CardComponent/Card.tsx:49</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>D = <span class="tsd-signature-type">never</span></h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>props: <a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>props: <a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="Card.html" class="tsd-signature-type" data-tsd-kind="Class">Card</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="Card.html" class="tsd-signature-type" data-tsd-kind="Class">Card</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="currentDesc" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> current<wbr>Desc</h3>
-					<div class="tsd-signature tsd-kind-icon">current<wbr>Desc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="MAX_DESC_LENGTH" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> MAX_<wbr>DESC_<wbr>LENGTH</h3>
+					<div class="tsd-signature tsd-kind-icon">MAX_<wbr>DESC_<wbr>LENGTH<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 300</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L29">src/general-components/CardComponent/CardComponent.tsx:29</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L47">src/general-components/CardComponent/Card.tsx:47</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="currentName" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> current<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">current<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="MAX_NAME_LENGTH" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> MAX_<wbr>NAME_<wbr>LENGTH</h3>
+					<div class="tsd-signature tsd-kind-icon">MAX_<wbr>NAME_<wbr>LENGTH<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 120</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L30">src/general-components/CardComponent/CardComponent.tsx:30</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L46">src/general-components/CardComponent/Card.tsx:46</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="closeDescriptionIfChanged" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> close<wbr>Description<wbr>IfChanged</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">close<wbr>Description<wbr>IfChanged<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L221">src/general-components/CardComponent/Card.tsx:221</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="componentDidMount" class="tsd-anchor"></a>
+					<h3>component<wbr>Did<wbr>Mount</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">component<wbr>Did<wbr>Mount<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides Component.componentDidMount</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L88">src/general-components/CardComponent/Card.tsx:88</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="customDescChanged" class="tsd-anchor"></a>
+					<h3>custom<wbr>Desc<wbr>Changed</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">custom<wbr>Desc<wbr>Changed<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L120">src/general-components/CardComponent/Card.tsx:120</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">D</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="descChanged" class="tsd-anchor"></a>
 					<h3>desc<wbr>Changed</h3>
@@ -169,7 +245,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L65">src/general-components/CardComponent/CardComponent.tsx:65</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L101">src/general-components/CardComponent/Card.tsx:101</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -183,57 +259,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getDescription" class="tsd-anchor"></a>
-					<h3>get<wbr>Description</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Description<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L53">src/general-components/CardComponent/CardComponent.tsx:53</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getName" class="tsd-anchor"></a>
-					<h3>get<wbr>Name</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L57">src/general-components/CardComponent/CardComponent.tsx:57</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="isValid" class="tsd-anchor"></a>
-					<h3>is<wbr>Valid</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Valid<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L44">src/general-components/CardComponent/CardComponent.tsx:44</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="nameChanged" class="tsd-anchor"></a>
 					<h3>name<wbr>Changed</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -243,7 +268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L61">src/general-components/CardComponent/CardComponent.tsx:61</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L73">src/general-components/CardComponent/Card.tsx:73</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -252,6 +277,23 @@
 									<h5>e: <span class="tsd-signature-type">ChangeEvent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">HTMLInputElement</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">HTMLSelectElement</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">HTMLTextAreaElement</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="onDelete" class="tsd-anchor"></a>
+					<h3>on<wbr>Delete</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Delete<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L124">src/general-components/CardComponent/Card.tsx:124</a></li>
+								</ul>
+							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -267,10 +309,80 @@
 							<aside class="tsd-sources">
 								<p>Overrides Component.render</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/CardComponent/CardComponent.tsx#L74">src/general-components/CardComponent/CardComponent.tsx:74</a></li>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L130">src/general-components/CardComponent/Card.tsx:130</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Element</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="shouldComponentUpdate" class="tsd-anchor"></a>
+					<h3>should<wbr>Component<wbr>Update</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">should<wbr>Component<wbr>Update<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, nextState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardState.html" class="tsd-signature-type" data-tsd-kind="Interface">CardState</a><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides Component.shouldComponentUpdate</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L69">src/general-components/CardComponent/Card.tsx:69</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardProps.html" class="tsd-signature-type" data-tsd-kind="Interface">CardProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5>nextState: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/CardState.html" class="tsd-signature-type" data-tsd-kind="Interface">CardState</a><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5>nextContext: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="showDescription" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> show<wbr>Description</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">show<wbr>Description<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L217">src/general-components/CardComponent/Card.tsx:217</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="empty" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> empty</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">empty<span class="tsd-signature-symbol">(</span>extra<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules.html#CardComponentField" class="tsd-signature-type" data-tsd-kind="Type alias">CardComponentField</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/CardComponent/Card.tsx#L60">src/general-components/CardComponent/Card.tsx:60</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> extra: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules.html#CardComponentField" class="tsd-signature-type" data-tsd-kind="Type alias">CardComponentField</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -288,35 +400,47 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="Card.html" class="tsd-kind-icon">Card</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite">
 								<a href="Card.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="Card.html#currentDesc" class="tsd-kind-icon">current<wbr>Desc</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="Card.html#MAX_DESC_LENGTH" class="tsd-kind-icon">MAX_<wbr>DESC_<wbr>LENGTH</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="Card.html#currentName" class="tsd-kind-icon">current<wbr>Name</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="Card.html#MAX_NAME_LENGTH" class="tsd-kind-icon">MAX_<wbr>NAME_<wbr>LENGTH</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="Card.html#closeDescriptionIfChanged" class="tsd-kind-icon">close<wbr>Description<wbr>IfChanged</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="Card.html#componentDidMount" class="tsd-kind-icon">component<wbr>Did<wbr>Mount</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="Card.html#customDescChanged" class="tsd-kind-icon">custom<wbr>Desc<wbr>Changed</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="Card.html#descChanged" class="tsd-kind-icon">desc<wbr>Changed</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="Card.html#getDescription" class="tsd-kind-icon">get<wbr>Description</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="Card.html#getName" class="tsd-kind-icon">get<wbr>Name</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="Card.html#isValid" class="tsd-kind-icon">is<wbr>Valid</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="Card.html#nameChanged" class="tsd-kind-icon">name<wbr>Changed</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="Card.html#onDelete" class="tsd-kind-icon">on<wbr>Delete</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="Card.html#render" class="tsd-kind-icon">render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="Card.html#shouldComponentUpdate" class="tsd-kind-icon">should<wbr>Component<wbr>Update</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="Card.html#showDescription" class="tsd-kind-icon">show<wbr>Description</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="Card.html#empty" class="tsd-kind-icon">empty</a>
 							</li>
 						</ul>
 					</li>
@@ -338,13 +462,12 @@
 				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>

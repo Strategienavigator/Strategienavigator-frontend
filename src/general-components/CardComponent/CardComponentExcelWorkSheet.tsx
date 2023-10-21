@@ -47,7 +47,7 @@ class CardComponentExcelWorkSheet<CD = object> extends ExcelExporter<any> {
             v: "Beschreibung", t: "s", s: this.getHeaderStyle()
         };
 
-        if (this.onCustomDescriptionRender !== undefined && this.values[0].extra !== undefined) {
+        if (this.onCustomDescriptionRender !== undefined && this.values.length > 0 && this.values[0].extra !== undefined) {
             cdLengths = this.onCustomDescriptionRender(this.values[0].extra).map((value) => {
                 return 0;
             });

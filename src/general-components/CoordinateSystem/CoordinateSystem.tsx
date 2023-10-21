@@ -8,6 +8,7 @@ import {CustomGrid} from "./Grid/CustomGrid";
 import {Point} from "./Point/Point";
 import {Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
 import {getMixOfColors} from "../Color";
+import {DefaultCoordinateTooltipRenderer} from "./DefaultCoordinateTooltipRenderer";
 
 
 /**
@@ -177,16 +178,28 @@ class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystem
 
     static getDerivedStateFromProps(props: CoordinateSystemProps, state: CoordinateSystemState): CoordinateSystemState {
         let maxY, maxX;
-        if (props.axis.y.maxValue === undefined || props.axis.y.maxValue === "auto") {
+
+        if (
+            props.axis.y.maxValue === undefined ||
+            props.axis.y.maxValue === "auto"
+        ) {
             maxY = Math.round(Math.max(...props.points.map(p => p.y))) + 1;
         } else {
             maxY = props.axis.y.maxValue;
         }
 
-        if (props.axis.x.maxValue === undefined || props.axis.x.maxValue === "auto") {
+        if (
+            props.axis.x.maxValue === undefined ||
+            props.axis.x.maxValue === "auto"
+        ) {
             maxX = Math.round(Math.max(...props.points.map(p => p.x))) + 1;
         } else {
             maxX = props.axis.x.maxValue;
+        }
+
+        if (props.points.length <= 0) {
+            maxY = 6;
+            maxX = 6;
         }
 
         return {
@@ -225,7 +238,9 @@ class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystem
                 </div>
                 <div className={"coordinate-system-container"}>
                     {(this.props.gridDisplay && typeof this.props.gridDisplay === "object" && this.props.gridDisplay instanceof CustomGrid) ?
-                        this.props.gridDisplay.render() : (
+                        this.props.gridDisplay.render() : (typeof this.props.gridDisplay === "boolean" && !this.props.gridDisplay) ? (
+                            <div className={"grid-overlay"}></div>
+                        ) : (
                             <div
                                 className={"grid-overlay"}
                                 style={{
@@ -278,7 +293,7 @@ class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystem
                                         <OverlayTrigger
                                             trigger={["hover", "focus", "click"]}
                                             placement={"top"}
-                                            overlay={(this.props.tooltipContentRenderer) ? (
+                                            overlay={
                                                 <Tooltip>
                                                     <div
                                                         className={`group ${pointGroup.name}`}
@@ -288,13 +303,16 @@ class CoordinateSystem extends Component<CoordinateSystemProps, CoordinateSystem
                                                             return (
                                                                 <div key={`tooltip-point-${index}-${groupIndex}`}
                                                                      className={`point`} data-point={point.header}>
-                                                                    {this.props.tooltipContentRenderer?.call(this.props.tooltipContentRenderer, point)}
+                                                                    {this.props.tooltipContentRenderer ?
+                                                                        this.props.tooltipContentRenderer(point) :
+                                                                        DefaultCoordinateTooltipRenderer(point)
+                                                                    }
                                                                 </div>
                                                             );
                                                         })}
                                                     </div>
                                                 </Tooltip>
-                                            ) : <></>}
+                                            }
                                         >
                                             <div
                                                 className={"circle"}

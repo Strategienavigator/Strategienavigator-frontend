@@ -69,7 +69,7 @@
 				<a href="#weitere-informationen" id="weitere-informationen" style="color: inherit; text-decoration: none;">
 					<h2>Weitere Informationen</h2>
 				</a>
-				<p><a href="https://moodle.jade-hs.de/moodle/course/view.php?id=521&amp;section=4">Interne Projektinformationen:link:</a></p>
+				<p><a href="https://moodle.jade-hs.de/moodle/course/view.php?id=521&section=4">Interne Projektinformationen:link:</a></p>
 				<a href="#voraussetzungen" id="voraussetzungen" style="color: inherit; text-decoration: none;">
 					<h2>Voraussetzungen</h2>
 				</a>
@@ -114,13 +114,15 @@
 				<pre><code class="language-shell"><span style="color: #000000">npm install</span>
 </code></pre>
 				<p>Dieser Schritt kann je nach System und Internetverbindung mehr Zeit in Anspruch nehmen.<br /><br /></p>
-				<p>Um nun das Projekt zu konfigurieren, muss die <strong>.env</strong> Datei erstellt und eingerichtet werden. Hierzu kopieren wir die
-				mitgelieferte <strong>.env.example</strong> Datei.</p>
-				<pre><code class="language-shell"><span style="color: #000000">copy .env.example .env   // Windows</span>
+				<p>Um nun das Projekt zu konfigurieren, muss die <strong>.env.development.local</strong> Datei erstellt und eingerichtet werden. Hierzu
+					kopieren wir die
+				mitgelieferte <strong>.env.development.local.example</strong> Datei.</p>
+				<pre><code class="language-shell"><span style="color: #000000">copy .env.development.local.example .env.development.local   // Windows</span>
 </code></pre>
-				<pre><code class="language-shell"><span style="color: #000000">cp .env.example .env     // Linux</span>
+				<pre><code class="language-shell"><span style="color: #000000">cp .env.development.local.example .env.development.local     // Linux</span>
 </code></pre>
-				<p>Wenn die <strong>.env</strong> Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei und stellen Sie
+				<p>Wenn die <strong>.env.development.local</strong> Datei jetzt vorhanden ist, muss diese bearbeitet werden. Öffnen Sie hierzu die Datei
+					und stellen Sie
 				die vorhandenen Umgebungsvariablen ein. Hierzu können Sie <a href="./ENV.md">folgende Dokumentation</a> benutzen.<br /><br /></p>
 				<p>Nun ist die Installation abgeschlossen und der Entwicklungsserver kann gestartet werden. Hierzu ist folgender Befehl
 				auszuführen:</p>
@@ -128,6 +130,11 @@
 </code></pre>
 				<p>Startet den Entwicklungsserver.<br>Der Server ist nun unter <a href="http://localhost:3000">http://localhost:3000:link:</a> erreichbar.</p>
 				<p>Sämtliche Editierungen werden beim Abspeichern automatisch aktualisiert.</p>
+				<a href="#cypress" id="cypress" style="color: inherit; text-decoration: none;">
+					<h2>Cypress</h2>
+				</a>
+				<p>Für die Nutzung von Cypress zur Erstellung und Testen von Szenarien können sie <a href="./TESTING.md">folgende Dokumentantion</a>
+				verwenden.</p>
 				<a href="#guidelines-für-beteiligte" id="guidelines-für-beteiligte" style="color: inherit; text-decoration: none;">
 					<h2>Guidelines für Beteiligte</h2>
 				</a>
@@ -167,6 +174,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="enums/SharedSavePermission.html" class="tsd-kind-icon">Shared<wbr>Save<wbr>Permission</a>
+					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/ABCAnalysis.html" class="tsd-kind-icon">ABCAnalysis</a>
 					</li>
@@ -180,10 +190,43 @@
 						<a href="classes/AuthToken.html" class="tsd-kind-icon">Auth<wbr>Token</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/Card.html" class="tsd-kind-icon">Card</a>
+						<a href="classes/BCGCustomGrid.html" class="tsd-kind-icon">BCGCustom<wbr>Grid</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/ButtonPanel.html" class="tsd-kind-icon">Button<wbr>Panel</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/CaptchaComponent.html" class="tsd-kind-icon">Captcha<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/Card.html" class="tsd-kind-icon">Card</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/CardComponent.html" class="tsd-kind-icon">Card<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/CardComponentExcelWorkSheet.html" class="tsd-kind-icon">Card<wbr>Component<wbr>Excel<wbr>Work<wbr>Sheet</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/CardComponentWithName.html" class="tsd-kind-icon">Card<wbr>Component<wbr>With<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ClassificationAccordions.html" class="tsd-kind-icon">Classification<wbr>Accordions</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ClassifyingCard.html" class="tsd-kind-icon">Classifying<wbr>Card</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ClassifyingCardList.html" class="tsd-kind-icon">Classifying<wbr>Card<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ClassifyingMenuCard.html" class="tsd-kind-icon">Classifying<wbr>Menu<wbr>Card</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/CollaboratorsDotsComponent.html" class="tsd-kind-icon">Collaborators<wbr>Dots<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/CollaboratorsTableComponent.html" class="tsd-kind-icon">Collaborators<wbr>Table<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/CompareAdapter.html" class="tsd-kind-icon">Compare<wbr>Adapter</a>
@@ -192,22 +235,43 @@
 						<a href="classes/CompareComponent.html" class="tsd-kind-icon">Compare<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/CompareHeader.html" class="tsd-kind-icon">Compare<wbr>Header</a>
+						<a href="classes/CompareComponentExcelWorkSheet.html" class="tsd-kind-icon">Compare<wbr>Component<wbr>Excel<wbr>Work<wbr>Sheet</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/CompareHeaderAdapter.html" class="tsd-kind-icon">Compare<wbr>Header<wbr>Adapter</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/CompareNumberHeader.html" class="tsd-kind-icon">Compare<wbr>Number<wbr>Header</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/CompareStarHeader.html" class="tsd-kind-icon">Compare<wbr>Star<wbr>Header</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/CompareSymbolHeader.html" class="tsd-kind-icon">Compare<wbr>Symbol<wbr>Header</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ContributionDecision.html" class="tsd-kind-icon">Contribution<wbr>Decision</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/ControlFooterComponent.html" class="tsd-kind-icon">Control<wbr>Footer<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/CoordinateSystem.html" class="tsd-kind-icon">Coordinate<wbr>System</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/CreateToolModal.html" class="tsd-kind-icon">Create<wbr>Tool<wbr>Modal</a>
 					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/DataPrivacy.html" class="tsd-kind-icon">Data<wbr>Privacy</a>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/CurrentSave.html" class="tsd-kind-icon">Current<wbr>Save</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/CustomDescriptionComponent.html" class="tsd-kind-icon">Custom<wbr>Description<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/DesktopButtons.html" class="tsd-kind-icon">Desktop<wbr>Buttons</a>
+						<a href="classes/CustomGrid.html" class="tsd-kind-icon">Custom<wbr>Grid</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/DataPrivacy.html" class="tsd-kind-icon">Data<wbr>Privacy</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/DragAndDropClassifying.html" class="tsd-kind-icon">Drag<wbr>And<wbr>Drop<wbr>Classifying</a>
@@ -226,6 +290,9 @@
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/Exporter.html" class="tsd-kind-icon">Exporter</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/ExtraWindowComponent.html" class="tsd-kind-icon">Extra<wbr>Window<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/Footer.html" class="tsd-kind-icon">Footer</a>
@@ -246,13 +313,31 @@
 						<a href="classes/GlobalContexts.html" class="tsd-kind-icon">Global<wbr>Contexts</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/HeaderCollaborators.html" class="tsd-kind-icon">Header<wbr>Collaborators</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/Home.html" class="tsd-kind-icon">Home</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/HoverWindow.html" class="tsd-kind-icon">Hover<wbr>Window</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ImportModal.html" class="tsd-kind-icon">Import<wbr>Modal</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/Imprint.html" class="tsd-kind-icon">Imprint</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/InvitationDecision.html" class="tsd-kind-icon">Invitation<wbr>Decision</a>
+					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/JSONExporter.html" class="tsd-kind-icon">JSONExporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/JSONImporter.html" class="tsd-kind-icon">JSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/JSONImporterError.html" class="tsd-kind-icon">JSONImporter<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/LinearCardComponentFieldsAdapter.html" class="tsd-kind-icon">Linear<wbr>Card<wbr>Component<wbr>Fields<wbr>Adapter</a>
@@ -275,11 +360,17 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/MatchCardComponentFieldsAdapter.html" class="tsd-kind-icon">Match<wbr>Card<wbr>Component<wbr>Fields<wbr>Adapter</a>
 					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/MatrixComponent.html" class="tsd-kind-icon">Matrix<wbr>Component</a>
-					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/Messages.html" class="tsd-kind-icon">Messages</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ModalClassifying.html" class="tsd-kind-icon">Modal<wbr>Classifying</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ModalCloseable.html" class="tsd-kind-icon">Modal<wbr>Closeable</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/MyCustomDescription.html" class="tsd-kind-icon">My<wbr>Custom<wbr>Description</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/MyProfileComponent.html" class="tsd-kind-icon">My<wbr>Profile<wbr>Component</a>
@@ -294,13 +385,31 @@
 						<a href="classes/NumberCounter.html" class="tsd-kind-icon">Number<wbr>Counter</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/NumberValueRenderer.html" class="tsd-kind-icon">Number<wbr>Value<wbr>Renderer</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/PCCriterias.html" class="tsd-kind-icon">PCCriterias</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PCCriteriasComponent.html" class="tsd-kind-icon">PCCriterias<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/PCExcelExporter.html" class="tsd-kind-icon">PCExcel<wbr>Exporter</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/PCJSONImporter.html" class="tsd-kind-icon">PCJSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/PCPairComparison.html" class="tsd-kind-icon">PCPair<wbr>Comparison</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PCPairComparisonComponent.html" class="tsd-kind-icon">PCPair<wbr>Comparison<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PCResult.html" class="tsd-kind-icon">PCResult</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PCResultComponent.html" class="tsd-kind-icon">PCResult<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/PaginationFooter.html" class="tsd-kind-icon">Pagination<wbr>Footer</a>
@@ -318,34 +427,112 @@
 						<a href="classes/PasswordReset.html" class="tsd-kind-icon">Password<wbr>Reset</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/PortCreateObjects.html" class="tsd-kind-icon">Port<wbr>Create<wbr>Objects</a>
+						<a href="classes/PercantageValueRenderer.html" class="tsd-kind-icon">Percantage<wbr>Value<wbr>Renderer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaAnalysis.html" class="tsd-kind-icon">Persona<wbr>Analysis</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaAnalysisInfoShower.html" class="tsd-kind-icon">Persona<wbr>Analysis<wbr>Info<wbr>Shower</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaInfo.html" class="tsd-kind-icon">Persona<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaInfoComponent.html" class="tsd-kind-icon">Persona<wbr>Info<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaJSONImporter.html" class="tsd-kind-icon">PersonaJSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaPersonality.html" class="tsd-kind-icon">Persona<wbr>Personality</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaPersonalityComponent.html" class="tsd-kind-icon">Persona<wbr>Personality<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaSummary.html" class="tsd-kind-icon">Persona<wbr>Summary</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PersonaSummaryComponent.html" class="tsd-kind-icon">Persona<wbr>Summary<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/Point.html" class="tsd-kind-icon">Point</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PointComponent.html" class="tsd-kind-icon">Point<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PointExcelSheet.html" class="tsd-kind-icon">Point<wbr>Excel<wbr>Sheet</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/PortCriterias.html" class="tsd-kind-icon">Port<wbr>Criterias</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/PortCriteriasComponent.html" class="tsd-kind-icon">Port<wbr>Criterias<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/PortEvaluation.html" class="tsd-kind-icon">Port<wbr>Evaluation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortEvaluationComponent.html" class="tsd-kind-icon">Port<wbr>Evaluation<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortJSONImporter.html" class="tsd-kind-icon">PortJSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortObjects.html" class="tsd-kind-icon">Port<wbr>Objects</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortObjectsComponent.html" class="tsd-kind-icon">Port<wbr>Objects<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortObjectsCustomDescription.html" class="tsd-kind-icon">Port<wbr>Objects<wbr>Custom<wbr>Description</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/PortResult.html" class="tsd-kind-icon">Port<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/PortResultComponent.html" class="tsd-kind-icon">Port<wbr>Result<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortScaleDescriptionShower.html" class="tsd-kind-icon">Port<wbr>Scale<wbr>Description<wbr>Shower</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/PortWeighting.html" class="tsd-kind-icon">Port<wbr>Weighting</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortWeightingComponent.html" class="tsd-kind-icon">Port<wbr>Weighting<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/PortfolioAnalysis.html" class="tsd-kind-icon">Portfolio<wbr>Analysis</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/PortfolioExcelExporter.html" class="tsd-kind-icon">Portfolio<wbr>Excel<wbr>Exporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PortfolioQuadrantsSettingType.html" class="tsd-kind-icon">Portfolio<wbr>Quadrants<wbr>Setting<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/QuadrantGrid.html" class="tsd-kind-icon">Quadrant<wbr>Grid</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/RefreshToken.html" class="tsd-kind-icon">Refresh<wbr>Token</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/Register.html" class="tsd-kind-icon">Register</a>
+						<a href="classes/ResultEvaluation.html" class="tsd-kind-icon">Result<wbr>Evaluation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/ResultEvaluationComponent.html" class="tsd-kind-icon">Result<wbr>Evaluation<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/RomanNumeralsCounter.html" class="tsd-kind-icon">Roman<wbr>Numerals<wbr>Counter</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/SWOTAlternativeActions.html" class="tsd-kind-icon">SWOTAlternative<wbr>Actions</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/SWOTAlternativeActionsComponent.html" class="tsd-kind-icon">SWOTAlternative<wbr>Actions<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/SWOTAnalysis.html" class="tsd-kind-icon">SWOTAnalysis</a>
@@ -357,16 +544,28 @@
 						<a href="classes/SWOTClassifyAlternativeActions.html" class="tsd-kind-icon">SWOTClassify<wbr>Alternative<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/SWOTClassifyAlternativeActionsComponent.html" class="tsd-kind-icon">SWOTClassify<wbr>Alternative<wbr>Actions<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/SWOTExcelExporter.html" class="tsd-kind-icon">SWOTExcel<wbr>Exporter</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/SWOTFactors.html" class="tsd-kind-icon">SWOTFactors</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/SWOTFactorsComponent.html" class="tsd-kind-icon">SWOTFactors<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/SWOTJSONImporter.html" class="tsd-kind-icon">SWOTJSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/SaveCard.html" class="tsd-kind-icon">Save<wbr>Card</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/SaveInfinityScroll.html" class="tsd-kind-icon">Save<wbr>Infinity<wbr>Scroll</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/SaveInvitation.html" class="tsd-kind-icon">Save<wbr>Invitation</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/SavePagination.html" class="tsd-kind-icon">Save<wbr>Pagination</a>
@@ -390,6 +589,9 @@
 						<a href="classes/SettingsList.html" class="tsd-kind-icon">Settings<wbr>List</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/SharedSaveContextComponent.html" class="tsd-kind-icon">Shared<wbr>Save<wbr>Context<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/SingleMessage.html" class="tsd-kind-icon">Single<wbr>Message</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -398,14 +600,89 @@
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/Step.html" class="tsd-kind-icon">Step</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/StepComponent.html" class="tsd-kind-icon">Step<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/StepComponentButtons.html" class="tsd-kind-icon">Step<wbr>Component<wbr>Buttons</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/StepComponentHeader.html" class="tsd-kind-icon">Step<wbr>Component<wbr>Header</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/SteppableTool.html" class="tsd-kind-icon">Steppable<wbr>Tool</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateAnalysis.html" class="tsd-kind-icon">Template<wbr>Analysis</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateAnalysisExcelExporter.html" class="tsd-kind-icon">Template<wbr>Analysis<wbr>Excel<wbr>Exporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateAnalysisJSONImporter.html" class="tsd-kind-icon">Template<wbr>AnalysisJSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateStep1.html" class="tsd-kind-icon">Template<wbr>Step1</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateStep1Component.html" class="tsd-kind-icon">Template<wbr>Step1<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateStep2.html" class="tsd-kind-icon">Template<wbr>Step2</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateStep2Component.html" class="tsd-kind-icon">Template<wbr>Step2<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateStep2ExtraWindow.html" class="tsd-kind-icon">Template<wbr>Step2<wbr>Extra<wbr>Window</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateStep3.html" class="tsd-kind-icon">Template<wbr>Step3</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TemplateStep3Component.html" class="tsd-kind-icon">Template<wbr>Step3<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestAnalysis.html" class="tsd-kind-icon">Test<wbr>Analysis</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestAnalysisExcelExporter.html" class="tsd-kind-icon">Test<wbr>Analysis<wbr>Excel<wbr>Exporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestAnalysisJSONImporter.html" class="tsd-kind-icon">Test<wbr>AnalysisJSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestCardcomponent.html" class="tsd-kind-icon">Test<wbr>Cardcomponent</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestCardcomponentComponent.html" class="tsd-kind-icon">Test<wbr>Cardcomponent<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestComparecomponent.html" class="tsd-kind-icon">Test<wbr>Comparecomponent</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestComparecomponentComponent.html" class="tsd-kind-icon">Test<wbr>Comparecomponent<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestCoordinateSystem.html" class="tsd-kind-icon">Test<wbr>Coordinate<wbr>System</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestCoordinateSystemComponent.html" class="tsd-kind-icon">Test<wbr>Coordinate<wbr>System<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestResources.html" class="tsd-kind-icon">Test<wbr>Resources</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestResourcesComponent.html" class="tsd-kind-icon">Test<wbr>Resources<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestSubsteps.html" class="tsd-kind-icon">Test<wbr>Substeps</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestSubstepsComponent.html" class="tsd-kind-icon">Test<wbr>Substeps<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/TestSubstepsExtraWindow.html" class="tsd-kind-icon">Test<wbr>Substeps<wbr>Extra<wbr>Window</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/ToggleSettingType.html" class="tsd-kind-icon">Toggle<wbr>Setting<wbr>Type</a>
@@ -413,11 +690,26 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/Token.html" class="tsd-kind-icon">Token</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/Tool.html" class="tsd-kind-icon">Tool</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/ToolHome.html" class="tsd-kind-icon">Tool<wbr>Home</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/ToolSavePage.html" class="tsd-kind-icon">Tool<wbr>Save<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UACriteriaCustomDescription.html" class="tsd-kind-icon">UACriteria<wbr>Custom<wbr>Description</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UAScaleDescriptionShower.html" class="tsd-kind-icon">UAScale<wbr>Description<wbr>Shower</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UIErrorBanner.html" class="tsd-kind-icon">UIError<wbr>Banner</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UIErrorContextComponent.html" class="tsd-kind-icon">UIError<wbr>Context<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/UniqueCheck.html" class="tsd-kind-icon">Unique<wbr>Check</a>
@@ -429,67 +721,148 @@
 						<a href="classes/User.html" class="tsd-kind-icon">User</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/UserContextComponent.html" class="tsd-kind-icon">User<wbr>Context<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/UtilCriterias.html" class="tsd-kind-icon">Util<wbr>Criterias</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UtilCriteriasComponent.html" class="tsd-kind-icon">Util<wbr>Criterias<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/UtilEvaluation.html" class="tsd-kind-icon">Util<wbr>Evaluation</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/UtilEvaluationComponent.html" class="tsd-kind-icon">Util<wbr>Evaluation<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/UtilInvestigationObjects.html" class="tsd-kind-icon">Util<wbr>Investigation<wbr>Objects</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UtilInvestigationObjectsComponent.html" class="tsd-kind-icon">Util<wbr>Investigation<wbr>Objects<wbr>Component</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/UtilResult.html" class="tsd-kind-icon">Util<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/UtilResultComponent.html" class="tsd-kind-icon">Util<wbr>Result<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/UtilWeighting.html" class="tsd-kind-icon">Util<wbr>Weighting</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/UtilWeightingComponent.html" class="tsd-kind-icon">Util<wbr>Weighting<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/UtilityAnalysis.html" class="tsd-kind-icon">Utility<wbr>Analysis</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UtilityAnalysisExcelExporter.html" class="tsd-kind-icon">Utility<wbr>Analysis<wbr>Excel<wbr>Exporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/UtilityJSONImporter.html" class="tsd-kind-icon">UtilityJSONImporter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/WebsocketChannelContextComponent.html" class="tsd-kind-icon">Websocket<wbr>Channel<wbr>Context<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/WeightingEvaluation.html" class="tsd-kind-icon">Weighting<wbr>Evaluation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/WeightingEvaluationComponent.html" class="tsd-kind-icon">Weighting<wbr>Evaluation<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/WeightingEvaluationExcelWorkSheet.html" class="tsd-kind-icon">Weighting<wbr>Evaluation<wbr>Excel<wbr>Work<wbr>Sheet</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/APIArgs.html" class="tsd-kind-icon">APIArgs</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/ActionInterface.html" class="tsd-kind-icon">Action<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
 						<a href="interfaces/AlternateAction.html" class="tsd-kind-icon">Alternate<wbr>Action</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/AnonportModalProps.html" class="tsd-kind-icon">Anonport<wbr>Modal<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/ButtonItem.html" class="tsd-kind-icon">Button<wbr>Item</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ButtonPanelProps.html" class="tsd-kind-icon">Button<wbr>Panel<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/CallInterface.html" class="tsd-kind-icon">Call<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/CaptchaComponentProps.html" class="tsd-kind-icon">Captcha<wbr>Component<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CaptchaComponentState.html" class="tsd-kind-icon">Captcha<wbr>Component<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CaptchaResponse.html" class="tsd-kind-icon">Captcha<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CardComponentControlProps.html" class="tsd-kind-icon">Card<wbr>Component<wbr>Control<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/CardComponentFieldPlaceholder.html" class="tsd-kind-icon">Card<wbr>Component<wbr>Field<wbr>Placeholder</a>
 					</li>
-					<li class=" tsd-kind-interface">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CardComponentFieldsWithNameValues.html" class="tsd-kind-icon">Card<wbr>Component<wbr>Fields<wbr>With<wbr>Name<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/CardComponentProps.html" class="tsd-kind-icon">Card<wbr>Component<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-interface">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CardComponentWithNameProps.html" class="tsd-kind-icon">Card<wbr>Component<wbr>With<wbr>Name<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/CardProps.html" class="tsd-kind-icon">Card<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/CardState.html" class="tsd-kind-icon">Card<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/Classification.html" class="tsd-kind-icon">Classification</a>
+						<a href="interfaces/ClassificationController.html" class="tsd-kind-icon">Classification<wbr>Controller</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ClassificationValues.html" class="tsd-kind-icon">Classification<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/ClassifiedAlternateAction.html" class="tsd-kind-icon">Classified<wbr>Alternate<wbr>Action</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/ClassifyingCardProps.html" class="tsd-kind-icon">Classifying<wbr>Card<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CollaboratorsDotsComponentProps.html" class="tsd-kind-icon">Collaborators<wbr>Dots<wbr>Component<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CollaboratorsProps.html" class="tsd-kind-icon">Collaborators<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/CompareComponentProps.html" class="tsd-kind-icon">Compare<wbr>Component<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/CompareHeader.html" class="tsd-kind-icon">Compare<wbr>Header</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/ControlFooterProps.html" class="tsd-kind-icon">Control<wbr>Footer<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CoordinateSystemGrid.html" class="tsd-kind-icon">Coordinate<wbr>System<wbr>Grid</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/CoordinateSystemProps.html" class="tsd-kind-icon">Coordinate<wbr>System<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/CounterInterface.html" class="tsd-kind-icon">Counter<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/CreateInviteInterface.html" class="tsd-kind-icon">Create<wbr>Invite<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/CustomDescriptionComponentProps.html" class="tsd-kind-icon">Custom<wbr>Description<wbr>Component<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/DesktopButtonsProps.html" class="tsd-kind-icon">Desktop<wbr>Buttons<wbr>Props</a>
@@ -501,7 +874,22 @@
 						<a href="interfaces/EmailVerificationState.html" class="tsd-kind-icon">Email<wbr>Verification<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/ErrorController.html" class="tsd-kind-icon">Error<wbr>Controller</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/ErrorPageProps.html" class="tsd-kind-icon">Error<wbr>Page<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/EvaluationComponentProps.html" class="tsd-kind-icon">Evaluation<wbr>Component<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/EvaluationValues.html" class="tsd-kind-icon">Evaluation<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ExtraWindowDefinition.html" class="tsd-kind-icon">Extra<wbr>Window<wbr>Definition</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ExtraWindowProps.html" class="tsd-kind-icon">Extra<wbr>Window<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/FooterContextProps.html" class="tsd-kind-icon">Footer<wbr>Context<wbr>Props</a>
@@ -516,7 +904,16 @@
 						<a href="interfaces/GetSavesArguments.html" class="tsd-kind-icon">Get<wbr>Saves<wbr>Arguments</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/HeaderCollaboratorsProps.html" class="tsd-kind-icon">Header<wbr>Collaborators<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/HomeItem.html" class="tsd-kind-icon">Home<wbr>Item</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/HoverWindowCustomPopupProps.html" class="tsd-kind-icon">Hover<wbr>Window<wbr>Custom<wbr>Popup<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/HoverWindowProps.html" class="tsd-kind-icon">Hover<wbr>Window<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/IFooterContext.html" class="tsd-kind-icon">IFooter<wbr>Context</a>
@@ -525,7 +922,31 @@
 						<a href="interfaces/ISettingsContext.html" class="tsd-kind-icon">ISettings<wbr>Context</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/ISharedSaveContext.html" class="tsd-kind-icon">IShared<wbr>Save<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/IUIErrorContext.html" class="tsd-kind-icon">IUIError<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/IUserContext.html" class="tsd-kind-icon">IUser<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/IWebsocketChannelContext.html" class="tsd-kind-icon">IWebsocket<wbr>Channel<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ImportModalProps.html" class="tsd-kind-icon">Import<wbr>Modal<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/InvitationDecisionState.html" class="tsd-kind-icon">Invitation<wbr>Decision<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/InvitationLinkProps.html" class="tsd-kind-icon">Invitation<wbr>Link<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/JWTTokenPayloadInterface.html" class="tsd-kind-icon">JWTToken<wbr>Payload<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/LiveSaveUpdateResource.html" class="tsd-kind-icon">Live<wbr>Save<wbr>Update<wbr>Resource</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/LoaderProps.html" class="tsd-kind-icon">Loader<wbr>Props</a>
@@ -540,10 +961,10 @@
 						<a href="interfaces/LoginState.html" class="tsd-kind-icon">Login<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/MatrixComponentProps.html" class="tsd-kind-icon">Matrix<wbr>Component<wbr>Props</a>
+						<a href="interfaces/MessagesProps.html" class="tsd-kind-icon">Messages<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/MessagesProps.html" class="tsd-kind-icon">Messages<wbr>Props</a>
+						<a href="interfaces/MyCustomDescriptionValues.html" class="tsd-kind-icon">My<wbr>Custom<wbr>Description<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/MyProfileState.html" class="tsd-kind-icon">My<wbr>Profile<wbr>State</a>
@@ -555,10 +976,19 @@
 						<a href="interfaces/NextStepItem.html" class="tsd-kind-icon">Next<wbr>Step<wbr>Item</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/NormalClassifyingProps.html" class="tsd-kind-icon">Normal<wbr>Classifying<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/NumberRange.html" class="tsd-kind-icon">Number<wbr>Range</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/PCCriteriasValues.html" class="tsd-kind-icon">PCCriterias<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/PCPairComparisonValues.html" class="tsd-kind-icon">PCPair<wbr>Comparison<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PCResultValues.html" class="tsd-kind-icon">PCResult<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/PaginationFooterProps.html" class="tsd-kind-icon">Pagination<wbr>Footer<wbr>Props</a>
@@ -582,6 +1012,21 @@
 						<a href="interfaces/PasswordResetState.html" class="tsd-kind-icon">Password<wbr>Reset<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/PersonaAnalysisValues.html" class="tsd-kind-icon">Persona<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PersonaInfoItemProps.html" class="tsd-kind-icon">Persona<wbr>Info<wbr>Item<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PersonaInfoValues.html" class="tsd-kind-icon">Persona<wbr>Info<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PersonaPersonalityValues.html" class="tsd-kind-icon">Persona<wbr>Personality<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PointComponentProps.html" class="tsd-kind-icon">Point<wbr>Component<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/PortCreateObjectsValues.html" class="tsd-kind-icon">Port<wbr>Create<wbr>Objects<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -591,10 +1036,25 @@
 						<a href="interfaces/PortEvaluationValues.html" class="tsd-kind-icon">Port<wbr>Evaluation<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/PortObjectsCustomDescriptionValues.html" class="tsd-kind-icon">Port<wbr>Objects<wbr>Custom<wbr>Description<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/PortResultValues.html" class="tsd-kind-icon">Port<wbr>Result<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/PortWeightingValues.html" class="tsd-kind-icon">Port<wbr>Weighting<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PortfolioAnalysisValues.html" class="tsd-kind-icon">Portfolio<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PortfolioQuadrantsSettingTypeProps.html" class="tsd-kind-icon">Portfolio<wbr>Quadrants<wbr>Setting<wbr>Type<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/PortfolioQuadrantsSettingValues.html" class="tsd-kind-icon">Portfolio<wbr>Quadrants<wbr>Setting<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/Rating.html" class="tsd-kind-icon">Rating</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/ResetStepsItem.html" class="tsd-kind-icon">Reset<wbr>Steps<wbr>Item</a>
@@ -603,7 +1063,16 @@
 						<a href="interfaces/ResetStepsModalProps.html" class="tsd-kind-icon">Reset<wbr>Steps<wbr>Modal<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/ResetType.html" class="tsd-kind-icon">Reset<wbr>Type</a>
+						<a href="interfaces/ResourceManager.html" class="tsd-kind-icon">Resource<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ResultEvaluationPercentages.html" class="tsd-kind-icon">Result<wbr>Evaluation<wbr>Percentages</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ResultEvaluationResult.html" class="tsd-kind-icon">Result<wbr>Evaluation<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ResultEvaluationValue.html" class="tsd-kind-icon">Result<wbr>Evaluation<wbr>Value</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/RouteMatches.html" class="tsd-kind-icon">Route<wbr>Matches</a>
@@ -627,13 +1096,25 @@
 						<a href="interfaces/SaveInfinityScrollState.html" class="tsd-kind-icon">Save<wbr>Infinity<wbr>Scroll<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/SaveInvitationProps.html" class="tsd-kind-icon">Save<wbr>Invitation<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/SaveInvitationState.html" class="tsd-kind-icon">Save<wbr>Invitation<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/SavePaginationState.html" class="tsd-kind-icon">Save<wbr>Pagination<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/SaveResource.html" class="tsd-kind-icon">Save<wbr>Resource</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/SaveResourceListProps.html" class="tsd-kind-icon">Save<wbr>Resource<wbr>List<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/SaveResourceListState.html" class="tsd-kind-icon">Save<wbr>Resource<wbr>List<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/SaveResourceResource.html" class="tsd-kind-icon">Save<wbr>Resource<wbr>Resource</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/SaveStepsItem.html" class="tsd-kind-icon">Save<wbr>Steps<wbr>Item</a>
@@ -657,6 +1138,12 @@
 						<a href="interfaces/SettingsTypeProps.html" class="tsd-kind-icon">Settings<wbr>Type<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/SharedSaveContextComponentProps.html" class="tsd-kind-icon">Shared<wbr>Save<wbr>Context<wbr>Component<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/SharedSaveState.html" class="tsd-kind-icon">Shared<wbr>Save<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/SingleComparison.html" class="tsd-kind-icon">Single<wbr>Comparison</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -666,25 +1153,67 @@
 						<a href="interfaces/SingleMessageState.html" class="tsd-kind-icon">Single<wbr>Message<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/SingleResult.html" class="tsd-kind-icon">Single<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/StepComponentHeaderProp.html" class="tsd-kind-icon">Step<wbr>Component<wbr>Header<wbr>Prop</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/StepComponentHeaderState.html" class="tsd-kind-icon">Step<wbr>Component<wbr>Header<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/StepComponentProps.html" class="tsd-kind-icon">Step<wbr>Component<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/StepComponentState.html" class="tsd-kind-icon">Step<wbr>Component<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/StepComponentState.html" class="tsd-kind-icon">Step<wbr>Component<wbr>State</a>
+						<a href="interfaces/StepController.html" class="tsd-kind-icon">Step<wbr>Controller</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/StepDataHandler.html" class="tsd-kind-icon">Step<wbr>Data<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/StepDefinition.html" class="tsd-kind-icon">Step<wbr>Definition</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/StepProp.html" class="tsd-kind-icon">Step<wbr>Prop</a>
 					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/SteppableProp.html" class="tsd-kind-icon">Steppable<wbr>Prop</a>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/SubStepDefinition.html" class="tsd-kind-icon">Sub<wbr>Step<wbr>Definition</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/SwotFactorsValues.html" class="tsd-kind-icon">Swot<wbr>Factors<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TemplateAnalysisValues.html" class="tsd-kind-icon">Template<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TemplateStep1Values.html" class="tsd-kind-icon">Template<wbr>Step1<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TemplateStep2Values.html" class="tsd-kind-icon">Template<wbr>Step2<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TemplateStep3Values.html" class="tsd-kind-icon">Template<wbr>Step3<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TestAnalysisValues.html" class="tsd-kind-icon">Test<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TestCardcomponentValues.html" class="tsd-kind-icon">Test<wbr>Cardcomponent<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TestComparecomponentValues.html" class="tsd-kind-icon">Test<wbr>Comparecomponent<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TestCoordinateSystemValues.html" class="tsd-kind-icon">Test<wbr>Coordinate<wbr>System<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TestResourcesValues.html" class="tsd-kind-icon">Test<wbr>Resources<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/TestSubstepsValues.html" class="tsd-kind-icon">Test<wbr>Substeps<wbr>Values</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/ToggleSettingTypeProps.html" class="tsd-kind-icon">Toggle<wbr>Setting<wbr>Type<wbr>Props</a>
@@ -698,11 +1227,35 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/ToolItem.html" class="tsd-kind-icon">Tool<wbr>Item</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ToolSaveController.html" class="tsd-kind-icon">Tool<wbr>Save<wbr>Controller</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ToolSavePageProps.html" class="tsd-kind-icon">Tool<wbr>Save<wbr>Page<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ToolSavePageState.html" class="tsd-kind-icon">Tool<wbr>Save<wbr>Page<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ToolSaveProps.html" class="tsd-kind-icon">Tool<wbr>Save<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/UACriteriaCustomDescriptionValues.html" class="tsd-kind-icon">UACriteria<wbr>Custom<wbr>Description<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/UIError.html" class="tsd-kind-icon">UIError</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/UniqueCheckProps.html" class="tsd-kind-icon">Unique<wbr>Check<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/UniqueCheckState.html" class="tsd-kind-icon">Unique<wbr>Check<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/UpdateContribution.html" class="tsd-kind-icon">Update<wbr>Contribution</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/UserContextState.html" class="tsd-kind-icon">User<wbr>Context<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/UserSetting.html" class="tsd-kind-icon">User<wbr>Setting</a>
@@ -725,6 +1278,21 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/UtilWeightingValues.html" class="tsd-kind-icon">Util<wbr>Weighting<wbr>Values</a>
 					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/UtilityAnalysisValues.html" class="tsd-kind-icon">Utility<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ValidatedFile.html" class="tsd-kind-icon">Validated<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ValueRenderer.html" class="tsd-kind-icon">Value<wbr>Renderer</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/WebsocketChannelContextProps.html" class="tsd-kind-icon">Websocket<wbr>Channel<wbr>Context<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/WebsocketChannelContextState.html" class="tsd-kind-icon">Websocket<wbr>Channel<wbr>Context<wbr>State</a>
+					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#APIErrorCallback" class="tsd-kind-icon">APIError<wbr>Callback</a>
 					</li>
@@ -734,14 +1302,20 @@
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#AvailabilityCheckResource" class="tsd-kind-icon">Availability<wbr>Check<wbr>Resource</a>
 					</li>
-					<li class=" tsd-kind-type-alias">
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="modules.html#CardComponentField" class="tsd-kind-icon">Card<wbr>Component<wbr>Field</a>
 					</li>
-					<li class=" tsd-kind-type-alias">
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="modules.html#CardComponentFields" class="tsd-kind-icon">Card<wbr>Component<wbr>Fields</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="modules.html#CardComponentFieldsWithName" class="tsd-kind-icon">Card<wbr>Component<wbr>Fields<wbr>With<wbr>Name</a>
+					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="modules.html#CardsInterface" class="tsd-kind-icon">Cards<wbr>Interface</a>
+						<a href="modules.html#CompareComponentValues" class="tsd-kind-icon">Compare<wbr>Component<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#CompareValue" class="tsd-kind-icon">Compare<wbr>Value</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#ControlFooterItemType" class="tsd-kind-icon">Control<wbr>Footer<wbr>Item<wbr>Type</a>
@@ -756,7 +1330,19 @@
 						<a href="modules.html#ErrorComponentTypes" class="tsd-kind-icon">Error<wbr>Component<wbr>Types</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#ErrorLevel" class="tsd-kind-icon">Error<wbr>Level</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#ErrorMap" class="tsd-kind-icon">Error<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#InvitationExpiryDate" class="tsd-kind-icon">Invitation<wbr>Expiry<wbr>Date</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#InvitationLinkResource" class="tsd-kind-icon">Invitation<wbr>Link<wbr>Resource</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#InvitationPermission" class="tsd-kind-icon">Invitation<wbr>Permission</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#LoaderAlignments" class="tsd-kind-icon">Loader<wbr>Alignments</a>
@@ -773,11 +1359,20 @@
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#PasswordResetResource" class="tsd-kind-icon">Password<wbr>Reset<wbr>Resource</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#SaveResource" class="tsd-kind-icon">Save<wbr>Resource</a>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#Permissions" class="tsd-kind-icon">Permissions</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#PersonaSummaryValues" class="tsd-kind-icon">Persona<wbr>Summary<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#ResourcesType" class="tsd-kind-icon">Resources<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#SettingResource" class="tsd-kind-icon">Setting<wbr>Resource</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#SettingsChanger" class="tsd-kind-icon">Settings<wbr>Changer</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#SharedSaveResource" class="tsd-kind-icon">Shared<wbr>Save<wbr>Resource</a>
@@ -787,6 +1382,12 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#SimpleSaveResource" class="tsd-kind-icon">Simple<wbr>Save<wbr>Resource</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#SimplerSaveResource" class="tsd-kind-icon">Simpler<wbr>Save<wbr>Resource</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#SimplestUserResource" class="tsd-kind-icon">Simplest<wbr>User<wbr>Resource</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#TokenCreatedResource" class="tsd-kind-icon">Token<wbr>Created<wbr>Resource</a>
@@ -804,6 +1405,9 @@
 						<a href="modules.html#UserResource" class="tsd-kind-icon">User<wbr>Resource</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#UserSearchResultResource" class="tsd-kind-icon">User<wbr>Search<wbr>Result<wbr>Resource</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#UserSettingResource" class="tsd-kind-icon">User<wbr>Setting<wbr>Resource</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
@@ -815,6 +1419,60 @@
 					<li class=" tsd-kind-property">
 						<a href="modules.html#default" class="tsd-kind-icon">default</a>
 					</li>
+					<li class=" tsd-kind-property">
+						<a href="modules.html#default" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-property">
+						<a href="modules.html#default" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-property">
+						<a href="modules.html#default" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#AlternateAction" class="tsd-kind-icon">Alternate<wbr>Action</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CardComponentField" class="tsd-kind-icon">Card<wbr>Component<wbr>Field</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CardComponentFieldPlaceholder" class="tsd-kind-icon">Card<wbr>Component<wbr>Field<wbr>Placeholder</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CardComponentFields" class="tsd-kind-icon">Card<wbr>Component<wbr>Fields</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CardComponentFieldsWithName" class="tsd-kind-icon">Card<wbr>Component<wbr>Fields<wbr>With<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CardComponentFieldsWithNameValues" class="tsd-kind-icon">Card<wbr>Component<wbr>Fields<wbr>With<wbr>Name<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CardComponentWithName_ts" class="tsd-kind-icon">Card<wbr>Component<wbr>With<wbr>Name_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CardComponent_ts" class="tsd-kind-icon">Card<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ClassificationValues" class="tsd-kind-icon">Classification<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ClassifiedAlternateAction" class="tsd-kind-icon">Classified<wbr>Alternate<wbr>Action</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CompareComponentValues" class="tsd-kind-icon">Compare<wbr>Component<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CompareComponent_ts" class="tsd-kind-icon">Compare<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CompareHeader" class="tsd-kind-icon">Compare<wbr>Header</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CompareHeaderAdapter_ts" class="tsd-kind-icon">Compare<wbr>Header<wbr>Adapter_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#CompareValue" class="tsd-kind-icon">Compare<wbr>Value</a>
+					</li>
 					<li class=" tsd-kind-variable">
 						<a href="modules.html#ControlFooter" class="tsd-kind-icon">Control<wbr>Footer</a>
 					</li>
@@ -822,7 +1480,22 @@
 						<a href="modules.html#DefaultAPIArgs" class="tsd-kind-icon">DefaultAPIArgs</a>
 					</li>
 					<li class=" tsd-kind-variable">
+						<a href="modules.html#DeleteSavePermission" class="tsd-kind-icon">Delete<wbr>Save<wbr>Permission</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#EditSavesPermission" class="tsd-kind-icon">Edit<wbr>Saves<wbr>Permission</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#EvaluationValues" class="tsd-kind-icon">Evaluation<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ExportModal" class="tsd-kind-icon">Export<wbr>Modal</a>
+					</li>
+					<li class=" tsd-kind-variable">
 						<a href="modules.html#FooterContext" class="tsd-kind-icon">Footer<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#InviteToSavePermission" class="tsd-kind-icon">Invite<wbr>ToSave<wbr>Permission</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="modules.html#Login" class="tsd-kind-icon">Login</a>
@@ -834,13 +1507,229 @@
 						<a href="modules.html#MyProfile" class="tsd-kind-icon">My<wbr>Profile</a>
 					</li>
 					<li class=" tsd-kind-variable">
+						<a href="modules.html#PCCriteriasComponent_ts" class="tsd-kind-icon">PCCriterias<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PCCriteriasState" class="tsd-kind-icon">PCCriterias<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PCCriteriasValues" class="tsd-kind-icon">PCCriterias<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PCPairComparisonComponent_ts" class="tsd-kind-icon">PCPair<wbr>Comparison<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PCPairComparisonValues" class="tsd-kind-icon">PCPair<wbr>Comparison<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PCResultComponent_ts" class="tsd-kind-icon">PCResult<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PCResultValues" class="tsd-kind-icon">PCResult<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PairwiseComparisonValues_ti" class="tsd-kind-icon">Pairwise<wbr>Comparison<wbr>Values_<wbr>ti</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PairwiseComparison_ts" class="tsd-kind-icon">Pairwise<wbr>Comparison_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaAnalysisValues" class="tsd-kind-icon">Persona<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaAnalysis_ts" class="tsd-kind-icon">Persona<wbr>Analysis_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaInfoValues" class="tsd-kind-icon">Persona<wbr>Info<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaInfo_ts" class="tsd-kind-icon">Persona<wbr>Info_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaPersonalityValues" class="tsd-kind-icon">Persona<wbr>Personality<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaPersonality_ts" class="tsd-kind-icon">Persona<wbr>Personality_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaSummaryValues" class="tsd-kind-icon">Persona<wbr>Summary<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PersonaSummary_ts" class="tsd-kind-icon">Persona<wbr>Summary_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#Point" class="tsd-kind-icon">Point</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PointColors" class="tsd-kind-icon">Point<wbr>Colors</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#Point_ts" class="tsd-kind-icon">Point_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortCreateObjectsValues" class="tsd-kind-icon">Port<wbr>Create<wbr>Objects<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortCriteriasComponent_ts" class="tsd-kind-icon">Port<wbr>Criterias<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortCriteriasValues" class="tsd-kind-icon">Port<wbr>Criterias<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortEvaluationComponent_ts" class="tsd-kind-icon">Port<wbr>Evaluation<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortEvaluationValues" class="tsd-kind-icon">Port<wbr>Evaluation<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortObjectsComponent_ts" class="tsd-kind-icon">Port<wbr>Objects<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortResultComponent_ts" class="tsd-kind-icon">Port<wbr>Result<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortResultValues" class="tsd-kind-icon">Port<wbr>Result<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortWeightingComponent_ts" class="tsd-kind-icon">Port<wbr>Weighting<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortWeightingValues" class="tsd-kind-icon">Port<wbr>Weighting<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortfolioAnalysisValues" class="tsd-kind-icon">Portfolio<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PortfolioAnalysis_ts" class="tsd-kind-icon">Portfolio<wbr>Analysis_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#Rating" class="tsd-kind-icon">Rating</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ResetSavePermission" class="tsd-kind-icon">Reset<wbr>Save<wbr>Permission</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ResultEvaluationPercentages" class="tsd-kind-icon">Result<wbr>Evaluation<wbr>Percentages</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ResultEvaluationResult" class="tsd-kind-icon">Result<wbr>Evaluation<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ResultEvaluationValue" class="tsd-kind-icon">Result<wbr>Evaluation<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#ResultEvaluation_ts" class="tsd-kind-icon">Result<wbr>Evaluation_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SWOTAlternativeActionsComponent_ts" class="tsd-kind-icon">SWOTAlternative<wbr>Actions<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SWOTAlternativeActionsValues" class="tsd-kind-icon">SWOTAlternative<wbr>Actions<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SWOTAnalysisValues" class="tsd-kind-icon">SWOTAnalysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SWOTAnalysis_ts" class="tsd-kind-icon">SWOTAnalysis_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SWOTClassifyAlternativeActionsComponent_ts" class="tsd-kind-icon">SWOTClassify<wbr>Alternative<wbr>Actions<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SWOTClassifyAlternativeActionsValues" class="tsd-kind-icon">SWOTClassify<wbr>Alternative<wbr>Actions<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SWOTFactorsComponent_ts" class="tsd-kind-icon">SWOTFactors<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SaveSavePermission" class="tsd-kind-icon">Save<wbr>Save<wbr>Permission</a>
+					</li>
+					<li class=" tsd-kind-variable">
 						<a href="modules.html#SettingsContext" class="tsd-kind-icon">Settings<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SharedSaveContext" class="tsd-kind-icon">Shared<wbr>Save<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SharedSavePermissionDefault" class="tsd-kind-icon">Shared<wbr>Save<wbr>Permission<wbr>Default</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SingleResult" class="tsd-kind-icon">Single<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SwotFactorsValues" class="tsd-kind-icon">Swot<wbr>Factors<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#Tools" class="tsd-kind-icon">Tools</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UIErrorContext" class="tsd-kind-icon">UIError<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UserContext" class="tsd-kind-icon">User<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilCriteriasComponent_ts" class="tsd-kind-icon">Util<wbr>Criterias<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilCriteriasValues" class="tsd-kind-icon">Util<wbr>Criterias<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilEvaluationComponentState" class="tsd-kind-icon">Util<wbr>Evaluation<wbr>Component<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilEvaluationComponent_ts" class="tsd-kind-icon">Util<wbr>Evaluation<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilEvaluationValues" class="tsd-kind-icon">Util<wbr>Evaluation<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilInvestigationObjectsComponent_ts" class="tsd-kind-icon">Util<wbr>Investigation<wbr>Objects<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilInvestigationObjectsValues" class="tsd-kind-icon">Util<wbr>Investigation<wbr>Objects<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilResultComponent_ts" class="tsd-kind-icon">Util<wbr>Result<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilResultValues" class="tsd-kind-icon">Util<wbr>Result<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilWeightingComponent_ts" class="tsd-kind-icon">Util<wbr>Weighting<wbr>Component_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilWeightingValues" class="tsd-kind-icon">Util<wbr>Weighting<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilityAnalysisValues" class="tsd-kind-icon">Utility<wbr>Analysis<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#UtilityAnalysis_ts" class="tsd-kind-icon">Utility<wbr>Analysis_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#WebsocketChannelContext" class="tsd-kind-icon">Websocket<wbr>Channel<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#WeightingEvaluation_ts" class="tsd-kind-icon">Weighting<wbr>Evaluation_<wbr>ts</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#fae" class="tsd-kind-icon">fae</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#AnonymousModal" class="tsd-kind-icon">Anonymous<wbr>Modal</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#CollaboratorsModal" class="tsd-kind-icon">Collaborators<wbr>Modal</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#ConfirmToolRouteChangeModal" class="tsd-kind-icon">Confirm<wbr>Tool<wbr>Route<wbr>Change<wbr>Modal</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#DarkModeChanger" class="tsd-kind-icon">Dark<wbr>Mode<wbr>Changer</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#DefaultCoordinateTooltipRenderer" class="tsd-kind-icon">Default<wbr>Coordinate<wbr>Tooltip<wbr>Renderer</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#DeleteSaveModal" class="tsd-kind-icon">Delete<wbr>Save<wbr>Modal</a>
@@ -849,22 +1738,34 @@
 						<a href="modules.html#ExportButton" class="tsd-kind-icon">Export<wbr>Button</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="modules.html#ExportModal" class="tsd-kind-icon">Export<wbr>Modal</a>
+						<a href="modules.html#InvitationLinkModal" class="tsd-kind-icon">Invitation<wbr>Link<wbr>Modal</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#PersonaInfoItem" class="tsd-kind-icon">Persona<wbr>Info<wbr>Item</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#ProtectedRoute" class="tsd-kind-icon">Protected<wbr>Route</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="modules.html#ResetStepsModal" class="tsd-kind-icon">Reset<wbr>Steps<wbr>Modal</a>
+						<a href="modules.html#ScaleDescriptionTable" class="tsd-kind-icon">Scale<wbr>Description<wbr>Table</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#SelectClassificationModal" class="tsd-kind-icon">Select<wbr>Classification<wbr>Modal</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#SingleInviteModal" class="tsd-kind-icon">Single<wbr>Invite<wbr>Modal</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#UACriteriaCustomDescriptionInfoPanel" class="tsd-kind-icon">UACriteria<wbr>Custom<wbr>Description<wbr>Info<wbr>Panel</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#acceptContribution" class="tsd-kind-icon">accept<wbr>Contribution</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#acceptInvitationLink" class="tsd-kind-icon">accept<wbr>Invitation<wbr>Link</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#broadcastSavePatches" class="tsd-kind-icon">broadcast<wbr>Save<wbr>Patches</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="modules.html#callAPI" class="tsd-kind-icon">callAPI</a>
@@ -878,14 +1779,20 @@
 					<li class=" tsd-kind-function">
 						<a href="modules.html#checkUsername" class="tsd-kind-icon">check<wbr>Username</a>
 					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#compareWithoutFunctions" class="tsd-kind-icon">compare<wbr>Without<wbr>Functions</a>
+					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#createContribution" class="tsd-kind-icon">create<wbr>Contribution</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#createInvitationLink" class="tsd-kind-icon">create<wbr>Invitation<wbr>Link</a>
 					</li>
-					<li class=" tsd-kind-function">
+					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="modules.html#createSave" class="tsd-kind-icon">create<wbr>Save</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#createSocketConnection" class="tsd-kind-icon">create<wbr>Socket<wbr>Connection</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#createUser" class="tsd-kind-icon">create<wbr>User</a>
@@ -900,6 +1807,9 @@
 						<a href="modules.html#deleteContribution" class="tsd-kind-icon">delete<wbr>Contribution</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#deleteInvitationLink" class="tsd-kind-icon">delete<wbr>Invitation<wbr>Link</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#deleteSave" class="tsd-kind-icon">delete<wbr>Save</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -909,19 +1819,43 @@
 						<a href="modules.html#deleteUserSettings" class="tsd-kind-icon">delete<wbr>User<wbr>Settings</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="modules.html#extractCardComponentField" class="tsd-kind-icon">extract<wbr>Card<wbr>Component<wbr>Field</a>
+						<a href="modules.html#extractFromForm" class="tsd-kind-icon">extract<wbr>From<wbr>Form</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="modules.html#extractFromForm" class="tsd-kind-icon">extract<wbr>From<wbr>Form</a>
+						<a href="modules.html#findClassification" class="tsd-kind-icon">find<wbr>Classification</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#forEachChildrenRecursively" class="tsd-kind-icon">for<wbr>Each<wbr>Children<wbr>Recursively</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#forgotPassword" class="tsd-kind-icon">forgot<wbr>Password</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#getCaptcha" class="tsd-kind-icon">get<wbr>Captcha</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#getContributors" class="tsd-kind-icon">get<wbr>Contributors</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#getFamilyStatus" class="tsd-kind-icon">get<wbr>Family<wbr>Status</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getLastOpenedSaves" class="tsd-kind-icon">get<wbr>Last<wbr>Opened<wbr>Saves</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getMixOfColors" class="tsd-kind-icon">get<wbr>Mix<wbr>OfColors</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getRandomPointColor" class="tsd-kind-icon">get<wbr>Random<wbr>Point<wbr>Color</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="modules.html#getSave" class="tsd-kind-icon">get<wbr>Save</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getSaveResource" class="tsd-kind-icon">get<wbr>Save<wbr>Resource</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getSaveURL" class="tsd-kind-icon">get<wbr>SaveURL</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#getSaves" class="tsd-kind-icon">get<wbr>Saves</a>
@@ -931,6 +1865,12 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#getSettings" class="tsd-kind-icon">get<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getSharedSavePermissionOptions" class="tsd-kind-icon">get<wbr>Shared<wbr>Save<wbr>Permission<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getSharedSavePermissionText" class="tsd-kind-icon">get<wbr>Shared<wbr>Save<wbr>Permission<wbr>Text</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#getTool" class="tsd-kind-icon">get<wbr>Tool</a>
@@ -945,16 +1885,37 @@
 						<a href="modules.html#getUserSettings" class="tsd-kind-icon">get<wbr>User<wbr>Settings</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#hasPermission" class="tsd-kind-icon">has<wbr>Permission</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#isCardComponentFilled" class="tsd-kind-icon">is<wbr>Card<wbr>Component<wbr>Filled</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#isCardComponentTooLong" class="tsd-kind-icon">is<wbr>Card<wbr>Component<wbr>Too<wbr>Long</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#isDesktop" class="tsd-kind-icon">is<wbr>Desktop</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#isEmpty" class="tsd-kind-icon">is<wbr>Empty</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#lockSave" class="tsd-kind-icon">lock<wbr>Save</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#portUser" class="tsd-kind-icon">port<wbr>User</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#reload_app" class="tsd-kind-icon">reload_<wbr>app</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#reportWebVitals" class="tsd-kind-icon">report<wbr>Web<wbr>Vitals</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#searchUser" class="tsd-kind-icon">search<wbr>User</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#shallowCompareStepProps" class="tsd-kind-icon">shallow<wbr>Compare<wbr>Step<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="modules.html#showContribution" class="tsd-kind-icon">show<wbr>Contribution</a>
@@ -993,7 +1954,16 @@
 						<a href="modules.html#updateUserSettings" class="tsd-kind-icon">update<wbr>User<wbr>Settings</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#validateCardComponentWithNameFilled" class="tsd-kind-icon">validate<wbr>Card<wbr>Component<wbr>With<wbr>Name<wbr>Filled</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#validateFile" class="tsd-kind-icon">validate<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#verifyEmail" class="tsd-kind-icon">verify<wbr>Email</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#withUIErrorContext" class="tsd-kind-icon">withUIError<wbr>Context</a>
 					</li>
 				</ul>
 			</nav>
@@ -1011,13 +1981,12 @@
 				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>

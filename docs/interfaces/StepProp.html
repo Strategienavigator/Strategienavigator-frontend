@@ -56,7 +56,7 @@
 					<a href="StepProp.html">StepProp</a>
 				</li>
 			</ul>
-			<h1>Interface StepProp&lt;T&gt;</h1>
+			<h1>Interface StepProp&lt;V&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -67,7 +67,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>T</h4>
+						<h4>V<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -75,7 +75,15 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">StepProp</span>
+						<a href="FormComponentProps.html" class="tsd-signature-type" data-tsd-kind="Interface">FormComponentProps</a>
+					</li>
+					<li>
+						<a href="ToolSaveProps.html" class="tsd-signature-type" data-tsd-kind="Interface">ToolSaveProps</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">StepProp</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -86,10 +94,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="StepProp.html#form" class="tsd-kind-icon">form</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="StepProp.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="StepProp.html#title" class="tsd-kind-icon">title</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="StepProp.html#values" class="tsd-kind-icon">values</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="StepProp.html#currentSubStep" class="tsd-kind-icon">current<wbr>Sub<wbr>Step</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="StepProp.html#disabled" class="tsd-kind-icon">disabled</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="StepProp.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="StepProp.html#isSaving" class="tsd-kind-icon">is<wbr>Saving</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="StepProp.html#resourceManager" class="tsd-kind-icon">resource<wbr>Manager</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="StepProp.html#save" class="tsd-kind-icon">save</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="StepProp.html#saveController" class="tsd-kind-icon">save<wbr>Controller</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="StepProp.html#stepController" class="tsd-kind-icon">step<wbr>Controller</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="StepProp.html#validationFailed" class="tsd-kind-icon">validation<wbr>Failed</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,42 +111,108 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="form" class="tsd-anchor"></a>
-					<h3>form</h3>
-					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Element</span></div>
+					<a name="currentSubStep" class="tsd-anchor"></a>
+					<h3>current<wbr>Sub<wbr>Step</h3>
+					<div class="tsd-signature tsd-kind-icon">current<wbr>Sub<wbr>Step<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx#L22">src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx:22</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/SteppableTool/StepComponent/Step/Step.tsx#L11">src/general-components/Tool/SteppableTool/StepComponent/Step/Step.tsx:11</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="disabled" class="tsd-anchor"></a>
+					<h3>disabled</h3>
+					<div class="tsd-signature tsd-kind-icon">disabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="FormComponentProps.html">FormComponentProps</a>.<a href="FormComponentProps.html#disabled">disabled</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/FormComponent/FormComponent.tsx#L13">src/general-components/Tool/FormComponent/FormComponent.tsx:13</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Bestimmt ob das Formular deaktiviert sein soll oder nicht</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="id" class="tsd-anchor"></a>
-					<h3>id</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> id</h3>
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="FormComponentProps.html">FormComponentProps</a>.<a href="FormComponentProps.html#id">id</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx#L20">src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx:20</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/FormComponent/FormComponent.tsx#L9">src/general-components/Tool/FormComponent/FormComponent.tsx:9</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Die ID des Formulares. Muss einzigartig sein!</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="isSaving" class="tsd-anchor"></a>
+					<h3>is<wbr>Saving</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Saving<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ToolSaveProps.html">ToolSaveProps</a>.<a href="ToolSaveProps.html#isSaving">isSaving</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/ToolSavePage/ToolSavePage.tsx#L41">src/general-components/Tool/ToolSavePage/ToolSavePage.tsx:41</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="resourceManager" class="tsd-anchor"></a>
+					<h3>resource<wbr>Manager</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Manager<span class="tsd-signature-symbol">:</span> <a href="ResourceManager.html" class="tsd-signature-type" data-tsd-kind="Interface">ResourceManager</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ToolSaveProps.html">ToolSaveProps</a>.<a href="ToolSaveProps.html#resourceManager">resourceManager</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/ToolSavePage/ToolSavePage.tsx#L39">src/general-components/Tool/ToolSavePage/ToolSavePage.tsx:39</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="save" class="tsd-anchor"></a>
+					<h3>save</h3>
+					<div class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">:</span> <a href="SaveResource.html" class="tsd-signature-type" data-tsd-kind="Interface">SaveResource</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ToolSaveProps.html">ToolSaveProps</a>.<a href="ToolSaveProps.html#save">save</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/ToolSavePage/ToolSavePage.tsx#L40">src/general-components/Tool/ToolSavePage/ToolSavePage.tsx:40</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="saveController" class="tsd-anchor"></a>
+					<h3>save<wbr>Controller</h3>
+					<div class="tsd-signature tsd-kind-icon">save<wbr>Controller<span class="tsd-signature-symbol">:</span> <a href="ToolSaveController.html" class="tsd-signature-type" data-tsd-kind="Interface">ToolSaveController</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ToolSaveProps.html">ToolSaveProps</a>.<a href="ToolSaveProps.html#saveController">saveController</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/ToolSavePage/ToolSavePage.tsx#L38">src/general-components/Tool/ToolSavePage/ToolSavePage.tsx:38</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="title" class="tsd-anchor"></a>
-					<h3>title</h3>
-					<div class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="stepController" class="tsd-anchor"></a>
+					<h3>step<wbr>Controller</h3>
+					<div class="tsd-signature tsd-kind-icon">step<wbr>Controller<span class="tsd-signature-symbol">:</span> <a href="StepController.html" class="tsd-signature-type" data-tsd-kind="Interface">StepController</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx#L21">src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx:21</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/SteppableTool/StepComponent/Step/Step.tsx#L10">src/general-components/Tool/SteppableTool/StepComponent/Step/Step.tsx:10</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="values" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> values</h3>
-					<div class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span></div>
+					<a name="validationFailed" class="tsd-anchor"></a>
+					<h3>validation<wbr>Failed</h3>
+					<div class="tsd-signature tsd-kind-icon">validation<wbr>Failed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/871a389/src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx#L23">src/general-components/Tool/SteppableTool/StepComponent/StepComponent.tsx:23</a></li>
+							<li>Defined in <a href="https://github.com/ricom/toolbox-frontend/blob/651aad0/src/general-components/Tool/SteppableTool/StepComponent/Step/Step.tsx#L12">src/general-components/Tool/SteppableTool/StepComponent/Step/Step.tsx:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -155,16 +234,31 @@
 						<a href="StepProp.html" class="tsd-kind-icon">Step<wbr>Prop</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="StepProp.html#form" class="tsd-kind-icon">form</a>
+								<a href="StepProp.html#currentSubStep" class="tsd-kind-icon">current<wbr>Sub<wbr>Step</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="StepProp.html#disabled" class="tsd-kind-icon">disabled</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="StepProp.html#id" class="tsd-kind-icon">id</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="StepProp.html#title" class="tsd-kind-icon">title</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="StepProp.html#isSaving" class="tsd-kind-icon">is<wbr>Saving</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="StepProp.html#resourceManager" class="tsd-kind-icon">resource<wbr>Manager</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="StepProp.html#save" class="tsd-kind-icon">save</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="StepProp.html#saveController" class="tsd-kind-icon">save<wbr>Controller</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="StepProp.html#values" class="tsd-kind-icon">values</a>
+								<a href="StepProp.html#stepController" class="tsd-kind-icon">step<wbr>Controller</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="StepProp.html#validationFailed" class="tsd-kind-icon">validation<wbr>Failed</a>
 							</li>
 						</ul>
 					</li>
@@ -186,13 +280,12 @@
 				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>

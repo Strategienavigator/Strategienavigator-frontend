@@ -8,6 +8,7 @@ import {StepProp} from "../../../../../general-components/Tool/SteppableTool/Ste
 import {ComponentClass, FunctionComponent} from "react";
 import {TestAnalysisValues} from "../../TestAnalysis";
 import {TestCoordinateSystemComponent} from "./TestCoordinateSystemComponent";
+import {Point} from "../../../../../general-components/CoordinateSystem/Point/Point";
 
 class TestCoordinateSystem implements StepDefinition<TestAnalysisValues>, StepDataHandler<TestAnalysisValues> {
     form: FunctionComponent<StepProp<TestAnalysisValues>> | ComponentClass<StepProp<TestAnalysisValues>>;
@@ -27,7 +28,23 @@ class TestCoordinateSystem implements StepDefinition<TestAnalysisValues>, StepDa
     }
 
     fillFromPreviousValues(data: Draft<TestAnalysisValues>): void {
-        data["test-coordinate-system"] = {};
+        data["test-coordinate-system"] = {
+            points: [
+                new Point(
+                    TestCoordinateSystemComponent.randomNumberInRange(0, 10),
+                    TestCoordinateSystemComponent.randomNumberInRange(0, 10),
+                    "Testpunkt1",
+                    1
+                ),
+
+                new Point(
+                    TestCoordinateSystemComponent.randomNumberInRange(0, 10),
+                    TestCoordinateSystemComponent.randomNumberInRange(0, 10),
+                    "Testpunkt2",
+                    1
+                ),
+            ]
+        };
     }
 
     isUnlocked(data: TestAnalysisValues): boolean {

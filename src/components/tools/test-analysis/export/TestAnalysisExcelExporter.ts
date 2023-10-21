@@ -9,13 +9,15 @@ import {TestSubstepsValues} from "../steps/TestSubsteps/TestSubstepsComponent";
 import {TestCoordinateSystemValues} from "../steps/TestCoordinateSystem/TestCoordinateSystemComponent";
 import {CardComponentExcelWorkSheet} from "../../../../general-components/CardComponent/CardComponentExcelWorkSheet";
 import {MyCustomDescriptionValues} from "../steps/TestCardcomponent/CustomDescription/MyCustomDescription";
+import {PointExcelSheet} from "../../../../general-components/CoordinateSystem/Point/PointExcelSheet";
+import {isCardComponentFilled} from "../../../../general-components/CardComponent/CardComponent";
 
 
 class TestAnalysisExcelExporter extends ExcelExporter<TestAnalysisValues> {
 
     protected buildExcel(workbook: WorkBook, data: SaveResource<TestAnalysisValues>): boolean {
         let testcardcomponent = data.data["test-cardcomponent"];
-        if (this.isFilled(testcardcomponent))
+        if (this.isFilled(testcardcomponent) && isCardComponentFilled(testcardcomponent?.cards))
             this.addSheet("1. CardComponent", this.getTestCardcomponentValues(testcardcomponent));
 
         let testcomparecomponent = data.data["test-comparecomponent"];
@@ -92,15 +94,7 @@ class TestAnalysisExcelExporter extends ExcelExporter<TestAnalysisValues> {
     }
 
     private getTestCoordinateSystemValues(values: TestCoordinateSystemValues): WorkSheet {
-        let ws: WorkSheet = {};
-        // let cell = {r: 0, c: 0};
-
-        let range: Range = {
-            s: {r: 0, c: 0},
-            e: {r: 0, c: 0}
-        }
-        ws["!ref"] = XLSX.utils.encode_range(range);
-        return ws;
+        return new PointExcelSheet(values.points, "Punkte").getExcelSheet();
     }
 
 
