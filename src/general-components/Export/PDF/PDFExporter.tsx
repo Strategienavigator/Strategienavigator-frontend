@@ -121,6 +121,17 @@ abstract class PDFExporter<D> extends Exporter<D> {
                 }
             );
 
+            let linkText = "Erstellt mit dem Strategienavigator";
+            doc.textWithLink(
+                linkText,
+                this.MARGINS.left,
+                height - doc.getTextDimensions(linkText, {fontSize: 10}).h,
+                {
+                    baseline: "bottom",
+                    url: 'https://strategie-navigator.jade-hs.de/'
+                }
+            );
+
             // Kopfzeile
             // Tool-name
             let toolname = `${Tools.find(v => v.id === save.tool_id)?.name ?? "Analyse"}`;

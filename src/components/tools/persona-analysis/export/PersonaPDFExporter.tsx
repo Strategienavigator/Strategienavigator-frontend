@@ -37,7 +37,7 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
         this.addNameValuePairs(doc, "Erstellt von:", [save.owner.username], this.getWidth(doc, sizes.width), undefined, 3);
 
         // Persona info
-        this.addNameValuePairs(doc, "Vorname:", [infos.firstname!], avatarSizes.width + 7, undefined, padding)
+        this.addNameValuePairs(doc, "Name:", [infos.firstname!], avatarSizes.width + 7, undefined, padding)
         this.addNameValuePairs(doc, "Alter:", [`${infos.age} ${infos.age! === 1 ? "Jahr" : "Jahre"} alt`], avatarSizes.width + 7, undefined, padding);
 
         let income = new Intl.NumberFormat(
@@ -74,12 +74,12 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
             let item = items[i];
 
             // Leftitem
-            sizes = this.addNameValuePairs(doc, item.name, item.fields.map(i => i.name), 0, this.height, padding);
+            sizes = this.addNameValuePairs(doc, item.name, item.fields.map(i => i.name), 0, this.height, padding, true);
 
             if (i + 1 < items.length) {
                 item = items[i + 1]
                 // Rightitem
-                let sizesB = this.addNameValuePairs(doc, item.name, item.fields.map(i => i.name), this.getWidth(doc, sizes.width), this.height, padding);
+                let sizesB = this.addNameValuePairs(doc, item.name, item.fields.map(i => i.name), this.getWidth(doc, sizes.width), this.height, padding,  true);
 
                 if (sizes.height > sizesB.height) {
                     this.height += sizes.height;
@@ -101,7 +101,7 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
         return errors;
     }
 
-    private addNameValuePairs(doc: jsPDF, name: string, values: string[], width: number, useHeight?: number, heightPadding?: number) {
+    private addNameValuePairs(doc: jsPDF, name: string, values: string[], width: number, useHeight?: number, heightPadding?: number, useMinus?: boolean) {
         if (values.length === 0) {
             values.push("Keine angaben");
         }
@@ -133,6 +133,10 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
 
         doc.setFontSize(11);
         values.forEach((v) => {
+            if (useMinus) {
+                v = `- ${v}`;
+            }
+
             if (useHeight) {
                 let add = doc.getTextDimensions(v, {fontSize: 11}).h;
                 height += add;
