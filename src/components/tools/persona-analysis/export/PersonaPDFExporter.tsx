@@ -8,7 +8,6 @@ import {ResourcesType} from "../../../../general-components/Tool/ToolSavePage/To
 import {getFamilyStatus} from "../steps/PersonaInfo/PersonaInfoComponent";
 import {PersonaPersonalityComponent} from "../steps/PersonaPersonality/PersonaPersonalityComponent";
 import {PersonaSummaryItem} from "../steps/PersonaSummary/PersonaSummaryComponent";
-import {info} from "autoprefixer";
 
 
 class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
