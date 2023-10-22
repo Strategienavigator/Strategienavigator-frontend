@@ -98,12 +98,6 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
                             {this.getItemElements(right)}
                         </Col>
                     </Row>
-
-                    <PDFExporterPreview<PersonaAnalysisValues>
-                        save={this.props.save}
-                        exporter={new PersonaPDFExporter()}
-                        resources={this.props.resourceManager.resources}
-                    />
                 </>
             );
         }
