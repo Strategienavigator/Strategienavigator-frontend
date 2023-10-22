@@ -48,16 +48,16 @@ class PDFExporter<D> extends Exporter<D> {
         return [output];
     }
 
+    protected validateExport(data: SaveResource<D>): SingleMessageProps[] {
+        return this.validateFunction(data);
+    }
+
     private getHTMLElement() {
         let element = document.querySelector<HTMLElement>(this.element);
         if (element == null) {
             console.error(`HTML Element "${this.element}" not found!`);
         }
         return element;
-    }
-
-    protected validateExport(data: SaveResource<D>): SingleMessageProps[] {
-        return this.validateFunction(data);
     }
 
 }

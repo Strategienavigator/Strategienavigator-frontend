@@ -1,20 +1,21 @@
 import {Exporter} from "./Exporter";
 import {SaveResource} from "../Datastructures";
 import {SingleMessageProps} from "../Messages/Messages";
+import {ResourcesType} from "../Tool/ToolSavePage/ToolSavePage";
 
 
 class JSONExporter<D> extends Exporter<D> {
 
-    constructor() {
+    public constructor() {
         super("JSON", "json", "application/json");
     }
 
-    public validateExport(data: SaveResource<D>): SingleMessageProps[] {
-        return [];
+    protected onExport = async (data: SaveResource<D>): Promise<BlobPart[]> => {
+        return [JSON.stringify(data.data, null, 4)];
     }
 
-    protected async onExport(data: SaveResource<D>): Promise<BlobPart[]> {
-        return [JSON.stringify(data.data, null, 4)];
+    protected validateExport(save: SaveResource<D>, resources: ResourcesType): SingleMessageProps[] {
+        return [];
     }
 }
 

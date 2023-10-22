@@ -11,9 +11,7 @@ import {PersonaPersonalityValues} from "./steps/PersonaPersonality/PersonaPerson
 import {PersonaPersonality} from "./steps/PersonaPersonality/PersonaPersonality";
 import {PersonaSummaryValues} from "./steps/PersonaSummary/PersonaSummaryComponent";
 import {PersonaSummary} from "./steps/PersonaSummary/PersonaSummary";
-import {PDFExporter} from "../../../general-components/Export/PDFExporter";
-import {SingleMessageProps} from "../../../general-components/Messages/Messages";
-
+import {PersonaPDFExporter} from "./export/PersonaPDFExporter";
 
 interface PersonaAnalysisValues {
     "persona-info"?: PersonaInfoValues,
@@ -27,17 +25,7 @@ class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
         super(props, context, "Persona Analyse", faUserCircle, 6);
 
         this.addExporter(new JSONExporter());
-        this.addExporter(new PDFExporter<PersonaAnalysisValues>("#persona-summary", (save) => {
-            let errors: SingleMessageProps[] = [];
-            if (save.data["persona-summary"] === undefined) {
-                errors.push({
-                    content: "Bitte stellen Sie Ihr Persona erst fertig!",
-                    type: "DANGER"
-                });
-            }
-            return errors;
-        }));
-
+        this.addExporter(new PersonaPDFExporter());
         this.setImporter(new PersonaJSONImporter());
 
         this.addStep(new PersonaInfo());

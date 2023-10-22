@@ -1,6 +1,7 @@
 import FileSaver from "file-saver";
 import {SaveResource} from "../Datastructures";
 import {Messages, SingleMessageProps} from "../Messages/Messages";
+import {ResourcesType} from "../Tool/ToolSavePage/ToolSavePage";
 
 
 abstract class Exporter<D> {
@@ -30,10 +31,11 @@ abstract class Exporter<D> {
         return this.fileType;
     }
 
-    public export = async (save: SaveResource<D>): Promise<void> => {
-        let validate = this.validateExport(save);
+    public export = async (save: SaveResource<D>, resources: ResourcesType): Promise<void> => {
+        console.log(resources)
+        let validate = this.validateExport(save, resources);
         if (validate.length <= 0) {
-            const blobPart = await this.onExport(save);
+            const blobPart = await this.onExport(save, resources);
             const blob = new Blob(blobPart, {
                 type: this.fileType
             });
@@ -46,8 +48,9 @@ abstract class Exporter<D> {
         }
     }
 
-    protected abstract validateExport(data: SaveResource<D>): SingleMessageProps[];
-    protected abstract onExport(data: SaveResource<D>): Promise<BlobPart[]>;
+    protected abstract validateExport(save: SaveResource<D>, resources: ResourcesType): SingleMessageProps[];
+
+    protected abstract onExport(save: SaveResource<D>, resources: ResourcesType): Promise<BlobPart[]>;
 
     /**
      * Öffnet Download Dialog und startet Download

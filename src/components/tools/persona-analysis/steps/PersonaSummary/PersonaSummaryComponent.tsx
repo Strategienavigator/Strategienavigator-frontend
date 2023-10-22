@@ -9,8 +9,10 @@ import {PersonaPersonalityComponent} from "../PersonaPersonality/PersonaPersonal
 import {faCoins, faUsers, faUserTag} from "@fortawesome/free-solid-svg-icons";
 import FAE from "../../../../../general-components/Icons/FAE";
 import {getFamilyStatus} from "../PersonaInfo/PersonaInfoComponent";
+import {PDFExporterPreview} from "../../../../../general-components/Export/PDF/PDFExporterPreview";
+import {PersonaPDFExporter} from "../../export/PersonaPDFExporter";
 
-interface Item extends CardComponentFieldsWithNameValues {
+export interface PersonaSummaryItem extends CardComponentFieldsWithNameValues {
     icon?: IconDefinition
 }
 
@@ -28,8 +30,8 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
         let personality = this.props.save.data["persona-personality"];
 
         if (info && personality) {
-            let items: Item[] = [
-                ...Object.values(personality.fields).map<Item>((data, index) => {
+            let items: PersonaSummaryItem[] = [
+                ...Object.values(personality.fields).map<PersonaSummaryItem>((data, index) => {
                     return {
                         name: PersonaPersonalityComponent.names[index],
                         fields: data,
@@ -38,8 +40,8 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
                 }),
                 ...personality.individual
             ];
-            let left: Item[] = [];
-            let right: Item[] = [];
+            let left: PersonaSummaryItem[] = [];
+            let right: PersonaSummaryItem[] = [];
             items.forEach((v, i) => {
                 if (i % 2) {
                     right.push(v);
@@ -96,6 +98,12 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
                             {this.getItemElements(right)}
                         </Col>
                     </Row>
+
+                    <PDFExporterPreview<PersonaAnalysisValues>
+                        save={this.props.save}
+                        exporter={new PersonaPDFExporter()}
+                        resources={this.props.resourceManager.resources}
+                    />
                 </>
             );
         }
@@ -114,9 +122,7 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
                     <ListGroup>
                         {props.values.map((data, index) => {
                             return (
-                                <ListGroupItem
-                                    key={`list-group-item-${props.name}-${index}`}
-                                >
+                                <ListGroupItem key={`list-item-${index}-${props.name}`}>
                                     {data}
                                 </ListGroupItem>
                             );
@@ -127,7 +133,7 @@ export class PersonaSummaryComponent extends Step<PersonaAnalysisValues, {}> {
         );
     }
 
-    getItemElements = (items: Item[]): JSX.Element[] => {
+    getItemElements = (items: PersonaSummaryItem[]): JSX.Element[] => {
         return items.map((data) => {
             this.i += 1;
             return (

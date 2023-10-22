@@ -36,6 +36,10 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         return parseInt(row.substr(1, row.length));
     }
 
+    public validateExport(data: SaveResource<D>): SingleMessageProps[] {
+        return [];
+    }
+
     protected isFilled = <D extends object>(o?: D): o is D => {
         return o !== undefined && Object.keys(o).length > 0;
     }
@@ -57,10 +61,6 @@ abstract class ExcelExporter<D> extends Exporter<D> {
             cellStyles: true,
         });
         return [buffer];
-    }
-
-    public validateExport(data: SaveResource<D>): SingleMessageProps[] {
-        return [];
     }
 
     protected updateWidth = (variable: number, w: number) => {

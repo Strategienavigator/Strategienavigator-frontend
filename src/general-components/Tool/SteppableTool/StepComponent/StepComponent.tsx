@@ -367,7 +367,10 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private onExport = (exporter: Exporter<D>) => {
-        exporter.export(this.props.save).then(() => {
+        exporter.export(
+            this.props.save,
+            this.props.resourceManager.resources
+        ).then(() => {
             this.setState({
                 showExportModal: false
             });
