@@ -335,8 +335,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             if (validated) {
                 // force for performance reasons (no duplicate check of validation)
                 this.nextSubStep(true);
-                return;
             }
+            return;
         }
 
         const validated = this.validateStep(this.state.currentStep);

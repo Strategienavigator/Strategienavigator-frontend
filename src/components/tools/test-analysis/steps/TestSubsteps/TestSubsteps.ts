@@ -1,4 +1,5 @@
 import {
+    CustomNextButton,
     ExtraWindowDefinition,
     StepDataHandler,
     StepDefinition,
@@ -19,6 +20,7 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
     dataHandler: StepDataHandler<TestAnalysisValues>;
     extraWindow: ExtraWindowDefinition<TestAnalysisValues>;
     subStep: SubStepDefinition<TestAnalysisValues>;
+    customNextButton: CustomNextButton
 
     constructor() {
         this.id = "test-substeps";
@@ -30,6 +32,7 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
             extraWindowComponent: TestSubstepsExtraWindow,
         };
         this.subStep = this;
+        this.customNextButton = {text: "Nächster"};
     }
 
     deleteData(data: Draft<TestAnalysisValues>): void {
@@ -37,7 +40,9 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
     }
 
     fillFromPreviousValues(data: Draft<TestAnalysisValues>): void {
-        data["test-substeps"] = {};
+        data["test-substeps"] = {
+            ratings: [0]
+        };
     }
 
     isUnlocked(data: TestAnalysisValues): boolean {
@@ -54,18 +59,25 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
     }
 
     getStepCount(data: TestAnalysisValues): number {
-        return 0;
+        return 10;
     }
 
     isStepUnlocked(subStep: number, data: TestAnalysisValues): boolean {
-        return false;
+        return subStep < 1 || this.validateStep(subStep - 1, data).length === 0;
     }
 
     validateStep(subStep: number, data: TestAnalysisValues): UIError[] {
         let errors: UIError[] = [];
 
         // Validierung
-        // ...
+        let ratings = data["test-substeps"]?.ratings;
+        if (ratings && ratings.length <= subStep) {
+            errors.push({
+               level: "error",
+               id: "rating.empty",
+               message: "Bitte geben Sie eine Bewertung an!"
+            });
+        }
 
         return errors;
     }
