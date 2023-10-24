@@ -32,7 +32,6 @@ abstract class Exporter<D> {
     }
 
     public export = async (save: SaveResource<D>, resources: ResourcesType): Promise<void> => {
-        console.log(resources)
         let validate = this.validateExport(save, resources);
         if (validate.length <= 0) {
             const blobPart = await this.onExport(save, resources);
