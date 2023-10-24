@@ -73,9 +73,9 @@ class TestSubsteps implements StepDefinition<TestAnalysisValues>, StepDataHandle
         let ratings = data["test-substeps"]?.ratings;
         if (ratings && ratings.length <= subStep) {
             errors.push({
-               level: "error",
-               id: "rating.empty",
-               message: "Bitte geben Sie eine Bewertung an!"
+                level: "error",
+                id: "rating.empty",
+                message: "Bitte geben Sie eine Bewertung an!"
             });
         }
 

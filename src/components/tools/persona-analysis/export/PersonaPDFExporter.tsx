@@ -5,7 +5,6 @@ import {SingleMessageProps} from "../../../../general-components/Messages/Messag
 import jsPDF from "jspdf";
 import {Buffer} from 'buffer';
 import {ResourcesType} from "../../../../general-components/Tool/ToolSavePage/ToolSavePage";
-import {getFamilyStatus} from "../steps/PersonaInfo/PersonaInfoComponent";
 import {PersonaPersonalityComponent} from "../steps/PersonaPersonality/PersonaPersonalityComponent";
 import {PersonaSummaryItem} from "../steps/PersonaSummary/PersonaSummaryComponent";
 
@@ -40,24 +39,8 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
         this.addNameValuePairs(doc, "Name:", [infos.firstname!], avatarSizes.width + 7, undefined, padding)
         this.addNameValuePairs(doc, "Alter:", [`${infos.age} ${infos.age! === 1 ? "Jahr" : "Jahre"} alt`], avatarSizes.width + 7, undefined, padding);
 
-        let income = new Intl.NumberFormat(
-            "de-DE",
-            {
-                style: "currency",
-                currency: "EUR"
-            }
-        ).format(infos.income ?? 0);
-
-        this.addNameValuePairs(doc, "Einkommen:", [infos.income === null ? "Keins angegeben" : `Monatlicher Nettoverdienst von ${income}`], avatarSizes.width + 7, undefined, padding);
-        this.addNameValuePairs(doc, "Familienstatus:", [getFamilyStatus(infos.familystatus)!], avatarSizes.width + 7);
-
         // Personalität
         let items: PersonaSummaryItem[] = [
-            {
-                name: "Familie & Freunde",
-                fields: infos.family,
-                icon: undefined
-            },
             ...Object.values(personality.fields).map<PersonaSummaryItem>((data, index) => {
                 return {
                     name: PersonaPersonalityComponent.names[index],
@@ -65,21 +48,32 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
                     icon: PersonaPersonalityComponent.icons[index]
                 };
             }),
-            ...personality.individual
+            ...personality.individual,
+            ...Object.values(personality.fieldsElse).map<PersonaSummaryItem>((data, index) => {
+                let l = Object.keys(personality.fields).length;
+                return {
+                    name: PersonaPersonalityComponent.names[l + index],
+                    fields: data,
+                    icon: PersonaPersonalityComponent.icons[l + index]
+                };
+            })
         ];
-
 
         this.height = 96;
         for (let i = 0; i < items.length; i += 2) {
             let item = items[i];
 
             // Leftitem
-            sizes = this.addNameValuePairs(doc, item.name, item.fields.map(i => i.name), 0, this.height, padding, true);
+            sizes = this.addNameValuePairs(doc, item.name, item.fields.map(i => {
+                return i.name + (i.desc !== "" ? (": " + i.desc) : "");
+            }), 0, this.height, padding, true);
 
             if (i + 1 < items.length) {
                 item = items[i + 1]
                 // Rightitem
-                let sizesB = this.addNameValuePairs(doc, item.name, item.fields.map(i => i.name), this.getWidth(doc, sizes.width), this.height, padding,  true);
+                let sizesB = this.addNameValuePairs(doc, item.name, item.fields.map(i => {
+                    return i.name + (i.desc !== "" ? (": " + i.desc) : "");
+                }), this.getWidth(doc, sizes.width), this.height, padding, true);
 
                 if (sizes.height > sizesB.height) {
                     this.height += sizes.height;
@@ -109,45 +103,58 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
         let newWidth: number;
         let newHeight = 0;
         let height = 0;
+
+        let breaken = this.breakStringByLength(name);
+        let v = breaken.value;
+
         if (useHeight) {
-            newHeight = doc.getTextDimensions(name, {fontSize: 13}).h
-            height = useHeight + newHeight;
+            height = useHeight + doc.getTextDimensions(v, {fontSize: 13}).h;
+            newHeight = doc.getTextDimensions(v, {fontSize: 13}).h;
         } else {
-            height = this.CalculateTextHeight(doc, name, 13);
+            height = this.CalculateTextHeight(doc, v, 13);
+            newHeight = height;
         }
 
         // Name
         newWidth = this.getWidth(doc, width);
         doc.setFontSize(12);
         doc.setFont("Helvetica", "bold");
+
         doc.text(
-            name,
+            v,
             newWidth,
             height
         );
         doc.setFont("Helvetica", "normal");
 
+        let add = doc.getTextDimensions(v, {fontSize: 11}).h * (breaken.count - 1);
+        let m = Math.pow(1.25, (breaken.count - 1));
+        height += add * m;
+        newHeight += add * m;
+
         // Value
-        let hightestWidth = doc.getTextDimensions(name, {fontSize: 12}).w;
-        let lastLength = name.length;
+        let hightestWidth = doc.getTextDimensions(breaken.longest, {fontSize: 12}).w;
+        let lastLength = breaken.longest.length;
 
         doc.setFontSize(11);
         values.forEach((v) => {
             if (useMinus) {
                 v = `- ${v}`;
             }
+            let breaked = this.breakStringByLength(v);
+            v = breaked.value;
 
             if (useHeight) {
                 let add = doc.getTextDimensions(v, {fontSize: 11}).h;
                 height += add;
-                newHeight += add
+                newHeight += add;
             } else {
                 height = this.CalculateTextHeight(doc, v, 11);
             }
 
-            if (v.length > lastLength) {
-                hightestWidth = doc.getTextDimensions(v, {fontSize: 11}).w;
-                lastLength = v.length;
+            if (breaked.longest.length > lastLength) {
+                hightestWidth = doc.getTextDimensions(breaked.longest, {fontSize: 11}).w;
+                lastLength = breaked.longest.length;
             }
 
             doc.text(
@@ -155,6 +162,10 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
                 this.getWidth(doc, width),
                 height
             );
+            let add = doc.getTextDimensions(v, {fontSize: 11}).h * (breaked.count - 1);
+            let m = Math.pow(1.25, (breaked.count - 1));
+            height += add * m;
+            newHeight += add * m;
         });
         newWidth += hightestWidth;
 
@@ -169,6 +180,55 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
         return {
             width: newWidth,
             height: newHeight
+        };
+    }
+
+    private breakStringByLength(v: string) {
+        let splitLength = 39;
+        let splitO = v.split(" ");
+        let splitted = [];
+
+        let a = [];
+        let l = 0;
+        let longest = "";
+
+        console.log(" ");
+        console.log(v);
+
+        for (const el of splitO) {
+            l += el.length + 1;
+            a.push(el);
+
+            console.log(l, el);
+
+            if (l > splitLength) {
+                splitted.push([...a]);
+
+                if (a.join(" ").length > longest.length) {
+                    longest = a.join(" ");
+                }
+
+                a = [];
+                l = 0;
+            }
+        }
+        if (a.length > 0) {
+            splitted.push(a);
+        }
+        if (longest === "") {
+            longest = v;
+        }
+        console.log({
+            splitted: splitted,
+            value: splitted.map(i => i.join(" ") + "\n").join(" "),
+            longest: longest,
+            count: splitted.length
+        });
+
+        return {
+            value: splitted.map(i => i.join(" ") + "\n").join(" "),
+            longest: longest,
+            count: splitted.length
         };
     }
 }

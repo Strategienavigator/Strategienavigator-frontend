@@ -65,8 +65,12 @@ abstract class PDFExporter<D> extends Exporter<D> {
         this.height += padding;
     }
 
-    protected CalculateTextHeight(doc: jsPDF, text: string, fontSize?: number) {
-        this.height += doc.getTextDimensions(text, {fontSize: fontSize ?? this.fontSize}).h;
+    protected CalculateTextHeight(doc: jsPDF, text: string, fontSize?: number, multiply?: number) {
+        let add = doc.getTextDimensions(text, {fontSize: fontSize ?? this.fontSize}).h;
+        if (multiply) {
+            add *= multiply;
+        }
+        this.height += add;
         return this.height;
     }
 

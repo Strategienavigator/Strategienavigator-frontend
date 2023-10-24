@@ -53,7 +53,7 @@ class TestSubstepsComponent extends Step<TestAnalysisValues, TestSubstepsCompone
                             }}
                         />
 
-                        <UIErrorBanner id={"rating.empty"} />
+                        <UIErrorBanner id={"rating.empty"}/>
                     </FormGroup>
                 </>
             );

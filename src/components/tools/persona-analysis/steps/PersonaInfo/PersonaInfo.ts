@@ -7,21 +7,15 @@ import {UIError} from "../../../../../general-components/Error/UIErrors/UIError"
 import React from "react";
 import {PersonaInfoComponent} from "./PersonaInfoComponent";
 import {PersonaAnalysisValues} from "../../PersonaAnalysis";
-import {isCardComponentTooLong} from "../../../../../general-components/CardComponent/CardComponent";
 import {ResourcesType} from "../../../../../general-components/Tool/ToolSavePage/ToolSavePage";
 import {validateFile} from "../../../../../general-components/Tool/Resources";
 
 
 export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepDataHandler<PersonaAnalysisValues> {
-
     static FIRST_NAME_MAX_LENGTH = 100;
-    static LAST_NAME_MAX_LENGTH = PersonaInfo.FIRST_NAME_MAX_LENGTH;
 
     static AGE_MIN = 0;
     static AGE_MAX = 150;
-
-    static INCOME_MIN = 0;
-    static INCOME_MAX = 10000000;
 
     form: React.FunctionComponent<StepProp<PersonaAnalysisValues>> | React.ComponentClass<StepProp<PersonaAnalysisValues>>;
     id: string;
@@ -40,10 +34,7 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => {
         data["persona-info"] = {
             "firstname": null,
-            "age": null,
-            "income": null,
-            "family": [],
-            "familystatus": 0
+            "age": null
         };
         return data;
     }
@@ -105,23 +96,6 @@ export class PersonaInfo implements StepDefinition<PersonaAnalysisValues>, StepD
             errors.push({
                 id: "age.invalid",
                 message: `Bitte geben Sie eine Zahl zwischen ${PersonaInfo.AGE_MIN} und ${PersonaInfo.AGE_MAX} an!`,
-                level: "error"
-            });
-        }
-
-        // Einkommen
-        if (d?.income !== null && d?.income !== undefined && (d?.income === -1 || (d?.income < PersonaInfo.INCOME_MIN || d?.income > PersonaInfo.INCOME_MAX))) {
-            errors.push({
-                id: "income.invalid",
-                message: `Bitte geben Sie ein Einkommen zwischen ${PersonaInfo.INCOME_MIN} € und ${PersonaInfo.INCOME_MAX} € an!`,
-                level: "error"
-            });
-        }
-
-        if (isCardComponentTooLong(d?.family)) {
-            errors.push({
-                id: "family.length",
-                message: "Der Text in einigen Feldern ist zu lang!",
                 level: "error"
             });
         }

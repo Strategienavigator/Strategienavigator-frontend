@@ -80,17 +80,27 @@
     }
   }
 
-  .info-element {
-    margin-bottom: 1rem;
+  // flex
+  .items {
+    column-gap: 1.5rem;
+    columns: 2;
+    column-fill: balance;
 
-    .name {
-      font-weight: 600;
-      font-size: 12.5pt;
-      margin-bottom: 0.35rem;
+    .avatar-item {
+      position: static;
     }
 
-    .list-group-item {
-      padding: 0.35rem 0.5rem;
+    .item {
+      display: inline-block;
+      width: 100%;
+      direction: ltr;
+      text-align: left;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .items {
+      column-count: 1;
     }
   }
 }
