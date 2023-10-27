@@ -51,7 +51,7 @@ abstract class ExcelExporter<D> extends Exporter<D> {
             type: "array",
             Props: {
                 Title: data.name,
-                Author: "Strategietools",
+                Author: "Strategienavigator",
             },
             cellStyles: true,
         });

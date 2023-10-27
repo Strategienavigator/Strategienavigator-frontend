@@ -71,7 +71,7 @@ export class AboutUs extends Component<any, any> {
             <p>
                 <h3>Historie</h3>
                 Der CRM-Navigator wurde 2007 als Open-Source-Software von Prof. Gündling initiert und 2008/09 um
-                Strategietools erweitert. Rico Meiner verantwortet die technische und organisatorische Umsetzung.
+                Strategienavigator erweitert. Rico Meiner verantwortet die technische und organisatorische Umsetzung.
             </p>
             <p>
                 <h3>Motivation</h3>
@@ -109,11 +109,11 @@ export class AboutUs extends Component<any, any> {
 
 
             <h3>Links</h3>
-            <p><a href="https://github.com/ricom/toolbox-frontend" rel="noreferrer" target="_blank">Frontend
+            <p><a href="https://github.com/ricom/Strategienavigator-frontend" rel="noreferrer" target="_blank">Frontend
                 Repository</a></p>
-            <p><a href="https://github.com/ricom/toolbox-backend" rel="noreferrer" target="_blank">Backend
+            <p><a href="https://github.com/ricom/Strategienavigator-backend" rel="noreferrer" target="_blank">Backend
                 Repository</a></p>
-            <p><a href="https://trello.com/b/3LQKqFb4/projekt-strategietools" rel="noreferrer"
+            <p><a href="https://trello.com/b/3LQKqFb4/strategienavigator" rel="noreferrer"
                   target="_blank">Kanbanboard</a></p>
 
             <p>Version: <span className={"text-muted"}> {process.env.REACT_APP_VERSION}</span></p>
