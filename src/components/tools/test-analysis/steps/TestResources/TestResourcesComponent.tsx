@@ -21,6 +21,15 @@ class TestResourcesComponent extends Step<TestAnalysisValues, TestResourcesCompo
         }
     }
 
+    componentDidMount = async () => {
+        let text = await this.props.resourceManager.getText("json");
+        if (text !== null) {
+            this.setState({
+                jsonData: text
+            });
+        }
+    }
+
     protected build(): JSX.Element {
         let excelURL = this.props.resourceManager.getBlobURL("excel");
         let pictureURL = this.props.resourceManager.getBlobURL("picture");

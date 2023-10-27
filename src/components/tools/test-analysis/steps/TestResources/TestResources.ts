@@ -92,7 +92,7 @@ class TestResources implements StepDefinition<TestAnalysisValues>, StepDataHandl
         }
 
         // Json
-        let jfile = resources.get("excel");
+        let jfile = resources.get("json");
         let jfileVal = validateFile(jfile?.file, {
             size: 1000,
             type: ["application/json"]

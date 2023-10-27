@@ -1,8 +1,7 @@
 import {APIArgs, callAPI} from "../API";
-import {PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
+import {ImportJSONData, PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
 import {Patch} from "immer";
-import {ResourcesType, SingleResource} from "../../Tool/ToolSavePage/ToolSavePage";
-import {forEach} from "react-bootstrap/ElementChildren";
+import {ResourcesType} from "../../Tool/ToolSavePage/ToolSavePage";
 
 
 export interface GetSavesArguments {
@@ -191,11 +190,45 @@ const lockSave = async (saveID: number, lock: boolean, apiArgs?: APIArgs) => {
 /**
  * Erstellt einen neuen Save
  *
+ * @param name
+ * @param description
+ * @param tool_id
  * @param data Daten des Save
+ * @param resources
  * @param apiArgs API Argumente
  */
-const createSave = async <D extends unknown>(data: FormData, apiArgs?: APIArgs) => {
-    return await callAPI<SaveResource<D>>("api/saves", "POST", data, true, apiArgs);
+const createSave = async <D extends object>(
+    name: string,
+    description: string,
+    tool_id: number,
+    data: D,
+    resources: ImportJSONData[],
+    apiArgs?: APIArgs
+) => {
+    let formData = new FormData();
+    formData.set("name", name);
+    formData.set("description", description);
+    formData.set("tool_id", tool_id.toString());
+    formData.set("data", JSON.stringify(data));
+
+    // Ressourcen
+    let i = 0;
+    for (const resource of resources) {
+        let res = await fetch(resource.file);
+        let blob = new File(
+            [new Uint8Array(await res.arrayBuffer())],
+            resource.name,
+            {
+                type: resource.type
+            }
+        );
+
+        formData.set(`resources[${i}][name]`, resource.name);
+        formData.set(`resources[${i}][file]`, blob);
+        i++;
+    }
+
+    return await callAPI<SaveResource<D>>("api/saves", "POST", formData, true, apiArgs);
 }
 
 export {

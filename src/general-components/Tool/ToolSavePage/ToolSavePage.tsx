@@ -62,10 +62,15 @@ export interface ResourceManager {
     onChanged: (name: string, file: File) => void,
     hasResource: (name: string) => boolean,
     getData: (name: string) => Blob | null,
+    getText: (name: string) => Promise<string | null>,
     getBlobURL: (name: string) => string | null
 }
 
-export type SingleResource = { file: File, url: string, changed: boolean };
+export type SingleResource = {
+    file: File,
+    url: string,
+    changed: boolean
+};
 export type ResourcesType = Map<string, SingleResource>;
 
 class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
@@ -101,6 +106,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             onChanged: this.resourceChanged.bind(this),
             hasResource: this.hasResource.bind(this),
             getData: this.getResourceData.bind(this),
+            getText: this.getResourceText.bind(this),
             getBlobURL: this.getBlobURL.bind(this)
         }
     }
@@ -363,6 +369,14 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         return null;
     }
 
+    private getResourceText = async (name: string): Promise<string | null> => {
+        let res = this.resources.get(name);
+        if (res) {
+            return await res.file.text();
+        }
+        return null;
+    }
+
     private getBlobURL = (name: string): string | null => {
         let res = this.resources.get(name);
         if (res) {
@@ -503,7 +517,15 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                     let res = await getSaveResource(save, resource.name, {errorCallback: this.onAPIError});
                     if (res !== null && res.success) {
                         let blob = res.callData;
-                        let file = new File([blob], resource.name, {type: blob.type});
+                        let put: string | Blob = "";
+                        if (blob instanceof Blob) {
+                            put = blob;
+                        } else {
+                            put = JSON.stringify(blob, null, 2);
+                        }
+                        let file = new File([put], resource.name, {
+                            type: res.response.headers.get("Content-Type") ?? ((blob instanceof Blob) ? blob.type : "")
+                        });
                         this.resources.set(resource.name, {
                             file: file,
                             url: URL.createObjectURL(file),

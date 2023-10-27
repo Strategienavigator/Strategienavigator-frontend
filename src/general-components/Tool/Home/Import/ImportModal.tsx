@@ -163,24 +163,28 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
 
                     try {
                         await importer.onImport(content);
+                        let data = JSON.parse(content);
 
-                        let data = new FormData();
-                        data.set("name", name);
-                        data.set("description", description);
-                        data.set("tool_id", this.props.tool.getID().toString());
-                        data.set("data", content);
-                        let saved = await createSave(data);
+                        let saved = await createSave(
+                            name,
+                            description,
+                            this.props.tool.getID(),
+                            data,
+                            data["export-resources"] ?? []
+                        );
 
                         if (saved == null || !saved?.success) {
                             throw new JSONImporterError("Fehler beim Speichern! Bitte versuchen Sie es später erneut.");
                         } else {
                             this.props.onSuccess(saved.callData);
                         }
-                    } catch (e) {
+                    } catch (e: any) {
                         if (e instanceof JSONImporterError) {
                             this.setState({
                                 error: e.message
                             });
+                        } else {
+                            console.error("Bitte überprüfen Sie die TypeSuits!: " + e.message);
                         }
                     }
                 } else {
