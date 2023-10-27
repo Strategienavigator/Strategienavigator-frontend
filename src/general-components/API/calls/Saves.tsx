@@ -1,6 +1,8 @@
 import {APIArgs, callAPI} from "../API";
 import {PaginationResource, SaveResource, SimpleSaveResource} from "../../Datastructures";
 import {Patch} from "immer";
+import {ResourcesType, SingleResource} from "../../Tool/ToolSavePage/ToolSavePage";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 
 export interface GetSavesArguments {
@@ -116,19 +118,27 @@ const deleteSave = async (saveID: number, apiArgs?: APIArgs) => {
  * @param resources
  * @param apiArgs API Argumente
  */
-const updateSave = async (save: SaveResource<any>, resources?: File[], apiArgs?: APIArgs) => {
+const updateSave = async (save: SaveResource<any>, resources?: ResourcesType, apiArgs?: APIArgs) => {
     let data = new FormData();
     data.append("data", JSON.stringify(save.data));
     data.append("name", save.name as string);
     data.append("description", save.description as string);
+
     if (resources) {
-        for (let i = 0; i < resources.length; i++) {
-            data.append("resources", resources[i]);
+        let i = 0;
+        for (let entry of Array.from(resources.entries())) {
+            let name = entry[0];
+            let value = entry[1];
+
+            data.append(`resources[${i}][name]`, name);
+            if (value.changed) {
+                data.append(`resources[${i}][file]`, value.file);
+            }
+
+            i++;
         }
     }
-    const saveID = save.id;
-
-    return await updateSaveData(saveID, data, apiArgs);
+    return await updateSaveData(save.id, data, apiArgs);
 }
 
 /**

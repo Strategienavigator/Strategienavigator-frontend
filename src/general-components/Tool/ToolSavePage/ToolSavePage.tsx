@@ -65,7 +65,8 @@ export interface ResourceManager {
     getBlobURL: (name: string) => string | null
 }
 
-export type ResourcesType = Map<string, { file: File, url: string }>;
+export type SingleResource = { file: File, url: string, changed: boolean };
+export type ResourcesType = Map<string, SingleResource>;
 
 class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
 
@@ -349,7 +350,8 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     private resourceChanged = (name: string, file: File) => {
         this.resources.set(name, {
             file: file,
-            url: URL.createObjectURL(file)
+            url: URL.createObjectURL(file),
+            changed: true
         });
     }
 
@@ -381,7 +383,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             // saveData.append("tool_id", String(save.tool_id)); no need to send tool_id because it is immutable
             const call = await updateSave(
                 this.state.save!,
-                this.resourcesMapToFileArray(this.resources),
+                this.resources,
                 {
                     errorCallback: this.onAPIError
                 }
@@ -504,7 +506,8 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                         let file = new File([blob], resource.name, {type: blob.type});
                         this.resources.set(resource.name, {
                             file: file,
-                            url: URL.createObjectURL(file)
+                            url: URL.createObjectURL(file),
+                            changed: false
                         });
                     }
                 }
