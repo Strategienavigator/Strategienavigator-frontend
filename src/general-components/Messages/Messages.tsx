@@ -62,6 +62,12 @@ class Messages extends Component<MessagesProps, any> {
         reload_app();
     }
 
+    static addWithProps(values: SingleMessageProps) {
+        Messages.messages.push(<SingleMessage key={Messages.messages.length} content={values.content} type={values.type}
+                                              timer={values.timer}/>);
+        reload_app();
+    }
+
     render = () => {
         return (
             <div style={this.props.style}

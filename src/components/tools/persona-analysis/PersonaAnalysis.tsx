@@ -11,7 +11,7 @@ import {PersonaPersonalityValues} from "./steps/PersonaPersonality/PersonaPerson
 import {PersonaPersonality} from "./steps/PersonaPersonality/PersonaPersonality";
 import {PersonaSummaryValues} from "./steps/PersonaSummary/PersonaSummaryComponent";
 import {PersonaSummary} from "./steps/PersonaSummary/PersonaSummary";
-
+import {PersonaPDFExporter} from "./export/PersonaPDFExporter";
 
 interface PersonaAnalysisValues {
     "persona-info"?: PersonaInfoValues,
@@ -25,6 +25,7 @@ class PersonaAnalysis extends SteppableTool<PersonaAnalysisValues> {
         super(props, context, "Persona Analyse", faUserCircle, 6);
 
         this.addExporter(new JSONExporter());
+        this.addExporter(new PersonaPDFExporter());
         this.setImporter(new PersonaJSONImporter());
 
         this.addStep(new PersonaInfo());

@@ -23,6 +23,7 @@
     "buffer": "^6.0.3",
     "file-saver": "^2.0.5",
     "immer": "^9.0.12",
+    "jspdf": "^2.5.1",
     "laravel-echo": "^1.13.1",
     "node-sass": "^9.0.0",
     "popper.js": "^1.16.1",

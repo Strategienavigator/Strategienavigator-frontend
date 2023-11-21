@@ -1,6 +1,11 @@
 import React, {ChangeEvent, PureComponent} from "react";
 import "./card-component-with-name.scss";
-import {CardComponent, CardComponentFields, isCardComponentFilled} from "./CardComponent";
+import {
+    CardComponent,
+    CardComponentFieldPlaceholder,
+    CardComponentFields,
+    isCardComponentFilled
+} from "./CardComponent";
 import FAE from "../Icons/FAE";
 import {faPlus, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {Button, Card as BootstrapCard, Form, InputGroup} from "react-bootstrap";
@@ -20,7 +25,8 @@ export interface CardComponentControlProps {
     min: number,
     max: number,
     hideDesc: boolean,
-    counter?: CounterInterface
+    counter?: CounterInterface,
+    placeholder?: CardComponentFieldPlaceholder
 }
 
 export interface CardComponentWithNameProps<D = any> {
@@ -76,6 +82,7 @@ class CardComponentWithName<D extends object> extends PureComponent<CardComponen
                                     hideDesc={this.props.cardComponent.hideDesc}
                                     disabled={this.props.disabled}
                                     counter={this.props.cardComponent.counter}
+                                    placeholder={this.props.cardComponent.placeholder}
                                     onChanged={(values) => {
                                         this.registerUpdate(index, data.name, values);
                                     }}

@@ -8,11 +8,14 @@ export const PersonaPersonalityValues = t.iface([], {
     "fields": t.iface([], {
         "demograph": "CardComponentFields",
         "pains": "CardComponentFields",
-        "gains": "CardComponentFields",
-        "statements": "CardComponentFields",
-        "motives": "CardComponentFields"
+        "gains": "CardComponentFields"
     }),
     "individual": "CardComponentFieldsWithName",
+    "fieldsElse": t.iface([], {
+        "statements": "CardComponentFields",
+        "motives": "CardComponentFields",
+        "keywords": "CardComponentFields"
+    })
 });
 
 const PersonaPersonality_ts: t.ITypeSuite = {
