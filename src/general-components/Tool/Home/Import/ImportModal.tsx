@@ -165,12 +165,15 @@ class ImportModal extends Component<ImportModalProps, ImportModalState> {
                         await importer.onImport(content);
                         let data = JSON.parse(content);
 
+                        let resources = data["export-resources"] ?? [];
+                        delete data["export-resources"];
+
                         let saved = await createSave(
                             name,
                             description,
                             this.props.tool.getID(),
                             data,
-                            data["export-resources"] ?? []
+                            resources
                         );
 
                         if (saved == null || !saved?.success) {
