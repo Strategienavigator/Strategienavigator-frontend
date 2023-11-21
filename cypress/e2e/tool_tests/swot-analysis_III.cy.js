@@ -1,6 +1,6 @@
 describe('SWOT Analyisis Part III', () => {
     beforeEach(() => {
-        cy.task("queryDb", `DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
+        cy.task("queryDb", `DELETE FROM strategienavigator.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
 
     })
     it('trys to classify the steps', () => {

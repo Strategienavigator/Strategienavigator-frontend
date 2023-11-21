@@ -96,7 +96,7 @@ Cypress.Commands.add('CreateSave', (saveSlot, name, tool_id, owner_id = 1) => {
         this.SaveData = SaveData
         var save = JSON.stringify(SaveData)
         cy.task("queryDb",
-            `INSERT INTO toolbox.saves
+            `INSERT INTO strategienavigator.saves
         (data, name, tool_id, owner_id, description)
         VALUES
         ('` + save + `',
