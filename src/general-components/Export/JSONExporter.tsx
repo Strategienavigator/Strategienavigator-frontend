@@ -24,7 +24,7 @@ class JSONExporter<D> extends Exporter<D> {
             });
         }
 
-        return [JSON.stringify(Object.assign(Object.assign({}, data.data), {
+        return [JSON.stringify(Object.assign({}, data.data, {
             "export-resources": allResources
         }), null, 4)];
     }
