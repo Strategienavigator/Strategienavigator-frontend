@@ -62,10 +62,16 @@ export interface ResourceManager {
     onChanged: (name: string, file: File) => void,
     hasResource: (name: string) => boolean,
     getData: (name: string) => Blob | null,
+    getText: (name: string) => Promise<string | null>,
     getBlobURL: (name: string) => string | null
 }
 
-export type ResourcesType = Map<string, { file: File, url: string }>;
+export type SingleResource = {
+    file: File,
+    url: string,
+    changed: boolean
+};
+export type ResourcesType = Map<string, SingleResource>;
 
 class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & RouteComponentProps<any>, ToolSavePageState<D>> {
 
@@ -100,6 +106,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             onChanged: this.resourceChanged.bind(this),
             hasResource: this.hasResource.bind(this),
             getData: this.getResourceData.bind(this),
+            getText: this.getResourceText.bind(this),
             getBlobURL: this.getBlobURL.bind(this)
         }
     }
@@ -349,7 +356,8 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     private resourceChanged = (name: string, file: File) => {
         this.resources.set(name, {
             file: file,
-            url: URL.createObjectURL(file)
+            url: URL.createObjectURL(file),
+            changed: true
         });
     }
 
@@ -357,6 +365,14 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         let res = this.resources.get(name);
         if (res) {
             return res.file;
+        }
+        return null;
+    }
+
+    private getResourceText = async (name: string): Promise<string | null> => {
+        let res = this.resources.get(name);
+        if (res) {
+            return await res.file.text();
         }
         return null;
     }
@@ -381,7 +397,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             // saveData.append("tool_id", String(save.tool_id)); no need to send tool_id because it is immutable
             const call = await updateSave(
                 this.state.save!,
-                this.resourcesMapToFileArray(this.resources),
+                this.resources,
                 {
                     errorCallback: this.onAPIError
                 }
@@ -501,10 +517,19 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                     let res = await getSaveResource(save, resource.name, {errorCallback: this.onAPIError});
                     if (res !== null && res.success) {
                         let blob = res.callData;
-                        let file = new File([blob], resource.name, {type: blob.type});
+                        let put: string | Blob = "";
+                        if (blob instanceof Blob) {
+                            put = blob;
+                        } else {
+                            put = JSON.stringify(blob, null, 2);
+                        }
+                        let file = new File([put], resource.name, {
+                            type: res.response.headers.get("Content-Type") ?? ((blob instanceof Blob) ? blob.type : "")
+                        });
                         this.resources.set(resource.name, {
                             file: file,
-                            url: URL.createObjectURL(file)
+                            url: URL.createObjectURL(file),
+                            changed: false
                         });
                     }
                 }

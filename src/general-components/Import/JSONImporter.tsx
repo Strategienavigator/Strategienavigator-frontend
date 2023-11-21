@@ -9,9 +9,7 @@ export class JSONImporterError extends Error {
     }
 }
 
-/**
- *
- */
+
 abstract class JSONImporter {
     /**
      * Wird aufgerufen wenn der Import beginnen soll.
@@ -30,6 +28,8 @@ abstract class JSONImporter {
             } else {
                 throw e;
             }
+        } finally {
+            console.log("Validation überlegt!");
         }
     }
 

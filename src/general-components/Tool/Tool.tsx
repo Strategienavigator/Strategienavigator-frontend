@@ -194,14 +194,14 @@ abstract class Tool<D extends object> extends Component<RouteComponentProps<{}>,
             isCreatingNewSave: true
         });
 
-        let data = new FormData();
+        let saved = await createSave(
+            name,
+            description,
+            this.getID(),
+            this.getInitData(),
+            []
+        );
 
-        data.set("name", name);
-        data.set("description", description);
-        data.set("tool_id", this.getID().toString());
-        data.set("data", JSON.stringify(this.getInitData()));
-
-        let saved = await createSave(data);
         if (saved) {
             this.setState({
                 isCreatingNewSave: false

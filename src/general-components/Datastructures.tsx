@@ -459,3 +459,16 @@ export interface CaptchaResponse {
      */
     img: string
 }
+
+export interface ImportJSONDataInterface {
+    /**
+     * Enthalten alle Export-Resourcen beim JSON-Export mit name und Blob
+     */
+    "export-resources": ImportJSONData[]
+}
+
+export type ImportJSONData = {
+    file: string,
+    name: string,
+    type: string
+};
