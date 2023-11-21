@@ -7,7 +7,7 @@ describe('Checking Profile', () => {
         cy.task("bcrypt", password).then(function (hashword) {
             this.hashword = hashword
             cy.task("queryDb",
-                `UPDATE toolbox.users
+                `UPDATE strategienavigator.users
             SET username = "test_user", email = "` + email + `", password = "` + hashword + `"
             WHERE id = 1;`)
         })

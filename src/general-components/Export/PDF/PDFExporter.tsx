@@ -57,7 +57,7 @@ abstract class PDFExporter<D> extends Exporter<D> {
         return [doc.output("blob")];
     }
 
-    protected CalculateImageHeight(doc: jsPDF) {
+    protected calculateImageHeight(doc: jsPDF) {
         return this.height;
     }
 
@@ -65,7 +65,7 @@ abstract class PDFExporter<D> extends Exporter<D> {
         this.height += padding;
     }
 
-    protected CalculateTextHeight(doc: jsPDF, text: string, fontSize?: number, multiply?: number) {
+    protected calculateTextHeight(doc: jsPDF, text: string, fontSize?: number, multiply?: number) {
         let add = doc.getTextDimensions(text, {fontSize: fontSize ?? this.fontSize}).h;
         if (multiply) {
             add *= multiply;

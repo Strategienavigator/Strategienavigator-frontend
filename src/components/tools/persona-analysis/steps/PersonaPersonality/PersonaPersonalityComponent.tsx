@@ -176,7 +176,7 @@ export class PersonaPersonalityComponent extends Step<PersonaAnalysisValues, {}>
                         }}
                     />
 
-                    <h1 className={"mt-4"}>Sonstige Kategorien</h1>
+                    <h1 className={"mt-4"}>Weitere Kategorien</h1>
                     {this.renderItems(this.itemsElse, data.fieldsElse)}
                 </>
             );

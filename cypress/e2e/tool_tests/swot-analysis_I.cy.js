@@ -44,7 +44,7 @@ describe('SWOT Analyisis Part I', () => {
             })
         cy.log("new SWOT created and saved for anonymous")
         cy.log("Removing DB entry for testing purposes")
-        cy.task("queryDb", `DELETE FROM toolbox.saves WHERE name="TEST-SWOT";`);
+        cy.task("queryDb", `DELETE FROM strategienavigator.saves WHERE name="TEST-SWOT";`);
     })
     
     it('trys to create a new SWOT as max@test.test', () => {

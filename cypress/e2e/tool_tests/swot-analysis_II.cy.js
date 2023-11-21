@@ -1,7 +1,7 @@
 var testIndex = 0
 describe('SWOT Analyisis Part II', () => {
     beforeEach(() => {
-        cy.task("queryDb", `DELETE FROM toolbox.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
+        cy.task("queryDb", `DELETE FROM strategienavigator.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
         cy.CreateSave("swot-1", "TEST-SWOT VON MAX", 2)
     })
     it('trys to load save and create action steps', () => {

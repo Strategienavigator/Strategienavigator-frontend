@@ -54,8 +54,9 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
 
         if (d) {
             let names = Object.assign(
-                Object.fromEntries(Object.entries(d?.fields)),
-                Object.fromEntries(Object.entries(d?.fieldsElse))
+                {},
+                d?.fields,
+                d?.fieldsElse
             );
 
             // Fields

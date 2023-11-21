@@ -49,7 +49,7 @@ Konfigurationen können in der cypress.json vorgenommen werden. Dort finden wir 
     "DB_PASSWORD": "",
     "DB_PORT": 3306,
     "SMTP_PORT": 7777,
-    "BACKEND_URL": "http://localhost/toolbox-backend/public/",
+    "BACKEND_URL": "http://localhost/Strategienavigator-backend/public/",
     "APP_CLIENT_ID": 2,
     "APP_CLIENT_SECRET": "ytr2ITFQRMCvez8CVFnK9oEzy5QvZb7vAz49eYaO",
     "TEST_LOGIN_USERNAME": "max@test.test",
