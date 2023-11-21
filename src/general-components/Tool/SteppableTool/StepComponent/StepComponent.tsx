@@ -335,8 +335,8 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             if (validated) {
                 // force for performance reasons (no duplicate check of validation)
                 this.nextSubStep(true);
-                return;
             }
+            return;
         }
 
         const validated = this.validateStep(this.state.currentStep);
@@ -367,10 +367,13 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
     }
 
     private onExport = (exporter: Exporter<D>) => {
-        exporter.export(this.props.save);
-
-        this.setState({
-            showExportModal: false
+        exporter.export(
+            this.props.save,
+            this.props.resourceManager.resources
+        ).then(() => {
+            this.setState({
+                showExportModal: false
+            });
         });
     }
 

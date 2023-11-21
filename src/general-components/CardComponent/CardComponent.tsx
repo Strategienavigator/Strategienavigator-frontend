@@ -72,19 +72,22 @@ class CardComponent<D extends object> extends PureComponent<CardComponentProps<D
 
         return this.props.values.map((value, index) => {
             return (
-                <Card<D> id={value.id}
-                         key={value.id + "-" + index}
-                         name={this.props.name}
-                         value={value.name}
-                         desc={value.desc}
-                         disabled={this.props.disabled}
-                         required={required}
-                         index={index}
-                         hideDesc={this.props.hideDesc ?? false}
-                         onDelete={this.removeCard.bind(this, index)}
-                         onChange={this.cardUpdatedListener}
-                         customDescValues={value.extra}
-                         customDescs={this.props.customDescriptions}/>
+                <Card<D>
+                    id={value.id}
+                    key={value.id + "-" + index}
+                    name={this.props.name}
+                    value={value.name}
+                    desc={value.desc}
+                    disabled={this.props.disabled}
+                    required={required}
+                    index={index}
+                    hideDesc={this.props.hideDesc ?? false}
+                    onDelete={this.removeCard.bind(this, index)}
+                    onChange={this.cardUpdatedListener}
+                    customDescValues={value.extra}
+                    customDescs={this.props.customDescriptions}
+                    placeholder={this.props.placeholder}
+                />
             );
         });
     }

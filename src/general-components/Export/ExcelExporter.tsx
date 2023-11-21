@@ -1,6 +1,7 @@
 import {Exporter} from "./Exporter";
 import {SaveResource} from "../Datastructures";
 import XLSX, {BookType, CellObject, CellStyle, WorkBook, WorkSheet} from "xlsx-js-style";
+import {SingleMessageProps} from "../Messages/Messages";
 
 
 abstract class ExcelExporter<D> extends Exporter<D> {
@@ -35,11 +36,15 @@ abstract class ExcelExporter<D> extends Exporter<D> {
         return parseInt(row.substr(1, row.length));
     }
 
+    public validateExport(data: SaveResource<D>): SingleMessageProps[] {
+        return [];
+    }
+
     protected isFilled = <D extends object>(o?: D): o is D => {
         return o !== undefined && Object.keys(o).length > 0;
     }
 
-    protected onExport(data: SaveResource<D>): BlobPart[] {
+    protected async onExport(data: SaveResource<D>): Promise<BlobPart[]> {
         // create new workbook
         this.workbook = XLSX.utils.book_new();
 

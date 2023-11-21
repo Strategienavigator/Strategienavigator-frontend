@@ -9,7 +9,8 @@ import "./persona-info-item.scss";
 export interface PersonaInfoItemProps {
     title: string,
     icon?: IconDefinition,
-    items: CardComponentFields
+    items: CardComponentFields,
+    className?: string
 }
 
 function PersonaInfoItem(props: PersonaInfoItemProps) {
@@ -18,7 +19,7 @@ function PersonaInfoItem(props: PersonaInfoItemProps) {
     }
 
     return (
-        <div className={"info-container"}>
+        <div className={"info-container" + (props.className !== undefined ? ` ${props.className}` : "")}>
             <div className={"title"}>
                 {props.icon && (
                     <>
@@ -32,7 +33,11 @@ function PersonaInfoItem(props: PersonaInfoItemProps) {
                     {props.items.map((item, i) => {
                         return (
                             <ListGroupItem key={props.title + "-item-" + i}>
-                                {item.name}
+                                {item.name}{item.desc !== "" && (
+                                <>
+                                    : {item.desc}
+                                </>
+                            )}
                             </ListGroupItem>
                         );
                     })}

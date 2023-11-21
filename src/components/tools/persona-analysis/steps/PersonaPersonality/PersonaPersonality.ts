@@ -26,34 +26,6 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
     extraWindow: ExtraWindowDefinition<PersonaAnalysisValues>;
     dataHandler: StepDataHandler<PersonaAnalysisValues>;
 
-    private properties = [
-        {
-            name: "demograph",
-            min: PersonaPersonalityComponent.MIN_DEMO,
-            max: PersonaPersonalityComponent.MAX_DEMO,
-        },
-        {
-            name: "pains",
-            min: PersonaPersonalityComponent.MIN_PAINS,
-            max: PersonaPersonalityComponent.MAX_PAINS,
-        },
-        {
-            name: "gains",
-            min: PersonaPersonalityComponent.MIN_GAINS,
-            max: PersonaPersonalityComponent.MAX_GAINS,
-        },
-        {
-            name: "statements",
-            min: PersonaPersonalityComponent.MIN_STATEMENTS,
-            max: PersonaPersonalityComponent.MAX_STATEMENTS,
-        },
-        {
-            name: "motives",
-            min: PersonaPersonalityComponent.MIN_MOTIVES,
-            max: PersonaPersonalityComponent.MAX_MOTIVES,
-        }
-    ];
-
     constructor() {
         this.id = "persona-personality";
         this.title = "2. Personalität kreieren";
@@ -68,28 +40,7 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
     isUnlocked = (data: PersonaAnalysisValues): boolean => data["persona-personality"] !== undefined;
 
     fillFromPreviousValues = (data: PersonaAnalysisValues): PersonaAnalysisValues => {
-        let d = this.properties.map((i) => i.name).reduce((a, v) => ({...a, [v]: []}), {}) as PersonaPersonalityValues;
-
-        d.fields = {
-            demograph: [],
-            pains: [],
-            gains: [],
-            statements: [],
-            motives: []
-        };
-
-        // generiere leere zeilen für min werte
-        for (const item of this.properties) {
-            for (let i = 0; i < item.min; i++) {
-                d.fields[item.name].push({
-                    name: "",
-                    desc: "",
-                    id: PersonaPersonalityComponent.COUNTER.get(i + 1)
-                });
-            }
-        }
-        d.individual = [];
-        data["persona-personality"] = d;
+        data["persona-personality"] = this.getDefault();
         return data;
     };
 
@@ -99,14 +50,19 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
 
     validateData = (data: PersonaAnalysisValues): UIError[] => {
         let errors = Array<UIError>();
-        let names = this.properties.map((item) => item.name);
         let d = data["persona-personality"];
 
         if (d) {
+            let names = Object.assign(
+                {},
+                d?.fields,
+                d?.fieldsElse
+            );
+
             // Fields
-            for (const name of names) {
+            for (const [name, values] of Object.entries(names)) {
                 // empty
-                if (!isCardComponentFilled(d.fields[name], false)) {
+                if (!isCardComponentFilled(values, false)) {
                     errors.push({
                         id: `${name}.empty`,
                         message: "Bitte füllen Sie alle Felder aus!",
@@ -115,7 +71,7 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
                 }
 
                 // too long
-                if (isCardComponentTooLong(d.fields[name])) {
+                if (isCardComponentTooLong(values)) {
                     errors.push({
                         id: `${name}.toolong`,
                         message: "Einige Feld sind zu Lang!",
@@ -127,8 +83,23 @@ export class PersonaPersonality implements StepDefinition<PersonaAnalysisValues>
             // Individuell
             validateCardComponentWithNameFilled(d.individual, "individual", errors);
         }
-
         return errors;
+    }
+
+    private getDefault = (): PersonaPersonalityValues => {
+        return {
+            fields: {
+                demograph: [],
+                pains: [],
+                gains: []
+            },
+            individual: [],
+            fieldsElse: {
+                statements: [],
+                motives: [],
+                keywords: []
+            }
+        };
     }
 
 
