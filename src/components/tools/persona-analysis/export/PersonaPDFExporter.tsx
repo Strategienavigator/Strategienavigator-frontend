@@ -26,7 +26,7 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
             height: avatarSizes.height,
             format: "JPEG",
             x: this.getWidth(doc, 0),
-            y: this.CalculateImageHeight(doc)
+            y: this.calculateImageHeight(doc)
         });
 
         let padding = 4.5;
@@ -111,7 +111,7 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
             height = useHeight + doc.getTextDimensions(v, {fontSize: 13}).h;
             newHeight = doc.getTextDimensions(v, {fontSize: 13}).h;
         } else {
-            height = this.CalculateTextHeight(doc, v, 13);
+            height = this.calculateTextHeight(doc, v, 13);
             newHeight = height;
         }
 
@@ -149,7 +149,7 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
                 height += add;
                 newHeight += add;
             } else {
-                height = this.CalculateTextHeight(doc, v, 11);
+                height = this.calculateTextHeight(doc, v, 11);
             }
 
             if (breaked.longest.length > lastLength) {
@@ -192,14 +192,9 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
         let l = 0;
         let longest = "";
 
-        console.log(" ");
-        console.log(v);
-
         for (const el of splitO) {
             l += el.length + 1;
             a.push(el);
-
-            console.log(l, el);
 
             if (l > splitLength) {
                 splitted.push([...a]);
@@ -218,12 +213,12 @@ class PersonaPDFExporter extends PDFExporter<PersonaAnalysisValues> {
         if (longest === "") {
             longest = v;
         }
-        console.log({
-            splitted: splitted,
-            value: splitted.map(i => i.join(" ") + "\n").join(" "),
-            longest: longest,
-            count: splitted.length
-        });
+        // console.log({
+        //     splitted: splitted,
+        //     value: splitted.map(i => i.join(" ") + "\n").join(" "),
+        //     longest: longest,
+        //     count: splitted.length
+        // });
 
         return {
             value: splitted.map(i => i.join(" ") + "\n").join(" "),
