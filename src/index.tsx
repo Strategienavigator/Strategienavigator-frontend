@@ -26,7 +26,6 @@ import {ControlFooter} from "./general-components/ControlFooter/ControlFooter";
 import {EmailVerification} from "./components/platform/verifications/EMail/EmailVerification";
 import {PasswordReset} from "./components/platform/verifications/PasswordReset/PasswordReset";
 import {SWOTAnalysis} from "./components/tools/swot-analysis/SWOTAnalysis";
-import {ABCAnalysis} from "./components/tools/abc-analysis/ABCAnalysis";
 import {PairwiseComparison} from "./components/tools/pairwise-comparison/PairwiseComparison";
 import {PortfolioAnalysis} from "./components/tools/portfolio-analysis/PortfolioAnalysis";
 import {UtilityAnalysis} from "./components/tools/utility-analysis/UtilityAnalysis";
@@ -73,7 +72,6 @@ const getRouterSwitch = () => {
             <Route path={"/reset-password"} exact component={PasswordReset}/>
 
             <Route loginAnonymous={true} loggedIn={true} path={"/pairwise-comparison"} component={PairwiseComparison}/>
-            <Route loginAnonymous={true} loggedIn={true} path={"/abc-analysis"} component={ABCAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/swot-analysis"} component={SWOTAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/persona-analysis"} component={PersonaAnalysis}/>
             <Route loginAnonymous={true} loggedIn={true} path={"/portfolio-analysis"} component={PortfolioAnalysis}/>

@@ -4,7 +4,6 @@ import {Col, Row} from "react-bootstrap";
 import {
     faArrowsAlt,
     faBorderAll,
-    faChartPie,
     faSortAmountDownAlt,
     faThLarge,
     faUserCircle,
@@ -62,13 +61,6 @@ export const Tools = [
         icon: faUserCircle,
         link: "/persona-analysis",
         maintenance: false
-    },
-    {
-        id: 5,
-        name: "ABC Analyse",
-        icon: faChartPie,
-        link: "/abc-analysis",
-        maintenance: true
     }
 ];
 if (process.env.NODE_ENV === "development") {
