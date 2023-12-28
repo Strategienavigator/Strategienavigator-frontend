@@ -1,6 +1,4 @@
 import {defineConfig} from "cypress";
-
-
 export default defineConfig({
     video: false,
     viewportHeight: 1080,
@@ -36,9 +34,8 @@ export default defineConfig({
 
     component: {
         devServer: {
-            framework: "create-react-app",
-            bundler: "webpack",
+            framework: 'react',
+            bundler: 'webpack'
         },
-        supportFile: false
     },
 });

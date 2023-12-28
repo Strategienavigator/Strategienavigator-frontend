@@ -20,7 +20,8 @@ export interface LoaderProps {
     alignment?: LoaderAlignments
     transparent?: boolean
     animate?: boolean
-    size?: number
+    size?: number,
+    children?: ReactNode
 }
 
 export class Loader extends Component<LoaderProps, LoaderState> {

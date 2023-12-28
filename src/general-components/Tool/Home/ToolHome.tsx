@@ -28,7 +28,8 @@ export interface ToolHomeInfo {
 
 export interface ToolHomeProps {
     tool: Tool<any>
-    info?: ToolHomeInfo
+    info?: ToolHomeInfo,
+    children?: ReactNode
 }
 
 export interface SavesPaginationSetting {

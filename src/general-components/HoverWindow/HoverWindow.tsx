@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ComponentClass, FunctionComponent, PureComponent} from "react";
+import {ComponentClass, FunctionComponent, PureComponent, ReactNode} from "react";
 import {OverlayTrigger, Popover} from "react-bootstrap";
 import {OverlayTriggerRenderProps, OverlayTriggerType} from "react-bootstrap/OverlayTrigger";
 import {OverlayInjectedProps} from "react-bootstrap/Overlay";
@@ -18,7 +18,7 @@ interface HoverWindowProps extends HoverWindowCustomPopupProps {
      * @param props
      */
     customPopUp?: FunctionComponent<HoverWindowCustomPopupProps & OverlayInjectedProps> | ComponentClass<HoverWindowCustomPopupProps & OverlayInjectedProps>
-    children: React.ReactElement | ((props: OverlayTriggerRenderProps) => React.ReactNode);
+    children: ReactNode
     /**
      * Bei welcher Aktion sich das Popup Fenster öffnen soll
      */
@@ -88,7 +88,7 @@ class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
                             {children}
                         </div>
                     </div>
-                ) : children}
+                ) : <div>{children}</div>}
 
             </OverlayTrigger>
         );

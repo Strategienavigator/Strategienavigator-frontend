@@ -39,6 +39,7 @@ import {enablePatches} from "immer";
 import {PersonaAnalysis} from "./components/tools/persona-analysis/PersonaAnalysis";
 import * as process from "process";
 import {TestAnalysis} from "./components/tools/test-analysis/TestAnalysis";
+import {createRoot} from "react-dom/client";
 
 // Add SettingsChangeListener for Darkmode
 SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
@@ -133,21 +134,20 @@ const getAppContent = () => {
 }
 
 const renderApp = () => {
-    ReactDOM.render(
+
+    appRoot.render(
         <React.StrictMode>
             {getAppContent()}
-        </React.StrictMode>,
-        document.getElementById('root')
+        </React.StrictMode>
     );
-    ReactDOM.render(
+    messageRoot.render(
         <React.StrictMode>
             <Messages
                 xAlignment={"CENTER"}
                 yAlignment={"BOTTOM"}
                 style={{marginBottom: 65}}
             />
-        </React.StrictMode>,
-        document.getElementById("messages")
+        </React.StrictMode>
     );
 }
 
@@ -177,13 +177,12 @@ const showErrorPage = (code: number, callback?: (...args: any) => any) => {
  *
  */
 const manageLoading = async () => {
-    ReactDOM.render(
+    appRoot.render(
         <React.StrictMode>
             <GlobalContexts key={"global-contexts"}>
                 <Loader key={"loader"} animate fullscreen loaded={false} variant={"style"} payload={[]}/>
             </GlobalContexts>
-        </React.StrictMode>,
-        document.getElementById('root')
+        </React.StrictMode>
     );
     await Session.checkLogin();
 }
@@ -195,9 +194,15 @@ const manageLoading = async () => {
  */
 const buildApp = async () => {
     await manageLoading();
+
     renderApp();
 }
 
+const appContainer = document.getElementById("root")
+const appRoot = createRoot(appContainer!);
+
+const messageContainer = document.getElementById("messages")
+const messageRoot = createRoot(messageContainer!);
 buildApp().then(() => {
     enablePatches();
 });

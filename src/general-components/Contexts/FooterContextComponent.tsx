@@ -1,5 +1,5 @@
 import {ControlFooterItemType} from "../ControlFooter/ControlFooter";
-import React, {Component} from "react";
+import React, {Component, ReactNode} from "react";
 
 
 export interface IFooterContext {
@@ -16,6 +16,7 @@ export interface FooterContextState {
 }
 
 export interface FooterContextProps {
+    children: ReactNode
 }
 
 const DefaultContext: IFooterContext = {
@@ -33,9 +34,9 @@ export const FooterContext = React.createContext<IFooterContext>(DefaultContext)
 
 export class FooterContextComponent extends Component<FooterContextProps, FooterContextState> {
 
-    constructor(props: Readonly<FooterContextState> | FooterContextState);
-    constructor(props: FooterContextState, context: any);
-    constructor(props: FooterContextState | Readonly<FooterContextState>, context?: any) {
+    constructor(props: Readonly<FooterContextProps> | FooterContextProps);
+    constructor(props: FooterContextProps, context: any);
+    constructor(props: FooterContextProps | Readonly<FooterContextProps>, context?: any) {
         super(props, context);
         this.state = {
             footerContext: this.buildContext(new Map())

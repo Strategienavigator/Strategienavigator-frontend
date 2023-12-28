@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, ReactNode} from "react";
 
 import "./button-panel.scss";
 import {Property} from "csstype";
@@ -8,7 +8,8 @@ export interface ButtonPanelProps {
     buttonPerCol?: number,
     auto?: boolean,
     flexHAlign?: Property.JustifyContent,
-    flexVAlign?: Property.AlignItems
+    flexVAlign?: Property.AlignItems,
+    children: ReactNode
 }
 
 /**
