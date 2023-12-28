@@ -31,8 +31,8 @@ Backend verändert, **muss** dieser Wert aktualisiert werden.
 Zur Authentifizierung am Backend, wird ein von *[Passport:link:](https://laravel.com/docs/8.x/passport)*
 bereitgestellter Client benötigt. Grundsätzlich sind für die globalen Variablen *REACT_APP_CLIENT_ID* und *
 REACT_APP_CLIENT_SECRET* keine Werte vordefiniert, da auch diese **für jeden Benutzer unterschiedlich** sind. Wenn Sie
-das [Backend-Guide:link:](https://github.com/ricom/Strategienavigator-backend/blob/main/README.md) bereits abgeschlossen haben,
-dann haben Sie unter dem Punkt [Passport](https://github.com/ricom/Strategienavigator-backend#passport) den benötigten Client
+das [Backend-Guide:link:](https://github.com/Strategienavigator/Strategienavigator-backend/blob/main/README.md) bereits abgeschlossen haben,
+dann haben Sie unter dem Punkt [Passport](https://github.com/Strategienavigator/Strategienavigator-backend#passport) den benötigten Client
 bereits erstellt und können diesen dort auslesen. Sofern Sie aus beliebigen Gründen keinen Zugriff mehr auf das Fenster
 zur Einsicht des Clients haben, können Sie den Befehl...
 
@@ -46,7 +46,7 @@ Die unter dem Punkt **Password grant client** genannte **Client ID** und **Clien
 Die globale Variable **REACT_APP_CLIENT_ID** wird dann mit dem Wert für **Client ID** initialisiert. Der Wert in **
 Client Secret** wird für das Initialisieren der globalen Variable **REACT_APP_CLIENT_SECRET** verwendet.
 
-![Passport](https://github.com/ricom/Strategienavigator-frontend/blob/main/screenshots/passport_install.png)  
+![Passport](https://github.com/Strategienavigator/Strategienavigator-frontend/blob/main/screenshots/passport_install.png)  
 *Passport Install Beispielausgabe.* **Dargestellte Werte NICHT in eigene .env-Datei übernehmen !**
 
 <br/>Nachdem Sie die zuvor genannten Schritte ausgeführt haben, kehren Sie wieder in das
