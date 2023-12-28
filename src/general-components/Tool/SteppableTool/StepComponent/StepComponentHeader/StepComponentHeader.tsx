@@ -10,7 +10,6 @@ import {SaveResource, SharedSavePermission} from "../../../../Datastructures";
 import FAE from "../../../../Icons/FAE";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
 import {SaveInvitation} from "../../../../Sharing/SaveInvitation";
-import {HeaderCollaborators} from "./HeaderCollaborators";
 import {CreateToolModal} from "../../../CreateToolModal/CreateToolModal";
 import {UserContext} from "../../../../Contexts/UserContextComponent";
 import {faPencilAlt} from "@fortawesome/free-solid-svg-icons/";
@@ -121,7 +120,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                 </div>
 
                 <SharedSaveContext.Consumer>
-                    {(context) => {
+                    {(unused) => {
                         return (
                             <SaveInvitation
                                 show={this.state.showInviteModal}
@@ -135,10 +134,6 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                         );
                     }}
                 </SharedSaveContext.Consumer>
-
-                <HeaderCollaborators
-                    save={this.props.associatedSave}
-                />
             </div>
         );
     }

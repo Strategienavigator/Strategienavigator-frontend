@@ -40,7 +40,6 @@ import {PersonaAnalysis} from "./components/tools/persona-analysis/PersonaAnalys
 import * as process from "process";
 import {TestAnalysis} from "./components/tools/test-analysis/TestAnalysis";
 
-require("./setupEcho.ts");
 // Add SettingsChangeListener for Darkmode
 SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
 

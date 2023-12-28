@@ -1,7 +1,6 @@
 import './tool-save-page.scss'
 import React, {Component, ReactNode} from "react";
 import {
-    LiveSaveUpdateResource,
     SaveResource,
     SharedSavePermission,
     SharedSavePermissionDefault,
@@ -16,7 +15,7 @@ import {Messages} from "../../Messages/Messages";
 import {Button, Modal} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
-import produce, {applyPatches} from "immer";
+import produce from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
 import {UIErrorContextComponent} from "../../Contexts/UIErrorContext/UIErrorContext";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
@@ -139,52 +138,12 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         }
     }
 
-    // createSocketConnection = async (save: SaveResource<D>): Promise<{
-    //     connection: Echo,
-    //     channel: PresenceChannel
-    // }> => {
-    //     let channelName = "savechannel." + save.id;
-    //     let connection = createSocketConnection();
-    //
-    //     connection.connector.pusher.connection.bind("connected", () => {
-    //         console.log("Websocket connected!"); // TODO: in state umwandeln
-    //     });
-    //     connection.connector.pusher.connection.bind("disconnected", () => {
-    //         console.log("Websocket disconnected!"); // TODO: in state umwandeln
-    //     });
-    //
-    //     let channel = connection.join(channelName);
-    //     channel.subscribed(() => {
-    //         console.log("channel subscribed");  // TODO: in state umwandeln
-    //     });
-    //
-    //     /**
-    //      * Watchout for updates
-    //      */
-    //     channel.listen("LiveSaveUpdate", (message: LiveSaveUpdateResource) => {
-    //         let userID = Session.currentUser?.getID();
-    //
-    //         if (userID !== message.sender.id) {
-    //             this.remoteUpdateSave(message);
-    //         }
-    //     });
-    //
-    //     return {
-    //         connection: connection,
-    //         channel: channel
-    //     };
-    // }
-
     render() {
         return (
             <Route>
                 <SharedSaveContextComponent permission={this.getPermissionOfSave()}>
                     <Loader payload={[]} loaded={!this.state.isLoading} transparent
                             alignment={"center"} fullscreen animate={false}>
-                        {/*<WebsocketChannelContextComponent*/}
-                        {/*    channel={this.state.channel ?? null}*/}
-                        {/*    connection={this.state.connection ?? null}*/}
-                        {/*>*/}
                         <UIErrorContextComponent>
                             {this.getView()}
                         </UIErrorContextComponent>
@@ -223,7 +182,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                                 </Button>
                             </Modal.Footer>
                         </ModalCloseable>
-                        {/*</WebsocketChannelContextComponent>*/}
                     </Loader>
 
                     <Prompt message={this.denyRouteChange}/>
@@ -422,15 +380,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             newSave = changes;
         } else {
             if (this.state.save !== undefined) {
-                newSave = produce(this.state.save, changes, async (patches, inversePatches) => {
-                    // if (this.updateTimeout) {
-                    //     clearTimeout(this.updateTimeout);
-                    // }
-
-                    // this.updateTimeout = setTimeout(async () => {
-                    //     await broadcastSavePatches(this.state.save!.id, patches);
-                    // }, this.updateTimeoutMS);
-                });
+                newSave = produce(this.state.save, changes);
             }
             this.saveDirty = true;
         }
@@ -438,19 +388,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         this.setState({
             save: newSave
         }, callback);
-    }
-
-    private remoteUpdateSave = (message: LiveSaveUpdateResource) => {
-        let patches = JSON.parse(message.patches);
-        let old = this.state.save;
-
-        if (old !== undefined) {
-            let newSave = applyPatches<SaveResource<D>>(old, patches);
-            this.setState({
-                save: newSave
-            });
-            this.saveDirty = true;
-        }
     }
 
     private lockSave = async (save: SaveResource<any>, lock: boolean, keepalive?: boolean) => {
