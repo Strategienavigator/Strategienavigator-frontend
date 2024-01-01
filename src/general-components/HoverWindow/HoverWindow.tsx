@@ -1,7 +1,7 @@
 import * as React from "react";
 import {ComponentClass, FunctionComponent, PureComponent, ReactNode} from "react";
 import {OverlayTrigger, Popover} from "react-bootstrap";
-import {OverlayTriggerRenderProps, OverlayTriggerType} from "react-bootstrap/OverlayTrigger";
+import {OverlayTriggerType} from "react-bootstrap/OverlayTrigger";
 import {OverlayInjectedProps} from "react-bootstrap/Overlay";
 import {Placement} from "react-bootstrap/types";
 
