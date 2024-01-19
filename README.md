@@ -102,7 +102,7 @@ Repository eintragen.
 
 ## Lizenz
 
-[GNU GPL 3.0:link:](https://www.gnu.org/licenses/gpl-3.0.de.html)
+[GNU GPL 3.0 :link:](https://www.gnu.org/licenses/gpl-3.0.de.html)
 
 ## Autoren
 
