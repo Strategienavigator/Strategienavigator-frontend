@@ -31,7 +31,7 @@ jobs:
       - name: clone backend
         uses: actions/checkout@v3
         with:
-          repository: 'ricom/Strategienavigator-backend'
+          repository: 'Strategienavigator/Strategienavigator-backend'
           path: 'backend'
       - name: clone frontend
         uses: actions/checkout@v3

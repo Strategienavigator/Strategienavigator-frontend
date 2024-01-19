@@ -23,7 +23,7 @@ export class AboutUs extends Component<any, any> {
         link: "https://github.com/nic-schi",
         displayName: "Nichlas Schipper"
     }, {
-        link: "https://github.com/ricom",
+        link: "https://github.com/omKano100",
         displayName: "Omar Kanoune"
     }, {
         link: "https://github.com/ricom",
@@ -109,9 +109,9 @@ export class AboutUs extends Component<any, any> {
 
 
             <h3>Links</h3>
-            <p><a href="https://github.com/ricom/Strategienavigator-frontend" rel="noreferrer" target="_blank">Frontend
+            <p><a href="https://github.com/Strategienavigator/Strategienavigator-frontend" rel="noreferrer" target="_blank">Frontend
                 Repository</a></p>
-            <p><a href="https://github.com/ricom/Strategienavigator-backend" rel="noreferrer" target="_blank">Backend
+            <p><a href="https://github.com/Strategienavigator/Strategienavigator-backend" rel="noreferrer" target="_blank">Backend
                 Repository</a></p>
             <p><a href="https://trello.com/b/3LQKqFb4/strategienavigator" rel="noreferrer"
                   target="_blank">Kanbanboard</a></p>
