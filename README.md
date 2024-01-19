@@ -7,14 +7,14 @@ sollen jedem einen einfachen Zugang zu strategischen Werkzeugen bieten. Insbeson
 geplant. Aber auch allen Interessierten stehen die Werkzeuge zur Verfügung.
 
 Das Projekt wird an der Jade Hochschule in Wilhelmshaven
-am [Fachbereich Management Information Technologie:link:](https://www.jade-hs.de/mit/) entwickelt.
+am [Fachbereich Management Information Technologie :link:](https://www.jade-hs.de/mit/) entwickelt.
 
 Das Frontend wurde mittels [Create React App](https://github.com/facebook/create-react-app) erstellt.  
-Das Strategienavigator-Backend ist [hier:link:](https://github.com/ricom/Strategienavigator-backend) zu finden.
+Das Strategienavigator-Backend ist [hier :link:](https://github.com/ricom/Strategienavigator-backend) zu finden.
 
 ## Weitere Informationen
 
-[Interne Projektinformationen:link:](https://moodle.jade-hs.de/moodle/course/view.php?id=521&section=4)
+[Interne Projektinformationen :link:](https://moodle.jade-hs.de/moodle/course/view.php?id=521&section=4)
 
 ## Voraussetzungen
 
@@ -34,7 +34,7 @@ Das Strategienavigator-Backend ist [hier:link:](https://github.com/ricom/Strateg
 Zu Beginn muss sich das Github-Repository heruntergeladen und in einen von Ihnen gewählten Ordner platziert werden.  
 (Für Mitentwickelnde kann dies auch durch **Git** oder **Github-Desktop** geschehen)<br />
 
-Folgend muss sich NodeJS heruntergeladen werden. Dies kann [hier:link:](https://nodejs.org/de/) geschehen. Achten Sie
+Folgend muss sich NodeJS heruntergeladen werden. Dies kann [hier :link:](https://nodejs.org/de/) geschehen. Achten Sie
 hierbei auf die oben genannten Mindestvoraussetzungen. Nach der Installation von NodeJS haben Sie die nötigen Programme
 und Programmierwerkzeuge um die Installation fortzusetzen.<br />
 
@@ -79,7 +79,7 @@ npm start
 ```
 
 Startet den Entwicklungsserver.  
-Der Server ist nun unter [http://localhost:3000:link:](http://localhost:3000) erreichbar.
+Der Server ist nun unter [http://localhost:3000 :link:](http://localhost:3000) erreichbar.
 
 Sämtliche Editierungen werden beim Abspeichern automatisch aktualisiert.
 
