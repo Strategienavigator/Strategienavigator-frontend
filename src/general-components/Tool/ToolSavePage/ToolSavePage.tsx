@@ -86,6 +86,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     private readonly resourceManager: ResourceManager;
     private readonly resources: ResourcesType = new Map();
+    private onUnmount: (() => void)[];
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
@@ -108,6 +109,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             getText: this.getResourceText.bind(this),
             getBlobURL: this.getBlobURL.bind(this)
         }
+        this.onUnmount = [];
     }
 
     componentDidMount = async () => {
@@ -117,8 +119,14 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
     componentWillUnmount = async () => {
+        const onUnmount = this.onUnmount;
+        this.onUnmount = [];
         if (this.state.save !== undefined) {
             await this.unlock(this.state.save);
+        }
+
+        for (const onUnmountCallback of onUnmount) {
+            onUnmountCallback();
         }
 
         // this.closeWebsocketConnection();
@@ -222,7 +230,17 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     private firstLoad = async () => {
         let ID = parseInt(this.props.match.params.id as string);
-        let save = await this.retrieveSave(ID);
+        let save;
+        try {
+            save = await this.retrieveSave(ID);
+        } catch (e: any) {
+            if (e.message === this.INTERRUPTED) {
+                return;
+            } else {
+                throw e;
+            }
+        }
+
 
         let isLocked: boolean | undefined = undefined;
         // let socketInfo: { connection: any; channel: any; } | undefined = undefined;
@@ -407,7 +425,17 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     private updateSaveFromRemote = async () => {
         this.setState({isLoading: true});
         if (this.state.save) {
-            let save = await this.retrieveSave(this.state.save.id);
+            let save;
+            try {
+                save = await this.retrieveSave(this.state.save.id);
+            } catch (e: any) {
+                if (e.message === this.INTERRUPTED) {
+                    return;
+                } else {
+                    throw e;
+                }
+            }
+
             if (save) {
                 this.setState({
                     save: save,
@@ -441,9 +469,21 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         return isLocked;
     }
 
+    private readonly INTERRUPTED = "interrupted";
     private retrieveSave = async (ID: number): Promise<SaveResource<D> | undefined> => {
+        let abort = false;
+        const onAbort = () => {
+            abort = true;
+        }
+        this.onUnmount.push(onAbort);
         let call = await getSave<any>(ID, {errorCallback: this.onAPIError});
 
+        if (abort) {
+            throw new Error(this.INTERRUPTED);
+        } else {
+            const index = this.onUnmount.findIndex(onAbort)
+            this.onUnmount.splice(index, 1);
+        }
         if (call && call.success) {
             if (call.callData.tool_id === this.props.tool.getID()) {
                 let save: SaveResource<D> = call.callData;
