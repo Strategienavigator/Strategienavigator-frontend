@@ -7,13 +7,14 @@ export default defineConfig({
 
     env: {
         DB_HOST: "127.0.0.1",
+        DB_NAME: "toolbox",
         DB_USER: "root",
         DB_PASSWORD: "",
         DB_PORT: 3306,
         SMTP_PORT: 7777,
-        BACKEND_URL: "http://strategietools.test/",
-        APP_CLIENT_ID: 1,
-        APP_CLIENT_SECRET: "7KaZrkjiv7xN14P62LiWGTPnDr0CuAfrWW1TdDS6",
+        BACKEND_URL: "http://toolbox-backend.test/",
+        APP_CLIENT_ID: 2,
+        APP_CLIENT_SECRET: "gzkcCEU68r9X7N27K9Zc1lhSUsLRLSXiMMmvm8O5",
         TEST_LOGIN_USERNAME: "max@test.test",
         TEST_LOGIN_PASSWORD: "password",
     },
@@ -29,7 +30,6 @@ export default defineConfig({
             return require("./cypress/plugins/index.js")(on, config);
         },
         baseUrl: "http://localhost:3000",
-        experimentalSessionAndOrigin: true,
     },
 
     component: {

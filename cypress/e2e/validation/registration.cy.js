@@ -1,6 +1,6 @@
 describe('register on the Website', () => {
     beforeEach(() => {
-        cy.task("queryDb", `DELETE FROM strategienavigator.users WHERE username="Tim_Tester";`);
+        cy.task("queryDb", `DELETE FROM \`${Cypress.env("DB_NAME")}\`.users WHERE username="Tim_Tester";`);
     })
     it('trys to send a email', () => {
         cy.visit("/register");
