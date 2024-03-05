@@ -40,42 +40,29 @@ Der Port kann in der cypress.json geändert werden.
 
 # Konfiguration von Cypress
 
-Konfigurationen können in der cypress.json vorgenommen werden. Dort finden wir eine Reihe von nötigen Angaben.
+Konfigurationen können in der `.env.test.local` vorgenommen werden. Eine vorlage für die Datei ist in `.env.test.local.example` zu finden.
 
 ```
-"env": {
-    "DB_HOST": "127.0.0.1",
-    "DB_USER": "root",
-    "DB_PASSWORD": "",
-    "DB_PORT": 3306,
-    "SMTP_PORT": 7777,
-    "BACKEND_URL": "http://localhost/Strategienavigator-backend/public/",
-    "APP_CLIENT_ID": 2,
-    "APP_CLIENT_SECRET": "ytr2ITFQRMCvez8CVFnK9oEzy5QvZb7vAz49eYaO",
-    "TEST_LOGIN_USERNAME": "max@test.test",
-    "TEST_LOGIN_PASSWORD": "password"
-}
+REACT_APP_API=local-url
+REACT_APP_CLIENT_ID=client-id
+REACT_APP_CLIENT_SECRET=client-secret
+
+CYPRESS_DB_HOST=127.0.0.1
+CYPRESS_DB_NAME=strategienavigator
+CYPRESS_DB_USER=root
+CYPRESS_DB_PASSWORD=""
+CYPRESS_DB_PORT=3306
+
+CYPRESS_SMTP_PORT=7777
+
+CYPRESS_TEST_LOGIN_USERNAME=max@test.test
+CYPRESS_TEST_LOGIN_PASSWORD=password
+
+CYPRESS_BASE_URL="http://localhost:3000"
 ```
 
-Wichtig sind hier hier die APP_CLIENT_ID und APP_CLIENT_SECRET. Weil diese für jeden Computer unterschiedlich sind
-müssen wir hier die
-die Werte von unserer .env.development.local nehmen.
-
-.env.development.local:
-
-```
-REACT_APP_CLIENT_ID=2
-REACT_APP_CLIENT_SECRET=ytr2ITFQRMCvez8CVFnK9oEzy5QvZb7vAz49eYaO
-```
-
-cypress.json:
-
-```
-"env": {
-    "APP_CLIENT_ID": 2,
-    "APP_CLIENT_SECRET": "ytr2ITFQRMCvez8CVFnK9oEzy5QvZb7vAz49eYaO"
-}
-```
+Wichtig sind hier hier die REACT_APP_CLIENT_ID und REACT_APP_CLIENT_SECRET. Weil diese für jeden Computer unterschiedlich sind
+müssen wir hier die Werte von unserer .env.development.local nehmen.
 
 ## Erstellen von Testscenarien
 
@@ -87,14 +74,12 @@ sie [hier]((https://docs.cypress.io/guides/overview/why-cypress#What-you-ll-lear
 
 # Testnutzer
 
-Es wird unausweilich sein das ein Testnutzer genutzt wird um die Intigrität der Tests zu gewährleisten.
-Die Einstellungen dafür finden wir ebenfalls in der cypress.json:
+In manchen tests wird ein Testaccount genutzt. Die Logindaten für diesen müssen angegeben werden.
+Die Einstellungen dafür finden wir ebenfalls in der .env.test.local:
 
 ```
-"env": {
-    "TEST_LOGIN_USERNAME": "max@test.test",
-    "TEST_LOGIN_PASSWORD": "password"
-}
+CYPRESS_TEST_LOGIN_USERNAME=max@test.test
+CYPRESS_TEST_LOGIN_PASSWORD=password
 ```
 
 # Nutzung von Testdaten
