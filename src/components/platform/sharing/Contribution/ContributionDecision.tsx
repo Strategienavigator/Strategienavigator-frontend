@@ -6,7 +6,6 @@ import {
     declineContribution,
     showContributions
 } from "../../../../general-components/API/calls/Contribution";
-import {showErrorPage} from "../../../../index";
 import {Loader} from "../../../../general-components/Loader/Loader";
 import {SaveResource, SharedSaveResource} from "../../../../general-components/Datastructures";
 import {LoadingButton} from "../../../../general-components/LoadingButton/LoadingButton";
@@ -16,6 +15,7 @@ import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons/";
 import "./contribution-decision.scss";
 import {Messages} from "../../../../general-components/Messages/Messages";
 import {getSaveURL, getSharedSavePermissionText} from "../../../../general-components/Save";
+import {legacyShowErrorPage} from "../../../../general-components/LegacyErrorPageAdapter";
 
 
 interface ContributionDecisionState {
@@ -80,7 +80,7 @@ export class ContributionDecision extends Component<RouteComponentProps<{
                 return;
             }
         }
-        showErrorPage(403);
+        legacyShowErrorPage(403)
     }
 
     render() {

@@ -20,11 +20,11 @@ import {WritableDraft} from "immer/dist/types/types-external";
 import {UIErrorContextComponent} from "../../Contexts/UIErrorContext/UIErrorContext";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 import {EditSavesPermission, hasPermission} from "../../Permissions";
-import {showErrorPage} from "../../../index";
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import FAE from '../../Icons/FAE';
 import {getSaveResource} from "../../API/calls/SaveResources";
+import {legacyShowErrorPage} from "../../LegacyErrorPageAdapter";
 
 
 interface ToolSaveController<D> {
@@ -258,11 +258,11 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                     // channel: socketInfo.channel
                 });
             } else {
-                showErrorPage(404);
+                legacyShowErrorPage(404);
                 return;
             }
         } else {
-            showErrorPage(404);
+            legacyShowErrorPage(404);
             return;
         }
     }
@@ -512,11 +512,11 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                 }
                 return save;
             } else {
-                showErrorPage(403);
+                legacyShowErrorPage(403);
                 return;
             }
         } else {
-            showErrorPage(404);
+            legacyShowErrorPage(404);
             return;
         }
     }
