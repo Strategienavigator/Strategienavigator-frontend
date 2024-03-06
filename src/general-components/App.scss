@@ -1,0 +1,89 @@
+// THEMES
+@import "/src/themes.scss";
+
+// BOOTSTRAP
+@import ".././scss/bootstrap/bootstrap.scss";
+
+// IMPORTED STYLES
+@import "../scss/tables.scss";
+@import "../scss/feedback.scss";
+@import "../scss/modal.scss";
+@import "../scss/links.scss";
+@import "../scss/hr.scss";
+
+
+// STYLE
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.smooth-transition {
+  transition: 0.5s ease-in-out;
+
+  * {
+    transition: 0.5s ease-in-out;
+  }
+}
+
+body, #root, html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 500;
+
+  @include theme() {
+    background-color: get("bg-color");
+    color: get("text-color");
+  }
+}
+
+#root {
+  display: grid;
+  grid-template-areas:
+    "nav"
+    "content"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+}
+
+footer {
+  grid-area: footer;
+}
+
+textarea {
+  max-height: 500px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+svg {
+  @include theme() {
+    color: get("style-color");
+  }
+}
+
+button.btn > svg {
+  color: white;
+}
+
+#content {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  overflow-y: auto;
+}
+
+.form-group {
+  z-index: 1;
+}

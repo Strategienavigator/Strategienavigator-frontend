@@ -9,9 +9,9 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTFactors} from "./SWOTFactors";
-import {showErrorPage} from "../../../../../index";
 import {IUIErrorContext} from "../../../../../general-components/Contexts/UIErrorContext/UIErrorContext";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
+import {legacyShowErrorPage} from "../../../../../general-components/LegacyErrorPageAdapter";
 
 
 export interface SwotFactorsValues {
@@ -131,7 +131,7 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
             );
         }
 
-        showErrorPage(404);
+        legacyShowErrorPage(404);
         return <p>"ERROR"</p>;
     }
 

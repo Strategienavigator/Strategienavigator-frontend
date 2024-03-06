@@ -7,12 +7,12 @@ describe('Captcha', () => {
     Cypress.config("viewportHeight", 500)
     Cypress.config("viewportWidth", 500)
 
-    it.skip("CheckLoadingBehaviour", () => {
+    it("CheckLoadingBehaviour", () => {
         let firstResponse = true;
         // mock network
         cy.intercept({
             method: "GET",
-            url: "/.*captcha\\/api.*/"
+            url: "**captcha/api"
         }, (req) => {
             if (firstResponse) {
                 firstResponse = false;
@@ -30,7 +30,7 @@ describe('Captcha', () => {
             }
         }).as("stubedRequest");
         const keyName = "captchaKey";
-        mount(<CaptchaComponent refreshIntervall={100} keyName={keyName}></CaptchaComponent>);
+        mount(<CaptchaComponent refreshIntervall={0.2} keyName={keyName}></CaptchaComponent>);
         cy.wait("@stubedRequest");
         cy.get(`#${keyName}`).should('have.value', 'blib');
         cy.wait("@stubedRequest");
