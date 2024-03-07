@@ -5,7 +5,6 @@ import {
 } from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {PortfolioAnalysisValues} from "../../PortfolioAnalysis";
 import {CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
-import {isDesktop} from "../../../../../general-components/Desktop";
 import {
     CompareComponent,
     CompareComponentValues
@@ -24,6 +23,7 @@ import {
 } from "../../../utility-analysis/steps/UtilCriterias/ScaleDescriptionModal/UACriteriaCustomDescriptionInfoPanel";
 import {WeightingEvaluation} from "../../../../../general-components/EvaluationComponent/Weighting/WeightingEvaluation";
 import {ReactNode} from "react";
+import {DesktopContext} from "../../../../../general-components/Contexts/DesktopContext";
 
 
 export interface Rating {
@@ -54,7 +54,14 @@ class PortEvaluationComponent extends Step<PortfolioAnalysisValues, {}> {
         this.index = -1;
         return (
             <>
-                {(isDesktop()) ? this.desktop() : this.mobile()}
+                <DesktopContext.Consumer children={isDesktop => {
+                    if(isDesktop){
+                        return this.desktop();
+                    }else{
+                        return this.mobile();
+                    }
+                }
+                }/>
 
                 <UIErrorBanner id={"port-evaluation.empty"}/>
             </>

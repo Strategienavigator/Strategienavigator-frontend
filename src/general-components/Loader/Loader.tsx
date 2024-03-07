@@ -44,15 +44,6 @@ export class Loader extends Component<LoaderProps, LoaderState> {
         }
     }
 
-    /**
-     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
-     * This is considered pretty hacky, but using history.push from react-router, this could be considered a considerable solution
-     */
-    componentWillUnmount() {
-        this.setState = (() => {
-            return;
-        });
-    }
 
     loadPayload = async () => {
         if (this.props.payload.length > 0) {

@@ -6,9 +6,9 @@ import {RouteComponentProps, StaticContext, withRouter} from "react-router";
 import {faCaretRight, faHome, faSave, faUndo} from "@fortawesome/free-solid-svg-icons/";
 
 import "./control-footer.scss";
-import {isDesktop} from "../Desktop";
 import {FooterContext} from "../Contexts/FooterContextComponent";
 import FAE from "../Icons/FAE";
+import {DesktopContext} from "../Contexts/DesktopContext";
 
 
 export interface ControlFooterProps {
@@ -92,19 +92,25 @@ export class ControlFooterComponent extends Component<ControlFooterProps & Route
             places.push(i);
         }
 
-        let classes = ["controlFooter", "nav"];
-        if (!isDesktop()) classes.push("show");
-
         return (
-            <div className={classes.join(" ")}>
-                {places.map(value => {
-                    return (
-                        <div key={value} className={"item"}>
-                            {this.getItem(this.context.items.get(value))}
-                        </div>
-                    );
-                })}
-            </div>
+
+            <DesktopContext.Consumer children={isDesktop => {
+                let classes = ["controlFooter", "nav"];
+                if (!isDesktop) classes.push("show");
+                return (
+                    <div className={classes.join(" ")}>
+                        {places.map(value => {
+                            return (
+                                <div key={value} className={"item"}>
+                                    {this.getItem(this.context.items.get(value))}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                );
+            }}/>
+
         );
     }
 

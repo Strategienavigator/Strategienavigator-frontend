@@ -83,16 +83,6 @@ export class UniqueCheck extends Component<ReplaceProps<"input", FormControlProp
     }
 
     /**
-     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
-     * This is considered pretty hacky
-     */
-    componentWillUnmount() {
-        this.setState = (() => {
-            return;
-        });
-    }
-
-    /**
      * Gibt ein Element zurück, welches anzeigt, ob es Fehler gibt oder ob die Anfrage erfolgreich war
      */
     renderErrors = () => {

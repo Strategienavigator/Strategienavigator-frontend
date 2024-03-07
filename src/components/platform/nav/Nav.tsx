@@ -12,7 +12,6 @@ import {
     faUser,
     faUserPlus
 } from "@fortawesome/free-solid-svg-icons/";
-import {isDesktop} from "../../../general-components/Desktop";
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 import "./nav.scss";
@@ -23,6 +22,7 @@ import {RouteComponentProps, withRouter} from "react-router";
 import FAE from "../../../general-components/Icons/FAE";
 import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
 import AnonportModal from "./AnonportModal";
+import {DesktopContext} from "../../../general-components/Contexts/DesktopContext";
 
 
 interface NavState {
@@ -275,32 +275,37 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                     </NavDropdown>
                                 )}
                             </BootstrapNav>
-                            {(!isDesktop()) && (
-                                <BootstrapNav>
-                                    <NavDropdown id={"profile-dropdown"} title={"mehr"}>
-                                        <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/settings"}
-                                                       role={"button"}>
-                                            <FAE icon={faCog}/>&nbsp;
-                                            Einstellungen
-                                        </Dropdown.Item>
-                                        <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/data-privacy"}
-                                                       role={"button"}>
-                                            <FAE icon={faShieldAlt}/>&nbsp;
-                                            Datenschutz
-                                        </Dropdown.Item>
-                                        <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/legal-notice"}
-                                                       role={"button"}>
-                                            <FAE icon={faBalanceScale}/>&nbsp;
-                                            Impressum
-                                        </Dropdown.Item>
-                                        <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/about-us"}
-                                                       role={"button"}>
-                                            <FAE icon={faInfoCircle}/>&nbsp;
-                                            Über uns
-                                        </Dropdown.Item>
-                                    </NavDropdown>
-                                </BootstrapNav>
-                            )}
+                            <DesktopContext.Consumer children={isDesktop => {
+                                if(isDesktop) {
+                                    return (
+                                        <BootstrapNav>
+                                            <NavDropdown id={"profile-dropdown"} title={"mehr"}>
+                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/settings"}
+                                                               role={"button"}>
+                                                    <FAE icon={faCog}/>&nbsp;
+                                                    Einstellungen
+                                                </Dropdown.Item>
+                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/data-privacy"}
+                                                               role={"button"}>
+                                                    <FAE icon={faShieldAlt}/>&nbsp;
+                                                    Datenschutz
+                                                </Dropdown.Item>
+                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/legal-notice"}
+                                                               role={"button"}>
+                                                    <FAE icon={faBalanceScale}/>&nbsp;
+                                                    Impressum
+                                                </Dropdown.Item>
+                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/about-us"}
+                                                               role={"button"}>
+                                                    <FAE icon={faInfoCircle}/>&nbsp;
+                                                    Über uns
+                                                </Dropdown.Item>
+                                            </NavDropdown>
+                                        </BootstrapNav>
+                                    );
+                                }
+                                return null;
+                            }}/>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>

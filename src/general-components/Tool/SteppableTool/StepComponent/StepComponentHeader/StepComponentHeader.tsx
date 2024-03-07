@@ -1,6 +1,5 @@
 import React, {PureComponent} from "react";
 import {Tool} from "../../../Tool";
-import {isDesktop} from "../../../../Desktop";
 import {Button, Collapse, Form} from "react-bootstrap";
 
 import "./step-header.scss";
@@ -16,6 +15,7 @@ import {faPencilAlt} from "@fortawesome/free-solid-svg-icons/";
 import {lockSave} from "../../../../API/calls/Saves";
 import {ToolSaveController} from "../../../ToolSavePage/ToolSavePage";
 import {LoadingButton} from "../../../../LoadingButton/LoadingButton";
+import {checkIfDesktop} from "../../../../Contexts/DesktopContext";
 
 
 export interface StepComponentHeaderProp {
@@ -44,7 +44,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
     constructor(props: StepComponentHeaderProp, context: any) {
         super(props, context);
         this.state = {
-            showStepHeaderDesc: isDesktop(),
+            showStepHeaderDesc: checkIfDesktop(),
             showInviteModal: false,
             descriptionTooLong: false,
             loadingUnlock: false
@@ -159,7 +159,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
 
     private showDescriptionIfDesktop = () => {
         this.setState({
-            showStepHeaderDesc: isDesktop()
+            showStepHeaderDesc: checkIfDesktop()
         });
     }
 
