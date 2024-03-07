@@ -1,28 +1,23 @@
-import {Component} from "react";
+import {Component, ReactNode} from "react";
 import {SettingsContextComponent} from "./SettingsContextComponent";
 import {FooterContextComponent} from "./FooterContextComponent";
 import {UserContextComponent} from "./UserContextComponent";
+import {DesktopContextComponent} from "./DesktopContext";
 
 
-export class GlobalContexts extends Component<any, any> {
-
-    public constructor(props: Readonly<{}> | {});
-    public constructor(props: {}, context: any);
-    public constructor(props: Readonly<{}> | {}, context?: any) {
-        super(props, context);
-    }
-
-    render() {
-        return (
+export function GlobalContexts({children}: { children: ReactNode }) {
+    return (
+        <DesktopContextComponent>
             <UserContextComponent>
                 <SettingsContextComponent>
                     <FooterContextComponent>
 
-                        {this.props.children}
+                        {children}
 
                     </FooterContextComponent>
                 </SettingsContextComponent>
             </UserContextComponent>
-        );
-    }
+        </DesktopContextComponent>
+
+    );
 }
