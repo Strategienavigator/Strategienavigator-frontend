@@ -3,13 +3,14 @@ import {NavLink} from "react-router-dom";
 import {faBalanceScale, faCog, faInfoCircle, faShieldAlt} from "@fortawesome/free-solid-svg-icons";
 
 import "./footer.scss";
-import {isDesktop} from "../../../general-components/Desktop";
 import FAE from "../../../general-components/Icons/FAE";
+import {useIsDesktop} from "../../../general-components/Contexts/DesktopContext";
 
 
-const Footer = function footerComponent() {
+export function Footer() {
+    const isDesktop = useIsDesktop()
     return (
-        <Nav as={"footer"} className={(isDesktop() ? "show" : "")}>
+        <Nav as={"footer"} className={(isDesktop ? "show" : "")}>
             <Row className={"container pt-2 pb-2 m-auto justify-content-center align-items-center w-100"}>
                 <Col className={"text-center"}>
                     <NavLink to={"/about-us"} className={"nav-link"}>
@@ -35,5 +36,3 @@ const Footer = function footerComponent() {
         </Nav>
     );
 }
-
-export default Footer;
