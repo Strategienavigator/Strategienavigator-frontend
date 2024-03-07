@@ -30,11 +30,17 @@ describe('Captcha', () => {
             }
         }).as("stubedRequest");
         const keyName = "captchaKey";
-        mount(<CaptchaComponent refreshIntervall={0.2} keyName={keyName}></CaptchaComponent>);
+        const captchaName = "captchaInput";
+        mount(<CaptchaComponent refreshIntervall={0.5} keyName={keyName} captchaName={captchaName}></CaptchaComponent>);
         cy.wait("@stubedRequest");
         cy.get(`#${keyName}`).should('have.value', 'blib');
+
+        cy.get(`#${captchaName}`).as('inp').type('testInput');
+        cy.get('@inp').should('have.value','testInput');
+
         cy.wait("@stubedRequest");
         cy.get(`#${keyName}`).should('have.value', 'blub');
+        cy.get('@inp').should('be.empty');
     });
 });
 
