@@ -24,7 +24,7 @@ import {UtilityAnalysis} from "../components/tools/utility-analysis/UtilityAnaly
 import process from "process";
 import {TestAnalysis} from "../components/tools/test-analysis/TestAnalysis";
 import {ErrorPages} from "./Error/ErrorPages/ErrorPages";
-import Footer from "../components/platform/footer/Footer";
+import {Footer} from "../components/platform/footer/Footer";
 import {ControlFooter} from "./ControlFooter/ControlFooter";
 import {GlobalContexts} from "./Contexts/GlobalContexts";
 import {Loader} from "./Loader/Loader";
@@ -39,6 +39,10 @@ export function App() {
     useEffect(function () {
         // Add SettingsChangeListener for Darkmode
         SettingsContextComponent.addSettingsChangeListener(DarkModeChanger);
+
+        return () => {
+            SettingsContextComponent.removeSettingsChangeListener(DarkModeChanger);
+        }
     }, []);
 
     function getRouterSwitch() {

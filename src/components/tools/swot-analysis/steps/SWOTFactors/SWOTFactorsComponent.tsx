@@ -1,7 +1,6 @@
 import React from "react";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
 import {Accordion} from "react-bootstrap";
-import {isDesktop} from "../../../../../general-components/Desktop";
 import {
     shallowCompareStepProps,
     Step,
@@ -12,6 +11,7 @@ import {SWOTFactors} from "./SWOTFactors";
 import {IUIErrorContext} from "../../../../../general-components/Contexts/UIErrorContext/UIErrorContext";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {legacyShowErrorPage} from "../../../../../general-components/LegacyErrorPageAdapter";
+import {DesktopContext} from "../../../../../general-components/Contexts/DesktopContext";
 
 
 export interface SwotFactorsValues {
@@ -58,81 +58,87 @@ export class SWOTFactorsComponent extends Step<SWOTAnalysisValues, SWOTFactorsSt
         let activeKey = "view";
 
         let values = this.props.save.data["swot-factors"]?.factors;
-        if (values !== undefined) {
-            return (
-                <div className={"swot-factors"}>
-                    <Accordion flush={true} activeKey={this.props.validationFailed ? activeKey : undefined}
-                               defaultActiveKey={isDesktop() ? "strengths" : undefined}>
-                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "strengths"}>
-                            <Accordion.Header>{SWOTFactors.strengthsCounter.get(1) + "-" + SWOTFactors.strengthsCounter.get(max)} -
-                                Stärken (Interne Faktoren)</Accordion.Header>
-                            <Accordion.Body>
-                                <CardComponent required={false}
-                                               values={values.strengths}
-                                               counter={SWOTFactors.strengthsCounter}
-                                               name={"strengths"}
-                                               disabled={this.props.disabled}
-                                               min={min}
-                                               max={max}
-                                               onChanged={this.strengthsChanged}/>
-                                <UIErrorBanner id={"swot-analysis.strengthsError"}/>
-                            </Accordion.Body>
-                        </Accordion.Item>
 
-                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "weaknesses"}>
-                            <Accordion.Header>{SWOTFactors.weaknessesCounter.get(1) + "-" + SWOTFactors.weaknessesCounter.get(max)} -
-                                Schwächen (Interne Faktoren)</Accordion.Header>
-                            <Accordion.Body>
-                                <CardComponent required={false}
-                                               values={values.weaknesses}
-                                               counter={SWOTFactors.weaknessesCounter}
-                                               name={"weaknesses"}
-                                               disabled={this.props.disabled}
-                                               min={min}
-                                               max={max}
-                                               onChanged={this.weaknessesChanged}/>
-                                <UIErrorBanner id={"swot-analysis.weaknessesError"}/>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "chances"}>
-                            <Accordion.Header>{SWOTFactors.chancesCounter.get(1) + "-" + SWOTFactors.chancesCounter.get(max)} -
-                                Chancen (Externe Faktoren)</Accordion.Header>
-                            <Accordion.Body>
-                                <CardComponent required={false}
-                                               values={values.chances}
-                                               counter={SWOTFactors.chancesCounter}
-                                               name={"chances"}
-                                               disabled={this.props.disabled}
-                                               min={min}
-                                               max={max}
-                                               onChanged={this.chancesChanged}/>
-                                <UIErrorBanner id={"swot-analysis.chancesError"}/>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "risks"}>
-                            <Accordion.Header>{SWOTFactors.risksCounter.get(1) + "-" + SWOTFactors.risksCounter.get(max)} -
-                                Risiken (Externe Faktoren)</Accordion.Header>
-                            <Accordion.Body>
-                                <CardComponent required={false}
-                                               values={values.risks}
-                                               counter={SWOTFactors.risksCounter}
-                                               name={"risks"}
-                                               disabled={this.props.disabled}
-                                               min={min}
-                                               max={max}
-                                               onChanged={this.risksChanged}/>
-                                <UIErrorBanner id={"swot-analysis.risksError"}/>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
+        return (
+            <DesktopContext.Consumer children={isDesktop => {
+                if (values !== undefined) {
+                    return (
+                        <div className={"swot-factors"}>
 
-                    <UIErrorBanner id={"swot-analysis.too-long"}/>
-                </div>
-            );
-        }
+                            <Accordion flush={true} activeKey={this.props.validationFailed ? activeKey : undefined}
+                                       defaultActiveKey={isDesktop ? "strengths" : undefined}>
+                                <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "strengths"}>
+                                    <Accordion.Header>{SWOTFactors.strengthsCounter.get(1) + "-" + SWOTFactors.strengthsCounter.get(max)} -
+                                        Stärken (Interne Faktoren)</Accordion.Header>
+                                    <Accordion.Body>
+                                        <CardComponent required={false}
+                                                       values={values.strengths}
+                                                       counter={SWOTFactors.strengthsCounter}
+                                                       name={"strengths"}
+                                                       disabled={this.props.disabled}
+                                                       min={min}
+                                                       max={max}
+                                                       onChanged={this.strengthsChanged}/>
+                                        <UIErrorBanner id={"swot-analysis.strengthsError"}/>
+                                    </Accordion.Body>
+                                </Accordion.Item>
 
-        legacyShowErrorPage(404);
-        return <p>"ERROR"</p>;
+                                <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "weaknesses"}>
+                                    <Accordion.Header>{SWOTFactors.weaknessesCounter.get(1) + "-" + SWOTFactors.weaknessesCounter.get(max)} -
+                                        Schwächen (Interne Faktoren)</Accordion.Header>
+                                    <Accordion.Body>
+                                        <CardComponent required={false}
+                                                       values={values.weaknesses}
+                                                       counter={SWOTFactors.weaknessesCounter}
+                                                       name={"weaknesses"}
+                                                       disabled={this.props.disabled}
+                                                       min={min}
+                                                       max={max}
+                                                       onChanged={this.weaknessesChanged}/>
+                                        <UIErrorBanner id={"swot-analysis.weaknessesError"}/>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                                <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "chances"}>
+                                    <Accordion.Header>{SWOTFactors.chancesCounter.get(1) + "-" + SWOTFactors.chancesCounter.get(max)} -
+                                        Chancen (Externe Faktoren)</Accordion.Header>
+                                    <Accordion.Body>
+                                        <CardComponent required={false}
+                                                       values={values.chances}
+                                                       counter={SWOTFactors.chancesCounter}
+                                                       name={"chances"}
+                                                       disabled={this.props.disabled}
+                                                       min={min}
+                                                       max={max}
+                                                       onChanged={this.chancesChanged}/>
+                                        <UIErrorBanner id={"swot-analysis.chancesError"}/>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                                <Accordion.Item eventKey={this.props.validationFailed ? activeKey : "risks"}>
+                                    <Accordion.Header>{SWOTFactors.risksCounter.get(1) + "-" + SWOTFactors.risksCounter.get(max)} -
+                                        Risiken (Externe Faktoren)</Accordion.Header>
+                                    <Accordion.Body>
+                                        <CardComponent required={false}
+                                                       values={values.risks}
+                                                       counter={SWOTFactors.risksCounter}
+                                                       name={"risks"}
+                                                       disabled={this.props.disabled}
+                                                       min={min}
+                                                       max={max}
+                                                       onChanged={this.risksChanged}/>
+                                        <UIErrorBanner id={"swot-analysis.risksError"}/>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+
+                            <UIErrorBanner id={"swot-analysis.too-long"}/>
+                        </div>);
+                }
+
+                legacyShowErrorPage(404);
+                return <p>"ERROR"</p>;
+            }}/>
+        );
+
     }
 
     private applyCardComponentChanges(type: "strengths" | "weaknesses" | "chances" | "risks", values: CardComponentFields) {

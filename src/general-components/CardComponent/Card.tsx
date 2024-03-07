@@ -1,11 +1,11 @@
 import React, {ChangeEvent, Component, ComponentClass, FunctionComponent} from "react";
 import {CustomDescriptionComponentProps} from "./CustomDescriptionComponent/CustomDescriptionComponent";
 import {CardComponentField, CardComponentFieldPlaceholder} from "./CardComponent";
-import {isDesktop} from "../Desktop";
 import {compareWithoutFunctions} from "../ComponentUtils";
 import {Button, Collapse, FormControl, InputGroup} from "react-bootstrap";
 import FAE from "../Icons/FAE";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
+import {DesktopContext, IDesktopContext} from "../Contexts/DesktopContext";
 
 
 export interface CardProps<D = never> {
@@ -46,11 +46,16 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
     public static MAX_NAME_LENGTH = 120;
     public static MAX_DESC_LENGTH = 300;
 
-    constructor(props: CardProps<D> | Readonly<CardProps<D>>) {
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = DesktopContext;
+    context!: React.ContextType<typeof DesktopContext>
+    constructor(props: CardProps<D> | Readonly<CardProps<D>>, isDesktop:IDesktopContext) {
         super(props);
 
         this.state = {
-            showDesc: isDesktop(),
+            showDesc: isDesktop,
             descChanged: false,
             nameTooLong: false,
             descTooLong: false
@@ -128,6 +133,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
     }
 
     render = () => {
+        const isDesktop = this.context;
         let customDescs: any[] = [];
 
         if (this.props.customDescs && this.props.customDescValues !== undefined) {
@@ -174,7 +180,7 @@ class Card<D = never> extends Component<CardProps<D>, CardState> {
                 </InputGroup>
                 {/*TODO put this logic into higher component*/}
                 {!this.props.hideDesc && (
-                    <Collapse in={isDesktop() || this.state.showDesc || this.props.disabled}>
+                    <Collapse in={isDesktop || this.state.showDesc || this.props.disabled}>
                         <div>
                             <FormControl
                                 required={this.props.required}

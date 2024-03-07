@@ -1,4 +1,4 @@
-import {Component, ReactNode} from "react";
+import {ReactNode} from "react";
 import {SettingsContextComponent} from "./SettingsContextComponent";
 import {FooterContextComponent} from "./FooterContextComponent";
 import {UserContextComponent} from "./UserContextComponent";

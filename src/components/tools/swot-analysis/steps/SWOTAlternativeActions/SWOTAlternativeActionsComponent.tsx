@@ -1,7 +1,6 @@
 import React, {FormEvent} from "react";
 import {Col, Form, ProgressBar, Row} from "react-bootstrap";
 import {CardComponent, CardComponentFields} from "../../../../../general-components/CardComponent/CardComponent";
-import {isDesktop} from "../../../../../general-components/Desktop";
 import {
     shallowCompareStepProps,
     Step,
@@ -11,6 +10,7 @@ import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTAlternativeActions} from "./SWOTAlternativeActions";
 import {UIErrorBanner} from "../../../../../general-components/Error/UIErrors/UIErrorBannerComponent/UIErrorBanner";
 import {HoverWindow} from "../../../../../general-components/HoverWindow/HoverWindow";
+import {DesktopContext} from "../../../../../general-components/Contexts/DesktopContext";
 
 
 export interface AlternateAction {
@@ -107,53 +107,60 @@ export class SWOTAlternativeActionsComponent extends Step<SWOTAnalysisValues, SW
                                  className={"progressBar"}/>
 
                     <Row className={"mb-3 mt-3"}>
-                        <Col sm={isDesktop() ? 6 : 12}>
-                            <HoverWindow description={firstIdDescription} placement={"bottom"}
-                                         pointerDisable={!this.props.disabled}>
-                                <Form.Select id={"first"}
-                                             disabled={!this.props.disabled}
-                                             value={firstId}
-                                             onChange={this.changedSelected}>
-                                    {firstIds.map((value, index) => {
-                                        return (
-                                            <option
-                                                key={"S" + index}
-                                                disabled={!this.props.disabled}
-                                                value={value.id ?? ""}
-                                            >
-                                                {value.id + " " + value.name}
-                                            </option>
-                                        );
-                                    })}
-                                </Form.Select>
-                            </HoverWindow>
-                        </Col>
-                        <Col sm={isDesktop() ? 6 : 12}>
+                        <DesktopContext.Consumer children={isDesktop => {
+                            return (
+                                <>
+                                    <Col sm={isDesktop ? 6 : 12}>
+                                        <HoverWindow description={firstIdDescription} placement={"bottom"}
+                                                     pointerDisable={!this.props.disabled}>
+                                            <Form.Select id={"first"}
+                                                         disabled={!this.props.disabled}
+                                                         value={firstId}
+                                                         onChange={this.changedSelected}>
+                                                {firstIds.map((value, index) => {
+                                                    return (
+                                                        <option
+                                                            key={"S" + index}
+                                                            disabled={!this.props.disabled}
+                                                            value={value.id ?? ""}
+                                                        >
+                                                            {value.id + " " + value.name}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </Form.Select>
+                                        </HoverWindow>
+                                    </Col>
+                                    <Col sm={isDesktop ? 6 : 12}>
 
-                            <HoverWindow description={secondIdDescription} placement={"bottom"}
-                                         pointerDisable={!this.props.disabled}>
-                                <Form.Select id={"second"}
-                                             disabled={!this.props.disabled}
-                                             value={secondId}
-                                             onChange={this.changedSelected}>
-                                    {secondIds.map((value, index) => {
-                                        return (
+                                        <HoverWindow description={secondIdDescription} placement={"bottom"}
+                                                     pointerDisable={!this.props.disabled}>
+                                            <Form.Select id={"second"}
+                                                         disabled={!this.props.disabled}
+                                                         value={secondId}
+                                                         onChange={this.changedSelected}>
+                                                {secondIds.map((value, index) => {
+                                                    return (
 
-                                            <option
-                                                key={"S" + index}
-                                                disabled={!this.props.disabled}
-                                                value={value.id ?? ""}
-                                            >
-                                                {value.id + " " + value.name}
+                                                        <option
+                                                            key={"S" + index}
+                                                            disabled={!this.props.disabled}
+                                                            value={value.id ?? ""}
+                                                        >
+                                                            {value.id + " " + value.name}
 
-                                            </option>
+                                                        </option>
 
 
-                                        );
-                                    })}
-                                </Form.Select>
-                            </HoverWindow>
-                        </Col>
+                                                    );
+                                                })}
+                                            </Form.Select>
+                                        </HoverWindow>
+                                    </Col>
+                                </>
+                            )
+                        }}/>
+
                     </Row>
 
                     <CardComponent
