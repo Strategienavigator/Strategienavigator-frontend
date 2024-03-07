@@ -11,7 +11,7 @@ import {SharedSaveContext} from "../../../Contexts/SharedSaveContextComponent";
 import './save-card.scss';
 import {DeleteSavePermission, hasPermission, InviteToSavePermission} from "../../../Permissions";
 import {ButtonPanel} from "../../../ButtonPanel/ButtonPanel";
-import {isDesktop} from "../../../Desktop";
+import {useIsDesktop} from "../../../Contexts/DesktopContext";
 
 
 export interface SaveCardProps {
@@ -21,60 +21,59 @@ export interface SaveCardProps {
     onInvite?: (save: SimpleSaveResource) => void
 }
 
-export class SaveCard extends Component<SaveCardProps, {}> {
+export function SaveCard({save, onTrash, onInvite, toolLink}: SaveCardProps) {
+    const isDesktop = useIsDesktop();
+    if (save !== undefined && toolLink !== undefined) {
+        // EARLY RETURN
+        let isDeleting = save.owner_deleting;
 
-    render() {
-        if (this.props.save !== undefined && this.props.toolLink !== undefined) {
-            // EARLY RETURN
-            let isDeleting = this.props.save.owner_deleting;
+        let classes = ["save"];
+        if (isDeleting)
+            classes.push("disabled");
 
-            let classes = ["save"];
-            if (isDeleting)
-                classes.push("disabled");
+        let formattedCreatedDate = new Date(save.created_at).toLocaleDateString("de-DE");
 
-            let formattedCreatedDate = new Date(this.props.save.created_at).toLocaleDateString("de-DE");
+        return (
+            <SharedSaveContext.Consumer>
+                {(context) => (
+                    <div key={save!.id} className={classes.join(" ")}>
+                        <Card as={Link} to={toolLink + "/" + save!.id}
+                              className={"mt-2 mb-2 save-card"}>
+                            <Card.Body className={"save-body"}>
+                                <Card.Title>{save!.name}</Card.Title>
+                                <Card.Text
+                                    className={"save-desc text-muted mb-1"}
+                                >
+                                    {save!.description && save!.description}
+                                </Card.Text>
+                                <small
+                                    title={"Erstelldatum: " + formattedCreatedDate}
+                                    className={`created-date text-muted ${isDesktop && "desktop"}`}
+                                >
+                                    {formattedCreatedDate}
+                                </small>
+                            </Card.Body>
+                        </Card>
 
-            return (
-                <SharedSaveContext.Consumer>
-                    {(context) => (
-                        <div key={this.props.save!.id} className={classes.join(" ")}>
-                            <Card as={Link} to={this.props.toolLink + "/" + this.props.save!.id}
-                                  className={"mt-2 mb-2 save-card"}>
-                                <Card.Body className={"save-body"}>
-                                    <Card.Title>{this.props.save!.name}</Card.Title>
-                                    <Card.Text
-                                        className={"save-desc text-muted mb-1"}
-                                    >
-                                        {this.props.save!.description && this.props.save!.description}
-                                    </Card.Text>
-                                    <small
-                                        title={"Erstelldatum: " + formattedCreatedDate}
-                                        className={`created-date text-muted ${isDesktop() && "desktop"}`}
-                                    >
-                                        {formattedCreatedDate}
-                                    </small>
-                                </Card.Body>
-                            </Card>
-
-                            <ButtonPanel buttonPerCol={3}>
-                                {(isDeleting) && (
-                                    <Button disabled variant={"danger"} className={"deleting"}>
-                                        Inhaber löscht aktuell sein Konto!
-                                    </Button>
-                                )}
-                                {(hasPermission(context.permission, InviteToSavePermission) && !isDeleting) && (
-                                    <Button type={"button"} variant={"primary"} className={"inviteSave"}
-                                            onClick={() => {
-                                                if (this.props.onInvite !== undefined && this.props.save !== undefined) {
-                                                    this.props.onInvite(this.props.save);
-                                                }
-                                            }}>
-                                        <FAE icon={faUserPlus}/>
-                                    </Button>
-                                )}
-                                {/* {( isPersona ) && (
-                                    <Link to={{ 
-                                        pathname :"persona/" + this.props.save!.id,
+                        <ButtonPanel buttonPerCol={3}>
+                            {(isDeleting) && (
+                                <Button disabled variant={"danger"} className={"deleting"}>
+                                    Inhaber löscht aktuell sein Konto!
+                                </Button>
+                            )}
+                            {(hasPermission(context.permission, InviteToSavePermission) && !isDeleting) && (
+                                <Button type={"button"} variant={"primary"} className={"inviteSave"}
+                                        onClick={() => {
+                                            if (onInvite !== undefined && save !== undefined) {
+                                                onInvite(save);
+                                            }
+                                        }}>
+                                    <FAE icon={faUserPlus}/>
+                                </Button>
+                            )}
+                            {/* {( isPersona ) && (
+                                    <Link to={{
+                                        pathname :"persona/" + save!.id,
                                         state : saveToSend
                                         }}>
                                     <Button  variant={"danger"} className={"personaPdf"} >
@@ -82,33 +81,32 @@ export class SaveCard extends Component<SaveCardProps, {}> {
                                     </Button>
                                     </Link>
                                 )} */}
-                                {(hasPermission(context.permission, DeleteSavePermission) && !!this.props.onTrash && !isDeleting) && (
-                                    <Button type={"button"} variant={"danger"} className={"deleteSave"}
-                                            onClick={this.props.onTrash}>
-                                        <FAE icon={faTrash}/>
-                                    </Button>
-                                )}
+                            {(hasPermission(context.permission, DeleteSavePermission) && !!onTrash && !isDeleting) && (
+                                <Button type={"button"} variant={"danger"} className={"deleteSave"}
+                                        onClick={onTrash}>
+                                    <FAE icon={faTrash}/>
+                                </Button>
+                            )}
 
-                            </ButtonPanel>
-                        </div>
-                    )}
-                </SharedSaveContext.Consumer>
-            );
-        }
-
-        return (
-            <div className={"save"}>
-                <Card className={"mt-2 mb-2 save-card-dummy"}>
-                    <Card.Body className={"save-body"}>
-                        <Card.Title className={"dummy"}>..............................</Card.Title>
-                        <br/>
-                        <Card.Text className={"save-desc mb-1 dummy"}>
-                            ......................................................
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            </div>
-        )
+                        </ButtonPanel>
+                    </div>
+                )}
+            </SharedSaveContext.Consumer>
+        );
     }
+
+    return (
+        <div className={"save"}>
+            <Card className={"mt-2 mb-2 save-card-dummy"}>
+                <Card.Body className={"save-body"}>
+                    <Card.Title className={"dummy"}>..............................</Card.Title>
+                    <br/>
+                    <Card.Text className={"save-desc mb-1 dummy"}>
+                        ......................................................
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+        </div>
+    );
 
 }
