@@ -1,6 +1,8 @@
+import '../../index.scss'
+/*
 import {mount} from "cypress/react18"
 import {SharedSavePermission, SharedSaveResource} from "../Datastructures";
-import '../../index.scss'
+
 import {CollaboratorsTableComponent} from "./CollaboratorsTableComponent";
 
 describe.skip('Collaborators Dots ', () => {
@@ -36,50 +38,6 @@ describe.skip('Collaborators Dots ', () => {
 
     });
 
-    /*
-    it("0 Users", () => {
-
-
-        mount(<CollaboratorsTableComponent collaborators={[]}></CollaboratorsTableComponent>);
-        cy.get('.collaborators').should('be.empty');
-
-    });
-
-    it("Hover Test", () => {
-
-        const collabs: SimplestUserResource[] = [{
-            id: 10,
-            username: "First Test"
-        }]
-        mount(<CollaboratorsTableComponent collaborators={collabs}></CollaboratorsTableComponent>);
-        cy.get('.collaborator').trigger('mouseover');
-        cy.contains('First Test').should('be.visible');
-        cy.get('.collaborator').trigger('mouseout');
-    });
-
-    it("Click Test", () => {
-
-        const collabs: SimplestUserResource[] = [{
-            id: 10,
-            username: "First Test"
-        }]
-        mount(<CollaboratorsTableComponent collaborators={collabs}></CollaboratorsTableComponent>);
-        cy.get('.collaborator').click();
-        cy.contains('First Test').should('be.visible');
-        cy.get('.collaborator').trigger('mouseout');
-    });
-
-    it("Self", () => {
-
-        Session.currentUser = new User(10, "First Test", Cypress.env('TEST_LOGIN_USERNAME'), false, [], [], new Date());
-        const collabs: SimplestUserResource[] = [{
-            id: 10,
-            username: "First Test"
-        }]
-        mount(<CollaboratorsTableComponent collaborators={collabs}></CollaboratorsTableComponent>);
-        cy.get('.collaborator').click();
-        cy.contains('First Test').should('be.visible');
-        cy.contains('(Sie)').should('be.visible');
-    });*/
 });
+ */
 
