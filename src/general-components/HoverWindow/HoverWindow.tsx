@@ -1,9 +1,9 @@
-import * as React from "react";
-import {ComponentClass, FunctionComponent, PureComponent, ReactNode} from "react";
-import {OverlayTrigger, Popover} from "react-bootstrap";
+import {ComponentClass, createElement, FunctionComponent, memo, ReactElement} from "react";
+import {OverlayTrigger} from "react-bootstrap";
 import {OverlayTriggerType} from "react-bootstrap/OverlayTrigger";
 import {OverlayInjectedProps} from "react-bootstrap/Overlay";
 import {Placement} from "react-bootstrap/types";
+import {HoverSimplePopover} from "./HoverSimplePopover";
 
 
 interface HoverWindowCustomPopupProps {
@@ -18,7 +18,8 @@ interface HoverWindowProps extends HoverWindowCustomPopupProps {
      * @param props
      */
     customPopUp?: FunctionComponent<HoverWindowCustomPopupProps & OverlayInjectedProps> | ComponentClass<HoverWindowCustomPopupProps & OverlayInjectedProps>
-    children: ReactNode
+
+    children: ReactElement
     /**
      * Bei welcher Aktion sich das Popup Fenster öffnen soll
      */
@@ -35,65 +36,54 @@ interface HoverWindowProps extends HoverWindowCustomPopupProps {
     /**
      * Definiert ob alle click events für die children deaktiviert werden sollen. Das wird benötigt, wenn die children disabled sind oder können
      */
-    pointerDisable: boolean
-}
-
-interface HoverWindowState {
+    pointerDisable?: boolean
 }
 
 /**
  * Zeigt ein popover fenster mit der definierten Überschrift und beschreibung
  *
  */
-class HoverWindow extends PureComponent<HoverWindowProps, HoverWindowState> {
+const HoverWindow = memo(function HoverWindow(componentProps: HoverWindowProps) {
 
-
-    static defaultProps = {
-        trigger: ["hover", "focus"],
-        disabled: false,
-        pointerDisable: false
+    // load default values
+    const {
+        customPopUp,
+        children,
+        trigger = ["hover", "focus"],
+        onToggle,
+        placement,
+        ...customProps
+    } = componentProps;
+    customProps.disabled = customProps.disabled ?? false;
+    customProps.pointerDisable = customProps.pointerDisable ?? false;
+    // early exit
+    if (customProps.disabled || (customProps.title === undefined && customProps.description === undefined)) {
+        return children;
     }
 
-    render() {
-        const {customPopUp, children, trigger, onToggle, placement, ...customProps} = this.props;
-
-        // early exit
-        if (customProps.disabled || (customProps.title === undefined && customProps.description === undefined)) {
-            return children;
-        }
-
-        // hide the HoverWindowCustomPopupProps from the OverlayTrigger
-        const popupFunction = customPopUp !== undefined ? (props: OverlayInjectedProps) => {
-            return React.createElement(customPopUp, {...props, ...customProps});
-        } : undefined;
+    // hide the HoverWindowCustomPopupProps from the OverlayTrigger
+    const popupFunction = customPopUp !== undefined ? (props: OverlayInjectedProps) => {
+        return createElement(customPopUp, {...props, ...customProps});
+    } : undefined;
 
 
-        //TODO make own component
-        const popover = popupFunction ?? (
-            <Popover id="popover-basic">
-                {customProps.title !== undefined ? (
-                    <Popover.Header as="h3">{customProps.title}</Popover.Header>) : undefined}
-                {customProps.description !== undefined ? (
-                    <Popover.Body>
-                        {customProps.description}
-                    </Popover.Body>) : undefined}
-            </Popover>
-        );
-        return (
-            <OverlayTrigger trigger={this.props.trigger} overlay={popover}
-                            onToggle={this.props.onToggle} placement={placement}>
-                {this.props.pointerDisable ? (
-                    <div>
-                        <div style={{pointerEvents: "none"}}>
-                            {children}
-                        </div>
+    const popover = popupFunction ?? (
+        <HoverSimplePopover title={customProps.title} description={customProps.description}/>
+    );
+    return (
+        <OverlayTrigger trigger={trigger} overlay={popover}
+                        onToggle={onToggle} placement={placement}>
+            {customProps.pointerDisable ? (
+                <div>
+                    <div style={{pointerEvents: "none"}}>
+                        {children}
                     </div>
-                ) : <div>{children}</div>}
+                </div>
+            ) : <div>{children}</div>}
 
-            </OverlayTrigger>
-        );
-    }
-}
+        </OverlayTrigger>
+    );
+});
 
 export {
     HoverWindow
