@@ -7,6 +7,7 @@ import {RouteComponentProps} from "react-router";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {ToolSaveProps} from "../ToolSavePage/ToolSavePage";
 import {withUIErrorContext} from "../../Contexts/UIErrorContext/UIErrorContext";
+import {withMessagesContext} from "../../Messages/Messages";
 
 
 abstract class SteppableTool<D extends object> extends Tool<D> {
@@ -17,8 +18,8 @@ abstract class SteppableTool<D extends object> extends Tool<D> {
 
     protected constructor(props: RouteComponentProps, context: any, toolName: string, toolIcon: IconDefinition, toolID: number) {
         super(props, context, toolName, toolIcon, toolID);
-        this.typeStepComponent = withUIErrorContext(class TypeStepComponent extends StepComponent<D> {
-        });
+        this.typeStepComponent = withUIErrorContext(withMessagesContext(class TypeStepComponent extends StepComponent<D> {
+        }));
     }
 
     public getStep(index: number) {

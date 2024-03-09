@@ -11,7 +11,7 @@ import {Prompt, RouteComponentProps} from "react-router";
 import * as H from "history";
 import {getSave, lockSave, updateSave} from "../../API/calls/Saves";
 import {Tool} from "../Tool";
-import {Messages} from "../../Messages/Messages";
+import {MessageContext, Messages} from "../../Messages/Messages";
 import {Button, Modal} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
@@ -87,6 +87,12 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     private readonly resourceManager: ResourceManager;
     private readonly resources: ResourcesType = new Map();
     private onUnmount: (() => void)[];
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
@@ -217,7 +223,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     public onAPIError(error: Error): void {
         // TODO: remove later
-        Messages.add(error.message, "DANGER", Messages.TIMER);
+        this.context.add(error.message, "DANGER", Messages.TIMER);
     }
 
     public lock = async (save: SaveResource<any>) => {

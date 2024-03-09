@@ -31,6 +31,7 @@ import {Loader} from "./Loader/Loader";
 import Nav from "../components/platform/nav/Nav";
 import {Container} from "react-bootstrap";
 import {LegacyErrorPageAdapter} from "./LegacyErrorPageAdapter";
+import {Messages} from "./Messages/Messages";
 
 
 export function App() {
@@ -109,25 +110,25 @@ export function App() {
     function getAppContent() {
         return (
             <>
+                <Messages xAlignment={"CENTER"} yAlignment={"BOTTOM"} style={{marginBottom: 65}}>
+                    <GlobalContexts key={"global-contexts"}>
+                        <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"} payload={[]}>
+                            <BrowserRouter>
+                                <LegacyErrorPageAdapter/>
+                                <Nav/>
 
-                <GlobalContexts key={"global-contexts"}>
-                    <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"} payload={[]}>
-                        <BrowserRouter>
-                            <LegacyErrorPageAdapter/>
-                            <Nav/>
+                                <div id={"content"}>
+                                    <Container fluid={false}>
+                                        {getRouterSwitch()}
+                                    </Container>
+                                </div>
 
-                            <div id={"content"}>
-                                <Container fluid={false}>
-                                    {getRouterSwitch()}
-                                </Container>
-                            </div>
+                                {getAppFooter()}
 
-                            {getAppFooter()}
-
-                        </BrowserRouter>
-                    </Loader>
-                </GlobalContexts>
-
+                            </BrowserRouter>
+                        </Loader>
+                    </GlobalContexts>
+                </Messages>
             </>
         );
     }

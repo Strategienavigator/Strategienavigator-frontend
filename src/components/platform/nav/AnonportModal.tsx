@@ -13,7 +13,7 @@ import {isEmpty} from "../../../general-components/ComponentUtils";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import {portUser} from "../../../general-components/API/calls/User";
 import {RouteComponentProps, withRouter} from "react-router";
-import {Messages} from "../../../general-components/Messages/Messages";
+import {MessageContext} from "../../../general-components/Messages/Messages";
 import {CaptchaComponent} from "../../../general-components/Captcha/CaptchaComponent";
 
 
@@ -37,6 +37,12 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
     private passwordField: RefObject<PasswordField<any>> = createRef();
     private uniqueEmail: RefObject<UniqueCheck & HTMLInputElement> = createRef();
     private uniqueUsername: RefObject<UniqueCheck & HTMLInputElement> = createRef();
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
 
     constructor(props: any) {
         super(props);
@@ -215,7 +221,7 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
                     let logoutCall = await Session.logout();
 
                     if (logoutCall && logoutCall.success) {
-                        Messages.add((
+                        this.context.add((
                             <div>
                                 Konto erfolgreich portiert.<br/>
                                 Überprüfen Sie Ihre E-Mails!

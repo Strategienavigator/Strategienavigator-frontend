@@ -16,7 +16,7 @@ import {
 import {Loader} from "../Loader/Loader";
 import {createInvitationLink, deleteInvitationLink, showInvitationLinks} from "../API/calls/Invitations";
 import {faTimes, faTrash} from "@fortawesome/free-solid-svg-icons/";
-import {Messages} from "../Messages/Messages";
+import {MessageContext, Messages} from "../Messages/Messages";
 import {SingleInviteModal} from "./SingleInviteModal/SingleInviteModal";
 import {searchUser} from "../API/calls/User";
 import {createContribution, getContributors} from "../API/calls/Contribution";
@@ -67,6 +67,12 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
         contributorsButtonLoading: false,
         showCopyModal: null
     };
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
 
     constructor(props: SaveInvitationProps | Readonly<SaveInvitationProps>) {
         super(props);
@@ -408,7 +414,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
 
                             if (link?.success) {
                                 await this.loadInviteLinks(this.props.save);
-                                Messages.add("Einladungslink erstellt!", "SUCCESS", Messages.TIMER);
+                                this.context.add("Einladungslink erstellt!", "SUCCESS", Messages.TIMER);
                             }
                         }
                     }}
@@ -443,7 +449,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                         if (window.navigator.clipboard && window.isSecureContext) {
                                             let location = window.location.origin;
                                             await window.navigator.clipboard.writeText(location + "/invitation/" + this.state.showCopyModal?.token);
-                                            Messages.add("Link kopiert!", "SUCCESS", Messages.TIMER);
+                                            this.context.add("Link kopiert!", "SUCCESS", Messages.TIMER);
                                         }
                                     }}
                                 >
@@ -486,7 +492,7 @@ class SaveInvitation extends Component<SaveInvitationProps, SaveInvitationState>
                                     await deleteInvitationLink(this.state.deleteInvitationLink);
                                     await this.loadInviteLinks(this.props.save);
 
-                                    Messages.add("Einladungslink gelöscht!", "SUCCESS", Messages.TIMER);
+                                    this.context.add("Einladungslink gelöscht!", "SUCCESS", Messages.TIMER);
 
                                     this.setState({
                                         deleteInvitationLink: null,

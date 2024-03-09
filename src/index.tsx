@@ -3,7 +3,6 @@ import React from 'react';
 import './index.scss';
 import {Session} from "./general-components/Session/Session";
 import {Loader} from "./general-components/Loader/Loader";
-import {Messages} from "./general-components/Messages/Messages";
 import {GlobalContexts} from "./general-components/Contexts/GlobalContexts";
 import {enablePatches} from "immer";
 import {createRoot} from "react-dom/client";
@@ -15,15 +14,6 @@ const renderApp = () => {
     appRoot.render(
         <React.StrictMode>
             <App></App>
-        </React.StrictMode>
-    );
-    messageRoot.render(
-        <React.StrictMode>
-            <Messages
-                xAlignment={"CENTER"}
-                yAlignment={"BOTTOM"}
-                style={{marginBottom: 65}}
-            />
         </React.StrictMode>
     );
 }
@@ -57,9 +47,6 @@ const buildApp = async () => {
 
 const appContainer = document.getElementById("root")
 const appRoot = createRoot(appContainer!);
-
-const messageContainer = document.getElementById("messages")
-const messageRoot = createRoot(messageContainer!);
 buildApp().then(() => {
     enablePatches();
 });

@@ -17,7 +17,7 @@ import {SaveInvitation} from "../../Sharing/SaveInvitation";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 import {ButtonPanel} from "../../ButtonPanel/ButtonPanel";
 import {ImportModal} from "./Import/ImportModal";
-import {Messages} from "../../Messages/Messages";
+import {MessageContext, Messages} from "../../Messages/Messages";
 import {DesktopContext} from "../../Contexts/DesktopContext";
 
 
@@ -234,15 +234,18 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                     />
                 </SharedSaveContextComponent>
 
-                <ImportModal
-                    show={this.state.showImportModal}
-                    tool={this.props.tool}
-                    onClose={this.onCloseImportModal}
-                    onSuccess={(save) => {
-                        this.props.tool.switchPage(save.id.toString());
-                        Messages.add("Importieren erfolgreich!", "SUCCESS", Messages.TIMER);
-                    }}
-                />
+                <MessageContext.Consumer children={({add}) => {
+                    return (<ImportModal
+                        show={this.state.showImportModal}
+                        tool={this.props.tool}
+                        onClose={this.onCloseImportModal}
+                        onSuccess={(save) => {
+                            this.props.tool.switchPage(save.id.toString());
+                            add("Importieren erfolgreich!", "SUCCESS", Messages.TIMER);
+                        }}
+                    />);
+                }}/>
+
             </div>
         );
     }

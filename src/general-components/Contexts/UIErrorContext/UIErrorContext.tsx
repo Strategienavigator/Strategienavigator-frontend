@@ -1,4 +1,4 @@
-import React, {Component, ReactNode} from "react";
+import React, {Component, ReactNode, useContext} from "react";
 import {ErrorMap, UIError} from "../../Error/UIErrors/UIError";
 import produce from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
@@ -62,6 +62,15 @@ const UIErrorContext = React.createContext<IUIErrorContext>({
 });
 
 
+export function useUIErrorContext() {
+    return useContext(UIErrorContext);
+}
+
+/**
+ * creates a new component with receives a UIErrorContext as prop.
+ * @deprecated use a function component and useUIErrorContext instead.
+ * @param Component the component to wrap
+ */
 const withUIErrorContext = <P extends object>(Component: React.ComponentType<P & {
     uiErrorContext: IUIErrorContext
 }>) =>

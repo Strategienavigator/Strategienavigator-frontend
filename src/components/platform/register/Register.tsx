@@ -8,7 +8,7 @@ import {checkUsername} from "../../../general-components/API/calls/Username";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 
 import "./register.scss";
-import {Messages} from "../../../general-components/Messages/Messages";
+import {MessageContext, Messages} from "../../../general-components/Messages/Messages";
 import {RouteComponentProps, withRouter} from "react-router";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import {CaptchaComponent} from "../../../general-components/Captcha/CaptchaComponent";
@@ -20,6 +20,12 @@ interface RegisterState {
 }
 
 class Register extends PureComponent<RouteComponentProps, RegisterState> {
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
 
     constructor(props: any) {
         super(props);
@@ -49,10 +55,10 @@ class Register extends PureComponent<RouteComponentProps, RegisterState> {
         });
 
         if (call?.success) {
-            Messages.add("Konto erstellt!\nÜberprüfe deine Emails!", "SUCCESS", Messages.TIMER);
+            this.context.add("Konto erstellt!\nÜberprüfe deine Emails!", "SUCCESS", Messages.TIMER);
             this.props.history.push(`/login?email=${email}&bestaetigen`);
         } else {
-            Messages.add("Fehlgeschlagen! Überprüfen Sie Ihre Eingaben!", "DANGER", Messages.TIMER);
+            this.context.add("Fehlgeschlagen! Überprüfen Sie Ihre Eingaben!", "DANGER", Messages.TIMER);
         }
     }
 

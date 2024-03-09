@@ -6,9 +6,8 @@ import {Badge, Button, Card, Col, Form, Modal, Row} from "react-bootstrap";
 import {extractFromForm} from "../../../general-components/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {deleteUser, UpdateData, updateUser} from "../../../general-components/API/calls/User";
-import {reload_app} from "../../../index";
-import {withRouter} from "react-router";
-import {Messages} from "../../../general-components/Messages/Messages";
+import {RouteComponentProps, withRouter} from "react-router";
+import {Messages, withMessagesContext, WithMessagesContextProps} from "../../../general-components/Messages/Messages";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
@@ -38,7 +37,7 @@ export interface MyProfileState {
     lastOpenedSaves?: SimpleSaveResource[]
 }
 
-export class MyProfileComponent extends Component<any, MyProfileState> {
+export class MyProfileComponent extends Component<RouteComponentProps & WithMessagesContextProps, MyProfileState> {
 
     /**
      * Definiert auf welchen Context zugegriffen werden soll
@@ -130,7 +129,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
             let call = await updateUser(Session.currentUser?.getID() as number, data, {
                 errorCallback: (reason) => {
-                    Messages.add("Beim speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
+                    this.props.messageContext.add("Beim speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
                 }
             });
 
@@ -141,12 +140,11 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
 
                 newUser.update(data);
                 Session.setCurrent(newUser);
-                // reload_app();
                 this.setState({
                     isSaved: true
                 });
             } else {
-                Messages.add("Beim Speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
+                this.props.messageContext.add("Beim Speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
             }
         } else {
             // fake load so the user thinks something is happening
@@ -178,9 +176,7 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
         Session.removeTokens();
 
         this.props.history.push("/");
-        Messages.add("Ihr Konto wurde gelöscht!", "SUCCESS", 7000);
-
-        reload_app();
+        this.props.messageContext.add("Ihr Konto wurde gelöscht!", "SUCCESS", 7000);
     }
 
     getLastOpenedSaves = async () => {
@@ -428,7 +424,6 @@ export class MyProfileComponent extends Component<any, MyProfileState> {
             </Form>
         );
     }
-
 }
 
-export const MyProfile = withRouter(MyProfileComponent);
+export const MyProfile = withRouter(withMessagesContext(MyProfileComponent));

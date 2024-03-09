@@ -5,7 +5,7 @@ import {extractFromForm} from "../../../general-components/FormHelper";
 import {reload_app} from "../../../index";
 import {RouteComponentProps, withRouter} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {Messages} from "../../../general-components/Messages/Messages";
+import {MessageContext, Messages} from "../../../general-components/Messages/Messages";
 
 import "./login.scss";
 import {Link} from "react-router-dom";
@@ -27,9 +27,14 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
 
     public static defaultPath: string = "/my-profile";
 
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
+
     constructor(props: any) {
         super(props);
-
         this.state = {
             isLoggingIn: false,
             isLoggingInAnonymously: false,
@@ -59,7 +64,7 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
         if (user !== null) {
             reload_app();
 
-            Messages.add("Willkommen zurück!", "SUCCESS", Messages.TIMER);
+            this.context.add("Willkommen zurück!", "SUCCESS", Messages.TIMER);
             this.props.history.push(path);
         } else {
             this.setState({
@@ -87,7 +92,7 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
             let path = this.getPath();
 
             if (user) {
-                Messages.add("Sie wurden anonym angemeldet!", "SUCCESS", Messages.TIMER);
+                this.context.add("Sie wurden anonym angemeldet!", "SUCCESS", Messages.TIMER);
                 this.props.history.push(path);
             }
         }

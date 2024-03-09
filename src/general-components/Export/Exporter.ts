@@ -42,7 +42,8 @@ abstract class Exporter<D> {
         } else {
             // Print error Messages
             validate.forEach((msg) => {
-                Messages.addWithProps(msg);
+                //TODO find way to show exceptions. Maybe throw exception which is catched by the calling function.
+                // Old way: Messages.addWithProps(msg);
             });
         }
     }

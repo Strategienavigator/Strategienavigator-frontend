@@ -2,7 +2,7 @@ import React, {Component, ComponentClass, FunctionComponent, ReactNode,} from "r
 import {Accordion, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
 import "./step-component.scss";
 import "./step-component-desk.scss";
-import {Messages} from "../../../Messages/Messages";
+import {Messages, WithMessagesContextProps} from "../../../Messages/Messages";
 import {StepProp} from "./Step/Step";
 import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeader";
 import {StepComponentButtons} from "./StepComponentButtons/StepComponentButtons";
@@ -19,6 +19,8 @@ import {SharedSaveContext,} from "../../../Contexts/SharedSaveContextComponent";
 import {EditSavesPermission, hasPermission} from "../../../Permissions";
 import {SharedSavePermission} from "../../../Datastructures";
 import {DesktopContext} from "../../../Contexts/DesktopContext";
+import {types} from "sass";
+import Error = types.Error;
 
 
 export interface StepDefinition<T extends object> {
@@ -134,7 +136,7 @@ export interface StepComponentState {
     showExportModal: boolean
 }
 
-class StepComponent<D extends object> extends Component<StepComponentProps<D> & {
+class StepComponent<D extends object> extends Component<StepComponentProps<D> & WithMessagesContextProps & {
     uiErrorContext: IUIErrorContext
 }, StepComponentState> {
     /**
@@ -145,13 +147,18 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private readonly stepController: StepController;
 
-    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & {
+
+    constructor(props: Readonly<StepComponentProps<D> & WithMessagesContextProps & {
         uiErrorContext: IUIErrorContext
-    });
-    constructor(props: StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, context: any);
-    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & {
+    }> | (StepComponentProps<D> & WithMessagesContextProps & { uiErrorContext: IUIErrorContext }));
+    constructor(props: StepComponentProps<D> & WithMessagesContextProps & {
         uiErrorContext: IUIErrorContext
-    }, context?: any) {
+    }, context: any);
+    constructor(props: (StepComponentProps<D> & WithMessagesContextProps & {
+        uiErrorContext: IUIErrorContext
+    }) | Readonly<StepComponentProps<D> & WithMessagesContextProps & {
+        uiErrorContext: IUIErrorContext
+    }>, context?: any) {
         super(props, context);
         this.stepController = {
             requestStep: this.changeStep,
@@ -581,7 +588,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private save = async () => {
         const addErrorMessage = () => {
-            Messages.add(
+            this.props.messageContext.add(
                 "Speichern fehlgeschlagen! Bitte versuchen Sie es später erneut.",
                 "DANGER",
                 Messages.TIMER
@@ -590,7 +597,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
         let saveCall = await this.props.saveController.save();
         if (saveCall) {
-            Messages.add(
+            this.props.messageContext.add(
                 "Erfolgreich abgespeichert!",
                 "SUCCESS",
                 Messages.TIMER
@@ -705,7 +712,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         const errors = this.withDataAndResources(this.props.steps[step].dataHandler.validateData);
         if (errors.length > 0) {
             this.putErrors(errors);
-            Messages.add(
+            this.props.messageContext.add(
                 "Überprüfen Sie Ihre Eingaben!",
                 "DANGER",
                 Messages.TIMER
