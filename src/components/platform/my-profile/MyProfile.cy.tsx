@@ -7,7 +7,7 @@ import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
 import {SharedSavePermission, SimpleSaveResource} from "../../../general-components/Datastructures";
 
-describe('Captcha', () => {
+describe('MyProfile Page', () => {
 
     before(function () {
             Session.currentUser = new User(

@@ -13,7 +13,7 @@ import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons/";
 
 
 import "./contribution-decision.scss";
-import {MessageContext, Messages} from "../../../../general-components/Messages/Messages";
+import {MessageContext} from "../../../../general-components/Messages/Messages";
 import {getSaveURL, getSharedSavePermissionText} from "../../../../general-components/Save";
 import {legacyShowErrorPage} from "../../../../general-components/LegacyErrorPageAdapter";
 

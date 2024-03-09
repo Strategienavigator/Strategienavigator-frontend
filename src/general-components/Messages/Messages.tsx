@@ -3,7 +3,8 @@ import React, {
     CSSProperties,
     ReactElement,
     ReactNode,
-    useCallback, useContext,
+    useCallback,
+    useContext,
     useEffect,
     useMemo,
     useReducer,
@@ -12,7 +13,6 @@ import React, {
 import {Alert} from "react-bootstrap";
 
 import "./messages.scss";
-import {IUIErrorContext, UIErrorContext} from "../Contexts/UIErrorContext/UIErrorContext";
 
 
 export type MessageTypes = "WARNING" | "DANGER" | "INFO" | "SUCCESS";

@@ -1,6 +1,6 @@
 import FileSaver from "file-saver";
 import {SaveResource} from "../Datastructures";
-import {Messages, SingleMessageProps} from "../Messages/Messages";
+import {SingleMessageProps} from "../Messages/Messages";
 import {ResourcesType} from "../Tool/ToolSavePage/ToolSavePage";
 
 
