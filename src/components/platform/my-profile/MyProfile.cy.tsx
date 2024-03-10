@@ -21,7 +21,7 @@ describe('MyProfile Page', () => {
         }
     )
 
-    it.skip("CheckLoadingBehaviour", () => {
+    it("CheckLoadingBehaviour", () => {
         // mock network
         const testSave = {
             id: 1,
@@ -85,6 +85,25 @@ describe('MyProfile Page', () => {
 
         cy.get('#username').clear().type("newUsername").should('have.value','newUsername');
         cy.get('#email').clear().type("newUsername").should('have.value','newUsername');
+    });
+
+    it("Check back button", function() {
+        mount(<UserContextComponent><MemoryRouter><MyProfile></MyProfile></MemoryRouter></UserContextComponent>);
+        cy.get('#username').should('have.value', "TestUser").should('have.attr',"readonly");
+
+        cy.contains('Bearbeiten').click();
+
+        cy.get('#username').should('have.value', "TestUser").should('not.have.attr',"readonly");
+
+
+        cy.get('#username').clear().type("newUsername").should('have.value','newUsername');
+        cy.get('#email').clear().type("newUsername").should('have.value','newUsername');
+
+        cy.contains('zurück',{matchCase:false}).click();
+
+        cy.get('#username').should('have.value', "TestUser").should('have.attr',"readonly");
+        cy.get('#email').should('have.value','max@test.test').should('have.attr',"readonly");
+
     })
 });
 
