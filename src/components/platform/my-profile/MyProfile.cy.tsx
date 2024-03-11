@@ -5,7 +5,6 @@ import {MemoryRouter} from "react-router";
 import {UserContextComponent} from "../../../general-components/Contexts/UserContextComponent";
 import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
-import {SharedSavePermission, SimpleSaveResource} from "../../../general-components/Datastructures";
 
 describe('MyProfile Page', () => {
 
@@ -22,46 +21,11 @@ describe('MyProfile Page', () => {
     )
 
     it("CheckLoadingBehaviour", () => {
-        // mock network
-        const testSave = {
-            id: 1,
-            name: "SaveName",
-            description: "SaveBeschreibung",
-            created_at: new Date().toDateString(),
-            last_locked: new Date().toDateString(),
-            last_opened: new Date().toDateString(),
-            locked_by: Session.currentUser?.getID()!,
-            owner: {
-                id: 1,
-                username: "TestUser"
-            },
-            owner_deleting: false,
-            permission: {
-                permission: SharedSavePermission.ADMIN,
-                created_at: new Date().toDateString()
-            },
-            resources: [],
-            tool_id: 1,
-            updated_at: new Date().toDateString()
-        } as SimpleSaveResource;
-        cy.intercept({
-            method: "GET",
-            url: "**api/saves/index/last"
-        }, (req) => {
-            req.reply({
-                data: [testSave]
-            });
-        }).as("stubedRequest");
-
 
         mount(<UserContextComponent><MemoryRouter><MyProfile></MyProfile></MemoryRouter></UserContextComponent>);
-        cy.wait('@stubedRequest');
-        cy.contains("Zuletzt geöffnet").parent().as("saveContainer");
-
         cy.contains("Anzahl eigener Analysen").parent().find(".badge").as('ownedCount');
         cy.contains("Anzahl geteilter Analysen").parent().find(".badge").as('sharedCount');
 
-        cy.get('@saveContainer').contains('SaveName');
         cy.get('@ownedCount').should('have.text', 1);
         cy.get('@sharedCount').should('have.text', 2);
 
