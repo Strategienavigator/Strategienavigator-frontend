@@ -81,7 +81,7 @@ describe('MyProfile Page', () => {
         cy.get('#email').should('have.value', "max@test.test").should('not.have.attr', "readonly");
 
         cy.get('#new_password').type("pass").should('have.value', 'pass');
-        cy.get('#new_password_confirm').clear().type("pass").should('have.value', 'pass');
+        cy.get('#passwordConfirm').clear().type("pass").should('have.value', 'pass');
 
         cy.get('#username').clear().type("newUsername").should('have.value', 'newUsername');
         cy.get('#email').clear().type("newUsername").should('have.value', 'newUsername');
@@ -105,20 +105,34 @@ describe('MyProfile Page', () => {
         cy.get('#email').should('have.value', 'max@test.test').should('have.attr', "readonly");
 
         cy.get('#new_password').should('not.exist');
-        cy.get('#new_password_confirm').should('not.exist');
+        cy.get('#passwordConfirm').should('not.exist');
     });
 
-    it("Test same and different Password", function () {
+    it("Test different Password", function () {
         mount(<UserContextComponent><MemoryRouter><MyProfile></MyProfile></MemoryRouter></UserContextComponent>);
 
         cy.contains('Bearbeiten').click();
 
         cy.get('#new_password').type('StrongPassw0rd!');
-        cy.get('#new_password_confirm').type('DifferentStrongPassw0rd!');
+        cy.get('#passwordConfirm').type('DifferentStrongPassw0rd!');
 
         cy.get('#current_password').type("CurrentPass"); // only for form validation not to fail
 
         cy.contains('Passwörter müssen übereinstimmen');
+    })
+
+    it("Test same Password", function () {
+        mount(<UserContextComponent><MemoryRouter><MyProfile></MyProfile></MemoryRouter></UserContextComponent>);
+
+        cy.contains('Bearbeiten').click();
+
+        const pass = 'StrongPassw0rd!';
+        cy.get('#new_password').type(pass);
+        cy.get('#passwordConfirm').type(pass);
+
+        cy.get('#current_password').type("CurrentPass"); // only for form validation not to fail
+
+        cy.contains('Passwörter müssen übereinstimmen').should('not.exist');
     })
 });
 

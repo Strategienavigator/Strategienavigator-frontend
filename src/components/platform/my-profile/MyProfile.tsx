@@ -30,8 +30,6 @@ export interface MyProfileState {
     edit: boolean
     delete: boolean
     showDeleteModal: boolean
-    passwordFieldTouched: boolean
-    passwordNotMatching?: boolean
     isSaving: boolean
     isSaved?: boolean
     lastOpenedSaves?: SimpleSaveResource[]
@@ -44,8 +42,6 @@ export class MyProfileComponent extends Component<RouteComponentProps & WithMess
      */
     static contextType = UserContext;
     context!: React.ContextType<typeof UserContext>
-    private password: string | null = null;
-    private passwordConfirm: string | null = null;
 
     constructor(props: any) {
         super(props);
@@ -54,43 +50,9 @@ export class MyProfileComponent extends Component<RouteComponentProps & WithMess
             edit: false,
             delete: false,
             showDeleteModal: false,
-            passwordFieldTouched: false,
             isSaving: false,
             lastOpenedSaves: undefined
         }
-    }
-
-    isSamePassword = () => {
-        if (this.password !== null && this.passwordConfirm !== null) {
-            if (this.password === this.passwordConfirm) {
-                this.setState({
-                    passwordNotMatching: false
-                });
-            } else {
-                this.setState({
-                    passwordNotMatching: true
-                });
-            }
-        } else {
-            this.setState({
-                passwordNotMatching: true
-            });
-        }
-    }
-
-    passwordChanged = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        this.password = e.currentTarget.value;
-        if (this.password !== "") {
-            this.setState({passwordFieldTouched: true});
-        } else {
-            this.setState({passwordFieldTouched: false});
-        }
-        this.isSamePassword();
-    }
-
-    passwordConfirmChanged = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        this.passwordConfirm = e.currentTarget.value;
-        this.isSamePassword();
     }
 
     changeView = () => {
@@ -239,34 +201,14 @@ export class MyProfileComponent extends Component<RouteComponentProps & WithMess
                     />
                     <Form.Label>E-Mail-Adresse</Form.Label>
                 </Form.Floating>
-                {/* changeHandler={(e) => {
-                    this.passwordChanged(e)
-                }}*/}
 
                 {/* NEUES PASSWORD */}
                 {(this.state.edit) && (
                     <PasswordField id={"new_password"} text={"Neues Passwort"} required={false} className={"field"}
                                    check={true}
                                    value={this.state.edit ? undefined : ""}
-                                   eye/>
-                )}
-
-                {/* NEUES PASSWORD WIEDERHOLEN */}
-                {(this.state.edit) && (
-                    <>
-                        <PasswordField id={"new_password_confirm"} text={"Neues Passwort wiederholen"}
-                                       required={this.state.passwordFieldTouched}
-                                       className={"field"} check={false}
-                                       value={this.state.edit ? undefined : ""}
-                                       eye/>
-                        <div className={"feedback"}>
-                            {(this.state.passwordNotMatching) && (
-                                <div className="invalid-feedback d-block">
-                                    Passwörter müssen übereinstimmen!
-                                </div>
-                            )}
-                        </div>
-                    </>
+                                   eye
+                                   confirm/>
                 )}
 
 
@@ -383,7 +325,7 @@ export class MyProfileComponent extends Component<RouteComponentProps & WithMess
                 {(this.state.edit) && (
                     <ButtonPanel buttonPerCol={2}>
                         <LoadingButton
-                            disabled={(this.state.isSaving) || (this.state.passwordFieldTouched && this.state.passwordNotMatching)}
+                            disabled={(this.state.isSaving)}
                             type={"submit"} variant={"dark"} className={"editButton"}
                             isLoading={this.state.isSaving} savingChild={"Speichert"}
                             defaultChild={"Änderungen speichern"}
