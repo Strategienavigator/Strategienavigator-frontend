@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.5.2
+        uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: clone backend
@@ -161,9 +161,9 @@ jobs:
       - name: clone frontend
         uses: actions/checkout@v3
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.5.2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - name: Cypress run component tests
         uses: cypress-io/github-action@v5
         with:

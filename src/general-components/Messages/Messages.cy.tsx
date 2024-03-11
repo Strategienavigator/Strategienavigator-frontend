@@ -12,7 +12,7 @@ function MessageDispatcher(props: SingleMessageProps) {
         return () => {
 
         }
-    }, [])
+    }, [addWithProps, props])
     return null;
 }
 
