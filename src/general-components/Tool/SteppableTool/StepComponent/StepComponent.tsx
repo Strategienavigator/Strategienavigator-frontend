@@ -11,7 +11,7 @@ import {ExportModal} from "../../ExportButton";
 import {ResourcesType, ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {ExtraWindowProps} from "../../ExtraWindowComponent/ExtraWindowComponent";
 import {UIError} from "../../../Error/UIErrors/UIError";
-import {Exporter} from "../../../Export/Exporter";
+import {Exporter, ValidationError} from "../../../Export/Exporter";
 import {Draft} from "immer";
 import {IUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
 import {SteppableTool} from "../SteppableTool";
@@ -387,6 +387,12 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             this.setState({
                 showExportModal: false
             });
+        }, (rejectReason) => {
+            if (rejectReason instanceof ValidationError) {
+                this.props.messageContext.addMultiple(rejectReason.validationMessages);
+            } else {
+                console.error(rejectReason);
+            }
         });
     }
 

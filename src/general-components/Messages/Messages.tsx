@@ -47,16 +47,21 @@ export interface SingleMessageState {
 
 export interface IMessageContext {
     add: (content: ReactNode, type: MessageTypes, timer?: number) => any
-    addWithProps: (values: SingleMessageProps) => any
+    addWithProps: (message: SingleMessageProps) => any,
+    addMultiple: (messages: SingleMessageProps[]) => any,
 }
 
 export const MessageContext = createContext({
-    add: (content: ReactNode, type: MessageTypes, timer?: number) => {
+    add: () => {
         console.warn("Tried to add message while the context wasn't initialized!")
     },
-    addWithProps: (values: SingleMessageProps) => {
+    addWithProps: () => {
+        console.warn("Tried to add message while the context wasn't initialized!")
+    },
+    addMultiple: () => {
         console.warn("Tried to add message while the context wasn't initialized!")
     }
+
 } as IMessageContext)
 
 
@@ -88,29 +93,40 @@ function SingleMessage({content, type, timer}: SingleMessageProps) {
 /**
  * This functions appends a SingleMessage element to the given array.
  * @param messages the array to append the SingleMessage to.
- * @param message the props of the added SingleMessage should have.
+ * @param newMessages the props of the added SingleMessage should have.
  */
-function messageReducer(messages: Array<ReactElement>, message: SingleMessageProps): Array<ReactElement> {
+function messageReducer(messages: Array<ReactElement>, newMessages: SingleMessageProps[]): Array<ReactElement> {
+
+    const newSingleMessages = newMessages.map((message) => (
+        <SingleMessage content={message.content} type={message.type}
+                       timer={message.timer} key={messages.length}/>
+    ));
 
     return [
         ...messages,
-        <SingleMessage content={message.content} type={message.type} timer={message.timer} key={messages.length}/>
+        ...newSingleMessages
     ];
 }
 
 function Messages({style, yAlignment, xAlignment, children}: MessagesProps) {
-    const [messages, showMessage] = useReducer(messageReducer, new Array<ReactElement>());
+    const [messages, showMessages] = useReducer(messageReducer, new Array<ReactElement>());
+
 
     const add = useCallback(function (content: ReactNode, type: MessageTypes, timer?: number) {
-        showMessage({content: content, type: type, timer: timer});
-    }, [showMessage]);
+        showMessages([{content: content, type: type, timer: timer}]);
+    }, [showMessages]);
+
+    const addWithProps = useCallback(function (messageProps: SingleMessageProps) {
+        add(messageProps.content, messageProps.type, messageProps.timer);
+    }, [add]);
 
     const context = useMemo(() => {
         return {
             add: add,
-            addWithProps: showMessage
+            addWithProps: addWithProps,
+            addMultiple: showMessages
         } as IMessageContext
-    }, [showMessage, add]);
+    }, [showMessages, add, addWithProps]);
 
 
     return (
@@ -134,7 +150,7 @@ export function useMessageContext() {
     return useContext(MessageContext)
 }
 
-export interface WithMessagesContextProps{
+export interface WithMessagesContextProps {
     messageContext: IMessageContext
 }
 
