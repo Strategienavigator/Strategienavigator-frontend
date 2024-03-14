@@ -4,26 +4,8 @@
  * @param {RadioNodeList} element die RadioNodeList
  * @returns {Array<string>} Das Array
  */
-import React, {FormEvent, ReactNode} from "react";
-import {CardComponentFields} from "./CardComponent/CardComponent";
-
-
-/**
- * Führt den callback für alle ReactNodes und ihre kinder aus.
- *
- * @param roots
- * @param func
- */
-function forEachChildrenRecursively(roots: ReactNode[], func: (node: ReactNode) => void) {
-    React.Children.forEach(roots, (value => {
-
-        if (React.isValidElement(value)) {
-            if ("children" in value.props) {
-                forEachChildrenRecursively(value.props.children, func);
-            }
-        }
-    }));
-}
+import {FormEvent} from "react";
+import {CardComponentFields} from "../CardComponent/CardComponent";
 
 
 /**
@@ -99,6 +81,5 @@ const extractFromForm = (
 }
 
 export {
-    extractFromForm,
-    forEachChildrenRecursively
+    extractFromForm
 }

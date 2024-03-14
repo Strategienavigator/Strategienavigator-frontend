@@ -1,7 +1,7 @@
 import {Component, FormEvent} from "react";
 import {Form} from "react-bootstrap";
 import {Session} from "../../../general-components/Session/Session";
-import {extractFromForm} from "../../../general-components/FormHelper";
+import {extractFromForm} from "../../../general-components/Utility/FormHelper";
 import {reload_app} from "../../../index";
 import {RouteComponentProps, withRouter} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";

@@ -4,7 +4,7 @@ import {UserContextComponent} from "../Contexts/UserContextComponent";
 import {Session} from "../Session/Session";
 import {User} from "../User";
 import {SharedSavePermission, SimpleSaveResource} from "../Datastructures";
-import {LastOpenenedSaves} from "./LastOpenenedSaves";
+import {LastOpenedSaves} from "./LastOpenedSaves";
 import {MemoryRouter} from "react-router";
 
 const testSave = {
@@ -55,7 +55,7 @@ describe('LastOpenedSaves', () => {
         }).as("stubedRequest");
 
 
-        mount(<UserContextComponent><MemoryRouter><LastOpenenedSaves/></MemoryRouter></UserContextComponent>);
+        mount(<UserContextComponent><MemoryRouter><LastOpenedSaves/></MemoryRouter></UserContextComponent>);
         cy.wait('@stubedRequest');
 
         cy.contains('SaveName');
@@ -72,7 +72,7 @@ describe('LastOpenedSaves', () => {
         }).as("stubedRequest");
 
 
-        mount(<UserContextComponent><MemoryRouter><LastOpenenedSaves/></MemoryRouter></UserContextComponent>);
+        mount(<UserContextComponent><MemoryRouter><LastOpenedSaves/></MemoryRouter></UserContextComponent>);
         cy.wait('@stubedRequest');
 
         cy.contains('Fehler');

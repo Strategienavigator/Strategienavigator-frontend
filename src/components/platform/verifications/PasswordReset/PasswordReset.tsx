@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {RouteComponentProps} from "react-router";
 import {PasswordField} from "../../../../general-components/PasswordField/PasswordField";
 import {Button, Form, Spinner} from "react-bootstrap";
-import {extractFromForm} from "../../../../general-components/FormHelper";
+import {extractFromForm} from "../../../../general-components/Utility/FormHelper";
 import {forgotPassword, updatePassword} from "../../../../general-components/API/calls/Password";
 import {Link} from "react-router-dom";
 

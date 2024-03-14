@@ -13,7 +13,7 @@ function getTimeString(time: Date) {
     return `${time.toLocaleDateString()}, ${time.toLocaleTimeString().split(":").slice(0, 2).join(":")} Uhr`
 }
 
-export function LastOpenenedSaves() {
+export function LastOpenedSaves() {
 
 
     const [lastOpenedSaves, setLastOpenedSaves] = useState<SimpleSaveResource[] | undefined>(undefined);

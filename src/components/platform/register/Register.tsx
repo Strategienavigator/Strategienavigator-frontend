@@ -1,7 +1,7 @@
 import React, {FormEvent, PureComponent} from "react";
 import {Form} from "react-bootstrap";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {extractFromForm} from "../../../general-components/FormHelper";
+import {extractFromForm} from "../../../general-components/Utility/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {checkUsername} from "../../../general-components/API/calls/Username";

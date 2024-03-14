@@ -8,7 +8,7 @@ import {checkEmail} from "../../../general-components/API/calls/Email";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {extractFromForm} from "../../../general-components/FormHelper";
+import {extractFromForm} from "../../../general-components/Utility/FormHelper";
 import {isEmpty} from "../../../general-components/ComponentUtils";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import {portUser} from "../../../general-components/API/calls/User";

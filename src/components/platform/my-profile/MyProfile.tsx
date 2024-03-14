@@ -1,13 +1,13 @@
-import React, {Component, FormEvent} from "react";
+import React, {FormEvent, useCallback, useState} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {User} from "../../../general-components/User";
 import {faArrowLeft, faPencilAlt, faTrash, faUser} from "@fortawesome/free-solid-svg-icons/";
-import {Badge, Button, Card, Col, Form, Modal, Row} from "react-bootstrap";
-import {extractFromForm} from "../../../general-components/FormHelper";
+import {Button, Form} from "react-bootstrap";
+import {extractFromForm} from "../../../general-components/Utility/FormHelper";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
 import {deleteUser, UpdateData, updateUser} from "../../../general-components/API/calls/User";
-import {RouteComponentProps, withRouter} from "react-router";
-import {Messages, withMessagesContext, WithMessagesContextProps} from "../../../general-components/Messages/Messages";
+import {useHistory} from "react-router";
+import {Messages, useMessageContext} from "../../../general-components/Messages/Messages";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
@@ -16,61 +16,64 @@ import {Loader} from "../../../general-components/Loader/Loader";
 import "./my-profile.scss";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import FAE from "../../../general-components/Icons/FAE";
-import {ModalCloseable} from "../../../general-components/Modal/ModalCloseable";
-import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
+import {useUserContext} from "../../../general-components/Contexts/UserContextComponent";
 import {ButtonPanel} from "../../../general-components/ButtonPanel/ButtonPanel";
-import {LastOpenenedSaves} from "../../../general-components/LastOpenendSaves/LastOpenenedSaves";
+import {useBooleanState} from "../../../general-components/Utility/Hooks";
+import {UserStatistics} from "../../../general-components/UserStatistics/UserStatistics";
+import {ConfirmDeletionModal} from "./ConfirmDeletionModal";
 
 
-export interface MyProfileState {
-    edit: boolean
-    delete: boolean
-    showDeleteModal: boolean
-    isSaving: boolean
-    isSaved?: boolean
-}
+export function MyProfile() {
 
-export class MyProfileComponent extends Component<RouteComponentProps & WithMessagesContextProps, MyProfileState> {
+    const {state: edit, toggle: toggleEdit} = useBooleanState(false);
+    const {
+        state: showDeleteModal,
+        setTrue: showDeleteModalCallback,
+        setFalse: hideDeleteModalCallback
+    } = useBooleanState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
 
-    /**
-     * Definiert auf welchen Context zugegriffen werden soll
-     */
-    static contextType = UserContext;
-    context!: React.ContextType<typeof UserContext>
+    const {user, isLoggedIn} = useUserContext();
 
-    constructor(props: any) {
-        super(props);
 
-        this.state = {
-            edit: false,
-            delete: false,
-            showDeleteModal: false,
-            isSaving: false
+    const messageContext = useMessageContext();
+    const history = useHistory();
+
+
+    const deleteCallback = useCallback(async () => {
+        if (!user) {
+            messageContext.add("Nicht angemeldet", "WARNING", 7000);
+            return;
         }
-    }
+        await deleteUser(user.getID() as number);
 
-    changeView = () => {
-        this.setState({
-            edit: !this.state.edit
-        });
-    }
+        Session.setCurrent(null);
+        Session.removeTokens();
 
-    saveChanges = async (e: FormEvent<HTMLFormElement>) => {
+        history.push("/");
+        messageContext.add("Ihr Konto wurde gelöscht!", "SUCCESS", 7000);
+    }, [history, messageContext, user]);
+
+
+    const saveChanges = useCallback(async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        this.setState({
-            isSaving: true
-        });
+        setIsSaving(true)
 
         let email: string = extractFromForm(e, "email") as string;
         let username: string = extractFromForm(e, "username") as string;
         let current_password: string = extractFromForm(e, "current_password") as string;
         let new_password: string = extractFromForm(e, "new_password") as string;
 
-        let new_username = username !== this.context.user?.getUsername() ? username : undefined
-        let new_email = email !== this.context.user?.getEmail() ? email : undefined
+        let new_username = username !== user?.getUsername() ? username : undefined
+        let new_email = email !== user?.getEmail() ? email : undefined
 
         let needs_update = new_email !== undefined || new_username !== undefined || new_password.length > 0;
+
+        function showErrorMessage() {
+            messageContext.add("Beim Speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
+        }
 
         if (needs_update) {
             let data: UpdateData = {
@@ -83,239 +86,134 @@ export class MyProfileComponent extends Component<RouteComponentProps & WithMess
                 data.password = new_password;
             }
 
-            let call = await updateUser(Session.currentUser?.getID() as number, data, {
-                errorCallback: (reason) => {
-                    this.props.messageContext.add("Beim speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
-                }
+            let call = await updateUser(user?.getID() as number, data, {
+                errorCallback: showErrorMessage
             });
 
             if (call && call.success) {
-                let currentUser = Session.currentUser;
 
-                let newUser = User.from(currentUser);
+                let newUser = User.from(user);
 
                 newUser.update(data);
                 Session.setCurrent(newUser);
-                this.setState({
-                    isSaved: true
-                });
+                setIsSaved(true);
             } else {
-                this.props.messageContext.add("Beim Speichern ist ein Fehler aufgetreten", "DANGER", Messages.TIMER);
+                showErrorMessage();
             }
         } else {
             // fake load so the user thinks something is happening
             await new Promise(resolve => setTimeout(resolve, 300));
         }
-        this.setState({
-            isSaving: false
-        });
-    }
+        setIsSaving(false);
+    }, [setIsSaved, setIsSaving, messageContext, user]);
 
-    showDeleteModal = () => {
-        this.setState({
-            delete: true,
-            showDeleteModal: true
-        });
-    }
 
-    hideDeleteModal = () => {
-        this.setState({
-            delete: false,
-            showDeleteModal: false
-        });
-    }
-
-    delete = async () => {
-        await deleteUser(Session.currentUser?.getID() as number);
-
-        Session.setCurrent(null);
-        Session.removeTokens();
-
-        this.props.history.push("/");
-        this.props.messageContext.add("Ihr Konto wurde gelöscht!", "SUCCESS", 7000);
-    }
-
-    render() {
-        if (!this.context.isLoggedIn) {
-            return (
-                <Loader payload={[]} loaded={false} transparent fullscreen/>
-            );
-        }
-
+    if (!isLoggedIn || !user) {
         return (
-            <Form onSubmit={async (e) => {
-                await this.saveChanges(e)
-            }} className={"profile"}>
-                <h4>
-                    <FAE icon={faUser}/> &nbsp;{this.context.user?.getUsername()}
-                    {(this.state.edit) && (
-                        <Button style={{float: "right"}} disabled={this.state.isSaving} variant={"dark"}
-                                className={"editButton"} onClick={this.changeView}>
-                            <FAE icon={faArrowLeft}/> &nbsp;Zurück
-                        </Button>
-                    )}
-                </h4>
-
-                <hr/>
-
-                {/* BENUTZERNAME */}
-                <Form.Floating className={"field"}>
-                    <UniqueCheck
-                        id={"username"}
-                        type={"text"}
-                        readOnly={!this.state.edit}
-                        suppressErrors={!this.state.edit}
-                        defaultValue={this.context.user?.getUsername()}
-                        value={this.state.edit ? undefined : this.context.user?.getUsername()}
-                        callback={checkUsername}
-                        entityName={"Username"}
-                    />
-                    <Form.Label>Benutzername</Form.Label>
-                </Form.Floating>
-
-                {/* E-MAIL */}
-                <Form.Floating className={"field"}>
-                    <UniqueCheck
-                        id={"email"}
-                        type={"text"}
-                        readOnly={!this.state.edit}
-                        suppressErrors={!this.state.edit}
-                        defaultValue={this.context.user?.getEmail()}
-                        value={this.state.edit ? undefined : this.context.user?.getEmail()}
-                        callback={checkEmail}
-                        entityName={"Email"}
-                    />
-                    <Form.Label>E-Mail-Adresse</Form.Label>
-                </Form.Floating>
-
-                {/* NEUES PASSWORD */}
-                {(this.state.edit) && (
-                    <PasswordField id={"new_password"} text={"Neues Passwort"} required={false} className={"field"}
-                                   check={true}
-                                   value={this.state.edit ? undefined : ""}
-                                   eye
-                                   confirm/>
-                )}
-
-
-                {/* AKTUELLES PASSWORD */}
-                {(this.state.edit) && (
-                    <>
-                        <hr/>
-                        <PasswordField id={"current_password"} text={"Aktuelles Passwort"} required={true}
-                                       className={"field"} check={false}
-                                       value={this.state.edit ? undefined : ""} eye/>
-                    </>
-                )}
-
-                {(!this.state.edit) && (
-                    <div>
-                        <hr/>
-
-                        <Card>
-                            <Card.Header>
-                                <h5 className={"mt-2 mb-2"}>Überblick Analysen</h5>
-                            </Card.Header>
-                            <Card.Body>
-                                <Row>
-                                    <Col lg={8}>
-                                        <div>
-                                            <h5>Zuletzt geöffnet</h5>
-
-                                            <hr/>
-                                            <LastOpenenedSaves/>
-                                        </div>
-                                    </Col>
-                                    <Col lg={4}>
-                                        <div>
-                                            <h5>Statistiken</h5>
-
-                                            <hr/>
-
-                                            <Row>
-                                                <Col xs={"auto"}>
-                                                    <Badge bg={"dark"} pill>
-                                                        {this.context.user?.getOwnedSavesAmount()}
-                                                    </Badge>
-                                                </Col>
-                                                <Col>
-                                                    Anzahl eigener Analysen
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col xs={"auto"}>
-                                                    <Badge bg={"dark"} pill>
-                                                        {this.context.user?.getSharedSavesAmount()}
-                                                    </Badge>
-                                                </Col>
-                                                <Col>
-                                                    Anzahl geteilter Analysen
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
-                        <hr/>
-                    </div>
-                )}
-
-                {(this.state.isSaved !== undefined && this.state.isSaved) && (
-                    <div className={"feedback text-success"}>
-                        Ihre Benutzerdaten wurden abgespeichert!
-                    </div>
-                )}
-
-                {(!this.state.edit) && (
-                    <Button variant={"dark"} className={"editButton"} onClick={this.changeView}>
-                        <FAE icon={faPencilAlt}/> &nbsp; Bearbeiten
-                    </Button>
-                )}
-                {(this.state.edit) && (
-                    <ButtonPanel buttonPerCol={2}>
-                        <LoadingButton
-                            disabled={(this.state.isSaving)}
-                            type={"submit"} variant={"dark"} className={"editButton"}
-                            isLoading={this.state.isSaving} savingChild={"Speichert"}
-                            defaultChild={"Änderungen speichern"}
-                        />
-
-                        <Button disabled={this.state.isSaving} variant={"danger"}
-                                className={"deleteButton"}
-                                onClick={this.showDeleteModal}>
-                            <FAE icon={faTrash}/> &nbsp; Benutzer löschen
-                        </Button>
-                    </ButtonPanel>
-                )}
-
-                <ModalCloseable
-                    show={this.state.showDeleteModal}
-                    backdrop="static"
-                    onHide={this.hideDeleteModal}
-                    keyboard={true}
-                >
-                    <Modal.Header>
-                        <Modal.Title>Wollen Sie Ihr Profil wirklich löschen?</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        Sie sind bis zu <b>30 Tagen</b> nach dem Löschen Ihres Accounts dazu in der
-                        Lage das Löschen rückgängig zu machen, indem Sie sich anmelden. Nach Ablauf dieses
-                        Zeitraumes wird
-                        Ihr Account unwiderruflich gelöscht!
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant={"light"} onClick={this.hideDeleteModal}>
-                            Abbrechen
-                        </Button>
-                        <Button variant="dark" onClick={this.delete}>
-                            Ja, Account löschen!
-                        </Button>
-                    </Modal.Footer>
-                </ModalCloseable>
-            </Form>
+            <Loader payload={[]} loaded={false} transparent fullscreen/>
         );
     }
-}
 
-export const MyProfile = withRouter(withMessagesContext(MyProfileComponent));
+    return (
+        <Form onSubmit={saveChanges} className={"profile"}>
+            <h4>
+                <FAE icon={faUser}/> &nbsp;{user.getUsername()}
+                {(edit) && (
+                    <Button style={{float: "right"}} disabled={isSaving} variant={"dark"}
+                            className={"editButton"} onClick={toggleEdit}>
+                        <FAE icon={faArrowLeft}/> &nbsp;Zurück
+                    </Button>
+                )}
+            </h4>
+
+            <hr/>
+
+            {/* BENUTZERNAME */}
+            <Form.Floating className={"field"}>
+                <UniqueCheck
+                    id={"username"}
+                    type={"text"}
+                    readOnly={!edit}
+                    suppressErrors={!edit}
+                    defaultValue={user?.getUsername()}
+                    value={edit ? undefined : user.getUsername()}
+                    callback={checkUsername}
+                    entityName={"Username"}
+                />
+                <Form.Label>Benutzername</Form.Label>
+            </Form.Floating>
+
+            {/* E-MAIL */}
+            <Form.Floating className={"field"}>
+                <UniqueCheck
+                    id={"email"}
+                    type={"text"}
+                    readOnly={!edit}
+                    suppressErrors={!edit}
+                    defaultValue={user.getEmail()}
+                    value={edit ? undefined : user.getEmail()}
+                    callback={checkEmail}
+                    entityName={"Email"}
+                />
+                <Form.Label>E-Mail-Adresse</Form.Label>
+            </Form.Floating>
+
+            {/* NEUES PASSWORD */}
+            {(edit) && (
+                <PasswordField id={"new_password"} text={"Neues Passwort"} required={false} className={"field"}
+                               check={true}
+                               value={edit ? undefined : ""}
+                               eye
+                               confirm/>
+            )}
+
+
+            {/* AKTUELLES PASSWORD */}
+            {(edit) && (
+                <>
+                    <hr/>
+                    <PasswordField id={"current_password"} text={"Aktuelles Passwort"} required={true}
+                                   className={"field"} check={false}
+                                   value={edit ? undefined : ""} eye/>
+                </>
+            )}
+
+            {(!edit) && (
+                <UserStatistics user={user}/>
+            )}
+
+            {(isSaved !== undefined && isSaved) && (
+                <div className={"feedback text-success"}>
+                    Ihre Benutzerdaten wurden abgespeichert!
+                </div>
+            )}
+
+            {(!edit) && (
+                <Button variant={"dark"} className={"editButton"} onClick={toggleEdit}>
+                    <FAE icon={faPencilAlt}/> &nbsp; Bearbeiten
+                </Button>
+            )}
+            {(edit) && (
+                <ButtonPanel buttonPerCol={2}>
+                    <LoadingButton
+                        disabled={(isSaving)}
+                        type={"submit"} variant={"dark"} className={"editButton"}
+                        isLoading={isSaving} savingChild={"Speichert"}
+                        defaultChild={"Änderungen speichern"}
+                    />
+
+                    <Button disabled={isSaving} variant={"danger"}
+                            className={"deleteButton"}
+                            onClick={showDeleteModalCallback}>
+                        <FAE icon={faTrash}/> &nbsp; Benutzer löschen
+                    </Button>
+                </ButtonPanel>
+            )}
+
+            <ConfirmDeletionModal show={showDeleteModal}
+                                  hideCallback={hideDeleteModalCallback}
+                                  deleteCallback={deleteCallback}/>
+        </Form>
+    );
+
+}
