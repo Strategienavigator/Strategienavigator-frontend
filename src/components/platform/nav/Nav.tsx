@@ -276,7 +276,7 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                 )}
                             </BootstrapNav>
                             <DesktopContext.Consumer children={isDesktop => {
-                                if(isDesktop) {
+                                if(!isDesktop) {
                                     return (
                                         <BootstrapNav>
                                             <NavDropdown id={"profile-dropdown"} title={"mehr"}>
