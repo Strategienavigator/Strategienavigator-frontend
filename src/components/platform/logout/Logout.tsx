@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useMemo} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {RouteComponentProps, withRouter} from "react-router";
 import {reload_app} from "../../../index";
@@ -22,8 +22,11 @@ export function LogoutComponent(props: RouteComponentProps) {
         }
     }, [props.history, addMessage]);
 
+    // prevent re-rendering of loader component.
+    const payload = useMemo(() => [logoutCallback], [logoutCallback]);
+
     return (
-        <Loader payload={[logoutCallback]} transparent size={120}/>
+        <Loader payload={payload} transparent size={120}/>
     );
 
 }

@@ -1,10 +1,11 @@
 import {useCallback, useState} from "react";
 
 /**
- * Hook und ein boolean state zu erstellen. Erstellt höufig genutzen callbacks.
+ * Hook um ein Boolean State zu erstellen. Erstellt häufig genutzte callbacks.
  *
- * Die Referenzen auf die Callbacks ändern sich nicht.
- * @param initialState
+ * Die Referenzen auf die Funktionen ändern sich nicht.
+ * @param initialState der erste Wert der, der State haben soll.
+ * @return
  */
 export function useBooleanState(initialState: boolean) {
     const [state, setState] = useState(initialState);
@@ -21,6 +22,26 @@ export function useBooleanState(initialState: boolean) {
         });
     }, [setState]);
 
-    return {state, setTrue, setFalse, setState, toggle};
+    return {
+        /**
+         * Die State Variable selbst.
+         */
+        state,
+        /**
+         * Eine Funktion um den state zu True zu ändern.
+         */
+        setTrue,
+        /**
+         * Eine Funktion um den state zu False zu ändern.
+         */
+        setFalse,
+        /**
+         * Die normale set Funktion eines states.
+         */
+        setState,
+        /**
+         * Eine Funktion die den aktuellen State invertiert.
+         */
+        toggle};
 
 }
