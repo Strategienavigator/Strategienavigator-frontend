@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Loader} from "../../../general-components/Loader/Loader";
 
 import "./logout.scss";
@@ -10,9 +10,12 @@ export function LogoutComponent(props: RouteComponentProps) {
 
     const {isLoggedIn} = useUserContext();
     const history = useHistory()
-    if (!isLoggedIn) {
-        history.push("/");
-    }
+    useEffect(() => {
+        if (!isLoggedIn) {
+            history.push("/");
+        }
+    }, [isLoggedIn, history]);
+
 
     return (
         <Loader loaded={false} transparent size={120}/>
