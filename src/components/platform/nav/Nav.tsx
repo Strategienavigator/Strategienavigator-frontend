@@ -23,6 +23,8 @@ import FAE from "../../../general-components/Icons/FAE";
 import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
 import AnonportModal from "./AnonportModal";
 import {DesktopContext} from "../../../general-components/Contexts/DesktopContext";
+import {Session} from "../../../general-components/Session/Session";
+import {Messages, withMessagesContext, WithMessagesContextProps} from "../../../general-components/Messages/Messages";
 
 
 interface NavState {
@@ -33,7 +35,7 @@ interface NavState {
     anonPortModalShow: boolean
 }
 
-class Nav extends Component<RouteComponentProps, NavState> {
+class Nav extends Component<RouteComponentProps & WithMessagesContextProps, NavState> {
     static contextType = UserContext;
     context!: React.ContextType<typeof UserContext>
     private timeout: NodeJS.Timeout | undefined;
@@ -264,19 +266,16 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                             </Dropdown.Item>
                                         )}
 
-                                        <Dropdown.Item as={"div"} className="p-0">
-                                            <NavLink onClick={this.navOnClick} to={"/logout"} role={"button"}
-                                                     className={"dropdown-item"}>
-                                                <FAE icon={faSignOutAlt}/>&nbsp;
-                                                Abmelden
-                                            </NavLink>
+                                        <Dropdown.Item as={"div"} role={"button"} onClick={this.onLogout}>
+                                            <FAE icon={faSignOutAlt}/>&nbsp;
+                                            Abmelden
                                         </ Dropdown.Item>
 
                                     </NavDropdown>
                                 )}
                             </BootstrapNav>
                             <DesktopContext.Consumer children={isDesktop => {
-                                if(!isDesktop) {
+                                if (!isDesktop) {
                                     return (
                                         <BootstrapNav>
                                             <NavDropdown id={"profile-dropdown"} title={"mehr"}>
@@ -285,12 +284,14 @@ class Nav extends Component<RouteComponentProps, NavState> {
                                                     <FAE icon={faCog}/>&nbsp;
                                                     Einstellungen
                                                 </Dropdown.Item>
-                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/data-privacy"}
+                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick}
+                                                               to={"/data-privacy"}
                                                                role={"button"}>
                                                     <FAE icon={faShieldAlt}/>&nbsp;
                                                     Datenschutz
                                                 </Dropdown.Item>
-                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/legal-notice"}
+                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick}
+                                                               to={"/legal-notice"}
                                                                role={"button"}>
                                                     <FAE icon={faBalanceScale}/>&nbsp;
                                                     Impressum
@@ -323,6 +324,17 @@ class Nav extends Component<RouteComponentProps, NavState> {
         this.setExpanded(false);
     };
 
+    private onLogout = () => {
+        Session.logout().then(() => {
+                this.props.messageContext.add("Bis bald!", "SUCCESS", Messages.TIMER);
+            },
+            (reason) => {
+                console.error(reason);
+                this.props.messageContext.add("Beim Logout is ein Fehler aufgetreten.", "DANGER");
+            });
+        this.props.history.push("/logout");
+    }
+
 }
 
-export default withRouter(Nav);
+export default withRouter(withMessagesContext(Nav));

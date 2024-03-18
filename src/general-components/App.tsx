@@ -54,7 +54,7 @@ export function App() {
                 <Route path={"/data-privacy"} exact component={DataPrivacy}/>
                 <Route path={"/about-us"} exact component={AboutUs}/>
                 <Route loggedIn={false} path={"/login"} exact component={Login}/>
-                <Route loggedIn={true} path={"/logout"} exact component={Logout}/>
+                <Route loggedIn={undefined} path={"/logout"} exact component={Logout}/>
                 <Route loggedIn={false} path={"/register"} exact component={Register}/>
                 <Route loggedIn={true} path={"/settings"} exact component={Settings}/>
                 <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact component={MyProfile}/>

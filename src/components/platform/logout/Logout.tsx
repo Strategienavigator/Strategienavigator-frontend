@@ -1,32 +1,21 @@
-import React, {useCallback, useMemo} from "react";
-import {Session} from "../../../general-components/Session/Session";
-import {RouteComponentProps, withRouter} from "react-router";
-import {reload_app} from "../../../index";
+import React from "react";
 import {Loader} from "../../../general-components/Loader/Loader";
-import {Messages, useMessageContext} from "../../../general-components/Messages/Messages";
 
 import "./logout.scss";
+import {useUserContext} from "../../../general-components/Contexts/UserContextComponent";
+import {RouteComponentProps, useHistory, withRouter} from "react-router";
 
 
 export function LogoutComponent(props: RouteComponentProps) {
 
-    const {add: addMessage} = useMessageContext();
-    const logoutCallback = useCallback(async () => {
-        let call = await Session.logout();
-
-        if ((call && call.success) || call?.status === 401) {
-            reload_app();
-
-            addMessage("Bis bald!", "SUCCESS", Messages.TIMER);
-            props.history.push("/");
-        }
-    }, [props.history, addMessage]);
-
-    // prevent re-rendering of loader component.
-    const payload = useMemo(() => [logoutCallback], [logoutCallback]);
+    const {isLoggedIn} = useUserContext();
+    const history = useHistory()
+    if (!isLoggedIn) {
+        history.push("/");
+    }
 
     return (
-        <Loader payload={payload} transparent size={120}/>
+        <Loader loaded={false} transparent size={120}/>
     );
 
 }
