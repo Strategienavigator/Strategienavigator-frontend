@@ -9,7 +9,7 @@ import {DataPrivacy} from "../components/platform/data-privacy/DataPrivacy";
 import {AboutUs} from "../components/platform/abous-us/AboutUs";
 import {Login} from "../components/platform/login/Login";
 import {Logout} from "../components/platform/logout/Logout";
-import Register from "../components/platform/register/Register";
+import {Register} from "../components/platform/register/Register";
 import {Settings} from "../components/platform/settings/Settings";
 import {MyProfile} from "../components/platform/my-profile/MyProfile";
 import {ContributionDecision} from "../components/platform/sharing/Contribution/ContributionDecision";
