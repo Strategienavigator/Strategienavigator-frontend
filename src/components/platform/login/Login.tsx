@@ -1,87 +1,68 @@
-import {Component, FormEvent} from "react";
+import {FormEvent, useCallback, useMemo, useState} from "react";
 import {Form} from "react-bootstrap";
 import {Session} from "../../../general-components/Session/Session";
 import {extractFromForm} from "../../../general-components/Utility/FormHelper";
-import {reload_app} from "../../../index";
-import {RouteComponentProps, withRouter} from "react-router";
+import {useHistory, useLocation} from "react-router";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {MessageContext, Messages} from "../../../general-components/Messages/Messages";
-
-import "./login.scss";
+import {Messages, useMessageContext} from "../../../general-components/Messages/Messages";
 import {Link} from "react-router-dom";
 import {faSignInAlt, faUserSecret} from "@fortawesome/free-solid-svg-icons/";
 import {AnonymousModal} from "../../../general-components/ProtectedRoute";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import {ButtonPanel} from "../../../general-components/ButtonPanel/ButtonPanel";
+import {useBooleanState} from "../../../general-components/Utility/Hooks";
+import "./login.scss";
+
+export function Login() {
+    // state
+    const [failed, setFailed] = useState(false);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const [isLoggingInAnonymously, setIsLoggingInAnonymously] = useState(false);
+    const {
+        state: showAnonymousModal,
+        setState: setShowAnonymousModal,
+        setTrue: showAnonymousModalCallback
+    } = useBooleanState(false);
+
+    // context
+    const location = useLocation();
+    const history = useHistory();
+    const {add: showMessage} = useMessageContext();
 
 
-export interface LoginState {
-    failed: boolean
-    isLoggingIn: boolean
-    isLoggingInAnonymously: boolean
-    showAnonymousModal: boolean
-    loaded?: boolean
-}
+    let params: URLSearchParams = useMemo(() => new URLSearchParams(location.search), [location]);
+    const getPath = useCallback(() => {
 
-export class LoginComponent extends Component<RouteComponentProps<any, any, any>, LoginState> {
-
-    public static defaultPath: string = "/my-profile";
-
-    /**
-     * Definiert auf welchen Context zugegriffen werden soll
-     */
-    static contextType = MessageContext;
-    context!: React.ContextType<typeof MessageContext>
-
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            isLoggingIn: false,
-            isLoggingInAnonymously: false,
-            showAnonymousModal: false,
-            failed: false
-        };
-    }
-
-    getPath = () => {
-        let params: URLSearchParams = new URLSearchParams(this.props.location.search);
         let origin = params.get("origin");
-        return (origin != null) ? origin : LoginComponent.defaultPath;
-    }
+        return (origin != null) ? origin : Login.defaultPath;
+    }, [params]);
 
-    login = async (e: FormEvent<HTMLFormElement>) => {
-        this.setState({
-            isLoggingIn: true
-        });
+    const asyncNoop = useCallback(async () => {
+    }, []);
+
+    const login = useCallback(async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoggingIn(true);
 
         let email: string = extractFromForm(e, "email") as string;
         let password: string = extractFromForm(e, "password") as string;
         let rememberMe: boolean = extractFromForm(e, "rememberMe") as boolean;
 
         let user = await Session.login(email, password, rememberMe);
-        let path = this.getPath();
+        let path = getPath();
 
         if (user !== null) {
-            reload_app();
-
-            this.context.add("Willkommen zurück!", "SUCCESS", Messages.TIMER);
-            this.props.history.push(path);
+            showMessage("Willkommen zurück!", "SUCCESS", Messages.TIMER);
+            history.push(path);
         } else {
-            this.setState({
-                loaded: true,
-                failed: true
-            });
-
-            this.setState({
-                isLoggingIn: false
-            });
+            setFailed(true);
+            setIsLoggingIn(false);
         }
-    }
+    }, [getPath, history, showMessage, setIsLoggingIn, setFailed]);
 
-    loginAnonymously = async () => {
-        this.setState({
-            isLoggingInAnonymously: true
-        });
+
+    const loginAnonymously = useCallback(async () => {
+        setIsLoggingInAnonymously(true);
 
         let anonUser = await Session.loginAnonymous();
         if (anonUser) {
@@ -89,122 +70,104 @@ export class LoginComponent extends Component<RouteComponentProps<any, any, any>
             let username = anonUser.username;
 
             let user = await Session.login(username, password, true);
-            let path = this.getPath();
+            let path = getPath();
 
             if (user) {
-                this.context.add("Sie wurden anonym angemeldet!", "SUCCESS", Messages.TIMER);
-                this.props.history.push(path);
+                showMessage("Sie wurden anonym angemeldet!", "SUCCESS", Messages.TIMER);
+                history.push(path);
             }
         }
 
-        this.setState({
-            isLoggingInAnonymously: false
-        });
+        setIsLoggingInAnonymously(false);
+    }, [getPath, history, showMessage, setIsLoggingInAnonymously]);
+
+    let email;
+    if (params.has("email")) {
+        email = params.get("email") ?? undefined;
     }
 
-    render() {
-        let params: URLSearchParams = new URLSearchParams(this.props.location.search);
+    let hasCheckNotice = params.has("bestaetigen");
 
-        let email;
-        if (params.has("email")) {
-            email = params.get("email") ?? undefined;
-        }
+    return (
+        <Form className={"loginContainer"} onSubmit={login}>
+            <h2>Anmelden</h2>
 
-        let hasCheckNotice = params.has("bestaetigen");
+            <hr/>
 
-        return (
-            <Form className={"loginContainer"} onSubmit={async (e) => {
-                e.preventDefault();
-                await this.login(e);
-            }}>
-                <h2>Anmelden</h2>
+            <Form.Floating className={"mb-2 mt-2"}>
+                <Form.Control
+                    id="email"
+                    type="email"
+                    name={"email"}
+                    size={"sm"}
+                    defaultValue={email}
+                    placeholder="name@example.com"
+                />
+                <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
+            </Form.Floating>
 
-                <hr/>
+            <PasswordField autofocus={email !== undefined} check={false}/>
 
-                <Form.Floating className={"mb-2 mt-2"}>
-                    <Form.Control
-                        id="email"
-                        type="email"
-                        name={"email"}
-                        size={"sm"}
-                        defaultValue={email}
-                        placeholder="name@example.com"
-                    />
-                    <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
-                </Form.Floating>
+            <Form.Group className={"mb-2 mt-2"}>
+                <Form.Check
+                    type="checkbox"
+                    id="rememberMe"
+                    name="rememberMe"
+                    label="Angemeldet bleiben"
+                />
+            </Form.Group>
 
-                <PasswordField autofocus={email !== undefined} check={false}/>
-
-                <Form.Group className={"mb-2 mt-2"}>
-                    <Form.Check
-                        type="checkbox"
-                        id="rememberMe"
-                        name="rememberMe"
-                        label="Angemeldet bleiben"
-                    />
-                </Form.Group>
-
-                <div className={"feedbackContainer"}>
-                    {(this.state.loaded && this.state.failed) && (
-                        <div className="feedback DANGER">
-                            Anmeldung fehlgeschlagen!
-                        </div>
-                    )}
-                    {(hasCheckNotice) && (
-                        <div className={"feedback INFO"}>
-                            Eventuell müssen Sie noch Ihre E-Mail-Adresse noch bestätigen!
-                        </div>
-                    )}
-                    {(params.has("origin")) && (
-                        <div className={"feedback INFO"}>
-                            Sie müssen sich vorher anmelden um diese Aktion auszuführen!
-                        </div>
-                    )}
-                </div>
-
-                <hr/>
-
-                <p><Link to={"/reset-password"} className={"link-primary"}>
-                    Passwort vergessen?
-                </Link></p>
-
-                <ButtonPanel>
-                    <LoadingButton
-                        isLoading={this.state.isLoggingIn}
-                        defaultChild={"Anmelden"}
-                        defaultIcon={faSignInAlt}
-                        savingChild={"Wird angemeldet..."}
-                        type={"submit"}
-                    />
-
-                    <LoadingButton
-                        isLoading={this.state.isLoggingInAnonymously}
-                        defaultChild={"Anonym Anmelden"}
-                        defaultIcon={faUserSecret}
-                        savingChild={"Wird angemeldet..."}
-                        onClick={() => {
-                            this.setState({
-                                showAnonymousModal: true
-                            });
-                        }}
-                    />
-                </ButtonPanel>
-
-                {(
-                    this.state.showAnonymousModal
-                ) && (
-                    <AnonymousModal onShowChange={(show: boolean) => {
-                        this.setState({
-                            showAnonymousModal: show
-                        });
-                    }} onAgreement={this.loginAnonymously} onDisagreement={async () => {
-                    }}/>
+            <div className={"feedbackContainer"}>
+                {(failed) && (
+                    <div className="feedback DANGER">
+                        Anmeldung fehlgeschlagen!
+                    </div>
                 )}
-            </Form>
-        );
-    }
+                {(hasCheckNotice) && (
+                    <div className={"feedback INFO"}>
+                        Eventuell müssen Sie noch Ihre E-Mail-Adresse noch bestätigen!
+                    </div>
+                )}
+                {(params.has("origin")) && (
+                    <div className={"feedback INFO"}>
+                        Sie müssen sich vorher anmelden um diese Aktion auszuführen!
+                    </div>
+                )}
+            </div>
 
+            <hr/>
+
+            <p><Link to={"/reset-password"} className={"link-primary"}>
+                Passwort vergessen?
+            </Link></p>
+
+            <ButtonPanel>
+                <LoadingButton
+                    isLoading={isLoggingIn}
+                    defaultChild={"Anmelden"}
+                    defaultIcon={faSignInAlt}
+                    savingChild={"Wird angemeldet..."}
+                    type={"submit"}
+                />
+
+                <LoadingButton
+                    isLoading={isLoggingInAnonymously}
+                    defaultChild={"Anonym Anmelden"}
+                    defaultIcon={faUserSecret}
+                    savingChild={"Wird angemeldet..."}
+                    onClick={showAnonymousModalCallback}
+                />
+            </ButtonPanel>
+
+            {(
+                showAnonymousModal
+            ) && (
+                <AnonymousModal onShowChange={setShowAnonymousModal} onAgreement={loginAnonymously}
+                                onDisagreement={asyncNoop}/>
+            )}
+        </Form>
+    );
 }
 
-export const Login = withRouter(LoginComponent);
+Login.defaultPath = "/my-profile";
 
