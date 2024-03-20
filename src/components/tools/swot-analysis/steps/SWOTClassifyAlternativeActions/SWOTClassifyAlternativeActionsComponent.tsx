@@ -4,10 +4,10 @@ import {CardComponentField} from "../../../../../general-components/CardComponen
 import {Step, StepProp} from "../../../../../general-components/Tool/SteppableTool/StepComponent/Step/Step";
 import {DragAndDropClassifying} from "./DragAndDropClassifying";
 import {ModalClassifying} from "./ModalClassifying/ModalClassifying";
-import {isDesktop} from "../../../../../general-components/Desktop";
 import {SWOTAnalysisValues} from "../../SWOTAnalysis";
 import {SWOTClassifyAlternativeActions} from "./SWOTClassifyAlternativeActions";
 import {NormalClassifying} from "./NormalClassifying/NormalClassifying";
+import {DesktopContext} from "../../../../../general-components/Contexts/DesktopContext";
 
 
 export interface ClassificationController {
@@ -161,38 +161,41 @@ class SWOTClassifyAlternativeActionsComponent extends Step<SWOTAnalysisValues, {
         let dragAndDropActionSize = 0; // good would be maximum 14
         let normal = false, drag = false, modal = false;
 
-        if (!isDesktop()) {
-            modal = true;
-        } else if (actionCount > dragAndDropActionSize) {
-            normal = true;
-        }
-
-        if (normal) {
-            return (
-                <NormalClassifying
-                    actions={actions}
-                    disabled={this.props.disabled}
-                    classifications={classifications}
-                    classificationController={this.classificationController}
-                />
-            );
-        } else if (drag) {
-            return (
-                <DragAndDropClassifying
-                    step3Instance={this}
-                />
-            );
-        } else if (modal) {
-            return (
-                <ModalClassifying
-                    actions={actions}
-                    disabled={this.props.disabled}
-                    classifications={classifications}
-                    classificationController={this.classificationController}
-                />
-            );
-        }
-        return <></>;
+        return (
+            <DesktopContext.Consumer children={ isDesktop => {
+                if (!isDesktop) {
+                    modal = true;
+                } else if (actionCount > dragAndDropActionSize) {
+                    normal = true;
+                }
+                if (normal) {
+                    return (
+                        <NormalClassifying
+                            actions={actions}
+                            disabled={this.props.disabled}
+                            classifications={classifications}
+                            classificationController={this.classificationController}
+                        />
+                    );
+                } else if (drag) {
+                    return (
+                        <DragAndDropClassifying
+                            step3Instance={this}
+                        />
+                    );
+                } else if (modal) {
+                    return (
+                        <ModalClassifying
+                            actions={actions}
+                            disabled={this.props.disabled}
+                            classifications={classifications}
+                            classificationController={this.classificationController}
+                        />
+                    );
+                }
+                return <></>;
+            }}/>
+        );
     }
 
     private requireStepData = () => {

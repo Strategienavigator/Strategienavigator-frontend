@@ -1,40 +1,33 @@
-import React, {FormEvent, PureComponent} from "react";
+import React, {FormEvent, useCallback, useState} from "react";
 import {Form} from "react-bootstrap";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {extractFromForm} from "../../../general-components/FormHelper";
+import {extractFromForm} from "../../../general-components/Utility/FormHelper";
 import {Session} from "../../../general-components/Session/Session";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 
 import "./register.scss";
-import {Messages} from "../../../general-components/Messages/Messages";
-import {RouteComponentProps, withRouter} from "react-router";
+import {Messages, useMessageContext} from "../../../general-components/Messages/Messages";
+import {useHistory} from "react-router";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import {CaptchaComponent} from "../../../general-components/Captcha/CaptchaComponent";
 
 
-interface RegisterState {
-    isRegistering: boolean
-    loaded?: boolean
-}
+export function Register() {
 
-class Register extends PureComponent<RouteComponentProps, RegisterState> {
+    // State
+    const [isRegistering, setIsRegistering] = useState(false);
 
-    constructor(props: any) {
-        super(props);
+    // Context
+    const {add: showMessage} = useMessageContext();
+    const history = useHistory();
 
-        this.state = {
-            isRegistering: false
-        };
-    }
 
-    register = async (e: FormEvent<HTMLFormElement>) => {
+    const register = useCallback(async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        this.setState({
-            isRegistering: true
-        });
+        setIsRegistering(true);
 
         let email: string = extractFromForm(e, "email") as string;
         let username: string = extractFromForm(e, "username") as string;
@@ -44,76 +37,69 @@ class Register extends PureComponent<RouteComponentProps, RegisterState> {
 
         let call = await Session.register(email, username, password, captchaKey, captcha);
 
-        this.setState({
-            isRegistering: false
-        });
+        setIsRegistering(false);
 
         if (call?.success) {
-            Messages.add("Konto erstellt!\nÜberprüfe deine Emails!", "SUCCESS", Messages.TIMER);
-            this.props.history.push(`/login?email=${email}&bestaetigen`);
+            showMessage("Konto erstellt!\nÜberprüfe deine Emails!", "SUCCESS", Messages.TIMER);
+            history.push(`/login?email=${email}&bestaetigen`);
         } else {
-            Messages.add("Fehlgeschlagen! Überprüfen Sie Ihre Eingaben!", "DANGER", Messages.TIMER);
+            showMessage("Fehlgeschlagen! Überprüfen Sie Ihre Eingaben!", "DANGER", Messages.TIMER);
         }
-    }
+    }, [showMessage, setIsRegistering, history]);
 
-    render() {
-        return (
-            <Form className={"registerContainer"} onSubmit={async (e) => {
-                await this.register(e)
-            }}>
-                <h2>Registrieren</h2>
 
-                <hr/>
+    return (
+        <Form className={"registerContainer"} onSubmit={register}>
+            <h2>Registrieren</h2>
 
-                {/*E-MAIL*/}
-                <Form.Floating className={"mb-2 mt-2"}>
-                    <UniqueCheck
-                        id="email"
-                        type="email"
-                        name={"email"}
-                        size={"sm"}
-                        placeholder="name@example.com"
-                        required={true}
-                        callback={checkEmail}
-                        entityName={"E-Mail"}
-                    />
-                    <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
-                </Form.Floating>
+            <hr/>
 
-                {/*USERNAME*/}
-                <Form.Floating className={"mb-2 mt-2"}>
-                    <UniqueCheck
-                        id="username"
-                        type="text"
-                        name={"username"}
-                        size={"sm"}
-                        placeholder="name@example.com"
-                        required={true}
-                        callback={checkUsername}
-                        entityName={"Username"}
-                    />
-                    <Form.Label htmlFor={"username"}>Benutzername</Form.Label>
-                </Form.Floating>
-
-                {/*PASSWORD*/}
-                <PasswordField required confirm check={true} eye={true}/>
-
-                <CaptchaComponent/>
-
-                <hr/>
-
-                {/*SUBMIT*/}
-                <LoadingButton
-                    type={"submit"}
-                    defaultChild={"Registrieren"}
-                    savingChild={"Wird registriert..."}
-                    showIcons
-                    isLoading={this.state.isRegistering}
+            {/*E-MAIL*/}
+            <Form.Floating className={"mb-2 mt-2"}>
+                <UniqueCheck
+                    id="email"
+                    type="email"
+                    name={"email"}
+                    size={"sm"}
+                    placeholder="name@example.com"
+                    required={true}
+                    callback={checkEmail}
+                    entityName={"E-Mail"}
                 />
-            </Form>
-        );
-    }
+                <Form.Label htmlFor={"email"} className={"email"}>E-Mail</Form.Label>
+            </Form.Floating>
+
+            {/*USERNAME*/}
+            <Form.Floating className={"mb-2 mt-2"}>
+                <UniqueCheck
+                    id="username"
+                    type="text"
+                    name={"username"}
+                    size={"sm"}
+                    placeholder="name@example.com"
+                    required={true}
+                    callback={checkUsername}
+                    entityName={"Username"}
+                />
+                <Form.Label htmlFor={"username"}>Benutzername</Form.Label>
+            </Form.Floating>
+
+            {/*PASSWORD*/}
+            <PasswordField required confirm check={true} eye={true}/>
+
+            <CaptchaComponent/>
+
+            <hr/>
+
+            {/*SUBMIT*/}
+            <LoadingButton
+                type={"submit"}
+                defaultChild={"Registrieren"}
+                savingChild={"Wird registriert..."}
+                showIcons
+                isLoading={isRegistering}
+            />
+        </Form>
+    );
 
 }
-
-export default withRouter(Register);

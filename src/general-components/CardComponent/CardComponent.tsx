@@ -60,15 +60,18 @@ export interface CardComponentProps<D> {
 
 class CardComponent<D extends object> extends PureComponent<CardComponentProps<D>, {}> {
 
-    getAllCards = () => {
-        let required = (this.props.required !== undefined) ? this.props.required : true;
 
+    componentDidMount() {
         // check and add minimum
         if (this.props.values.length < this.props.min) {
             for (let i = 0; i < this.props.min - this.props.values.length; i++) {
                 this.addCard();
             }
         }
+    }
+
+    getAllCards = () => {
+        let required = (this.props.required !== undefined) ? this.props.required : true;
 
         return this.props.values.map((value, index) => {
             return (

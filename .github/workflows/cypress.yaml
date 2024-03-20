@@ -25,9 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.5.2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - name: clone backend
         uses: actions/checkout@v3
         with:
@@ -45,6 +45,7 @@ jobs:
       - name: Setup Composer and PHP
         uses: php-actions/composer@v6
         with:
+          php_version: "8.1.3"
           version: 2
           php_extensions: gd
           working_dir: 'backend'
@@ -67,6 +68,7 @@ jobs:
       - name: remove dev dependencies with composer
         uses: php-actions/composer@v6
         with:
+          php_version: "8.1.3"
           dev: 'no'
           version: 2
           args: '--optimize-autoloader'
@@ -112,9 +114,6 @@ jobs:
           REACT_APP_CLIENT_ID: 2
           REACT_APP_CLIENT_SECRET: '${{env.CLIENT_SECRET}}'
           REACT_APP_API: 'http://localhost:8000/'
-          REACT_APP_COLLABORATION_URL: 'ws://test.test'
-          REACT_APP_COLLABORATION_KEY: 'asdf'
-          REACT_APP_COLLABORATION_PORT: 1241
         run: |
           npm run build
           cd build
@@ -133,6 +132,7 @@ jobs:
           CYPRESS_BASE_URL: 'http://localhost:8000/'
           CYPRESS_BACKEND_URL: 'http://localhost:8000/'
           CYPRESS_DB_HOST: 'localhost'
+          CYPRESS_DB_NAME: 'strategienavigator'
           CYPRESS_DB_USER: 'root'
           CYPRESS_DB_PASSWORD: '${{env.DB_PASSWORD}}'
           CYPRESS_DB_PORT: ${{ job.services.mysql.ports[3306] }}
@@ -161,9 +161,9 @@ jobs:
       - name: clone frontend
         uses: actions/checkout@v3
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.5.2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - name: Cypress run component tests
         uses: cypress-io/github-action@v5
         with:

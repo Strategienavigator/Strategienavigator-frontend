@@ -1,6 +1,6 @@
 describe('SWOT Analyisis Part III', () => {
     beforeEach(() => {
-        cy.task("queryDb", `DELETE FROM strategienavigator.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
+        cy.task("queryDb", `DELETE FROM \`${Cypress.env("DB_NAME")}\`.saves WHERE owner_id= 1 AND name= "TEST-SWOT VON MAX";`);
 
     })
     it('trys to classify the steps', () => {
@@ -9,16 +9,12 @@ describe('SWOT Analyisis Part III', () => {
 
         cy.get(".addClassification.btn.btn-primary")
         .click()
-        cy.wait(100)
         cy.get("input[name='droppable-1']")
-        .clear()
         .type("Klassifikation 1")
 
         cy.get(".addClassification.btn.btn-primary")
         .click()
-        cy.wait(100)
         cy.get("input[name='droppable-2']")
-        .clear()
         .type("Klassifikation 2")
 
 
@@ -47,9 +43,10 @@ describe('SWOT Analyisis Part III', () => {
             .parent()
             .children()
             .next()
-            .first()
-            .invoke("text")
-            .as("text")
+            .first().then($value => {
+                const value = $value.text()
+                cy.wrap(value).as("text")
+            })
 
             if (i % 2) {
                 select = 'droppable-1'
@@ -61,11 +58,12 @@ describe('SWOT Analyisis Part III', () => {
                 inputValue = "input[value='Klassifikation 2']"
                 valueText = 'Klassifikation 2'
             }
-            cy.get('@button').parent().parent().parent().parent().parent().find(".menu select").select(select)
+            cy.get('@button').parent().parent().parent().parent().parent().parent().find(".menu select").select(select)
 
             cy.get('@text').then((text) => {
                 //going through the tree to find current parents and being part of the right input group
                 cy.contains(text)
+                .parent()
                 .parent()
                 .parent()
                 .parent()

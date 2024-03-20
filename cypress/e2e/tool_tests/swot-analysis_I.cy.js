@@ -25,11 +25,12 @@ describe('SWOT Analyisis Part I', () => {
         .click()
         cy.url().should("include", "swot-analysis/new")
         
-        cy.get("input[id='name']")
-        .clear()
-        .type("TEST-SWOT")
+        cy.get("input[id='name']").clear()
+        cy.get("input[id='name']").type("TEST-SWOT")
+
         cy.get("textarea[id='description']")
         .clear()
+        cy.get("textarea[id='description']")
         .type("TEST-SWOT ist ein Testscenario")
         
         cy.intercept('POST', /.*api\/saves.*/).as('save')
@@ -44,7 +45,7 @@ describe('SWOT Analyisis Part I', () => {
             })
         cy.log("new SWOT created and saved for anonymous")
         cy.log("Removing DB entry for testing purposes")
-        cy.task("queryDb", `DELETE FROM strategienavigator.saves WHERE name="TEST-SWOT";`);
+        cy.task("queryDb", `DELETE FROM \`${Cypress.env("DB_NAME")}\`.saves WHERE name="TEST-SWOT";`);
     })
     
     it('trys to create a new SWOT as max@test.test', () => {

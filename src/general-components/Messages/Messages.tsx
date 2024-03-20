@@ -1,5 +1,15 @@
-import {Component, CSSProperties, ReactElement, ReactNode} from "react";
-import {reload_app} from "../../index";
+import React, {
+    createContext,
+    CSSProperties,
+    ReactElement,
+    ReactNode,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useReducer,
+    useState
+} from "react";
 import {Alert} from "react-bootstrap";
 
 import "./messages.scss";
@@ -10,14 +20,24 @@ export type xAlignments = "CENTER" | "LEFT" | "RIGHT";
 export type yAlignments = "MIDDLE" | "TOP" | "BOTTOM";
 
 export interface MessagesProps {
+    children: ReactNode
     xAlignment: xAlignments
     yAlignment: yAlignments
     style?: CSSProperties
 }
 
 export interface SingleMessageProps {
+    /**
+     * Inhalt der angezeigt wird.
+     */
     content: ReactNode
+    /**
+     * Inhalt der angezeigt wird.
+     */
     type: MessageTypes
+    /**
+     * Zeit in millisekunden nachdem die message verschwindet.
+     */
     timer?: number
 }
 
@@ -25,59 +45,133 @@ export interface SingleMessageState {
     show: boolean
 }
 
-class SingleMessage extends Component<SingleMessageProps, SingleMessageState> {
+export interface IMessageContext {
+    add: (content: ReactNode, type: MessageTypes, timer?: number) => any
+    addWithProps: (message: SingleMessageProps) => any,
+    addMultiple: (messages: SingleMessageProps[]) => any,
+}
 
-    constructor(props: SingleMessageProps | Readonly<SingleMessageProps>) {
-        super(props);
+export const MessageContext = createContext({
+    add: () => {
+        console.warn("Tried to add message while the context wasn't initialized!")
+    },
+    addWithProps: () => {
+        console.warn("Tried to add message while the context wasn't initialized!")
+    },
+    addMultiple: () => {
+        console.warn("Tried to add message while the context wasn't initialized!")
+    }
 
-        this.state = {
-            show: true
+} as IMessageContext)
+
+
+function SingleMessage({content, type, timer}: SingleMessageProps) {
+
+    const [show, setShow] = useState(true);
+
+    useEffect(() => {
+        if (timer === undefined) {
+            return;
         }
-    }
+        const timeout = setTimeout(() => setShow(false), timer);
 
-    componentDidMount() {
-        if (this.props.timer !== undefined) {
-            setTimeout(() => this.setState({show: false}), this.props.timer);
+        return () => {
+            clearTimeout(timeout)
         }
-    }
+    }, [setShow, timer])
 
-    render = () => {
-        return (
-            <Alert show={this.state.show} className={"message"} onClose={() => this.setState({show: false})} dismissible
-                   variant={this.props.type.toLowerCase()}>
-                {this.props.content}
-            </Alert>
-        );
-    }
+    return (
+        <Alert show={show} className={"message"} onClose={() => setShow(false)} dismissible
+               variant={type.toLowerCase()}>
+            {content}
+        </Alert>
+    );
 
 }
 
-class Messages extends Component<MessagesProps, any> {
-    public static TIMER: number = 3000;
-    private static messages: Array<ReactElement> = new Array<ReactElement>();
 
-    static add(content: ReactNode, type: MessageTypes, timer?: number) {
-        Messages.messages.push(<SingleMessage key={Messages.messages.length} content={content} type={type}
-                                              timer={timer}/>);
-        reload_app();
-    }
+/**
+ * This functions appends a SingleMessage element to the given array.
+ * @param messages the array to append the SingleMessage to.
+ * @param newMessages the props of the added SingleMessage should have.
+ */
+function messageReducer(messages: Array<ReactElement>, newMessages: SingleMessageProps[]): Array<ReactElement> {
 
-    static addWithProps(values: SingleMessageProps) {
-        Messages.messages.push(<SingleMessage key={Messages.messages.length} content={values.content} type={values.type}
-                                              timer={values.timer}/>);
-        reload_app();
-    }
+    const newSingleMessages = newMessages.map((message) => (
+        <SingleMessage content={message.content} type={message.type}
+                       timer={message.timer} key={messages.length}/>
+    ));
 
-    render = () => {
-        return (
-            <div style={this.props.style}
-                 className={["messages", this.props.yAlignment.toLowerCase(), this.props.xAlignment.toLowerCase()].join(" ")}>
-                {Messages.messages}
+    return [
+        ...messages,
+        ...newSingleMessages
+    ];
+}
+
+function Messages({style, yAlignment, xAlignment, children}: MessagesProps) {
+    const [messages, showMessages] = useReducer(messageReducer, new Array<ReactElement>());
+
+
+    const add = useCallback(function (content: ReactNode, type: MessageTypes, timer?: number) {
+        showMessages([{content: content, type: type, timer: timer}]);
+    }, [showMessages]);
+
+    const addWithProps = useCallback(function (messageProps: SingleMessageProps) {
+        add(messageProps.content, messageProps.type, messageProps.timer);
+    }, [add]);
+
+    const context = useMemo(() => {
+        return {
+            add: add,
+            addWithProps: addWithProps,
+            addMultiple: showMessages
+        } as IMessageContext
+    }, [showMessages, add, addWithProps]);
+
+
+    return (
+        <>
+            <MessageContext.Provider value={context}>
+                {children}
+            </MessageContext.Provider>
+            <div style={style}
+                 className={["messages", yAlignment.toLowerCase(), xAlignment.toLowerCase()].join(" ")}>
+                {messages}
             </div>
-        );
-    }
+        </>
 
+    );
 }
+
+Messages.TIMER = 3000;
+
+
+export function useMessageContext() {
+    return useContext(MessageContext)
+}
+
+export interface WithMessagesContextProps {
+    messageContext: IMessageContext
+}
+
+/**
+ * creates a new component with receives a messageContext as prop.
+ * @deprecated use a function component and useMessageContext instead.
+ * @param Component the component to wrap
+ */
+export const withMessagesContext = <P extends object>(Component: React.ComponentType<P & WithMessagesContextProps>) =>
+    class WithMessages extends React.Component<P> {
+        render() {
+            return (
+                <MessageContext.Consumer>
+                    {messageContext =>
+                        <Component {...this.props} messageContext={messageContext}/>
+                    }
+                </MessageContext.Consumer>
+            )
+
+        }
+    };
 
 export {
     Messages,

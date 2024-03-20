@@ -1,7 +1,6 @@
 import './tool-save-page.scss'
 import React, {Component, ReactNode} from "react";
 import {
-    LiveSaveUpdateResource,
     SaveResource,
     SharedSavePermission,
     SharedSavePermissionDefault,
@@ -12,20 +11,20 @@ import {Prompt, RouteComponentProps} from "react-router";
 import * as H from "history";
 import {getSave, lockSave, updateSave} from "../../API/calls/Saves";
 import {Tool} from "../Tool";
-import {Messages} from "../../Messages/Messages";
+import {MessageContext, Messages} from "../../Messages/Messages";
 import {Button, Modal} from "react-bootstrap";
 import {ConfirmToolRouteChangeModal} from "../ConfirmToolRouteChangeModal/ConfirmToolRouteChangeModal";
 import {Route} from "react-router-dom";
-import produce, {applyPatches} from "immer";
+import produce from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
 import {UIErrorContextComponent} from "../../Contexts/UIErrorContext/UIErrorContext";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 import {EditSavesPermission, hasPermission} from "../../Permissions";
-import {showErrorPage} from "../../../index";
 import {ModalCloseable} from "../../Modal/ModalCloseable";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import FAE from '../../Icons/FAE';
 import {getSaveResource} from "../../API/calls/SaveResources";
+import {legacyShowErrorPage} from "../../LegacyErrorPageAdapter";
 
 
 interface ToolSaveController<D> {
@@ -87,6 +86,13 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     private readonly resourceManager: ResourceManager;
     private readonly resources: ResourcesType = new Map();
+    private onUnmount: (() => void)[];
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
 
     constructor(props: ToolSavePageProps<D> & RouteComponentProps<any>, context: any) {
         super(props, context);
@@ -109,6 +115,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             getText: this.getResourceText.bind(this),
             getBlobURL: this.getBlobURL.bind(this)
         }
+        this.onUnmount = [];
     }
 
     componentDidMount = async () => {
@@ -118,8 +125,14 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     }
 
     componentWillUnmount = async () => {
+        const onUnmount = this.onUnmount;
+        this.onUnmount = [];
         if (this.state.save !== undefined) {
             await this.unlock(this.state.save);
+        }
+
+        for (const onUnmountCallback of onUnmount) {
+            onUnmountCallback();
         }
 
         // this.closeWebsocketConnection();
@@ -139,52 +152,12 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         }
     }
 
-    // createSocketConnection = async (save: SaveResource<D>): Promise<{
-    //     connection: Echo,
-    //     channel: PresenceChannel
-    // }> => {
-    //     let channelName = "savechannel." + save.id;
-    //     let connection = createSocketConnection();
-    //
-    //     connection.connector.pusher.connection.bind("connected", () => {
-    //         console.log("Websocket connected!"); // TODO: in state umwandeln
-    //     });
-    //     connection.connector.pusher.connection.bind("disconnected", () => {
-    //         console.log("Websocket disconnected!"); // TODO: in state umwandeln
-    //     });
-    //
-    //     let channel = connection.join(channelName);
-    //     channel.subscribed(() => {
-    //         console.log("channel subscribed");  // TODO: in state umwandeln
-    //     });
-    //
-    //     /**
-    //      * Watchout for updates
-    //      */
-    //     channel.listen("LiveSaveUpdate", (message: LiveSaveUpdateResource) => {
-    //         let userID = Session.currentUser?.getID();
-    //
-    //         if (userID !== message.sender.id) {
-    //             this.remoteUpdateSave(message);
-    //         }
-    //     });
-    //
-    //     return {
-    //         connection: connection,
-    //         channel: channel
-    //     };
-    // }
-
     render() {
         return (
             <Route>
                 <SharedSaveContextComponent permission={this.getPermissionOfSave()}>
                     <Loader payload={[]} loaded={!this.state.isLoading} transparent
                             alignment={"center"} fullscreen animate={false}>
-                        {/*<WebsocketChannelContextComponent*/}
-                        {/*    channel={this.state.channel ?? null}*/}
-                        {/*    connection={this.state.connection ?? null}*/}
-                        {/*>*/}
                         <UIErrorContextComponent>
                             {this.getView()}
                         </UIErrorContextComponent>
@@ -223,7 +196,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                                 </Button>
                             </Modal.Footer>
                         </ModalCloseable>
-                        {/*</WebsocketChannelContextComponent>*/}
                     </Loader>
 
                     <Prompt message={this.denyRouteChange}/>
@@ -251,7 +223,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     public onAPIError(error: Error): void {
         // TODO: remove later
-        Messages.add(error.message, "DANGER", Messages.TIMER);
+        this.context.add(error.message, "DANGER", Messages.TIMER);
     }
 
     public lock = async (save: SaveResource<any>) => {
@@ -264,7 +236,17 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
 
     private firstLoad = async () => {
         let ID = parseInt(this.props.match.params.id as string);
-        let save = await this.retrieveSave(ID);
+        let save;
+        try {
+            save = await this.retrieveSave(ID);
+        } catch (e: any) {
+            if (e.message === this.INTERRUPTED) {
+                return;
+            } else {
+                throw e;
+            }
+        }
+
 
         let isLocked: boolean | undefined = undefined;
         // let socketInfo: { connection: any; channel: any; } | undefined = undefined;
@@ -282,11 +264,11 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                     // channel: socketInfo.channel
                 });
             } else {
-                showErrorPage(404);
+                legacyShowErrorPage(404);
                 return;
             }
         } else {
-            showErrorPage(404);
+            legacyShowErrorPage(404);
             return;
         }
     }
@@ -422,15 +404,7 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
             newSave = changes;
         } else {
             if (this.state.save !== undefined) {
-                newSave = produce(this.state.save, changes, async (patches, inversePatches) => {
-                    // if (this.updateTimeout) {
-                    //     clearTimeout(this.updateTimeout);
-                    // }
-
-                    // this.updateTimeout = setTimeout(async () => {
-                    //     await broadcastSavePatches(this.state.save!.id, patches);
-                    // }, this.updateTimeoutMS);
-                });
+                newSave = produce(this.state.save, changes);
             }
             this.saveDirty = true;
         }
@@ -438,19 +412,6 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         this.setState({
             save: newSave
         }, callback);
-    }
-
-    private remoteUpdateSave = (message: LiveSaveUpdateResource) => {
-        let patches = JSON.parse(message.patches);
-        let old = this.state.save;
-
-        if (old !== undefined) {
-            let newSave = applyPatches<SaveResource<D>>(old, patches);
-            this.setState({
-                save: newSave
-            });
-            this.saveDirty = true;
-        }
     }
 
     private lockSave = async (save: SaveResource<any>, lock: boolean, keepalive?: boolean) => {
@@ -470,7 +431,17 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
     private updateSaveFromRemote = async () => {
         this.setState({isLoading: true});
         if (this.state.save) {
-            let save = await this.retrieveSave(this.state.save.id);
+            let save;
+            try {
+                save = await this.retrieveSave(this.state.save.id);
+            } catch (e: any) {
+                if (e.message === this.INTERRUPTED) {
+                    return;
+                } else {
+                    throw e;
+                }
+            }
+
             if (save) {
                 this.setState({
                     save: save,
@@ -504,9 +475,21 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
         return isLocked;
     }
 
+    private readonly INTERRUPTED = "interrupted";
     private retrieveSave = async (ID: number): Promise<SaveResource<D> | undefined> => {
+        let abort = false;
+        const onAbort = () => {
+            abort = true;
+        }
+        this.onUnmount.push(onAbort);
         let call = await getSave<any>(ID, {errorCallback: this.onAPIError});
 
+        if (abort) {
+            throw new Error(this.INTERRUPTED);
+        } else {
+            const index = this.onUnmount.findIndex(onAbort)
+            this.onUnmount.splice(index, 1);
+        }
         if (call && call.success) {
             if (call.callData.tool_id === this.props.tool.getID()) {
                 let save: SaveResource<D> = call.callData;
@@ -535,11 +518,11 @@ class ToolSavePage<D extends object> extends Component<ToolSavePageProps<D> & Ro
                 }
                 return save;
             } else {
-                showErrorPage(403);
+                legacyShowErrorPage(403);
                 return;
             }
         } else {
-            showErrorPage(404);
+            legacyShowErrorPage(404);
             return;
         }
     }

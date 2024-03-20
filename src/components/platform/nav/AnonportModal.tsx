@@ -2,19 +2,20 @@ import {ModalCloseable} from "../../../general-components/Modal/ModalCloseable";
 import {Button, Form, FormGroup, Modal} from "react-bootstrap";
 import FAE from "../../../general-components/Icons/FAE";
 import {faCheck, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
-import React, {Component, createRef, FormEvent, RefObject} from "react";
+import React, {FormEvent, useCallback, useRef, useState} from "react";
 import {Session} from "../../../general-components/Session/Session";
 import {checkEmail} from "../../../general-components/API/calls/Email";
 import {UniqueCheck} from "../../../general-components/UniqueCheck/UniqueCheck";
 import {checkUsername} from "../../../general-components/API/calls/Username";
 import {PasswordField} from "../../../general-components/PasswordField/PasswordField";
-import {extractFromForm} from "../../../general-components/FormHelper";
+import {extractFromForm} from "../../../general-components/Utility/FormHelper";
 import {isEmpty} from "../../../general-components/ComponentUtils";
 import {LoadingButton} from "../../../general-components/LoadingButton/LoadingButton";
 import {portUser} from "../../../general-components/API/calls/User";
-import {RouteComponentProps, withRouter} from "react-router";
-import {Messages} from "../../../general-components/Messages/Messages";
+import {useHistory} from "react-router";
+import {useMessageContext} from "../../../general-components/Messages/Messages";
 import {CaptchaComponent} from "../../../general-components/Captcha/CaptchaComponent";
+import {useUserContext} from "../../../general-components/Contexts/UserContextComponent";
 
 
 export interface AnonportModalProps {
@@ -27,167 +28,42 @@ interface Errors {
     emailEmpty?: boolean
 }
 
-interface AnonportModalState {
-    errors: Errors,
-    isPorting: boolean,
-    success?: boolean
-}
 
-class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, AnonportModalState> {
-    private passwordField: RefObject<PasswordField<any>> = createRef();
-    private uniqueEmail: RefObject<UniqueCheck & HTMLInputElement> = createRef();
-    private uniqueUsername: RefObject<UniqueCheck & HTMLInputElement> = createRef();
+export function AnonportModal({onClose, show}: AnonportModalProps) {
+    // State
+    const [errors, setErrors] = useState<Errors>({});
+    const [isPorting, setIsPorting] = useState(false);
+    const [success, setSuccess] = useState<Boolean | undefined>(undefined);
 
-    constructor(props: any) {
-        super(props);
+    // Context
 
-        this.state = {
-            errors: {},
-            isPorting: false,
-            success: undefined
-        }
-    }
+    const {add: showMessage} = useMessageContext();
+    const {user} = useUserContext();
+    const history = useHistory();
 
-    resetError = () => {
-        this.setState({
-            errors: {},
-            success: undefined
-        });
-    }
+    // Refs
 
-    render() {
-        let required = false;
+    const passwordField = useRef<PasswordField<any>>(null);
+    const uniqueEmail = useRef<UniqueCheck & HTMLInputElement>(null);
+    const uniqueUsername = useRef<UniqueCheck & HTMLInputElement>(null);
 
-        return (
-            <ModalCloseable
-                show={this.props.show}
-                centered
-                backdrop
-                keyboard
-                onHide={this.props.onClose}
-            >
-                <Form onSubmit={this.onPort}>
-                    <Modal.Header>
-                        <h5>Anonymes Konto portieren</h5>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>Hier können Sie sich nun Registrieren und Ihr Anonymes Konto auf ein Richtiges Konto
-                            portieren.</p>
-                        <p><FAE icon={faInfoCircle}/> Ihre Speicherstände und Einstellungen werden übernommen.</p>
+    // Callbacks
 
-                        <FormGroup className={"mb-2"}>
-                            <Form.FloatingLabel label={"E-Mail"}>
-                                <UniqueCheck
-                                    ref={this.uniqueEmail}
-                                    id="email"
-                                    type="email"
-                                    name={"email"}
-                                    size={"sm"}
-                                    placeholder="name@example.com"
-                                    required={required}
-                                    onChangedValue={this.resetError}
-                                    callback={checkEmail}
-                                    entityName={"E-Mail"}
-                                />
-
-                                <div className={"feedbackContainer"}>
-                                    {(this.state.errors.emailEmpty) && (
-                                        <div className={"feedback DANGER"}>
-                                            Bitte geben Sie eine E-Mail-Adresse an!
-                                        </div>
-                                    )}
-                                </div>
-                            </Form.FloatingLabel>
-                        </FormGroup>
-
-                        <FormGroup className={"mb-2"}>
-                            <Form.FloatingLabel label={"Benutzername"}>
-                                <UniqueCheck
-                                    ref={this.uniqueUsername}
-                                    id="username"
-                                    type="text"
-                                    name={"username"}
-                                    size={"sm"}
-                                    placeholder=""
-                                    required={required}
-                                    onChangedValue={this.resetError}
-                                    callback={checkUsername}
-                                    entityName={"Username"}
-                                />
-
-                                <div className={"feedbackContainer"}>
-                                    {(this.state.errors.usernameEmpty) && (
-                                        <div className={"feedback DANGER"}>
-                                            Bitte geben Sie einen Benutzernamen an!
-                                        </div>
-                                    )}
-                                </div>
-                            </Form.FloatingLabel>
-                        </FormGroup>
-
-                        <PasswordField
-                            ref={this.passwordField}
-                            required={required}
-                            confirm
-                            check
-                            eye
-                            onChange={this.resetError}
-                        />
-
-                        <CaptchaComponent/>
-
-                        <div className={"feedbackContainer"}>
-                            {(
-                                this.state.success !== undefined &&
-                                !this.state.success
-                            ) && (
-                                <div className={"feedback DANGER"}>
-                                    Es ist ein Fehler aufgetreten! Bitte versuchen Sie es später erneut!
-                                </div>
-                            )}
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <LoadingButton
-                            size={"sm"}
-                            type={"submit"}
-                            variant={"success"}
-                            defaultChild={"Portieren"}
-                            savingChild={"Portiert..."}
-                            isLoading={this.state.isPorting}
-                            defaultIcon={faCheck}
-                        />
-
-                        <Button
-                            size={"sm"}
-                            onClick={this.props.onClose}
-                        >
-                            Abbrechen
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </ModalCloseable>
-        );
-    }
-
-    private onPort = async (e: FormEvent<HTMLFormElement>) => {
+    const onPort = useCallback(async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        let user = Session.currentUser;
         let email = extractFromForm(e, "email") as string;
         let username = extractFromForm(e, "username") as string;
         let password = extractFromForm(e, "password") as string;
         let captcha = extractFromForm(e, "captcha") as string;
         let captchaKey = extractFromForm(e, "captcha_key") as string;
 
-        this.setState({
-            isPorting: true
-        });
+        setIsPorting(true);
 
         if (
-            this.passwordField.current &&
-            this.uniqueUsername.current &&
-            this.uniqueEmail.current &&
+            passwordField.current &&
+            uniqueUsername.current &&
+            uniqueEmail.current &&
             user
         ) {
             let errors: Errors = {
@@ -198,10 +74,10 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
             if (
                 !errors.emailEmpty &&
                 !errors.usernameEmpty &&
-                this.uniqueEmail.current.isAvailable() &&
-                this.uniqueUsername.current.isAvailable() &&
-                this.passwordField.current.isMatching() &&
-                this.passwordField.current.isValid()
+                uniqueEmail.current.isAvailable() &&
+                uniqueUsername.current.isAvailable() &&
+                passwordField.current.isMatching() &&
+                passwordField.current.isValid()
             ) {
                 let call = await portUser({
                     email: email,
@@ -215,37 +91,143 @@ class AnonportModal extends Component<AnonportModalProps & RouteComponentProps, 
                     let logoutCall = await Session.logout();
 
                     if (logoutCall && logoutCall.success) {
-                        Messages.add((
+                        showMessage((
                             <div>
                                 Konto erfolgreich portiert.<br/>
                                 Überprüfen Sie Ihre E-Mails!
                             </div>
                         ), "SUCCESS", 8000);
 
-                        this.props.onClose();
-                        this.props.history.push(`/login?email=${email}&bestaetigen`);
+                        onClose();
+                        history.push(`/login?email=${email}&bestaetigen`);
                     } else {
-                        this.setState({
-                            success: false
-                        });
+                        setSuccess(false);
                     }
                 } else {
-                    this.setState({
-                        success: false
-                    });
+                    setSuccess(false);
                 }
             } else {
-                this.setState({
-                    errors: errors
-                });
+                setErrors(errors);
             }
 
-            this.setState({
-                isPorting: false
-            });
+            setIsPorting(false);
         }
-    }
+    }, [history, onClose, user, passwordField, uniqueUsername, uniqueEmail, showMessage, setIsPorting, setErrors, setSuccess]);
 
+    const resetError = useCallback(() => {
+        setErrors({});
+        setSuccess(undefined);
+    }, [setErrors, setSuccess]);
+
+    let required = false;
+
+    return (
+        <ModalCloseable
+            show={show}
+            centered
+            backdrop
+            keyboard
+            onHide={onClose}
+        >
+            <Form onSubmit={onPort}>
+                <Modal.Header>
+                    <h5>Anonymes Konto portieren</h5>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Hier können Sie sich nun Registrieren und Ihr Anonymes Konto auf ein Richtiges Konto
+                        portieren.</p>
+                    <p><FAE icon={faInfoCircle}/> Ihre Speicherstände und Einstellungen werden übernommen.</p>
+
+                    <FormGroup className={"mb-2"}>
+                        <Form.FloatingLabel label={"E-Mail"}>
+                            <UniqueCheck
+                                ref={uniqueEmail}
+                                id="email"
+                                type="email"
+                                name={"email"}
+                                size={"sm"}
+                                placeholder="name@example.com"
+                                required={required}
+                                onChangedValue={resetError}
+                                callback={checkEmail}
+                                entityName={"E-Mail"}
+                            />
+
+                            <div className={"feedbackContainer"}>
+                                {(errors.emailEmpty) && (
+                                    <div className={"feedback DANGER"}>
+                                        Bitte geben Sie eine E-Mail-Adresse an!
+                                    </div>
+                                )}
+                            </div>
+                        </Form.FloatingLabel>
+                    </FormGroup>
+
+                    <FormGroup className={"mb-2"}>
+                        <Form.FloatingLabel label={"Benutzername"}>
+                            <UniqueCheck
+                                ref={uniqueUsername}
+                                id="username"
+                                type="text"
+                                name={"username"}
+                                size={"sm"}
+                                placeholder=""
+                                required={required}
+                                onChangedValue={resetError}
+                                callback={checkUsername}
+                                entityName={"Username"}
+                            />
+
+                            <div className={"feedbackContainer"}>
+                                {(errors.usernameEmpty) && (
+                                    <div className={"feedback DANGER"}>
+                                        Bitte geben Sie einen Benutzernamen an!
+                                    </div>
+                                )}
+                            </div>
+                        </Form.FloatingLabel>
+                    </FormGroup>
+
+                    <PasswordField
+                        ref={passwordField}
+                        required={required}
+                        confirm
+                        check
+                        eye
+                        onChange={resetError}
+                    />
+
+                    <CaptchaComponent/>
+
+                    <div className={"feedbackContainer"}>
+                        {(
+                            success !== undefined &&
+                            !success
+                        ) && (
+                            <div className={"feedback DANGER"}>
+                                Es ist ein Fehler aufgetreten! Bitte versuchen Sie es später erneut!
+                            </div>
+                        )}
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <LoadingButton
+                        size={"sm"}
+                        type={"submit"}
+                        variant={"success"}
+                        defaultChild={"Portieren"}
+                        savingChild={"Portiert..."}
+                        isLoading={isPorting}
+                        defaultIcon={faCheck}
+                    />
+
+                    <Button
+                        size={"sm"}
+                        onClick={onClose}>
+                        Abbrechen
+                    </Button>
+                </Modal.Footer>
+            </Form>
+        </ModalCloseable>
+    );
 }
-
-export default withRouter(AnonportModal);

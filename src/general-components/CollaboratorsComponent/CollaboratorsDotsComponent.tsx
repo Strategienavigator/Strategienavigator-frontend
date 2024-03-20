@@ -1,31 +1,33 @@
 import "./collaborators-dots-component.scss";
-import {Component} from "react";
 import {SimplestUserResource} from "../Datastructures";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {Session} from "../Session/Session";
 
 
+const alpha = 0.45;
+const colors = [
+    `rgba(255, 0, 0, ${alpha})`, // red
+    `rgba(0, 255, 0, ${alpha})`, // lime
+    `rgba(255, 0, 255, ${alpha})`, // fuchsia
+    `rgba(255, 215, 0, ${alpha})`, // gold
+    `rgba(0, 100, 0, ${alpha})`, // darkgreen
+    `rgba(255, 228, 196, ${alpha})`, // bisque
+    `rgba(0, 0, 128, ${alpha})`, // navy
+    `rgba(0, 191, 255, ${alpha})` // deepskyblue
+];
+
+function getColor(index: number) {
+    return colors[index % colors.length];
+}
+
 export interface CollaboratorsDotsComponentProps {
     collaborators: SimplestUserResource[]
 }
 
-export class CollaboratorsDotsComponent extends Component<CollaboratorsDotsComponentProps, any> {
-    alpha = 0.45;
-    colors = [
-        `rgba(255, 0, 0, ${this.alpha})`, // red
-        `rgba(0, 255, 0, ${this.alpha})`, // lime
-        `rgba(255, 0, 255, ${this.alpha})`, // fuchsia
-        `rgba(255, 215, 0, ${this.alpha})`, // gold
-        `rgba(0, 100, 0, ${this.alpha})`, // darkgreen
-        `rgba(255, 228, 196, ${this.alpha})`, // bisque
-        `rgba(0, 0, 128, ${this.alpha})`, // navy
-        `rgba(0, 191, 255, ${this.alpha})` // deepskyblue
-    ];
-
-    render = () => {
+export function CollaboratorsDotsComponent({collaborators}:CollaboratorsDotsComponentProps) {
         return (
             <div className={"collaborators dots"}>
-                {(this.props.collaborators.map((user, index) => {
+                {(collaborators.map((user, index) => {
                     let letter = user.username.substr(0, 1).toUpperCase();
                     return (
                         <OverlayTrigger
@@ -40,7 +42,7 @@ export class CollaboratorsDotsComponent extends Component<CollaboratorsDotsCompo
                         >
                             <div
                                 className={"collaborator"}
-                                style={{backgroundColor: this.getColor(user.id)}}
+                                style={{backgroundColor: getColor(user.id)}}
                             >
                                 {letter}
                             </div>
@@ -51,8 +53,4 @@ export class CollaboratorsDotsComponent extends Component<CollaboratorsDotsCompo
         );
     }
 
-    private getColor(index: number) {
-        return this.colors[index % this.colors.length];
-    }
 
-}

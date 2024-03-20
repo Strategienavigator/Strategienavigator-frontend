@@ -1,5 +1,6 @@
-import {showErrorPage} from "../../index";
+
 import {Session} from "../Session/Session";
+import {legacyShowErrorPage} from "../LegacyErrorPageAdapter";
 
 
 export interface CallInterface<D> {
@@ -103,7 +104,7 @@ const callAPI = async <D extends object>(
         if (apiArgs?.errorCallback !== undefined) {
             apiArgs.errorCallback(e as Error);
         } else {
-            showErrorPage(500);
+            legacyShowErrorPage(500);
         }
         return null;
     }

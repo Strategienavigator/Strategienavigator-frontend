@@ -1,6 +1,6 @@
 import FileSaver from "file-saver";
 import {SaveResource} from "../Datastructures";
-import {Messages, SingleMessageProps} from "../Messages/Messages";
+import {SingleMessageProps} from "../Messages/Messages";
 import {ResourcesType} from "../Tool/ToolSavePage/ToolSavePage";
 
 
@@ -40,10 +40,7 @@ abstract class Exporter<D> {
             });
             this.save(blob, save.name);
         } else {
-            // Print error Messages
-            validate.forEach((msg) => {
-                Messages.addWithProps(msg);
-            });
+            throw new ValidationError("Error while validating exporter", validate);
         }
     }
 
@@ -62,6 +59,22 @@ abstract class Exporter<D> {
         let date = new Date();
         let fileName = saveName + " - " + date.toLocaleString() + "." + this.getFileExtension();
         FileSaver.saveAs(data, fileName);
+    }
+}
+
+
+export class ValidationError extends Error {
+
+    private readonly _validationMessages: SingleMessageProps[];
+
+    constructor(message: string, validationMessages: SingleMessageProps[]) {
+        super(message);
+        this._validationMessages = validationMessages;
+    }
+
+
+    get validationMessages(): SingleMessageProps[] {
+        return this._validationMessages;
     }
 }
 

@@ -5,10 +5,16 @@ import {RomanNumeralsCounter} from "../../../../general-components/Counter/Roman
 import {UpperABCCounter} from "../../../../general-components/Counter/UpperABCCounter";
 import {LowerABCCounter} from "../../../../general-components/Counter/LowerABCCounter";
 import {AlternateAction} from "../steps/SWOTAlternativeActions/SWOTAlternativeActionsComponent";
-import {isDesktop} from "../../../../general-components/Desktop";
+import {DesktopContext} from "../../../../general-components/Contexts/DesktopContext";
 
 
 class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = DesktopContext;
+    context!: React.ContextType<typeof DesktopContext>
 
     getAction(actions: any, first: string, second: any): AlternateAction | null {
         for (const action of actions) {
@@ -165,7 +171,8 @@ class SWOTAnalysisMatrix extends ExtraWindowComponent<SWOTAnalysisValues, {}> {
 
             let flexContainerClasses = "flex-container";
 
-            if (!isDesktop()) {
+            const isDesktop = this.context;
+            if (!isDesktop) {
                 flexContainerClasses = flexContainerClasses + " flex-center";
             }
 

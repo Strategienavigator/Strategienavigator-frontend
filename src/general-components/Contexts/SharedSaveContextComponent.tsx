@@ -1,4 +1,4 @@
-import {createContext, PureComponent} from "react";
+import {createContext, PureComponent, ReactNode} from "react";
 import {SharedSavePermission, SharedSavePermissionDefault} from "../Datastructures";
 
 
@@ -27,7 +27,8 @@ export interface SharedSaveState {
  * Interface für die Props des SharedSaveContextComponent
  */
 export interface SharedSaveContextComponentProps {
-    permission?: SharedSavePermission
+    permission?: SharedSavePermission,
+    children: ReactNode
 }
 
 /**

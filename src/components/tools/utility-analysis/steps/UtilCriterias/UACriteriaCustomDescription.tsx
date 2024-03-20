@@ -4,7 +4,7 @@ import {
 } from "../../../../../general-components/CardComponent/CustomDescriptionComponent/CustomDescriptionComponent";
 import {ChangeEvent} from "react";
 import {CompareHeader} from "../../../../../general-components/CompareComponent/Header/CompareHeaderAdapter";
-import {isDesktop} from "../../../../../general-components/Desktop";
+import {DesktopContext} from "../../../../../general-components/Contexts/DesktopContext";
 
 
 /**
@@ -30,68 +30,71 @@ class UACriteriaCustomDescription extends CustomDescriptionComponent<UACriteriaC
         let headerLength = values.headers.length;
 
         return (
-            <div style={{marginTop: "0.25rem"}}>
-                <Accordion aria-disabled={this.props.disabled}>
-                    <Accordion.Item aria-disabled={this.props.disabled} eventKey={"0"}>
-                        <Accordion.Header>
-                            Skala
-                        </Accordion.Header>
-                        <Accordion.Body>
-                            <div className={"scale " + ((isDesktop() ? "desktop" : "mobile"))}>
-                                <InputGroup>
-                                    <InputGroup.Text id={"desc"}>Anzahl Skala-Elemente</InputGroup.Text>
-                                    <Form.Select disabled={this.props.disabled} onChange={this.presetChanged}
-                                                 aria-describedby={"desc"} defaultValue="5">
-                                        <option value="2">
-                                            2
-                                        </option>
-                                        <option value="3">
-                                            3
-                                        </option>
-                                        <option value={headerLength}>
-                                            {headerLength}
-                                        </option>
-                                    </Form.Select>
-                                </InputGroup>
+            <DesktopContext.Consumer children={(isDesktop) => {
+                return (<div style={{marginTop: "0.25rem"}}>
+                    <Accordion aria-disabled={this.props.disabled}>
+                        <Accordion.Item aria-disabled={this.props.disabled} eventKey={"0"}>
+                            <Accordion.Header>
+                                Skala
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                <div className={"scale " + ((isDesktop ? "desktop" : "mobile"))}>
+                                    <InputGroup>
+                                        <InputGroup.Text id={"desc"}>Anzahl Skala-Elemente</InputGroup.Text>
+                                        <Form.Select disabled={this.props.disabled} onChange={this.presetChanged}
+                                                     aria-describedby={"desc"} defaultValue="5">
+                                            <option value="2">
+                                                2
+                                            </option>
+                                            <option value="3">
+                                                3
+                                            </option>
+                                            <option value={headerLength}>
+                                                {headerLength}
+                                            </option>
+                                        </Form.Select>
+                                    </InputGroup>
 
-                                <div className={"headers"}>
-                                    {values.headers.map((v, index) => {
-                                        let mustBeChecked = (index === 0 || index === headerLength - 1) ? true : undefined
-                                        let shallBeChecked = values.activeIndices.includes(index + 1);
+                                    <div className={"headers"}>
+                                        {values.headers.map((v, index) => {
+                                            let mustBeChecked = (index === 0 || index === headerLength - 1) ? true : undefined
+                                            let shallBeChecked = values.activeIndices.includes(index + 1);
 
-                                        return (
-                                            <Row className={"singleScale"} key={"row-" + index}>
-                                                <Col className={"header"} xs={2}>
-                                                    {v.header}
-                                                </Col>
-                                                <Col className={"checkbox"}>
-                                                    <Form.Check
-                                                        onChange={this.toggledSelection}
-                                                        checked={mustBeChecked ?? shallBeChecked}
-                                                        disabled={this.props.disabled ? true : mustBeChecked}
-                                                        value={index + 1}
-                                                    />
-                                                </Col>
-                                                <Col className={"description"}>
-                                                    {/*TODO remove bind*/}
-                                                    <FormControl
-                                                        type={"text"}
-                                                        disabled={this.props.disabled ? true : !shallBeChecked}
-                                                        value={v.desc}
-                                                        size={"sm"}
-                                                        placeholder={v.header}
-                                                        onChange={this.descriptionChanged.bind(this, index)}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        );
-                                    })}
+                                            return (
+                                                <Row className={"singleScale"} key={"row-" + index}>
+                                                    <Col className={"header"} xs={2}>
+                                                        {v.header}
+                                                    </Col>
+                                                    <Col className={"checkbox"}>
+                                                        <Form.Check
+                                                            onChange={this.toggledSelection}
+                                                            checked={mustBeChecked ?? shallBeChecked}
+                                                            disabled={this.props.disabled ? true : mustBeChecked}
+                                                            value={index + 1}
+                                                        />
+                                                    </Col>
+                                                    <Col className={"description"}>
+                                                        {/*TODO remove bind*/}
+                                                        <FormControl
+                                                            type={"text"}
+                                                            disabled={this.props.disabled ? true : !shallBeChecked}
+                                                            value={v.desc}
+                                                            size={"sm"}
+                                                            placeholder={v.header}
+                                                            onChange={this.descriptionChanged.bind(this, index)}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
-            </div>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                </div>)
+            }}/>
+
         );
     }
 

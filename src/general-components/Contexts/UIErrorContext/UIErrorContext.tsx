@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, ReactNode, useContext} from "react";
 import {ErrorMap, UIError} from "../../Error/UIErrors/UIError";
 import produce from "immer";
 import {WritableDraft} from "immer/dist/types/types-external";
@@ -10,6 +10,10 @@ interface IUIErrorContext extends ErrorController {
 
 interface UIErrorContextState {
     uiErrorContext: IUIErrorContext;
+}
+
+interface UIErrorContextProps {
+    children: ReactNode;
 }
 
 /**
@@ -58,6 +62,15 @@ const UIErrorContext = React.createContext<IUIErrorContext>({
 });
 
 
+export function useUIErrorContext() {
+    return useContext(UIErrorContext);
+}
+
+/**
+ * creates a new component with receives a UIErrorContext as prop.
+ * @deprecated use a function component and useUIErrorContext instead.
+ * @param Component the component to wrap
+ */
 const withUIErrorContext = <P extends object>(Component: React.ComponentType<P & {
     uiErrorContext: IUIErrorContext
 }>) =>
@@ -74,12 +87,12 @@ const withUIErrorContext = <P extends object>(Component: React.ComponentType<P &
         }
     };
 
-class UIErrorContextComponent extends Component<{}, UIErrorContextState> implements ErrorController {
+class UIErrorContextComponent extends Component<UIErrorContextProps, UIErrorContextState> implements ErrorController {
 
 
-    constructor(props: Readonly<{}> | {});
-    constructor(props: {}, context: any);
-    constructor(props: Readonly<{}> | {}, context?: any) {
+    constructor(props: Readonly<UIErrorContextProps> | UIErrorContextProps);
+    constructor(props: UIErrorContextProps, context: any);
+    constructor(props: Readonly<UIErrorContextProps> | UIErrorContextProps, context?: any) {
         super(props, context);
         this.state = {
             uiErrorContext: this.buildContext()
@@ -151,9 +164,9 @@ class UIErrorContextComponent extends Component<{}, UIErrorContextState> impleme
 
 export
     type {
-    IUIErrorContext
-    ,
-    ErrorController
+    IUIErrorContext,
+    ErrorController,
+    UIErrorContextProps
 }
 
 export {

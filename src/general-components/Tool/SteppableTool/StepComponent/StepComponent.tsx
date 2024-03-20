@@ -1,9 +1,8 @@
 import React, {Component, ComponentClass, FunctionComponent, ReactNode,} from "react";
 import {Accordion, Col, Fade, Nav, NavItem, Row, Tab} from "react-bootstrap";
-import {isDesktop} from "../../../Desktop";
 import "./step-component.scss";
 import "./step-component-desk.scss";
-import {Messages} from "../../../Messages/Messages";
+import {Messages, WithMessagesContextProps} from "../../../Messages/Messages";
 import {StepProp} from "./Step/Step";
 import {StepComponentHeader} from "./StepComponentHeader/StepComponentHeader";
 import {StepComponentButtons} from "./StepComponentButtons/StepComponentButtons";
@@ -12,13 +11,16 @@ import {ExportModal} from "../../ExportButton";
 import {ResourcesType, ToolSaveProps} from "../../ToolSavePage/ToolSavePage";
 import {ExtraWindowProps} from "../../ExtraWindowComponent/ExtraWindowComponent";
 import {UIError} from "../../../Error/UIErrors/UIError";
-import {Exporter} from "../../../Export/Exporter";
+import {Exporter, ValidationError} from "../../../Export/Exporter";
 import {Draft} from "immer";
 import {IUIErrorContext} from "../../../Contexts/UIErrorContext/UIErrorContext";
 import {SteppableTool} from "../SteppableTool";
 import {SharedSaveContext,} from "../../../Contexts/SharedSaveContextComponent";
 import {EditSavesPermission, hasPermission} from "../../../Permissions";
 import {SharedSavePermission} from "../../../Datastructures";
+import {DesktopContext} from "../../../Contexts/DesktopContext";
+import {types} from "sass";
+import Error = types.Error;
 
 
 export interface StepDefinition<T extends object> {
@@ -134,7 +136,7 @@ export interface StepComponentState {
     showExportModal: boolean
 }
 
-class StepComponent<D extends object> extends Component<StepComponentProps<D> & {
+class StepComponent<D extends object> extends Component<StepComponentProps<D> & WithMessagesContextProps & {
     uiErrorContext: IUIErrorContext
 }, StepComponentState> {
     /**
@@ -145,13 +147,18 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private readonly stepController: StepController;
 
-    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & {
+
+    constructor(props: Readonly<StepComponentProps<D> & WithMessagesContextProps & {
         uiErrorContext: IUIErrorContext
-    });
-    constructor(props: StepComponentProps<D> & { uiErrorContext: IUIErrorContext }, context: any);
-    constructor(props: Readonly<StepComponentProps<D> & { uiErrorContext: IUIErrorContext }> | StepComponentProps<D> & {
+    }> | (StepComponentProps<D> & WithMessagesContextProps & { uiErrorContext: IUIErrorContext }));
+    constructor(props: StepComponentProps<D> & WithMessagesContextProps & {
         uiErrorContext: IUIErrorContext
-    }, context?: any) {
+    }, context: any);
+    constructor(props: (StepComponentProps<D> & WithMessagesContextProps & {
+        uiErrorContext: IUIErrorContext
+    }) | Readonly<StepComponentProps<D> & WithMessagesContextProps & {
+        uiErrorContext: IUIErrorContext
+    }>, context?: any) {
         super(props, context);
         this.stepController = {
             requestStep: this.changeStep,
@@ -239,91 +246,97 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         const anyErrors = Object.keys(this.props.uiErrorContext.errors).length > 0;
 
         return (
-            <>
-                <Tab.Container
-                    id="step"
-                    activeKey={this.state.currentStep}
-                    transition={Fade}
-                    onSelect={this.onStepSelect}>
-                    <Row className={"stepContainer"}>
-                        {(!isDesktop()) && header}
 
-                        <Col className={"stepTabContainer"}>
-                            {(isDesktop()) && header}
+            <DesktopContext.Consumer children={isDesktop => {
+                return (
+                    <>
+                        <Tab.Container
+                            id="step"
+                            activeKey={this.state.currentStep}
+                            transition={Fade}
+                            onSelect={this.onStepSelect}>
+                            <Row className={"stepContainer"}>
+                                {(!isDesktop) && header}
 
-                            <Nav className={"stepTabs"}>
-                                {this.props.steps.map((value, index) => {
-                                    return (
-                                        <Nav.Link key={index} as={NavItem}
-                                                  disabled={!this.withData(value.dataHandler.isUnlocked)}
-                                                  eventKey={index}>{isDesktop() ? value.title : (index + 1)}</Nav.Link>
+                                <Col className={"stepTabContainer"}>
+                                    {(isDesktop) && header}
 
-                                    );
-                                })}
-                            </Nav>
+                                    <Nav className={"stepTabs"}>
+                                        {this.props.steps.map((value, index) => {
+                                            return (
+                                                <Nav.Link key={index} as={NavItem}
+                                                          disabled={!this.withData(value.dataHandler.isUnlocked)}
+                                                          eventKey={index}>{isDesktop ? value.title : (index + 1)}</Nav.Link>
 
-                            <StepComponentButtons
-                                isMobile={!isDesktop()}
-                                customNextButton={customNextButton}
-                                nextDisabled={(
-                                    this.isLastStep() &&
-                                    !this.hasNextSubStep()
-                                ) || (
-                                    this.context.permission === SharedSavePermission.READ &&
-                                    !this.hasNextStep()
-                                )}
-                                isSaving={this.props.isSaving}
-                                onNext={this.tryNextStep}
-                                onReset={this.showResetModal}
-                                onSave={this.save}
-                                onExportClick={this.showExportModal}
-                                sharedSaveContext={this.context}
-                            />
+                                            );
+                                        })}
+                                    </Nav>
 
-                            {this.shouldExtraWindowRender() && (
-                                this.getExtraWindow()
-                            )}
-                        </Col>
-                        <Col className={"tabsContent"}>
-                            <Tab.Content>
-                                {this.props.steps.map((step, index) => {
-                                    return (
-                                        <Tab.Pane key={"2" + (index)} eventKey={index}>
-                                            <div className={"stepTitle"}>{step.title}</div>
+                                    <StepComponentButtons
+                                        isMobile={!isDesktop}
+                                        customNextButton={customNextButton}
+                                        nextDisabled={(
+                                            this.isLastStep() &&
+                                            !this.hasNextSubStep()
+                                        ) || (
+                                            this.context.permission === SharedSavePermission.READ &&
+                                            !this.hasNextStep()
+                                        )}
+                                        isSaving={this.props.isSaving}
+                                        onNext={this.tryNextStep}
+                                        onReset={this.showResetModal}
+                                        onSave={this.save}
+                                        onExportClick={this.showExportModal}
+                                        sharedSaveContext={this.context}
+                                    />
 
-                                            {React.createElement(step.form, {
-                                                save: this.props.save,
-                                                saveController: this.props.saveController,
-                                                resourceManager: this.props.resourceManager,
-                                                isSaving: this.props.isSaving,
-                                                id: step.id,
-                                                disabled: !hasPermission(this.context.permission, EditSavesPermission) || index < this.state.progress /*|| !this.withData(step.dataHandler.isUnlocked)*/,
-                                                stepController: this.stepController,
-                                                currentSubStep: this.state.currentSubStep,
-                                                validationFailed: index === this.state.progress && anyErrors
-                                            })}
-                                        </Tab.Pane>
-                                    );
-                                })}
-                            </Tab.Content>
-                        </Col>
-                    </Row>
-                </Tab.Container>
+                                    {this.shouldExtraWindowRender() && (
+                                        this.getExtraWindow(isDesktop)
+                                    )}
+                                </Col>
+                                <Col className={"tabsContent"}>
+                                    <Tab.Content>
+                                        {this.props.steps.map((step, index) => {
+                                            return (
+                                                <Tab.Pane key={"2" + (index)} eventKey={index}>
+                                                    <div className={"stepTitle"}>{step.title}</div>
 
-                <ResetStepsModal
-                    show={this.state.showResetModal}
-                    onYes={this.onResetCurrent}
-                    onAllReset={this.onResetAll}
-                    onNo={this.hideResetModal}
-                />
+                                                    {React.createElement(step.form, {
+                                                        save: this.props.save,
+                                                        saveController: this.props.saveController,
+                                                        resourceManager: this.props.resourceManager,
+                                                        isSaving: this.props.isSaving,
+                                                        id: step.id,
+                                                        disabled: !hasPermission(this.context.permission, EditSavesPermission) || index < this.state.progress /*|| !this.withData(step.dataHandler.isUnlocked)*/,
+                                                        stepController: this.stepController,
+                                                        currentSubStep: this.state.currentSubStep,
+                                                        validationFailed: index === this.state.progress && anyErrors
+                                                    })}
+                                                </Tab.Pane>
+                                            );
+                                        })}
+                                    </Tab.Content>
+                                </Col>
+                            </Row>
+                        </Tab.Container>
 
-                <ExportModal
-                    onClose={this.hideExportModal}
-                    onSelect={this.onExport}
-                    show={this.state.showExportModal}
-                    tool={this.props.tool}
-                />
-            </>
+                        <ResetStepsModal
+                            show={this.state.showResetModal}
+                            onYes={this.onResetCurrent}
+                            onAllReset={this.onResetAll}
+                            onNo={this.hideResetModal}
+                        />
+
+                        <ExportModal
+                            onClose={this.hideExportModal}
+                            onSelect={this.onExport}
+                            show={this.state.showExportModal}
+                            tool={this.props.tool}
+                        />
+                    </>
+                );
+            }}/>
+
         );
     }
 
@@ -374,6 +387,12 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
             this.setState({
                 showExportModal: false
             });
+        }, (rejectReason) => {
+            if (rejectReason instanceof ValidationError) {
+                this.props.messageContext.addMultiple(rejectReason.validationMessages);
+            } else {
+                console.error(rejectReason);
+            }
         });
     }
 
@@ -575,7 +594,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
     private save = async () => {
         const addErrorMessage = () => {
-            Messages.add(
+            this.props.messageContext.add(
                 "Speichern fehlgeschlagen! Bitte versuchen Sie es später erneut.",
                 "DANGER",
                 Messages.TIMER
@@ -584,7 +603,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
 
         let saveCall = await this.props.saveController.save();
         if (saveCall) {
-            Messages.add(
+            this.props.messageContext.add(
                 "Erfolgreich abgespeichert!",
                 "SUCCESS",
                 Messages.TIMER
@@ -652,7 +671,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
      * does return the extra window if the current sub step has one
      * @private
      */
-    private getExtraWindow(): undefined | ReactNode {
+    private getExtraWindow(isDesktop:boolean): undefined | ReactNode {
         let step = this.getCurrentStep();
         if (step.extraWindow !== undefined) {
             let extraWindow = React.createElement(step.extraWindow.extraWindowComponent, {
@@ -671,7 +690,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
                 );
             }
 
-            if (isDesktop()) {
+            if (isDesktop) {
                 return getExtraWindowContainer();
             } else {
                 return (
@@ -699,7 +718,7 @@ class StepComponent<D extends object> extends Component<StepComponentProps<D> & 
         const errors = this.withDataAndResources(this.props.steps[step].dataHandler.validateData);
         if (errors.length > 0) {
             this.putErrors(errors);
-            Messages.add(
+            this.props.messageContext.add(
                 "Überprüfen Sie Ihre Eingaben!",
                 "DANGER",
                 Messages.TIMER

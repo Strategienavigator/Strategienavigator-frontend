@@ -7,7 +7,7 @@ import {getSharedSavePermissionOptions, getSharedSavePermissionText} from "../Sa
 import "./collabortors-table-component.scss"
 import {faTrash} from "@fortawesome/free-solid-svg-icons/faTrash";
 import {LoadingButton} from "../LoadingButton/LoadingButton";
-import {Messages} from "../Messages/Messages";
+import {MessageContext, Messages} from "../Messages/Messages";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import {ModalCloseable} from "../Modal/ModalCloseable";
 import {UpdateContribution, updateContribution} from "../API/calls/Contribution";
@@ -29,6 +29,12 @@ interface CollaboratorsComponentState {
 }
 
 class CollaboratorsTableComponent extends Component<CollaboratorsProps, CollaboratorsComponentState> {
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
+
     state = {
         deletable: false,
         editable: false,
@@ -185,7 +191,7 @@ class CollaboratorsTableComponent extends Component<CollaboratorsProps, Collabor
 
         let call = await updateContribution(save.id, data);
         if (call && call.success) {
-            Messages.add("Berechtigung geändert", "SUCCESS", Messages.TIMER);
+            this.context.add("Berechtigung geändert", "SUCCESS", Messages.TIMER);
         }
 
         this.setState({
@@ -205,7 +211,7 @@ class CollaboratorsTableComponent extends Component<CollaboratorsProps, Collabor
 
         let call = await updateContribution(save.id, data);
         if (call && call.success) {
-            Messages.add("Kollaborateur entfernt!", "SUCCESS", Messages.TIMER);
+            this.context.add("Kollaborateur entfernt!", "SUCCESS", Messages.TIMER);
         }
 
         this.setState({

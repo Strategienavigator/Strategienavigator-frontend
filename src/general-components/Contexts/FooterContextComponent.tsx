@@ -1,5 +1,5 @@
 import {ControlFooterItemType} from "../ControlFooter/ControlFooter";
-import React, {Component} from "react";
+import React, {Component, ReactNode, useContext} from "react";
 
 
 export interface IFooterContext {
@@ -16,26 +16,38 @@ export interface FooterContextState {
 }
 
 export interface FooterContextProps {
+    children: ReactNode
 }
 
 const DefaultContext: IFooterContext = {
     items: new Map(),
     setItem: () => {
+        console.warn("Called set item of Footer Context without an existing context.")
     },
     removeItem: () => {
+        console.warn("Called remove item of Footer Context without an existing context.")
     },
     clearItems: () => {
+        console.warn("Called clear items of Footer Context without an existing context.")
     },
     disableItem: () => {
+        console.warn("Called disable item of Footer Context without an existing context.")
     }
 };
+
 export const FooterContext = React.createContext<IFooterContext>(DefaultContext);
+
+
+export function useFooterContext() {
+    return useContext(FooterContext);
+}
+
 
 export class FooterContextComponent extends Component<FooterContextProps, FooterContextState> {
 
-    constructor(props: Readonly<FooterContextState> | FooterContextState);
-    constructor(props: FooterContextState, context: any);
-    constructor(props: FooterContextState | Readonly<FooterContextState>, context?: any) {
+    constructor(props: Readonly<FooterContextProps> | FooterContextProps);
+    constructor(props: FooterContextProps, context: any);
+    constructor(props: FooterContextProps | Readonly<FooterContextProps>, context?: any) {
         super(props, context);
         this.state = {
             footerContext: this.buildContext(new Map())
@@ -56,16 +68,6 @@ export class FooterContextComponent extends Component<FooterContextProps, Footer
 //         this.setState({
 //             items: oldMap
 //         });
-    }
-
-    /**
-     * Will fix the "Can't perform a React state update on an unmounted component" error. Doing this will replace the setState function so it will just return nothing.
-     * This is considered pretty hacky, but using history.push from react-router, this could be considered a considerable solution
-     */
-    componentWillUnmount() {
-        this.setState = (() => {
-            return;
-        });
     }
 
     render() {
@@ -107,8 +109,10 @@ export class FooterContextComponent extends Component<FooterContextProps, Footer
     }
 
     private clear = () => {
-        this.setState({
-            footerContext: this.buildContext(new Map<number, ControlFooterItemType>())
+        this.setState(state => {
+            return {
+                footerContext: this.buildContext(new Map<number, ControlFooterItemType>())
+            }
         });
     }
 

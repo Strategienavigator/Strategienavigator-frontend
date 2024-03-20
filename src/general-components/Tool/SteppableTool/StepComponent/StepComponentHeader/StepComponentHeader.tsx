@@ -1,6 +1,5 @@
 import React, {PureComponent} from "react";
 import {Tool} from "../../../Tool";
-import {isDesktop} from "../../../../Desktop";
 import {Button, Collapse, Form} from "react-bootstrap";
 
 import "./step-header.scss";
@@ -10,13 +9,13 @@ import {SaveResource, SharedSavePermission} from "../../../../Datastructures";
 import FAE from "../../../../Icons/FAE";
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
 import {SaveInvitation} from "../../../../Sharing/SaveInvitation";
-import {HeaderCollaborators} from "./HeaderCollaborators";
 import {CreateToolModal} from "../../../CreateToolModal/CreateToolModal";
 import {UserContext} from "../../../../Contexts/UserContextComponent";
 import {faPencilAlt} from "@fortawesome/free-solid-svg-icons/";
 import {lockSave} from "../../../../API/calls/Saves";
 import {ToolSaveController} from "../../../ToolSavePage/ToolSavePage";
 import {LoadingButton} from "../../../../LoadingButton/LoadingButton";
+import {checkIfDesktop} from "../../../../Contexts/DesktopContext";
 
 
 export interface StepComponentHeaderProp {
@@ -45,7 +44,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
     constructor(props: StepComponentHeaderProp, context: any) {
         super(props, context);
         this.state = {
-            showStepHeaderDesc: isDesktop(),
+            showStepHeaderDesc: checkIfDesktop(),
             showInviteModal: false,
             descriptionTooLong: false,
             loadingUnlock: false
@@ -121,7 +120,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                 </div>
 
                 <SharedSaveContext.Consumer>
-                    {(context) => {
+                    {(unused) => {
                         return (
                             <SaveInvitation
                                 show={this.state.showInviteModal}
@@ -135,10 +134,6 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
                         );
                     }}
                 </SharedSaveContext.Consumer>
-
-                <HeaderCollaborators
-                    save={this.props.associatedSave}
-                />
             </div>
         );
     }
@@ -164,7 +159,7 @@ export class StepComponentHeader extends PureComponent<StepComponentHeaderProp, 
 
     private showDescriptionIfDesktop = () => {
         this.setState({
-            showStepHeaderDesc: isDesktop()
+            showStepHeaderDesc: checkIfDesktop()
         });
     }
 

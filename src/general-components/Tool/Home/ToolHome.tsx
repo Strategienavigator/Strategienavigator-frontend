@@ -1,7 +1,6 @@
 import React, {Component, ReactNode} from "react";
 import {Tool} from "../Tool";
 import {Badge, Button, Offcanvas, OffcanvasBody, OffcanvasHeader} from "react-bootstrap";
-import {isDesktop} from "../../Desktop";
 import {faFileImport, faInfoCircle, faSortAmountDown, faSortAmountUp} from "@fortawesome/free-solid-svg-icons";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons/faPlusSquare";
 
@@ -18,7 +17,8 @@ import {SaveInvitation} from "../../Sharing/SaveInvitation";
 import {SharedSaveContextComponent} from "../../Contexts/SharedSaveContextComponent";
 import {ButtonPanel} from "../../ButtonPanel/ButtonPanel";
 import {ImportModal} from "./Import/ImportModal";
-import {Messages} from "../../Messages/Messages";
+import {MessageContext, Messages} from "../../Messages/Messages";
+import {DesktopContext} from "../../Contexts/DesktopContext";
 
 
 export interface ToolHomeInfo {
@@ -28,7 +28,8 @@ export interface ToolHomeInfo {
 
 export interface ToolHomeProps {
     tool: Tool<any>
-    info?: ToolHomeInfo
+    info?: ToolHomeInfo,
+    children?: ReactNode
 }
 
 export interface SavesPaginationSetting {
@@ -167,36 +168,41 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
 
                 {this.props.info?.shortDescription}
 
-                <div className={"button-container mb-0 mt-2"}>
-                    {isDesktop() && (
-                        <ButtonPanel>
-                            <Button onClick={this.onNewSaveButtonClick} size={"sm"} variant={"dark"}>
-                                <FAE icon={faPlusSquare}/> Neue Analyse
-                            </Button>
+                <DesktopContext.Consumer children={isDesktop => {
+                    return (
+                        <div className={"button-container mb-0 mt-2"}>
+                            {isDesktop && (
+                                <ButtonPanel>
+                                    <Button onClick={this.onNewSaveButtonClick} size={"sm"} variant={"dark"}>
+                                        <FAE icon={faPlusSquare}/> Neue Analyse
+                                    </Button>
 
-                            {(this.props.tool.hasImporter()) && (
-                                <Button size={"sm"} onClick={this.onImport} variant={"dark"}>
-                                    <FAE icon={faFileImport}/> Analyse importieren
-                                </Button>
+                                    {(this.props.tool.hasImporter()) && (
+                                        <Button size={"sm"} onClick={this.onImport} variant={"dark"}>
+                                            <FAE icon={faFileImport}/> Analyse importieren
+                                        </Button>
+                                    )}
+                                </ButtonPanel>
                             )}
-                        </ButtonPanel>
-                    )}
 
-                    <span className={"sorting-button"}>
-                        {isDesktop() && (
-                            <span>Nach Erstelldatum sortieren: </span>
-                        )}
+                            <span className={"sorting-button"}>
+                            {isDesktop && (
+                                <span>Nach Erstelldatum sortieren: </span>
+                            )}
 
-                        <Button type={"button"} disabled={this.state.isLoadingPage || this.state.saves === undefined}
-                                className={"btn btn-primary"}
-                                onClick={this.orderingChangedCallback}
-                                title={"Nach Erstelldatum sortieren"}
-                        >
-                            <FAE
-                                icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
-                        </Button>
-                    </span>
-                </div>
+                                <Button type={"button"}
+                                        disabled={this.state.isLoadingPage || this.state.saves === undefined}
+                                        className={"btn btn-primary"}
+                                        onClick={this.orderingChangedCallback}
+                                        title={"Nach Erstelldatum sortieren"}>
+                                    <FAE
+                                        icon={this.state.paginationSettings.orderDesc ? faSortAmountDown : faSortAmountUp}/>
+                                </Button>
+                            </span>
+                        </div>
+                    );
+                }}/>
+
 
                 <hr/>
 
@@ -228,15 +234,18 @@ class ToolHome extends Component<ToolHomeProps, ToolHomeState> {
                     />
                 </SharedSaveContextComponent>
 
-                <ImportModal
-                    show={this.state.showImportModal}
-                    tool={this.props.tool}
-                    onClose={this.onCloseImportModal}
-                    onSuccess={(save) => {
-                        this.props.tool.switchPage(save.id.toString());
-                        Messages.add("Importieren erfolgreich!", "SUCCESS", Messages.TIMER);
-                    }}
-                />
+                <MessageContext.Consumer children={({add}) => {
+                    return (<ImportModal
+                        show={this.state.showImportModal}
+                        tool={this.props.tool}
+                        onClose={this.onCloseImportModal}
+                        onSuccess={(save) => {
+                            this.props.tool.switchPage(save.id.toString());
+                            add("Importieren erfolgreich!", "SUCCESS", Messages.TIMER);
+                        }}
+                    />);
+                }}/>
+
             </div>
         );
     }

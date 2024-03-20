@@ -3,7 +3,7 @@ import {Button, FloatingLabel, Form, FormControl, FormGroup, Modal} from "react-
 import {faFileImport} from "@fortawesome/free-solid-svg-icons";
 import React, {Component, FormEvent} from "react";
 import {Tool} from "../../Tool";
-import {extractFromForm} from "../../../FormHelper";
+import {extractFromForm} from "../../../Utility/FormHelper";
 import {JSONImporterError} from "../../../Import/JSONImporter";
 import {LoadingButton} from "../../../LoadingButton/LoadingButton";
 import {createSave} from "../../../API/calls/Saves";

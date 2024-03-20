@@ -7,7 +7,7 @@ import {acceptInvitationLink, showInvitationLink} from "../../../../general-comp
 import {InvitationLinkResource} from "../../../../general-components/Datastructures";
 import {Loader} from "../../../../general-components/Loader/Loader";
 import {LoadingButton} from "../../../../general-components/LoadingButton/LoadingButton";
-import {Messages} from "../../../../general-components/Messages/Messages";
+import {MessageContext} from "../../../../general-components/Messages/Messages";
 import {getSaveURL, getSharedSavePermissionText} from "../../../../general-components/Save";
 
 
@@ -18,6 +18,12 @@ export interface InvitationDecisionState {
 
 export class InvitationDecision extends Component<RouteComponentProps<{ token: string }>, InvitationDecisionState> {
 
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
     constructor(props: RouteComponentProps<{ token: string; }, StaticContext, unknown> | Readonly<RouteComponentProps<{
         token: string;
     }, StaticContext, unknown>>) {
@@ -82,7 +88,7 @@ export class InvitationDecision extends Component<RouteComponentProps<{ token: s
         let response = await acceptInvitationLink(token);
 
         if (response?.success) {
-            Messages.add("Einladung angenommen!", "SUCCESS", 5000);
+            this.context.add("Einladung angenommen!", "SUCCESS", 5000);
             this.props.history.push(getSaveURL(this.state.link?.save.id as number, this.state.link?.save.tool.id as number));
         }
     }

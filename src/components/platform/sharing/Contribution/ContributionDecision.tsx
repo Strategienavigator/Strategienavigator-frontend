@@ -6,7 +6,6 @@ import {
     declineContribution,
     showContributions
 } from "../../../../general-components/API/calls/Contribution";
-import {showErrorPage} from "../../../../index";
 import {Loader} from "../../../../general-components/Loader/Loader";
 import {SaveResource, SharedSaveResource} from "../../../../general-components/Datastructures";
 import {LoadingButton} from "../../../../general-components/LoadingButton/LoadingButton";
@@ -14,8 +13,9 @@ import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons/";
 
 
 import "./contribution-decision.scss";
-import {Messages} from "../../../../general-components/Messages/Messages";
+import {MessageContext} from "../../../../general-components/Messages/Messages";
 import {getSaveURL, getSharedSavePermissionText} from "../../../../general-components/Save";
+import {legacyShowErrorPage} from "../../../../general-components/LegacyErrorPageAdapter";
 
 
 interface ContributionDecisionState {
@@ -31,6 +31,12 @@ interface ContributionDecisionState {
 export class ContributionDecision extends Component<RouteComponentProps<{
     sharedSaveID: string
 }>, ContributionDecisionState> {
+
+    /**
+     * Definiert auf welchen Context zugegriffen werden soll
+     */
+    static contextType = MessageContext;
+    context!: React.ContextType<typeof MessageContext>
 
     constructor(props: RouteComponentProps<{
         sharedSaveID: string;
@@ -80,7 +86,7 @@ export class ContributionDecision extends Component<RouteComponentProps<{
                 return;
             }
         }
-        showErrorPage(403);
+        legacyShowErrorPage(403)
     }
 
     render() {
@@ -174,7 +180,7 @@ export class ContributionDecision extends Component<RouteComponentProps<{
         let call = await acceptContribution(parseInt(saveID));
 
         if (call && call.success) {
-            Messages.add("Einladung angenommen!", "SUCCESS", 5000);
+            this.context.add("Einladung angenommen!", "SUCCESS", 5000);
             this.props.history.push(getSaveURL(this.state.sharedSave?.save.id as number, this.state.sharedSave?.save.tool.id as number));
         } else {
             this.setState({

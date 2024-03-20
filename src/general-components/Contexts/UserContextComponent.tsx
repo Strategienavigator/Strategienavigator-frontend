@@ -1,4 +1,4 @@
-import {Component, createContext} from "react";
+import {Component, createContext, useContext} from "react";
 import {User} from "../User";
 import {Session} from "../Session/Session";
 
@@ -20,6 +20,10 @@ export const UserContext = createContext<IUserContext>({
     user: null,
     isLoggedIn: false
 });
+
+export function useUserContext() {
+    return useContext(UserContext);
+}
 
 export class UserContextComponent extends Component<any, UserContextState> {
 
@@ -80,3 +84,6 @@ export class UserContextComponent extends Component<any, UserContextState> {
     }
 
 }
+
+
+
