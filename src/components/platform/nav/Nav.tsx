@@ -27,6 +27,8 @@ import {Session} from "../../../general-components/Session/Session";
 import {Messages, useMessageContext} from "../../../general-components/Messages/Messages";
 import {useBooleanState} from "../../../general-components/Utility/Hooks";
 
+// Could be useful later.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function removeDuplicateSaves(saves: SimpleSaveResource[]): SimpleSaveResource[] {
     let newSaves = [];
     let ids = new Map<number, null>();
