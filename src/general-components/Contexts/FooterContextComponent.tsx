@@ -1,5 +1,5 @@
 import {ControlFooterItemType} from "../ControlFooter/ControlFooter";
-import React, {Component, ReactNode} from "react";
+import React, {Component, ReactNode, useContext} from "react";
 
 
 export interface IFooterContext {
@@ -34,7 +34,14 @@ const DefaultContext: IFooterContext = {
         console.warn("Called disable item of Footer Context without an existing context.")
     }
 };
+
 export const FooterContext = React.createContext<IFooterContext>(DefaultContext);
+
+
+export function useFooterContext() {
+    return useContext(FooterContext);
+}
+
 
 export class FooterContextComponent extends Component<FooterContextProps, FooterContextState> {
 

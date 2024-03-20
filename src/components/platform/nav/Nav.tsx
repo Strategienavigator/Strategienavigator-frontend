@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Component} from "react";
+import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import {Badge, Card, Container, Dropdown, FormControl, Nav as BootstrapNav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {
@@ -18,323 +18,293 @@ import "./nav.scss";
 import {getSaves} from "../../../general-components/API/calls/Saves";
 import {SimpleSaveResource} from "../../../general-components/Datastructures";
 import {Loader} from "../../../general-components/Loader/Loader";
-import {RouteComponentProps, withRouter} from "react-router";
+import {useHistory} from "react-router";
 import FAE from "../../../general-components/Icons/FAE";
-import {UserContext} from "../../../general-components/Contexts/UserContextComponent";
+import {useUserContext} from "../../../general-components/Contexts/UserContextComponent";
 import AnonportModal from "./AnonportModal";
 import {DesktopContext} from "../../../general-components/Contexts/DesktopContext";
 import {Session} from "../../../general-components/Session/Session";
-import {Messages, withMessagesContext, WithMessagesContextProps} from "../../../general-components/Messages/Messages";
+import {Messages, useMessageContext} from "../../../general-components/Messages/Messages";
+import {useBooleanState} from "../../../general-components/Utility/Hooks";
 
+function removeDuplicateSaves(saves: SimpleSaveResource[]): SimpleSaveResource[] {
+    let newSaves = [];
+    let ids = new Map<number, null>();
 
-interface NavState {
-    expanded: boolean
-    showSearchOutput: boolean
-    searchResult: SimpleSaveResource[]
-    searchLoading: boolean
-    anonPortModalShow: boolean
+    for (const save of saves) {
+        if (!ids.has(save.id)) {
+            newSaves.push(save);
+        }
+
+        ids.set(save.id, null);
+    }
+
+    return newSaves;
 }
 
-class Nav extends Component<RouteComponentProps & WithMessagesContextProps, NavState> {
-    static contextType = UserContext;
-    context!: React.ContextType<typeof UserContext>
-    private timeout: NodeJS.Timeout | undefined;
-
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            expanded: false,
-            showSearchOutput: false,
-            searchResult: [],
-            searchLoading: false,
-            anonPortModalShow: false
-        }
+function getToolLink(toolID: number, saveID: number) {
+    if (toolID === 1) {
+        return "/utility-analysis/" + saveID;
+    } else if (toolID === 2) {
+        return "/swot-analysis/" + saveID;
+    } else if (toolID === 3) {
+        return "/pairwise-comparison/" + saveID;
+    } else if (toolID === 4) {
+        return "/portfolio-analysis/" + saveID;
+    } else if (toolID === 6) {
+        return "/persona-analysis/" + saveID;
     }
+    return "/";
+}
 
-    shouldComponentUpdate(nextProps: Readonly<RouteComponentProps>, nextState: Readonly<NavState>, nextContext: any): boolean {
-        if (nextState.expanded !== this.state.expanded)
-            return true;
-        if (nextState.showSearchOutput !== this.state.showSearchOutput)
-            return true;
-        if (nextState.searchLoading !== this.state.searchLoading)
-            return true;
-        if (nextState.anonPortModalShow !== this.state.anonPortModalShow)
-            return true;
-        return nextState.searchResult !== this.state.searchResult;
+function getToolName(toolID: number) {
+    if (toolID === 1) {
+        return "Nutzwertanalyse";
+    } else if (toolID === 2) {
+        return "SWOT Analyse";
+    } else if (toolID === 3) {
+        return "Paarweiser Vergleich";
+    } else if (toolID === 4) {
+        return "Portfolio Analyse";
+    } else if (toolID === 6) {
+        return "Persona Analyse";
     }
+}
 
-    setExpanded = (value: boolean) => {
-        this.setState({
-            expanded: value
-        });
-    }
+export function Nav() {
+    // State
+    const {
+        state: expanded,
+        setFalse: shrinkCallback,
+        toggle: toggleExpaned
+    } = useBooleanState(false);
+    const [showSearchOutput, setShowSearchOutput] = useState(false);
+    const [searchResult, setSearchResult] = useState<SimpleSaveResource[]>([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const {
+        state: anonPortModalShow,
+        setTrue: showAnonPortModalCallback,
+        setFalse: hideAnonPortModalCallback
+    } = useBooleanState(false);
+    const [searchPrompt, setSearchPrompt] = useState("");
 
-    search = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Context
+
+    const {user, isLoggedIn} = useUserContext();
+    const {add: showMessage} = useMessageContext();
+    const history = useHistory();
+
+    const searchPromptChanged = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let value = e.target.value;
+        setSearchPrompt(value);
 
         if (value === "") {
-            this.setState({showSearchOutput: false});
+            setShowSearchOutput(false);
         } else {
-            this.setState({showSearchOutput: true});
+            setShowSearchOutput(true);
+        }
+    }, [setSearchPrompt]);
 
-            if (this.timeout) {
-                clearTimeout(this.timeout);
-            }
+    useEffect(() => {
+        let canceled = false;
+        const timeout = setTimeout(() => {
+            setSearchLoading(true);
+            setSearchResult([]);
 
-            this.timeout = setTimeout(async () => {
-                this.setState({
-                    searchLoading: true,
-                    searchResult: []
-                });
-
-                let searchCall = await getSaves(this.context.user?.getID() as number, {
-                    name: value,
-                    description: value,
-                    searchBoth: false
-                });
-
+            getSaves(user?.getID() as number, {
+                name: searchPrompt,
+                description: searchPrompt,
+                searchBoth: false
+            }).then((searchCall) => {
+                if (canceled) {
+                    return;
+                }
                 if (searchCall && searchCall.success) {
                     let searchCallData = searchCall.callData;
-
-                    this.setState({
-                        searchResult: searchCallData?.data
-                    });
+                    setSearchResult(searchCallData?.data);
                 }
-                this.setState({
-                    searchLoading: false
-                });
-            }, 400);
+                setSearchLoading(false);
+            }, () => {
+                setSearchLoading(false);
+            });
+        }, 400);
+        return () => {
+            canceled = true;
+            clearTimeout(timeout);
         }
-    }
+    }, [searchPrompt, user, setSearchResult, setSearchLoading]);
 
-    removeDuplicateSaves = (saves: SimpleSaveResource[]): SimpleSaveResource[] => {
-        let newSaves = [];
-        let ids = new Map<number, null>();
-
-        for (const save of saves) {
-            if (!ids.has(save.id)) {
-                newSaves.push(save);
-            }
-
-            ids.set(save.id, null);
-        }
-
-        return newSaves;
-    }
-
-    getToolLink(toolID: number, saveID: number) {
-        if (toolID === 1) {
-            return "/utility-analysis/" + saveID;
-        } else if (toolID === 2) {
-            return "/swot-analysis/" + saveID;
-        } else if (toolID === 3) {
-            return "/pairwise-comparison/" + saveID;
-        } else if (toolID === 4) {
-            return "/portfolio-analysis/" + saveID;
-        } else if (toolID === 6) {
-            return "/persona-analysis/" + saveID;
-        }
-        return "/";
-    }
-
-    getToolName(toolID: number) {
-        if (toolID === 1) {
-            return "Nutzwertanalyse";
-        } else if (toolID === 2) {
-            return "SWOT Analyse";
-        } else if (toolID === 3) {
-            return "Paarweiser Vergleich";
-        } else if (toolID === 4) {
-            return "Portfolio Analyse";
-        } else if (toolID === 6) {
-            return "Persona Analyse";
-        }
-    }
-
-    render() {
-        return (
-            <>
-                <Navbar onToggle={(e) => {
-                    this.setExpanded(!this.state.expanded)
-                }} expanded={this.state.expanded} expand="lg">
-                    <Container>
-                        <Navbar.Brand onClick={this.navOnClick} as={NavLink} to={"/"} exact className={"nav-link"}>
-
-                            <FAE icon={faHome}/>&nbsp;
-                            {process.env.REACT_APP_NAME}
-                        </Navbar.Brand>
-
-                        <Navbar.Toggle/>
-
-                        <Navbar.Collapse>
-                            <BootstrapNav className="m-auto">
-                                {(this.context.isLoggedIn) && (
-                                    <div className={"searchContainer"}>
-                                        <FormControl
-                                            type={"search"}
-                                            title={"Nach Analysen suchen"}
-                                            placeholder={"Nach Analysen suchen..."}
-                                            onFocus={(e) => {
-                                                if (e.target.value !== "") {
-                                                    this.setState({showSearchOutput: true});
-                                                }
-                                            }}
-                                            onBlur={() => {
-                                                this.setState({showSearchOutput: false});
-                                            }}
-                                            onChange={(e) => {
-                                                this.search(e);
-                                            }}
-                                        />
-
-                                        <div
-                                            className={"searchOutputContainer " + (this.state.showSearchOutput ? "show" : "")}>
-                                            <div className={"header"}>
-                                                <Badge pill bg={"dark"}>
-                                                    <Loader payload={[]} variant={"light"}
-                                                            loaded={!this.state.searchLoading}
-                                                            transparent
-                                                            size={10}>
-                                                        {this.state.searchResult.length}
-                                                    </Loader>
-                                                </Badge>&nbsp;
-                                                Ergebnisse
-                                            </div>
-                                            <div className={"output"}>
-                                                <Loader payload={[]} variant={"style"}
-                                                        loaded={!this.state.searchLoading}
-                                                        transparent
-                                                        size={100} alignment={"center"}>
-                                                    {this.state.searchResult.map((value) => {
-                                                        let link = this.getToolLink(value.tool_id, value.id);
-                                                        return (
-                                                            <Card as={NavLink}
-                                                                  title={(value.description !== null) ? "Beschreibung: " + value.description : ""}
-                                                                  to={link} onMouseDown={() => {
-                                                                this.props.history.push(link); // TODO: Wenn man bereits auf einem Save ist, wird nicht der Push registriert, evtl. reload einbauen
-                                                            }} key={"SAVE" + value.id} body className={"result"}>
-                                                                {value.name} | {this.getToolName(value.tool_id)}
-                                                            </Card>
-                                                        )
-                                                    })}
-                                                    {this.state.searchResult.length === 0 && (
-                                                        <Card body className={"result none"}>
-                                                            Keine Ergebnisse
-                                                        </Card>
-                                                    )}
-                                                </Loader>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </BootstrapNav>
-                            <BootstrapNav>
-                                {(!this.context.isLoggedIn) && (
-                                    <>
-                                        <NavLink onClick={this.navOnClick} to={"/login"} className={"nav-link"}>
-                                            <FAE icon={faSignInAlt}/>&nbsp;
-                                            Anmelden
-                                        </NavLink>
-                                        <NavLink onClick={this.navOnClick} to={"/register"} className={"nav-link"}>
-                                            <FAE icon={faUserPlus}/>&nbsp;
-                                            Registrieren
-                                        </NavLink>
-                                    </>
-                                )}
-                                {(this.context.isLoggedIn) && (
-                                    <NavDropdown id={"profile-dropdown"} title={<><FAE
-                                        icon={faUser}/> &nbsp;{!this.context.user?.isAnonymous() ? this.context.user?.getUsername() : ""}</>}>
-
-                                        {!this.context.user?.isAnonymous() && (
-                                            <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/my-profile"}
-                                                           role={"button"}>
-                                                <FAE icon={faUser}/>&nbsp;
-                                                Mein Profil
-                                            </Dropdown.Item>
-                                        )}
-
-                                        {(this.context.user?.isAnonymous()) && (
-                                            <Dropdown.Item as={"div"} onClick={() => {
-                                                this.setState({
-                                                    anonPortModalShow: true
-                                                });
-                                            }}
-                                                           role={"button"}>
-                                                <FAE icon={faExchangeAlt}/>&nbsp;
-                                                Anonymes Konto Portieren
-                                            </Dropdown.Item>
-                                        )}
-
-                                        <Dropdown.Item as={"div"} role={"button"} onClick={this.onLogout}>
-                                            <FAE icon={faSignOutAlt}/>&nbsp;
-                                            Abmelden
-                                        </ Dropdown.Item>
-
-                                    </NavDropdown>
-                                )}
-                            </BootstrapNav>
-                            <DesktopContext.Consumer children={isDesktop => {
-                                if (!isDesktop) {
-                                    return (
-                                        <BootstrapNav>
-                                            <NavDropdown id={"profile-dropdown"} title={"mehr"}>
-                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/settings"}
-                                                               role={"button"}>
-                                                    <FAE icon={faCog}/>&nbsp;
-                                                    Einstellungen
-                                                </Dropdown.Item>
-                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick}
-                                                               to={"/data-privacy"}
-                                                               role={"button"}>
-                                                    <FAE icon={faShieldAlt}/>&nbsp;
-                                                    Datenschutz
-                                                </Dropdown.Item>
-                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick}
-                                                               to={"/legal-notice"}
-                                                               role={"button"}>
-                                                    <FAE icon={faBalanceScale}/>&nbsp;
-                                                    Impressum
-                                                </Dropdown.Item>
-                                                <Dropdown.Item as={NavLink} onClick={this.navOnClick} to={"/about-us"}
-                                                               role={"button"}>
-                                                    <FAE icon={faInfoCircle}/>&nbsp;
-                                                    Über uns
-                                                </Dropdown.Item>
-                                            </NavDropdown>
-                                        </BootstrapNav>
-                                    );
-                                }
-                                return null;
-                            }}/>
-                        </Navbar.Collapse>
-                    </Container>
-                </Navbar>
-
-                <AnonportModal show={this.state.anonPortModalShow} onClose={() => {
-                    this.setState({
-                        anonPortModalShow: false
-                    });
-                }}/>
-            </>
-        );
-    }
-
-    private navOnClick = () => {
-        this.setExpanded(false);
-    };
-
-    private onLogout = () => {
+    const onLogout = useCallback(() => {
         Session.logout().then(() => {
-                this.props.messageContext.add("Bis bald!", "SUCCESS", Messages.TIMER);
+                showMessage("Bis bald!", "SUCCESS", Messages.TIMER);
             },
             (reason) => {
                 console.error(reason);
-                this.props.messageContext.add("Beim Logout is ein Fehler aufgetreten.", "DANGER");
+                showMessage("Beim Logout is ein Fehler aufgetreten.", "DANGER");
             });
-        this.props.history.push("/logout");
-    }
+        history.push("/logout");
+    }, [showMessage, history]);
+
+
+    return (
+        <>
+            <Navbar onToggle={toggleExpaned} expanded={expanded} expand="lg">
+                <Container>
+                    <Navbar.Brand onClick={shrinkCallback} as={NavLink} to={"/"} exact className={"nav-link"}>
+
+                        <FAE icon={faHome}/>&nbsp;
+                        {process.env.REACT_APP_NAME}
+                    </Navbar.Brand>
+
+                    <Navbar.Toggle/>
+
+                    <Navbar.Collapse>
+                        <BootstrapNav className="m-auto">
+                            {(isLoggedIn) && (
+                                <div className={"searchContainer"}>
+                                    <FormControl
+                                        type={"search"}
+                                        title={"Nach Analysen suchen"}
+                                        placeholder={"Nach Analysen suchen..."}
+                                        value={searchPrompt}
+                                        onFocus={(e) => {
+                                            if (e.target.value !== "") {
+                                                setShowSearchOutput(true);
+                                            }
+                                        }}
+                                        onBlur={() => {
+                                            setShowSearchOutput(false);
+                                        }}
+                                        onChange={searchPromptChanged}
+                                    />
+
+                                    <div
+                                        className={"searchOutputContainer " + (showSearchOutput ? "show" : "")}>
+                                        <div className={"header"}>
+                                            <Badge pill bg={"dark"}>
+                                                <Loader variant={"light"}
+                                                        loaded={!searchLoading}
+                                                        transparent
+                                                        size={10}>
+                                                    {searchResult.length}
+                                                </Loader>
+                                            </Badge>&nbsp;
+                                            Ergebnisse
+                                        </div>
+                                        <div className={"output"}>
+                                            <Loader payload={[]} variant={"style"}
+                                                    loaded={!searchLoading}
+                                                    transparent
+                                                    size={100} alignment={"center"}>
+                                                {searchResult.map((value) => {
+                                                    let link = getToolLink(value.tool_id, value.id);
+                                                    return (
+                                                        <Card as={NavLink}
+                                                              title={(value.description !== null) ? "Beschreibung: " + value.description : ""}
+                                                              to={link}
+                                                              onMouseDown={() => {
+                                                                  history.push(link); // TODO: Wenn man bereits auf einem Save ist, wird nicht der Push registriert, evtl. reload einbauen
+                                                              }}
+                                                              key={"SAVE" + value.id}
+                                                              body
+                                                              className={"result"}>
+
+                                                            {value.name} | {getToolName(value.tool_id)}
+                                                        </Card>
+                                                    )
+                                                })}
+                                                {searchResult.length === 0 && (
+                                                    <Card body className={"result none"}>
+                                                        Keine Ergebnisse
+                                                    </Card>
+                                                )}
+                                            </Loader>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </BootstrapNav>
+                        <BootstrapNav>
+                            {(!isLoggedIn) && (
+                                <>
+                                    <NavLink onClick={shrinkCallback} to={"/login"} className={"nav-link"}>
+                                        <FAE icon={faSignInAlt}/>&nbsp;
+                                        Anmelden
+                                    </NavLink>
+                                    <NavLink onClick={shrinkCallback} to={"/register"} className={"nav-link"}>
+                                        <FAE icon={faUserPlus}/>&nbsp;
+                                        Registrieren
+                                    </NavLink>
+                                </>
+                            )}
+                            {(isLoggedIn) && (
+                                <NavDropdown id={"profile-dropdown"} title={<><FAE
+                                    icon={faUser}/> &nbsp;{!user?.isAnonymous() ? user?.getUsername() : ""}</>}>
+
+                                    {!user?.isAnonymous() && (
+                                        <Dropdown.Item as={NavLink} onClick={shrinkCallback} to={"/my-profile"}
+                                                       role={"button"}>
+                                            <FAE icon={faUser}/>&nbsp;
+                                            Mein Profil
+                                        </Dropdown.Item>
+                                    )}
+
+                                    {(user?.isAnonymous()) && (
+                                        <Dropdown.Item as={"div"} onClick={showAnonPortModalCallback}
+                                                       role={"button"}>
+                                            <FAE icon={faExchangeAlt}/>&nbsp;
+                                            Anonymes Konto Portieren
+                                        </Dropdown.Item>
+                                    )}
+
+                                    <Dropdown.Item as={"div"} role={"button"} onClick={onLogout}>
+                                        <FAE icon={faSignOutAlt}/>&nbsp;
+                                        Abmelden
+                                    </ Dropdown.Item>
+
+                                </NavDropdown>
+                            )}
+                        </BootstrapNav>
+                        <DesktopContext.Consumer children={isDesktop => {
+                            if (!isDesktop) {
+                                return (
+                                    <BootstrapNav>
+                                        <NavDropdown id={"profile-dropdown"} title={"mehr"}>
+                                            <Dropdown.Item as={NavLink} onClick={shrinkCallback} to={"/settings"}
+                                                           role={"button"}>
+                                                <FAE icon={faCog}/>&nbsp;
+                                                Einstellungen
+                                            </Dropdown.Item>
+                                            <Dropdown.Item as={NavLink} onClick={shrinkCallback}
+                                                           to={"/data-privacy"}
+                                                           role={"button"}>
+                                                <FAE icon={faShieldAlt}/>&nbsp;
+                                                Datenschutz
+                                            </Dropdown.Item>
+                                            <Dropdown.Item as={NavLink} onClick={shrinkCallback}
+                                                           to={"/legal-notice"}
+                                                           role={"button"}>
+                                                <FAE icon={faBalanceScale}/>&nbsp;
+                                                Impressum
+                                            </Dropdown.Item>
+                                            <Dropdown.Item as={NavLink} onClick={shrinkCallback} to={"/about-us"}
+                                                           role={"button"}>
+                                                <FAE icon={faInfoCircle}/>&nbsp;
+                                                Über uns
+                                            </Dropdown.Item>
+                                        </NavDropdown>
+                                    </BootstrapNav>
+                                );
+                            }
+                            return null;
+                        }}/>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+
+            <AnonportModal show={anonPortModalShow} onClose={hideAnonPortModalCallback}/>
+        </>
+    );
 
 }
 
-export default withRouter(withMessagesContext(Nav));

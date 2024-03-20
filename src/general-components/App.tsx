@@ -28,7 +28,7 @@ import {Footer} from "../components/platform/footer/Footer";
 import {ControlFooter} from "./ControlFooter/ControlFooter";
 import {GlobalContexts} from "./Contexts/GlobalContexts";
 import {Loader} from "./Loader/Loader";
-import Nav from "../components/platform/nav/Nav";
+import {Nav} from "../components/platform/nav/Nav";
 import {Container} from "react-bootstrap";
 import {LegacyErrorPageAdapter} from "./LegacyErrorPageAdapter";
 import {Messages} from "./Messages/Messages";
