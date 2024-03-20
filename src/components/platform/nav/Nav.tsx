@@ -21,7 +21,7 @@ import {Loader} from "../../../general-components/Loader/Loader";
 import {useHistory} from "react-router";
 import FAE from "../../../general-components/Icons/FAE";
 import {useUserContext} from "../../../general-components/Contexts/UserContextComponent";
-import AnonportModal from "./AnonportModal";
+import {AnonportModal} from "./AnonportModal";
 import {DesktopContext} from "../../../general-components/Contexts/DesktopContext";
 import {Session} from "../../../general-components/Session/Session";
 import {Messages, useMessageContext} from "../../../general-components/Messages/Messages";
