@@ -37,7 +37,9 @@ Session.addUserChangedCallback(DarkModeUserChanged);
  */
 export const DarkModeChanger = (oldSettings: SettingsList, newSettings: SettingsList) => {
     let setting = newSettings.getSettingByName("Dark Mode");
-
+    if (setting === undefined) {
+        return;
+    }
     document.body.className = "";
     document.body.classList.add("smooth-transition");
     if (setting.value && setting.value === "true") {

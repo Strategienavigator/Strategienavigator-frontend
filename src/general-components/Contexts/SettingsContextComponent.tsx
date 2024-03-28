@@ -97,6 +97,7 @@ export class SettingsContextComponent extends Component<any, SettingsContextStat
      */
     componentDidMount() {
         Session.addUserChangedCallback(this.userChanged);
+        this.userChanged(Session.currentUser);
     }
 
     /**
