@@ -60,8 +60,8 @@ export function App() {
                 <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact><MyProfile/></Route>
 
                 <Route loggedIn={true} path={"/invite/:sharedSaveID"}><ContributionDecision/></Route>
-                //TODO remove all usages of component and render props. (Only use children)
-                <Route loggedIn={true} path={"/invitation/:token"} component={InvitationDecision}/>
+                <Route loggedIn={true} path={"/invitation/:token"}><InvitationDecision/></Route>
+                (//TODO remove all usages of component and render props. (Only use children))
 
                 <Route path={"/verify-email/:token"} component={EmailVerification}/>
                 <Route path={"/reset-password/:token"} component={PasswordReset}/>
@@ -113,7 +113,7 @@ export function App() {
             <>
                 <Messages xAlignment={"CENTER"} yAlignment={"BOTTOM"} style={{marginBottom: 65}}>
                     <GlobalContexts key={"global-contexts"}>
-                        <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"} payload={[]}>
+                        <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"}>
                             <BrowserRouter>
                                 <LegacyErrorPageAdapter/>
                                 <Nav/>
