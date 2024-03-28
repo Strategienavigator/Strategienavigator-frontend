@@ -49,18 +49,19 @@ export function App() {
     function getRouterSwitch() {
         return (
             <Switch>
-                <Route path={"/"} exact component={Home}/>
-                <Route path={"/legal-notice"} exact component={Imprint}/>
-                <Route path={"/data-privacy"} exact component={DataPrivacy}/>
-                <Route path={"/about-us"} exact component={AboutUs}/>
-                <Route loggedIn={false} path={"/login"} exact component={Login}/>
-                <Route loggedIn={undefined} path={"/logout"} exact component={Logout}/>
-                <Route loggedIn={false} path={"/register"} exact component={Register}/>
-                <Route loggedIn={true} path={"/settings"} exact component={Settings}/>
-                <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact component={MyProfile}/>
+                <Route path={"/"} exact><Home/></Route>
+                <Route path={"/legal-notice"} exact><Imprint/></Route>
+                <Route path={"/data-privacy"} exact><DataPrivacy/></Route>
+                <Route path={"/about-us"} exact><AboutUs/></Route>
+                <Route loggedIn={false} path={"/login"} exact><Login/></Route>
+                <Route loggedIn={undefined} path={"/logout"} exact><Logout/></Route>
+                <Route loggedIn={false} path={"/register"} exact><Register/></Route>
+                <Route loggedIn={true} path={"/settings"} exact><Settings/></Route>
+                <Route loggedIn={true} anonymous={false} path={"/my-profile"} exact><MyProfile/></Route>
 
-                <Route loggedIn={true} path={"/invite/:sharedSaveID"} component={ContributionDecision}/>
-                <Route loggedIn={true} path={"/invitation/:token"} component={InvitationDecision}/>
+                <Route loggedIn={true} path={"/invite/:sharedSaveID"}><ContributionDecision/></Route>
+                <Route loggedIn={true} path={"/invitation/:token"}><InvitationDecision/></Route>
+                (//TODO remove all usages of component and render props. (Only use children))
 
                 <Route path={"/verify-email/:token"} component={EmailVerification}/>
                 <Route path={"/reset-password/:token"} component={PasswordReset}/>
@@ -112,7 +113,7 @@ export function App() {
             <>
                 <Messages xAlignment={"CENTER"} yAlignment={"BOTTOM"} style={{marginBottom: 65}}>
                     <GlobalContexts key={"global-contexts"}>
-                        <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"} payload={[]}>
+                        <Loader key={"loader"} animate fullscreen loaded={true} variant={"style"}>
                             <BrowserRouter>
                                 <LegacyErrorPageAdapter/>
                                 <Nav/>
