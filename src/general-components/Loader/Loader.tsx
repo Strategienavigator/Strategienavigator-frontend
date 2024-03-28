@@ -79,7 +79,7 @@ export function Loader({
         return function () {
             aborted = true;
         }
-    }, [payload, waitFor, setLoaded]);
+    }, [waitFor, setLoaded]);
 
     let loaded = loadedProp ?? loadedState;
 
